@@ -26,3 +26,22 @@
 *.exe
 *.out
 *.app
+
+# Emacs backup files
+*~
+
+# Autoconf generated files
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config/
+configure
+jb/jb-config.hpp.in
+
+# I typically build in directories named like this, ignore them too
+clang/
+gcc/
+gcov/
+tsan/
+asan/
+ubsan/

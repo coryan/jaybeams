@@ -1,0 +1,9 @@
+Configure and install using the usual autotools setup:
+
+$ ./configure
+$ make
+$ make check
+$ sudo make install
+
+Instructions on what dependencies are required to compile the system
+are available in doc/setup.dox
