@@ -29,7 +29,7 @@ before_install:
 install:
   - echo PWD = $PWD
   - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
-  - ${TRAVIS_BUILD_DIR?}/ci/install.sh
+  - (mkdir ${HOME?}/deps && cd ${HOME?}/deps && ${TRAVIS_BUILD_DIR?}/ci/install.sh)
 
 before_script:
   - echo PWD = $PWD

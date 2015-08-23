@@ -4,7 +4,7 @@
 set -e
 
 # ... this is used to upload coverage information to coveralls.io
-sudo gem install coveralls-lcov
+gem install coveralls-lcov
 
 # ... make sure VERSION is set to something, even if it is an empty string ...
 if [ "x${VERSION}" == "x" ]; then

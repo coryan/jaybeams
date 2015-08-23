@@ -12,6 +12,6 @@ lcov --remove coverage.info '/usr/include/*' 'jb/ut_*' --output-file coverage.in
 
 # Show the code coverage results in the Travis CI log
 lcov --list coverage.info
-coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info; fi
+coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
 
 exit 0
