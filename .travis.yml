@@ -11,7 +11,7 @@ env:
 
 before_install:
   - echo PWD = $PWD
-  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT GENDOCS=${GENDOCS}
+  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
   - ${TRAVIS_BUILD_DIR?}/ci/before_install.sh
 
 before_script:
