@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # Exit on error
 set -e
 
 # ... this is used to upload coverage information to coveralls.io
-gem install coveralls-lcov
+sudo gem install coveralls-lcov
 
 # ... make sure VERSION is set to something, even if it is an empty string ...
 if [ "x${VERSION}" == "x" ]; then

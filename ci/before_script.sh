@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Typically this script is sourced to setup the CC and CXX environment
 # variables.
