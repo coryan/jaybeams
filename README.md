@@ -1,6 +1,8 @@
 JayBeams Documentation                {#mainpage}
 ======================
 
+[![Build Status](https://travis-ci.org/coryan/jaybeams.svg?branch=master)](https://travis-ci.org/coryan/jaybeams)
+
 Another project to have fun coding.
 
 The JayBeams library performs relative time delay estimation of market
