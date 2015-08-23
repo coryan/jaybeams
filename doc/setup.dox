@@ -78,9 +78,9 @@ tar -xf release-0.5.1.tar.gz
 (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
 
 # Skye (Small Mocking framework)
-wget -q https://github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz
-tar -xf Skye-0.1.tar.gz
-(cd Skye && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
+wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
+tar -xf skye-0.2.tar.gz
+(cd skye-0.2 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
 @endcode
 
 @section ubuntu_build Checkout the Code and Build

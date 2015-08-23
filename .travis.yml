@@ -1,0 +1,60 @@
+language: cpp
+
+os:
+  - linux
+
+compiler:
+  - clang
+  - gcc
+
+before_install:
+  - sudo apt-get -qq -y install python-software-properties
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository -y ppa:dns/gnu
+  - sudo add-apt-repository -y ppa:boost-latest/ppa
+  - sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main"
+  - sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
+  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+  - sudo apt-get -qq update
+  - sudo apt-get -qq -y install clang-3.6
+  - sudo apt-get -qq -y install g++-4.9
+  - sudo apt-get -qq -y install boost1.55
+  - sudo apt-get -qq -y install autoconf automake make
+  - sudo apt-get -qq -y install git
+  - wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2015.02.24.tar.xz
+  - tar -xf autoconf-archive-2015.02.24.tar.xz
+  - (cd autoconf-archive-2015.02.24 && ./configure --prefix=/usr && make && sudo make install)
+  - sudo apt-get -qq -y install cmake
+  - wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
+  - tar -xf release-0.5.1.tar.gz
+  - (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
+  - wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
+  - tar -xf skye-0.2.tar.gz
+  - (cd skye-0.2 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
+
+before_script:
+  - uname -a
+  - g++ --version || echo "no g++ found"
+  - clang++ --version || echo "no clang++ found"
+  - g++-4.9 --version || echo "no g++-4.9 found"
+  - clang++-3.6 --version || echo "no clang++-3.6 found"
+  - make --version || echo "no make found"
+  - automake --version || echo "no automake found"
+  - autoconf --version || echo "no autoconf found"
+  - dpkg -s autoconf-archive || echo "no autoconf-archive found"
+  - dpkg -s libboost-test1.55-dev || echo "no libboost-test1.55-dev found"
+  - if [ "x$CC" == "xgcc" ]; then CXX=g++-4.9; CC=gcc-4.9; fi
+  - if [ "x$CC" == "xclang" ]; then CXX=clang++-3.6; CC=clang-3.6; fi
+  - export CC
+  - export CXX  
+
+script:
+  - ./bootstrap
+  - buildir=$(basename ${CC?})
+  - echo buildir=${buildir?}
+  - mkdir ${buildir?} && cd ${buildir?}
+  - ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu || true
+
+notifications:
+  email: false
+
