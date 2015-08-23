@@ -6,14 +6,19 @@ set -e
 # ... this is used to upload coverage information to coveralls.io
 gem install coveralls-lcov
 
+# ... make sure VERSION is set to something, even if it is an empty string ...
+if [ "x${VERSION}" == "x" ]; then
+    VERSION=""
+fi
+
 # ... only install the compiler that we are planning to use ...
 if [ "x${COMPILER?}" == "xclang" ]; then
-    sudo apt-get -qq -y install clang${VERSION}
-elif [ "x${COMPILER?}" == "xclang" ]; then
-    sudo apt-get -qq -y install g++${VERSION}
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${VERSION?} 90
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${VERSION?} 90
-    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-${VERSION?} 90
+    sudo apt-get -qq -y install clang${VERSION?}
+elif [ "x${COMPILER?}" == "xgcc" ]; then
+    sudo apt-get -qq -y install g++${VERSION?}
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++${VERSION?} 90
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc${VERSION?} 90
+    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov${VERSION?} 90
 else
     echo "Unknown compiler ${COMPILER?}"
     exit 1
