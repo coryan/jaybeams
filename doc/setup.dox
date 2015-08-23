@@ -67,12 +67,12 @@ sudo apt-get -qq -y install clang-3.6
 sudo apt-get -qq -y install g++-4.9
 sudo apt-get -qq -y install boost1.55
 sudo apt-get -qq -y install autoconf automake make
-sudo apt-get -qq -y install cmake
 sudo apt-get -qq -y install git
 wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2015.02.24.tar.xz
 tar -xf autoconf-archive-2015.02.24.tar.xz
 (cd autoconf-archive-2015.02.24 && ./configure --prefix=/usr && make && sudo make install)
 
+sudo apt-get -qq -y install cmake
 wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
 tar -xf release-0.5.1.tar.gz
 (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
