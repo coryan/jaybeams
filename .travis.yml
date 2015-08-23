@@ -5,7 +5,7 @@ os:
 
 compiler:
   - clang
-  - gcc
+#  - gcc
 
 before_install:
   - sudo apt-get -qq -y install python-software-properties
@@ -20,6 +20,7 @@ before_install:
   - sudo apt-get -qq -y install g++-4.9
   - sudo apt-get -qq -y install boost1.55
   - sudo apt-get -qq -y install autoconf automake make
+  - sudo apt-get -qq -y install doxygen
   - sudo apt-get -qq -y install git
   - wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2015.02.24.tar.xz
   - tar -xf autoconf-archive-2015.02.24.tar.xz
@@ -43,8 +44,8 @@ before_script:
   - autoconf --version || echo "no autoconf found"
   - dpkg -s autoconf-archive || echo "no autoconf-archive found"
   - dpkg -s libboost-test1.55-dev || echo "no libboost-test1.55-dev found"
-  - if [ "x$CC" == "xgcc" ]; then CXX=g++-4.9; CC=gcc-4.9; fi
-  - if [ "x$CC" == "xclang" ]; then CXX=clang++-3.6; CC=clang-3.6; fi
+  - if [ "x$CC" == "xgcc" ]; then CXX=g++-4.9; CC=gcc-4.9; GENDOCS=no; fi
+  - if [ "x$CC" == "xclang" ]; then CXX=clang++-3.6; CC=clang-3.6; GENDOCS=yes; fi
   - export CC
   - export CXX  
 
@@ -57,6 +58,22 @@ script:
   - make
   - make check
 
+after_success:
+  - git config --global user.name "${GIT_NAME}"
+  - git config --global user.email "${GIT_EMAIL}"
+  - git clone://github.com/coryan/jaybeams doc/html
+  - ## Kill them all; let Git sort them out.
+  - (cd doc/html && git checkout gh-pages && git rm -fr .)
+  - doxygen doc/Doxyfile
+  - cd doc/html
+  - git add --all .
+  - git commit -m"Automatically generated documentation"
+  - if [ "x${GENDOCS?}" == "xyes" ]; then echo git push https://${GH_TOKEN}@github.com/coryan/jaybeams gh-pages; fi
+  - cd ../..
+
 notifications:
   email: false
 
+env:
+  global:
+  - secure: "k7EehR9k8vHfvrGUTXjlCiIJ4r2H0+XN3/zHyIQrcoN62m6OUCX+aOboXpB6DP78xOPDWlqhVkN2+XoHAaC2XwJXLikzqJtXmN694SMN8Wx+WehIPRwVEmgM3MzwV0Xu0RqxgNhwOitgktSBOsbhXbmv6dl4ZeI97MAad8GaMzNphPUpJechZNDbVvH4RC4aHdUDW8dxBP+VdSNek/pJNwDNOsVzpRXTbjVe7Br9izACtzyAfoltP6vbNBG/SmLnO57asjJ0z0ss4vHP6mkvINWnkSL8pTAr0g3A2j8SqeUwLcgIiY61d+Ponslo5eCu/ViRQLZHZBgdHwTwYuTa+LsuSGc3iT+LKIVcP71g7AqxOOzpL1SIAJPTCV2OkI6gGho10kQPVsIzK44UGK3qkxUlOB02WpsfuOfNrrkXxSLlPFN0PlF+JFat3nYsy9FcmSXK2bS/P6okziiffMQ+6re65LcT2zW3dFOC1w8niP8wmyvSfN97J75AvY/Hzq/q1ffzwXD7jquZLTuRPO1ktsmBwGGVKrEvxLJx8HaOvm3FdQhkWdLWqRX6W7FKpOTiQ9A3Xd6QhimtKoduZqx2OOyjAImC576G7DyxUysr19QY9hyfkV9LWN3IRaoXVEen7olEZXSt1goGQ5vgf6o+qNXTcbbDewfN/5OMtTSoyb0="
