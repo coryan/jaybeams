@@ -21,9 +21,14 @@ sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-
 
 # YAML-CPP (C++ Wrappers for YAML files)
 sudo yum install yaml-cpp-devel
+
+# Skye (Small Mocking framework)
+wget -q https://github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz
+tar -xf Skye-0.1.tar.gz
+(cd Skye && ./configure && make check && sudo make install)
 @endcode
 
-@section setup_build Checkout the Code and Build
+@section fedora_build Checkout the Code and Build
 
 This is the easy part:
 
@@ -33,7 +38,62 @@ cd jaybeams
 ./bootstrap
 mkdir clang
 cd clang
-CXX=clang++ CC=clang ../configure --with-opencl=/opt/AMDAPPSDK-2.9-1
+CXX=clang++ CC=clang ../configure
+# Just compile the code
+make
+# Compile the code, the tests and run the tests
+make check
+#
+@endcode
+
+@section ubuntu_precise Ubuntu 12.04 (Precise Pangolin LTS)
+
+This is a popular platform for Cloud services and, consequently, for
+hosted continuous integration environments.  Unfortunately the
+platform is also rather old, so you need to install backports of most
+of the development tools.
+
+@code
+sudo apt-get -qq -y install python-software-properties
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo add-apt-repository -y ppa:dns/gnu
+sudo add-apt-repository -y ppa:boost-latest/ppa
+sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main"
+sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
+# ... add the public key used by llvm.org ...
+wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+sudo apt-get -qq update
+sudo apt-get -qq -y install clang-3.6
+sudo apt-get -qq -y install g++-4.9
+sudo apt-get -qq -y install boost1.55
+sudo apt-get -qq -y install autoconf automake make
+sudo apt-get -qq -y install cmake
+sudo apt-get -qq -y install git
+wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2015.02.24.tar.xz
+tar -xf autoconf-archive-2015.02.24.tar.xz
+(cd autoconf-archive-2015.02.24 && ./configure --prefix=/usr && make && sudo make install)
+
+wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
+tar -xf release-0.5.1.tar.gz
+(cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
+
+# Skye (Small Mocking framework)
+wget -q https://github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz
+tar -xf Skye-0.1.tar.gz
+(cd Skye && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
+@endcode
+
+@section ubuntu_build Checkout the Code and Build
+
+This is the easy part:
+
+@code
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+./bootstrap
+mkdir clang
+cd clang
+CXX=clang++-3.6 CC=clang-3.6 ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/
 # Just compile the code
 make
 # Compile the code, the tests and run the tests
