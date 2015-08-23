@@ -11,7 +11,9 @@ env:
 #   - COMPILER=clang VERSION="-3.6"  VARIANT=opt  GENDOCS=no
 
 before_install:
-  - ci/before_install.sh
+  - echo PWD = $PWD
+  - echo COMPILER=${COMPILER?} VERSION=${VERSION?} VARIANT=${VARIANT} GENDOCS=${GENDOCS?}
+  - ${TRAVIS_BUILD_DIR?}/ci/before_install.sh
 
 before_script:
   - uname -a
