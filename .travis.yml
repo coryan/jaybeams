@@ -4,15 +4,14 @@ os:
   - linux
 
 env:
-  matrix:
-#   - COMPILER=gcc   VERSION="-4.9"  VARIANT=opt  GENDOCS=no
-    - COMPILER=gcc   VERSION="-4.9"  VARIANT=cov  GENDOCS=no
-#   - COMPILER=clang VERSION="-3.6"  VARIANT=dbg  GENDOCS=yes
-#   - COMPILER=clang VERSION="-3.6"  VARIANT=opt  GENDOCS=no
+# - COMPILER=gcc   VERSION="-4.9"  VARIANT=opt  GENDOCS=no
+  - COMPILER=gcc   VERSION="-4.9"  VARIANT=cov  GENDOCS=no
+# - COMPILER=clang VERSION="-3.6"  VARIANT=dbg  GENDOCS=yes
+# - COMPILER=clang VERSION="-3.6"  VARIANT=opt  GENDOCS=no
 
 before_install:
   - echo PWD = $PWD
-  - echo COMPILER=${COMPILER?} VERSION=${VERSION?} VARIANT=${VARIANT} GENDOCS=${GENDOCS?}
+  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT GENDOCS=${GENDOCS}
   - ${TRAVIS_BUILD_DIR?}/ci/before_install.sh
 
 before_script:
