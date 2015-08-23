@@ -64,7 +64,7 @@ before_script:
 
 script:
   - ./bootstrap
-  - ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+  - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
   - make
   - make check
 
