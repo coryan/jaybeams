@@ -5,7 +5,7 @@ os:
 
 compiler:
   - clang
-#  - gcc
+  - gcc
 
 before_install:
   - sudo apt-get -qq -y install python-software-properties
@@ -68,7 +68,7 @@ after_success:
   - cd doc/html
   - git add --all .
   - git commit -m"Automatically generated documentation"
-  - if [ "x${GENDOCS?}" == "xyes" ]; then echo git push https://${GH_TOKEN}@github.com/coryan/jaybeams gh-pages; fi
+  - if [ "x${GENDOCS?}" == "xyes" ]; then git push https://${GH_TOKEN}@github.com/coryan/jaybeams gh-pages; fi
   - cd ../..
 
 notifications:
@@ -76,4 +76,4 @@ notifications:
 
 env:
   global:
-  - secure: "k7EehR9k8vHfvrGUTXjlCiIJ4r2H0+XN3/zHyIQrcoN62m6OUCX+aOboXpB6DP78xOPDWlqhVkN2+XoHAaC2XwJXLikzqJtXmN694SMN8Wx+WehIPRwVEmgM3MzwV0Xu0RqxgNhwOitgktSBOsbhXbmv6dl4ZeI97MAad8GaMzNphPUpJechZNDbVvH4RC4aHdUDW8dxBP+VdSNek/pJNwDNOsVzpRXTbjVe7Br9izACtzyAfoltP6vbNBG/SmLnO57asjJ0z0ss4vHP6mkvINWnkSL8pTAr0g3A2j8SqeUwLcgIiY61d+Ponslo5eCu/ViRQLZHZBgdHwTwYuTa+LsuSGc3iT+LKIVcP71g7AqxOOzpL1SIAJPTCV2OkI6gGho10kQPVsIzK44UGK3qkxUlOB02WpsfuOfNrrkXxSLlPFN0PlF+JFat3nYsy9FcmSXK2bS/P6okziiffMQ+6re65LcT2zW3dFOC1w8niP8wmyvSfN97J75AvY/Hzq/q1ffzwXD7jquZLTuRPO1ktsmBwGGVKrEvxLJx8HaOvm3FdQhkWdLWqRX6W7FKpOTiQ9A3Xd6QhimtKoduZqx2OOyjAImC576G7DyxUysr19QY9hyfkV9LWN3IRaoXVEen7olEZXSt1goGQ5vgf6o+qNXTcbbDewfN/5OMtTSoyb0="
+    - secure: "n9xlk1SpwtyBBB/U3B+o7EQomk4wPS+lj+9pYQCJwLkmR4Yh6hoz/bsl5vlYYK1V6xFhAaXqPWBnQmhrsIf8lOWqqrKCOPFsJ1AxDgPY3zFt+G91BqOuaTSG2eCbnyEVPidBchaUTeg2NiOpCAHyzA17h65c1Hl4l6IBUWGpYft5MWZhkeYz5r0bP2KAIb2NWRhuAW3PYxmFArWhBpnTICMx7rXzYWYCPUiXYra2JNebS1JAp+4JPly0efvNNjtjv4dyxq8qMdTDgz5Kj9wGo8ByPpseyWgx5Il0SSHmeUN5/NhJj4Wx2lVjOSv/EfoFmDN86V+P2zCwkl0tKV8sYONNvAIDqPDadRfQhbUAAFidSYiS2O6ttbInxegs3jStus/jxD0Myn8BgvOgddPbe1p0WFhCtcPDPA5J9/ic8M1NclYlMp04QNED+PnxxVt94tTmU7zCsNGXX4rxa7B1Q4EjTvEmjtvPA99kBla8JGOOxws8Xo5+WkfWVfbinveqs6G3kqg2bKTcurvgCeT7gqc/uVymdti7xdn+xALfzSohH91qN/T0Md1NVBJOlIN+J6oQ+qmZMcTQ6RrPOKDKPqcFTgpp5Np/lvq0yMUL7s+rS544hXZvtZ96E25wCorbJv6DVl0m5D1crBsJGmMzYfcGtRc8smTpF4+YcRkUIfc="
