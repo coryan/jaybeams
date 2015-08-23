@@ -55,7 +55,10 @@ AX_BOOST_SYSTEM
 AX_BOOST_UNIT_TEST_FRAMEWORK
 
 AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
-PKG_CHECK_MODULES([YAML_CPP], [yaml-cpp >= 0.5.1])
+
+AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
+                 [YAML_CPP_LIBS=-lyaml-cpp],
+                 [AC_MSG_ERROR([Unable to find yaml-cpp library])])
 
 # Checks for header files (and header-only libraries)
 

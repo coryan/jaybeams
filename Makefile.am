@@ -1,6 +1,5 @@
 # JayBeams uses a non-recursive make, this is the only Makefile.
 
-ACLOCAL_AMFLAGS = -I m4
 instdir = $(prefix)/lib
 inst_LIBRARIES = \
   jb/libjb.a
@@ -30,6 +29,8 @@ AM_CXXFLAGS = \
 
 LDFLAGS = \
   $(BOOST_LDFLAGS)
+
+YAML_CPP_LIBS=-lyaml-cpp
 
 LIBS = \
   $(YAML_CPP_LIBS) \
