@@ -53,7 +53,9 @@ script:
   - buildir=$(basename ${CC?})
   - echo buildir=${buildir?}
   - mkdir ${buildir?} && cd ${buildir?}
-  - ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu || true
+  - ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+  - make
+  - make check
 
 notifications:
   email: false
