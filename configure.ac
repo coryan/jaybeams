@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([The Jay Beams Library], [0.1], [carlos.oryan@gmail.com])
+AC_INIT([JayBeams], [0.1], [coryan@users.noreply.github.com])
 
 # Move as many of the generated files as possible to a subdirectory
 AC_CONFIG_AUX_DIR(config)
