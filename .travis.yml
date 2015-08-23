@@ -3,42 +3,15 @@ language: cpp
 os:
   - linux
 
-compiler:
-#  - clang
-  - gcc
+env:
+  matrix:
+#   - COMPILER=gcc   VERSION="-4.9"  VARIANT=opt  GENDOCS=no
+    - COMPILER=gcc   VERSION="-4.9"  VARIANT=cov  GENDOCS=no
+#   - COMPILER=clang VERSION="-3.6"  VARIANT=dbg  GENDOCS=yes
+#   - COMPILER=clang VERSION="-3.6"  VARIANT=opt  GENDOCS=no
 
 before_install:
-  - sudo apt-get -qq -y install python-software-properties
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo add-apt-repository -y ppa:dns/gnu
-  - sudo add-apt-repository -y ppa:boost-latest/ppa
-  - sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main"
-  - sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
-  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-  - sudo apt-get -qq update
-  - gem install coveralls-lcov
-  - sudo apt-get -qq -y install clang-3.6
-  - sudo apt-get -qq -y install g++-4.9
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
-  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
-  - sudo apt-get -qq -y install boost1.55
-  - sudo apt-get -qq -y install autoconf automake make
-  - sudo apt-get -qq -y install doxygen
-  - sudo apt-get -qq -y install git
-  - wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2015.02.24.tar.xz
-  - tar -xf autoconf-archive-2015.02.24.tar.xz
-  - (cd autoconf-archive-2015.02.24 && ./configure --prefix=/usr && make && sudo make install)
-  - sudo apt-get -qq -y install cmake
-  - wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
-  - tar -xf release-0.5.1.tar.gz
-  - (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
-  - wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
-  - tar -xf skye-0.2.tar.gz
-  - (cd skye-0.2 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
-  - wget -q http://http.debian.net/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
-  - tar xf lcov_1.11.orig.tar.gz
-  - sudo make -C lcov-1.11/ install
+  - ci/before_install.sh
 
 before_script:
   - uname -a
@@ -52,17 +25,14 @@ before_script:
   - automake --version
   - autoconf --version
   - dpkg -s libboost-test1.55-dev
-  - if [ "x$CC" == "xgcc" ]; then CXX=g++-4.9; CC=gcc-4.9; fi
-  - if [ "x$CC" == "xclang" ]; then CXX=clang++-3.6; CC=clang-3.6; fi
-  - export CC
-  - export CXX
-  - GENDOCS="no"
+  - source ci/before_script.sh
+  - echo BUILD DIR = ${TRAVIS_BUILD_DIR?}
   - cd ${TRAVIS_BUILD_DIR?}
-  - CFLAGS="-coverage -O0 -g"
-  - CXXFLAGS="-coverage -O0 -g"
+  - ls -l
   - lcov --directory . --zerocounters
 
 script:
+  - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?}
   - ./bootstrap
   - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
   - make
@@ -71,26 +41,14 @@ script:
 after_success:
 # Upload code coverage results to coveralls.io
   - cd ${TRAVIS_BUILD_DIR?}
-  - lcov --directory . --capture --output-file coverage.info 
-  - lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info
-  - lcov --list coverage.info
-  - coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
+  - if [ "x${VARIANT?}" == "xcov" ]; then ci/coverage.sh; fi
 # Upload documentation to gh-pages
-  - git config --global user.name "${GIT_NAME}"
-  - git config --global user.email "${GIT_EMAIL}"
-  - git clone://github.com/coryan/jaybeams doc/html
-  - ## Kill them all; let Git sort them out.
-  - (cd doc/html && git checkout gh-pages && git rm -fr .)
-  - doxygen doc/Doxyfile
-  - cd doc/html
-  - git add --all .
-  - git commit -m"Automatically generated documentation"
-  - if [ "x${GENDOCS?}" == "xyes" ]; then echo "pushding doxygen docs"; git push https://${GH_TOKEN}@github.com/coryan/jaybeams gh-pages; fi
-  - cd ../..
+  - if [ "x${GENDOCS?}" == "xyes" ]; then ci/gendocs.sh; fi
 
 notifications:
   email: false
 
+# TODO(#1) change this to a robot account
 env:
   global:
     - secure: "n9xlk1SpwtyBBB/U3B+o7EQomk4wPS+lj+9pYQCJwLkmR4Yh6hoz/bsl5vlYYK1V6xFhAaXqPWBnQmhrsIf8lOWqqrKCOPFsJ1AxDgPY3zFt+G91BqOuaTSG2eCbnyEVPidBchaUTeg2NiOpCAHyzA17h65c1Hl4l6IBUWGpYft5MWZhkeYz5r0bP2KAIb2NWRhuAW3PYxmFArWhBpnTICMx7rXzYWYCPUiXYra2JNebS1JAp+4JPly0efvNNjtjv4dyxq8qMdTDgz5Kj9wGo8ByPpseyWgx5Il0SSHmeUN5/NhJj4Wx2lVjOSv/EfoFmDN86V+P2zCwkl0tKV8sYONNvAIDqPDadRfQhbUAAFidSYiS2O6ttbInxegs3jStus/jxD0Myn8BgvOgddPbe1p0WFhCtcPDPA5J9/ic8M1NclYlMp04QNED+PnxxVt94tTmU7zCsNGXX4rxa7B1Q4EjTvEmjtvPA99kBla8JGOOxws8Xo5+WkfWVfbinveqs6G3kqg2bKTcurvgCeT7gqc/uVymdti7xdn+xALfzSohH91qN/T0Md1NVBJOlIN+J6oQ+qmZMcTQ6RrPOKDKPqcFTgpp5Np/lvq0yMUL7s+rS544hXZvtZ96E25wCorbJv6DVl0m5D1crBsJGmMzYfcGtRc8smTpF4+YcRkUIfc="
