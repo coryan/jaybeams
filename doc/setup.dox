@@ -1,0 +1,44 @@
+/*!
+@page setup Configuration Guide: Howto Setup your Workstation to Compile JayBeams
+
+@section setup_intro Introduction
+
+These are my notes on how to prepare your environment to build
+JayBeams.  If you find a problem with the instructions, please submit
+a patch for the instructions so I can fix the problem.
+
+@section fedora Fedora 21 and 22
+
+We assume that you have superuser privileges in your workstation.  The
+instructions were originally written for Fedora 21, I will try to make
+them more generic over time.  Please submit patches to support other
+systems.
+
+Installing the developement tools:
+
+@code
+sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive
+
+# YAML-CPP (C++ Wrappers for YAML files)
+sudo yum install yaml-cpp-devel
+@endcode
+
+@section setup_build Checkout the Code and Build
+
+This is the easy part:
+
+@code
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+./bootstrap
+mkdir clang
+cd clang
+CXX=clang++ CC=clang ../configure --with-opencl=/opt/AMDAPPSDK-2.9-1
+# Just compile the code
+make
+# Compile the code, the tests and run the tests
+make check
+#
+@endcode
+
+*/

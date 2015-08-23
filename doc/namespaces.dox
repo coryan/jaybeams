@@ -1,0 +1,31 @@
+/**
+ * @namespace jb
+ *
+ * The top-level namespace for the JayBeams library.
+ */
+
+/**
+ * @namespace jb::defaults
+ *
+ * Default values for configuration parameters.
+ */
+
+/**
+ * @namespace jb::examples
+ *
+ * Contains types and functions useful in the examples.
+ */
+
+/**
+ * @namespace jb::examples::defaults
+ *
+ * Default values for configuration parameters in the examples.
+ */
+
+/**
+ * @namespace YAML
+ *
+ * Types and functions for the yaml-cpp library.
+ *
+ * JayBeams re-opens this namespace to specialize some templates.
+ */
