@@ -37,6 +37,7 @@ a challenge given the dependency on OpenCL libraries.
 
 ### What is with the name?
 
-Jay Beams is named after a [WWII electronic warfare](https://en.wikipedia.org/wiki/List_of_World_War_II_electronic_warfare_equipment) system.
+JayBeams is named after a [WWII electronic warfare](https://en.wikipedia.org/wiki/List_of_World_War_II_electronic_warfare_equipment) system.
 The name was selected more or less at random from the Wikipedia list
-of such systems, and does not mean anything in particular.
+of such systems, and is not meant to represent anything in
+particular.  It sounds cool, in a Flash Gordon kind of way.
