@@ -41,6 +41,21 @@ AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
 
 # Checks for libraries.
+AX_BOOST_BASE([1.55],[],[
+  AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
+])
+AX_BOOST_LOG
+AX_BOOST_LOG_SETUP
+AX_BOOST_PROGRAM_OPTIONS
+AX_BOOST_FILESYSTEM
+AX_BOOST_SYSTEM
+AX_BOOST_DATE_TIME
+AX_BOOST_THREAD
+AX_BOOST_SYSTEM
+AX_BOOST_UNIT_TEST_FRAMEWORK
+
+AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
+PKG_CHECK_MODULES([YAML_CPP], [yaml-cpp >= 0.5.1])
 
 # Checks for header files (and header-only libraries)
 
