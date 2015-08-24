@@ -10,7 +10,6 @@ var searchData=
   ['severity_5flevel_2ehpp',['severity_level.hpp',['../severity__level_8hpp.html',1,'']]],
   ['severity_5flevel_5fwidth',['severity_level_width',['../namespacejb.html#acad72c331a63bfe75ce38b4dc718529b',1,'jb']]],
   ['severity_5fstatic_5fpredicate',['severity_static_predicate',['../namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9',1,'jb']]],
-  ['stdc_5fheaders',['STDC_HEADERS',['../jb-config_8hpp.html#a550e5c272cc3cf3814651721167dcd23',1,'jb-config.hpp']]],
   ['stn_5ftraits',['STN_TRAITS',['../strtonum_8hpp.html#a3c61c0bb7c8d350475efed8b3a980123',1,'STN_TRAITS():&#160;strtonum.hpp'],['../namespacejb.html#ae33693a964490c19d694f641a59cb1e1',1,'jb::STN_TRAITS(int, std::stoi)'],['../namespacejb.html#aa8a88cc54163b0d35b64b4951ca71ab0',1,'jb::STN_TRAITS(unsigned long long, std::stoull)'],['../namespacejb.html#ac7e647b7ed2bb5e5293646eeb884622e',1,'jb::STN_TRAITS(long long, std::stoll)'],['../namespacejb.html#a8f7d6fe2b187d07777583db0e193fc4b',1,'jb::STN_TRAITS(unsigned long, std::stoul)'],['../namespacejb.html#aded423703f186f25e4a1ae099f231202',1,'jb::STN_TRAITS(long, std::stol)'],['../namespacejb.html#a0f5f44c69cc5273e27c4212c41eb33e2',1,'jb::STN_TRAITS(float, std::stof)'],['../namespacejb.html#a1c1339a514c484eaddcd106a2f0e5f7f',1,'jb::STN_TRAITS(double, std::stod)']]],
   ['strtonum',['strtonum',['../namespacejb.html#a4b84daf04d6ce26f0e29600156117f1d',1,'jb']]],
   ['strtonum_2ehpp',['strtonum.hpp',['../strtonum_8hpp.html',1,'']]],

@@ -4,6 +4,5 @@ var searchData=
   ['validate_5fall',['validate_all',['../classjb_1_1config__object.html#adfd2790fca7108f685fe6ff4e782531f',1,'jb::config_object']]],
   ['validate_5fattributes',['validate_attributes',['../classjb_1_1config__object.html#a2ba3291ce2e3faaddb778239c1f49422',1,'jb::config_object']]],
   ['value_5f',['value_',['../classjb_1_1config__attribute.html#a6bfa4ffde7f294a53dbc566e79a6b454',1,'jb::config_attribute']]],
-  ['value_5ftype',['value_type',['../classjb_1_1config__attribute.html#ab6f6451e2a051f8eb776babac4659b66',1,'jb::config_attribute']]],
-  ['version',['VERSION',['../jb-config_8hpp.html#a1c6d5de492ac61ad29aec7aa9a436bbf',1,'jb-config.hpp']]]
+  ['value_5ftype',['value_type',['../classjb_1_1config__attribute.html#ab6f6451e2a051f8eb776babac4659b66',1,'jb::config_attribute']]]
 ];

@@ -5,7 +5,6 @@ var searchData=
   ['defaults',['defaults',['../namespacejb_1_1log_1_1defaults.html',1,'jb::log']]],
   ['examples',['examples',['../namespacejb_1_1examples.html',1,'jb']]],
   ['jb',['jb',['../namespacejb.html',1,'']]],
-  ['jb_2dconfig_2ehpp',['jb-config.hpp',['../jb-config_8hpp.html',1,'']]],
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
   ['jb_5flog',['JB_LOG',['../log_8hpp.html#a69e7901a14a27585e998359dd544818e',1,'log.hpp']]],
