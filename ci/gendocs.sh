@@ -14,7 +14,7 @@ git clone https://github.com/coryan/jaybeams doc/html
 # ... basically we remove any existing pages and then add everything
 # back again.  That way removed pages are also removed from the
 # version control, otherwise we would have pages survive forever ...
-(cd doc/html && git checkout gh-pages && git rm -fr .)
+(cd doc/html && git checkout gh-pages && git rm -qfr .)
 
 # ... call doxygen directly, no need for fancy make rules in this case ...
 doxygen doc/Doxyfile
@@ -24,14 +24,14 @@ cd doc/html
 git add --all .
 
 # ... we always commit the changes locally ...
-git commit -m"Automatically generated documentation"
+git commit -q -m"Automatically generated documentation"
 
 # ... I want some minimal output so I can see it in the Travis log ...
 echo "pushing doxygen docs"
 echo
 
 # ... and now we push the changes (if any) to the gh-pages branch
-git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages
+#git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages
 
 echo "git push status = " $?
 
