@@ -19,7 +19,5 @@ var searchData=
   ['have_5fsys_5fstat_5fh',['HAVE_SYS_STAT_H',['../jb-config_8hpp.html#ace156430ba007d19b4348a950d0c692b',1,'jb-config.hpp']]],
   ['have_5fsys_5ftypes_5fh',['HAVE_SYS_TYPES_H',['../jb-config_8hpp.html#a69dc70bea5d1f8bd2be9740e974fa666',1,'jb-config.hpp']]],
   ['have_5funistd_5fh',['HAVE_UNISTD_H',['../jb-config_8hpp.html#a219b06937831d0da94d801ab13987639',1,'jb-config.hpp']]],
-  ['have_5fyaml_5fcpp',['HAVE_YAML_CPP',['../jb-config_8hpp.html#aa55f270e381b5a49f672e239d50e6736',1,'jb-config.hpp']]],
-  ['help',['help',['../structjb_1_1config__object_1_1attribute__descriptor.html#ab60bc3bca263bac3f9ca93e8702703e2',1,'jb::config_object::attribute_descriptor::help()'],['../classjb_1_1config__object_1_1attribute__base.html#aa0ba2caf98067545fbe3226770244ecd',1,'jb::config_object::attribute_base::help()']]],
-  ['helpmsg',['helpmsg',['../structjb_1_1config__object_1_1attribute__descriptor.html#a50442b2fbc3214035ecfd9da70a3af4c',1,'jb::config_object::attribute_descriptor']]]
+  ['have_5fyaml_5fcpp',['HAVE_YAML_CPP',['../jb-config_8hpp.html#aa55f270e381b5a49f672e239d50e6736',1,'jb-config.hpp']]]
 ];
