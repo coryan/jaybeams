@@ -69,3 +69,25 @@ BOOST_AUTO_TEST_CASE(logging_basic) {
   jb::log::next_tid();
   JB_LOG(info) << "more logging after removing the sunk...";
 }
+
+/**
+ * @test Verify that parsing YAML files to configure logging works as expected.
+ */
+BOOST_AUTO_TEST_CASE(logging_yaml) {
+  char const contents[] = R"""(# YAML overrides
+minimum-severity: ERROR
+minimum-console-severity: NOTICE
+)""";
+  jb::log::config tested;
+  std::istringstream is(contents);
+  int argc = 0;
+  tested.load_overrides(argc, nullptr, is);
+
+  BOOST_CHECK_EQUAL(
+      tested.minimum_severity(), jb::severity_level::error);
+  BOOST_CHECK_EQUAL(
+      tested.minimum_console_severity(), jb::severity_level::notice);
+
+  std::ostringstream os;
+  BOOST_CHECK_NO_THROW(os << tested);
+}
