@@ -9,6 +9,7 @@ unit_tests = \
   jb/ut_config_files_location \
   jb/ut_config_object \
   jb/ut_logging \
+  jb/ut_severity_level \
   jb/ut_strtonum
 
 examples = \
@@ -124,6 +125,14 @@ jb_ut_logging_CPPFLAGS = \
   $(UT_CPPFLAGS) \
   -DBOOST_TEST_MODULE=jb_ut_logging
 jb_ut_logging_LDADD = \
+  $(jb_ut_libs)
+
+jb_ut_severity_level_SOURCES = \
+  jb/ut_severity_level.cpp
+jb_ut_severity_level_CPPFLAGS = \
+  $(UT_CPPFLAGS) \
+  -DBOOST_TEST_MODULE=jb_ut_severity_level
+jb_ut_severity_level_LDADD = \
   $(jb_ut_libs)
 
 jb_ut_strtonum_SOURCES = \
