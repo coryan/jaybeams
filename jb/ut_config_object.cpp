@@ -1,6 +1,10 @@
 #include <jb/config_object.hpp>
+#include <jb/config_files_location.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/filesystem.hpp>
+#include <cstdlib>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -463,7 +467,6 @@ BOOST_AUTO_TEST_CASE(config_object_invalid_option) {
 }
 
 namespace {
-
 class config5 : public jb::config_object {
  public:
   config5()
@@ -518,6 +521,67 @@ foo:
   BOOST_CHECK_EQUAL(tested.foo().second, 43);
 }
 
+namespace {
+class config6 : public jb::config_object {
+ public:
+  config6()
+      : foo(desc("foo"), this)
+      , bar(desc("bar", "config0").help("not much help"), this)
+      , baz(desc("baz", "config0").help("not much help"), this)
+  {}
+
+  config_object_constructors(config6);
+
+  jb::config_attribute<config6,std::string> foo;
+  jb::config_attribute<config6,config0> bar;
+  jb::config_attribute<config6,config0> baz;
+};
+} // anonymous namespace
+
+/**
+ * @test Verify that config object works correctly with real files.
+ */
+BOOST_AUTO_TEST_CASE(config_object_config_file) {
+  char const contents[] = R"""(# YAML overrides
+:config0:
+  x: -1
+  y: -2
+  z: -3
+foo: this is a long string
+baz:
+  z: 4
+)""";
+  namespace fs = boost::filesystem;
+  fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
+  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_REQUIRE(fs::create_directories(tmpdir));
+  std::shared_ptr<int> delete_dir(
+      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::string filename = "test.yml";
+  // ... create a file in the temporary directory with these
+  {
+    fs::path base = fs::path(jb::sysconfdir()).filename();
+    BOOST_REQUIRE(fs::create_directories(tmpdir / base));
+    fs::path fullpath = tmpdir / base / filename;
+    BOOST_MESSAGE("writing contents to " << fullpath.string());
+    std::ofstream os(fullpath.string());
+    os << contents;
+  }
+
+  // ... setup the environment variable to the test directory ...
+  (void) setenv("TEST_ROOT", tmpdir.string().c_str(), true);
+  char argv0[] = "binary";
+  char argv1[] = "--bar.x=42";
+  char argv2[] = "--baz.y=24";
+  char* argv[] = {argv0, argv1, argv2};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  config6 tested;
+  tested.load_overrides(argc, argv, filename, "TEST_ROOT");
+  BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
+  BOOST_CHECK_EQUAL(tested.bar(), make_config0(42, -2, -3));
+  BOOST_CHECK_EQUAL(tested.baz(), make_config0(-1, 24, 4));
+}
+
 /**
  * @test Complete coverage for jb::usage
  */
@@ -528,3 +592,4 @@ BOOST_AUTO_TEST_CASE(usage_coverage) {
   BOOST_CHECK_EQUAL(a.exit_status(), b.exit_status());
   BOOST_CHECK_EQUAL(a.what(), b.what());
 }
+
