@@ -699,6 +699,42 @@ BOOST_AUTO_TEST_CASE(config_object_config_file_missing) {
   BOOST_CHECK_EQUAL(tested.baz(), make_config0(0, 24, 0));
 }
 
+namespace {
+class config7 : public jb::config_object {
+ public:
+  config7()
+      : foo(desc("foo"), this)
+      , bar(desc("bar").help("not much help").positional(), this)
+      , baz(desc("baz").help("not much help").positional(), this)
+  {}
+
+  config_object_constructors(config7);
+
+  jb::config_attribute<config7,std::string> foo;
+  jb::config_attribute<config7,std::string> bar;
+  jb::config_attribute<config7,std::string> baz;
+};
+} // anonymous namespace
+
+/**
+ * @test Verify that config object works correctly with real files and
+ * an environment variable.
+ */
+BOOST_AUTO_TEST_CASE(config_object_positional) {
+  std::istringstream is("");
+  char argv0[] = "binary";
+  char argv1[] = "should-be-bar";
+  char argv2[] = "should-be-baz";
+  char argv3[] = "--foo=another";
+  char* argv[] = {argv0, argv1, argv2, argv3};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  config7 tested;
+  tested.load_overrides(argc, argv, is);
+  BOOST_CHECK_EQUAL(tested.foo(), "another");
+  BOOST_CHECK_EQUAL(tested.bar(), "should-be-bar");
+  BOOST_CHECK_EQUAL(tested.baz(), "should-be-baz");
+}
+
 /**
  * @test Complete coverage for jb::usage
  */

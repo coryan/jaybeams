@@ -155,8 +155,7 @@ void jb::config_object::validate_attributes() const {
 
 void jb::config_object::merge_values(
     YAML::Node target, YAML::Node const& source) {
-  // TODO() this only works for relatively flat objects, we need to
-  // recurse if the object
+  // TODO(#2) this only works for relatively flat objects.
   for (auto const& j : source) {
     if (j.second.IsMap()) {
       merge_values(target[j.first.Scalar()], j.second);
