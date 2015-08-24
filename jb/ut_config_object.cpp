@@ -583,6 +583,25 @@ baz:
 }
 
 /**
+ * @test Verify that config object works correctly when the real file
+ * is not found.
+ */
+BOOST_AUTO_TEST_CASE(config_object_config_file_missing) {
+  std::string filename("missing-config-file.bad.bad.bad.yml");
+
+  char argv0[] = "binary";
+  char argv1[] = "--foo=this is a long string";
+  char argv2[] = "--baz.y=24";
+  char* argv[] = {argv0, argv1, argv2};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  config6 tested;
+  tested.load_overrides(argc, argv, filename);
+  BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
+  BOOST_CHECK_EQUAL(tested.bar(), make_config0(0, 0, 0));
+  BOOST_CHECK_EQUAL(tested.baz(), make_config0(0, 24, 0));
+}
+
+/**
  * @test Complete coverage for jb::usage
  */
 BOOST_AUTO_TEST_CASE(usage_coverage) {
