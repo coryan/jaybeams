@@ -539,9 +539,10 @@ class config6 : public jb::config_object {
 } // anonymous namespace
 
 /**
- * @test Verify that config object works correctly with real files.
+ * @test Verify that config object works correctly with real files and
+ * an environment variable.
  */
-BOOST_AUTO_TEST_CASE(config_object_config_file) {
+BOOST_AUTO_TEST_CASE(config_object_config_file_env) {
   char const contents[] = R"""(# YAML overrides
 :config0:
   x: -1
@@ -583,8 +584,80 @@ baz:
 }
 
 /**
+ * @test Verify that config object works correctly with a missing file
+ * and the environment variable.
+ */
+BOOST_AUTO_TEST_CASE(config_object_config_file_missing_with_env) {
+  namespace fs = boost::filesystem;
+  fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
+  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_REQUIRE(fs::create_directories(tmpdir));
+  std::shared_ptr<int> delete_dir(
+      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::string filename = "test.yml";
+
+  // ... setup the environment variable to the test directory ...
+  (void) setenv("TEST_ROOT", tmpdir.string().c_str(), true);
+  char argv0[] = "binary";
+  char argv1[] = "--bar.x=42";
+  char argv2[] = "--baz.y=24";
+  char* argv[] = {argv0, argv1, argv2};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  config6 tested;
+  tested.load_overrides(argc, argv, filename, "TEST_ROOT");
+  BOOST_CHECK_EQUAL(tested.foo(), "");
+  BOOST_CHECK_EQUAL(tested.bar(), make_config0(42, 0, 0));
+  BOOST_CHECK_EQUAL(tested.baz(), make_config0(0, 24, 0));
+}
+
+/**
+ * @test Verify that config object works correctly with real files and
+ * the default environment variable.
+ */
+BOOST_AUTO_TEST_CASE(config_object_config_file) {
+  char const contents[] = R"""(# YAML overrides
+:config0:
+  x: -1
+  y: -2
+  z: -3
+foo: this is a long string
+baz:
+  z: 4
+)""";
+  namespace fs = boost::filesystem;
+  fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
+  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_REQUIRE(fs::create_directories(tmpdir));
+  std::shared_ptr<int> delete_dir(
+      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::string filename = "test.yml";
+  // ... create a file in the temporary directory with these
+  {
+    fs::path base = fs::path(jb::sysconfdir()).filename();
+    BOOST_REQUIRE(fs::create_directories(tmpdir / base));
+    fs::path fullpath = tmpdir / base / filename;
+    BOOST_MESSAGE("writing contents to " << fullpath.string());
+    std::ofstream os(fullpath.string());
+    os << contents;
+  }
+
+  // ... setup the environment variable to the test directory ...
+  (void) setenv("JAYBEAMS_ROOT", tmpdir.string().c_str(), true);
+  char argv0[] = "binary";
+  char argv1[] = "--bar.x=42";
+  char argv2[] = "--baz.y=24";
+  char* argv[] = {argv0, argv1, argv2};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  config6 tested;
+  tested.load_overrides(argc, argv, filename);
+  BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
+  BOOST_CHECK_EQUAL(tested.bar(), make_config0(42, -2, -3));
+  BOOST_CHECK_EQUAL(tested.baz(), make_config0(-1, 24, 4));
+}
+
+/**
  * @test Verify that config object works correctly when the real file
- * is not found.
+ * is not found using the default environment variable.
  */
 BOOST_AUTO_TEST_CASE(config_object_config_file_missing) {
   std::string filename("missing-config-file.bad.bad.bad.yml");
