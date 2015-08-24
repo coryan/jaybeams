@@ -666,16 +666,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00583"></a>00583 }
 <a name="l00584"></a>00584 <span class="comment"></span>
 <a name="l00585"></a>00585 <span class="comment">/**</span>
-<a name="l00586"></a>00586 <span class="comment"> * @test Complete coverage for jb::usage</span>
-<a name="l00587"></a>00587 <span class="comment"> */</span>
-<a name="l00588"></a><a class="code" href="ut__config__object_8cpp.html#af35085eaf795edd8a2967fe24ae3524c">00588</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(usage_coverage) {
-<a name="l00589"></a>00589   <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> a(<span class="stringliteral">&quot;foo&quot;</span>, 0);
-<a name="l00590"></a>00590   <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> b(std::string(<span class="stringliteral">&quot;foo&quot;</span>), 0);
+<a name="l00586"></a>00586 <span class="comment"> * @test Verify that config object works correctly when the real file</span>
+<a name="l00587"></a>00587 <span class="comment"> * is not found.</span>
+<a name="l00588"></a>00588 <span class="comment"> */</span>
+<a name="l00589"></a><a class="code" href="ut__config__object_8cpp.html#acf40fca6b78b7a9ec55eddb4100c48f3">00589</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(config_object_config_file_missing) {
+<a name="l00590"></a>00590   std::string filename(<span class="stringliteral">&quot;missing-config-file.bad.bad.bad.yml&quot;</span>);
 <a name="l00591"></a>00591 
-<a name="l00592"></a>00592   BOOST_CHECK_EQUAL(a.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>(), b.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>());
-<a name="l00593"></a>00593   BOOST_CHECK_EQUAL(a.what(), b.what());
-<a name="l00594"></a>00594 }
-<a name="l00595"></a>00595 
+<a name="l00592"></a>00592   <span class="keywordtype">char</span> argv0[] = <span class="stringliteral">&quot;binary&quot;</span>;
+<a name="l00593"></a>00593   <span class="keywordtype">char</span> argv1[] = <span class="stringliteral">&quot;--foo=this is a long string&quot;</span>;
+<a name="l00594"></a>00594   <span class="keywordtype">char</span> argv2[] = <span class="stringliteral">&quot;--baz.y=24&quot;</span>;
+<a name="l00595"></a>00595   <span class="keywordtype">char</span>* argv[] = {argv0, argv1, argv2};
+<a name="l00596"></a>00596   <span class="keywordtype">int</span> argc = <span class="keyword">sizeof</span>(argv) / <span class="keyword">sizeof</span>(argv[0]);
+<a name="l00597"></a>00597   config6 tested;
+<a name="l00598"></a>00598   tested.load_overrides(argc, argv, filename);
+<a name="l00599"></a>00599   BOOST_CHECK_EQUAL(tested.foo(), <span class="stringliteral">&quot;this is a long string&quot;</span>);
+<a name="l00600"></a>00600   BOOST_CHECK_EQUAL(tested.bar(), make_config0(0, 0, 0));
+<a name="l00601"></a>00601   BOOST_CHECK_EQUAL(tested.baz(), make_config0(0, 24, 0));
+<a name="l00602"></a>00602 }
+<a name="l00603"></a>00603 <span class="comment"></span>
+<a name="l00604"></a>00604 <span class="comment">/**</span>
+<a name="l00605"></a>00605 <span class="comment"> * @test Complete coverage for jb::usage</span>
+<a name="l00606"></a>00606 <span class="comment"> */</span>
+<a name="l00607"></a><a class="code" href="ut__config__object_8cpp.html#af35085eaf795edd8a2967fe24ae3524c">00607</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(usage_coverage) {
+<a name="l00608"></a>00608   <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> a(<span class="stringliteral">&quot;foo&quot;</span>, 0);
+<a name="l00609"></a>00609   <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> b(std::string(<span class="stringliteral">&quot;foo&quot;</span>), 0);
+<a name="l00610"></a>00610 
+<a name="l00611"></a>00611   BOOST_CHECK_EQUAL(a.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>(), b.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>());
+<a name="l00612"></a>00612   BOOST_CHECK_EQUAL(a.what(), b.what());
+<a name="l00613"></a>00613 }
+<a name="l00614"></a>00614 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
