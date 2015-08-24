@@ -53,3 +53,26 @@ BOOST_AUTO_TEST_CASE(hhmmss_ios) {
     BOOST_CHECK_EQUAL(os.str(), "090502");
   }
 }
+
+/**
+ * @test Verify that as_hh_mm_ss_u works correctly:
+ */
+BOOST_AUTO_TEST_CASE(as_hh_mm_ss_u_ios) {
+  {
+    // 13:14:15.123 in microseconds
+    std::chrono::microseconds t(((13 * 60 + 14) * 60 + 15) * usec + 123000);
+
+    std::ostringstream os;
+    os << jb::as_hh_mm_ss_u(t);
+    BOOST_CHECK_EQUAL(os.str(), "13:14:15.123000");
+  }
+
+  {
+    // 09:05:04.000123 in microseconds
+    std::chrono::microseconds t(((9 * 60 + 5) * 60 + 4) * usec + 123);
+
+    std::ostringstream os;
+    os << jb::as_hh_mm_ss_u(t);
+    BOOST_CHECK_EQUAL(os.str(), "09:05:04.000123");
+  }
+}
