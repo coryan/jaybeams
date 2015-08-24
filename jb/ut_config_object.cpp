@@ -432,3 +432,32 @@ pos:
       expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(3, 4, -3));
 }
+
+/**
+ * @test Verify that config objects raise usage exceptions.
+ */
+BOOST_AUTO_TEST_CASE(config_object_usage) {
+  config1 tested;
+  char argv0[] = "binary";
+  char argv1[] = "--help";
+  char* argv[] = {argv0, argv1};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  std::istringstream is("");
+  
+  BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), jb::usage);
+}
+
+/**
+ * @test Verify that config objects raise exceptions when presented
+ * with invalid options.
+ */
+BOOST_AUTO_TEST_CASE(config_object_invalid_option) {
+  config1 tested;
+  char argv0[] = "binary";
+  char argv1[] = "--invalid-option";
+  char* argv[] = {argv0, argv1};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  std::istringstream is("");
+  
+  BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), std::exception);
+}
