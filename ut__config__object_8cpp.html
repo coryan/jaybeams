@@ -109,6 +109,8 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#afe14caa9bbf63fefdf501d1ddcd9c3be">BOOST_AUTO_TEST_CASE</a> (config_object_invalid_option)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#a3f7c425c1c1beac5a7ac900eeebe0290">BOOST_AUTO_TEST_CASE</a> (config_object_pair_yaml)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#a5aa71588609ee10034ee380b833e4af8">BOOST_AUTO_TEST_CASE</a> (config_object_pair_options)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#a93486e8313a46f9a936a19e641e2815f">BOOST_AUTO_TEST_CASE</a> (config_object_config_file_env)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#aca3f484942a3c3bbf95478cdec53fd43">BOOST_AUTO_TEST_CASE</a> (config_object_config_file_missing_with_env)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#ae7bf95da9809ab9c73252d2cd2b747de">BOOST_AUTO_TEST_CASE</a> (config_object_config_file)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#acf40fca6b78b7a9ec55eddb4100c48f3">BOOST_AUTO_TEST_CASE</a> (config_object_config_file_missing)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__object_8cpp.html#af35085eaf795edd8a2967fe24ae3524c">BOOST_AUTO_TEST_CASE</a> (usage_coverage)</td></tr>
@@ -374,6 +376,48 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a93486e8313a46f9a936a19e641e2815f"></a><!-- doxytag: member="ut_config_object.cpp::BOOST_AUTO_TEST_CASE" ref="a93486e8313a46f9a936a19e641e2815f" args="(config_object_config_file_env)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
+          <td>(</td>
+          <td class="paramtype">config_object_config_file_env&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000025">Test:</a></b></dt><dd>Verify that config object works correctly with real files and an environment variable.</dd></dl>
+
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00545">545</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+
+<p>References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca3f484942a3c3bbf95478cdec53fd43"></a><!-- doxytag: member="ut_config_object.cpp::BOOST_AUTO_TEST_CASE" ref="aca3f484942a3c3bbf95478cdec53fd43" args="(config_object_config_file_missing_with_env)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
+          <td>(</td>
+          <td class="paramtype">config_object_config_file_missing_with_env&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000026">Test:</a></b></dt><dd>Verify that config object works correctly with a missing file and the environment variable.</dd></dl>
+
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00590">590</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae7bf95da9809ab9c73252d2cd2b747de"></a><!-- doxytag: member="ut_config_object.cpp::BOOST_AUTO_TEST_CASE" ref="ae7bf95da9809ab9c73252d2cd2b747de" args="(config_object_config_file)" -->
 <div class="memitem">
 <div class="memproto">
@@ -388,9 +432,9 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000025">Test:</a></b></dt><dd>Verify that config object works correctly with real files.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000027">Test:</a></b></dt><dd>Verify that config object works correctly with real files and the default environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00544">544</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00617">617</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 <p>References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -410,9 +454,9 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000026">Test:</a></b></dt><dd>Verify that config object works correctly when the real file is not found.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000028">Test:</a></b></dt><dd>Verify that config object works correctly when the real file is not found using the default environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00589">589</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00662">662</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -430,9 +474,9 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000027">Test:</a></b></dt><dd>Complete coverage for <a class="el" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000029">Test:</a></b></dt><dd>Complete coverage for <a class="el" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00607">607</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00680">680</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 <p>References <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>.</p>
 
