@@ -32,29 +32,15 @@ install:
   - (mkdir ${HOME?}/deps && cd ${HOME?}/deps && ${TRAVIS_BUILD_DIR?}/ci/install.sh)
 
 before_script:
-  - echo PWD = $PWD
   - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
-  - uname -a
-  - lcov --version
-  - gcov --version
-  - g++ --version
-  - clang++ --version
-  - g++-4.9 --version
-  - clang++-3.6 --version
-  - make --version
-  - automake --version
-  - autoconf --version
-  - dpkg -s libboost-test1.55-dev
-  - source ci/before_script.sh
-  - echo BUILD DIR = ${TRAVIS_BUILD_DIR?}
   - cd ${TRAVIS_BUILD_DIR?}
-  - ls -l
-  - lcov --directory . --zerocounters
+  - source ci/before_script.sh
+  - if [ "x${VARIANT}" == "xcov" ]; then lcov --directory . --zerocounters; fi
 
 script:
-  - echo PWD = $PWD
-  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
   - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?}
+  - ${CXX?} --version
+  - echo ${CXXFLAGS?}
   - ./bootstrap
   - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
   - make
