@@ -1,8 +1,6 @@
-JayBeams Documentation                {#mainpage}
-======================
+## JayBeams Documentation
 
 [![Build Status](https://travis-ci.org/coryan/jaybeams.svg?branch=master)](https://travis-ci.org/coryan/jaybeams)
-
 [![Coverage Status](https://coveralls.io/repos/coryan/jaybeams/badge.svg?branch=master&service=github)](https://coveralls.io/github/coryan/jaybeams?branch=master)
 
 Another project to have fun coding.

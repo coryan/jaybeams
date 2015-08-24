@@ -4,9 +4,9 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "The JayBeams Library"
+PROJECT_NAME           = JayBeams
 PROJECT_NUMBER         = 0.1
-PROJECT_BRIEF          = "A Project to have fun coding."
+PROJECT_BRIEF          = "Another project to have fun coding."
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
@@ -101,8 +101,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = jb \
                          doc \
-                         examples \
-                         README.md
+                         examples
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.hpp \
                          *.cpp \
