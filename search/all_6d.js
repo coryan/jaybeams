@@ -1,6 +1,7 @@
 var searchData=
 [
   ['main',['main',['../configuration_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'configuration.cpp']]],
+  ['mainpage_2edox',['mainpage.dox',['../mainpage_8dox.html',1,'']]],
   ['maximum_5fsize_5farchived',['maximum_size_archived',['../classjb_1_1log_1_1config.html#a4e9a210a463d48f01c4cf3a7cee22507',1,'jb::log::config::maximum_size_archived()'],['../namespacejb_1_1log_1_1defaults.html#a7364bf50ee5b1f5e657a6cc364dc8b0e',1,'jb::log::defaults::maximum_size_archived()']]],
   ['merge',['merge',['../classjb_1_1config__object.html#ae398d6d5cbb8d3d61fc4946bcfde3155',1,'jb::config_object']]],
   ['merge_5fvalues',['merge_values',['../classjb_1_1config__object.html#a18e98f483bec736b9145eeedf29c34aa',1,'jb::config_object']]],
