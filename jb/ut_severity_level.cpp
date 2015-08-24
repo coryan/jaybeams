@@ -11,6 +11,8 @@ BOOST_AUTO_TEST_CASE(severity_level_simple) {
   os << actual;
   BOOST_CHECK_EQUAL(os.str(), std::string("ERROR"));
 
+  BOOST_CHECK_EQUAL(std::string(jb::get_name(actual)), std::string("ERROR"));
+
   std::istringstream is("NOTICE");
   is >> actual;
   BOOST_CHECK_EQUAL(actual, jb::severity_level::notice);
@@ -24,6 +26,8 @@ BOOST_AUTO_TEST_CASE(severity_level_errors) {
   std::ostringstream os;
   os << in_error;
   BOOST_CHECK_EQUAL(os.str(), "[invalid severity (2000)]");
+
+  BOOST_CHECK_THROW(jb::get_name(in_error), std::exception);
 
   std::istringstream is("NOT-A-SEVERITY");
   BOOST_CHECK_THROW(is >> in_error, std::exception);
