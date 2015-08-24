@@ -94,23 +94,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00011"></a>00011   os &lt;&lt; actual;
 <a name="l00012"></a>00012   BOOST_CHECK_EQUAL(os.str(), std::string(<span class="stringliteral">&quot;ERROR&quot;</span>));
 <a name="l00013"></a>00013 
-<a name="l00014"></a>00014   std::istringstream is(<span class="stringliteral">&quot;NOTICE&quot;</span>);
-<a name="l00015"></a>00015   is &gt;&gt; actual;
-<a name="l00016"></a>00016   BOOST_CHECK_EQUAL(actual, <a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603ab0fbf4d17293b06caf60f339c4496a4e">jb::severity_level::notice</a>);
-<a name="l00017"></a>00017 }
-<a name="l00018"></a>00018 <span class="comment"></span>
-<a name="l00019"></a>00019 <span class="comment">/**</span>
-<a name="l00020"></a>00020 <span class="comment"> * @test Verify that the severity_level functions detect errors.</span>
-<a name="l00021"></a>00021 <span class="comment"> */</span>
-<a name="l00022"></a><a class="code" href="ut__severity__level_8cpp.html#a50cc1b41c8ed917aa01958e5dd344b93">00022</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(severity_level_errors) {
-<a name="l00023"></a>00023   <a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603" title="Severity levels for JayBeams, based on syslog.">jb::severity_level</a> in_error = <span class="keyword">static_cast&lt;</span><a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603" title="Severity levels for JayBeams, based on syslog.">jb::severity_level</a><span class="keyword">&gt;</span>(2000);
-<a name="l00024"></a>00024   std::ostringstream os;
-<a name="l00025"></a>00025   os &lt;&lt; in_error;
-<a name="l00026"></a>00026   BOOST_CHECK_EQUAL(os.str(), <span class="stringliteral">&quot;[invalid severity (2000)]&quot;</span>);
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028   std::istringstream is(<span class="stringliteral">&quot;NOT-A-SEVERITY&quot;</span>);
-<a name="l00029"></a>00029   BOOST_CHECK_THROW(is &gt;&gt; in_error, std::exception);
-<a name="l00030"></a>00030 }
+<a name="l00014"></a>00014   BOOST_CHECK_EQUAL(std::string(<a class="code" href="namespacejb.html#a877a46978a7e4af1a0d0c6cc9bb16d5a" title="Get the name of a security level.">jb::get_name</a>(actual)), std::string(<span class="stringliteral">&quot;ERROR&quot;</span>));
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016   std::istringstream is(<span class="stringliteral">&quot;NOTICE&quot;</span>);
+<a name="l00017"></a>00017   is &gt;&gt; actual;
+<a name="l00018"></a>00018   BOOST_CHECK_EQUAL(actual, <a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603ab0fbf4d17293b06caf60f339c4496a4e">jb::severity_level::notice</a>);
+<a name="l00019"></a>00019 }
+<a name="l00020"></a>00020 <span class="comment"></span>
+<a name="l00021"></a>00021 <span class="comment">/**</span>
+<a name="l00022"></a>00022 <span class="comment"> * @test Verify that the severity_level functions detect errors.</span>
+<a name="l00023"></a>00023 <span class="comment"> */</span>
+<a name="l00024"></a><a class="code" href="ut__severity__level_8cpp.html#a50cc1b41c8ed917aa01958e5dd344b93">00024</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(severity_level_errors) {
+<a name="l00025"></a>00025   <a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603" title="Severity levels for JayBeams, based on syslog.">jb::severity_level</a> in_error = <span class="keyword">static_cast&lt;</span><a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603" title="Severity levels for JayBeams, based on syslog.">jb::severity_level</a><span class="keyword">&gt;</span>(2000);
+<a name="l00026"></a>00026   std::ostringstream os;
+<a name="l00027"></a>00027   os &lt;&lt; in_error;
+<a name="l00028"></a>00028   BOOST_CHECK_EQUAL(os.str(), <span class="stringliteral">&quot;[invalid severity (2000)]&quot;</span>);
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030   BOOST_CHECK_THROW(<a class="code" href="namespacejb.html#a877a46978a7e4af1a0d0c6cc9bb16d5a" title="Get the name of a security level.">jb::get_name</a>(in_error), std::exception);
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032   std::istringstream is(<span class="stringliteral">&quot;NOT-A-SEVERITY&quot;</span>);
+<a name="l00033"></a>00033   BOOST_CHECK_THROW(is &gt;&gt; in_error, std::exception);
+<a name="l00034"></a>00034 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
