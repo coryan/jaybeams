@@ -461,3 +461,70 @@ BOOST_AUTO_TEST_CASE(config_object_invalid_option) {
   
   BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), std::exception);
 }
+
+namespace {
+
+class config5 : public jb::config_object {
+ public:
+  config5()
+      : foo(desc("foo"), this)
+  {}
+
+  config_object_constructors(config5);
+
+  jb::config_attribute<config5,std::pair<int,int>> foo;
+};
+} // anonymous namespace
+
+/**
+ * @test Verify config_objects can handle std::pair<> 
+ */
+BOOST_AUTO_TEST_CASE(config_object_pair_yaml) {
+  char const contents[] = R"""(# YAML overrides
+foo:
+  - 2
+  - 7
+)""";
+
+  std::istringstream is(contents);
+  config5 tested;
+  int argc = 0;
+  tested.load_overrides(argc, nullptr, is);
+
+  BOOST_CHECK_EQUAL(tested.foo().first, 2);
+  BOOST_CHECK_EQUAL(tested.foo().second, 7);
+}
+
+/**
+ * @test Verify config_objects can handle std::pair<> 
+ */
+BOOST_AUTO_TEST_CASE(config_object_pair_options) {
+  char const contents[] = R"""(# YAML overrides
+foo:
+  - 2
+  - 7
+)""";
+
+  std::istringstream is(contents);
+  config5 tested;
+  char argv0[] = "binary";
+  char argv1[] = "--foo.first=42";
+  char argv2[] = "--foo.second=43";
+  char* argv[] = {argv0, argv1, argv2};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  tested.load_overrides(argc, argv, is);
+
+  BOOST_CHECK_EQUAL(tested.foo().first, 42);
+  BOOST_CHECK_EQUAL(tested.foo().second, 43);
+}
+
+/**
+ * @test Complete coverage for jb::usage
+ */
+BOOST_AUTO_TEST_CASE(usage_coverage) {
+  jb::usage a("foo", 0);
+  jb::usage b(std::string("foo"), 0);
+
+  BOOST_CHECK_EQUAL(a.exit_status(), b.exit_status());
+  BOOST_CHECK_EQUAL(a.what(), b.what());
+}

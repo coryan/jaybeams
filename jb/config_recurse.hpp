@@ -161,12 +161,12 @@ struct config_recurse {
         options, object.first,
         jb::config_object::cmdline_arg_name(prefix, d.name),
         config_object::attribute_descriptor("first").help(
-            d.helpmsg + " Set the first field"));
+            d.helpmsg + ". Set the first field"));
     add_options(
         options, object.second,
         jb::config_object::cmdline_arg_name(prefix, d.name),
         config_object::attribute_descriptor("second").help(
-            d.helpmsg + ".  Set the second field"));
+            d.helpmsg + ". Set the second field"));
   }
 
   /**
