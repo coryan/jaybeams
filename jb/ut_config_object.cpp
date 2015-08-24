@@ -281,6 +281,28 @@ vars:
   BOOST_CHECK_EQUAL(tested.vars()[2].pos(), make_config0(1, 2, 3));
 }
 
+/**
+ * @test Verify the framework supports vectors of config objects that
+ * are empty.
+ */
+BOOST_AUTO_TEST_CASE(config_object_vector_empty) {
+  config2 tested;
+  std::istringstream is("");
+  char argv0[] = "not_a_path";
+  char argv1[] = "--vars.0.pos.x=2";
+  char* argv[] = { argv0, argv1 };
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  tested.load_overrides(argc, argv, is);
+
+  BOOST_REQUIRE_EQUAL(tested.vars().size(), 1);
+  BOOST_CHECK_EQUAL(tested.vars()[0].pos().x(), 2);
+
+  std::ostringstream os;
+  BOOST_CHECK_NO_THROW(os << tested);
+  config2 empty;
+  BOOST_CHECK_NO_THROW(os << empty);
+}
+
 namespace {
 class config3 : public jb::config_object {
  public:
@@ -519,6 +541,9 @@ foo:
 
   BOOST_CHECK_EQUAL(tested.foo().first, 42);
   BOOST_CHECK_EQUAL(tested.foo().second, 43);
+
+  std::ostringstream os;
+  BOOST_CHECK_NO_THROW(os << tested);
 }
 
 namespace {
