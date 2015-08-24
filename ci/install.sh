@@ -50,7 +50,10 @@ sudo apt-get -qq -y install cmake
 # JayBeams, extract it, compile it, and install it in /usr ...
 wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
 tar -xf release-0.5.1.tar.gz
-(cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
+(cd yaml-cpp-release-0.5.1 && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr .. && \
+    make && make test && sudo make install)
 
 # ... manually download Skye (one of my own libraries), extract it,
 # compile it (it is a header-only library, but the tests are executed
@@ -58,7 +61,10 @@ tar -xf release-0.5.1.tar.gz
 # environment variable ...
 wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
 tar -xf skye-0.2.tar.gz
-(source ci/before_script.sh && cd skye-0.2 && ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
+(source ${TRAVIS_BUILD_DIR?}/ci/before_script.sh && \
+    cd skye-0.2 && \
+    ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && \
+    make check && sudo make install)
 
 # ... manually download a recent version of lcov from a debian source
 # repository, extract it, compile it and install it ...
