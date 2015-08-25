@@ -59,3 +59,12 @@ BOOST_AUTO_TEST_CASE(fileio_gz) {
 
   check_read_write(tmp);
 }
+
+/**
+ * @test Verify we can write to stdout.
+ */
+BOOST_AUTO_TEST_CASE(fileio_stdout) {
+  boost::iostreams::filtering_ostream out;
+  BOOST_CHECK_NO_THROW(jb::open_output_file(out, "stdout"));
+  out << "test message, please ignore\n";
+}
