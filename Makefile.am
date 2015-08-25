@@ -151,7 +151,7 @@ jb_ut_histogram_summary_SOURCES = jb/ut_histogram.cpp
 jb_ut_histogram_summary_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram_summary
 jb_ut_histogram_summary_LDADD = $(jb_ut_libs)
 
-jb_ut_integer_range_binning_SOURCES = jb/ut_histogram.cpp
+jb_ut_integer_range_binning_SOURCES = jb/ut_integer_range_binning.cpp
 jb_ut_integer_range_binning_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_integer_range_binning
 jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 
