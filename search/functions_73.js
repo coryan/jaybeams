@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['sample',['sample',['../classjb_1_1histogram.html#a9b51fb79ccb2995a8e6d063c982ee8a1',1,'jb::histogram']]],
+  ['sample',['sample',['../classjb_1_1event__rate__estimator.html#a2dd315ccda0fd1c308f3c42659fc7109',1,'jb::event_rate_estimator::sample()'],['../classjb_1_1event__rate__histogram.html#a8444c5b5b429e0a3bd5012e5020cc857',1,'jb::event_rate_histogram::sample()'],['../classjb_1_1histogram.html#a9b51fb79ccb2995a8e6d063c982ee8a1',1,'jb::histogram::sample()']]],
   ['sample2bin',['sample2bin',['../classjb_1_1explicit__cuts__binning.html#a3a91f1e4cc80f37d78b635e5c314e23c',1,'jb::explicit_cuts_binning::sample2bin()'],['../classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941',1,'jb::integer_range_binning::sample2bin()'],['../classjb_1_1binning__strategy__concept.html#a2cec93da7f2c1154cae71f2f1338f67e',1,'jb::binning_strategy_concept::sample2bin()']]],
   ['search_5fpath',['search_path',['../classjb_1_1config__files__locations__base.html#a995c646efb282395c7942b8a0f0a8c3b',1,'jb::config_files_locations_base']]],
   ['severity_5flevel_5fwidth',['severity_level_width',['../namespacejb.html#acad72c331a63bfe75ce38b4dc718529b',1,'jb']]],

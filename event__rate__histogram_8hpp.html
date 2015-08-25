@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>JayBeams: jb/ut_strtonum.cpp File Reference</title>
+<title>JayBeams: jb/event_rate_histogram.hpp File Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -84,66 +84,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">jb/ut_strtonum.cpp File Reference</div>  </div>
+<div class="title">jb/event_rate_histogram.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="strtonum_8hpp_source.html">jb/strtonum.hpp</a>&gt;</code><br/>
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="histogram_8hpp_source.html">jb/histogram.hpp</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="event__rate__estimator_8hpp_source.html">jb/event_rate_estimator.hpp</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="integer__range__binning_8hpp_source.html">jb/integer_range_binning.hpp</a>&gt;</code><br/>
 </div>
-<p><a href="ut__strtonum_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="event__rate__histogram_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr><td colspan="2"><h2><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__strtonum_8cpp.html#ab7718ac38aa6345871919a57269fc668">BOOST_AUTO_TEST_CASE</a> (strtonum_int)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> (strtonum_double)</td></tr>
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram&lt; counter_type, duration_type &gt;</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Keep a histogram of observed event rates.  <a href="classjb_1_1event__rate__histogram.html#details">More...</a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><p>The top-level namespace for the JayBeams library. </p>
+<br/></td></tr>
 </table>
-<hr/><h2>Function Documentation</h2>
-<a class="anchor" id="ab7718ac38aa6345871919a57269fc668"></a><!-- doxytag: member="ut_strtonum.cpp::BOOST_AUTO_TEST_CASE" ref="ab7718ac38aa6345871919a57269fc668" args="(strtonum_int)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
-          <td>(</td>
-          <td class="paramtype">strtonum_int&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000054">Test:</a></b></dt><dd>Verify that strtonum&lt;int&gt; works as expected.</dd></dl>
-
-<p>Definition at line <a class="el" href="ut__strtonum_8cpp_source.html#l00008">8</a> of file <a class="el" href="ut__strtonum_8cpp_source.html">ut_strtonum.cpp</a>.</p>
-
-<p>References <a class="el" href="strtonum_8hpp_source.html#l00038">jb::strtonum()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a09142ae821048736f57985fe795d5c64"></a><!-- doxytag: member="ut_strtonum.cpp::BOOST_AUTO_TEST_CASE" ref="a09142ae821048736f57985fe795d5c64" args="(strtonum_double)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
-          <td>(</td>
-          <td class="paramtype">strtonum_double&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000055">Test:</a></b></dt><dd>Verify that strtonum&lt;double&gt; works as expected.</dd></dl>
-
-<p>Definition at line <a class="el" href="ut__strtonum_8cpp_source.html#l00038">38</a> of file <a class="el" href="ut__strtonum_8cpp_source.html">ut_strtonum.cpp</a>.</p>
-
-<p>References <a class="el" href="strtonum_8hpp_source.html#l00038">jb::strtonum()</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"

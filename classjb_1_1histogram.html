@@ -201,7 +201,7 @@ class jb::histogram&lt; binning_strategy_t, counter_type_t &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef binning_strategy_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#aace3e6c50f3a9381209cece0e28693d8">binning_strategy</a></td>
@@ -209,6 +209,8 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
       </table>
 </div>
 <div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classjb_1_1event__rate__histogram.html#a9584d042dc8f36572f14034dc65133b5">jb::event_rate_histogram&lt; counter_type, duration_type &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00053">53</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
@@ -218,7 +220,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef counter_type_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a></td>
@@ -235,7 +237,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef std::vector&lt;<a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>&gt; <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#af4ad87cdc2a5e3067bb5416ac616d443">counters</a></td>
@@ -254,7 +256,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef binning_strategy::sample_type <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a></td>
@@ -272,7 +274,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html">histogram</a> </td>
@@ -303,7 +305,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#aa73371973ff3b372acfd5d3fbe8b9238">estimated_mean</a> </td>
@@ -320,15 +322,13 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00097">97</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00250">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::binning_</a>, <a class="el" href="histogram_8hpp_source.html#l00256">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::bins_</a>, <a class="el" href="histogram_8hpp_source.html#l00245">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::midpoint()</a>, <a class="el" href="histogram_8hpp_source.html#l00255">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples_</a>, <a class="el" href="histogram_8hpp_source.html#l00088">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max()</a>, <a class="el" href="histogram_8hpp_source.html#l00083">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min()</a>, <a class="el" href="histogram_8hpp_source.html#l00179">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::overflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00174">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::underflow_count()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a6c02b97a76ebee1a0bfbf2953130f213"></a><!-- doxytag: member="jb::histogram::estimated_quantile" ref="a6c02b97a76ebee1a0bfbf2953130f213" args="(double q) const " -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a6c02b97a76ebee1a0bfbf2953130f213">estimated_quantile</a> </td>
@@ -348,9 +348,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00134">134</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00250">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::binning_</a>, <a class="el" href="histogram_8hpp_source.html#l00256">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::bins_</a>, <a class="el" href="histogram_8hpp_source.html#l00078">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples()</a>, <a class="el" href="histogram_8hpp_source.html#l00255">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples_</a>, <a class="el" href="histogram_8hpp_source.html#l00088">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max()</a>, <a class="el" href="histogram_8hpp_source.html#l00083">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min()</a>, <a class="el" href="histogram_8hpp_source.html#l00179">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::overflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00174">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::underflow_count()</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::summary()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::summary()</a>.</p>
 
 </div>
 </div>
@@ -358,7 +356,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a18db9487a2a4101f1936122da02b4dee">midpoint</a> </td>
@@ -385,7 +383,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00245">245</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>.</p>
 
 </div>
 </div>
@@ -393,7 +391,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a2b64d077321ffa69b6632fda4e28160e">nbins</a> </td>
@@ -409,15 +407,13 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00238">238</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00250">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::binning_</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="af6b2645c8cee5fc7835508fa1d4f0723"></a><!-- doxytag: member="jb::histogram::nsamples" ref="af6b2645c8cee5fc7835508fa1d4f0723" args="() const " -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#af6b2645c8cee5fc7835508fa1d4f0723">nsamples</a> </td>
@@ -433,9 +429,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00078">78</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00255">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::summary()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::summary()</a>.</p>
 
 </div>
 </div>
@@ -443,7 +437,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a6e750a8e2b32dabde8db57469c63ba40">observed_max</a> </td>
@@ -459,9 +453,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00088">88</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00254">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::summary()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::summary()</a>.</p>
 
 </div>
 </div>
@@ -469,7 +461,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#acf2c888c4753696e498350d6c97114bd">observed_min</a> </td>
@@ -485,9 +477,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00083">83</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00253">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::summary()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00184">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::summary()</a>.</p>
 
 </div>
 </div>
@@ -495,7 +485,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a2c09e6829efc3086e388cb4e8d56af32">overflow_count</a> </td>
@@ -511,9 +501,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00179">179</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00252">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::overflow_count_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, and <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, and <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>.</p>
 
 </div>
 </div>
@@ -521,7 +509,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#abd04d5c38e88b4c4cef2784e568f3571">reset</a> </td>
@@ -537,15 +525,13 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00228">228</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00250">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::binning_</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a9b51fb79ccb2995a8e6d063c982ee8a1"></a><!-- doxytag: member="jb::histogram::sample" ref="a9b51fb79ccb2995a8e6d063c982ee8a1" args="(sample_type const &amp;t)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a9b51fb79ccb2995a8e6d063c982ee8a1">sample</a> </td>
@@ -562,8 +548,6 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00201">201</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
-
 <p>Referenced by <a class="el" href="ut__histogram_8cpp_source.html#l00220">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
@@ -572,7 +556,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacejb.html#structjb_1_1histogram__summary">histogram_summary</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#abafffad3f8c6a9f5120aa50336adca9b">summary</a> </td>
@@ -588,15 +572,13 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00184">184</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, <a class="el" href="histogram_8hpp_source.html#l00078">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples()</a>, <a class="el" href="histogram_8hpp_source.html#l00088">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max()</a>, and <a class="el" href="histogram_8hpp_source.html#l00083">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a1847b98e285bd10f9121fa8f9792f811"></a><!-- doxytag: member="jb::histogram::underflow_count" ref="a1847b98e285bd10f9121fa8f9792f811" args="() const " -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a1847b98e285bd10f9121fa8f9792f811">underflow_count</a> </td>
@@ -612,9 +594,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00174">174</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00251">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::underflow_count_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, and <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, and <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>.</p>
 
 </div>
 </div>
@@ -622,7 +602,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#abaeeedbe99d6a1f649bd2b3e0774f596">weighted_sample</a> </td>
@@ -649,9 +629,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00206">206</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>References <a class="el" href="histogram_8hpp_source.html#l00250">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::binning_</a>, <a class="el" href="histogram_8hpp_source.html#l00256">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::bins_</a>, <a class="el" href="histogram_8hpp_source.html#l00255">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples_</a>, <a class="el" href="histogram_8hpp_source.html#l00254">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max_</a>, <a class="el" href="histogram_8hpp_source.html#l00253">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min_</a>, <a class="el" href="histogram_8hpp_source.html#l00252">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::overflow_count_</a>, and <a class="el" href="histogram_8hpp_source.html#l00251">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::underflow_count_</a>.</p>
-
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00201">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__histogram_8hpp_source.html#l00056">jb::event_rate_histogram&lt; counter_type, duration_type &gt;::sample()</a>, and <a class="el" href="histogram_8hpp_source.html#l00201">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
@@ -660,7 +638,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#aace3e6c50f3a9381209cece0e28693d8">binning_strategy</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#adadc231b469a58c61a3387ad954fee29">binning_</a><code> [private]</code></td>
@@ -671,7 +649,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00250">250</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, <a class="el" href="histogram_8hpp_source.html#l00238">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nbins()</a>, <a class="el" href="histogram_8hpp_source.html#l00228">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::reset()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, <a class="el" href="histogram_8hpp_source.html#l00238">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::nbins()</a>, <a class="el" href="histogram_8hpp_source.html#l00228">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::reset()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -679,7 +657,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#af4ad87cdc2a5e3067bb5416ac616d443">counters</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a78798797db9b1e0cf936a4b8e0091be1">bins_</a><code> [private]</code></td>
@@ -690,7 +668,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00256">256</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -698,7 +676,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#ad0a520c1b634c874818dcbdb4682c9e8">nsamples_</a><code> [private]</code></td>
@@ -709,7 +687,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00255">255</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::estimated_quantile()</a>, <a class="el" href="histogram_8hpp_source.html#l00078">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::nsamples()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00097">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_mean()</a>, <a class="el" href="histogram_8hpp_source.html#l00134">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::estimated_quantile()</a>, <a class="el" href="histogram_8hpp_source.html#l00078">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::nsamples()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -717,7 +695,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a87c7ca772d5cd4023686a42a66ce88c7">observed_max_</a><code> [private]</code></td>
@@ -728,7 +706,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00254">254</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00088">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_max()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00088">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::observed_max()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -736,7 +714,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">sample_type</a> <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a8692849e35c37d92f35e19f69b1237c6">observed_min_</a><code> [private]</code></td>
@@ -747,7 +725,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00253">253</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00083">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::observed_min()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00083">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::observed_min()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -755,7 +733,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#aec2f95316c532bf0fb93ee48a0f1ca28">overflow_count_</a><code> [private]</code></td>
@@ -766,7 +744,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00252">252</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00179">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::overflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00179">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::overflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>
@@ -774,7 +752,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned int&gt; </div>
+template&lt;typename binning_strategy_t, typename counter_type_t = unsigned int&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::uint64_t <a class="el" href="classjb_1_1histogram.html">jb::histogram</a>&lt; binning_strategy_t, counter_type_t &gt;::<a class="el" href="classjb_1_1histogram.html#a300d6e8debc13bf1c68041a67aaa9db6">underflow_count_</a><code> [private]</code></td>
@@ -785,7 +763,7 @@ template&lt;typename binning_strategy_t , typename counter_type_t  = unsigned in
 
 <p>Definition at line <a class="el" href="histogram_8hpp_source.html#l00251">251</a> of file <a class="el" href="histogram_8hpp_source.html">histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00174">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::underflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::weighted_sample()</a>.</p>
+<p>Referenced by <a class="el" href="histogram_8hpp_source.html#l00174">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::underflow_count()</a>, and <a class="el" href="histogram_8hpp_source.html#l00206">jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;::weighted_sample()</a>.</p>
 
 </div>
 </div>

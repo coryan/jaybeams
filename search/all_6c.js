@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['last_5fevent_5f',['last_event_',['../classjb_1_1event__rate__estimator.html#ab74a2e7f79c06490f58ec4bc1fb35c75',1,'jb::event_rate_estimator']]],
+  ['last_5frate',['last_rate',['../classjb_1_1event__rate__histogram.html#ab850e66b03ec8ab0f1779994f5417e4f',1,'jb::event_rate_histogram']]],
+  ['last_5frate_5f',['last_rate_',['../classjb_1_1event__rate__histogram.html#a3d399bddc2c0f0a086776ccce8cfc721',1,'jb::event_rate_histogram']]],
   ['load_5foverrides',['load_overrides',['../classjb_1_1config__object.html#ae605be26755b7af1e9d90d1e229bb2fa',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::string const &amp;filename, char const *environment_variable_name)'],['../classjb_1_1config__object.html#a08686516f759e8f8be7d1b4eced16afb',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::string const &amp;filename)'],['../classjb_1_1config__object.html#afa9aeb4444edbc3c7658787dc361c8d1',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::istream &amp;is)']]],
   ['log_2ecpp',['log.cpp',['../log_8cpp.html',1,'']]],
   ['log_2ehpp',['log.hpp',['../log_8hpp.html',1,'']]],
