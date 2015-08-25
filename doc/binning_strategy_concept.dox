@@ -60,11 +60,11 @@ public:
    *
    * Given the two endpoints (x_a,y_a) and (x_b,y_a + s) of a line,
    * and a y value such that y is the [y_a,y_a + s] range, compute the
-   * value of x that most closely satisfies:
+   * value of @f$x@f$ that most closely satisfies:
    *
-   * @code
-   *    (x - x_a) / (y - y_a) = (x_b - x_a) / s 
-   * @endcode
+   * @f[
+   *     {{(x - x_a)} \over {(y - y_a)}} = {{(x_b - x_a)} \over {s}}
+   * @f]
    *
    * This function is used to encapsulate rounding differences for
    * different types of samples.

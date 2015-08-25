@@ -8,6 +8,7 @@ unit_tests = \
   jb/ut_as_hhmmss \
   jb/ut_config_files_location \
   jb/ut_config_object \
+  jb/ut_explicit_cuts_binning \
   jb/ut_histogram \
   jb/ut_histogram_summary \
   jb/ut_logging \
@@ -72,6 +73,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/config_object.hpp \
   jb/config_recurse.hpp \
   jb/convert_severity_level.hpp \
+  jb/explicit_cuts_binning.hpp \
   jb/histogram.hpp \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
@@ -123,6 +125,14 @@ jb_ut_config_object_CPPFLAGS = \
   $(UT_CPPFLAGS) \
   -DBOOST_TEST_MODULE=jb_ut_config_object
 jb_ut_config_object_LDADD = \
+  $(jb_ut_libs)
+
+jb_ut_explicit_cuts_binning_SOURCES = \
+  jb/ut_explicit_cuts_binning.cpp
+jb_ut_explicit_cuts_binning_CPPFLAGS = \
+  $(UT_CPPFLAGS) \
+  -DBOOST_TEST_MODULE=jb_ut_explicit_cuts_binning
+jb_ut_explicit_cuts_binning_LDADD = \
   $(jb_ut_libs)
 
 jb_ut_histogram_SOURCES = \

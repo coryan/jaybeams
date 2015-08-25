@@ -1,7 +1,8 @@
 #ifndef jb_integer_range_binning_hpp
 #define jb_integer_range_binning_hpp
 
-#include <cmath>
+#include <jb/histogram_binning_linear_interpolation.hpp>
+
 #include <limits>
 #include <type_traits>
 
@@ -20,7 +21,7 @@ namespace jb {
 template<typename sample_type_t>
 class integer_range_binning {
  public:
-  /// type traits
+  /// type traits as required by @ref binning_strategy_concept
   typedef sample_type_t sample_type;
 
   /**
@@ -37,6 +38,13 @@ class integer_range_binning {
         "The sample_type must be an integral type");
   }
 
+  //@{
+  /**
+   * @name Implement binning_strategy_concept interface.
+   *
+   * Please see @ref binning_strategy_concept for detailed
+   * documentation of each member function.
+   */
   sample_type histogram_min() const {
     return h_min_;
   }
@@ -57,8 +65,9 @@ class integer_range_binning {
   }
   sample_type interpolate(
       sample_type x_a, sample_type x_b, double y_a, double s, double q) const {
-    return sample_type(std::floor(x_a + (q - y_a) * (x_b - x_a) / s));
+    return histogram_binning_linear_interpolation(x_a, x_b, y_a, s, q);
   }
+  //@}
 
  private:
   sample_type h_min_;
@@ -67,4 +76,4 @@ class integer_range_binning {
 
 } // namespace jb
 
-#endif // jb_integer_rate_histogram_hpp
+#endif // jb_integer_range_binning_hpp
