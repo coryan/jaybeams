@@ -148,6 +148,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00059"></a>00059 
 <a name="l00060"></a>00060   <a class="code" href="ut__fileio_8cpp.html#ade376c335599c9a52e4543dad6a566d1" title="Implement the common part of the tests.">check_read_write</a>(tmp);
 <a name="l00061"></a>00061 }
+<a name="l00062"></a>00062 <span class="comment"></span>
+<a name="l00063"></a>00063 <span class="comment">/**</span>
+<a name="l00064"></a>00064 <span class="comment"> * @test Verify we can write to stdout.</span>
+<a name="l00065"></a>00065 <span class="comment"> */</span>
+<a name="l00066"></a><a class="code" href="ut__fileio_8cpp.html#ad2d40da4e2f1fc02049139d0d4c84f64">00066</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(fileio_stdout) {
+<a name="l00067"></a>00067   boost::iostreams::filtering_ostream out;
+<a name="l00068"></a>00068   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb.html#abf1d1ffdd847231dc1e9480bfea40d7c" title="Open a file for writing.">jb::open_output_file</a>(out, <span class="stringliteral">&quot;stdout&quot;</span>));
+<a name="l00069"></a>00069   out &lt;&lt; <span class="stringliteral">&quot;test message, please ignore\n&quot;</span>;
+<a name="l00070"></a>00070 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
