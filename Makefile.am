@@ -8,6 +8,8 @@ unit_tests = \
   jb/ut_as_hhmmss \
   jb/ut_config_files_location \
   jb/ut_config_object \
+  jb/ut_histogram \
+  jb/ut_histogram_summary \
   jb/ut_logging \
   jb/ut_severity_level \
   jb/ut_strtonum
@@ -70,6 +72,9 @@ nobase_jb_libjb_a_HEADERS = \
   jb/config_object.hpp \
   jb/config_recurse.hpp \
   jb/convert_severity_level.hpp \
+  jb/histogram.hpp \
+  jb/histogram_summary.hpp \
+  jb/integer_range_binning.hpp \
   jb/log.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
@@ -78,6 +83,7 @@ jb_libjb_a_SOURCES = \
   jb/as_hhmmss.cpp \
   jb/config_files_location.cpp \
   jb/config_object.cpp \
+  jb/histogram_summary.cpp \
   jb/log.cpp \
   jb/severity_level.cpp
 
@@ -117,6 +123,22 @@ jb_ut_config_object_CPPFLAGS = \
   $(UT_CPPFLAGS) \
   -DBOOST_TEST_MODULE=jb_ut_config_object
 jb_ut_config_object_LDADD = \
+  $(jb_ut_libs)
+
+jb_ut_histogram_SOURCES = \
+  jb/ut_histogram.cpp
+jb_ut_histogram_CPPFLAGS = \
+  $(UT_CPPFLAGS) \
+  -DBOOST_TEST_MODULE=jb_ut_histogram
+jb_ut_histogram_LDADD = \
+  $(jb_ut_libs)
+
+jb_ut_histogram_summary_SOURCES = \
+  jb/ut_histogram.cpp
+jb_ut_histogram_summary_CPPFLAGS = \
+  $(UT_CPPFLAGS) \
+  -DBOOST_TEST_MODULE=jb_ut_histogram_summary
+jb_ut_histogram_summary_LDADD = \
   $(jb_ut_libs)
 
 jb_ut_logging_SOURCES = \

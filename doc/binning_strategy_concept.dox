@@ -1,0 +1,83 @@
+// -*- c++ -*-
+/**
+ * The interface that must be met by the binning_strategy in jb::histogram.
+ */
+class jb::binning_strategy_concept {
+public:
+  /**
+   * The type of the samples.
+   *
+   * Must be comparable using operator< and operator<=.
+   */
+  typedef ... sample_type;
+
+  /**
+   * The minimum value that will be included in the histogram.
+   *
+   * Any sample with a smaller value is included in the underflow bin.
+   */
+  sample_type histogram_min() const;
+
+  /**
+   * The smallest value that will not be included in the histogram.
+   *
+   * Any sample with such a value or higher is included in the
+   * overflow bin.
+   *
+   * Notice that the histogram only includes the samples such that:
+   *    histogram_min() <= sample < histogram_max().
+   */
+  sample_type histogram_max() const;
+
+  /**
+   * The minimum value that can be attained by the samples.
+   *
+   * For example, 0 if all samples are known to be positive, or maybe
+   * std::numberic_limits<sample_type>::min().
+   */
+  sample_type theoretical_min() const;
+
+  /**
+   * The minimum value that can be attained by the samples.
+   *
+   * For example, 86400 if all samples are "secons within a day", or
+   * simply std::numberic_limits<sample_type>::max().
+   */
+  sample_type theoretical_max() const;
+
+  /**
+   * Map a variable type into a bin number.
+   */
+  std::size_t sample2bin(sample_type const& x) const;
+
+  /**
+   * Map a bin number into the start of its range.
+   */
+  sample_type bin2sample(std::size_t i) const;
+
+  /**
+   * Interpolate a x-coordinate given endpoints and y values.
+   *
+   * Given the two endpoints (x_a,y_a) and (x_b,y_a + s) of a line,
+   * and a y value such that y is the [y_a,y_a + s] range, compute the
+   * value of x that most closely satisfies:
+   *
+   * @code
+   *    (x - x_a) / (y - y_a) = (x_b - x_a) / s 
+   * @endcode
+   *
+   * This function is used to encapsulate rounding differences for
+   * different types of samples.
+   *
+   * @param x_a The x coordinate for the @a a point.
+   * @param y_a The y coordinate for the @a a point.
+   * @param x_b The x coordinate for the @a b point.
+   * @param s The difference between y_b and y_a.
+   * @param q A value in the [y_a,y_b] range.
+   *
+   * @returns The closest solution to the equation shown above for
+   *   values in the sample_type domain.
+   */
+  sample_type interpolate(
+      sample_type x_a, sample_type x_b, double y_a, double s, double q) const;
+};
