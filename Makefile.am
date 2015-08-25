@@ -2,9 +2,41 @@
 
 instdir = $(prefix)/lib
 inst_LIBRARIES = \
-  jb/libjb.a
+  jb/libjb.a \
+  jb/libitch5.a
 
 unit_tests = \
+  jb/itch5/ut_add_order_message \
+  jb/itch5/ut_add_order_mpid_message \
+  jb/itch5/ut_base_decoders \
+  jb/itch5/ut_broken_trade_message \
+  jb/itch5/ut_char_list_field \
+  jb/itch5/ut_char_list_validator \
+  jb/itch5/ut_cross_trade_message \
+  jb/itch5/ut_cross_type \
+  jb/itch5/ut_decoder \
+  jb/itch5/ut_ipo_quoting_period_update_message \
+  jb/itch5/ut_market_participant_position_message \
+  jb/itch5/ut_message_header \
+  jb/itch5/ut_mwcb_breach_message \
+  jb/itch5/ut_mwcb_decline_level_message \
+  jb/itch5/ut_net_order_imbalance_indicator_message \
+  jb/itch5/ut_order_cancel_message \
+  jb/itch5/ut_order_delete_message \
+  jb/itch5/ut_order_executed_message \
+  jb/itch5/ut_order_executed_price_message \
+  jb/itch5/ut_order_replace_message \
+  jb/itch5/ut_p2ceil \
+  jb/itch5/ut_price_field \
+  jb/itch5/ut_reg_sho_restriction_message \
+  jb/itch5/ut_seconds_field \
+  jb/itch5/ut_short_string_field \
+  jb/itch5/ut_static_digits \
+  jb/itch5/ut_stock_directory_message \
+  jb/itch5/ut_stock_trading_action_message \
+  jb/itch5/ut_system_event_message \
+  jb/itch5/ut_timestamp \
+  jb/itch5/ut_trade_message \
   jb/ut_as_hhmmss \
   jb/ut_config_files_location \
   jb/ut_config_object \
@@ -63,6 +95,11 @@ jb_ut_libs = \
   jb/libjb.a \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 
+jb_ut_itch5_libs = \
+  jb/libitch5.a \
+  jb/libjb.a \
+  $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
+
 ################################################################
 # jb/libjb.a
 ################################################################
@@ -98,6 +135,77 @@ jb_libjb_a_SOURCES = \
   jb/severity_level.cpp
 
 jb_libjb_a_LIBADD = 
+
+################################################################
+# jb/libmo.a
+################################################################
+
+jb_libitch5_adir = $(includedir)
+nobase_jb_libitch5_a_HEADERS =
+
+jb_libitch5_a_SOURCES = \
+  jb/itch5/add_order_message.cpp \
+  jb/itch5/add_order_mpid_message.cpp \
+  jb/itch5/base_decoders.cpp \
+  jb/itch5/broken_trade_message.cpp \
+  jb/itch5/char_list_validator.cpp \
+  jb/itch5/cross_trade_message.cpp \
+  jb/itch5/decoder.cpp \
+  jb/itch5/ipo_quoting_period_update_message.cpp \
+  jb/itch5/market_participant_position_message.cpp \
+  jb/itch5/message_header.cpp \
+  jb/itch5/mwcb_breach_message.cpp \
+  jb/itch5/mwcb_decline_level_message.cpp \
+  jb/itch5/net_order_imbalance_indicator_message.cpp \
+  jb/itch5/order_cancel_message.cpp \
+  jb/itch5/order_delete_message.cpp \
+  jb/itch5/order_executed_message.cpp \
+  jb/itch5/order_executed_price_message.cpp \
+  jb/itch5/order_replace_message.cpp \
+  jb/itch5/reg_sho_restriction_message.cpp \
+  jb/itch5/seconds_field.cpp \
+  jb/itch5/stock_directory_message.cpp \
+  jb/itch5/stock_trading_action_message.cpp \
+  jb/itch5/system_event_message.cpp \
+  jb/itch5/timestamp.cpp \
+  jb/itch5/trade_message.cpp
+
+jb_libitch5_a_HEADERS = \
+  jb/itch5/add_order_message.hpp \
+  jb/itch5/add_order_mpid_message.hpp \
+  jb/itch5/base_decoders.hpp \
+  jb/itch5/broken_trade_message.hpp \
+  jb/itch5/char_list_field.hpp \
+  jb/itch5/char_list_validator.hpp \
+  jb/itch5/cross_trade_message.hpp \
+  jb/itch5/cross_type.hpp \
+  jb/itch5/decoder.hpp \
+  jb/itch5/ipo_quoting_period_update_message.hpp \
+  jb/itch5/market_participant_position_message.hpp \
+  jb/itch5/message_header.hpp \
+  jb/itch5/mpid_field.hpp \
+  jb/itch5/mwcb_breach_message.hpp \
+  jb/itch5/mwcb_decline_level_message.hpp \
+  jb/itch5/net_order_imbalance_indicator_message.hpp \
+  jb/itch5/order_cancel_message.hpp \
+  jb/itch5/order_delete_message.hpp \
+  jb/itch5/order_executed_message.hpp \
+  jb/itch5/order_executed_price_message.hpp \
+  jb/itch5/order_replace_message.hpp \
+  jb/itch5/p2ceil.hpp \
+  jb/itch5/price_field.hpp \
+  jb/itch5/reg_sho_restriction_message.hpp \
+  jb/itch5/seconds_field.hpp \
+  jb/itch5/short_string_field.hpp \
+  jb/itch5/static_digits.hpp \
+  jb/itch5/stock_directory_message.hpp \
+  jb/itch5/stock_field.hpp \
+  jb/itch5/stock_trading_action_message.hpp \
+  jb/itch5/system_event_message.hpp \
+  jb/itch5/timestamp.hpp \
+  jb/itch5/trade_message.hpp
+
+jb_libitch5_a_LIBADD =
 
 ################################################################
 # examples
@@ -166,3 +274,131 @@ jb_ut_severity_level_LDADD = $(jb_ut_libs)
 jb_ut_strtonum_SOURCES = jb/ut_strtonum.cpp
 jb_ut_strtonum_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_strtonum
 jb_ut_strtonum_LDADD = $(jb_ut_libs)
+
+################################################################
+# itch5 unit tests
+################################################################
+
+jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
+jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
+jb_itch5_ut_add_order_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_add_order_mpid_message_SOURCES = jb/itch5/ut_add_order_mpid_message.cpp
+jb_itch5_ut_add_order_mpid_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_mpid_messag
+jb_itch5_ut_add_order_mpid_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_base_decoders_SOURCES = jb/itch5/ut_base_decoders.cpp
+jb_itch5_ut_base_decoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_decoders
+jb_itch5_ut_base_decoders_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_broken_trade_message_SOURCES = jb/itch5/ut_broken_trade_message.cpp
+jb_itch5_ut_broken_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_broken_trade_message
+jb_itch5_ut_broken_trade_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_char_list_field_SOURCES = jb/itch5/ut_char_list_field.cpp
+jb_itch5_ut_char_list_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_field
+jb_itch5_ut_char_list_field_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_char_list_validator_SOURCES = jb/itch5/ut_char_list_validator.cpp
+jb_itch5_ut_char_list_validator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_validator
+jb_itch5_ut_char_list_validator_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
+jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
+jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_cross_type_SOURCES = jb/itch5/ut_cross_type.cpp
+jb_itch5_ut_cross_type_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_type
+jb_itch5_ut_cross_type_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_decoder_SOURCES = jb/itch5/ut_decoder.cpp
+jb_itch5_ut_decoder_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_decoder
+jb_itch5_ut_decoder_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_period_update_message.cpp
+jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
+jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_market_participant_position_message_SOURCES = jb/itch5/ut_market_participant_position_message.cpp
+jb_itch5_ut_market_participant_position_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_market_participant_position_message
+jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_message_header_SOURCES = jb/itch5/ut_message_header.cpp
+jb_itch5_ut_message_header_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_message_header
+jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
+jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message
+jb_itch5_ut_mwcb_breach_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_mwcb_decline_level_message_SOURCES = jb/itch5/ut_mwcb_decline_level_message.cpp
+jb_itch5_ut_mwcb_decline_level_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_decline_level_message
+jb_itch5_ut_mwcb_decline_level_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_net_order_imbalance_indicator_message_SOURCES = jb/itch5/ut_net_order_imbalance_indicator_message.cpp
+jb_itch5_ut_net_order_imbalance_indicator_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_net_order_imbalance_indicator_message
+jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_cancel_message_SOURCES = jb/itch5/ut_order_cancel_message.cpp
+jb_itch5_ut_order_cancel_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_cancel_message
+jb_itch5_ut_order_cancel_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_delete_message_SOURCES = jb/itch5/ut_order_delete_message.cpp
+jb_itch5_ut_order_delete_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_delete_message
+jb_itch5_ut_order_delete_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_executed_message_SOURCES = jb/itch5/ut_order_executed_message.cpp
+jb_itch5_ut_order_executed_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_message
+jb_itch5_ut_order_executed_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_executed_price_message_SOURCES = jb/itch5/ut_order_executed_price_message.cpp
+jb_itch5_ut_order_executed_price_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_price_message
+jb_itch5_ut_order_executed_price_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_replace_message_SOURCES = jb/itch5/ut_order_replace_message.cpp
+jb_itch5_ut_order_replace_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_replace_message
+jb_itch5_ut_order_replace_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_p2ceil_SOURCES = jb/itch5/ut_p2ceil.cpp
+jb_itch5_ut_p2ceil_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_p2ceil
+jb_itch5_ut_p2ceil_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
+jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
+jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_reg_sho_restriction_message_SOURCES = jb/itch5/ut_reg_sho_restriction_message.cpp
+jb_itch5_ut_reg_sho_restriction_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_reg_sho_restriction_message
+jb_itch5_ut_reg_sho_restriction_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_seconds_field_SOURCES = jb/itch5/ut_seconds_field.cpp
+jb_itch5_ut_seconds_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_seconds_field
+jb_itch5_ut_seconds_field_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_short_string_field_SOURCES = jb/itch5/ut_short_string_field.cpp
+jb_itch5_ut_short_string_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_short_string_field
+jb_itch5_ut_short_string_field_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_static_digits_SOURCES = jb/itch5/ut_static_digits.cpp
+jb_itch5_ut_static_digits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_static_digits
+jb_itch5_ut_static_digits_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_stock_directory_message_SOURCES = jb/itch5/ut_stock_directory_message.cpp
+jb_itch5_ut_stock_directory_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_directory_message
+jb_itch5_ut_stock_directory_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_stock_trading_action_message_SOURCES = jb/itch5/ut_stock_trading_action_message.cpp
+jb_itch5_ut_stock_trading_action_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_trading_action_message
+jb_itch5_ut_stock_trading_action_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_system_event_message_SOURCES = jb/itch5/ut_system_event_message.cpp
+jb_itch5_ut_system_event_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_system_event_message
+jb_itch5_ut_system_event_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_timestamp_SOURCES = jb/itch5/ut_timestamp.cpp
+jb_itch5_ut_timestamp_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_timestamp
+jb_itch5_ut_timestamp_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
+jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
+jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_libs)
