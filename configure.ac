@@ -33,9 +33,6 @@ AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 # ... enable all warnings ...
 AX_CXXFLAGS_WARN_ALL
 
-# ... if supported, enable support for code-coverage ...
-AX_CODE_COVERAGE
-
 # ... avoid spurious warnings from clang ...
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
