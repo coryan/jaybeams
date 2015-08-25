@@ -4,6 +4,8 @@
 #include <jb/histogram_binning_linear_interpolation.hpp>
 
 #include <limits>
+#include <sstream>
+#include <stdexcept>
 #include <type_traits>
 
 namespace jb {
@@ -36,6 +38,12 @@ class integer_range_binning {
     static_assert(
         std::is_integral<sample_type>::value,
         "The sample_type must be an integral type");
+    if (h_min_ >= h_max_) {
+      std::ostringstream os;
+      os << "jb::integer_range_binning requires h_min (" << h_min
+         << ") to be less than h_max (" << h_max << ")";
+      throw std::invalid_argument(os.str());
+    }
   }
 
   //@{

@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(explicit_cuts_binning_constructor) {
 }
 
 /**
- * @test Verify the constructor in jb::explicit_cuts_binning works as expected.
+ * @test Verify that jb::explicit_cuts_binning works as expected.
  */
 BOOST_AUTO_TEST_CASE(explicit_cuts_binning_basic) {
   std::vector<int> cuts{
@@ -90,6 +90,4 @@ BOOST_AUTO_TEST_CASE(explicit_cuts_binning_histogram) {
   BOOST_CHECK_CLOSE(h.estimated_quantile(0.70), 50.00, eps);
   BOOST_CHECK_CLOSE(h.estimated_quantile(0.80), 150.00, eps);
   BOOST_CHECK_CLOSE(h.estimated_quantile(1.00), 1000.00, eps);
-
-  
 }

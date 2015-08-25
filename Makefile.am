@@ -13,6 +13,7 @@ unit_tests = \
   jb/ut_explicit_cuts_binning \
   jb/ut_histogram \
   jb/ut_histogram_summary \
+  jb/ut_integer_range_binning \
   jb/ut_logging \
   jb/ut_severity_level \
   jb/ut_strtonum
@@ -59,10 +60,6 @@ jb_ut_libs = \
   jb/libjb.a \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 
-@CODE_COVERAGE_RULES@
-AM_CXXFLAGS += $(CODE_COVERAGE_CFLAGS)
-LIBS += $(CODE_COVERAGE_LDFLAGS)
-
 ################################################################
 # jb/libjb.a
 ################################################################
@@ -107,90 +104,50 @@ examples_configuration_LDADD = jb/libjb.a
 # unit tests and benchmarks
 ################################################################
 
-jb_ut_as_hhmmss_SOURCES = \
-  jb/ut_as_hhmmss.cpp
-jb_ut_as_hhmmss_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_as_hhmmss
-jb_ut_as_hhmmss_LDADD = \
-  $(jb_ut_libs)
+jb_ut_as_hhmmss_SOURCES = jb/ut_as_hhmmss.cpp
+jb_ut_as_hhmmss_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_as_hhmmss
+jb_ut_as_hhmmss_LDADD = $(jb_ut_libs)
 
-jb_ut_config_files_location_SOURCES = \
-  jb/ut_config_files_location.cpp
-jb_ut_config_files_location_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_config_files_location
-jb_ut_config_files_location_LDADD = \
-  $(jb_ut_libs)
+jb_ut_config_files_location_SOURCES = jb/ut_config_files_location.cpp
+jb_ut_config_files_location_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_files_location
+jb_ut_config_files_location_LDADD = $(jb_ut_libs)
 
-jb_ut_config_object_SOURCES = \
-  jb/ut_config_object.cpp
-jb_ut_config_object_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_config_object
-jb_ut_config_object_LDADD = \
-  $(jb_ut_libs)
+jb_ut_config_object_SOURCES = jb/ut_config_object.cpp
+jb_ut_config_object_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_object
+jb_ut_config_object_LDADD = $(jb_ut_libs)
 
-jb_ut_event_rate_estimator_SOURCES = \
-  jb/ut_event_rate_estimator.cpp
-jb_ut_event_rate_estimator_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_event_rate_estimator
-jb_ut_event_rate_estimator_LDADD = \
-  $(jb_ut_libs)
+jb_ut_event_rate_estimator_SOURCES = jb/ut_event_rate_estimator.cpp
+jb_ut_event_rate_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_event_rate_estimator
+jb_ut_event_rate_estimator_LDADD = $(jb_ut_libs)
 
-jb_ut_event_rate_histogram_SOURCES = \
-  jb/ut_event_rate_histogram.cpp
-jb_ut_event_rate_histogram_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_event_rate_histogram
-jb_ut_event_rate_histogram_LDADD = \
-  $(jb_ut_libs)
+jb_ut_event_rate_histogram_SOURCES = jb/ut_event_rate_histogram.cpp
+jb_ut_event_rate_histogram_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_event_rate_histogram
+jb_ut_event_rate_histogram_LDADD = $(jb_ut_libs)
 
-jb_ut_explicit_cuts_binning_SOURCES = \
-  jb/ut_explicit_cuts_binning.cpp
-jb_ut_explicit_cuts_binning_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_explicit_cuts_binning
-jb_ut_explicit_cuts_binning_LDADD = \
-  $(jb_ut_libs)
+jb_ut_explicit_cuts_binning_SOURCES = jb/ut_explicit_cuts_binning.cpp
+jb_ut_explicit_cuts_binning_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_explicit_cuts_binning
+jb_ut_explicit_cuts_binning_LDADD = $(jb_ut_libs)
 
-jb_ut_histogram_SOURCES = \
-  jb/ut_histogram.cpp
-jb_ut_histogram_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_histogram
-jb_ut_histogram_LDADD = \
-  $(jb_ut_libs)
+jb_ut_histogram_SOURCES = jb/ut_histogram.cpp
+jb_ut_histogram_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram
+jb_ut_histogram_LDADD = $(jb_ut_libs)
 
-jb_ut_histogram_summary_SOURCES = \
-  jb/ut_histogram.cpp
-jb_ut_histogram_summary_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_histogram_summary
-jb_ut_histogram_summary_LDADD = \
-  $(jb_ut_libs)
+jb_ut_histogram_summary_SOURCES = jb/ut_histogram.cpp
+jb_ut_histogram_summary_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram_summary
+jb_ut_histogram_summary_LDADD = $(jb_ut_libs)
 
-jb_ut_logging_SOURCES = \
-  jb/ut_logging.cpp
-jb_ut_logging_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_logging
-jb_ut_logging_LDADD = \
-  $(jb_ut_libs)
+jb_ut_integer_range_binning_SOURCES = jb/ut_histogram.cpp
+jb_ut_integer_range_binning_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_integer_range_binning
+jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 
-jb_ut_severity_level_SOURCES = \
-  jb/ut_severity_level.cpp
-jb_ut_severity_level_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_severity_level
-jb_ut_severity_level_LDADD = \
-  $(jb_ut_libs)
+jb_ut_logging_SOURCES = jb/ut_logging.cpp
+jb_ut_logging_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_logging
+jb_ut_logging_LDADD = $(jb_ut_libs)
 
-jb_ut_strtonum_SOURCES = \
-  jb/ut_strtonum.cpp
-jb_ut_strtonum_CPPFLAGS = \
-  $(UT_CPPFLAGS) \
-  -DBOOST_TEST_MODULE=jb_ut_strtonum
-jb_ut_strtonum_LDADD = \
-  $(jb_ut_libs)
+jb_ut_severity_level_SOURCES = jb/ut_severity_level.cpp
+jb_ut_severity_level_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_severity_level
+jb_ut_severity_level_LDADD = $(jb_ut_libs)
+
+jb_ut_strtonum_SOURCES = jb/ut_strtonum.cpp
+jb_ut_strtonum_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_strtonum
+jb_ut_strtonum_LDADD = $(jb_ut_libs)
