@@ -14,6 +14,12 @@
 <script type="text/javascript">
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 
 </head>
 <body>
@@ -124,8 +130,18 @@ Classes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all configuration objects.  <a href="classjb_1_1config__object.html#details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1config__recurse.html">config_recurse</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively apply functions to <a class="el" href="classjb_1_1config__object.html" title="Base class for all configuration objects.">config_object</a>, attributes, and sequences of config objects.  <a href="structjb_1_1config__recurse.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1explicit__cuts__binning.html">explicit_cuts_binning</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A histogram binning_strategy for integer numbers with user defined cuts.  <a href="classjb_1_1explicit__cuts__binning.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1histogram.html">histogram</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A histogram class with controllable binning and range strategy.  <a href="classjb_1_1histogram.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#structjb_1_1histogram__summary">histogram_summary</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple class to capture summary information about a histogram.  <a href="namespacejb.html#structjb_1_1histogram__summary">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A histogram binning_strategy for integer numbers in a known range.  <a href="classjb_1_1integer__range__binning.html#details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1usage.html">usage</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple class to communicate the result of parsing the options.  <a href="classjb_1_1usage.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1binning__strategy__concept.html">binning_strategy_concept</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The interface that must be met by the binning_strategy in <a class="el" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">jb::histogram</a>.  <a href="classjb_1_1binning__strategy__concept.html#details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, <br class="typebreak"/>
@@ -161,6 +177,10 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#a13ac12ee0cdd5aa7551c45ec44a36192">bindir</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the binary installation directory directory.  <a href="#a13ac12ee0cdd5aa7551c45ec44a36192"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#a280de3a17265b3d10f84177a53f6c967">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="classjb_1_1config__object.html">config_object</a> const &amp;x)</td></tr>
+<tr><td class="memTemplParams" colspan="2">template&lt;typename sample_type &gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">sample_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb.html#a448f309310be45d80bc7181eb51cc5f4">histogram_binning_linear_interpolation</a> (sample_type x_a, sample_type x_b, double y_a, double s, double q)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience function to implement the <a class="el" href="classjb_1_1binning__strategy__concept.html">binning_strategy_concept</a>.  <a href="#a448f309310be45d80bc7181eb51cc5f4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#ab0806e2e36bdf2f349d63f4f4ee523aa">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="namespacejb.html#structjb_1_1histogram__summary">histogram_summary</a> const &amp;x)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9">severity_static_predicate</a> (<a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">jb::severity_level</a> lvl)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Statically check if the severity level should even be compiled in.  <a href="#abfc933e88c6a00c98531ffbcc80b6ea9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#aec93c13a2f8e053b77afda713783aac2">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> const &amp;x)</td></tr>
@@ -185,7 +205,75 @@ Functions</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The top-level namespace for the JayBeams library. </p>
-</div><hr/><h2>Typedef Documentation</h2>
+</div><hr/><h2>Class Documentation</h2>
+<a name="structjb_1_1histogram__summary" id="structjb_1_1histogram__summary"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct jb::histogram_summary</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<div class="textblock"><p>A simple class to capture summary information about a histogram. </p>
+
+<p>Definition at line <a class="el" href="histogram__summary_8hpp_source.html#l00009">9</a> of file <a class="el" href="histogram__summary_8hpp_source.html">histogram_summary.hpp</a>.</p>
+</div><table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="aa36785541dc4a1a199f144d2ca8f805a"></a><!-- doxytag: member="max" ref="aa36785541dc4a1a199f144d2ca8f805a" args="" -->double</td>
+<td class="fieldname">
+max</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="acd31c2e7c85118c93bcee3f55fd58351"></a><!-- doxytag: member="min" ref="acd31c2e7c85118c93bcee3f55fd58351" args="" -->double</td>
+<td class="fieldname">
+min</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a5ae87806966540050b494ebdba370bfc"></a><!-- doxytag: member="nsamples" ref="a5ae87806966540050b494ebdba370bfc" args="" -->size_t</td>
+<td class="fieldname">
+nsamples</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a0cdf836177bd31ba73130f1b5b44a11f"></a><!-- doxytag: member="p25" ref="a0cdf836177bd31ba73130f1b5b44a11f" args="" -->double</td>
+<td class="fieldname">
+p25</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a5c139d1bff55e7e76e0c34a23e6e4486"></a><!-- doxytag: member="p50" ref="a5c139d1bff55e7e76e0c34a23e6e4486" args="" -->double</td>
+<td class="fieldname">
+p50</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="ae0c65da7236e5a5e1034e98d01a3594b"></a><!-- doxytag: member="p75" ref="ae0c65da7236e5a5e1034e98d01a3594b" args="" -->double</td>
+<td class="fieldname">
+p75</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="af59e25f730ae0c81345d074f212e0fc7"></a><!-- doxytag: member="p90" ref="af59e25f730ae0c81345d074f212e0fc7" args="" -->double</td>
+<td class="fieldname">
+p90</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a4b82b2c1d74a67d9140db4f9f130f368"></a><!-- doxytag: member="p99" ref="a4b82b2c1d74a67d9140db4f9f130f368" args="" -->double</td>
+<td class="fieldname">
+p99</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<!-- doxytag: class="jb::histogram_summary" --><hr/><h2>Typedef Documentation</h2>
 <a class="anchor" id="a1f477677705f6b1e951bdb1ab6e0dd60"></a><!-- doxytag: member="jb::class_overrides" ref="a1f477677705f6b1e951bdb1ab6e0dd60" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -289,6 +377,95 @@ Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="severity__level_8cpp_source.html#l00066">66</a> of file <a class="el" href="severity__level_8cpp_source.html">severity_level.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__severity__level_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="convert__severity__level_8hpp_source.html#l00021">YAML::convert&lt; jb::severity_level &gt;::encode()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a448f309310be45d80bc7181eb51cc5f4"></a><!-- doxytag: member="jb::histogram_binning_linear_interpolation" ref="a448f309310be45d80bc7181eb51cc5f4" args="(sample_type x_a, sample_type x_b, double y_a, double s, double q)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename sample_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">sample_type <a class="el" href="namespacejb.html#a448f309310be45d80bc7181eb51cc5f4">jb::histogram_binning_linear_interpolation</a> </td>
+          <td>(</td>
+          <td class="paramtype">sample_type&#160;</td>
+          <td class="paramname"><em>x_a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sample_type&#160;</td>
+          <td class="paramname"><em>x_b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y_a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>q</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Convenience function to implement the <a class="el" href="classjb_1_1binning__strategy__concept.html">binning_strategy_concept</a>. </p>
+<p>The histogram class requires the binning strategy to solve the follow equation for \(x\):</p>
+<p class="formulaDsp">
+\[ {{(x - x_a)} \over {(y - y_a)}} = {{(x_b - x_a)} \over {s}} \]
+</p>
+<p>this is used in the computation of percentiles to better approximate the percentile value between different cuts. Some binning strategies might provide a non-linear interpolation, but in practice this (linear) solution is used in most cases. </p>
+
+<p>Definition at line <a class="el" href="histogram__binning__linear__interpolation_8hpp_source.html#l00024">24</a> of file <a class="el" href="histogram__binning__linear__interpolation_8hpp_source.html">histogram_binning_linear_interpolation.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="integer__range__binning_8hpp_source.html#l00066">jb::integer_range_binning&lt; sample_type_t &gt;::interpolate()</a>, and <a class="el" href="explicit__cuts__binning_8hpp_source.html#l00091">jb::explicit_cuts_binning&lt; sample_type_t &gt;::interpolate()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab0806e2e36bdf2f349d63f4f4ee523aa"></a><!-- doxytag: member="jb::operator&lt;&lt;" ref="ab0806e2e36bdf2f349d63f4f4ee523aa" args="(std::ostream &amp;os, histogram_summary const &amp;x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">histogram_summary const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="histogram__summary_8cpp_source.html#l00005">5</a> of file <a class="el" href="histogram__summary_8cpp_source.html">histogram_summary.cpp</a>.</p>
+
+<p>References <a class="el" href="histogram__summary_8hpp_source.html#l00016">jb::histogram_summary::max</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00010">jb::histogram_summary::min</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00017">jb::histogram_summary::nsamples</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00011">jb::histogram_summary::p25</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00012">jb::histogram_summary::p50</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00013">jb::histogram_summary::p75</a>, <a class="el" href="histogram__summary_8hpp_source.html#l00014">jb::histogram_summary::p90</a>, and <a class="el" href="histogram__summary_8hpp_source.html#l00015">jb::histogram_summary::p99</a>.</p>
 
 </div>
 </div>

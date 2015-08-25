@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['check_5fconstraints',['check_constraints',['../structjb_1_1histogram_1_1check__constraints.html',1,'jb::histogram']]],
   ['config',['config',['../classjb_1_1log_1_1config.html',1,'jb::log']]],
   ['config_5fattribute',['config_attribute',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20config_2c_20bool_20_3e',['config_attribute< config, bool >',['../classjb_1_1config__attribute.html',1,'jb']]],

@@ -1,6 +1,8 @@
 var searchData=
 [
   ['t',['t',['../structjb_1_1as__hhmmssu.html#a5c1270ca61eaae5e3922783317421354',1,'jb::as_hhmmssu::t()'],['../structjb_1_1as__hhmmss.html#aeb5eb8cd8738bea0a54f880d99ef909c',1,'jb::as_hhmmss::t()'],['../structjb_1_1as__hh__mm__ss__u.html#af577cc417aa5c2a9c49cc100f065e643',1,'jb::as_hh_mm_ss_u::t()']]],
+  ['theoretical_5fmax',['theoretical_max',['../classjb_1_1explicit__cuts__binning.html#a43bbf463ea0eb02cec993cd27f29ee64',1,'jb::explicit_cuts_binning::theoretical_max()'],['../classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7',1,'jb::integer_range_binning::theoretical_max()'],['../classjb_1_1binning__strategy__concept.html#a6617790c0477f221e065f33f6872218f',1,'jb::binning_strategy_concept::theoretical_max()']]],
+  ['theoretical_5fmin',['theoretical_min',['../classjb_1_1explicit__cuts__binning.html#a57e43f460ee02dda4ab8989200bedaa5',1,'jb::explicit_cuts_binning::theoretical_min()'],['../classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3',1,'jb::integer_range_binning::theoretical_min()'],['../classjb_1_1binning__strategy__concept.html#ab5573334c72460265e7404e982a3fe43',1,'jb::binning_strategy_concept::theoretical_min()']]],
   ['thread_5fconfig',['thread_config',['../classthread__config.html',1,'thread_config'],['../classthread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'thread_config::thread_config()']]],
   ['tid',['tid',['../namespacejb_1_1log.html#a0a9a49c9901bf9e9a1cfb22856133e87',1,'jb::log']]],
   ['tid_5f',['tid_',['../namespacejb_1_1log.html#ad92b3bc538c77ac05a774cb3ac9c05f9',1,'jb::log']]],

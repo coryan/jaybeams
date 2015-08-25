@@ -1,5 +1,9 @@
 var searchData=
 [
+  ['h_5fmax_5f',['h_max_',['../classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4',1,'jb::integer_range_binning']]],
+  ['h_5fmin_5f',['h_min_',['../classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e',1,'jb::integer_range_binning']]],
+  ['has_5fless_5fthan',['has_less_than',['../structjb_1_1histogram_1_1check__constraints.html#ab8caeb72c0b2581fcf858c46947a1eab',1,'jb::histogram::check_constraints::has_less_than(...)'],['../structjb_1_1histogram_1_1check__constraints.html#a7873b860171d971fadb0d543979fa057',1,'jb::histogram::check_constraints::has_less_than(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt; t)']]],
+  ['has_5fless_5fthan_5for_5fequal',['has_less_than_or_equal',['../structjb_1_1histogram_1_1check__constraints.html#a8cc4f0c13fc431437473ce0975043e9e',1,'jb::histogram::check_constraints::has_less_than_or_equal(...)'],['../structjb_1_1histogram_1_1check__constraints.html#ac4c3d6610f9e2e5788170016a6692457',1,'jb::histogram::check_constraints::has_less_than_or_equal(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt;']]],
   ['have_5fboost',['HAVE_BOOST',['../jb-config_8hpp.html#a1644f282a4f84575a270f96b98d4f3c6',1,'jb-config.hpp']]],
   ['have_5fboost_5fdate_5ftime',['HAVE_BOOST_DATE_TIME',['../jb-config_8hpp.html#a864cdfb0b5b3b2fbed2808a33562efb9',1,'jb-config.hpp']]],
   ['have_5fboost_5ffilesystem',['HAVE_BOOST_FILESYSTEM',['../jb-config_8hpp.html#a547dd280b4b8c381d9d69581ca861c87',1,'jb-config.hpp']]],
@@ -21,5 +25,16 @@ var searchData=
   ['have_5funistd_5fh',['HAVE_UNISTD_H',['../jb-config_8hpp.html#a219b06937831d0da94d801ab13987639',1,'jb-config.hpp']]],
   ['have_5fyaml_5fcpp',['HAVE_YAML_CPP',['../jb-config_8hpp.html#aa55f270e381b5a49f672e239d50e6736',1,'jb-config.hpp']]],
   ['help',['help',['../structjb_1_1config__object_1_1attribute__descriptor.html#ab60bc3bca263bac3f9ca93e8702703e2',1,'jb::config_object::attribute_descriptor::help()'],['../classjb_1_1config__object_1_1attribute__base.html#aa0ba2caf98067545fbe3226770244ecd',1,'jb::config_object::attribute_base::help()']]],
-  ['helpmsg',['helpmsg',['../structjb_1_1config__object_1_1attribute__descriptor.html#a50442b2fbc3214035ecfd9da70a3af4c',1,'jb::config_object::attribute_descriptor']]]
+  ['helpmsg',['helpmsg',['../structjb_1_1config__object_1_1attribute__descriptor.html#a50442b2fbc3214035ecfd9da70a3af4c',1,'jb::config_object::attribute_descriptor']]],
+  ['histo',['histo',['../structjb_1_1histogram_1_1check__constraints.html#a90972a2d5f81f40e63e31497799bcf10',1,'jb::histogram::check_constraints']]],
+  ['histogram',['histogram',['../classjb_1_1histogram.html#abdf6ee3911e990a233b6ff837f5927f8',1,'jb::histogram']]],
+  ['histogram',['histogram',['../classjb_1_1histogram.html',1,'jb']]],
+  ['histogram_2ehpp',['histogram.hpp',['../histogram_8hpp.html',1,'']]],
+  ['histogram_5fbinning_5flinear_5finterpolation',['histogram_binning_linear_interpolation',['../namespacejb.html#a448f309310be45d80bc7181eb51cc5f4',1,'jb']]],
+  ['histogram_5fbinning_5flinear_5finterpolation_2ehpp',['histogram_binning_linear_interpolation.hpp',['../histogram__binning__linear__interpolation_8hpp.html',1,'']]],
+  ['histogram_5fmax',['histogram_max',['../classjb_1_1explicit__cuts__binning.html#ae23dd6087af007b1fcc00b09da679253',1,'jb::explicit_cuts_binning::histogram_max()'],['../classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553',1,'jb::integer_range_binning::histogram_max()'],['../classjb_1_1binning__strategy__concept.html#ac10fb5ca256696ce9f7c126a1e7fae88',1,'jb::binning_strategy_concept::histogram_max()']]],
+  ['histogram_5fmin',['histogram_min',['../classjb_1_1explicit__cuts__binning.html#a4efc79fbd5e09c164ea4d225082946ee',1,'jb::explicit_cuts_binning::histogram_min()'],['../classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9',1,'jb::integer_range_binning::histogram_min()'],['../classjb_1_1binning__strategy__concept.html#a84832c0ae30397112ba75e3e33ea43b4',1,'jb::binning_strategy_concept::histogram_min()']]],
+  ['histogram_5fsummary',['histogram_summary',['../namespacejb.html#structjb_1_1histogram__summary',1,'jb']]],
+  ['histogram_5fsummary_2ecpp',['histogram_summary.cpp',['../histogram__summary_8cpp.html',1,'']]],
+  ['histogram_5fsummary_2ehpp',['histogram_summary.hpp',['../histogram__summary_8hpp.html',1,'']]]
 ];

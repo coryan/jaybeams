@@ -1,5 +1,10 @@
 var searchData=
 [
+  ['p25',['p25',['../namespacejb.html#a0cdf836177bd31ba73130f1b5b44a11f',1,'jb::histogram_summary']]],
+  ['p50',['p50',['../namespacejb.html#a5c139d1bff55e7e76e0c34a23e6e4486',1,'jb::histogram_summary']]],
+  ['p75',['p75',['../namespacejb.html#ae0c65da7236e5a5e1034e98d01a3594b',1,'jb::histogram_summary']]],
+  ['p90',['p90',['../namespacejb.html#af59e25f730ae0c81345d074f212e0fc7',1,'jb::histogram_summary']]],
+  ['p99',['p99',['../namespacejb.html#a4b82b2c1d74a67d9140db4f9f130f368',1,'jb::histogram_summary']]],
   ['package',['PACKAGE',['../jb-config_8hpp.html#aca8570fb706c81df371b7f9bc454ae03',1,'jb-config.hpp']]],
   ['package_5fbugreport',['PACKAGE_BUGREPORT',['../jb-config_8hpp.html#a1d1d2d7f8d2f95b376954d649ab03233',1,'jb-config.hpp']]],
   ['package_5fname',['PACKAGE_NAME',['../jb-config_8hpp.html#a1c0439e4355794c09b64274849eb0279',1,'jb-config.hpp']]],

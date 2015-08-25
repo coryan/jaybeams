@@ -14,6 +14,12 @@
 <script type="text/javascript">
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 
 </head>
 <body>
@@ -89,6 +95,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr><td class="indexkey"><a class="el" href="structjb_1_1as__hhmmssu.html">jb::as_hhmmssu</a></td><td class="indexvalue">Helper class to print time durations in a HHMMSS.UUUUUU format </td></tr>
   <tr><td class="indexkey"><a class="el" href="classjb_1_1config__object_1_1attribute__base.html">jb::config_object::attribute_base</a></td><td class="indexvalue">Define the interface to manipulate and access configuration attributes embedded in a <a class="el" href="classjb_1_1config__object.html" title="Base class for all configuration objects.">config_object</a> </td></tr>
   <tr><td class="indexkey"><a class="el" href="structjb_1_1config__object_1_1attribute__descriptor.html">jb::config_object::attribute_descriptor</a></td><td class="indexvalue">An attribute descriptor </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classjb_1_1binning__strategy__concept.html">jb::binning_strategy_concept</a></td><td class="indexvalue">The interface that must be met by the binning_strategy in <a class="el" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">jb::histogram</a> </td></tr>
+  <tr><td class="indexkey"><a class="el" href="structjb_1_1histogram_1_1check__constraints.html">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::check_constraints</a></td><td class="indexvalue">Verify the constraints on the histogram template class template parameters, and generate better error messages when they are not met </td></tr>
   <tr><td class="indexkey"><a class="el" href="classjb_1_1log_1_1config.html">jb::log::config</a></td><td class="indexvalue">Configuration object for the logging functions </td></tr>
   <tr><td class="indexkey"><a class="el" href="classjb_1_1config__attribute.html">jb::config_attribute&lt; C, T &gt;</a></td><td class="indexvalue">Helper class to easily define configuration attributes </td></tr>
   <tr><td class="indexkey"><a class="el" href="classjb_1_1config__files__locations.html">jb::config_files_locations&lt; getenv_functor, validator_functor &gt;</a></td><td class="indexvalue">Compute the directories where a configuration file can be found </td></tr>
@@ -98,6 +106,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr><td class="indexkey"><a class="el" href="structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html">YAML::convert&lt; jb::severity_level &gt;</a></td><td class="indexvalue">Specialize <a class="el" href="namespaceYAML.html" title="Types and functions for the yaml-cpp library.">YAML</a> conversions for <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603" title="Severity levels for JayBeams, based on syslog.">jb::severity_level</a> </td></tr>
   <tr><td class="indexkey"><a class="el" href="structjb_1_1default__getenv.html">jb::default_getenv</a></td><td class="indexvalue">Define the functor to read configuration variables from the environment </td></tr>
   <tr><td class="indexkey"><a class="el" href="structjb_1_1default__validator.html">jb::default_validator</a></td><td class="indexvalue">Define the functor to validate if paths are readable </td></tr>
+  <tr><td class="indexkey"><a class="el" href="structjb_1_1histogram_1_1check__constraints.html#structjb_1_1histogram_1_1check__constraints_1_1error">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::check_constraints::error</a></td><td class="indexvalue">An object to create a SFINAE condition </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classjb_1_1explicit__cuts__binning.html">jb::explicit_cuts_binning&lt; sample_type_t &gt;</a></td><td class="indexvalue">A histogram binning_strategy for integer numbers with user defined cuts </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classjb_1_1histogram.html">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;</a></td><td class="indexvalue">A histogram class with controllable binning and range strategy </td></tr>
+  <tr><td class="indexkey"><a class="el" href="namespacejb.html#structjb_1_1histogram__summary">jb::histogram_summary</a></td><td class="indexvalue">A simple class to capture summary information about a histogram </td></tr>
+  <tr><td class="indexkey"><a class="el" href="classjb_1_1integer__range__binning.html">jb::integer_range_binning&lt; sample_type_t &gt;</a></td><td class="indexvalue">A histogram binning_strategy for integer numbers in a known range </td></tr>
   <tr><td class="indexkey"><a class="el" href="classprogram__config.html">program_config</a></td><td class="indexvalue">The main configuration class for this example program </td></tr>
   <tr><td class="indexkey"><a class="el" href="classthread__config.html">thread_config</a></td><td class="indexvalue">A configuration class for threads </td></tr>
   <tr><td class="indexkey"><a class="el" href="classjb_1_1usage.html">jb::usage</a></td><td class="indexvalue">A simple class to communicate the result of parsing the options </td></tr>
