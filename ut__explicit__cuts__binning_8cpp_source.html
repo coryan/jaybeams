@@ -101,7 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00012"></a>00012 <span class="comment">/**</span>
 <a name="l00013"></a>00013 <span class="comment"> * @test Verify the constructor in jb::explicit_cuts_binning works as expected.</span>
 <a name="l00014"></a>00014 <span class="comment"> */</span>
-<a name="l00015"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a6a6869880b4cc08b4f8f2938c9ac1c88">00015</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_constructor) {
+<a name="l00015"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a6a6869880b4cc08b4f8f2938c9ac1c88">00015</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_constructor) {
 <a name="l00016"></a>00016   std::vector&lt;int&gt; cuts;
 <a name="l00017"></a>00017   BOOST_CHECK_THROW(
 <a name="l00018"></a>00018       <a class="code" href="classjb_1_1explicit__cuts__binning.html" title="A histogram binning_strategy for integer numbers with user defined cuts.">jb::explicit_cuts_binning&lt;int&gt;</a>(cuts.begin(), cuts.end()), std::exception);
@@ -120,7 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00031"></a>00031 <span class="comment">/**</span>
 <a name="l00032"></a>00032 <span class="comment"> * @test Verify that jb::explicit_cuts_binning works as expected.</span>
 <a name="l00033"></a>00033 <span class="comment"> */</span>
-<a name="l00034"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a3af5f3819ff227be78c744b7d3ef5a62">00034</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_basic) {
+<a name="l00034"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a3af5f3819ff227be78c744b7d3ef5a62">00034</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_basic) {
 <a name="l00035"></a>00035   std::vector&lt;int&gt; cuts{
 <a name="l00036"></a>00036     0, 10, 20, 30, 40, 50, 60, 70, 80, 90,
 <a name="l00037"></a>00037         100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
@@ -150,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00061"></a>00061 <span class="comment">/**</span>
 <a name="l00062"></a>00062 <span class="comment"> * @test Verify that jb::explicit_cuts_binning works with jb::histogram.</span>
 <a name="l00063"></a>00063 <span class="comment"> */</span>
-<a name="l00064"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a96b5fe783d5b2bbb2266e9f3928f63dc">00064</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_histogram) {
+<a name="l00064"></a><a class="code" href="ut__explicit__cuts__binning_8cpp.html#a96b5fe783d5b2bbb2266e9f3928f63dc">00064</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(explicit_cuts_binning_histogram) {
 <a name="l00065"></a>00065   tested_histogram h({10, 20, 30, 40, 50, 100, 150, 200});
 <a name="l00066"></a>00066   BOOST_CHECK_THROW(h.estimated_mean(), std::invalid_argument);
 <a name="l00067"></a>00067 
