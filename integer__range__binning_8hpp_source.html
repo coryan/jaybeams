@@ -93,79 +93,87 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00004"></a>00004 <span class="preprocessor">#include &lt;<a class="code" href="histogram__binning__linear__interpolation_8hpp.html">jb/histogram_binning_linear_interpolation.hpp</a>&gt;</span>
 <a name="l00005"></a>00005 
 <a name="l00006"></a>00006 <span class="preprocessor">#include &lt;limits&gt;</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;type_traits&gt;</span>
-<a name="l00008"></a>00008 
-<a name="l00009"></a>00009 <span class="keyword">namespace </span>jb {
-<a name="l00010"></a>00010 <span class="comment"></span>
-<a name="l00011"></a>00011 <span class="comment">/**</span>
-<a name="l00012"></a>00012 <span class="comment"> * A histogram binning_strategy for integer numbers in a known range.</span>
-<a name="l00013"></a>00013 <span class="comment"> *</span>
-<a name="l00014"></a>00014 <span class="comment"> * This class defines histogram bins for samples with integer values</span>
-<a name="l00015"></a>00015 <span class="comment"> * in a range defined at run-time.  Care must be taken if the range is</span>
-<a name="l00016"></a>00016 <span class="comment"> * too big because the corresponding histogram is likely to consume a</span>
-<a name="l00017"></a>00017 <span class="comment"> * lot of memory.   See jb::binning_strategy_concept.</span>
-<a name="l00018"></a>00018 <span class="comment"> *</span>
-<a name="l00019"></a>00019 <span class="comment"> * @tparam sample_type_t the type of samples, should be an integer type.</span>
-<a name="l00020"></a>00020 <span class="comment"> */</span>
-<a name="l00021"></a>00021 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> sample_type_t&gt;
-<a name="l00022"></a><a class="code" href="classjb_1_1integer__range__binning.html">00022</a> <span class="keyword">class </span><a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">integer_range_binning</a> {
-<a name="l00023"></a>00023  <span class="keyword">public</span>:<span class="comment"></span>
-<a name="l00024"></a>00024 <span class="comment">  /// type traits as required by @ref binning_strategy_concept</span>
-<a name="l00025"></a><a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93">00025</a> <span class="comment"></span>  <span class="keyword">typedef</span> sample_type_t <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a>;
-<a name="l00026"></a>00026 <span class="comment"></span>
-<a name="l00027"></a>00027 <span class="comment">  /**</span>
-<a name="l00028"></a>00028 <span class="comment">   * Constructor based on the histogram range.</span>
-<a name="l00029"></a>00029 <span class="comment">   *</span>
-<a name="l00030"></a>00030 <span class="comment">   * @param h_min The value for histogram_min()</span>
-<a name="l00031"></a>00031 <span class="comment">   * @param h_max The value for histogram_max()</span>
-<a name="l00032"></a>00032 <span class="comment">   */</span>
-<a name="l00033"></a><a class="code" href="classjb_1_1integer__range__binning.html#ae5627eb8c40f9aa6d9c5d5f378070110">00033</a>   <a class="code" href="classjb_1_1integer__range__binning.html#ae5627eb8c40f9aa6d9c5d5f378070110" title="Constructor based on the histogram range.">integer_range_binning</a>(<a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> h_min, <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> h_max)
-<a name="l00034"></a>00034       : <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>(h_min)
-<a name="l00035"></a>00035       , <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>(h_max) {
-<a name="l00036"></a>00036     static_assert(
-<a name="l00037"></a>00037         std::is_integral&lt;sample_type&gt;::value,
-<a name="l00038"></a>00038         <span class="stringliteral">&quot;The sample_type must be an integral type&quot;</span>);
-<a name="l00039"></a>00039   }
-<a name="l00040"></a>00040 <span class="comment"></span>
-<a name="l00041"></a>00041 <span class="comment">  //@{</span>
-<a name="l00042"></a>00042 <span class="comment"></span><span class="comment">  /**</span>
-<a name="l00043"></a>00043 <span class="comment">   * @name Implement binning_strategy_concept interface.</span>
-<a name="l00044"></a>00044 <span class="comment">   *</span>
-<a name="l00045"></a>00045 <span class="comment">   * Please see @ref binning_strategy_concept for detailed</span>
-<a name="l00046"></a>00046 <span class="comment">   * documentation of each member function.</span>
-<a name="l00047"></a>00047 <span class="comment">   */</span>
-<a name="l00048"></a><a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">00048</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>()<span class="keyword"> const </span>{
-<a name="l00049"></a>00049     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>;
-<a name="l00050"></a>00050   }
-<a name="l00051"></a><a class="code" href="classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553">00051</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553">histogram_max</a>()<span class="keyword"> const </span>{
-<a name="l00052"></a>00052     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>;
-<a name="l00053"></a>00053   }
-<a name="l00054"></a><a class="code" href="classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3">00054</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3">theoretical_min</a>()<span class="keyword"> const </span>{
-<a name="l00055"></a>00055     <span class="keywordflow">return</span> std::numeric_limits&lt;sample_type&gt;::min();
-<a name="l00056"></a>00056   }
-<a name="l00057"></a><a class="code" href="classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7">00057</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7">theoretical_max</a>()<span class="keyword"> const </span>{
-<a name="l00058"></a>00058     <span class="keywordflow">return</span> std::numeric_limits&lt;sample_type&gt;::max();
-<a name="l00059"></a>00059   }
-<a name="l00060"></a><a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">00060</a>   std::size_t <a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">sample2bin</a>(<a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> t)<span class="keyword"> const </span>{
-<a name="l00061"></a>00061     <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(t - <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>());
-<a name="l00062"></a>00062   }
-<a name="l00063"></a><a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">00063</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">bin2sample</a>(std::size_t i)<span class="keyword"> const </span>{
-<a name="l00064"></a>00064     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>() + i;
-<a name="l00065"></a>00065   }
-<a name="l00066"></a><a class="code" href="classjb_1_1integer__range__binning.html#a66a357e07b84a24d4bebf119c87ca65f">00066</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a66a357e07b84a24d4bebf119c87ca65f">interpolate</a>(
-<a name="l00067"></a>00067       <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> x_a, <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> x_b, <span class="keywordtype">double</span> y_a, <span class="keywordtype">double</span> s, <span class="keywordtype">double</span> q)<span class="keyword"> const </span>{
-<a name="l00068"></a>00068     <span class="keywordflow">return</span> <a class="code" href="namespacejb.html#a448f309310be45d80bc7181eb51cc5f4" title="Convenience function to implement the binning_strategy_concept.">histogram_binning_linear_interpolation</a>(x_a, x_b, y_a, s, q);
-<a name="l00069"></a>00069   }<span class="comment"></span>
-<a name="l00070"></a>00070 <span class="comment">  //@}</span>
-<a name="l00071"></a>00071 <span class="comment"></span>
-<a name="l00072"></a>00072  <span class="keyword">private</span>:
-<a name="l00073"></a><a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">00073</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>;
-<a name="l00074"></a><a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">00074</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>;
-<a name="l00075"></a>00075 };
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077 } <span class="comment">// namespace jb</span>
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079 <span class="preprocessor">#endif // jb_integer_range_binning_hpp</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;sstream&gt;</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#include &lt;stdexcept&gt;</span>
+<a name="l00009"></a>00009 <span class="preprocessor">#include &lt;type_traits&gt;</span>
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="keyword">namespace </span>jb {
+<a name="l00012"></a>00012 <span class="comment"></span>
+<a name="l00013"></a>00013 <span class="comment">/**</span>
+<a name="l00014"></a>00014 <span class="comment"> * A histogram binning_strategy for integer numbers in a known range.</span>
+<a name="l00015"></a>00015 <span class="comment"> *</span>
+<a name="l00016"></a>00016 <span class="comment"> * This class defines histogram bins for samples with integer values</span>
+<a name="l00017"></a>00017 <span class="comment"> * in a range defined at run-time.  Care must be taken if the range is</span>
+<a name="l00018"></a>00018 <span class="comment"> * too big because the corresponding histogram is likely to consume a</span>
+<a name="l00019"></a>00019 <span class="comment"> * lot of memory.   See jb::binning_strategy_concept.</span>
+<a name="l00020"></a>00020 <span class="comment"> *</span>
+<a name="l00021"></a>00021 <span class="comment"> * @tparam sample_type_t the type of samples, should be an integer type.</span>
+<a name="l00022"></a>00022 <span class="comment"> */</span>
+<a name="l00023"></a>00023 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> sample_type_t&gt;
+<a name="l00024"></a><a class="code" href="classjb_1_1integer__range__binning.html">00024</a> <span class="keyword">class </span><a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">integer_range_binning</a> {
+<a name="l00025"></a>00025  <span class="keyword">public</span>:<span class="comment"></span>
+<a name="l00026"></a>00026 <span class="comment">  /// type traits as required by @ref binning_strategy_concept</span>
+<a name="l00027"></a><a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93">00027</a> <span class="comment"></span>  <span class="keyword">typedef</span> sample_type_t <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a>;
+<a name="l00028"></a>00028 <span class="comment"></span>
+<a name="l00029"></a>00029 <span class="comment">  /**</span>
+<a name="l00030"></a>00030 <span class="comment">   * Constructor based on the histogram range.</span>
+<a name="l00031"></a>00031 <span class="comment">   *</span>
+<a name="l00032"></a>00032 <span class="comment">   * @param h_min The value for histogram_min()</span>
+<a name="l00033"></a>00033 <span class="comment">   * @param h_max The value for histogram_max()</span>
+<a name="l00034"></a>00034 <span class="comment">   */</span>
+<a name="l00035"></a><a class="code" href="classjb_1_1integer__range__binning.html#ae5627eb8c40f9aa6d9c5d5f378070110">00035</a>   <a class="code" href="classjb_1_1integer__range__binning.html#ae5627eb8c40f9aa6d9c5d5f378070110" title="Constructor based on the histogram range.">integer_range_binning</a>(<a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> h_min, <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> h_max)
+<a name="l00036"></a>00036       : <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>(h_min)
+<a name="l00037"></a>00037       , <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>(h_max) {
+<a name="l00038"></a>00038     static_assert(
+<a name="l00039"></a>00039         std::is_integral&lt;sample_type&gt;::value,
+<a name="l00040"></a>00040         <span class="stringliteral">&quot;The sample_type must be an integral type&quot;</span>);
+<a name="l00041"></a>00041     <span class="keywordflow">if</span> (<a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a> &gt;= <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>) {
+<a name="l00042"></a>00042       std::ostringstream os;
+<a name="l00043"></a>00043       os &lt;&lt; <span class="stringliteral">&quot;jb::integer_range_binning requires h_min (&quot;</span> &lt;&lt; h_min
+<a name="l00044"></a>00044          &lt;&lt; <span class="stringliteral">&quot;) to be less than h_max (&quot;</span> &lt;&lt; h_max &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;
+<a name="l00045"></a>00045       <span class="keywordflow">throw</span> std::invalid_argument(os.str());
+<a name="l00046"></a>00046     }
+<a name="l00047"></a>00047   }
+<a name="l00048"></a>00048 <span class="comment"></span>
+<a name="l00049"></a>00049 <span class="comment">  //@{</span>
+<a name="l00050"></a>00050 <span class="comment"></span><span class="comment">  /**</span>
+<a name="l00051"></a>00051 <span class="comment">   * @name Implement binning_strategy_concept interface.</span>
+<a name="l00052"></a>00052 <span class="comment">   *</span>
+<a name="l00053"></a>00053 <span class="comment">   * Please see @ref binning_strategy_concept for detailed</span>
+<a name="l00054"></a>00054 <span class="comment">   * documentation of each member function.</span>
+<a name="l00055"></a>00055 <span class="comment">   */</span>
+<a name="l00056"></a><a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">00056</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>()<span class="keyword"> const </span>{
+<a name="l00057"></a>00057     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>;
+<a name="l00058"></a>00058   }
+<a name="l00059"></a><a class="code" href="classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553">00059</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553">histogram_max</a>()<span class="keyword"> const </span>{
+<a name="l00060"></a>00060     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>;
+<a name="l00061"></a>00061   }
+<a name="l00062"></a><a class="code" href="classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3">00062</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3">theoretical_min</a>()<span class="keyword"> const </span>{
+<a name="l00063"></a>00063     <span class="keywordflow">return</span> std::numeric_limits&lt;sample_type&gt;::min();
+<a name="l00064"></a>00064   }
+<a name="l00065"></a><a class="code" href="classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7">00065</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7">theoretical_max</a>()<span class="keyword"> const </span>{
+<a name="l00066"></a>00066     <span class="keywordflow">return</span> std::numeric_limits&lt;sample_type&gt;::max();
+<a name="l00067"></a>00067   }
+<a name="l00068"></a><a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">00068</a>   std::size_t <a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">sample2bin</a>(<a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> t)<span class="keyword"> const </span>{
+<a name="l00069"></a>00069     <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(t - <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>());
+<a name="l00070"></a>00070   }
+<a name="l00071"></a><a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">00071</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">bin2sample</a>(std::size_t i)<span class="keyword"> const </span>{
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> <a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>() + i;
+<a name="l00073"></a>00073   }
+<a name="l00074"></a><a class="code" href="classjb_1_1integer__range__binning.html#a66a357e07b84a24d4bebf119c87ca65f">00074</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a66a357e07b84a24d4bebf119c87ca65f">interpolate</a>(
+<a name="l00075"></a>00075       <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> x_a, <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> x_b, <span class="keywordtype">double</span> y_a, <span class="keywordtype">double</span> s, <span class="keywordtype">double</span> q)<span class="keyword"> const </span>{
+<a name="l00076"></a>00076     <span class="keywordflow">return</span> <a class="code" href="namespacejb.html#a448f309310be45d80bc7181eb51cc5f4" title="Convenience function to implement the binning_strategy_concept.">histogram_binning_linear_interpolation</a>(x_a, x_b, y_a, s, q);
+<a name="l00077"></a>00077   }<span class="comment"></span>
+<a name="l00078"></a>00078 <span class="comment">  //@}</span>
+<a name="l00079"></a>00079 <span class="comment"></span>
+<a name="l00080"></a>00080  <span class="keyword">private</span>:
+<a name="l00081"></a><a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">00081</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e">h_min_</a>;
+<a name="l00082"></a><a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">00082</a>   <a class="code" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93" title="type traits as required by binning_strategy_concept">sample_type</a> <a class="code" href="classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4">h_max_</a>;
+<a name="l00083"></a>00083 };
+<a name="l00084"></a>00084 
+<a name="l00085"></a>00085 } <span class="comment">// namespace jb</span>
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087 <span class="preprocessor">#endif // jb_integer_range_binning_hpp</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"

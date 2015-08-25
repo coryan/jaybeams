@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>JayBeams: jb/ut_logging.cpp File Reference</title>
+<title>JayBeams: jb/ut_integer_range_binning.cpp Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -83,72 +83,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">jb/ut_logging.cpp File Reference</div>  </div>
+<div class="title">jb/ut_integer_range_binning.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="log_8hpp_source.html">jb/log.hpp</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="as__hhmmss_8hpp_source.html">jb/as_hhmmss.hpp</a>&gt;</code><br/>
-<code>#include &lt;boost/log/sinks/text_ostream_backend.hpp&gt;</code><br/>
-<code>#include &lt;boost/log/sinks/sync_frontend.hpp&gt;</code><br/>
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br/>
-<code>#include &lt;sstream&gt;</code><br/>
-</div>
-<p><a href="ut__logging_8cpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr><td colspan="2"><h2><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__logging_8cpp.html#a1dc3a60986f56198f8f32ba2356b6572">BOOST_AUTO_TEST_CASE</a> (logging_basic)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__logging_8cpp.html#ac1143cb440292ca41e0d0af07167b0d2">BOOST_AUTO_TEST_CASE</a> (logging_yaml)</td></tr>
-</table>
-<hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a1dc3a60986f56198f8f32ba2356b6572"></a><!-- doxytag: member="ut_logging.cpp::BOOST_AUTO_TEST_CASE" ref="a1dc3a60986f56198f8f32ba2356b6572" args="(logging_basic)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
-          <td>(</td>
-          <td class="paramtype">logging_basic&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000052">Test:</a></b></dt><dd>Verify that basic logging functions work as expected.</dd></dl>
-
-<p>Definition at line <a class="el" href="ut__logging_8cpp_source.html#l00012">12</a> of file <a class="el" href="ut__logging_8cpp_source.html">ut_logging.cpp</a>.</p>
-
-<p>References <a class="el" href="severity__level_8hpp_source.html#l00018">jb::alert</a>, <a class="el" href="severity__level_8hpp_source.html#l00012">jb::debug</a>, <a class="el" href="log_8cpp_source.html#l00054">jb::log::defaults::enable_file_logging</a>, <a class="el" href="severity__level_8hpp_source.html#l00016">jb::error</a>, <a class="el" href="severity__level_8hpp_source.html#l00013">jb::info</a>, <a class="el" href="log_8cpp_source.html#l00181">jb::log::init()</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="log_8cpp_source.html#l00051">jb::log::defaults::minimum_severity</a>, <a class="el" href="log_8cpp_source.html#l00176">jb::log::next_tid()</a>, <a class="el" href="severity__level_8hpp_source.html#l00014">jb::notice</a>, <a class="el" href="severity__level_8hpp_source.html#l00011">jb::trace</a>, and <a class="el" href="severity__level_8hpp_source.html#l00015">jb::warning</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac1143cb440292ca41e0d0af07167b0d2"></a><!-- doxytag: member="ut_logging.cpp::BOOST_AUTO_TEST_CASE" ref="ac1143cb440292ca41e0d0af07167b0d2" args="(logging_yaml)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
-          <td>(</td>
-          <td class="paramtype">logging_yaml&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000053">Test:</a></b></dt><dd>Verify that parsing <a class="el" href="namespaceYAML.html" title="Types and functions for the yaml-cpp library.">YAML</a> files to configure logging works as expected.</dd></dl>
-
-<p>Definition at line <a class="el" href="ut__logging_8cpp_source.html#l00076">76</a> of file <a class="el" href="ut__logging_8cpp_source.html">ut_logging.cpp</a>.</p>
-
-<p>References <a class="el" href="severity__level_8hpp_source.html#l00016">jb::error</a>, <a class="el" href="config__object_8cpp_source.html#l00015">jb::config_object::load_overrides()</a>, <a class="el" href="log_8hpp_source.html#l00035">jb::log::config::minimum_console_severity</a>, <a class="el" href="log_8hpp_source.html#l00034">jb::log::config::minimum_severity</a>, and <a class="el" href="severity__level_8hpp_source.html#l00014">jb::notice</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<a href="ut__integer__range__binning_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#include &lt;<a class="code" href="integer__range__binning_8hpp.html">jb/integer_range_binning.hpp</a>&gt;</span>
+<a name="l00002"></a>00002 
+<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;boost/test/unit_test.hpp&gt;</span>
+<a name="l00004"></a>00004 <span class="comment"></span>
+<a name="l00005"></a>00005 <span class="comment">/**</span>
+<a name="l00006"></a>00006 <span class="comment"> * @test Verify the constructor in jb::integer_range_binning works as expected.</span>
+<a name="l00007"></a>00007 <span class="comment"> */</span>
+<a name="l00008"></a><a class="code" href="ut__integer__range__binning_8cpp.html#a95048e4b8d86898841805a6815507a4b">00008</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(integer_range_binning_constructor) {
+<a name="l00009"></a>00009   BOOST_CHECK_THROW(
+<a name="l00010"></a>00010       <a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">jb::integer_range_binning&lt;int&gt;</a>(10, 10), std::exception);
+<a name="l00011"></a>00011   BOOST_CHECK_THROW(
+<a name="l00012"></a>00012       <a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">jb::integer_range_binning&lt;int&gt;</a>(20, 10), std::exception);
+<a name="l00013"></a>00013   BOOST_CHECK_NO_THROW(
+<a name="l00014"></a>00014       <a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">jb::integer_range_binning&lt;int&gt;</a>(1, 2));
+<a name="l00015"></a>00015   BOOST_CHECK_NO_THROW(
+<a name="l00016"></a>00016       <a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">jb::integer_range_binning&lt;int&gt;</a>(1000, 2000));
+<a name="l00017"></a>00017 }
+<a name="l00018"></a>00018 <span class="comment"></span>
+<a name="l00019"></a>00019 <span class="comment">/**</span>
+<a name="l00020"></a>00020 <span class="comment"> * @test Verify that jb::integer_range_binning works as expected.</span>
+<a name="l00021"></a>00021 <span class="comment"> */</span>
+<a name="l00022"></a><a class="code" href="ut__integer__range__binning_8cpp.html#a937bde022e342c846d6ba3fdc4aafca7">00022</a> <a class="code" href="ut__as__hhmmss_8cpp.html#a23d894f9d6a75d9025bcff9c80c7ea40">BOOST_AUTO_TEST_CASE</a>(integer_range_binning_basic) {
+<a name="l00023"></a>00023   <a class="code" href="classjb_1_1integer__range__binning.html" title="A histogram binning_strategy for integer numbers in a known range.">jb::integer_range_binning&lt;int&gt;</a> bin(0, 1000);
+<a name="l00024"></a>00024   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#aead9b53749744fb5d16c80639b6f16f9">histogram_min</a>(), 0);
+<a name="l00025"></a>00025   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#a87ace102bc94f46517272e2306802553">histogram_max</a>(), 1000);
+<a name="l00026"></a>00026   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3">theoretical_min</a>(), std::numeric_limits&lt;int&gt;::min());
+<a name="l00027"></a>00027   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7">theoretical_max</a>(), std::numeric_limits&lt;int&gt;::max());
+<a name="l00028"></a>00028   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">sample2bin</a>(0), 0);
+<a name="l00029"></a>00029   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">sample2bin</a>(5), 5);
+<a name="l00030"></a>00030   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#ace88b5d46f6e13721b716c92785b6941">sample2bin</a>(999), 999);
+<a name="l00031"></a>00031   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">bin2sample</a>(0), 0);
+<a name="l00032"></a>00032   BOOST_CHECK_EQUAL(bin.<a class="code" href="classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960">bin2sample</a>(10), 10);
+<a name="l00033"></a>00033 }
+</pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
