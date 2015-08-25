@@ -2,6 +2,7 @@ var searchData=
 [
   ['char',['char',['../structjb_1_1histogram_1_1check__constraints.html#afda1dcb3ae31a4d86716b74602bcb4cd',1,'jb::histogram::check_constraints']]],
   ['check_5fconstraints',['check_constraints',['../structjb_1_1histogram_1_1check__constraints.html#aaf3337374ad4282cab047a4f6203e188',1,'jb::histogram::check_constraints']]],
+  ['check_5fread_5fwrite',['check_read_write',['../ut__fileio_8cpp.html#ade376c335599c9a52e4543dad6a566d1',1,'ut_fileio.cpp']]],
   ['class_5fname',['class_name',['../classjb_1_1config__object_1_1attribute__base.html#aa3a213945dd0e96a65213ed9762c3fa3',1,'jb::config_object::attribute_base']]],
   ['clone',['clone',['../classjb_1_1config__object.html#a92fb389cf026440b9c6c9e63d7ea0a6d',1,'jb::config_object']]],
   ['cmdline_5farg_5fname',['cmdline_arg_name',['../classjb_1_1config__object.html#ac87ab822bf7787f6a59c9ec0e77b6da3',1,'jb::config_object']]],

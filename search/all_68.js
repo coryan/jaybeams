@@ -7,6 +7,7 @@ var searchData=
   ['have_5fboost',['HAVE_BOOST',['../jb-config_8hpp.html#a1644f282a4f84575a270f96b98d4f3c6',1,'jb-config.hpp']]],
   ['have_5fboost_5fdate_5ftime',['HAVE_BOOST_DATE_TIME',['../jb-config_8hpp.html#a864cdfb0b5b3b2fbed2808a33562efb9',1,'jb-config.hpp']]],
   ['have_5fboost_5ffilesystem',['HAVE_BOOST_FILESYSTEM',['../jb-config_8hpp.html#a547dd280b4b8c381d9d69581ca861c87',1,'jb-config.hpp']]],
+  ['have_5fboost_5fiostreams',['HAVE_BOOST_IOSTREAMS',['../jb-config_8hpp.html#aff6c63c8f38407d4448c6525aa534b2b',1,'jb-config.hpp']]],
   ['have_5fboost_5flog',['HAVE_BOOST_LOG',['../jb-config_8hpp.html#a2ef9f061181257862f8a31c4b7353b55',1,'jb-config.hpp']]],
   ['have_5fboost_5flog_5fsetup',['HAVE_BOOST_LOG_SETUP',['../jb-config_8hpp.html#a692b78f2df8a67aefa069bd570c4a178',1,'jb-config.hpp']]],
   ['have_5fboost_5fprogram_5foptions',['HAVE_BOOST_PROGRAM_OPTIONS',['../jb-config_8hpp.html#aecd1bc7fdfc4affb8ebbf9d332e5197d',1,'jb-config.hpp']]],

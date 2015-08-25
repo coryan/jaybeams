@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>JayBeams: jb/ut_histogram_summary.cpp File Reference</title>
+<title>JayBeams: jb/ut_fileio.cpp File Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -86,36 +86,89 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">jb/ut_histogram_summary.cpp File Reference</div>  </div>
+<div class="title">jb/ut_fileio.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="histogram__summary_8hpp_source.html">jb/histogram_summary.hpp</a>&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="fileio_8hpp_source.html">jb/fileio.hpp</a>&gt;</code><br/>
+<code>#include &lt;boost/filesystem.hpp&gt;</code><br/>
 <code>#include &lt;boost/test/unit_test.hpp&gt;</code><br/>
 </div>
-<p><a href="ut__histogram__summary_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="ut__fileio_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__histogram__summary_8cpp.html#ac0bc154372c1e3209807755a5825d7cc">BOOST_AUTO_TEST_CASE</a> (histogram_summary_ios)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__fileio_8cpp.html#ade376c335599c9a52e4543dad6a566d1">check_read_write</a> (boost::filesystem::path const &amp;path)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement the common part of the tests.  <a href="#ade376c335599c9a52e4543dad6a566d1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__fileio_8cpp.html#a762d2c6da705847cc1e162546e3e5575">BOOST_AUTO_TEST_CASE</a> (fileio_basic)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__fileio_8cpp.html#a25b21a4182fdd8fa12df254dc140d8da">BOOST_AUTO_TEST_CASE</a> (fileio_gz)</td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="ac0bc154372c1e3209807755a5825d7cc"></a><!-- doxytag: member="ut_histogram_summary.cpp::BOOST_AUTO_TEST_CASE" ref="ac0bc154372c1e3209807755a5825d7cc" args="(histogram_summary_ios)" -->
+<a class="anchor" id="a762d2c6da705847cc1e162546e3e5575"></a><!-- doxytag: member="ut_fileio.cpp::BOOST_AUTO_TEST_CASE" ref="a762d2c6da705847cc1e162546e3e5575" args="(fileio_basic)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
           <td>(</td>
-          <td class="paramtype">histogram_summary_ios&#160;</td>
+          <td class="paramtype">fileio_basic&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000052">Test:</a></b></dt><dd>Verify that a histogram_summary works as expected.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000040">Test:</a></b></dt><dd>Verify we can read and write regular files...</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__histogram__summary_8cpp_source.html#l00008">8</a> of file <a class="el" href="ut__histogram__summary_8cpp_source.html">ut_histogram_summary.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__fileio_8cpp_source.html#l00044">44</a> of file <a class="el" href="ut__fileio_8cpp_source.html">ut_fileio.cpp</a>.</p>
+
+<p>References <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a25b21a4182fdd8fa12df254dc140d8da"></a><!-- doxytag: member="ut_fileio.cpp::BOOST_AUTO_TEST_CASE" ref="a25b21a4182fdd8fa12df254dc140d8da" args="(fileio_gz)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ut__strtonum_8cpp.html#a09142ae821048736f57985fe795d5c64">BOOST_AUTO_TEST_CASE</a> </td>
+          <td>(</td>
+          <td class="paramtype">fileio_gz&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000041">Test:</a></b></dt><dd>Verify we can read and write regular files...</dd></dl>
+
+<p>Definition at line <a class="el" href="ut__fileio_8cpp_source.html#l00055">55</a> of file <a class="el" href="ut__fileio_8cpp_source.html">ut_fileio.cpp</a>.</p>
+
+<p>References <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade376c335599c9a52e4543dad6a566d1"></a><!-- doxytag: member="ut_fileio.cpp::check_read_write" ref="ade376c335599c9a52e4543dad6a566d1" args="(boost::filesystem::path const &amp;path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="ut__fileio_8cpp.html#ade376c335599c9a52e4543dad6a566d1">check_read_write</a> </td>
+          <td>(</td>
+          <td class="paramtype">boost::filesystem::path const &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implement the common part of the tests. </p>
+
+<p>Definition at line <a class="el" href="ut__fileio_8cpp_source.html#l00010">10</a> of file <a class="el" href="ut__fileio_8cpp_source.html">ut_fileio.cpp</a>.</p>
+
+<p>References <a class="el" href="fileio_8cpp_source.html#l00028">jb::open_input_file()</a>, and <a class="el" href="fileio_8cpp_source.html#l00011">jb::open_output_file()</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00044">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
