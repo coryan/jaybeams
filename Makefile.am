@@ -11,6 +11,8 @@ unit_tests = \
   jb/ut_event_rate_estimator \
   jb/ut_event_rate_histogram \
   jb/ut_explicit_cuts_binning \
+  jb/ut_fileio \
+  jb/ut_filetype \
   jb/ut_histogram \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
@@ -48,6 +50,7 @@ LIBS = \
   $(BOOST_DATE_TIME_LIB) \
   $(BOOST_THREAD_LIB) \
   $(BOOST_PROGRAM_OPTIONS_LIB) \
+  $(BOOST_IOSTREAMS_LIB) \
   $(PTHREAD_LIBS)
 
 # Common configuration for all unit tests
@@ -75,6 +78,8 @@ nobase_jb_libjb_a_HEADERS = \
   jb/event_rate_estimator.hpp \
   jb/event_rate_histogram.hpp \
   jb/explicit_cuts_binning.hpp \
+  jb/fileio.hpp \
+  jb/filetype.hpp \
   jb/histogram.hpp \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
@@ -86,6 +91,8 @@ jb_libjb_a_SOURCES = \
   jb/as_hhmmss.cpp \
   jb/config_files_location.cpp \
   jb/config_object.cpp \
+  jb/fileio.cpp \
+  jb/filetype.cpp \
   jb/histogram_summary.cpp \
   jb/log.cpp \
   jb/severity_level.cpp
@@ -127,6 +134,14 @@ jb_ut_event_rate_histogram_LDADD = $(jb_ut_libs)
 jb_ut_explicit_cuts_binning_SOURCES = jb/ut_explicit_cuts_binning.cpp
 jb_ut_explicit_cuts_binning_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_explicit_cuts_binning
 jb_ut_explicit_cuts_binning_LDADD = $(jb_ut_libs)
+
+jb_ut_fileio_SOURCES = jb/ut_fileio.cpp
+jb_ut_fileio_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_fileio
+jb_ut_fileio_LDADD = $(jb_ut_libs)
+
+jb_ut_filetype_SOURCES = jb/ut_filetype.cpp
+jb_ut_filetype_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_filetype
+jb_ut_filetype_LDADD = $(jb_ut_libs)
 
 jb_ut_histogram_SOURCES = jb/ut_histogram.cpp
 jb_ut_histogram_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram
