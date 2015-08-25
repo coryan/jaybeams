@@ -57,3 +57,39 @@ BOOST_AUTO_TEST_CASE(explicit_cuts_binning_basic) {
   BOOST_CHECK_EQUAL(bin.bin2sample(11), 200);
   BOOST_CHECK_EQUAL(bin.bin2sample(14), 500);
 }
+
+/**
+ * @test Verify that jb::explicit_cuts_binning works with jb::histogram.
+ */
+BOOST_AUTO_TEST_CASE(explicit_cuts_binning_histogram) {
+  tested_histogram h({10, 20, 30, 40, 50, 100, 150, 200});
+  BOOST_CHECK_THROW(h.estimated_mean(), std::invalid_argument);
+
+  h.sample(0);
+  h.sample(10);
+  h.sample(20);
+  h.sample(30);
+  h.sample(40);
+  // each bucket is estimated at the central point
+  BOOST_CHECK_EQUAL(h.estimated_mean(), 25);
+
+  h.sample(40);
+  h.sample(40);
+  h.sample(100);
+  h.sample(200);
+  h.sample(1000);
+
+  double eps = (1<<8) * std::numeric_limits<double>::epsilon();
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.00), 0.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.10), 10.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.20), 20.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.30), 29.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.40), 40.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.50), 43.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.60), 46.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.70), 50.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(0.80), 150.00, eps);
+  BOOST_CHECK_CLOSE(h.estimated_quantile(1.00), 1000.00, eps);
+
+  
+}

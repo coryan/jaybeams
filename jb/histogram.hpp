@@ -160,7 +160,7 @@ class histogram {
     }
     cum_samples += bin_samples;
     bin_samples = overflow_count();
-    if (bin_samples and q <= double(cum_samples + bin_samples) / nsamples()) {
+    if (bin_samples and q < double(cum_samples + bin_samples) / nsamples()) {
       double s = double(bin_samples) / nsamples();
       double y_a = double(cum_samples) / nsamples();
       return binning_.interpolate(
