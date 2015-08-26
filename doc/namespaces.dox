@@ -5,6 +5,14 @@
  */
 
 /**
+ * @namespace jb::itch5
+ *
+ * Contains classes and functions to parse NASDAQ ITCH-5.0 messages,
+ * more information about ITCH-5.0 can be found at:
+ *  http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf
+ */
+
+/**
  * @namespace jb::defaults
  *
  * Default values for configuration parameters.
