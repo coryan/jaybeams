@@ -23,7 +23,7 @@ namespace jb {
 template<typename sample_type_t>
 class integer_range_binning {
  public:
-  /// type traits as required by @ref binning_strategy_concept
+  /// type traits as required by @ref jb::binning_strategy_concept
   typedef sample_type_t sample_type;
 
   /**
