@@ -20,8 +20,6 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> input_file;
 };
 
-
-
 std::size_t const aggregate_max_messages_per_sec = 1000000;
 std::size_t const max_messages_per_sec  = 10000;
 std::size_t const max_messages_per_msec = 10000;
@@ -175,7 +173,7 @@ int main(int argc, char* argv[]) try {
   jb::open_input_file(in, cfg.input_file());
 
   itch5_stats_handler handler;
-  process_itch5_stream(in, handler);
+  jb::itch5::process_iostream(in, handler);
 
   return 0;
 } catch(jb::usage const& u) {
