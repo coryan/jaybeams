@@ -1,0 +1,68 @@
+// -*- c++ -*-
+/**
+ * The interface for message_handlers in jb::itch5::process_iostream.
+ *
+ * The jb::itch5::process_iostream() function reads an ITCH-5.0 file
+ * and calls a handler to process each message.  This class documents
+ * the interface that must be implemented by such a class.
+ */
+class jb::itch5::message_handler_concept {
+ public:
+  //@{
+  /**
+   * @name Time measurement
+   *
+   * The handler must provide a clock to measure parsing and
+   * processing delays in the jb::itch5::process_iostream() function.
+   * Typically this is a simple typedef around
+   * std::chrono::steady_clock and a wrapper around
+   * std::chrono::steady_clock::now().
+   */
+  /**
+   * Timestamps
+   */
+  typedef ... time_point;
+  /**
+   * Get the current time
+   */
+  time_point now() const;
+  //@}
+
+  /**
+   * Handle a message.
+   *
+   * The handler can define this as a single template member function,
+   * or as a template member function with some specializations, or as
+   * a list of overloaded member functions.
+   *
+   * @tparam message_type_t the type of the message, each ITCH-5.0
+   *   message type is represented by a different C++ message in
+   *   jb::itch5
+   * @param recv_ts the timestamp when the message was received.  The
+   *   message processor timestamps each message after it is fully
+   *   received, but before it is parsed.
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param m the message itself
+   */
+  template<typename message_type_t> void handle(
+      time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
+      message_type_t const& m);
+
+  /**
+   * Handle completely unknown or unexpected messages.
+   *
+   * If the message processor receives an unknown or unexpected
+   * message type this member function is called.
+   *
+   * @param recv_ts the timestamp when the message was received by the
+   * processor.
+   * @param msgbuf the raw contents of the message
+   * @param msglen the length of the message
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   */
+  void handle_unknown(
+      time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
+      char const* msgbuf, std::size_t msglen);
+};
