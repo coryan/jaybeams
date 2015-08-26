@@ -101,7 +101,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = jb \
                          doc \
-                         examples
+                         examples \
+                         tools
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.hpp \
                          *.cpp \
