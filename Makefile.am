@@ -32,6 +32,7 @@ unit_tests = \
   jb/itch5/ut_p2ceil \
   jb/itch5/ut_price_field \
   jb/itch5/ut_process_buffer_mlist \
+  jb/itch5/ut_process_iostream_mlist \
   jb/itch5/ut_reg_sho_restriction_message \
   jb/itch5/ut_seconds_field \
   jb/itch5/ut_short_string_field \
@@ -390,6 +391,10 @@ jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
 jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist
 jb_itch5_ut_process_buffer_mlist_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_process_iostream_mlist_SOURCES = jb/itch5/ut_process_iostream_mlist.cpp
+jb_itch5_ut_process_iostream_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_iostream_mlist
+jb_itch5_ut_process_iostream_mlist_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_reg_sho_restriction_message_SOURCES = jb/itch5/ut_reg_sho_restriction_message.cpp
 jb_itch5_ut_reg_sho_restriction_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_reg_sho_restriction_message

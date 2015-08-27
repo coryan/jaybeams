@@ -2,6 +2,7 @@
 #define jb_itch5_process_iostream_mlist_hpp
 
 #include <jb/itch5/process_buffer_mlist.hpp>
+#include <jb/itch5/base_decoders.hpp>
 #include <jb/log.hpp>
 
 namespace jb {
@@ -24,14 +25,13 @@ namespace itch5 {
  * description of the message_handler requirements.
  */
 template<typename message_handler, typename... message_types>
-void process_iostream_mlist(std::istream& in, message_handler& handler) {
+void process_iostream_mlist(std::istream& is, message_handler& handler) {
   std::size_t msgoffset = 0;
-  for (long msgcnt = 0; in.good(); ++msgcnt) {
-    auto read_ts = message_handler.now();
+  for (long msgcnt = 0; is.good(); ++msgcnt) {
     char blen[2];
-    in.read(blen, 2);
-    if (not in) {
-      if (not in.eof()) {
+    is.read(blen, 2);
+    if (not is) {
+      if (not is.eof()) {
         JB_LOG(error) << "reading length when msgcnt=" << msgcnt
                       << ", msgoffset=" << msgoffset;
       }
@@ -43,8 +43,8 @@ void process_iostream_mlist(std::istream& in, message_handler& handler) {
     std::size_t msglen = jb::itch5::decoder<true,std::uint16_t>::r(
         2, blen, 0);
     char msgbuf[maxmsglen];
-    in.read(msgbuf, msglen);
-    auto recv_ts = message_handler.now();
+    is.read(msgbuf, msglen);
+    auto recv_ts = handler.now();
     process_buffer_mlist<message_handler,message_types...>::process(
         handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
     msgoffset += msglen;
