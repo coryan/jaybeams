@@ -91,84 +91,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 <span class="preprocessor">#include &lt;<a class="code" href="testing__data_8hpp.html">jb/itch5/testing_data.hpp</a>&gt;</span>
 <a name="l00003"></a>00003 
 <a name="l00004"></a>00004 <span class="preprocessor">#include &lt;boost/test/unit_test.hpp&gt;</span>
-<a name="l00005"></a>00005 
-<a name="l00006"></a>00006 <span class="keyword">namespace </span>{
-<a name="l00007"></a>00007 <span class="comment">// A sample message for testing</span>
-<a name="l00008"></a>00008 <span class="keywordtype">char</span> <span class="keyword">const</span> buf[] =
-<a name="l00009"></a>00009     u8<span class="stringliteral">&quot;H&quot;</span>                 <span class="comment">// Message Type</span>
-<a name="l00010"></a>00010     <a class="code" href="testing__data_8hpp.html#a844f8859753e183f9639fcfc34e60d48" title="A convenient sequence of bytes to test messages.">JB_ITCH5_TEST_HEADER</a>  <span class="comment">// Common test header</span>
-<a name="l00011"></a>00011     <span class="stringliteral">&quot;HSART   &quot;</span>            <span class="comment">// Stock</span>
-<a name="l00012"></a>00012     <span class="stringliteral">&quot;T&quot;</span>                   <span class="comment">// Trading State</span>
-<a name="l00013"></a>00013     <span class="stringliteral">&quot;\x00&quot;</span>                <span class="comment">// Reserved</span>
-<a name="l00014"></a>00014     <span class="stringliteral">&quot;MWC1&quot;</span>                <span class="comment">// Reason</span>
-<a name="l00015"></a>00015     ;
-<a name="l00016"></a>00016 std::size_t <span class="keyword">const</span> bufsize = <span class="keyword">sizeof</span>(buf) - 1;
-<a name="l00017"></a>00017 } <span class="comment">// anonymous namespace</span>
-<a name="l00018"></a>00018 <span class="comment"></span>
-<a name="l00019"></a>00019 <span class="comment">/**</span>
-<a name="l00020"></a>00020 <span class="comment"> * @test Verify that the jb::itch5::stock_trading_action_message decoder works</span>
-<a name="l00021"></a>00021 <span class="comment"> * as expected.</span>
-<a name="l00022"></a>00022 <span class="comment"> */</span>
-<a name="l00023"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a4cc2007c174132dfa3f72a4cd6a1b133">00023</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(decode_stock_trading_action_message) {
-<a name="l00024"></a>00024   <span class="keyword">using namespace </span>jb::itch5;
-<a name="l00025"></a>00025   <span class="keyword">using namespace </span>std::chrono;
+<a name="l00005"></a>00005 <span class="comment"></span>
+<a name="l00006"></a>00006 <span class="comment">/**</span>
+<a name="l00007"></a>00007 <span class="comment"> * @test Verify that the jb::itch5::stock_trading_action_message decoder works</span>
+<a name="l00008"></a>00008 <span class="comment"> * as expected.</span>
+<a name="l00009"></a>00009 <span class="comment"> */</span>
+<a name="l00010"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a4cc2007c174132dfa3f72a4cd6a1b133">00010</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(decode_stock_trading_action_message) {
+<a name="l00011"></a>00011   <span class="keyword">using namespace </span>jb::itch5;
+<a name="l00012"></a>00012   <span class="keyword">using namespace </span>std::chrono;
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014   <span class="keyword">auto</span> buf = <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a0efd062c987215121be83a4f23bfd2d8">jb::itch5::testing::stock_trading_action</a>();
+<a name="l00015"></a>00015   <span class="keyword">auto</span> <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a5d2c530bc50d648ad5481cda88591ba7" title="Return the expected timestamp for all the test messages.">expected_ts</a> = <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a5d2c530bc50d648ad5481cda88591ba7" title="Return the expected timestamp for all the test messages.">jb::itch5::testing::expected_ts</a>();
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017   <span class="keyword">auto</span> x = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;true,stock_trading_action_message&gt;::r</a>(buf.second, buf.first, 0);
+<a name="l00018"></a>00018   BOOST_CHECK_EQUAL(
+<a name="l00019"></a>00019       x.header.message_type, <a class="code" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">stock_trading_action_message::message_type</a>);
+<a name="l00020"></a>00020   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
+<a name="l00021"></a>00021   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
+<a name="l00022"></a>00022   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a5d2c530bc50d648ad5481cda88591ba7" title="Return the expected timestamp for all the test messages.">expected_ts</a>.count());
+<a name="l00023"></a>00023   BOOST_CHECK_EQUAL(x.stock, <span class="stringliteral">&quot;HSART&quot;</span>);
+<a name="l00024"></a>00024   BOOST_CHECK_EQUAL(x.trading_state, u<span class="charliteral">&#39;T&#39;</span>);
+<a name="l00025"></a>00025   BOOST_CHECK_EQUAL(x.reason, u8<span class="stringliteral">&quot;MWC1&quot;</span>);
 <a name="l00026"></a>00026 
-<a name="l00027"></a>00027   <span class="keyword">auto</span> expected_ts = duration_cast&lt;nanoseconds&gt;(
-<a name="l00028"></a>00028       hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030   <span class="keyword">auto</span> x = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;true,stock_trading_action_message&gt;::r</a>(bufsize, buf, 0);
-<a name="l00031"></a>00031   BOOST_CHECK_EQUAL(
-<a name="l00032"></a>00032       x.header.message_type, <a class="code" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">stock_trading_action_message::message_type</a>);
-<a name="l00033"></a>00033   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
-<a name="l00034"></a>00034   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
-<a name="l00035"></a>00035   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
-<a name="l00036"></a>00036   BOOST_CHECK_EQUAL(x.stock, <span class="stringliteral">&quot;HSART&quot;</span>);
-<a name="l00037"></a>00037   BOOST_CHECK_EQUAL(x.trading_state, u<span class="charliteral">&#39;T&#39;</span>);
-<a name="l00038"></a>00038   BOOST_CHECK_EQUAL(x.reason, u8<span class="stringliteral">&quot;MWC1&quot;</span>);
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040   x = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;false,stock_trading_action_message&gt;::r</a>(bufsize, buf, 0);
-<a name="l00041"></a>00041   BOOST_CHECK_EQUAL(
-<a name="l00042"></a>00042       x.header.message_type, <a class="code" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">stock_trading_action_message::message_type</a>);
-<a name="l00043"></a>00043   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
-<a name="l00044"></a>00044   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
-<a name="l00045"></a>00045   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
-<a name="l00046"></a>00046   BOOST_CHECK_EQUAL(x.stock, <span class="stringliteral">&quot;HSART&quot;</span>);
-<a name="l00047"></a>00047   BOOST_CHECK_EQUAL(x.trading_state, u<span class="charliteral">&#39;T&#39;</span>);
-<a name="l00048"></a>00048   BOOST_CHECK_EQUAL(x.reason, u8<span class="stringliteral">&quot;MWC1&quot;</span>);
-<a name="l00049"></a>00049 }
-<a name="l00050"></a>00050 <span class="comment"></span>
-<a name="l00051"></a>00051 <span class="comment">/**</span>
-<a name="l00052"></a>00052 <span class="comment"> * @test Verify that jb::itch5::stock_trading_action_message iostream</span>
-<a name="l00053"></a>00053 <span class="comment"> * operator works as expected.</span>
-<a name="l00054"></a>00054 <span class="comment"> */</span>
-<a name="l00055"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a2f0d48ded4b1049da974162460e3d62b">00055</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(stream_stock_trading_action_message) {
-<a name="l00056"></a>00056   <span class="keyword">using namespace </span>std::chrono;
-<a name="l00057"></a>00057   <span class="keyword">using namespace </span>jb::itch5;
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059   <span class="keyword">auto</span> tmp = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;false,stock_trading_action_message&gt;::r</a>(bufsize, buf, 0);
-<a name="l00060"></a>00060   std::ostringstream os;
-<a name="l00061"></a>00061   os &lt;&lt; tmp;
-<a name="l00062"></a>00062   BOOST_CHECK_EQUAL(
-<a name="l00063"></a>00063       os.str(), <span class="stringliteral">&quot;message_type=H,stock_locate=0&quot;</span>
-<a name="l00064"></a>00064       <span class="stringliteral">&quot;,tracking_number=1,timestamp=113231.123456789&quot;</span>
-<a name="l00065"></a>00065       <span class="stringliteral">&quot;,stock=HSART&quot;</span>
-<a name="l00066"></a>00066       <span class="stringliteral">&quot;,trading_state=T&quot;</span>
-<a name="l00067"></a>00067       <span class="stringliteral">&quot;,reserved=0&quot;</span>
-<a name="l00068"></a>00068       <span class="stringliteral">&quot;,reason=MWC1&quot;</span>
-<a name="l00069"></a>00069       );
-<a name="l00070"></a>00070 }
-<a name="l00071"></a>00071 <span class="comment"></span>
-<a name="l00072"></a>00072 <span class="comment">/**</span>
-<a name="l00073"></a>00073 <span class="comment"> * @test Verify that trading_state_t works as expected.</span>
-<a name="l00074"></a>00074 <span class="comment"> */</span>
-<a name="l00075"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a80d24db8be54095f96879f055e276ee7">00075</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(simple_trading_state) {
-<a name="l00076"></a>00076   <span class="keyword">using namespace </span>jb::itch5;
-<a name="l00077"></a>00077   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;H&#39;</span>));
-<a name="l00078"></a>00078   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;P&#39;</span>));
-<a name="l00079"></a>00079   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;Q&#39;</span>));
-<a name="l00080"></a>00080   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;T&#39;</span>));
-<a name="l00081"></a>00081   BOOST_CHECK_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39; &#39;</span>), std::runtime_error);
-<a name="l00082"></a>00082 }
+<a name="l00027"></a>00027   x = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;false,stock_trading_action_message&gt;::r</a>(buf.second, buf.first, 0);
+<a name="l00028"></a>00028   BOOST_CHECK_EQUAL(
+<a name="l00029"></a>00029       x.header.message_type, <a class="code" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">stock_trading_action_message::message_type</a>);
+<a name="l00030"></a>00030   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
+<a name="l00031"></a>00031   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
+<a name="l00032"></a>00032   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a5d2c530bc50d648ad5481cda88591ba7" title="Return the expected timestamp for all the test messages.">expected_ts</a>.count());
+<a name="l00033"></a>00033   BOOST_CHECK_EQUAL(x.stock, <span class="stringliteral">&quot;HSART&quot;</span>);
+<a name="l00034"></a>00034   BOOST_CHECK_EQUAL(x.trading_state, u<span class="charliteral">&#39;T&#39;</span>);
+<a name="l00035"></a>00035   BOOST_CHECK_EQUAL(x.reason, u8<span class="stringliteral">&quot;MWC1&quot;</span>);
+<a name="l00036"></a>00036 }
+<a name="l00037"></a>00037 <span class="comment"></span>
+<a name="l00038"></a>00038 <span class="comment">/**</span>
+<a name="l00039"></a>00039 <span class="comment"> * @test Verify that jb::itch5::stock_trading_action_message iostream</span>
+<a name="l00040"></a>00040 <span class="comment"> * operator works as expected.</span>
+<a name="l00041"></a>00041 <span class="comment"> */</span>
+<a name="l00042"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a2f0d48ded4b1049da974162460e3d62b">00042</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(stream_stock_trading_action_message) {
+<a name="l00043"></a>00043   <span class="keyword">using namespace </span>std::chrono;
+<a name="l00044"></a>00044   <span class="keyword">using namespace </span>jb::itch5;
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046   <span class="keyword">auto</span> buf = <a class="code" href="namespacejb_1_1itch5_1_1testing.html#a0efd062c987215121be83a4f23bfd2d8">jb::itch5::testing::stock_trading_action</a>();
+<a name="l00047"></a>00047   <span class="keyword">auto</span> tmp = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">decoder&lt;false,stock_trading_action_message&gt;::r</a>(
+<a name="l00048"></a>00048       buf.second, buf.first, 0);
+<a name="l00049"></a>00049   std::ostringstream os;
+<a name="l00050"></a>00050   os &lt;&lt; tmp;
+<a name="l00051"></a>00051   BOOST_CHECK_EQUAL(
+<a name="l00052"></a>00052       os.str(), <span class="stringliteral">&quot;message_type=H,stock_locate=0&quot;</span>
+<a name="l00053"></a>00053       <span class="stringliteral">&quot;,tracking_number=1,timestamp=113231.123456789&quot;</span>
+<a name="l00054"></a>00054       <span class="stringliteral">&quot;,stock=HSART&quot;</span>
+<a name="l00055"></a>00055       <span class="stringliteral">&quot;,trading_state=T&quot;</span>
+<a name="l00056"></a>00056       <span class="stringliteral">&quot;,reserved=0&quot;</span>
+<a name="l00057"></a>00057       <span class="stringliteral">&quot;,reason=MWC1&quot;</span>
+<a name="l00058"></a>00058       );
+<a name="l00059"></a>00059 }
+<a name="l00060"></a>00060 <span class="comment"></span>
+<a name="l00061"></a>00061 <span class="comment">/**</span>
+<a name="l00062"></a>00062 <span class="comment"> * @test Verify that trading_state_t works as expected.</span>
+<a name="l00063"></a>00063 <span class="comment"> */</span>
+<a name="l00064"></a><a class="code" href="ut__stock__trading__action__message_8cpp.html#a80d24db8be54095f96879f055e276ee7">00064</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(simple_trading_state) {
+<a name="l00065"></a>00065   <span class="keyword">using namespace </span>jb::itch5;
+<a name="l00066"></a>00066   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;H&#39;</span>));
+<a name="l00067"></a>00067   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;P&#39;</span>));
+<a name="l00068"></a>00068   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;Q&#39;</span>));
+<a name="l00069"></a>00069   BOOST_CHECK_NO_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39;T&#39;</span>));
+<a name="l00070"></a>00070   BOOST_CHECK_THROW(<a class="code" href="namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303" title="Represent the &#39;Trading State&#39; field on a &#39;Stock Trading Action&#39; message.">trading_state_t</a>(u<span class="charliteral">&#39; &#39;</span>), std::runtime_error);
+<a name="l00071"></a>00071 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"

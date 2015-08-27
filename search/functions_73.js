@@ -11,9 +11,12 @@ var searchData=
   ['specification',['specification',['../README_8md.html#a97465c571e85e07734c89c99ea1b1e40',1,'README.md']]],
   ['static_5fdigits',['static_digits',['../namespacejb_1_1itch5.html#abdb301132a6940c8015fc134141c2409',1,'jb::itch5']]],
   ['stn_5ftraits',['STN_TRAITS',['../namespacejb.html#ae33693a964490c19d694f641a59cb1e1',1,'jb::STN_TRAITS(int, std::stoi)'],['../namespacejb.html#aa8a88cc54163b0d35b64b4951ca71ab0',1,'jb::STN_TRAITS(unsigned long long, std::stoull)'],['../namespacejb.html#ac7e647b7ed2bb5e5293646eeb884622e',1,'jb::STN_TRAITS(long long, std::stoll)'],['../namespacejb.html#a8f7d6fe2b187d07777583db0e193fc4b',1,'jb::STN_TRAITS(unsigned long, std::stoul)'],['../namespacejb.html#aded423703f186f25e4a1ae099f231202',1,'jb::STN_TRAITS(long, std::stol)'],['../namespacejb.html#a0f5f44c69cc5273e27c4212c41eb33e2',1,'jb::STN_TRAITS(float, std::stof)'],['../namespacejb.html#a1c1339a514c484eaddcd106a2f0e5f7f',1,'jb::STN_TRAITS(double, std::stod)']]],
+  ['stock_5fdirectory',['stock_directory',['../namespacejb_1_1itch5_1_1testing.html#a0696483daf5c0a4c1bd822c044b02d9c',1,'jb::itch5::testing']]],
+  ['stock_5ftrading_5faction',['stock_trading_action',['../namespacejb_1_1itch5_1_1testing.html#a0efd062c987215121be83a4f23bfd2d8',1,'jb::itch5::testing']]],
   ['strings',['strings',['../securities__and__tickers_8md.html#a633b050629487657420f389e00d5cb73',1,'securities_and_tickers.md']]],
   ['strtonum',['strtonum',['../namespacejb.html#a4b84daf04d6ce26f0e29600156117f1d',1,'jb']]],
   ['summary',['summary',['../classjb_1_1histogram.html#abafffad3f8c6a9f5120aa50336adca9b',1,'jb::histogram']]],
   ['swap',['swap',['../classjb_1_1config__attribute.html#a5b46e73426cdde61d7e30fcd4ce4e325',1,'jb::config_attribute::swap()'],['../classjb_1_1config__object.html#aa9038a66dd6b5b949c3833ecc16b8ba8',1,'jb::config_object::swap()']]],
-  ['sysconfdir',['sysconfdir',['../namespacejb.html#ad2af85800e929a8f320160708a32041c',1,'jb']]]
+  ['sysconfdir',['sysconfdir',['../namespacejb.html#ad2af85800e929a8f320160708a32041c',1,'jb']]],
+  ['system_5fevent',['system_event',['../namespacejb_1_1itch5_1_1testing.html#a0645ccf0d92770baed3baf2d51260bd0',1,'jb::itch5::testing']]]
 ];

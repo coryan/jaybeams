@@ -2,6 +2,8 @@ var searchData=
 [
   ['h_5fmax_5f',['h_max_',['../classjb_1_1integer__range__binning.html#aec2ba1bf83429d284b9443600c854fa4',1,'jb::integer_range_binning']]],
   ['h_5fmin_5f',['h_min_',['../classjb_1_1integer__range__binning.html#a04cf24e9c989c782058635c7943d813e',1,'jb::integer_range_binning']]],
+  ['handle',['handle',['../classjb_1_1itch5_1_1message__handler__concept.html#a4e87975e3b17411be4434725cdac346d',1,'jb::itch5::message_handler_concept']]],
+  ['handle_5funknown',['handle_unknown',['../classjb_1_1itch5_1_1message__handler__concept.html#a766ac89b36f6b75fcc2c64f328b9c934',1,'jb::itch5::message_handler_concept']]],
   ['has_5fless_5fthan',['has_less_than',['../structjb_1_1histogram_1_1check__constraints.html#ab8caeb72c0b2581fcf858c46947a1eab',1,'jb::histogram::check_constraints::has_less_than(...)'],['../structjb_1_1histogram_1_1check__constraints.html#a7873b860171d971fadb0d543979fa057',1,'jb::histogram::check_constraints::has_less_than(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt; t)']]],
   ['has_5fless_5fthan_5for_5fequal',['has_less_than_or_equal',['../structjb_1_1histogram_1_1check__constraints.html#a8cc4f0c13fc431437473ce0975043e9e',1,'jb::histogram::check_constraints::has_less_than_or_equal(...)'],['../structjb_1_1histogram_1_1check__constraints.html#ac4c3d6610f9e2e5788170016a6692457',1,'jb::histogram::check_constraints::has_less_than_or_equal(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt;']]],
   ['have_5fboost',['HAVE_BOOST',['../jb-config_8hpp.html#a1644f282a4f84575a270f96b98d4f3c6',1,'jb-config.hpp']]],

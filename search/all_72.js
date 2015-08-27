@@ -10,6 +10,7 @@ var searchData=
   ['reason_5ft',['reason_t',['../namespacejb_1_1itch5.html#af15c4e97bdc325d0e04ad4697a3cc531',1,'jb::itch5']]],
   ['reg_5fsho_5faction',['reg_sho_action',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html#a871ee476567dbe73e83625452a7d43dd',1,'jb::itch5::reg_sho_restriction_message']]],
   ['reg_5fsho_5faction_5ft',['reg_sho_action_t',['../namespacejb_1_1itch5.html#a7e19588b34b5f37a9261b58ec3c9f4f9',1,'jb::itch5']]],
+  ['reg_5fsho_5frestriction',['reg_sho_restriction',['../namespacejb_1_1itch5_1_1testing.html#a2b71a80752f62af5034cc49c53c27d4e',1,'jb::itch5::testing']]],
   ['reg_5fsho_5frestriction_5fmessage',['reg_sho_restriction_message',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html',1,'jb::itch5']]],
   ['reg_5fsho_5frestriction_5fmessage_2ecpp',['reg_sho_restriction_message.cpp',['../reg__sho__restriction__message_8cpp.html',1,'']]],
   ['reg_5fsho_5frestriction_5fmessage_2ehpp',['reg_sho_restriction_message.hpp',['../reg__sho__restriction__message_8hpp.html',1,'']]],
