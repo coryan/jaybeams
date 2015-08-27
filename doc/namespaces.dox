@@ -13,6 +13,12 @@
  */
 
 /**
+ * @namespace jb::itch5::testing
+ *
+ * Functions used in testing jb::itch5 entities.
+ */
+
+/**
  * @namespace jb::defaults
  *
  * Default values for configuration parameters.

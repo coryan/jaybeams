@@ -11,17 +11,10 @@ BOOST_AUTO_TEST_CASE(decode_system_event_message) {
   using jb::itch5::decoder;
   using namespace std::chrono;
 
-  char buf[] =
-      u8"S"                // Message Type
-      JB_ITCH5_TEST_HEADER // Common test header
-      "O"                  // Event Code ("O" -> Start)
-      ;
-  std::size_t const size = sizeof(buf)/sizeof(buf[0]);
+  auto buf = jb::itch5::testing::system_event();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
-
-  auto x = decoder<true,system_event_message>::r(size, buf, 0);
+  auto x = decoder<true,system_event_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, system_event_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -29,7 +22,7 @@ BOOST_AUTO_TEST_CASE(decode_system_event_message) {
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
   BOOST_CHECK_EQUAL(x.event_code, u'O');
 
-  x = decoder<false,system_event_message>::r(size, buf, 0);
+  x = decoder<false,system_event_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, system_event_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);

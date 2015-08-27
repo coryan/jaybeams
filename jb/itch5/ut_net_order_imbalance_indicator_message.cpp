@@ -3,26 +3,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace {
-// A sample message for testing
-char const buf[] =
-    u8"I"                 // Message Type
-    JB_ITCH5_TEST_HEADER  // Common test header
-    "\x00\x00\x00\x00"
-    "\x02\x80\xDE\x80"    // Paired Shares (42000000)
-    "\x00\x00\x00\x00"
-    "\x00\x06\x79\x08"    // Imbalance Shares (424200)
-    "B"                   // Imbalance Direction (H)
-    "HSART   "            // Stock
-    "\x00\x23\xB6\xF8"    // Far Price (234.0600)
-    "\x00\x12\xC6\xA4"    // Near Price (123.0500)
-    "\x00\x0D\x94\xF4"    // Current Reference Price (89.0100)
-    "O"                   // Cross Type (O)
-    "A"                   // Price Variation Indicator
-    ;
-std::size_t const bufsize = sizeof(buf) - 1;
-} // anonymous namespace
-
 /**
  * @test Verify that the jb::itch5::net_order_imbalance_indicator_message decoder works
  * as expected.
@@ -31,10 +11,10 @@ BOOST_AUTO_TEST_CASE(decode_net_order_imbalance_indicator_message) {
   using namespace jb::itch5;
   using namespace std::chrono;
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
+  auto buf = jb::itch5::testing::net_order_imbalance_indicator();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,net_order_imbalance_indicator_message>::r(bufsize, buf, 0);
+  auto x = decoder<true,net_order_imbalance_indicator_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type,
       net_order_imbalance_indicator_message::message_type);
@@ -52,7 +32,7 @@ BOOST_AUTO_TEST_CASE(decode_net_order_imbalance_indicator_message) {
   BOOST_CHECK_EQUAL(
       x.price_variation_indicator, price_variation_indicator_t(u'A'));
 
-  x = decoder<false,net_order_imbalance_indicator_message>::r(bufsize, buf, 0);
+  x = decoder<false,net_order_imbalance_indicator_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type,
       net_order_imbalance_indicator_message::message_type);
@@ -79,8 +59,9 @@ BOOST_AUTO_TEST_CASE(stream_net_order_imbalance_indicator_message) {
   using namespace std::chrono;
   using namespace jb::itch5;
 
+  auto buf = jb::itch5::testing::net_order_imbalance_indicator();
   auto tmp = decoder<false,net_order_imbalance_indicator_message>::r(
-      bufsize, buf, 0);
+      buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
   BOOST_CHECK_EQUAL(

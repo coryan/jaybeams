@@ -5,6 +5,9 @@ inst_LIBRARIES = \
   jb/libjb.a \
   jb/libitch5.a
 
+noinst_LIBRARIES = \
+  jb/libitch5_testing.a
+
 unit_tests = \
   jb/itch5/ut_add_order_message \
   jb/itch5/ut_add_order_mpid_message \
@@ -96,6 +99,7 @@ jb_ut_libs = \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 
 jb_ut_itch5_libs = \
+  jb/libitch5_testing.a \
   jb/libitch5.a \
   jb/libjb.a \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
@@ -137,7 +141,19 @@ jb_libjb_a_SOURCES = \
 jb_libjb_a_LIBADD = 
 
 ################################################################
-# jb/libmo.a
+# jb/libitch5_testing.a
+################################################################
+
+jb_libitch5_testing_adir = $(includedir)
+nobase_jb_libitch5_testing_a_HEADERS =
+
+jb_libitch5_testing_a_SOURCES = \
+  jb/itch5/testing_data.cpp
+jb_libitch5_testing_a_HEADERS = \
+  jb/itch5/testing_data.hpp
+
+################################################################
+# jb/libitch5.a
 ################################################################
 
 jb_libitch5_adir = $(includedir)

@@ -3,23 +3,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace {
-// A sample message for testing
-char const buf[] =
-    u8"P"                 // Message Type
-    JB_ITCH5_TEST_HEADER  // Common test header
-    "\x00\x00\x00\x00"
-    "\x00\x00\x10\x92"    // Order Reference Number (4242)
-    "B"                   // Buy/Sell Indicator
-    "\x00\x00\x00\x64"    // Shares (100)
-    "HSART   "            // Stock
-    "\x00\x12\xC6\xA4"    // Price (123.0500)
-    "\x00\x00\x00\x00"
-    "\x00\x23\xB6\xF8"    // Match Number (2340600)
-    ;
-std::size_t const bufsize = sizeof(buf) - 1;
-} // anonymous namespace
-
 /**
  * @test Verify that the jb::itch5::trade_message decoder works
  * as expected.
@@ -28,10 +11,10 @@ BOOST_AUTO_TEST_CASE(decode_trade_message) {
   using namespace jb::itch5;
   using namespace std::chrono;
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
+  auto buf = jb::itch5::testing::trade();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,trade_message>::r(bufsize, buf, 0);
+  auto x = decoder<true,trade_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, trade_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -44,7 +27,7 @@ BOOST_AUTO_TEST_CASE(decode_trade_message) {
   BOOST_CHECK_EQUAL(x.price, price4_t(1230500));
   BOOST_CHECK_EQUAL(x.match_number, 2340600ULL);
 
-  x = decoder<false,trade_message>::r(bufsize, buf, 0);
+  x = decoder<false,trade_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, trade_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -66,7 +49,8 @@ BOOST_AUTO_TEST_CASE(stream_trade_message) {
   using namespace std::chrono;
   using namespace jb::itch5;
 
-  auto tmp = decoder<false,trade_message>::r(bufsize, buf, 0);
+  auto buf = jb::itch5::testing::trade();
+  auto tmp = decoder<false,trade_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
   BOOST_CHECK_EQUAL(

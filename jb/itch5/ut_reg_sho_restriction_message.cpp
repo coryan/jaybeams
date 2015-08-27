@@ -3,17 +3,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace {
-// A sample message for testing
-char const buf[] =
-    u8"Y"                 // Message Type
-    JB_ITCH5_TEST_HEADER  // Common test header
-    "HSART   "            // Stock
-    "0"                   // Reg SHO Action
-    ;
-std::size_t const bufsize = sizeof(buf) - 1;
-} // anonymous namespace
-
 /**
  * @test Verify that the jb::itch5::reg_sho_restriction_message decoder works
  * as expected.
@@ -22,10 +11,10 @@ BOOST_AUTO_TEST_CASE(decode_reg_sho_restriction_message) {
   using namespace jb::itch5;
   using namespace std::chrono;
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
+  auto buf = jb::itch5::testing::reg_sho_restriction();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,reg_sho_restriction_message>::r(bufsize, buf, 0);
+  auto x = decoder<true,reg_sho_restriction_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, reg_sho_restriction_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -34,7 +23,7 @@ BOOST_AUTO_TEST_CASE(decode_reg_sho_restriction_message) {
   BOOST_CHECK_EQUAL(x.stock, "HSART");
   BOOST_CHECK_EQUAL(x.reg_sho_action, u'0');
 
-  x = decoder<false,reg_sho_restriction_message>::r(bufsize, buf, 0);
+  x = decoder<false,reg_sho_restriction_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, reg_sho_restriction_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -52,7 +41,9 @@ BOOST_AUTO_TEST_CASE(stream_reg_sho_restriction_message) {
   using namespace std::chrono;
   using namespace jb::itch5;
 
-  auto tmp = decoder<false,reg_sho_restriction_message>::r(bufsize, buf, 0);
+  auto buf = jb::itch5::testing::reg_sho_restriction();
+  auto tmp = decoder<false,reg_sho_restriction_message>::r(
+      buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
   BOOST_CHECK_EQUAL(

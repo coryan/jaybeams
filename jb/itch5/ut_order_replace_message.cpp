@@ -3,21 +3,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace {
-// A sample message for testing
-char const buf[] =
-    u8"U"                 // Message Type
-    JB_ITCH5_TEST_HEADER  // Common test header
-    "\x00\x00\x00\x00"
-    "\x00\x00\x00\x2A"    // Original Order Reference Number (42)
-    "\x00\x00\x00\x00"
-    "\x00\x00\x10\x92"    // New Order Reference Number (4242)
-    "\x00\x00\x00\x64"    // Shares (100)
-    "\x00\x23\xB6\xF8"    // Price (234.0600)
-    ;
-std::size_t const bufsize = sizeof(buf) - 1;
-} // anonymous namespace
-
 /**
  * @test Verify that the jb::itch5::order_replace_message decoder works
  * as expected.
@@ -26,10 +11,10 @@ BOOST_AUTO_TEST_CASE(decode_order_replace_message) {
   using namespace jb::itch5;
   using namespace std::chrono;
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
+  auto buf = jb::itch5::testing::order_replace();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,order_replace_message>::r(bufsize, buf, 0);
+  auto x = decoder<true,order_replace_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, order_replace_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -40,7 +25,7 @@ BOOST_AUTO_TEST_CASE(decode_order_replace_message) {
   BOOST_CHECK_EQUAL(x.shares, 100);
   BOOST_CHECK_EQUAL(x.price, price4_t(2340600));
 
-  x = decoder<false,order_replace_message>::r(bufsize, buf, 0);
+  x = decoder<false,order_replace_message>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, order_replace_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -60,7 +45,8 @@ BOOST_AUTO_TEST_CASE(stream_order_replace_message) {
   using namespace std::chrono;
   using namespace jb::itch5;
 
-  auto tmp = decoder<false,order_replace_message>::r(bufsize, buf, 0);
+  auto buf = jb::itch5::testing::order_replace();
+  auto tmp = decoder<false,order_replace_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
   BOOST_CHECK_EQUAL(

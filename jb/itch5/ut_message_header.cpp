@@ -11,22 +11,16 @@ BOOST_AUTO_TEST_CASE(decode_message_header) {
   using jb::itch5::decoder;
   using namespace std::chrono;
 
-  char buf[] =
-      u8" "                 // Message Type (space is invalid)
-      JB_ITCH5_TEST_HEADER  // Common header body
-      ;
-  std::size_t const size = sizeof(buf)/sizeof(buf[0]);
+  auto buf = jb::itch5::testing::message_header();
+  auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
-
-  auto x = decoder<true,message_header>::r(size, buf, 0);
+  auto x = decoder<true,message_header>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(x.message_type, u' ');
   BOOST_CHECK_EQUAL(x.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.timestamp.ts.count(), expected_ts.count());
 
-  x = decoder<false,message_header>::r(size, buf, 0);
+  x = decoder<false,message_header>::r(buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(x.message_type, u' ');
   BOOST_CHECK_EQUAL(x.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.tracking_number, 1);

@@ -3,35 +3,21 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace {
-// A sample message for testing
-char const buf[] =
-    u8"K"                 // Message Type
-    JB_ITCH5_TEST_HEADER  // Common test header
-    "HSART   "            // Stock
-    "\x00\x00\xC0\xFD"    // IPO Quotation Release Time (13:43:25)
-    "A"                   // IPO Quotation Release Qualifier
-    "\x00\x12\xC6\xA4"    // IPO Price (123.0500)
-    ;
-std::size_t const bufsize = sizeof(buf) - 1;
-} // anonymous namespace
-
 /**
- * @test Verify that the jb::itch5::ipo_quoting_period_update_message decoder works
- * as expected.
+ * @test Verify that the jb::itch5::ipo_quoting_period_update_message
+ * decoder works as expected.
  */
 BOOST_AUTO_TEST_CASE(decode_ipo_quoting_period_update_message) {
   using namespace jb::itch5;
   using namespace std::chrono;
 
-  auto expected_ts = duration_cast<nanoseconds>(
-      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
-
+  auto buf = jb::itch5::testing::ipo_quoting_period_update();
+  auto expected_ts = jb::itch5::testing::expected_ts();
   auto expected_release = duration_cast<seconds>(
       hours(13) + minutes(43) + seconds(25));
 
   auto x = decoder<true,ipo_quoting_period_update_message>::r(
-      bufsize, buf, 0);
+      buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, ipo_quoting_period_update_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -43,7 +29,8 @@ BOOST_AUTO_TEST_CASE(decode_ipo_quoting_period_update_message) {
   BOOST_CHECK_EQUAL(x.ipo_quotation_release_qualifier, u'A');
   BOOST_CHECK_EQUAL(x.ipo_price, price4_t(1230500));
 
-  x = decoder<false,ipo_quoting_period_update_message>::r(bufsize, buf, 0);
+  x = decoder<false,ipo_quoting_period_update_message>::r(
+      buf.second, buf.first, 0);
   BOOST_CHECK_EQUAL(
       x.header.message_type, ipo_quoting_period_update_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
@@ -64,8 +51,9 @@ BOOST_AUTO_TEST_CASE(stream_ipo_quoting_period_update_message) {
   using namespace std::chrono;
   using namespace jb::itch5;
 
+  auto buf = jb::itch5::testing::ipo_quoting_period_update();
   auto tmp = decoder<false,ipo_quoting_period_update_message>::r(
-      bufsize, buf, 0);
+      buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
   BOOST_CHECK_EQUAL(
