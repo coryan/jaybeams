@@ -211,7 +211,7 @@ struct config_recurse {
   apply_cmdline_values(
       Sequence& rhs, boost::program_options::variables_map const& vm,
       std::string const& name) {
-    // TODO(JB-69)
+    // TODO(#6)
     if (rhs.size() == 0) {
       rhs.resize(1);
     }
