@@ -6,23 +6,22 @@
 #include <jb/itch5/testing_data.hpp>
 
 #include <skye/mock_function.hpp>
-#include <initializer_list>
+#include <skye/mock_template_function.hpp>
 
 namespace {
 
 class mock_message_handler {
- pubic:
+ public:
   mock_message_handler() {}
 
   typedef int time_point;
 
   skye::mock_function<int()> now;
-  skye::mock_function<void> handle_message;
-  skye::mock_function<void> handle_unknown;
-};
+  skye::mock_function<void(int const&, long, std::size_t,
+                           char const*, std::size_t)> handle_unknown;
 
-std::string create_message_stream(
-    std::initializer_list<std::string> const& rhs);
+  skye::mock_template_function<void> handle_message;
+};
 
 } // anonymous namespace
 
@@ -31,37 +30,81 @@ std::string create_message_stream(
  */
 BOOST_AUTO_TEST_CASE(process_buffer_mlist_empty) {
   mock_message_handler handler;
-  handler.now.returns(0);
 
-  std::string bytes =
-      create_message_stream({
-          jb::itch5::samples::system_event(),
-          jb::itch5::samples::stock_directory(),
-          jb::itch5::samples::add_order()});
-  std::istringstream is(bytes);
-
-  jb::itch5::process_iostream_mlist<>(is, handler);
+  auto p = jb::itch5::testing::system_event();
+  jb::itch5::process_buffer_mlist<mock_message_handler>::process(
+      handler, 42, 2, 100, p.first, p.second);
+  handler.handle_unknown.require_called()
+      .once();
+  BOOST_CHECK_EQUAL(
+      std::get<0>(handler.handle_unknown.at(0)), 42);
+  BOOST_CHECK_EQUAL(
+      std::get<1>(handler.handle_unknown.at(0)), 2);
+  BOOST_CHECK_EQUAL(
+      std::get<2>(handler.handle_unknown.at(0)), 100);
 }
 
-namespace {
+/**
+ * Verify that jb::itch5::process_buffer_mlist<> works for a list with
+ * a single element.
+ */
+BOOST_AUTO_TEST_CASE(process_buffer_mlist_single) {
+  mock_message_handler handler;
 
-std::string create_message_stream(
-    std::initializer_list<std::string> const& rhs) {
-  string bytes;
-  for (auto const& message : rhs) {
-    std::size_t len = message.length();
-    if (len == 0 or len >= std::size_t(1<<16)) {
-      throw std::invalid_argument(
-          "arguments to create_message_stream must have "
-          "length in the [0,65536] range");
-    }
-    int hi = len / 256;
-    int lo = len % 256;
-    bytes += char(hi);
-    bytes += char(lo);
-    bytes += message;
+  {
+    auto p = jb::itch5::testing::system_event();
+    jb::itch5::process_buffer_mlist<
+      mock_message_handler, jb::itch5::system_event_message>::process(
+          handler, 42, 2, 100, p.first, p.second);
   }
-  return bytes;
+  handler.handle_message.require_called()
+      .once();
+
+  {
+    auto p = jb::itch5::testing::stock_directory();
+    jb::itch5::process_buffer_mlist<
+      mock_message_handler, jb::itch5::system_event_message>::process(
+          handler, 4242, 3, 200, p.first, p.second);
+  }
+  handler.handle_message.check_called()
+      .once();
+  handler.handle_unknown.require_called()
+      .once();
+  BOOST_CHECK_EQUAL(
+      std::get<0>(handler.handle_unknown.at(0)), 4242);
+  BOOST_CHECK_EQUAL(
+      std::get<1>(handler.handle_unknown.at(0)), 3);
+  BOOST_CHECK_EQUAL(
+      std::get<2>(handler.handle_unknown.at(0)), 200);
 }
 
-} // anonymous namespace
+/**
+ * Verify that jb::itch5::process_buffer_mlist<> works for a list with
+ * 3 elements.
+ */
+BOOST_AUTO_TEST_CASE(process_buffer_mlist_3) {
+  mock_message_handler handler;
+
+  typedef jb::itch5::process_buffer_mlist<
+    mock_message_handler, jb::itch5::system_event_message,
+    jb::itch5::stock_directory_message, jb::itch5::add_order_message
+    > tested;
+
+  {
+    auto p = jb::itch5::testing::system_event();
+    tested::process(
+          handler, 42, 2, 100, p.first, p.second);
+  }
+  {
+    auto p = jb::itch5::testing::stock_directory();
+    tested::process(
+          handler, 43, 3, 120, p.first, p.second);
+  }
+  {
+    auto p = jb::itch5::testing::add_order();
+    tested::process(
+          handler, 44, 4, 140, p.first, p.second);
+  }
+  handler.handle_message.require_called()
+      .exactly( 3 );
+}

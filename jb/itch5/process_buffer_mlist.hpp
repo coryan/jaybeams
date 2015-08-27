@@ -74,7 +74,9 @@ template<typename message_handler, typename head_t, typename... tail_t>
 class process_buffer_mlist<message_handler,head_t,tail_t...> {
  public:
   /**
-   * Always call handle_unknown(), as the message type list is empty.
+   * If any of the message types in the list matches the contents of
+   * the buffer call handle_message() for that type in the handler.
+   * Otherwise call handle_unknown().
    *
    * @param handler a message handler per @ref
    *   jb::itch5::message_handler_concept.
