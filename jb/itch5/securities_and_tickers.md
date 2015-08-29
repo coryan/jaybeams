@@ -36,7 +36,7 @@ market feed may not be the same string used to identify them when
 placing orders, or clearing.
 
 In short, it behooves sofware engineers in the field to keep these
-things straight in their designs, and in their heads too I might say.
+things straight in their designs, and in their heads too I might add.
 
 ### References
 
