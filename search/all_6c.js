@@ -3,6 +3,7 @@ var searchData=
   ['last_5fevent_5f',['last_event_',['../classjb_1_1event__rate__estimator.html#ab74a2e7f79c06490f58ec4bc1fb35c75',1,'jb::event_rate_estimator']]],
   ['last_5frate',['last_rate',['../classjb_1_1event__rate__histogram.html#ab850e66b03ec8ab0f1779994f5417e4f',1,'jb::event_rate_histogram']]],
   ['last_5frate_5f',['last_rate_',['../classjb_1_1event__rate__histogram.html#a3d399bddc2c0f0a086776ccce8cfc721',1,'jb::event_rate_histogram']]],
+  ['last_5freport_5fts_5f',['last_report_ts_',['../classjb_1_1offline__feed__statistics.html#acdd010376ac9dddc40c71c58d4c18855',1,'jb::offline_feed_statistics']]],
   ['last_5fts_5f',['last_ts_',['../classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8',1,'jb::offline_feed_statistics']]],
   ['less_5fthan_5fcomparable',['less_than_comparable',['../classboost_1_1less__than__comparable.html',1,'']]],
   ['level_5f1',['level_1',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html#ae6c00e5892c1e1cdb56cc2ca07eff6ed',1,'jb::itch5::mwcb_decline_level_message']]],

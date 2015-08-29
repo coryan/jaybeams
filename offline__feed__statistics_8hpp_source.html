@@ -177,66 +177,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00088"></a>00088 <span class="comment">   *   statistics for the messages/millisecond rate.</span>
 <a name="l00089"></a>00089 <span class="comment">   * - minRatePerUSec, p25RatePerUSec, ..., maxRatePerUSec: the</span>
 <a name="l00090"></a>00090 <span class="comment">   *   statistics for the messages/microsecond rate.</span>
-<a name="l00091"></a>00091 <span class="comment">   * - minArrival: the minimum of the timestamp difference between two</span>
-<a name="l00092"></a>00092 <span class="comment">   *   consecutive messages, in nanoseconds.</span>
-<a name="l00093"></a>00093 <span class="comment">   * - p25Arrival: the 25th percentile of the timestamp difference</span>
-<a name="l00094"></a>00094 <span class="comment">   *   between two consecutive messages, in nanoseconds.</span>
-<a name="l00095"></a>00095 <span class="comment">   * - p50Arrival, p75Arrival, ..., maxArrival: analogous statistics</span>
-<a name="l00096"></a>00096 <span class="comment">   *   for the time difference between two consecutive messages.</span>
-<a name="l00097"></a>00097 <span class="comment">   * - minProcessingLatency, ..., maxProcessingLatency: the statistics</span>
-<a name="l00098"></a>00098 <span class="comment">   *   for processing latency of the events, in nanoseconds.</span>
-<a name="l00099"></a>00099 <span class="comment">   *</span>
-<a name="l00100"></a>00100 <span class="comment">   * @param os the output stream</span>
-<a name="l00101"></a>00101 <span class="comment">   */</span>
-<a name="l00102"></a>00102   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#a19ea2704339300186bee0159d7db96df" title="Print a CSV header.">print_csv_header</a>(std::ostream&amp; os);
-<a name="l00103"></a>00103 <span class="comment"></span>
-<a name="l00104"></a>00104 <span class="comment">  /**</span>
-<a name="l00105"></a>00105 <span class="comment">   * Print all the measurements in CSV format.</span>
-<a name="l00106"></a>00106 <span class="comment">   */</span>
-<a name="l00107"></a>00107   <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#a6095d408997ebe62c795a169bb129fe5" title="Print all the measurements in CSV format.">print_csv</a>(std::string <span class="keyword">const</span>&amp; name, std::ostream&amp; os) <span class="keyword">const</span>;
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109  <span class="keyword">private</span>:
-<a name="l00110"></a>00110   <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#afabf39eec3f0f6fcb30e7e7cccd8092a">record_sample</a>(
-<a name="l00111"></a>00111       std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
-<a name="l00112"></a>00112 
-<a name="l00113"></a>00113  <span class="keyword">private</span>:
-<a name="l00114"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039">00114</a>   <a class="code" href="classjb_1_1event__rate__histogram.html">event_rate_histogram&lt;int,std::chrono::milliseconds&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039">per_sec_rate_</a>;
-<a name="l00115"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044">00115</a>   <a class="code" href="classjb_1_1event__rate__histogram.html" title="Keep a histogram of observed event rates.">event_rate_histogram&lt;&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044">per_msec_rate_</a>;
-<a name="l00116"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a04385b5774feaa204b14c70516245962">00116</a>   <a class="code" href="classjb_1_1event__rate__histogram.html" title="Keep a histogram of observed event rates.">event_rate_histogram&lt;&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a04385b5774feaa204b14c70516245962">per_usec_rate_</a>;
-<a name="l00117"></a>00117   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">histogram&lt;integer_range_binning&lt;std::uint64_t&gt;</a>&gt;
-<a name="l00118"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a0159d5df0569ca9ae43614ebe042c9f3">00118</a>       <a class="code" href="classjb_1_1offline__feed__statistics.html#a0159d5df0569ca9ae43614ebe042c9f3">interarrival_histogram_t</a>;
-<a name="l00119"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d">00119</a>   <a class="code" href="classjb_1_1histogram.html">interarrival_histogram_t</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d">interarrival_</a>;
-<a name="l00120"></a>00120 
-<a name="l00121"></a>00121   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">histogram&lt;integer_range_binning&lt;std::uint64_t&gt;</a>&gt;
-<a name="l00122"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7">00122</a>       <a class="code" href="classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7">processing_latency_histogram_t</a>;
-<a name="l00123"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c">00123</a>   <a class="code" href="classjb_1_1histogram.html">processing_latency_histogram_t</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c">processing_latency_</a>;
-<a name="l00124"></a>00124 
-<a name="l00125"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157">00125</a>   std::chrono::seconds <a class="code" href="classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157">reporting_interval_</a>;
-<a name="l00126"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8">00126</a>   std::chrono::nanoseconds <a class="code" href="classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8">last_ts_</a>;
-<a name="l00127"></a>00127 };
-<a name="l00128"></a>00128 <span class="comment"></span>
-<a name="l00129"></a>00129 <span class="comment">/**</span>
-<a name="l00130"></a>00130 <span class="comment"> * Configure an offline_feed_statistics object</span>
-<a name="l00131"></a>00131 <span class="comment"> */</span>
-<a name="l00132"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html">00132</a> <span class="keyword">class </span><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">offline_feed_statistics::config</a> : <span class="keyword">public</span> jb::<a class="code" href="classjb_1_1config__object.html" title="Base class for all configuration objects.">config_object</a> {
-<a name="l00133"></a>00133  <span class="keyword">public</span>:
-<a name="l00134"></a>00134   <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">config</a>();
-<a name="l00135"></a>00135   <a class="code" href="config__object_8hpp.html#a0cc79b81f23b416c77f04fb0cb00cae0">config_object_constructors</a>(<a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">config</a>);
-<a name="l00136"></a>00136 <span class="comment"></span>
-<a name="l00137"></a>00137 <span class="comment">  /// Validate the configuration</span>
-<a name="l00138"></a>00138 <span class="comment"></span>  <span class="keywordtype">void</span> validate() <span class="keyword">const override</span>;
-<a name="l00139"></a>00139 
-<a name="l00140"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#aa59f2e7ebf0ef9e285a0cb6adf322348">00140</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#aa59f2e7ebf0ef9e285a0cb6adf322348">max_messages_per_second</a>;
-<a name="l00141"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a35393b2a32efd7f8f1f58ea7d56b7c13">00141</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a35393b2a32efd7f8f1f58ea7d56b7c13">max_messages_per_millisecond</a>;
-<a name="l00142"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a11f2de691ee4e8fb5ea43ecfc544cd61">00142</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a11f2de691ee4e8fb5ea43ecfc544cd61">max_messages_per_microsecond</a>;
-<a name="l00143"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a6ad935fd3b25cf270f56fda85dd889a8">00143</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,std::int64_t&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a6ad935fd3b25cf270f56fda85dd889a8">max_interarrival_time_nanoseconds</a>;
-<a name="l00144"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a22c029857919de12afadccf14d859865">00144</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a22c029857919de12afadccf14d859865">max_processing_latency_nanoseconds</a>;
-<a name="l00145"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a01c409bcd7aacadd8741a4e3d6798732">00145</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a01c409bcd7aacadd8741a4e3d6798732">reporting_interval_seconds</a>;
-<a name="l00146"></a>00146 };
-<a name="l00147"></a>00147 
-<a name="l00148"></a>00148 } <span class="comment">// namespace jb</span>
-<a name="l00149"></a>00149 
-<a name="l00150"></a>00150 <span class="preprocessor">#endif // jb_offline_feed_stats_hpp</span>
+<a name="l00091"></a>00091 <span class="comment">   * - minProcessingLatency, ..., maxProcessingLatency: the statistics</span>
+<a name="l00092"></a>00092 <span class="comment">   *   for processing latency of the events, in nanoseconds.</span>
+<a name="l00093"></a>00093 <span class="comment">   * - minArrival: the minimum of the timestamp difference between two</span>
+<a name="l00094"></a>00094 <span class="comment">   *   consecutive messages, in nanoseconds.</span>
+<a name="l00095"></a>00095 <span class="comment">   * - p0001Arrival: the 0.01th percentile of the timestamp difference</span>
+<a name="l00096"></a>00096 <span class="comment">   *   between two consecutive messages, in nanoseconds.</span>
+<a name="l00097"></a>00097 <span class="comment">   * - p001Arrival: the 0.1th percentile of the timestamp difference</span>
+<a name="l00098"></a>00098 <span class="comment">   *   between two consecutive messages, in nanoseconds.</span>
+<a name="l00099"></a>00099 <span class="comment">   * - p01Arrival: the 1st percentile of the timestamp difference</span>
+<a name="l00100"></a>00100 <span class="comment">   *   between two consecutive messages, in nanoseconds.</span>
+<a name="l00101"></a>00101 <span class="comment">   * - p10Arrival: the 10th percentile of the timestamp difference</span>
+<a name="l00102"></a>00102 <span class="comment">   *   between two consecutive messages, in nanoseconds.</span>
+<a name="l00103"></a>00103 <span class="comment">   * - p25Arrival, p50Arrival, p75Arrival, maxArrival: more statistics</span>
+<a name="l00104"></a>00104 <span class="comment">   *   about the arrival time.</span>
+<a name="l00105"></a>00105 <span class="comment">   *</span>
+<a name="l00106"></a>00106 <span class="comment">   * @param os the output stream</span>
+<a name="l00107"></a>00107 <span class="comment">   */</span>
+<a name="l00108"></a>00108   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#a19ea2704339300186bee0159d7db96df" title="Print a CSV header.">print_csv_header</a>(std::ostream&amp; os);
+<a name="l00109"></a>00109 <span class="comment"></span>
+<a name="l00110"></a>00110 <span class="comment">  /**</span>
+<a name="l00111"></a>00111 <span class="comment">   * Print all the measurements in CSV format.</span>
+<a name="l00112"></a>00112 <span class="comment">   */</span>
+<a name="l00113"></a>00113   <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#a6095d408997ebe62c795a169bb129fe5" title="Print all the measurements in CSV format.">print_csv</a>(std::string <span class="keyword">const</span>&amp; name, std::ostream&amp; os) <span class="keyword">const</span>;
+<a name="l00114"></a>00114 
+<a name="l00115"></a>00115  <span class="keyword">private</span>:
+<a name="l00116"></a>00116   <span class="keywordtype">void</span> <a class="code" href="classjb_1_1offline__feed__statistics.html#afabf39eec3f0f6fcb30e7e7cccd8092a">record_sample</a>(
+<a name="l00117"></a>00117       std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119  <span class="keyword">private</span>:
+<a name="l00120"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039">00120</a>   <a class="code" href="classjb_1_1event__rate__histogram.html">event_rate_histogram&lt;int,std::chrono::milliseconds&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039">per_sec_rate_</a>;
+<a name="l00121"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044">00121</a>   <a class="code" href="classjb_1_1event__rate__histogram.html" title="Keep a histogram of observed event rates.">event_rate_histogram&lt;&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044">per_msec_rate_</a>;
+<a name="l00122"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a04385b5774feaa204b14c70516245962">00122</a>   <a class="code" href="classjb_1_1event__rate__histogram.html" title="Keep a histogram of observed event rates.">event_rate_histogram&lt;&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a04385b5774feaa204b14c70516245962">per_usec_rate_</a>;
+<a name="l00123"></a>00123   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">histogram&lt;integer_range_binning&lt;std::int64_t&gt;</a>&gt;
+<a name="l00124"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a03b6232679a392f12effd5f03ab2eff5">00124</a>       <a class="code" href="classjb_1_1offline__feed__statistics.html#a03b6232679a392f12effd5f03ab2eff5">interarrival_histogram_t</a>;
+<a name="l00125"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d">00125</a>   <a class="code" href="classjb_1_1histogram.html">interarrival_histogram_t</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d">interarrival_</a>;
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1histogram.html" title="A histogram class with controllable binning and range strategy.">histogram&lt;integer_range_binning&lt;std::uint64_t&gt;</a>&gt;
+<a name="l00128"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7">00128</a>       <a class="code" href="classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7">processing_latency_histogram_t</a>;
+<a name="l00129"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c">00129</a>   <a class="code" href="classjb_1_1histogram.html">processing_latency_histogram_t</a> <a class="code" href="classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c">processing_latency_</a>;
+<a name="l00130"></a>00130 
+<a name="l00131"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157">00131</a>   std::chrono::seconds <a class="code" href="classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157">reporting_interval_</a>;
+<a name="l00132"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8">00132</a>   std::chrono::nanoseconds <a class="code" href="classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8">last_ts_</a>;
+<a name="l00133"></a><a class="code" href="classjb_1_1offline__feed__statistics.html#acdd010376ac9dddc40c71c58d4c18855">00133</a>   std::chrono::nanoseconds <a class="code" href="classjb_1_1offline__feed__statistics.html#acdd010376ac9dddc40c71c58d4c18855">last_report_ts_</a>;
+<a name="l00134"></a>00134 };
+<a name="l00135"></a>00135 <span class="comment"></span>
+<a name="l00136"></a>00136 <span class="comment">/**</span>
+<a name="l00137"></a>00137 <span class="comment"> * Configure an offline_feed_statistics object</span>
+<a name="l00138"></a>00138 <span class="comment"> */</span>
+<a name="l00139"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html">00139</a> <span class="keyword">class </span><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">offline_feed_statistics::config</a> : <span class="keyword">public</span> jb::<a class="code" href="classjb_1_1config__object.html" title="Base class for all configuration objects.">config_object</a> {
+<a name="l00140"></a>00140  <span class="keyword">public</span>:
+<a name="l00141"></a>00141   <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">config</a>();
+<a name="l00142"></a>00142   <a class="code" href="config__object_8hpp.html#a0cc79b81f23b416c77f04fb0cb00cae0">config_object_constructors</a>(<a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">config</a>);
+<a name="l00143"></a>00143 <span class="comment"></span>
+<a name="l00144"></a>00144 <span class="comment">  /// Validate the configuration</span>
+<a name="l00145"></a>00145 <span class="comment"></span>  <span class="keywordtype">void</span> validate() <span class="keyword">const override</span>;
+<a name="l00146"></a>00146 
+<a name="l00147"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#aa59f2e7ebf0ef9e285a0cb6adf322348">00147</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#aa59f2e7ebf0ef9e285a0cb6adf322348">max_messages_per_second</a>;
+<a name="l00148"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a35393b2a32efd7f8f1f58ea7d56b7c13">00148</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a35393b2a32efd7f8f1f58ea7d56b7c13">max_messages_per_millisecond</a>;
+<a name="l00149"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a11f2de691ee4e8fb5ea43ecfc544cd61">00149</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a11f2de691ee4e8fb5ea43ecfc544cd61">max_messages_per_microsecond</a>;
+<a name="l00150"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a6ad935fd3b25cf270f56fda85dd889a8">00150</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,std::int64_t&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a6ad935fd3b25cf270f56fda85dd889a8">max_interarrival_time_nanoseconds</a>;
+<a name="l00151"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a22c029857919de12afadccf14d859865">00151</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a22c029857919de12afadccf14d859865">max_processing_latency_nanoseconds</a>;
+<a name="l00152"></a><a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a01c409bcd7aacadd8741a4e3d6798732">00152</a>   <a class="code" href="classjb_1_1config__attribute.html">jb::config_attribute&lt;config,int&gt;</a> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html#a01c409bcd7aacadd8741a4e3d6798732">reporting_interval_seconds</a>;
+<a name="l00153"></a>00153 };
+<a name="l00154"></a>00154 
+<a name="l00155"></a>00155 } <span class="comment">// namespace jb</span>
+<a name="l00156"></a>00156 
+<a name="l00157"></a>00157 <span class="preprocessor">#endif // jb_offline_feed_stats_hpp</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"

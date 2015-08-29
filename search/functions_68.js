@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['handle',['handle',['../classjb_1_1itch5_1_1message__handler__concept.html#a4e87975e3b17411be4434725cdac346d',1,'jb::itch5::message_handler_concept']]],
+  ['handle_5fmessage',['handle_message',['../classjb_1_1itch5_1_1message__handler__concept.html#a2451a8d0ddd88d99cacf3659d7f52fb6',1,'jb::itch5::message_handler_concept']]],
   ['handle_5funknown',['handle_unknown',['../classjb_1_1itch5_1_1message__handler__concept.html#a766ac89b36f6b75fcc2c64f328b9c934',1,'jb::itch5::message_handler_concept']]],
   ['has_5fless_5fthan',['has_less_than',['../structjb_1_1histogram_1_1check__constraints.html#ab8caeb72c0b2581fcf858c46947a1eab',1,'jb::histogram::check_constraints::has_less_than(...)'],['../structjb_1_1histogram_1_1check__constraints.html#a7873b860171d971fadb0d543979fa057',1,'jb::histogram::check_constraints::has_less_than(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt; t)']]],
   ['has_5fless_5fthan_5for_5fequal',['has_less_than_or_equal',['../structjb_1_1histogram_1_1check__constraints.html#a8cc4f0c13fc431437473ce0975043e9e',1,'jb::histogram::check_constraints::has_less_than_or_equal(...)'],['../structjb_1_1histogram_1_1check__constraints.html#ac4c3d6610f9e2e5788170016a6692457',1,'jb::histogram::check_constraints::has_less_than_or_equal(sample_type const &amp;t)-&gt; decltype(static_cast&lt; void &gt;(t&lt;']]],

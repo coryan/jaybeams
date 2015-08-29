@@ -95,52 +95,70 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00006"></a>00006 <span class="comment"> * @test Verify that jb::offline_feed_statistics works as expected.</span>
 <a name="l00007"></a>00007 <span class="comment"> */</span>
 <a name="l00008"></a><a class="code" href="ut__offline__feed__statistics_8cpp.html#a0dac0bd4d64560874db6644fd3cf7e6a">00008</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(offline_feed_statististics_simple) {
-<a name="l00009"></a>00009 }
-<a name="l00010"></a>00010 <span class="comment"></span>
-<a name="l00011"></a>00011 <span class="comment">/**</span>
-<a name="l00012"></a>00012 <span class="comment"> * @test Verify that jb::offline_feed_statistics works as expected.</span>
-<a name="l00013"></a>00013 <span class="comment"> */</span>
-<a name="l00014"></a><a class="code" href="ut__offline__feed__statistics_8cpp.html#ab897a517ebffe17bd6c6849d8426e16a">00014</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(offline_feed_statististics_print_empty) {
-<a name="l00015"></a>00015   <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">jb::offline_feed_statistics::config</a> cfg;
-<a name="l00016"></a>00016   <a class="code" href="classjb_1_1offline__feed__statistics.html" title="Keep statistics about a feed and its offline processor.">jb::offline_feed_statistics</a> stats(cfg);
-<a name="l00017"></a>00017   std::ostringstream header;
-<a name="l00018"></a>00018   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a19ea2704339300186bee0159d7db96df" title="Print a CSV header.">print_csv_header</a>(header);
-<a name="l00019"></a>00019   BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string(<span class="stringliteral">&quot;Name,&quot;</span>));
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021   std::ostringstream body;
-<a name="l00022"></a>00022   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a6095d408997ebe62c795a169bb129fe5" title="Print all the measurements in CSV format.">print_csv</a>(<span class="stringliteral">&quot;testing&quot;</span>, body);
-<a name="l00023"></a>00023   BOOST_CHECK_EQUAL(
-<a name="l00024"></a>00024       body.str(), std::string(<span class="stringliteral">&quot;testing,0&quot;</span>
-<a name="l00025"></a>00025                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-sec rate</span>
-<a name="l00026"></a>00026                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-msec rate</span>
-<a name="l00027"></a>00027                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-usec rate</span>
-<a name="l00028"></a>00028                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// arrival</span>
-<a name="l00029"></a>00029                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// processing latency</span>
-<a name="l00030"></a>00030                               ));
-<a name="l00031"></a>00031 }
-<a name="l00032"></a>00032 <span class="comment"></span>
-<a name="l00033"></a>00033 <span class="comment">/**</span>
-<a name="l00034"></a>00034 <span class="comment"> * @test Verify that jb::offline_feed_statistics::config works as expected.</span>
-<a name="l00035"></a>00035 <span class="comment"> */</span>
-<a name="l00036"></a><a class="code" href="ut__offline__feed__statistics_8cpp.html#a344c3ca3a05bdb84e2fd389f412e3f9f">00036</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(offline_feed_statististics_config_simple) {
-<a name="l00037"></a>00037   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">jb::offline_feed_statistics::config</a> config;
+<a name="l00009"></a>00009   <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">jb::offline_feed_statistics::config</a> cfg;
+<a name="l00010"></a>00010   <a class="code" href="classjb_1_1offline__feed__statistics.html" title="Keep statistics about a feed and its offline processor.">jb::offline_feed_statistics</a> stats(cfg);
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b" title="Record a sample, that is process a message received at the given timestamp.">sample</a>(
+<a name="l00013"></a>00013       std::chrono::seconds(1), std::chrono::microseconds(1));
+<a name="l00014"></a>00014   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b" title="Record a sample, that is process a message received at the given timestamp.">sample</a>(
+<a name="l00015"></a>00015       std::chrono::seconds(1) + std::chrono::microseconds(1),
+<a name="l00016"></a>00016       std::chrono::microseconds(1));
+<a name="l00017"></a>00017   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b" title="Record a sample, that is process a message received at the given timestamp.">sample</a>(
+<a name="l00018"></a>00018       std::chrono::seconds(1) + std::chrono::microseconds(2),
+<a name="l00019"></a>00019       std::chrono::microseconds(1));
+<a name="l00020"></a>00020   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b" title="Record a sample, that is process a message received at the given timestamp.">sample</a>(
+<a name="l00021"></a>00021       std::chrono::seconds(1) + std::chrono::microseconds(3),
+<a name="l00022"></a>00022       std::chrono::microseconds(1));
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b" title="Record a sample, that is process a message received at the given timestamp.">sample</a>(
+<a name="l00025"></a>00025       std::chrono::seconds(601) + std::chrono::microseconds(1),
+<a name="l00026"></a>00026       std::chrono::microseconds(2));
+<a name="l00027"></a>00027 }
+<a name="l00028"></a>00028 <span class="comment"></span>
+<a name="l00029"></a>00029 <span class="comment">/**</span>
+<a name="l00030"></a>00030 <span class="comment"> * @test Verify that jb::offline_feed_statistics works as expected.</span>
+<a name="l00031"></a>00031 <span class="comment"> */</span>
+<a name="l00032"></a><a class="code" href="ut__offline__feed__statistics_8cpp.html#ab897a517ebffe17bd6c6849d8426e16a">00032</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(offline_feed_statististics_print_empty) {
+<a name="l00033"></a>00033   <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">jb::offline_feed_statistics::config</a> cfg;
+<a name="l00034"></a>00034   <a class="code" href="classjb_1_1offline__feed__statistics.html" title="Keep statistics about a feed and its offline processor.">jb::offline_feed_statistics</a> stats(cfg);
+<a name="l00035"></a>00035   std::ostringstream header;
+<a name="l00036"></a>00036   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a19ea2704339300186bee0159d7db96df" title="Print a CSV header.">print_csv_header</a>(header);
+<a name="l00037"></a>00037   BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string(<span class="stringliteral">&quot;Name,&quot;</span>));
 <a name="l00038"></a>00038 
-<a name="l00039"></a>00039   BOOST_CHECK_NO_THROW(config().validate());
-<a name="l00040"></a>00040   BOOST_CHECK_THROW(
-<a name="l00041"></a>00041       config().<a class="code" href="namespacejb_1_1defaults.html#a396ddb5e02ffe84a588982a710bc3fc6">max_messages_per_second</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00042"></a>00042   BOOST_CHECK_THROW(
-<a name="l00043"></a>00043       config().<a class="code" href="namespacejb_1_1defaults.html#a1faa669159909d31a54af2c1d4601438">max_messages_per_millisecond</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00044"></a>00044   BOOST_CHECK_THROW(
-<a name="l00045"></a>00045       config().<a class="code" href="namespacejb_1_1defaults.html#a690e7dddcdb5e4103d939023f96e9bd3">max_messages_per_microsecond</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00046"></a>00046   BOOST_CHECK_THROW(
-<a name="l00047"></a>00047       config().<a class="code" href="namespacejb_1_1defaults.html#ab5e8908bb13cb369b764c7e1b5a28eb1">max_interarrival_time_nanoseconds</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00048"></a>00048   BOOST_CHECK_THROW(
-<a name="l00049"></a>00049       config().<a class="code" href="namespacejb_1_1defaults.html#a9ba843a6f4071b27a4652272be9c99ca">max_processing_latency_nanoseconds</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00050"></a>00050   BOOST_CHECK_THROW(
-<a name="l00051"></a>00051       config().<a class="code" href="namespacejb_1_1defaults.html#a3c33fcc4058e9a0be5263551c1fdd6a6">reporting_interval_seconds</a>(-1).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
-<a name="l00052"></a>00052   BOOST_CHECK_NO_THROW(
-<a name="l00053"></a>00053       config().<a class="code" href="namespacejb_1_1defaults.html#a3c33fcc4058e9a0be5263551c1fdd6a6">reporting_interval_seconds</a>(0).validate());
-<a name="l00054"></a>00054 }
+<a name="l00039"></a>00039   std::ostringstream body;
+<a name="l00040"></a>00040   stats.<a class="code" href="classjb_1_1offline__feed__statistics.html#a6095d408997ebe62c795a169bb129fe5" title="Print all the measurements in CSV format.">print_csv</a>(<span class="stringliteral">&quot;testing&quot;</span>, body);
+<a name="l00041"></a>00041   BOOST_CHECK_EQUAL(
+<a name="l00042"></a>00042       body.str(), std::string(<span class="stringliteral">&quot;testing,0&quot;</span>
+<a name="l00043"></a>00043                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-sec rate</span>
+<a name="l00044"></a>00044                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-msec rate</span>
+<a name="l00045"></a>00045                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// per-usec rate</span>
+<a name="l00046"></a>00046                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// arrival</span>
+<a name="l00047"></a>00047                               <span class="stringliteral">&quot;,,,,,,,,,,&quot;</span> <span class="comment">// processing latency</span>
+<a name="l00048"></a>00048                               ));
+<a name="l00049"></a>00049 }
+<a name="l00050"></a>00050 <span class="comment"></span>
+<a name="l00051"></a>00051 <span class="comment">/**</span>
+<a name="l00052"></a>00052 <span class="comment"> * @test Verify that jb::offline_feed_statistics::config works as expected.</span>
+<a name="l00053"></a>00053 <span class="comment"> */</span>
+<a name="l00054"></a><a class="code" href="ut__offline__feed__statistics_8cpp.html#a344c3ca3a05bdb84e2fd389f412e3f9f">00054</a> <a class="code" href="ut__add__order__message_8cpp.html#a9e322b7c89d9ee161c8cc6602a4b3c17">BOOST_AUTO_TEST_CASE</a>(offline_feed_statististics_config_simple) {
+<a name="l00055"></a>00055   <span class="keyword">typedef</span> <a class="code" href="classjb_1_1offline__feed__statistics_1_1config.html" title="Configure an offline_feed_statistics object.">jb::offline_feed_statistics::config</a> config;
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057   BOOST_CHECK_NO_THROW(config().validate());
+<a name="l00058"></a>00058   BOOST_CHECK_THROW(
+<a name="l00059"></a>00059       config().<a class="code" href="namespacejb_1_1defaults.html#a396ddb5e02ffe84a588982a710bc3fc6">max_messages_per_second</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00060"></a>00060   BOOST_CHECK_THROW(
+<a name="l00061"></a>00061       config().<a class="code" href="namespacejb_1_1defaults.html#a1faa669159909d31a54af2c1d4601438">max_messages_per_millisecond</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00062"></a>00062   BOOST_CHECK_THROW(
+<a name="l00063"></a>00063       config().<a class="code" href="namespacejb_1_1defaults.html#a690e7dddcdb5e4103d939023f96e9bd3">max_messages_per_microsecond</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00064"></a>00064   BOOST_CHECK_THROW(
+<a name="l00065"></a>00065       config().<a class="code" href="namespacejb_1_1defaults.html#ab5e8908bb13cb369b764c7e1b5a28eb1">max_interarrival_time_nanoseconds</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00066"></a>00066   BOOST_CHECK_THROW(
+<a name="l00067"></a>00067       config().<a class="code" href="namespacejb_1_1defaults.html#a9ba843a6f4071b27a4652272be9c99ca">max_processing_latency_nanoseconds</a>(-7).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00068"></a>00068   BOOST_CHECK_THROW(
+<a name="l00069"></a>00069       config().<a class="code" href="namespacejb_1_1defaults.html#a3c33fcc4058e9a0be5263551c1fdd6a6">reporting_interval_seconds</a>(-1).validate(), <a class="code" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options.">jb::usage</a>);
+<a name="l00070"></a>00070   BOOST_CHECK_NO_THROW(
+<a name="l00071"></a>00071       config().<a class="code" href="namespacejb_1_1defaults.html#a3c33fcc4058e9a0be5263551c1fdd6a6">reporting_interval_seconds</a>(0).validate());
+<a name="l00072"></a>00072 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
