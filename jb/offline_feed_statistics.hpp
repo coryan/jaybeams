@@ -114,7 +114,7 @@ class offline_feed_statistics {
   event_rate_histogram<int,std::chrono::milliseconds> per_sec_rate_;
   event_rate_histogram<> per_msec_rate_;
   event_rate_histogram<> per_usec_rate_;
-  typedef histogram<integer_range_binning<std::uint64_t>>
+  typedef histogram<integer_range_binning<std::int64_t>>
       interarrival_histogram_t;
   interarrival_histogram_t interarrival_;
 
@@ -124,6 +124,7 @@ class offline_feed_statistics {
 
   std::chrono::seconds reporting_interval_;
   std::chrono::nanoseconds last_ts_;
+  std::chrono::nanoseconds last_report_ts_;
 };
 
 /**

@@ -6,6 +6,24 @@
  * @test Verify that jb::offline_feed_statistics works as expected.
  */
 BOOST_AUTO_TEST_CASE(offline_feed_statististics_simple) {
+  jb::offline_feed_statistics::config cfg;
+  jb::offline_feed_statistics stats(cfg);
+
+  stats.sample(
+      std::chrono::seconds(1), std::chrono::microseconds(1));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(1),
+      std::chrono::microseconds(1));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(2),
+      std::chrono::microseconds(1));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(3),
+      std::chrono::microseconds(1));
+
+  stats.sample(
+      std::chrono::seconds(601) + std::chrono::microseconds(1),
+      std::chrono::microseconds(2));
 }
 
 /**
