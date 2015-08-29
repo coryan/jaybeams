@@ -54,6 +54,7 @@ unit_tests = \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
   jb/ut_logging \
+  jb/ut_offline_feed_statistics \
   jb/ut_severity_level \
   jb/ut_strtonum
 
@@ -127,9 +128,11 @@ nobase_jb_libjb_a_HEADERS = \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
   jb/log.hpp \
+  jb/offline_feed_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/usage.hpp
+
 jb_libjb_a_SOURCES = \
   jb/as_hhmmss.cpp \
   jb/config_files_location.cpp \
@@ -138,6 +141,7 @@ jb_libjb_a_SOURCES = \
   jb/filetype.cpp \
   jb/histogram_summary.cpp \
   jb/log.cpp \
+  jb/offline_feed_statistics.cpp \
   jb/severity_level.cpp
 
 jb_libjb_a_LIBADD = 
@@ -287,6 +291,10 @@ jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 jb_ut_logging_SOURCES = jb/ut_logging.cpp
 jb_ut_logging_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_logging
 jb_ut_logging_LDADD = $(jb_ut_libs)
+
+jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
+jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
+jb_ut_offline_feed_statistics_LDADD = $(jb_ut_libs)
 
 jb_ut_severity_level_SOURCES = jb/ut_severity_level.cpp
 jb_ut_severity_level_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_severity_level

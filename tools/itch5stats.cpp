@@ -1,9 +1,6 @@
 #include <jb/itch5/process_iostream.hpp>
 #include <jb/config_object.hpp>
-#include <jb/event_rate_histogram.hpp>
 #include <jb/fileio.hpp>
-#include <jb/histogram.hpp>
-#include <jb/integer_range_binning.hpp>
 #include <jb/log.hpp>
 
 #include <iostream>
@@ -20,13 +17,12 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> input_file;
 };
 
-std::size_t const aggregate_max_messages_per_sec = 1000000;
-std::size_t const max_messages_per_sec  = 10000;
-std::size_t const max_messages_per_msec = 10000;
+std::size_t const max_messages_per_sec  = 100000;
+std::size_t const max_messages_per_msec = 50000;
 std::size_t const max_messages_per_usec = 1000;
 std::chrono::minutes report_period(60);
 
-typedef std::chrono::high_resolution_clock clock;
+typedef std::chrono::steady_clock clock;
 typedef clock::duration duration;
 typedef clock::duration::rep elapsed_histogram_type;
 typedef jb::histogram<jb::integer_range_binning<elapsed_histogram_type>, unsigned long> elapsed_time_histogram;
