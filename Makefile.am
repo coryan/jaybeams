@@ -59,7 +59,8 @@ unit_tests = \
   jb/ut_strtonum
 
 examples = \
-  examples/configuration
+  examples/configuration \
+  tools/itch5stats
 
 noinst_PROGRAMS = $(examples)
 
@@ -236,9 +237,11 @@ jb_libitch5_a_LIBADD =
 # examples
 ################################################################
 
-examples_configuration_SOURCES = \
-  examples/configuration.cpp
+examples_configuration_SOURCES = examples/configuration.cpp
 examples_configuration_LDADD = jb/libjb.a
+
+tools_itch5stats_SOURCES = tools/itch5stats.cpp
+tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
 
 ################################################################
 # unit tests and benchmarks

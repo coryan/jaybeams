@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 namespace {
+
 class config : public jb::config_object {
  public:
   config();
@@ -18,6 +19,10 @@ class config : public jb::config_object {
   jb::config_attribute<config,jb::offline_feed_statistics::config> stats;
 };
 
+/**
+ * An implementation of jb::message_handler_concept to capture
+ * ITCH-5.0 statistics.
+ */
 class itch5_stats_handler {
  public:
   itch5_stats_handler(config const& cfg)
@@ -32,7 +37,7 @@ class itch5_stats_handler {
 
   template<typename message_type>
   void handle_message(
-      std::chrono::nanoseconds recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
       message_type const& msg) {
     JB_LOG(trace) << msgcnt << ":" << msgoffset << " " << msg;
     auto pl = now() - recv_ts;
@@ -40,11 +45,14 @@ class itch5_stats_handler {
   }
 
   void handle_unknown(
-      std::chrono::nanoseconds recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
       char const* msgbuf, std::size_t msglen) {
     JB_LOG(error) << "Unknown message type '" << msgbuf[0] << "'"
                   << " in msgcnt=" << msgcnt << ", msgoffset=" << msgoffset;
   }
+
+ private:
+  jb::offline_feed_statistics stats_;
 };
 
 } // anonymous namespace

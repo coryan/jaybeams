@@ -45,7 +45,7 @@ class jb::itch5::message_handler_concept {
    * @param msgoffset the number of bytes received before this message
    * @param m the message itself
    */
-  template<typename message_type_t> void handle(
+  template<typename message_type_t> void handle_message(
       time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
       message_type_t const& m);
 
