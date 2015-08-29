@@ -3,13 +3,35 @@
 #include <boost/test/unit_test.hpp>
 
 /**
- * @test Verity that jb::offline_feed_statistics works as expected.
+ * @test Verify that jb::offline_feed_statistics works as expected.
  */
 BOOST_AUTO_TEST_CASE(offline_feed_statististics_simple) {
 }
 
 /**
- * @test Verity that jb::offline_feed_statistics::config works as expected.
+ * @test Verify that jb::offline_feed_statistics works as expected.
+ */
+BOOST_AUTO_TEST_CASE(offline_feed_statististics_print_empty) {
+  jb::offline_feed_statistics::config cfg;
+  jb::offline_feed_statistics stats(cfg);
+  std::ostringstream header;
+  stats.print_csv_header(header);
+  BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string("Name,"));
+
+  std::ostringstream body;
+  stats.print_csv("testing", body);
+  BOOST_CHECK_EQUAL(
+      body.str(), std::string("testing,0"
+                              ",,,,,,,,,," // per-sec rate
+                              ",,,,,,,,,," // per-msec rate
+                              ",,,,,,,,,," // per-usec rate
+                              ",,,,,,,,,," // arrival
+                              ",,,,,,,,,," // processing latency
+                              ));
+}
+
+/**
+ * @test Verify that jb::offline_feed_statistics::config works as expected.
  */
 BOOST_AUTO_TEST_CASE(offline_feed_statististics_config_simple) {
   typedef jb::offline_feed_statistics::config config;

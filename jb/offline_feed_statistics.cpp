@@ -1,5 +1,50 @@
 #include <jb/offline_feed_statistics.hpp>
 
+#include <iostream>
+
+jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
+    : per_sec_rate_(
+        cfg.max_messages_per_second(), std::chrono::seconds(1))
+    , per_msec_rate_(
+        cfg.max_messages_per_millisecond(), std::chrono::milliseconds(1))
+    , per_usec_rate_(
+        cfg.max_messages_per_microsecond(), std::chrono::microseconds(1))
+    , interarrival_(interarrival_histogram_t::binning_strategy(
+        0, cfg.max_interarrival_time_nanoseconds()))
+    , processing_latency_(processing_latency_histogram_t::binning_strategy(
+        0, cfg.max_processing_latency_nanoseconds()))
+    , reporting_interval_(
+        std::chrono::seconds(cfg.reporting_interval_seconds()))
+    , last_ts_(0)
+{}
+
+void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
+  char const* fields[] = {
+    "min", "p25", "p50", "p75", "p90", "p99", "p999", "p9999", "max" };
+  char const* tracked[] = {
+    "RatePerSec", "RatePerMSec", "RatePerUSec", "Arrival",
+    "ProcessingLatency" };
+  os << "Name";
+  for (auto t : tracked) {
+    for (auto f : fields) {
+      os << "," << f << t;
+    }
+  }
+}
+
+void jb::offline_feed_statistics::print_csv(
+    std::string const& name, std::ostream& os) const {
+  if (processing_latency_.nsamples() == 0) {
+    os << name << ",0";
+    os << ",,,,,,,,,,"; // per-second rate
+    os << ",,,,,,,,,,"; // per-millisecond rate
+    os << ",,,,,,,,,,"; // per-microsecond rate
+    os << ",,,,,,,,,,"; // interarrival
+    os << ",,,,,,,,,,"; // processing latency
+    return;
+  }
+}
+
 namespace jb {
 namespace defaults {
 
@@ -13,7 +58,7 @@ namespace defaults {
 #define JB_OFS_DEFAULTS_max_messages_per_microsecond 100000
 #endif
 #ifndef JB_OFS_DEFAULTS_max_interarrival_time_nanoseconds
-#define JB_OFS_DEFAULTS_max_interarrival_time_nanoseconds 1000000000LL
+#define JB_OFS_DEFAULTS_max_interarrival_time_nanoseconds 100000
 #endif
 #ifndef JB_OFS_DEFAULTS_max_processing_latency_nanoseconds
 #define JB_OFS_DEFAULTS_max_processing_latency_nanoseconds 1000000

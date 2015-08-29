@@ -6,6 +6,8 @@
 #include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
 
+#include <iosfwd>
+
 namespace jb {
 
 /**
@@ -40,7 +42,7 @@ class offline_feed_statistics {
   class config;
 
   /// Constructor
-  offline_feed_statistics(config const& cfg);
+  explicit offline_feed_statistics(config const& cfg);
 
   /**
    * Record a sample, that is process a message received at the given
@@ -112,10 +114,16 @@ class offline_feed_statistics {
   event_rate_histogram<int,std::chrono::milliseconds> per_sec_rate_;
   event_rate_histogram<> per_msec_rate_;
   event_rate_histogram<> per_usec_rate_;
-  histogram<integer_range_binning<std::uint64_t>> interarrival_;
-  histogram<integer_range_binning<std::uint64_t>> processing_latency_;
+  typedef histogram<integer_range_binning<std::uint64_t>>
+      interarrival_histogram_t;
+  interarrival_histogram_t interarrival_;
+
+  typedef histogram<integer_range_binning<std::uint64_t>>
+      processing_latency_histogram_t;
+  processing_latency_histogram_t processing_latency_;
 
   std::chrono::seconds reporting_interval_;
+  std::chrono::nanoseconds last_ts_;
 };
 
 /**
