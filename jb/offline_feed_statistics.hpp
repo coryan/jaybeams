@@ -132,7 +132,7 @@ class offline_feed_statistics::config : public jb::config_object {
   jb::config_attribute<config,int> max_messages_per_second;
   jb::config_attribute<config,int> max_messages_per_millisecond;
   jb::config_attribute<config,int> max_messages_per_microsecond;
-  jb::config_attribute<config,int> max_interarrival_time_microseconds;
+  jb::config_attribute<config,std::int64_t> max_interarrival_time_nanoseconds;
   jb::config_attribute<config,int> max_processing_latency_nanoseconds;
   jb::config_attribute<config,int> reporting_interval_seconds;
 };
