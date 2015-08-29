@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
     jb::itch5::stock_directory_message,
     jb::itch5::add_order_message >(is, handler);
 
-  handler.now.check_called().exactly( 10 );
+  handler.now.check_called().exactly( 21 );
   handler.handle_message.check_called().exactly( 9 );
   handler.handle_unknown.check_called().exactly( 1 );
 }
@@ -70,13 +70,20 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
  */
 BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
   mock_message_handler handler;
-  handler.now.returns( 0 );
 
   std::string bytes = create_message_stream(
       {jb::itch5::testing::system_event(),
+       jb::itch5::testing::stock_directory(),
+       jb::itch5::testing::stock_directory(),
+       jb::itch5::testing::stock_directory(),
        jb::itch5::testing::stock_directory() });
   std::istringstream is(bytes);
-  is.setstate( std::ios::failbit );
+
+  int count = 0;
+  handler.now.action( [&is,&count]() {
+      if (++count == 5) is.setstate(std::ios::failbit);
+      return 0;
+    });
 
   jb::itch5::process_iostream_mlist<
     mock_message_handler,
@@ -84,8 +91,9 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
     jb::itch5::stock_directory_message,
     jb::itch5::add_order_message >(is, handler);
 
-  handler.now.check_called().exactly( 0 );
-  handler.handle_message.check_called().exactly( 0 );
+  // We expect invocations for count == 0 and count == 1
+  handler.now.check_called().exactly( 5 );
+  handler.handle_message.check_called().exactly( 2 );
   handler.handle_unknown.check_called().exactly( 0 );
 }
 
