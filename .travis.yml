@@ -42,7 +42,7 @@ script:
   - ${CXX?} --version
   - echo ${CXXFLAGS?}
   - ./bootstrap
-  - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+  - ./configure
   - make
   - make check
 
