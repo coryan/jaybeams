@@ -31,7 +31,7 @@ std::string create_message_stream(
 
 
 /**
- * Verify that jb::itch5::process_iostream_mlist<> works as expected.
+ * @test Verify that jb::itch5::process_iostream_mlist<> works as expected.
  */
 BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
   // TODO(#5) this is a really trivial test, its main purpose is to
@@ -62,6 +62,31 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
   handler.now.check_called().exactly( 10 );
   handler.handle_message.check_called().exactly( 9 );
   handler.handle_unknown.check_called().exactly( 1 );
+}
+
+/**
+ * @test Verify that jb::itch5::process_iostream_mlist<> exits
+ * gracefully on I/O errors.
+ */
+BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
+  mock_message_handler handler;
+  handler.now.returns( 0 );
+
+  std::string bytes = create_message_stream(
+      {jb::itch5::testing::system_event(),
+       jb::itch5::testing::stock_directory() });
+  std::istringstream is(bytes);
+  is.setstate( std::ios::failbit );
+
+  jb::itch5::process_iostream_mlist<
+    mock_message_handler,
+    jb::itch5::system_event_message,
+    jb::itch5::stock_directory_message,
+    jb::itch5::add_order_message >(is, handler);
+
+  handler.now.check_called().exactly( 0 );
+  handler.handle_message.check_called().exactly( 0 );
+  handler.handle_unknown.check_called().exactly( 0 );
 }
 
 namespace {
