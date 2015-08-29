@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on error
-set -e
+set -ev
 
 # Configure git to use my name and email
 git config --global user.name "${GIT_NAME?}"
@@ -23,14 +23,15 @@ doxygen doc/Doxyfile
 cd doc/html
 git add --all .
 
-# ... we always commit the changes locally ...
-git commit -q -m"Automatically generated documentation"
+# ... we always commit the changes locally, and if there is nothing to
+# commit exit successfully ...
+git commit -q -m"Automatically generated documentation" || exit 0
 
 # ... I want some minimal output so I can see it in the Travis log ...
 echo "pushing doxygen docs"
 
 # ... and now we push the changes (if any) to the gh-pages branch
-git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages || echo "Ignore git push error"
+git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages
 
 exit 0
 
