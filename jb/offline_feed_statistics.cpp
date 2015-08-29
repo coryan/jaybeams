@@ -22,11 +22,29 @@ void report_rate(
 }
 
 template<typename latency_histogram_t>
+void report_arrival(
+    std::chrono::nanoseconds ts, char const* name,
+    latency_histogram_t const& histo) {
+  JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
+               << " n=" << histo.nsamples()
+               << ", min=" << histo.observed_min()
+               << ", p0.01=" << histo.estimated_quantile(0.0001)
+               << ", p0.1=" << histo.estimated_quantile(0.001)
+               << ", p01=" << histo.estimated_quantile(0.01)
+               << ", p10=" << histo.estimated_quantile(0.10)
+               << ", p25=" << histo.estimated_quantile(0.25)
+               << ", p50=" << histo.estimated_quantile(0.50)
+               << ", p75=" << histo.estimated_quantile(0.75)
+               << ", max=" << histo.observed_max();
+}
+
+template<typename latency_histogram_t>
 void report_latency(
     std::chrono::nanoseconds ts, char const* name,
     latency_histogram_t const& histo) {
   JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
-               << "  min=" << histo.observed_min()
+               << " n=" << histo.nsamples()
+               << ", min=" << histo.observed_min()
                << ", p25=" << histo.estimated_quantile(0.25)
                << ", p50=" << histo.estimated_quantile(0.50)
                << ", p75=" << histo.estimated_quantile(0.75)
@@ -46,7 +64,7 @@ jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
     , per_usec_rate_(
         cfg.max_messages_per_microsecond(), std::chrono::microseconds(1))
     , interarrival_(interarrival_histogram_t::binning_strategy(
-        -cfg.max_interarrival_time_nanoseconds(), 0))
+        0, cfg.max_interarrival_time_nanoseconds()))
     , processing_latency_(processing_latency_histogram_t::binning_strategy(
         0, cfg.max_processing_latency_nanoseconds()))
     , reporting_interval_(
@@ -58,14 +76,15 @@ void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
   char const* fields[] = {
     "min", "p25", "p50", "p75", "p90", "p99", "p999", "p9999", "max" };
   char const* tracked[] = {
-    "RatePerSec", "RatePerMSec", "RatePerUSec", "Arrival",
-    "ProcessingLatency" };
+    "RatePerSec", "RatePerMSec", "RatePerUSec", "ProcessingLatency" };
   os << "Name";
   for (auto t : tracked) {
     for (auto f : fields) {
       os << "," << f << t;
     }
   }
+  os << "minArrival,p0001Arrival,p001Arrival,p01Arrival,p25Arrival"
+     << ",p50Arrival,p75Arrival,maxArrival";
 }
 
 void jb::offline_feed_statistics::record_sample(
@@ -76,7 +95,7 @@ void jb::offline_feed_statistics::record_sample(
   per_usec_rate_.sample(duration_cast<microseconds>(ts));
 
   if (processing_latency_.nsamples() > 0) {
-    nanoseconds d = last_ts_ - ts;
+    nanoseconds d = ts - last_ts_;
     interarrival_.sample(d.count());
   } else {
     last_report_ts_ = ts;
@@ -89,7 +108,7 @@ void jb::offline_feed_statistics::record_sample(
     report_rate(ts, "sec ", per_sec_rate_);
     report_rate(ts, "msec", per_msec_rate_);
     report_rate(ts, "usec", per_usec_rate_);
-    report_latency(ts, "arrival    ", interarrival_);
+    report_arrival(ts, "arrival    ", interarrival_);
     report_latency(ts, "processing ", processing_latency_);
     last_report_ts_ = ts;
   }

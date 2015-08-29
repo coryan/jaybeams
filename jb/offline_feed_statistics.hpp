@@ -88,14 +88,20 @@ class offline_feed_statistics {
    *   statistics for the messages/millisecond rate.
    * - minRatePerUSec, p25RatePerUSec, ..., maxRatePerUSec: the
    *   statistics for the messages/microsecond rate.
-   * - minArrival: the minimum of the timestamp difference between two
-   *   consecutive messages, in nanoseconds.
-   * - p25Arrival: the 25th percentile of the timestamp difference
-   *   between two consecutive messages, in nanoseconds.
-   * - p50Arrival, p75Arrival, ..., maxArrival: analogous statistics
-   *   for the time difference between two consecutive messages.
    * - minProcessingLatency, ..., maxProcessingLatency: the statistics
    *   for processing latency of the events, in nanoseconds.
+   * - minArrival: the minimum of the timestamp difference between two
+   *   consecutive messages, in nanoseconds.
+   * - p0001Arrival: the 0.01th percentile of the timestamp difference
+   *   between two consecutive messages, in nanoseconds.
+   * - p001Arrival: the 0.1th percentile of the timestamp difference
+   *   between two consecutive messages, in nanoseconds.
+   * - p01Arrival: the 1st percentile of the timestamp difference
+   *   between two consecutive messages, in nanoseconds.
+   * - p10Arrival: the 10th percentile of the timestamp difference
+   *   between two consecutive messages, in nanoseconds.
+   * - p25Arrival, p50Arrival, p75Arrival, maxArrival: more statistics
+   *   about the arrival time.
    *
    * @param os the output stream
    */
