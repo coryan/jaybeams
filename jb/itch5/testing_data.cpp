@@ -17,7 +17,7 @@ std::chrono::nanoseconds expected_ts() {
 }
 
 std::pair<char const*, std::size_t> message_header() {
-  static char buf[] =
+  static char const buf[] =
       u8" "                 // Message Type (space is invalid)
       JB_ITCH5_TEST_HEADER  // Common header body
       ;
@@ -41,7 +41,7 @@ std::pair<char const*, std::size_t> add_order() {
 }
 
 std::pair<char const*, std::size_t> add_order_mpid() {
-  char const buf[] =
+  static char const buf[] =
       u8"F"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -57,7 +57,7 @@ std::pair<char const*, std::size_t> add_order_mpid() {
 }
 
 std::pair<char const*, std::size_t> broken_trade() {
-  char const buf[] =
+  static char const buf[] =
       u8"B"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -68,7 +68,7 @@ std::pair<char const*, std::size_t> broken_trade() {
 }
 
 std::pair<char const*, std::size_t> cross_trade() {
-  char const buf[] =
+  static char const buf[] =
       u8"Q"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -84,7 +84,7 @@ std::pair<char const*, std::size_t> cross_trade() {
 }
 
 std::pair<char const*, std::size_t> ipo_quoting_period_update() {
-  char const buf[] =
+  static char const buf[] =
       u8"K"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "HSART   "            // Stock
@@ -97,7 +97,7 @@ std::pair<char const*, std::size_t> ipo_quoting_period_update() {
 }
 
 std::pair<char const*, std::size_t> market_participant_position() {
-  char const buf[] =
+  static char const buf[] =
       u8"L"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "LOOF"                // MPID
@@ -111,7 +111,7 @@ std::pair<char const*, std::size_t> market_participant_position() {
 }
 
 std::pair<char const*, std::size_t> mwcb_breach() {
-  char const buf[] =
+  static char const buf[] =
       u8"W"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "2"                   // Breached Level
@@ -121,7 +121,7 @@ std::pair<char const*, std::size_t> mwcb_breach() {
 }
 
 std::pair<char const*, std::size_t> mwcb_decline_level() {
-  char const buf[] =
+  static char const buf[] =
       u8"V"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x74\x6A\x61\xCA\x40" // Level 1 (5000.01)
@@ -133,7 +133,7 @@ std::pair<char const*, std::size_t> mwcb_decline_level() {
 }
 
 std::pair<char const*, std::size_t> net_order_imbalance_indicator() {
-  char const buf[] =
+  static char const buf[] =
       u8"I"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -153,7 +153,7 @@ std::pair<char const*, std::size_t> net_order_imbalance_indicator() {
 }
 
 std::pair<char const*, std::size_t> order_cancel() {
-  char const buf[] =
+  static char const buf[] =
       u8"X"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -165,7 +165,7 @@ std::pair<char const*, std::size_t> order_cancel() {
 }
 
 std::pair<char const*, std::size_t> order_delete() {
-  char const buf[] =
+  static char const buf[] =
       u8"D"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -176,7 +176,7 @@ std::pair<char const*, std::size_t> order_delete() {
 }
 
 std::pair<char const*, std::size_t> order_executed() {
-  char const buf[] =
+  static char const buf[] =
       u8"E"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -190,7 +190,7 @@ std::pair<char const*, std::size_t> order_executed() {
 }
 
 std::pair<char const*, std::size_t> order_executed_price() {
-  char const buf[] =
+  static char const buf[] =
       u8"C"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -206,7 +206,7 @@ std::pair<char const*, std::size_t> order_executed_price() {
 }
 
 std::pair<char const*, std::size_t> order_replace() {
-  char const buf[] =
+  static char const buf[] =
       u8"U"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
@@ -221,7 +221,7 @@ std::pair<char const*, std::size_t> order_replace() {
 }
 
 std::pair<char const*, std::size_t> reg_sho_restriction() {
-  char const buf[] =
+  static char const buf[] =
       u8"Y"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "HSART   "            // Stock
@@ -232,7 +232,7 @@ std::pair<char const*, std::size_t> reg_sho_restriction() {
 }
 
 std::pair<char const*, std::size_t> stock_directory() {
-  char const buf[] =
+  static char const buf[] =
       u8"R"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "HSART   "            // Stock
@@ -255,7 +255,7 @@ std::pair<char const*, std::size_t> stock_directory() {
 }
 
 std::pair<char const*, std::size_t> stock_trading_action() {
-  char const buf[] =
+  static char const buf[] =
       u8"H"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "HSART   "            // Stock
@@ -278,7 +278,7 @@ std::pair<char const*, std::size_t> system_event() {
 }
 
 std::pair<char const*, std::size_t> trade() {
-  char const buf[] =
+  static char const buf[] =
       u8"P"                 // Message Type
       JB_ITCH5_TEST_HEADER  // Common test header
       "\x00\x00\x00\x00"
