@@ -91,36 +91,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define jb_itch5_process_iostream_mlist_hpp</span>
 <a name="l00003"></a>00003 <span class="preprocessor"></span>
 <a name="l00004"></a>00004 <span class="preprocessor">#include &lt;<a class="code" href="process__buffer__mlist_8hpp.html">jb/itch5/process_buffer_mlist.hpp</a>&gt;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;<a class="code" href="log_8hpp.html">jb/log.hpp</a>&gt;</span>
-<a name="l00006"></a>00006 
-<a name="l00007"></a>00007 <span class="keyword">namespace </span>jb {
-<a name="l00008"></a>00008 <span class="keyword">namespace </span>itch5 {
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 <span class="comment">/*</span>
-<a name="l00011"></a>00011 <span class="comment"> * Process an iostream of ITCH-5.0 given a list of expected messages.</span>
-<a name="l00012"></a>00012 <span class="comment"> *</span>
-<a name="l00013"></a>00013 <span class="comment"> * This function parses each ITCH-5.0 message in an iostream, then</span>
-<a name="l00014"></a>00014 <span class="comment"> * calls a handler for the message.  The messages are allocated on the</span>
-<a name="l00015"></a>00015 <span class="comment"> * stack, and do not survice the call to the handler.</span>
-<a name="l00016"></a>00016 <span class="comment"> *</span>
-<a name="l00017"></a>00017 <span class="comment"> * If the iostream contains a message that is not on the list, the</span>
-<a name="l00018"></a>00018 <span class="comment"> * message is not parsed and the handle_unknown() member function of</span>
-<a name="l00019"></a>00019 <span class="comment"> * the handler can be ignored.  This is convenient when you want to</span>
-<a name="l00020"></a>00020 <span class="comment"> * ignore the most common messages in the protocol, and only process a</span>
-<a name="l00021"></a>00021 <span class="comment"> * subset.  It also decouples the list of messages from the processing.</span>
-<a name="l00022"></a>00022 <span class="comment"> *</span>
-<a name="l00023"></a>00023 <span class="comment"> * Please see @ref jb::itch5::message_handler_concept for a detailed</span>
-<a name="l00024"></a>00024 <span class="comment"> * description of the message_handler requirements.</span>
-<a name="l00025"></a>00025 <span class="comment"> */</span>
-<a name="l00026"></a>00026 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> message_handler, <span class="keyword">typename</span>... message_types&gt;
-<a name="l00027"></a><a class="code" href="namespacejb_1_1itch5.html#a5d023dd72a7df2df3f56225c863225e5">00027</a> <span class="keywordtype">void</span> <a class="code" href="namespacejb_1_1itch5.html#a5d023dd72a7df2df3f56225c863225e5">process_iostream_mlist</a>(std::istream&amp; in, message_handler&amp; handler) {
-<a name="l00028"></a>00028   std::size_t msgoffset = 0;
-<a name="l00029"></a>00029   <span class="keywordflow">for</span> (<span class="keywordtype">long</span> msgcnt = 0; in.good(); ++msgcnt) {
-<a name="l00030"></a>00030     <span class="keyword">auto</span> read_ts = message_handler.now();
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;<a class="code" href="base__decoders_8hpp.html">jb/itch5/base_decoders.hpp</a>&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;<a class="code" href="log_8hpp.html">jb/log.hpp</a>&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 <span class="keyword">namespace </span>jb {
+<a name="l00009"></a>00009 <span class="keyword">namespace </span>itch5 {
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="comment">/*</span>
+<a name="l00012"></a>00012 <span class="comment"> * Process an iostream of ITCH-5.0 given a list of expected messages.</span>
+<a name="l00013"></a>00013 <span class="comment"> *</span>
+<a name="l00014"></a>00014 <span class="comment"> * This function parses each ITCH-5.0 message in an iostream, then</span>
+<a name="l00015"></a>00015 <span class="comment"> * calls a handler for the message.  The messages are allocated on the</span>
+<a name="l00016"></a>00016 <span class="comment"> * stack, and do not survice the call to the handler.</span>
+<a name="l00017"></a>00017 <span class="comment"> *</span>
+<a name="l00018"></a>00018 <span class="comment"> * If the iostream contains a message that is not on the list, the</span>
+<a name="l00019"></a>00019 <span class="comment"> * message is not parsed and the handle_unknown() member function of</span>
+<a name="l00020"></a>00020 <span class="comment"> * the handler can be ignored.  This is convenient when you want to</span>
+<a name="l00021"></a>00021 <span class="comment"> * ignore the most common messages in the protocol, and only process a</span>
+<a name="l00022"></a>00022 <span class="comment"> * subset.  It also decouples the list of messages from the processing.</span>
+<a name="l00023"></a>00023 <span class="comment"> *</span>
+<a name="l00024"></a>00024 <span class="comment"> * Please see @ref jb::itch5::message_handler_concept for a detailed</span>
+<a name="l00025"></a>00025 <span class="comment"> * description of the message_handler requirements.</span>
+<a name="l00026"></a>00026 <span class="comment"> */</span>
+<a name="l00027"></a>00027 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> message_handler, <span class="keyword">typename</span>... message_types&gt;
+<a name="l00028"></a><a class="code" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">00028</a> <span class="keywordtype">void</span> <a class="code" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">process_iostream_mlist</a>(std::istream&amp; <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>, message_handler&amp; handler) {
+<a name="l00029"></a>00029   std::size_t msgoffset = 0;
+<a name="l00030"></a>00030   <span class="keywordflow">for</span> (<span class="keywordtype">long</span> msgcnt = 0; is.good(); ++msgcnt) {
 <a name="l00031"></a>00031     <span class="keywordtype">char</span> blen[2];
-<a name="l00032"></a>00032     in.read(blen, 2);
-<a name="l00033"></a>00033     <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> in) {
-<a name="l00034"></a>00034       <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> in.eof()) {
+<a name="l00032"></a>00032     is.read(blen, 2);
+<a name="l00033"></a>00033     <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> is) {
+<a name="l00034"></a>00034       <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> is.eof()) {
 <a name="l00035"></a>00035         <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(<a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a998546df2d42d48343ff43591db81fed">error</a>) &lt;&lt; <span class="stringliteral">&quot;reading length when msgcnt=&quot;</span> &lt;&lt; msgcnt
 <a name="l00036"></a>00036                       &lt;&lt; <span class="stringliteral">&quot;, msgoffset=&quot;</span> &lt;&lt; msgoffset;
 <a name="l00037"></a>00037       }
@@ -132,8 +132,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00043"></a>00043     std::size_t msglen = <a class="code" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields.">jb::itch5::decoder&lt;true,std::uint16_t&gt;::r</a>(
 <a name="l00044"></a>00044         2, blen, 0);
 <a name="l00045"></a>00045     <span class="keywordtype">char</span> msgbuf[maxmsglen];
-<a name="l00046"></a>00046     in.read(msgbuf, msglen);
-<a name="l00047"></a>00047     <span class="keyword">auto</span> recv_ts = message_handler.now();
+<a name="l00046"></a>00046     is.read(msgbuf, msglen);
+<a name="l00047"></a>00047     <span class="keyword">auto</span> recv_ts = handler.now();
 <a name="l00048"></a>00048     process_buffer_mlist&lt;message_handler,message_types...&gt;::process(
 <a name="l00049"></a>00049         handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
 <a name="l00050"></a>00050     msgoffset += msglen;

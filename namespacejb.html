@@ -145,6 +145,8 @@ Classes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple class to capture summary information about a histogram.  <a href="namespacejb.html#structjb_1_1histogram__summary">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A histogram binning_strategy for integer numbers in a known range.  <a href="classjb_1_1integer__range__binning.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1offline__feed__statistics.html">offline_feed_statistics</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Keep statistics about a feed and its offline processor.  <a href="classjb_1_1offline__feed__statistics.html#details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1usage.html">usage</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple class to communicate the result of parsing the options.  <a href="classjb_1_1usage.html#details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1binning__strategy__concept.html">binning_strategy_concept</a></td></tr>
@@ -198,7 +200,7 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Statically check if the severity level should even be compiled in.  <a href="#abfc933e88c6a00c98531ffbcc80b6ea9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#aec93c13a2f8e053b77afda713783aac2">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> const &amp;x)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming for severity levels.  <a href="#aec93c13a2f8e053b77afda713783aac2"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#aac3b7b54e7f92824557d16b2a54eae77">operator&gt;&gt;</a> (std::istream &amp;is, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> &amp;x)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#aac3b7b54e7f92824557d16b2a54eae77">operator&gt;&gt;</a> (std::istream &amp;<a class="el" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> &amp;x)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#a553b24fa12610362f9d2d2feb5a1a0c3">parse</a> (<a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> &amp;lhs, std::string const &amp;rhs)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a severity level.  <a href="#a553b24fa12610362f9d2d2feb5a1a0c3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#a877a46978a7e4af1a0d0c6cc9bb16d5a">get_name</a> (<a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603">severity_level</a> const &amp;rhs)</td></tr>
@@ -505,7 +507,7 @@ template&lt;typename sample_type &gt; </div>
 
 <p>References <a class="el" href="filetype_8cpp_source.html#l00003">is_gz()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>, and <a class="el" href="itch5stats_8cpp_source.html#l00166">main()</a>.</p>
+<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>, and <a class="el" href="itch5stats_8cpp_source.html#l00162">main()</a>.</p>
 
 </div>
 </div>
@@ -763,7 +765,7 @@ template&lt;typename sample_type &gt; </div>
 
 <p>Definition at line <a class="el" href="severity__level_8cpp_source.html#l00045">45</a> of file <a class="el" href="severity__level_8cpp_source.html">severity_level.cpp</a>.</p>
 
-<p>References <a class="el" href="severity__level_8cpp_source.html#l00052">parse()</a>.</p>
+<p>References <a class="el" href="securities__and__tickers_8md_source.html#l00006">is</a>, and <a class="el" href="severity__level_8cpp_source.html#l00052">parse()</a>.</p>
 
 </div>
 </div>

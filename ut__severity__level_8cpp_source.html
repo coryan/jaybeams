@@ -102,7 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 
 <a name="l00014"></a>00014   BOOST_CHECK_EQUAL(std::string(<a class="code" href="namespacejb.html#a877a46978a7e4af1a0d0c6cc9bb16d5a" title="Get the name of a security level.">jb::get_name</a>(actual)), std::string(<span class="stringliteral">&quot;ERROR&quot;</span>));
 <a name="l00015"></a>00015 
-<a name="l00016"></a>00016   std::istringstream is(<span class="stringliteral">&quot;NOTICE&quot;</span>);
+<a name="l00016"></a>00016   std::istringstream <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>(<span class="stringliteral">&quot;NOTICE&quot;</span>);
 <a name="l00017"></a>00017   is &gt;&gt; actual;
 <a name="l00018"></a>00018   BOOST_CHECK_EQUAL(actual, <a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603ab0fbf4d17293b06caf60f339c4496a4e">jb::severity_level::notice</a>);
 <a name="l00019"></a>00019 }
@@ -118,7 +118,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00029"></a>00029 
 <a name="l00030"></a>00030   BOOST_CHECK_THROW(<a class="code" href="namespacejb.html#a877a46978a7e4af1a0d0c6cc9bb16d5a" title="Get the name of a security level.">jb::get_name</a>(in_error), std::exception);
 <a name="l00031"></a>00031 
-<a name="l00032"></a>00032   std::istringstream is(<span class="stringliteral">&quot;NOT-A-SEVERITY&quot;</span>);
+<a name="l00032"></a>00032   std::istringstream <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>(<span class="stringliteral">&quot;NOT-A-SEVERITY&quot;</span>);
 <a name="l00033"></a>00033   BOOST_CHECK_THROW(is &gt;&gt; in_error, std::exception);
 <a name="l00034"></a>00034 }
 </pre></div></div><!-- contents -->

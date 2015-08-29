@@ -42,5 +42,6 @@ var searchData=
   ['denom_5fdigits',['denom_digits',['../classjb_1_1itch5_1_1price__field.html#ac851392210b946a4940fd90c97bb2ca0',1,'jb::itch5::price_field']]],
   ['desc',['desc',['../classjb_1_1config__object.html#a2979d1d6795bc7c47f94df06f5db9ad5',1,'jb::config_object::desc(std::string const &amp;name)'],['../classjb_1_1config__object.html#a2d6e65a868b25745df4d6549cd3f0281',1,'jb::config_object::desc(std::string const &amp;name, std::string const &amp;class_name)']]],
   ['descriptor',['descriptor',['../classjb_1_1config__object_1_1attribute__base.html#ac54ca052dee6f81b24043e42469bbd2c',1,'jb::config_object::attribute_base']]],
-  ['descriptor_5f',['descriptor_',['../classjb_1_1config__object_1_1attribute__base.html#a553321dbe99fd894a609944ea5a50004',1,'jb::config_object::attribute_base']]]
+  ['descriptor_5f',['descriptor_',['../classjb_1_1config__object_1_1attribute__base.html#a553321dbe99fd894a609944ea5a50004',1,'jb::config_object::attribute_base']]],
+  ['designs',['designs',['../securities__and__tickers_8md.html#a0af75abf0a5327794edd22b78fa0c86d',1,'securities_and_tickers.md']]]
 ];

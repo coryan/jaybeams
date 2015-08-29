@@ -87,41 +87,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">jb/itch5/securities_and_tickers.md</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="securities__and__tickers_8md.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="securities__and__tickers_8md.html#a07f3e55ce0e57642906d100c6d42a1a3">00001</a> <a class="code" href="securities__and__tickers_8md.html#aeb29dbe27342cb4cf68ef5b6bfe9e51b">Securities</a>, <a class="code" href="securities__and__tickers_8md.html#a251b7b3699cac7519626c78c59f4a1a4">Symbols</a>, <a class="code" href="securities__and__tickers_8md.html#a07f3e55ce0e57642906d100c6d42a1a3">Tickers</a>, oh my!             {#securities-vs-symbols}
-<a name="l00002"></a>00002 ====================================
-<a name="l00003"></a>00003 
-<a name="l00004"></a>00004 The ITCH-5.0 protocol suffers from a common confusion in the
-<a name="l00005"></a>00005 securities industry.  It calls their ticker field <span class="stringliteral">&#39;Stock&#39;</span>.  While it
-<a name="l00006"></a>00006 is <span class="keyword">true</span> that most securities traded on Nasdaq are common stock
-<a name="l00007"></a>00007 securities, many are <a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a>: Nasdaq also trades Exchange Traded Funds,
-<a name="l00008"></a>00008 Exchange Traded <a class="code" href="securities__and__tickers_8md.html#afa2d381029e0fca52ba8dc7b6c79eb28">Notes</a>, and even Warrants.
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 And the name of a <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a>, i.e., the <span class="keywordtype">string</span> used to identify the
-<a name="l00011"></a>00011 <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a> in the many electronic protocols used between exchanges and
-<a name="l00012"></a>00012 <a class="code" href="securities__and__tickers_8md.html#a0277b1ac1d6a57efcca739907d696fea">participants</a>, is <a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> the same as the <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a>.  A more appropriate
-<a name="l00013"></a>00013 name would have been <span class="stringliteral">&#39;Security Identifier&#39;</span>, or <span class="stringliteral">&#39;Ticker&#39;</span>, or <span class="stringliteral">&#39;Symbol&#39;</span>.
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015 Software engineers in the industry should be warned to <a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> confuse a
-<a name="l00016"></a>00016 <a class="code" href="securities__and__tickers_8md.html#adf126dd21984568238439626f29aac9d">thing</a> (a <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a>: a contract granting specific rights to its owner),
-<a name="l00017"></a>00017 vs. the name of the <a class="code" href="securities__and__tickers_8md.html#adf126dd21984568238439626f29aac9d">thing</a> (a ticker: a <span class="keywordtype">short</span> <span class="keywordtype">string</span> used to identify a
-<a name="l00018"></a>00018 <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a>).
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 Also, software engineers in the field should be aware that the same
-<a name="l00021"></a><a class="code" href="securities__and__tickers_8md.html#a106625c2ee02fee7a87c127c8430b21f">00021</a> <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a> may be identified <a class="code" href="securities__and__tickers_8md.html#ae3ad2f34fe236d5b64d2660b585b79a4">by</a> different <a class="code" href="securities__and__tickers_8md.html#a633b050629487657420f389e00d5cb73">strings</a> in different <a class="code" href="securities__and__tickers_8md.html#a95120125abb3cb26ec71a5946741cb7e">contexts</a>,
-<a name="l00022"></a>00022 <a class="code" href="securities__and__tickers_8md.html#a47d904c2dffe8b658f03db3b409068fa">e</a>.g. many exchanges used different tickers <span class="keywordflow">for</span> the same <a class="code" href="securities__and__tickers_8md.html#a1c5fdcbf328e5258033a61e606a78c5e">security</a>, <a class="code" href="securities__and__tickers_8md.html#a106625c2ee02fee7a87c127c8430b21f">yes</a>,
-<a name="l00023"></a>00023 even in the US markets.  That sometimes the same tickers refers to
-<a name="l00024"></a>00024 different securities as time goes <a class="code" href="securities__and__tickers_8md.html#ae3ad2f34fe236d5b64d2660b585b79a4">by</a>, <span class="keywordflow">for</span> <a class="code" href="securities__and__tickers_8md.html#a84b0e4963abd77a74b71e4561f5ea25d">example</a>, after some
-<a name="l00025"></a>00025 corporate actions.  That in non-US markets it is common to use fairly
-<a name="l00026"></a>00026 <span class="keywordtype">long</span> <a class="code" href="securities__and__tickers_8md.html#a633b050629487657420f389e00d5cb73">strings</a> (ISINs) or just numbers (in Japan) to identify
-<a name="l00027"></a>00027 securities.  And that the <span class="keywordtype">string</span> used to identify securities in a
-<a name="l00028"></a>00028 market feed may <a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> be the same <span class="keywordtype">string</span> used to identify them when
-<a name="l00029"></a><a class="code" href="securities__and__tickers_8md.html#a0bd76848160d5dc3c14b1fd980837f33">00029</a> placing orders, <a class="code" href="securities__and__tickers_8md.html#a0bd76848160d5dc3c14b1fd980837f33">clearing</a>, etc.
+<a href="securities__and__tickers_8md.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor"># ITCH-5.0: Confused about Securities, Symbols, and Tickers {#securities-vs-symbols}</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span>
+<a name="l00003"></a>00003 The ITCH-5.0 protocol suffers from a common confusion in the
+<a name="l00004"></a>00004 <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> industry.  It calls their <a class="code" href="securities__and__tickers_8md.html#a6cc7260eed1124c063e5c945fc8a834e">ticker</a> field <span class="stringliteral">&#39;Stock&#39;</span>.  While it
+<a name="l00005"></a>00005 <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a> <span class="keyword">true</span> that most <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> traded on Nasdaq are common <a class="code" href="securities__and__tickers_8md.html#a9b5d02a9b1a1af0a336eec84d10429f7">stock</a>
+<a name="l00006"></a><a class="code" href="securities__and__tickers_8md.html#a9835b6fac8a313e1966771783412b9d1">00006</a> <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a>, many are <a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a>: Nasdaq also trades Exchange Traded Funds,
+<a name="l00007"></a>00007 Exchange Traded <a class="code" href="securities__and__tickers_8md.html#a925464b0cbd5e775f5d34b3570bd1a8e">Notes</a>, and even Warrants.
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 And the name of a <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a>, i.e., the <span class="keywordtype">string</span> used to identify the
+<a name="l00010"></a>00010 <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a> in the many electronic protocols used between exchanges and
+<a name="l00011"></a>00011 <a class="code" href="securities__and__tickers_8md.html#a588a98c220a6576633b22e48fc28dad8">participants</a>, <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a> <a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> the same as the <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a>.  A more appropriate
+<a name="l00012"></a>00012 name would have been <span class="stringliteral">&#39;Security Identifier&#39;</span>, or <span class="stringliteral">&#39;Ticker&#39;</span>, or <span class="stringliteral">&#39;Symbol&#39;</span>.
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 In software we are used to <a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> confusing an <span class="keywordtype">object</span> with the multiple
+<a name="l00015"></a>00015 references to it.
+<a name="l00016"></a>00016 Likewise, we should <span class="keyword">get</span> used to <a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> confuse <a class="code" href="securities__and__tickers_8md.html#a9b5d02a9b1a1af0a336eec84d10429f7">stock</a>, which <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a> a
+<a name="l00017"></a>00017 <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a>, that <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>, a contract granting specific rights to its <a class="code" href="securities__and__tickers_8md.html#a5c035c5eb78e1674ab7704346f7dbb74">owner</a>;
+<a name="l00018"></a><a class="code" href="securities__and__tickers_8md.html#a57c6d0b9eea973ba0cee49beced3ee92">00018</a> vs. the name of the <a class="code" href="securities__and__tickers_8md.html#a93945518f5e0179db171a8e1dad6037f">thing</a>, such as a <a class="code" href="securities__and__tickers_8md.html#a6cc7260eed1124c063e5c945fc8a834e">ticker</a>: a <span class="keywordtype">short</span> <span class="keywordtype">string</span> used to
+<a name="l00019"></a>00019 identify a <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a> in some <a class="code" href="securities__and__tickers_8md.html#a6e0dc8d12ca137e3c44307c3af0c7f17">contexts</a>.
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 Also, software engineers in the field should be aware that the same
+<a name="l00022"></a>00022 <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a> may be identified <a class="code" href="securities__and__tickers_8md.html#a630ad631e61f46252e88a81841bfb6b7">by</a> different <a class="code" href="securities__and__tickers_8md.html#a1a51a7fa531a6ab23f73b95519861a29">strings</a> in different <a class="code" href="securities__and__tickers_8md.html#a6e0dc8d12ca137e3c44307c3af0c7f17">contexts</a>,
+<a name="l00023"></a>00023 <a class="code" href="securities__and__tickers_8md.html#ad546ce20fa1a113584ca698cbaca6a7e">e</a>.g. many exchanges used different tickers <span class="keywordflow">for</span> the same <a class="code" href="securities__and__tickers_8md.html#a78e8ebca850567abb4ef39386e7246a9">security</a>, <a class="code" href="securities__and__tickers_8md.html#a57c6d0b9eea973ba0cee49beced3ee92">yes</a>,
+<a name="l00024"></a>00024 even in the US markets.
+<a name="l00025"></a>00025 This <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a> particularly obvious <span class="keywordflow">if</span> you start
+<a name="l00026"></a>00026 looking at <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> with <a class="code" href="securities__and__tickers_8md.html#a92cbe58912a8cbf8a34b15b377e300f2">suffixes</a>, such as preferred <a class="code" href="securities__and__tickers_8md.html#a9b5d02a9b1a1af0a336eec84d10429f7">stock</a>.
+<a name="l00027"></a>00027 In <a class="code" href="securities__and__tickers_8md.html#a5d8a82764e8c9ad5a50fa95dbae654b9">addition</a>, the same tickers refers to
+<a name="l00028"></a>00028 different <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> as time goes <a class="code" href="securities__and__tickers_8md.html#a630ad631e61f46252e88a81841bfb6b7">by</a>, <span class="keywordflow">for</span> <a class="code" href="securities__and__tickers_8md.html#ae2573a4662efa13ebd14856b44200bc0">example</a>, after some
+<a name="l00029"></a>00029 corporate actions.
 <a name="l00030"></a>00030 
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 References
-<a name="l00033"></a>00033 ----------
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 http:<span class="comment">//en.wikipedia.org/wiki/Haddocks%27_Eyes</span>
+<a name="l00031"></a>00031 And outside the US markets it <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a> common to use fairly
+<a name="l00032"></a>00032 <span class="keywordtype">long</span> <a class="code" href="securities__and__tickers_8md.html#a1a51a7fa531a6ab23f73b95519861a29">strings</a> (ISINs) or just numbers (in Japan) to identify
+<a name="l00033"></a>00033 <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> in computer systems.
+<a name="l00034"></a>00034 And that the <span class="keywordtype">string</span> used to identify <a class="code" href="securities__and__tickers_8md.html#a8ab22adc88f63deb52cac6a56daf4784">securities</a> in a
+<a name="l00035"></a>00035 market feed may <a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> be the same <span class="keywordtype">string</span> used to identify them when
+<a name="l00036"></a>00036 placing orders, or clearing.
+<a name="l00037"></a>00037 
+<a name="l00038"></a><a class="code" href="securities__and__tickers_8md.html#a69a17b2e9faed64d6b2dd16df274417e">00038</a> In <span class="keywordtype">short</span>, it behooves software engineers in the field to keep these
+<a name="l00039"></a>00039 things straight in their <a class="code" href="securities__and__tickers_8md.html#a0af75abf0a5327794edd22b78fa0c86d">designs</a>, and in their heads too I might add.
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="preprocessor">### References</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span>
+<a name="l00043"></a>00043 http:<span class="comment">//en.wikipedia.org/wiki/Haddocks%27_Eyes</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"

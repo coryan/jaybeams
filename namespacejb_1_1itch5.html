@@ -406,7 +406,7 @@ Functions</h2></td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">process_iostream</a> (std::istream &amp;in, message_handler &amp;handler)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Process an iostream of ITCH-5.0 messages.  <a href="#acc62372a33f6aeac5ec64d35ac3e70e2"></a><br/></td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename message_handler , typename... message_types&gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a5d023dd72a7df2df3f56225c863225e5">process_iostream_mlist</a> (std::istream &amp;in, message_handler &amp;handler)</td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">process_iostream_mlist</a> (std::istream &amp;<a class="el" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>, message_handler &amp;handler)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a1f41e49eb631ddf4a7095096e7e1e0ab">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html">reg_sho_restriction_message</a> const &amp;x)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming operator for <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html" title="Represent a &#39;Reg SHO Restriction&#39; message in the ITCH-5.0 protocol.">jb::itch5::reg_sho_restriction_message</a>.  <a href="#a1f41e49eb631ddf4a7095096e7e1e0ab"></a><br/></td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;bool validate&gt; </td></tr>
@@ -2289,26 +2289,26 @@ template&lt;typename message_handler &gt; </div>
 <div class="memdoc">
 
 <p>Process an iostream of ITCH-5.0 messages. </p>
-<p>This is just a wrapper around <a class="el" href="namespacejb_1_1itch5.html#a5d023dd72a7df2df3f56225c863225e5">jb::itch5::process_iostream_mlist()</a> using all the messages in ITCH-5.0 as the allowed message list.</p>
+<p>This is just a wrapper around <a class="el" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">jb::itch5::process_iostream_mlist()</a> using all the messages in ITCH-5.0 as the allowed message list.</p>
 <p>Please see <a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html">jb::itch5::message_handler_concept</a> for a detailed description of the message_handler requirements. </p>
 
 <p>Definition at line <a class="el" href="process__iostream_8hpp_source.html#l00060">60</a> of file <a class="el" href="process__iostream_8hpp_source.html">process_iostream.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="itch5stats_8cpp_source.html#l00166">main()</a>.</p>
+<p>Referenced by <a class="el" href="itch5stats_8cpp_source.html#l00162">main()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a5d023dd72a7df2df3f56225c863225e5"></a><!-- doxytag: member="jb::itch5::process_iostream_mlist" ref="a5d023dd72a7df2df3f56225c863225e5" args="(std::istream &amp;in, message_handler &amp;handler)" -->
+<a class="anchor" id="a0b2b99f7c339621cba6ab6dfd58906f6"></a><!-- doxytag: member="jb::itch5::process_iostream_mlist" ref="a0b2b99f7c339621cba6ab6dfd58906f6" args="(std::istream &amp;is, message_handler &amp;handler)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename message_handler , typename... message_types&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="namespacejb_1_1itch5.html#a5d023dd72a7df2df3f56225c863225e5">jb::itch5::process_iostream_mlist</a> </td>
+          <td class="memname">void <a class="el" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">jb::itch5::process_iostream_mlist</a> </td>
           <td>(</td>
           <td class="paramtype">std::istream &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
+          <td class="paramname"><em>is</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -2325,9 +2325,11 @@ template&lt;typename message_handler , typename... message_types&gt; </div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="process__iostream__mlist_8hpp_source.html#l00027">27</a> of file <a class="el" href="process__iostream__mlist_8hpp_source.html">process_iostream_mlist.hpp</a>.</p>
+<p>Definition at line <a class="el" href="process__iostream__mlist_8hpp_source.html#l00028">28</a> of file <a class="el" href="process__iostream__mlist_8hpp_source.html">process_iostream_mlist.hpp</a>.</p>
 
-<p>References <a class="el" href="severity__level_8hpp_source.html#l00016">jb::error</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="securities__and__tickers_8md_source.html#l00001">not</a>.</p>
+<p>References <a class="el" href="severity__level_8hpp_source.html#l00016">jb::error</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="securities__and__tickers_8md_source.html#l00006">not</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__process__iostream__mlist_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>

@@ -292,6 +292,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>imbalance_shares
 : <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8eb4065c28520c0e678cee59522d92cf">jb::itch5::net_order_imbalance_indicator_message</a>
 </li>
+<li>interarrival_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d">jb::offline_feed_statistics</a>
+</li>
 <li>inverse_indicator
 : <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html#a9be35b0375230ac42c540107747b7a70">jb::itch5::stock_directory_message</a>
 </li>
@@ -325,6 +328,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>last_rate_
 : <a class="el" href="classjb_1_1event__rate__histogram.html#a3d399bddc2c0f0a086776ccce8cfc721">jb::event_rate_histogram&lt; counter_type, duration_type &gt;</a>
+</li>
+<li>last_ts_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#a28805bb29a9208c4c8ebc04b3c4f0ab8">jb::offline_feed_statistics</a>
 </li>
 <li>level_1
 : <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html#ae6c00e5892c1e1cdb56cc2ca07eff6ed">jb::itch5::mwcb_decline_level_message</a>
@@ -369,30 +375,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>max
 : <a class="el" href="namespacejb.html#aa36785541dc4a1a199f144d2ca8f805a">jb::histogram_summary</a>
 </li>
+<li>max_interarrival_time_nanoseconds
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#a6ad935fd3b25cf270f56fda85dd889a8">jb::offline_feed_statistics::config</a>
+</li>
+<li>max_messages_per_microsecond
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#a11f2de691ee4e8fb5ea43ecfc544cd61">jb::offline_feed_statistics::config</a>
+</li>
+<li>max_messages_per_millisecond
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#a35393b2a32efd7f8f1f58ea7d56b7c13">jb::offline_feed_statistics::config</a>
+</li>
+<li>max_messages_per_second
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#aa59f2e7ebf0ef9e285a0cb6adf322348">jb::offline_feed_statistics::config</a>
+</li>
+<li>max_processing_latency_nanoseconds
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#a22c029857919de12afadccf14d859865">jb::offline_feed_statistics::config</a>
+</li>
 <li>maximum_size_archived
 : <a class="el" href="classjb_1_1log_1_1config.html#a4e9a210a463d48f01c4cf3a7cee22507">jb::log::config</a>
 </li>
 <li>message_type
-: <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html#ab188b557ca91e9c89fe9dbd233d5c3de">jb::itch5::stock_directory_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html#ad800e99c62b7f74a32c7cf24c353c8a3">jb::itch5::reg_sho_restriction_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">jb::itch5::stock_trading_action_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1order__executed__price__message.html#a5be531a9429b8356a2e76907489f6793">jb::itch5::order_executed_price_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1order__executed__message.html#ad9c93c1d16fe0429b4cab681d1f1a598">jb::itch5::order_executed_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html#a7cf3b3d8e18f929bd6f20bcb3ee98033">jb::itch5::order_delete_message</a>
-, <a class="el" href="namespacejb_1_1itch5.html#a7ebee310d3470ead4135b69d39650e61">jb::itch5::message_header</a>
-, <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html#adcbad42651416ff733b8e5ba3a3a9815">jb::itch5::mwcb_breach_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html#a716e168d008d9e271589f066d44b334b">jb::itch5::mwcb_decline_level_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a2aa052618db1ede3a300e043e8e95daf">jb::itch5::net_order_imbalance_indicator_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#ac10d035442305eed9bab1f7e3e2d932f">jb::itch5::add_order_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html#a98595024bcd341b986659e060aad65b5">jb::itch5::market_participant_position_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1system__event__message.html#a4d431d0022a3ddf80ab48cfa0ff0afc8">jb::itch5::system_event_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html#ae5609b70d2a5cc30d25fb85c937fae78">jb::itch5::cross_trade_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html#a8b9f3cb18a0308f368d8cd539f132910">jb::itch5::order_replace_message</a>
+: <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html#a7cf3b3d8e18f929bd6f20bcb3ee98033">jb::itch5::order_delete_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1order__cancel__message.html#a9527f2714cc26b9590541b6651b87efb">jb::itch5::order_cancel_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html#ad800e99c62b7f74a32c7cf24c353c8a3">jb::itch5::reg_sho_restriction_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html#a716e168d008d9e271589f066d44b334b">jb::itch5::mwcb_decline_level_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1system__event__message.html#a4d431d0022a3ddf80ab48cfa0ff0afc8">jb::itch5::system_event_message</a>
+, <a class="el" href="namespacejb_1_1itch5.html#a7ebee310d3470ead4135b69d39650e61">jb::itch5::message_header</a>
 , <a class="el" href="structjb_1_1itch5_1_1add__order__mpid__message.html#ae7f5e96c9a5a3ef1a9a19eaab602ced8">jb::itch5::add_order_mpid_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a8f53c4086b9aa20bfaf741784a6795bd">jb::itch5::trade_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1broken__trade__message.html#a760066984f27e56f82fef9d69e45d833">jb::itch5::broken_trade_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html#af5ebbe695e7ddb19d32baa8fc2b5f67d">jb::itch5::ipo_quoting_period_update_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a3afd5c18c4490d0401afb01a96c8c8f2">jb::itch5::stock_trading_action_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1broken__trade__message.html#a760066984f27e56f82fef9d69e45d833">jb::itch5::broken_trade_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html#ae5609b70d2a5cc30d25fb85c937fae78">jb::itch5::cross_trade_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#ac10d035442305eed9bab1f7e3e2d932f">jb::itch5::add_order_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html#ab188b557ca91e9c89fe9dbd233d5c3de">jb::itch5::stock_directory_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a8f53c4086b9aa20bfaf741784a6795bd">jb::itch5::trade_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a2aa052618db1ede3a300e043e8e95daf">jb::itch5::net_order_imbalance_indicator_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html#a98595024bcd341b986659e060aad65b5">jb::itch5::market_participant_position_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html#adcbad42651416ff733b8e5ba3a3a9815">jb::itch5::mwcb_breach_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1order__executed__message.html#ad9c93c1d16fe0429b4cab681d1f1a598">jb::itch5::order_executed_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html#a8b9f3cb18a0308f368d8cd539f132910">jb::itch5::order_replace_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1order__executed__price__message.html#a5be531a9429b8356a2e76907489f6793">jb::itch5::order_executed_price_message</a>
 </li>
 <li>min
 : <a class="el" href="namespacejb.html#acd31c2e7c85118c93bcee3f55fd58351">jb::histogram_summary</a>
@@ -474,10 +495,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>paired_shares
 : <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8fc9443b5635b9953d92e0f3a543109f">jb::itch5::net_order_imbalance_indicator_message</a>
 </li>
+<li>per_msec_rate_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044">jb::offline_feed_statistics</a>
+</li>
+<li>per_sec_rate_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039">jb::offline_feed_statistics</a>
+</li>
+<li>per_usec_rate_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#a04385b5774feaa204b14c70516245962">jb::offline_feed_statistics</a>
+</li>
 <li>price
 : <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html#a242569377bbf3c2c05c41fce9be76b73">jb::itch5::order_replace_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a437483d75bc0ffcfa7229cb149a6e0e0">jb::itch5::trade_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#a803dededb444d0a57dd2e3d84d0a964b">jb::itch5::add_order_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a437483d75bc0ffcfa7229cb149a6e0e0">jb::itch5::trade_message</a>
 </li>
 <li>price_variation_indicator
 : <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a1f5beb4cd961c0c55f17342265add7f1">jb::itch5::net_order_imbalance_indicator_message</a>
@@ -490,6 +520,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>priority
 : <a class="el" href="classthread__config.html#a6d825485047b562f06e95f3ef5188b0e">thread_config</a>
+</li>
+<li>processing_latency_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c">jb::offline_feed_statistics</a>
 </li>
 </ul>
 
@@ -506,6 +539,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>reg_sho_action
 : <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html#a871ee476567dbe73e83625452a7d43dd">jb::itch5::reg_sho_restriction_message</a>
+</li>
+<li>reporting_interval_
+: <a class="el" href="classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157">jb::offline_feed_statistics</a>
+</li>
+<li>reporting_interval_seconds
+: <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#a01c409bcd7aacadd8741a4e3d6798732">jb::offline_feed_statistics::config</a>
 </li>
 <li>reserved
 : <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a7f3e5b6161585db349e5df720d4a69b2">jb::itch5::stock_trading_action_message</a>

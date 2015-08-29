@@ -7,5 +7,5 @@ var searchData=
   ['buffer_5f',['buffer_',['../classjb_1_1itch5_1_1short__string__field.html#a2f29574911a52df5c1a56a13797ed2d2',1,'jb::itch5::short_string_field']]],
   ['buffer_5fsize',['buffer_size',['../classjb_1_1itch5_1_1short__string__field.html#a9bfeb695574700d4c4676b959981b2f5',1,'jb::itch5::short_string_field']]],
   ['buy_5fsell_5findicator',['buy_sell_indicator',['../structjb_1_1itch5_1_1add__order__message.html#a2cd0f14aa71ff23a88984c33a86797db',1,'jb::itch5::add_order_message::buy_sell_indicator()'],['../structjb_1_1itch5_1_1trade__message.html#adc48f48859b9bb63f02dba79435259b2',1,'jb::itch5::trade_message::buy_sell_indicator()']]],
-  ['by',['by',['../securities__and__tickers_8md.html#ae3ad2f34fe236d5b64d2660b585b79a4',1,'securities_and_tickers.md']]]
+  ['by',['by',['../securities__and__tickers_8md.html#a630ad631e61f46252e88a81841bfb6b7',1,'securities_and_tickers.md']]]
 ];

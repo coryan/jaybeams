@@ -1,6 +1,7 @@
 var searchData=
 [
   ['imbalance_5fdirection_5ft',['imbalance_direction_t',['../namespacejb_1_1itch5.html#a21b9b3380ceb5f904362fe9ddb82dc3a',1,'jb::itch5']]],
+  ['interarrival_5fhistogram_5ft',['interarrival_histogram_t',['../classjb_1_1offline__feed__statistics.html#a0159d5df0569ca9ae43614ebe042c9f3',1,'jb::offline_feed_statistics']]],
   ['inverse_5findicator_5ft',['inverse_indicator_t',['../namespacejb_1_1itch5.html#ac88bb095270355309609a3e0be6d6411',1,'jb::itch5']]],
   ['ipo_5fflag_5ft',['ipo_flag_t',['../namespacejb_1_1itch5.html#ad49ef265d8780223e0cd29d66645a467',1,'jb::itch5']]],
   ['ipo_5fquotation_5frelease_5fqualifier_5ft',['ipo_quotation_release_qualifier_t',['../namespacejb_1_1itch5.html#ae2d4c2f2f8043cd42f73a49b7ea073e8',1,'jb::itch5']]],

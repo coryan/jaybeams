@@ -110,8 +110,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00021"></a>00021   <span class="keywordflow">try</span> {
 <a name="l00022"></a>00022     <span class="keyword">auto</span> full = search.<a class="code" href="classjb_1_1config__files__locations.html#afa2ed3984d6e4c43cdf7d6f5737e3282" title="Find a configuration file in the computed search path.">find_configuration_file</a>(filename);
 <a name="l00023"></a>00023     <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(<a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603ae6ec24356c0d09377ccd017d92af761d">debug</a>) &lt;&lt; <span class="stringliteral">&quot;loading overrides from &quot;</span> &lt;&lt; full;
-<a name="l00024"></a>00024     std::ifstream is(full.string());
-<a name="l00025"></a>00025     load_overrides(argc, argv, is);
+<a name="l00024"></a>00024     std::ifstream <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>(full.string());
+<a name="l00025"></a>00025     load_overrides(argc, argv, <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>);
 <a name="l00026"></a>00026     <span class="keywordflow">return</span>;
 <a name="l00027"></a>00027   } <span class="keywordflow">catch</span>(std::runtime_error <span class="keyword">const</span>&amp; ex) {
 <a name="l00028"></a>00028     <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(<a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a88719311e1e78af6bb70a31761ce49bb">warning</a>) &lt;&lt; <span class="stringliteral">&quot;fail to load overrides &quot;</span> &lt;&lt; ex.what();
@@ -127,8 +127,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00038"></a>00038   <span class="keywordflow">try</span> {
 <a name="l00039"></a>00039     <span class="keyword">auto</span> full = search.<a class="code" href="classjb_1_1config__files__locations.html#afa2ed3984d6e4c43cdf7d6f5737e3282" title="Find a configuration file in the computed search path.">find_configuration_file</a>(filename);
 <a name="l00040"></a>00040     <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(<a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603ae6ec24356c0d09377ccd017d92af761d">debug</a>) &lt;&lt; <span class="stringliteral">&quot;loading overrides from &quot;</span> &lt;&lt; full;
-<a name="l00041"></a>00041     std::ifstream is(full.string());
-<a name="l00042"></a>00042     load_overrides(argc, argv, is);
+<a name="l00041"></a>00041     std::ifstream <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>(full.string());
+<a name="l00042"></a>00042     load_overrides(argc, argv, <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>);
 <a name="l00043"></a>00043     <span class="keywordflow">return</span>;
 <a name="l00044"></a>00044   } <span class="keywordflow">catch</span>(std::runtime_error <span class="keyword">const</span>&amp; ex) {
 <a name="l00045"></a>00045     <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(<a class="code" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a88719311e1e78af6bb70a31761ce49bb">warning</a>) &lt;&lt; <span class="stringliteral">&quot;fail to load overrides &quot;</span> &lt;&lt; ex.what();
@@ -137,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00048"></a>00048 }
 <a name="l00049"></a>00049 
 <a name="l00050"></a><a class="code" href="classjb_1_1config__object.html#afa9aeb4444edbc3c7658787dc361c8d1">00050</a> <span class="keywordtype">void</span> <a class="code" href="classjb_1_1config__object.html#ae605be26755b7af1e9d90d1e229bb2fa" title="Read the configuration file and load the overrides defined therein.">jb::config_object::load_overrides</a>(
-<a name="l00051"></a>00051     <span class="keywordtype">int</span>&amp; argc, <span class="keywordtype">char</span>* argv[], std::istream&amp; is) {
+<a name="l00051"></a>00051     <span class="keywordtype">int</span>&amp; argc, <span class="keywordtype">char</span>* argv[], std::istream&amp; <a class="code" href="securities__and__tickers_8md.html#ac530fadbce0d50301d4452a1b1ae5fff">is</a>) {
 <a name="l00052"></a>00052   YAML::Node doc = YAML::Load(is);
 <a name="l00053"></a>00053   apply_overrides(doc);
 <a name="l00054"></a>00054   process_cmdline(argc, argv);
@@ -260,14 +260,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00171"></a>00171 
 <a name="l00172"></a><a class="code" href="classjb_1_1config__object.html#ae398d6d5cbb8d3d61fc4946bcfde3155">00172</a> <span class="keywordtype">void</span> <a class="code" href="classjb_1_1config__object.html#ae398d6d5cbb8d3d61fc4946bcfde3155" title="Merge the class-overrides from source into by_class.">jb::config_object::merge</a>(
 <a name="l00173"></a>00173     <a class="code" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60" title="Store the overrides for each class.">class_overrides</a>&amp; by_class, YAML::Node node) {
-<a name="l00174"></a>00174   <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> node.IsMap()) {
+<a name="l00174"></a>00174   <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> node.IsMap()) {
 <a name="l00175"></a>00175     <span class="keywordflow">return</span>;
 <a name="l00176"></a>00176   }
 <a name="l00177"></a>00177   <span class="comment">// ... iterate over the node, searching for nodes with a key starting</span>
 <a name="l00178"></a>00178   <span class="comment">// with &#39;:&#39; ...</span>
 <a name="l00179"></a>00179   <span class="keywordflow">for</span> (<span class="keyword">auto</span> i : node) {
 <a name="l00180"></a>00180     <span class="comment">// ... no key, probably a sequence, skip ...</span>
-<a name="l00181"></a>00181     <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#af898b4fe0160417ff99b247f5fbd2755">not</a> i.first) {
+<a name="l00181"></a>00181     <span class="keywordflow">if</span> (<a class="code" href="securities__and__tickers_8md.html#a0936b449e80cf44733eef4b108df90a3">not</a> i.first) {
 <a name="l00182"></a>00182       <span class="keywordflow">continue</span>;
 <a name="l00183"></a>00183     }
 <a name="l00184"></a>00184     <span class="comment">// ... found a key, check the format ...</span>

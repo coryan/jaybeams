@@ -126,6 +126,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>sample()
 : <a class="el" href="classjb_1_1event__rate__estimator.html#a2dd315ccda0fd1c308f3c42659fc7109">jb::event_rate_estimator&lt; duration_type &gt;</a>
 , <a class="el" href="classjb_1_1event__rate__histogram.html#a8444c5b5b429e0a3bd5012e5020cc857">jb::event_rate_histogram&lt; counter_type, duration_type &gt;</a>
+, <a class="el" href="classjb_1_1offline__feed__statistics.html#a2be72c98a0933b3325d659fee211e65b">jb::offline_feed_statistics</a>
 , <a class="el" href="classjb_1_1histogram.html#a9b51fb79ccb2995a8e6d063c982ee8a1">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;</a>
 </li>
 <li>sample2bin()
@@ -134,11 +135,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classjb_1_1binning__strategy__concept.html#a2cec93da7f2c1154cae71f2f1338f67e">jb::binning_strategy_concept</a>
 </li>
 <li>sample_type
-: <a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;</a>
+: <a class="el" href="classjb_1_1explicit__cuts__binning.html#ab054ceb97c1f0f37023c874558695c30">jb::explicit_cuts_binning&lt; sample_type_t &gt;</a>
+, <a class="el" href="classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;</a>
 , <a class="el" href="structjb_1_1histogram_1_1check__constraints.html#aa2b3f5e0f6dcaa57bd7ed53bc80bdd79">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::check_constraints</a>
 , <a class="el" href="classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93">jb::integer_range_binning&lt; sample_type_t &gt;</a>
 , <a class="el" href="classjb_1_1binning__strategy__concept.html#a411dd4fa645d3fc61404769be070c2cc">jb::binning_strategy_concept</a>
-, <a class="el" href="classjb_1_1explicit__cuts__binning.html#ab054ceb97c1f0f37023c874558695c30">jb::explicit_cuts_binning&lt; sample_type_t &gt;</a>
 </li>
 <li>scheduler
 : <a class="el" href="classthread__config.html#a09bbc2ad9da0f80ef25229e37eb6cced">thread_config</a>
@@ -159,27 +160,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classprogram__config.html#a94cf46b5f0f41b46dbef5438a5478ff2">program_config</a>
 </li>
 <li>shares
-: <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#a99c26c5fe63d674cb8a463c684540b82">jb::itch5::add_order_message</a>
+: <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a3c4cac29770eb51c6c0f623c04143c06">jb::itch5::trade_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#a99c26c5fe63d674cb8a463c684540b82">jb::itch5::add_order_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html#a076131a0e4864c98b7c2a0904fb825fe">jb::itch5::cross_trade_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html#ad759e408acde67d9644275200130ae3a">jb::itch5::order_replace_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#a3c4cac29770eb51c6c0f623c04143c06">jb::itch5::trade_message</a>
 </li>
 <li>short_sale_threshold_indicator
 : <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html#aca59fd9565b6cdd9d5d7bfa41fcb6964">jb::itch5::stock_directory_message</a>
 </li>
 <li>short_string_field()
-: <a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a5eed0943cd2150446492b7910596a6ab">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;</a>
+: <a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a4bc9bad03e75a6f72bfc9fabf3e33403">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;</a>
 </li>
 <li>stock
-: <a class="el" href="structjb_1_1itch5_1_1trade__message.html#abf8588c35ad7c18a7082f8058ff07f36">jb::itch5::trade_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ae804fadffcf98f642291aabe39e2a9c1">jb::itch5::net_order_imbalance_indicator_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html#ac3760fd9bd4f1660b85997f7258846f0">jb::itch5::reg_sho_restriction_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a91b4f8287797270f27142f581418c9ca">jb::itch5::stock_trading_action_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html#aab045cd8dfc21913ff373f6a1298a948">jb::itch5::ipo_quoting_period_update_message</a>
+: <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html#a91b4f8287797270f27142f581418c9ca">jb::itch5::stock_trading_action_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html#ae4b7d2c253aacb46db63d44540556b65">jb::itch5::stock_directory_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html#ab88bb24907c9fe6ab5a9d61cb0a52c76">jb::itch5::market_participant_position_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ae804fadffcf98f642291aabe39e2a9c1">jb::itch5::net_order_imbalance_indicator_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html#aab045cd8dfc21913ff373f6a1298a948">jb::itch5::ipo_quoting_period_update_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html#ac3760fd9bd4f1660b85997f7258846f0">jb::itch5::reg_sho_restriction_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html#ab0e307450abad6bc0bfc56ab66ef3bad">jb::itch5::cross_trade_message</a>
 , <a class="el" href="structjb_1_1itch5_1_1add__order__message.html#a3344b10379aefb36c71dab99d205eeb9">jb::itch5::add_order_message</a>
-, <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html#ab88bb24907c9fe6ab5a9d61cb0a52c76">jb::itch5::market_participant_position_message</a>
+, <a class="el" href="structjb_1_1itch5_1_1trade__message.html#abf8588c35ad7c18a7082f8058ff07f36">jb::itch5::trade_message</a>
 </li>
 <li>stock_locate
 : <a class="el" href="namespacejb_1_1itch5.html#a6c211a54f45d7fc1902e0e0374f5b5b0">jb::itch5::message_header</a>

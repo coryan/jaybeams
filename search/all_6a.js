@@ -24,6 +24,12 @@ var searchData=
   ['jb_5flog_5fi',['JB_LOG_I',['../log_8hpp.html#a92252c0b8461dfbb3c46aa89632c6b96',1,'log.hpp']]],
   ['jb_5flog_5fvar',['JB_LOG_VAR',['../log_8hpp.html#a8441cdb22ea1062153c23b682723d53c',1,'log.hpp']]],
   ['jb_5fmin_5flog_5flevel',['JB_MIN_LOG_LEVEL',['../log_8hpp.html#a7a4c15ea19e3fe9d0bce542bd4f0d0fa',1,'log.hpp']]],
+  ['jb_5fofs_5fdefaults_5fmax_5finterarrival_5ftime_5fnanoseconds',['JB_OFS_DEFAULTS_max_interarrival_time_nanoseconds',['../offline__feed__statistics_8cpp.html#a092bb876d913d0d28c7acee38d39ea46',1,'offline_feed_statistics.cpp']]],
+  ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fmicrosecond',['JB_OFS_DEFAULTS_max_messages_per_microsecond',['../offline__feed__statistics_8cpp.html#a5e1e88500f9c3aa2e4d997cdc21291ea',1,'offline_feed_statistics.cpp']]],
+  ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fmillisecond',['JB_OFS_DEFAULTS_max_messages_per_millisecond',['../offline__feed__statistics_8cpp.html#a7eae6dcc5f632c6d0671010eeefb1a61',1,'offline_feed_statistics.cpp']]],
+  ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fsecond',['JB_OFS_DEFAULTS_max_messages_per_second',['../offline__feed__statistics_8cpp.html#a992e94492edb304b3ec48833f01de2e3',1,'offline_feed_statistics.cpp']]],
+  ['jb_5fofs_5fdefaults_5fmax_5fprocessing_5flatency_5fnanoseconds',['JB_OFS_DEFAULTS_max_processing_latency_nanoseconds',['../offline__feed__statistics_8cpp.html#abbf6b2de533edc5db00be80bf41ea8a4',1,'offline_feed_statistics.cpp']]],
+  ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]],
   ['log',['log',['../namespacejb_1_1log.html',1,'jb']]],
   ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]]
 ];
