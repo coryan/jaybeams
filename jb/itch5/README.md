@@ -28,9 +28,12 @@ public:
    * we are not using C++14 features).
    */
   static int const message_type = ...;
+};
 
+template<bool V>
+class decoder<V,foo_message> {
   /**
-   * Decode (and validate) a ITCH-5.0 buffer into the message type.
+   * Decode, and if V==true validate, an ITCH-5.0 buffer into the message type.
    *
    * Extract the field values from the buffer, and validate the fields
    * against the protocol.  The protocol makes many guarantees with
@@ -42,13 +45,7 @@ public:
    * However, in a production environment one might prefer to trust
    * the protocol source and use unsafe_decode()
    */
-   static foo_message decode_validated(std::size_t size, char const* buffer);
-
-  /**
-   * Decode a ITCH-5.0 buffer into the message type, without validation.
-   *
-   * Skip any message and/or field validations.
-   */
-  static foo_message decode(std::size_t size, char const* buffer);
+  static foo_message r(std::size_t size, char const* buffer, std::size_t off);
 };
+
 @endcode
