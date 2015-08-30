@@ -1,4 +1,4 @@
-# ITCH-5.0: Confused about Securities, Symbols, and Tickers {#securitiesvssymbols}
+# ITCH-5.0: Confused about Securities, Symbols, and Tickers {#securities-vs-symbols}
 
 The ITCH-5.0 protocol suffers from a common confusion in the
 securities industry.  It calls their ticker field 'Stock'.  While it
