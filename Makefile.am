@@ -6,9 +6,28 @@ inst_LIBRARIES = \
   jb/libitch5.a
 
 noinst_LIBRARIES = \
+  jb/libjb_testing.a \
   jb/libitch5_testing.a
 
-unit_tests = \
+jb_unit_tests = \
+  jb/ut_as_hhmmss \
+  jb/ut_config_files_location \
+  jb/ut_config_object \
+  jb/ut_event_rate_estimator \
+  jb/ut_event_rate_histogram \
+  jb/ut_explicit_cuts_binning \
+  jb/ut_fileio \
+  jb/ut_filetype \
+  jb/ut_histogram \
+  jb/ut_histogram_summary \
+  jb/ut_integer_range_binning \
+  jb/ut_logging \
+  jb/ut_offline_feed_statistics \
+  jb/ut_severity_level \
+  jb/ut_strtonum \
+  jb/ut_timeseries
+
+jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
   jb/itch5/ut_add_order_mpid_message \
   jb/itch5/ut_base_decoders \
@@ -41,22 +60,12 @@ unit_tests = \
   jb/itch5/ut_stock_trading_action_message \
   jb/itch5/ut_system_event_message \
   jb/itch5/ut_timestamp \
-  jb/itch5/ut_trade_message \
-  jb/ut_as_hhmmss \
-  jb/ut_config_files_location \
-  jb/ut_config_object \
-  jb/ut_event_rate_estimator \
-  jb/ut_event_rate_histogram \
-  jb/ut_explicit_cuts_binning \
-  jb/ut_fileio \
-  jb/ut_filetype \
-  jb/ut_histogram \
-  jb/ut_histogram_summary \
-  jb/ut_integer_range_binning \
-  jb/ut_logging \
-  jb/ut_offline_feed_statistics \
-  jb/ut_severity_level \
-  jb/ut_strtonum
+  jb/itch5/ut_trade_message
+
+jb_testing_unit_tests = \
+  jb/testing/ut_create_triangle_timeseries
+
+unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) $(jb_itch5_unit_tests)
 
 examples = \
   examples/configuration \
@@ -104,11 +113,14 @@ jb_ut_libs = \
   jb/libjb.a \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 
+jb_ut_testing_libs = \
+  jb/libjb_testing.a \
+  $(jb_ut_libs)
+
 jb_ut_itch5_libs = \
   jb/libitch5_testing.a \
   jb/libitch5.a \
-  jb/libjb.a \
-  $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
+  $(jb_ut_libs)
 
 ################################################################
 # jb/libjb.a
@@ -134,6 +146,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/offline_feed_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
+  jb/timeseries.hpp \
   jb/usage.hpp
 
 jb_libjb_a_SOURCES = \
@@ -150,12 +163,19 @@ jb_libjb_a_SOURCES = \
 jb_libjb_a_LIBADD = 
 
 ################################################################
+# jb/libjb_testing.a
+################################################################
+
+jb_libjb_testing_adir = $(includedir)
+jb_libjb_testing_a_SOURCES =
+jb_libjb_testing_a_HEADERS = \
+  jb/testing/create_triangle_timeseries.hpp
+
+################################################################
 # jb/libitch5_testing.a
 ################################################################
 
 jb_libitch5_testing_adir = $(includedir)
-nobase_jb_libitch5_testing_a_HEADERS =
-
 jb_libitch5_testing_a_SOURCES = \
   jb/itch5/testing_data.cpp
 jb_libitch5_testing_a_HEADERS = \
@@ -309,6 +329,10 @@ jb_ut_strtonum_SOURCES = jb/ut_strtonum.cpp
 jb_ut_strtonum_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_strtonum
 jb_ut_strtonum_LDADD = $(jb_ut_libs)
 
+jb_ut_timeseries_SOURCES = jb/ut_timeseries.cpp
+jb_ut_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_timeseries
+jb_ut_timeseries_LDADD = $(jb_ut_libs)
+
 ################################################################
 # itch5 unit tests
 ################################################################
@@ -444,3 +468,11 @@ jb_itch5_ut_timestamp_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
 jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
 jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_libs)
+
+################################################################
+# testing unit tests
+################################################################
+
+jb_testing_ut_create_triangle_timeseries_SOURCES = jb/testing/ut_create_triangle_timeseries.cpp
+jb_testing_ut_create_triangle_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_triangle_timeseries
+jb_testing_ut_create_triangle_timeseries_LDADD = $(jb_ut_testing_libs)
