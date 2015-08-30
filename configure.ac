@@ -54,8 +54,18 @@ AX_BOOST_UNIT_TEST_FRAMEWORK
 AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
 
 AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
-                 [YAML_CPP_LIBS=-lyaml-cpp],
+                 [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
                  [AC_MSG_ERROR([Unable to find yaml-cpp library])])
+
+# FFTW3 Single Precision
+AX_CHECK_LIBRARY(FFTW3F, [fftw3.h], [fftw3f],
+	[FFTW3F_LIBS=-lfftw3f AC_SUBST(FFTW3F_LIBS)],
+        [AC_MSG_ERROR([Unable to find single-precision FFTW3 library])])
+
+# FFTW3 Double Precision
+AX_CHECK_LIBRARY(FFTW3L, [fftw3.h], [fftw3l],
+	[FFTW3L_LIBS=-lfftw3l AC_SUBST(FFTW3L_LIBS)],
+        [AC_MSG_ERROR([Unable to find double-precision FFTW3 library])])
 
 # Checks for header files (and header-only libraries)
 
