@@ -3,9 +3,6 @@
 # Typically this script is sourced to setup the CC and CXX environment
 # variables.
 
-# exit on error
-set -ev
-
 # ... set the CXX and CC variables based on COMPILER and VERSION
 if [ "x${COMPILER?}" == "xgcc" ]; then
     CXX=g++${VERSION}
@@ -42,7 +39,7 @@ if [ "x${GENDOCS}" == "xyes" ]; then
     if [ "x${TRAVIS_BRANCH}" != "xmaster" -a "x${TRAVIS_BRANCH}" != "xwrap-fftw" ]; then
         GENDOCS=disabled
     fi
-    if [ "x${TRAVIS_PULL_REQUEST}" == "xfalse" ]; then
+    if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
         GENDOCS=disabled
     fi
 fi
