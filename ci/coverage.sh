@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on the first error
-set -e
+set -ev
 
 # Get all the converage information
 lcov --directory . --capture --output-file coverage.info
