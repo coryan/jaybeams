@@ -8,7 +8,7 @@ var searchData=
   ['thing',['thing',['../securities__and__tickers_8md.html#a93945518f5e0179db171a8e1dad6037f',1,'securities_and_tickers.md']]],
   ['thread_5fconfig',['thread_config',['../classthread__config.html',1,'thread_config'],['../classthread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'thread_config::thread_config()']]],
   ['tick',['tick',['../classjb_1_1itch5_1_1price__field.html#a567f67858ee1d86a983387b1a19034f0',1,'jb::itch5::price_field']]],
-  ['ticker',['Ticker',['../securities__and__tickers_8md.html#a9835b6fac8a313e1966771783412b9d1',1,'Ticker():&#160;securities_and_tickers.md'],['../securities__and__tickers_8md.html#a6cc7260eed1124c063e5c945fc8a834e',1,'ticker():&#160;securities_and_tickers.md']]],
+  ['ticker',['ticker',['../securities__and__tickers_8md.html#a6cc7260eed1124c063e5c945fc8a834e',1,'ticker():&#160;securities_and_tickers.md'],['../securities__and__tickers_8md.html#a9835b6fac8a313e1966771783412b9d1',1,'Ticker():&#160;securities_and_tickers.md']]],
   ['tid',['tid',['../namespacejb_1_1log.html#a0a9a49c9901bf9e9a1cfb22856133e87',1,'jb::log']]],
   ['tid_5f',['tid_',['../namespacejb_1_1log.html#ad92b3bc538c77ac05a774cb3ac9c05f9',1,'jb::log']]],
   ['time_5fpoint',['time_point',['../classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a',1,'jb::itch5::message_handler_concept']]],

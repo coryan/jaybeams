@@ -10,6 +10,8 @@ var searchData=
   ['have_5fboost_5fsystem',['HAVE_BOOST_SYSTEM',['../jb-config_8hpp.html#a4d123235b596d41b8269e2f1672dad42',1,'jb-config.hpp']]],
   ['have_5fboost_5fthread',['HAVE_BOOST_THREAD',['../jb-config_8hpp.html#a8440ed88a386b99b76d65ae079a52356',1,'jb-config.hpp']]],
   ['have_5fboost_5funit_5ftest_5fframework',['HAVE_BOOST_UNIT_TEST_FRAMEWORK',['../jb-config_8hpp.html#a4abddb862d64c2962541b503613f4d89',1,'jb-config.hpp']]],
+  ['have_5ffftw3f',['HAVE_FFTW3F',['../jb-config_8hpp.html#a46d650ea671d41a67bd0055ba35f28ab',1,'jb-config.hpp']]],
+  ['have_5ffftw3l',['HAVE_FFTW3L',['../jb-config_8hpp.html#a7e915940b32ffb12c9947389c6471156',1,'jb-config.hpp']]],
   ['have_5finttypes_5fh',['HAVE_INTTYPES_H',['../jb-config_8hpp.html#ab90a030ff2790ebdc176660a6dd2a478',1,'jb-config.hpp']]],
   ['have_5fmemory_5fh',['HAVE_MEMORY_H',['../jb-config_8hpp.html#ae93a78f9d076138897af441c9f86f285',1,'jb-config.hpp']]],
   ['have_5fpthread',['HAVE_PTHREAD',['../jb-config_8hpp.html#aac699f6be8f38e3c8a5f375df9a12aaf',1,'jb-config.hpp']]],
