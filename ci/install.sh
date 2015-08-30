@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Exit on error
-set -e
+set -ev
 
-# ... this is used to upload coverage information to coveralls.io
-gem install coveralls-lcov
+# ... when testing in my workstation I need to set GEM_HOME ...
+if [ "x${TRAVIS_BUILD_DIR}" != "x" -a "x${VARIANT}" == "xcov" ]; then
+  # ... this is used to upload coverage information to coveralls.io
+  gem install coveralls-lcov
+fi
 
 # ... make sure VERSION is set to something, even if it is an empty string ...
 if [ "x${VERSION}" == "x" ]; then
@@ -26,6 +29,9 @@ fi
 
 # ... install all the boost libraries ...
 sudo apt-get -qq -y install boost1.55
+
+# ... install the FFT3W libraries ...
+sudo apt-get -qq -y install libfftw3-dev
 
 # ... install a recent version of autoconf, automake and whatever make
 # comes through that long list of apt sources.  We do not install
@@ -62,9 +68,7 @@ tar -xf release-0.5.1.tar.gz
 wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
 tar -xf skye-0.2.tar.gz
 (source ${TRAVIS_BUILD_DIR?}/ci/before_script.sh && \
-    cd skye-0.2 && \
-    ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && \
-    make check && sudo make install)
+    cd skye-0.2 && ./configure && make check && sudo make install)
 
 # ... manually download a recent version of lcov from a debian source
 # repository, extract it, compile it and install it ...
