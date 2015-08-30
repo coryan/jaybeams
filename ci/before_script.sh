@@ -38,7 +38,8 @@ export CXXFLAGS
 # ... disable document generation for all branches except 'master' and
 # for pull request builds ...
 if [ "x${GENDOCS}" == "xyes" ]; then
-    if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
+    # ... temporarily enable wrap-fftw to test how it works ..
+    if [ "x${TRAVIS_BRANCH}" != "xmaster" -a "x${TRAVIS_BRANCH}" != "xwrap-fftw" ]; then
         GENDOCS=disabled
     fi
     if [ "x${TRAVIS_PULL_REQUEST}" == "xfalse" ]; then
