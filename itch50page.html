@@ -106,9 +106,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="comment">   * we are not using C++14 features).</span></div>
 <div class="line"><span class="comment">   */</span></div>
 <div class="line">  <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> message_type = ...;</div>
-<div class="line"><span class="comment"></span></div>
+<div class="line">};</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">template</span>&lt;<span class="keywordtype">bool</span> V&gt;</div>
+<div class="line"><span class="keyword">class </span>decoder&lt;V,foo_message&gt; {<span class="comment"></span></div>
 <div class="line"><span class="comment">  /**</span></div>
-<div class="line"><span class="comment">   * Decode (and validate) a ITCH-5.0 buffer into the message type.</span></div>
+<div class="line"><span class="comment">   * Decode, and if V==true validate, an ITCH-5.0 buffer into the message type.</span></div>
 <div class="line"><span class="comment">   *</span></div>
 <div class="line"><span class="comment">   * Extract the field values from the buffer, and validate the fields</span></div>
 <div class="line"><span class="comment">   * against the protocol.  The protocol makes many guarantees with</span></div>
@@ -120,14 +123,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="comment">   * However, in a production environment one might prefer to trust</span></div>
 <div class="line"><span class="comment">   * the protocol source and use unsafe_decode()</span></div>
 <div class="line"><span class="comment">   */</span></div>
-<div class="line">   <span class="keyword">static</span> foo_message decode_validated(std::size_t size, <span class="keywordtype">char</span> <span class="keyword">const</span>* buffer);</div>
-<div class="line"><span class="comment"></span></div>
-<div class="line"><span class="comment">  /**</span></div>
-<div class="line"><span class="comment">   * Decode a ITCH-5.0 buffer into the message type, without validation.</span></div>
-<div class="line"><span class="comment">   *</span></div>
-<div class="line"><span class="comment">   * Skip any message and/or field validations.</span></div>
-<div class="line"><span class="comment">   */</span></div>
-<div class="line">  <span class="keyword">static</span> foo_message decode(std::size_t size, <span class="keywordtype">char</span> <span class="keyword">const</span>* buffer);</div>
+<div class="line">  <span class="keyword">static</span> foo_message r(std::size_t size, <span class="keywordtype">char</span> <span class="keyword">const</span>* buffer, std::size_t off);</div>
 <div class="line">};</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
