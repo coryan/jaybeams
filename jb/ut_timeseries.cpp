@@ -28,4 +28,8 @@ BOOST_AUTO_TEST_CASE(create_triangle_timeseries_default) {
   for (int i : t5) {
     t1.push_back(i);
   }
+
+  t1[0] = t3[0];
+
+  BOOST_CHECK_THROW(t1.at(1000), std::exception);
 }
