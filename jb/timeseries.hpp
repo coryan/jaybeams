@@ -135,18 +135,25 @@ class timeseries : private std::vector<sample_t> {
    *
    * The timeseries is interpolated as-if it was a step function (or
    * "last observation carried forward" in R parlance).
+   *
+   * @param t the requested timestamp to resample the timeseries at.
+   * @param extention a functor to define how the function behaves
+   *   when the timestamp is outside the range of the timseries.
+   *
+   * @tparam extension_functor a functor that takes two parameters, an
+   *   (signed) integer and a std::size_t.  The first parameter is the
+   *   number of sampling periods between the start of the timeseries
+   *   and the requested timestamp @a t.  The second is the size of
+   *   the timeseries in sampling periods.
    */
   template<typename extension_functor>
-  value_type at(duration_type t, extension_functor e) const {
-    std::intmax_t index = (t - initial_timestamp_) / sampling_period_;
-    if (0 >= index or index >= size()) {
-      auto pair = e(index, size());
-      if (pair.first == -1) {
-        return pair.second;
-      }
-      index = pair.first;
+  value_type at(duration_type t, extension_functor extension) const {
+    auto ticks = (t - initial_timestamp_) / sampling_period_;
+    auto pair = extension(ticks, size());
+    if (pair.first == -1) {
+      return pair.second;
     }
-    return at(index);
+    return at(pair.first);
   }
 
   //@{
@@ -201,7 +208,7 @@ class timeseries : private std::vector<sample_t> {
    * single period of a periodic function.
    */
   struct extend_by_recycling {
-    std::pair<std::size_t, sample_t> operator()(
+    std::pair<std::ptrdiff_t, sample_t> operator()(
         std::intmax_t index, std::size_t size) const {
       if (size == 0) {
         return std::make_pair(static_cast<std::ptrdiff_t>(0), sample_t(0));
@@ -224,7 +231,7 @@ class timeseries : private std::vector<sample_t> {
   struct extend_by_zeroes {
     std::pair<std::ptrdiff_t, sample_t> operator()(
         std::intmax_t index, std::size_t size) const {
-      if (index < 0 or size <= index) {
+      if (index < 0 or size <= std::size_t(index)) {
         return std::make_pair(static_cast<std::ptrdiff_t>(-1), sample_t(0));
       }
       return std::make_pair(static_cast<std::ptrdiff_t>(index), sample_t(0));

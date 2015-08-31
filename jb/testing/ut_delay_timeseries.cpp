@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(delay_timeseries_periodic_default) {
   auto delayed = jb::testing::delay_timeseries_periodic(
       ts, std::chrono::microseconds(delay));
 
-  for (std::size_t i = 0; i != delay; ++i) {
+  for (std::size_t i = 0; i != std::size_t(delay); ++i) {
     float expected = ts.at(ts.size() + i - delay);
     BOOST_CHECK_CLOSE(expected, delayed.at(i), 1.0 / 1024);
   }
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(delay_timeseries_zeroes_default) {
   auto delayed = jb::testing::delay_timeseries_zeroes(
       ts, std::chrono::microseconds(delay));
 
-  for (std::size_t i = 0; i != delay; ++i) {
+  for (std::size_t i = 0; i != std::size_t(delay); ++i) {
     BOOST_CHECK_SMALL(delayed.at(i), 1.0f / 1024);
   }
   for (std::size_t i = delay; i != delayed.size() - delay; ++i) {
