@@ -64,7 +64,8 @@ jb_itch5_unit_tests = \
 
 jb_testing_unit_tests = \
   jb/testing/ut_create_square_timeseries \
-  jb/testing/ut_create_triangle_timeseries
+  jb/testing/ut_create_triangle_timeseries \
+  jb/testing/ut_delay_timeseries
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) $(jb_itch5_unit_tests)
 
@@ -171,7 +172,8 @@ jb_libjb_testing_adir = $(includedir)
 jb_libjb_testing_a_SOURCES =
 jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
-  jb/testing/create_triangle_timeseries.hpp
+  jb/testing/create_triangle_timeseries.hpp \
+  jb/testing/delay_timeseries.hpp
 
 ################################################################
 # jb/libitch5_testing.a
@@ -482,3 +484,7 @@ jb_testing_ut_create_square_timeseries_LDADD = $(jb_ut_testing_libs)
 jb_testing_ut_create_triangle_timeseries_SOURCES = jb/testing/ut_create_triangle_timeseries.cpp
 jb_testing_ut_create_triangle_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_triangle_timeseries
 jb_testing_ut_create_triangle_timeseries_LDADD = $(jb_ut_testing_libs)
+
+jb_testing_ut_delay_timeseries_SOURCES = jb/testing/ut_delay_timeseries.cpp
+jb_testing_ut_delay_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_delay_timeseries
+jb_testing_ut_delay_timeseries_LDADD = $(jb_ut_testing_libs)
