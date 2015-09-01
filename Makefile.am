@@ -65,15 +65,19 @@ jb_itch5_unit_tests = \
 jb_testing_unit_tests = \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
-  jb/testing/ut_delay_timeseries
+  jb/testing/ut_delay_timeseries \
+  jb/testing/ut_microbenchmark_config
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) $(jb_itch5_unit_tests)
+
+benchmarks = \
+  jb/bm_clocks
 
 examples = \
   examples/configuration \
   tools/itch5stats
 
-noinst_PROGRAMS = $(examples)
+noinst_PROGRAMS = $(examples) $(benchmarks)
 
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
@@ -169,11 +173,17 @@ jb_libjb_a_LIBADD =
 ################################################################
 
 jb_libjb_testing_adir = $(includedir)
-jb_libjb_testing_a_SOURCES =
+jb_libjb_testing_a_SOURCES = \
+  jb/testing/microbenchmark_base.cpp \
+  jb/testing/microbenchmark_config.cpp
+
 jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
-  jb/testing/delay_timeseries.hpp
+  jb/testing/delay_timeseries.hpp \
+  jb/testing/microbenchmark.hpp \
+  jb/testing/microbenchmark_base.hpp \
+  jb/testing/microbenchmark_config.hpp
 
 ################################################################
 # jb/libitch5_testing.a
@@ -270,8 +280,12 @@ tools_itch5stats_SOURCES = tools/itch5stats.cpp
 tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
 
 ################################################################
-# unit tests and benchmarks
+# benchmarks and unit tests
 ################################################################
+
+jb_bm_clocks_SOURCES = jb/bm_clocks.cpp
+jb_bm_clocks_CPPFLAGS =
+jb_bm_clocks_LDADD = jb/libjb_testing.a jb/libjb.a
 
 jb_ut_as_hhmmss_SOURCES = jb/ut_as_hhmmss.cpp
 jb_ut_as_hhmmss_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_as_hhmmss
@@ -488,3 +502,7 @@ jb_testing_ut_create_triangle_timeseries_LDADD = $(jb_ut_testing_libs)
 jb_testing_ut_delay_timeseries_SOURCES = jb/testing/ut_delay_timeseries.cpp
 jb_testing_ut_delay_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_delay_timeseries
 jb_testing_ut_delay_timeseries_LDADD = $(jb_ut_testing_libs)
+
+jb_testing_ut_microbenchmark_config_SOURCES = jb/testing/ut_microbenchmark_config.cpp
+jb_testing_ut_microbenchmark_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_microbenchmark_config
+jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_libs)
