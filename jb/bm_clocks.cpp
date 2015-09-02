@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) try {
   auto r = bm.run(cfg.clock_name());
 
   benchmark::summary s(r);
-  std::cout << cfg.clock_name() << " summary " << s << std::endl;
+  std::cerr << cfg.clock_name() << " summary " << s << std::endl;
   if (cfg.benchmark().verbose()) {
     bm.write_results(std::cout, r);
   }
@@ -123,6 +123,29 @@ class wrapped_clock : public wrapped_clock_base {
   int calls_per_iteration_;
 };
 
+static std::uint64_t read_rdtscp() {
+  std::uint64_t hi, lo;
+  std::uint32_t aux;
+  __asm__ __volatile__("rdtscp\n" : "=a"(lo), "=d"(hi), "=c" (aux) : : );
+  return (hi << 32) + lo;
+}
+
+class wrapped_rdtscp : public wrapped_clock_base {
+ public:
+  wrapped_rdtscp(int calls_per_iteration)
+      : calls_per_iteration_(calls_per_iteration)
+  {}
+
+  virtual void run() const override {
+    for (int i = 0; i != calls_per_iteration_; ++i) {
+      (void) read_rdtscp();
+    }
+  }
+
+ private:
+  int calls_per_iteration_;
+};
+
 fixture::fixture(std::string const& clock_name)
     : fixture(defaults::clock_repetitions, clock_name)
 {}
@@ -135,6 +158,8 @@ fixture::fixture(int size, std::string const& clock_name) {
     wrapped_clock_.reset(new wrapped_clock<high_resolution_clock>(size));
   } else if (clock_name == "std::chrono::system_clock") {
     wrapped_clock_.reset(new wrapped_clock<system_clock>(size));
+  } else if (clock_name == "rdtscp") {
+    wrapped_clock_.reset(new wrapped_rdtscp(size));
   } else {
     std::ostringstream os;
     os << "unknown value for --clock-name, was=" << clock_name;
