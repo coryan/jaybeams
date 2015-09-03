@@ -74,6 +74,7 @@ benchmarks = \
   jb/bm_clocks
 
 examples = \
+  examples/fftw_correlation_no_wrappers \
   examples/configuration \
   tools/itch5stats
 
@@ -94,6 +95,7 @@ LDFLAGS = \
   $(BOOST_LDFLAGS)
 
 YAML_CPP_LIBS=@YAML_CPP_LIBS@
+FFTW3_LIBS=@FFTW3_LIBS@
 FFTW3F_LIBS=@FFTW3F_LIBS@
 FFTW3L_LIBS=@FFTW3L_LIBS@
 
@@ -275,6 +277,9 @@ jb_libitch5_a_LIBADD =
 
 examples_configuration_SOURCES = examples/configuration.cpp
 examples_configuration_LDADD = jb/libjb.a
+
+examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wrappers.cpp
+examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
 tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a

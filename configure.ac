@@ -63,9 +63,14 @@ AX_CHECK_LIBRARY(FFTW3F, [fftw3.h], [fftw3f],
         [AC_MSG_ERROR([Unable to find single-precision FFTW3 library])])
 
 # FFTW3 Double Precision
+AX_CHECK_LIBRARY(FFTW3, [fftw3.h], [fftw3],
+	[FFTW3_LIBS=-lfftw3 AC_SUBST(FFTW3_LIBS)],
+        [AC_MSG_ERROR([Unable to find double-precision FFTW3 library])])
+
+# FFTW3 Quad (long double) Precision
 AX_CHECK_LIBRARY(FFTW3L, [fftw3.h], [fftw3l],
 	[FFTW3L_LIBS=-lfftw3l AC_SUBST(FFTW3L_LIBS)],
-        [AC_MSG_ERROR([Unable to find double-precision FFTW3 library])])
+        [AC_MSG_ERROR([Unable to find quad-precision FFTW3 library])])
 
 # Checks for header files (and header-only libraries)
 
