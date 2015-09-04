@@ -28,7 +28,7 @@ struct traits;
  */
 template<>
 struct traits<float> {
-  typedef float base_type;
+  typedef float precision_type;
   typedef std::complex<float> std_complex_type;
   typedef ::fftwf_complex fftw_complex_type;
 
@@ -42,13 +42,13 @@ struct traits<float> {
     ::fftwf_execute_dft(p, const_cast<fftw_complex_type*>(in), out);
   }
   static void execute_plan(
-      fftw_plan_type const p, base_type const* in,
+      fftw_plan_type const p, precision_type const* in,
       fftw_complex_type* out) {
-    ::fftwf_execute_dft_r2c(p, const_cast<base_type*>(in), out);
+    ::fftwf_execute_dft_r2c(p, const_cast<precision_type*>(in), out);
   }
   static void execute_plan(
       fftw_plan_type const p, fftw_complex_type const* in,
-      base_type* out) {
+      precision_type* out) {
     ::fftwf_execute_dft_c2r(p, const_cast<fftw_complex_type*>(in), out);
   }
 };
@@ -59,7 +59,7 @@ struct traits<float> {
  */
 template<>
 struct traits<double> {
-  typedef double base_type;
+  typedef double precision_type;
   typedef ::std::complex<double> std_complex_type;
   typedef ::fftw_complex fftw_complex_type;
 
@@ -80,23 +80,23 @@ struct traits<double> {
     ::fftw_execute_dft(p, const_cast<fftw_complex_type*>(in), out);
   }
   static void execute_plan(
-      fftw_plan_type const p, base_type const* in,
+      fftw_plan_type const p, precision_type const* in,
       fftw_complex_type* out) {
-    ::fftw_execute_dft_r2c(p, const_cast<base_type*>(in), out);
+    ::fftw_execute_dft_r2c(p, const_cast<precision_type*>(in), out);
   }
   static void execute_plan(
       fftw_plan_type const p, fftw_complex_type const* in,
-      base_type* out) {
+      precision_type* out) {
     ::fftw_execute_dft_c2r(p, const_cast<fftw_complex_type*>(in), out);
   }
   static fftw_plan_type create_forward_plan(
-      int size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
     return ::fftw_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
         FFTW_FORWARD, FFTW_ESTIMATE);
   }
   static fftw_plan_type create_backward_plan(
-      int size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
     return ::fftw_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
         FFTW_BACKWARD, FFTW_ESTIMATE);
@@ -109,7 +109,7 @@ struct traits<double> {
  */
 template<>
 struct traits<long double> {
-  typedef long double base_type;
+  typedef long double precision_type;
   typedef std::complex<long double> std_complex;
   typedef ::fftwl_complex fftw_complex_type;
 
@@ -123,13 +123,13 @@ struct traits<long double> {
     ::fftwl_execute_dft(p, in, out);
   }
   static void execute_plan(
-      fftw_plan_type const p, base_type const* in,
+      fftw_plan_type const p, precision_type const* in,
       fftw_complex_type* out) {
     ::fftwl_execute_dft_r2c(p, in, out);
   }
   static void execute_plan(
       fftw_plan_type const p, fftw_complex_type const* in,
-      base_type* out) {
+      precision_type* out) {
     ::fftwl_execute_dft_c2r(p, in, out);
   }
 };
