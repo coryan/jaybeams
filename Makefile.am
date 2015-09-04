@@ -3,6 +3,7 @@
 instdir = $(prefix)/lib
 inst_LIBRARIES = \
   jb/libjb.a \
+  jb/libjb_fftw.a \
   jb/libitch5.a
 
 noinst_LIBRARIES = \
@@ -26,6 +27,9 @@ jb_unit_tests = \
   jb/ut_severity_level \
   jb/ut_strtonum \
   jb/ut_timeseries
+
+jb_fftw_unit_tests = \
+  jb/fftw/ut_traits
 
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
@@ -68,7 +72,8 @@ jb_testing_unit_tests = \
   jb/testing/ut_delay_timeseries \
   jb/testing/ut_microbenchmark_config
 
-unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) $(jb_itch5_unit_tests)
+unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
+  $(jb_fftw_unit_tests) $(jb_itch5_unit_tests)
 
 benchmarks = \
   jb/bm_clocks
@@ -130,6 +135,12 @@ jb_ut_itch5_libs = \
   jb/libitch5.a \
   $(jb_ut_libs)
 
+jb_ut_fftw_libs = \
+  $(FFTW3_LIBS) \
+  jb/libjb_testing.a \
+  jb/libjb_fftw.a \
+  $(jb_ut_libs)
+
 ################################################################
 # jb/libjb.a
 ################################################################
@@ -180,6 +191,7 @@ jb_libjb_testing_a_SOURCES = \
   jb/testing/microbenchmark_config.cpp
 
 jb_libjb_testing_a_HEADERS = \
+  jb/testing/check_equal_vector.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
@@ -272,6 +284,17 @@ jb_libitch5_a_HEADERS = \
 jb_libitch5_a_LIBADD =
 
 ################################################################
+# jb/libjb_fftw.a
+################################################################
+
+jb_libjb_fftw_adir = $(includedir)
+jb_libjb_fftw_a_SOURCES =
+jb_libjb_fftw_a_HEADERS = \
+  jb/fftw/cast.hpp \
+  jb/fftw/plan.hpp \
+  jb/fftw/traits.hpp
+
+################################################################
 # examples
 ################################################################
 
@@ -355,6 +378,14 @@ jb_ut_strtonum_LDADD = $(jb_ut_libs)
 jb_ut_timeseries_SOURCES = jb/ut_timeseries.cpp
 jb_ut_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_timeseries
 jb_ut_timeseries_LDADD = $(jb_ut_libs)
+
+################################################################
+# fftw unit tests
+################################################################
+
+jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
+jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits
+jb_fftw_ut_traits_LDADD = $(jb_ut_fftw_libs)
 
 ################################################################
 # itch5 unit tests
