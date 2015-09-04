@@ -45,8 +45,8 @@ template<typename real>
 bool close_enough(
     std::complex<real> const& actual, std::complex<real> const& expected,
     int tol = 1) {
-  return (close_enough(real(actual), real(expected), tol)
-          and close_enough(imag(actual), imag(expected), tol));
+  return (close_enough(actual.real(), expected.real(), tol)
+          and close_enough(actual.imag(), expected.imag(), tol));
 }
 
 /**

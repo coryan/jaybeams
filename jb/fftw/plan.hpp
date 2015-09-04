@@ -1,7 +1,7 @@
 #ifndef jb_fftw_plan_hpp
 #define jb_fftw_plan_hpp
 
-#include <jb/fftw/traits.hpp>
+#include <jb/fftw/cast.hpp>
 
 #include <memory>
 #include <stdexcept>
@@ -91,6 +91,30 @@ class plan {
     return plan(traits::create_backward_plan(nsamples, in, out));
   }
 
+  /// Execute the plan for arrays of fftw_complex numbers
+  void execute(
+      std_complex_type const* in, std_complex_type* out) {
+    execute(fftw_cast_array<precision_type>(in),
+            fftw_cast_array<precision_type>(out));
+  }
+
+  /// Create the plan for arrays for fftw_complex numbers
+  static plan create_forward(
+      std::size_t nsamples, std_complex_type const* in,
+      std_complex_type* out) {
+    return create_forward(
+        nsamples, fftw_cast_array<precision_type>(in),
+        fftw_cast_array<precision_type>(out));
+  }
+
+  static plan create_backward(
+      std::size_t nsamples, std_complex_type const* in,
+      std_complex_type* out) {
+    return create_backward(
+        nsamples, fftw_cast_array<precision_type>(in),
+        fftw_cast_array<precision_type>(out));
+  }
+  
  private:
   plan(fftw_plan_type p)
       : p_(p) {
