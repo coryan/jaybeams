@@ -67,6 +67,18 @@ struct traits<double> {
         size, const_cast<fftw_complex_type*>(in), out,
         FFTW_BACKWARD, FFTW_ESTIMATE);
   }
+
+  static fftw_plan_type create_plan(
+      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+    return ::fftw_plan_dft_r2c_1d(
+        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+  }
+  static fftw_plan_type create_plan(
+      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+    return ::fftw_plan_dft_c2r_1d(
+        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+  }
+
   static void destroy_plan(fftw_plan_type p) {
     ::fftw_destroy_plan(p);
   }
@@ -117,6 +129,18 @@ struct traits<float> {
         size, const_cast<fftw_complex_type*>(in), out,
         FFTW_BACKWARD, FFTW_ESTIMATE);
   }
+
+  static fftw_plan_type create_plan(
+      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+    return ::fftwf_plan_dft_r2c_1d(
+        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+  }
+  static fftw_plan_type create_plan(
+      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+    return ::fftwf_plan_dft_c2r_1d(
+        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+  }
+
   static void destroy_plan(fftw_plan_type p) {
     ::fftwf_destroy_plan(p);
   }
@@ -168,6 +192,18 @@ struct traits<long double> {
         size, const_cast<fftw_complex_type*>(in), out,
         FFTW_BACKWARD, FFTW_ESTIMATE);
   }
+
+  static fftw_plan_type create_plan(
+      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+    return ::fftwl_plan_dft_r2c_1d(
+        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+  }
+  static fftw_plan_type create_plan(
+      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+    return ::fftwl_plan_dft_c2r_1d(
+        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+  }
+
   static void destroy_plan(fftw_plan_type p) {
     ::fftwl_destroy_plan(p);
   }
