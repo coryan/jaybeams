@@ -84,6 +84,14 @@ int main(int argc, char* argv[]) try {
     benchmark_test_case<std::vector<float>>(cfg);
   } else if (cfg.test_case() == "double:unaligned") {
     benchmark_test_case<std::vector<double>>(cfg);
+  } else if (cfg.test_case() == "complex:float:aligned") {
+    benchmark_test_case<jb::fftw::aligned_vector<std::complex<float>>>(cfg);
+  } else if (cfg.test_case() == "complex:double:aligned") {
+    benchmark_test_case<jb::fftw::aligned_vector<std::complex<double>>>(cfg);
+  } else if (cfg.test_case() == "complex:float:unaligned") {
+    benchmark_test_case<std::vector<std::complex<float>>>(cfg);
+  } else if (cfg.test_case() == "complex:double:unaligned") {
+    benchmark_test_case<std::vector<std::complex<double>>>(cfg);
   } else {
     std::cerr << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
     return 1;
