@@ -2,7 +2,7 @@
 #include <jb/testing/create_triangle_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
-#include <complex>
+#include <chrono>
 
 /**
  * @test Test jb::testing::delay_timeseries_periodic with default types
@@ -13,11 +13,10 @@
  */
 BOOST_AUTO_TEST_CASE(delay_timeseries_periodic_default) {
   int delay = 23;
-  jb::timeseries<float,std::chrono::microseconds> ts(
-      std::chrono::microseconds(1), std::chrono::microseconds(0));
+  std::vector<float> ts;
   jb::testing::create_triangle_timeseries(1024, ts);
   auto delayed = jb::testing::delay_timeseries_periodic(
-      ts, std::chrono::microseconds(delay));
+      ts, std::chrono::microseconds(delay), std::chrono::microseconds(1));
 
   for (std::size_t i = 0; i != std::size_t(delay); ++i) {
     float expected = ts.at(ts.size() + i - delay);
@@ -37,12 +36,11 @@ BOOST_AUTO_TEST_CASE(delay_timeseries_periodic_default) {
  * validate this before too long.
  */
 BOOST_AUTO_TEST_CASE(delay_timeseries_zeroes_default) {
-  int delay = 3;
-  jb::timeseries<float,std::chrono::microseconds> ts(
-      std::chrono::microseconds(1), std::chrono::microseconds(0));
+  int delay = 23;
+  std::vector<float> ts;
   jb::testing::create_triangle_timeseries(1024, ts);
   auto delayed = jb::testing::delay_timeseries_zeroes(
-      ts, std::chrono::microseconds(delay));
+      ts, std::chrono::microseconds(delay), std::chrono::microseconds(1));
 
   for (std::size_t i = 0; i != std::size_t(delay); ++i) {
     BOOST_CHECK_SMALL(delayed.at(i), 1.0f / 1024);

@@ -25,8 +25,7 @@ jb_unit_tests = \
   jb/ut_logging \
   jb/ut_offline_feed_statistics \
   jb/ut_severity_level \
-  jb/ut_strtonum \
-  jb/ut_timeseries
+  jb/ut_strtonum
 
 jb_fftw_unit_tests = \
   jb/fftw/ut_allocator \
@@ -169,7 +168,6 @@ nobase_jb_libjb_a_HEADERS = \
   jb/offline_feed_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
-  jb/timeseries.hpp \
   jb/usage.hpp
 
 jb_libjb_a_SOURCES = \
@@ -380,10 +378,6 @@ jb_ut_severity_level_LDADD = $(jb_ut_libs)
 jb_ut_strtonum_SOURCES = jb/ut_strtonum.cpp
 jb_ut_strtonum_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_strtonum
 jb_ut_strtonum_LDADD = $(jb_ut_libs)
-
-jb_ut_timeseries_SOURCES = jb/ut_timeseries.cpp
-jb_ut_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_timeseries
-jb_ut_timeseries_LDADD = $(jb_ut_libs)
 
 ################################################################
 # fftw unit tests
