@@ -29,8 +29,10 @@ void test_fftw_traits() {
   }
 
   typedef typename tested::fftw_plan_type plan_type;
-  plan_type dir = tested::create_forward_plan(nsamples, in, tmp);
-  plan_type inv = tested::create_backward_plan(nsamples, tmp, out);
+  plan_type dir = tested::create_forward_plan(
+      nsamples, in, tmp, FFTW_ESTIMATE | FFTW_UNALIGNED | FFTW_PRESERVE_INPUT);
+  plan_type inv = tested::create_backward_plan(
+      nsamples, tmp, out, FFTW_ESTIMATE | FFTW_UNALIGNED | FFTW_PRESERVE_INPUT);
 
   tested::execute_plan(dir, in, tmp);
   tested::execute_plan(inv, tmp, out);

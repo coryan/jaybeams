@@ -9,6 +9,8 @@
 namespace jb {
 namespace fftw {
 
+int const default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;
+
 /**
  * Wrap FFTW3 plan objects to automatically destroy them.
  *
@@ -83,20 +85,23 @@ class plan {
 
   /// Create the plan for vectors
   template<typename invector, typename outvector>
-  static plan create_forward(invector const& in, outvector& out) {
+  static plan create_forward(invector const& in, outvector& out,
+                             int flags = default_flags) {
     if (in.size() != out.size()) {
       throw std::invalid_argument("mismatched vector size in create_forward()");
     }
-    return create_forward_impl(in.size(), fftw_cast(in), fftw_cast(out));
+    return create_forward_impl(in.size(), fftw_cast(in), fftw_cast(out), flags);
   }
 
   /// Create the plan for vectors
   template<typename invector, typename outvector>
-  static plan create_backward(invector const& in, outvector& out) {
+  static plan create_backward(invector const& in, outvector& out,
+                              int flags = default_flags) {
     if (in.size() != out.size()) {
       throw std::invalid_argument("mismatched vector size in create_forward()");
     }
-    return create_backward_impl(in.size(), fftw_cast(in), fftw_cast(out));
+    return create_backward_impl(
+        in.size(), fftw_cast(in), fftw_cast(out), flags);
   }
 
  private:
@@ -121,29 +126,29 @@ class plan {
   /// Create the direct plan for arrays in the c2c case.
   static plan create_forward_impl(
       std::size_t nsamples, fftw_complex_type const* in,
-      fftw_complex_type* out) {
-    return plan(traits::create_forward_plan(nsamples, in, out));
+      fftw_complex_type* out, int flags) {
+    return plan(traits::create_forward_plan(nsamples, in, out, flags));
   }
 
   /// Create the inverse plan for arrays in the c2c case
   static plan create_backward_impl(
       std::size_t nsamples, fftw_complex_type const* in,
-      fftw_complex_type* out) {
-    return plan(traits::create_backward_plan(nsamples, in, out));
+      fftw_complex_type* out, int flags) {
+    return plan(traits::create_backward_plan(nsamples, in, out, flags));
   }
 
   /// Create the plan for arrays for r2c case
   static plan create_forward_impl(
       std::size_t nsamples, precision_type const* in,
-      fftw_complex_type* out) {
-    return plan(traits::create_plan(nsamples, in, out));
+      fftw_complex_type* out, int flags) {
+    return plan(traits::create_plan(nsamples, in, out, flags));
   }
 
   /// Create the plan for the c2r case
   static plan create_backward_impl(
       std::size_t nsamples, fftw_complex_type const* in,
-      precision_type* out) {
-    return plan(traits::create_plan(nsamples, in, out));
+      precision_type* out, int flags) {
+    return plan(traits::create_plan(nsamples, in, out, flags));
   }
   
  private:
