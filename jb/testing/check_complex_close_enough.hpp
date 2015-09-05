@@ -14,8 +14,8 @@ namespace testing {
  *
  * @return true if the numbers are within tolerance.
  *
- * @param a the first number to compare
- * @param b the second number to compare
+ * @param actual the first number to compare
+ * @param expected the second number to compare
  * @param tol expressed in "number of epsilons", i.e., the function
  *   will tolerate errors up to tol * std::numeric_limit<real>::epsilon()
  * @tparam real the type of floating point number (float, double, long double)
