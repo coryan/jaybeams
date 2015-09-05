@@ -1,5 +1,5 @@
 #include <jb/fftw/plan.hpp>
-#include <jb/testing/check_equal_vector.hpp>
+#include <jb/testing/check_array_close_enough.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
