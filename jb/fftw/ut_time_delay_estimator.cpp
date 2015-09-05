@@ -24,3 +24,22 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_simple) {
   BOOST_CHECK_EQUAL(e.first, true);
   BOOST_CHECK_CLOSE(e.second, double(delay), 0.01);
 }
+
+/**
+ * @test Verify that we can create and use a simple time delay estimator.
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_error) {
+  int const nsamples = 1<<15;
+  typedef jb::fftw::aligned_vector<float> timeseries_type;
+  typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
+
+  timeseries_type a = {0};
+  timeseries_type b = a;
+
+  tested estimator(a, b);
+  auto e = estimator.estimate_delay(a, b);
+  BOOST_CHECK_EQUAL(e.first, false);
+
+  b.resize(nsamples / 2);
+  BOOST_CHECK_THROW(tested tmp(a, b), std::exception);
+}

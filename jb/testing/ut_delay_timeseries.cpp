@@ -4,6 +4,16 @@
 #include <boost/test/unit_test.hpp>
 #include <chrono>
 
+namespace std {
+
+// Horrible hack to make Boost.Test happy
+std::ostream& operator<<(
+    std::ostream& os, std::pair<std::ptrdiff_t,float> const& x) {
+  return os << "{" << x.first << "," << x.second << "}";
+}
+
+} // namespace std
+
 /**
  * @test Test jb::testing::delay_timeseries_periodic with default types
  *
@@ -26,6 +36,21 @@ BOOST_AUTO_TEST_CASE(delay_timeseries_periodic_default) {
     float expected = ts.at(i - delay);
     BOOST_CHECK_CLOSE(expected, delayed.at(i), 1.0 / 1024);
   }
+}
+
+/**
+ * @test Improve coverage for jb::testing::extrapolate_periodic.
+ */
+BOOST_AUTO_TEST_CASE(extrapolate_periodic) {
+  jb::testing::extrapolate_periodic<float> tested;
+  BOOST_CHECK_EQUAL(
+      tested(0, 0), std::make_pair(std::ptrdiff_t(0), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(1, 100), std::make_pair(std::ptrdiff_t(1), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(120, 100), std::make_pair(std::ptrdiff_t(20), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(-20, 100), std::make_pair(std::ptrdiff_t(80), float(0)));
 }
 
 /**
