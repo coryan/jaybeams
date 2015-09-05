@@ -30,6 +30,7 @@ jb_unit_tests = \
 jb_fftw_unit_tests = \
   jb/fftw/ut_allocator \
   jb/fftw/ut_plan \
+  jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_traits
 
 jb_itch5_unit_tests = \
@@ -151,6 +152,7 @@ jb_ut_fftw_libs = \
 jb_libjb_adir = $(includedir)
 nobase_jb_libjb_a_HEADERS = \
   jb/as_hhmmss.hpp \
+  jb/complex_traits.hpp \
   jb/config_attribute.hpp \
   jb/config_files_location.hpp \
   jb/config_object.hpp \
@@ -294,8 +296,11 @@ jb_libitch5_a_LIBADD =
 jb_libjb_fftw_adir = $(includedir)
 jb_libjb_fftw_a_SOURCES =
 jb_libjb_fftw_a_HEADERS = \
+  jb/fftw/aligned_vector.hpp \
   jb/fftw/allocator.hpp \
+  jb/fftw/cast.hpp \
   jb/fftw/plan.hpp \
+  jb/fftw/time_delay_estimator.hpp \
   jb/fftw/traits.hpp
 
 ################################################################
@@ -390,6 +395,10 @@ jb_fftw_ut_allocator_LDADD = $(jb_ut_fftw_libs)
 jb_fftw_ut_plan_SOURCES = jb/fftw/ut_plan.cpp
 jb_fftw_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan
 jb_fftw_ut_plan_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
+jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator
+jb_fftw_ut_time_delay_estimator_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
 jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits
