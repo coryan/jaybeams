@@ -8,5 +8,6 @@ var searchData=
   ['stn_5ftraits',['stn_traits',['../namespacejb.html#structjb_1_1stn__traits',1,'jb']]],
   ['stock_5fdirectory_5fmessage',['stock_directory_message',['../structjb_1_1itch5_1_1stock__directory__message.html',1,'jb::itch5']]],
   ['stock_5ftrading_5faction_5fmessage',['stock_trading_action_message',['../structjb_1_1itch5_1_1stock__trading__action__message.html',1,'jb::itch5']]],
+  ['summary',['summary',['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html',1,'jb::testing::microbenchmark_base']]],
   ['system_5fevent_5fmessage',['system_event_message',['../structjb_1_1itch5_1_1system__event__message.html',1,'jb::itch5']]]
 ];

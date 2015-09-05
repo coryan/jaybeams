@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['price4_5ft',['price4_t',['../namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c',1,'jb::itch5']]],
-  ['price8_5ft',['price8_t',['../namespacejb_1_1itch5.html#a30ea5e85be69710fa958000e3d3dfba5',1,'jb::itch5']]],
-  ['price_5fvariation_5findicator_5ft',['price_variation_indicator_t',['../namespacejb_1_1itch5.html#a834323e2cf69c0623fb6a68b3ae7169b',1,'jb::itch5']]],
-  ['primary_5fmarket_5fmaker_5ft',['primary_market_maker_t',['../namespacejb_1_1itch5.html#a6fb352a92bc4255baa95f21950c557cd',1,'jb::itch5']]],
-  ['printable_5ft',['printable_t',['../namespacejb_1_1itch5.html#a36e96ca3a9e1c08f628d37235e8d5942',1,'jb::itch5']]],
-  ['processing_5flatency_5fhistogram_5ft',['processing_latency_histogram_t',['../classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7',1,'jb::offline_feed_statistics']]]
+  ['market_5fcategory_5ft',['market_category_t',['../namespacejb_1_1itch5.html#acbf88e0322dcbd820728ad4d9c9287fd',1,'jb::itch5']]],
+  ['market_5fmaker_5fmode_5ft',['market_maker_mode_t',['../namespacejb_1_1itch5.html#af0f7f24481605d9c3090e290b3e5c1bb',1,'jb::itch5']]],
+  ['market_5fparticipant_5fstate_5ft',['market_participant_state_t',['../namespacejb_1_1itch5.html#a09aaa1c549e96fa51fc38a8f5cf5ba9c',1,'jb::itch5']]],
+  ['mpid_5ft',['mpid_t',['../namespacejb_1_1itch5.html#a2bcb820c7703a32ae40266aae8c18d34',1,'jb::itch5']]]
 ];

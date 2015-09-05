@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['n',['n',['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#aeb06359985a8195b357e4af50f8d44ad',1,'jb::testing::microbenchmark_base::summary']]],
   ['name',['name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a291167dd8c9d7a716bebabf4ff8e6508',1,'jb::config_object::attribute_descriptor::name()'],['../classthread__config.html#ad219a4b4cc89c0e4c436fe8f43bbb67f',1,'thread_config::name()'],['../classjb_1_1config__object_1_1attribute__base.html#a904c70d9488d909bcc2eec237fd4e71d',1,'jb::config_object::attribute_base::name()']]],
   ['namespaces_2edox',['namespaces.dox',['../namespaces_8dox.html',1,'']]],
   ['native_5fpriority',['native_priority',['../classthread__config.html#a84826188fa4e0d57154ad72ba5409797',1,'thread_config']]],

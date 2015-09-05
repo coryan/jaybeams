@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['deallocate',['deallocate',['../classjb_1_1fftw_1_1allocator.html#a19a735d101ef36eb224121bca6010525',1,'jb::fftw::allocator']]],
   ['debug',['debug',['../namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d',1,'jb']]],
   ['decode',['decode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#a5930c365ba231d378f666aa0f3ea5a4e',1,'YAML::convert&lt; jb::severity_level &gt;']]],
   ['decoder',['decoder',['../structjb_1_1itch5_1_1decoder.html',1,'jb::itch5']]],
@@ -38,9 +39,18 @@ var searchData=
   ['decoder_3c_20validate_2c_20timestamp_20_3e',['decoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
   ['default_5fgetenv',['default_getenv',['../structjb_1_1default__getenv.html',1,'jb']]],
   ['default_5fvalidator',['default_validator',['../structjb_1_1default__validator.html',1,'jb']]],
+  ['defaults',['defaults',['../namespacedefaults.html',1,'']]],
+  ['delay_5ftimeseries',['delay_timeseries',['../namespacejb_1_1testing.html#a759e9b1da5a78a5269cdce029f78475c',1,'jb::testing']]],
+  ['delay_5ftimeseries_2ehpp',['delay_timeseries.hpp',['../delay__timeseries_8hpp.html',1,'']]],
+  ['delay_5ftimeseries_5fperiodic',['delay_timeseries_periodic',['../namespacejb_1_1testing.html#a3441cf5e54676bb9ce827d8fd6e4b739',1,'jb::testing']]],
+  ['delay_5ftimeseries_5fzeroes',['delay_timeseries_zeroes',['../namespacejb_1_1testing.html#a39cfe14ddf5a1eff70f9be2c975140c2',1,'jb::testing']]],
   ['denom',['denom',['../classjb_1_1itch5_1_1price__field.html#ad2160b78fa889ac63d7f85695816a878',1,'jb::itch5::price_field']]],
   ['denom_5fdigits',['denom_digits',['../classjb_1_1itch5_1_1price__field.html#ac851392210b946a4940fd90c97bb2ca0',1,'jb::itch5::price_field']]],
   ['desc',['desc',['../classjb_1_1config__object.html#a2979d1d6795bc7c47f94df06f5db9ad5',1,'jb::config_object::desc(std::string const &amp;name)'],['../classjb_1_1config__object.html#a2d6e65a868b25745df4d6549cd3f0281',1,'jb::config_object::desc(std::string const &amp;name, std::string const &amp;class_name)']]],
   ['descriptor',['descriptor',['../classjb_1_1config__object_1_1attribute__base.html#ac54ca052dee6f81b24043e42469bbd2c',1,'jb::config_object::attribute_base']]],
-  ['descriptor_5f',['descriptor_',['../classjb_1_1config__object_1_1attribute__base.html#a553321dbe99fd894a609944ea5a50004',1,'jb::config_object::attribute_base']]]
+  ['descriptor_5f',['descriptor_',['../classjb_1_1config__object_1_1attribute__base.html#a553321dbe99fd894a609944ea5a50004',1,'jb::config_object::attribute_base']]],
+  ['destroy',['destroy',['../classjb_1_1fftw_1_1allocator.html#ab5552f4e219d366cb6c509ef07de6685',1,'jb::fftw::allocator']]],
+  ['destroy_5fplan',['destroy_plan',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a898cd3e7b6baf88093d50b0f943da548',1,'jb::fftw::traits&lt; double &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#ae3eccdbe618a250766aeaf9826448225',1,'jb::fftw::traits&lt; float &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff',1,'jb::fftw::traits&lt; long double &gt;::destroy_plan()']]],
+  ['difference_5ftype',['difference_type',['../classjb_1_1fftw_1_1allocator.html#a59d26b2b7c8604f8b02eaa40c07ea71d',1,'jb::fftw::allocator']]],
+  ['duration',['duration',['../classjb_1_1testing_1_1microbenchmark__base.html#a75b1b3af82f33a23b8d6b99894a2c426',1,'jb::testing::microbenchmark_base']]]
 ];

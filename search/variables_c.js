@@ -1,10 +1,12 @@
 var searchData=
 [
-  ['p25',['p25',['../namespacejb.html#a0cdf836177bd31ba73130f1b5b44a11f',1,'jb::histogram_summary']]],
-  ['p50',['p50',['../namespacejb.html#a5c139d1bff55e7e76e0c34a23e6e4486',1,'jb::histogram_summary']]],
-  ['p75',['p75',['../namespacejb.html#ae0c65da7236e5a5e1034e98d01a3594b',1,'jb::histogram_summary']]],
-  ['p90',['p90',['../namespacejb.html#af59e25f730ae0c81345d074f212e0fc7',1,'jb::histogram_summary']]],
-  ['p99',['p99',['../namespacejb.html#a4b82b2c1d74a67d9140db4f9f130f368',1,'jb::histogram_summary']]],
+  ['p25',['p25',['../namespacejb.html#a0cdf836177bd31ba73130f1b5b44a11f',1,'jb::histogram_summary::p25()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a816808474365c0c28b7ab27fc5620815',1,'jb::testing::microbenchmark_base::summary::p25()']]],
+  ['p50',['p50',['../namespacejb.html#a5c139d1bff55e7e76e0c34a23e6e4486',1,'jb::histogram_summary::p50()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#aead254171e21910266551c7e6dad5477',1,'jb::testing::microbenchmark_base::summary::p50()']]],
+  ['p75',['p75',['../namespacejb.html#ae0c65da7236e5a5e1034e98d01a3594b',1,'jb::histogram_summary::p75()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a67adaebd5ebd678e1b5e2cfc8fc1119d',1,'jb::testing::microbenchmark_base::summary::p75()']]],
+  ['p90',['p90',['../namespacejb.html#af59e25f730ae0c81345d074f212e0fc7',1,'jb::histogram_summary::p90()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a1134cbdfdf155ef36d82251b4852c46c',1,'jb::testing::microbenchmark_base::summary::p90()']]],
+  ['p99',['p99',['../namespacejb.html#a4b82b2c1d74a67d9140db4f9f130f368',1,'jb::histogram_summary::p99()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a59b099b7b1675eb6695fb609cc528b04',1,'jb::testing::microbenchmark_base::summary::p99()']]],
+  ['p99_5f9',['p99_9',['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a68e2f8e5e1f9a0f0ffce5dad17616adf',1,'jb::testing::microbenchmark_base::summary']]],
+  ['p_5f',['p_',['../classjb_1_1fftw_1_1plan.html#a896f5797e827b457c48d60d35a281883',1,'jb::fftw::plan']]],
   ['paired_5fshares',['paired_shares',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8fc9443b5635b9953d92e0f3a543109f',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['per_5fmsec_5frate_5f',['per_msec_rate_',['../classjb_1_1offline__feed__statistics.html#a2868ac3ee416d2ae6dafa6dc640f7044',1,'jb::offline_feed_statistics']]],
   ['per_5fsec_5frate_5f',['per_sec_rate_',['../classjb_1_1offline__feed__statistics.html#aecd91bfed5158f2b34472c81a416b039',1,'jb::offline_feed_statistics']]],

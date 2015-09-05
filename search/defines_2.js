@@ -2,6 +2,13 @@ var searchData=
 [
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
+  ['jb_5fdefaults_5fclock_5fname',['JB_DEFAULTS_clock_name',['../bm__clocks_8cpp.html#a1d482abf4e41938dc08aa070dfcfde57',1,'bm_clocks.cpp']]],
+  ['jb_5fdefaults_5fclock_5frepetitions',['JB_DEFAULTS_clock_repetitions',['../bm__clocks_8cpp.html#a7245ccbe1e373f0fbef94f00c691e875',1,'bm_clocks.cpp']]],
+  ['jb_5fdefaults_5fmicrobenchmark_5fiterations',['JB_DEFAULTS_microbenchmark_iterations',['../microbenchmark__config_8cpp.html#a904d9e9064083ecd77457fd134d22eb4',1,'microbenchmark_config.cpp']]],
+  ['jb_5fdefaults_5fmicrobenchmark_5fsize',['JB_DEFAULTS_microbenchmark_size',['../microbenchmark__config_8cpp.html#a082e633def5cbfd84e1dc5eab70326de',1,'microbenchmark_config.cpp']]],
+  ['jb_5fdefaults_5fmicrobenchmark_5fverbose',['JB_DEFAULTS_microbenchmark_verbose',['../microbenchmark__config_8cpp.html#a2f2535ae27f433e8afaa113d42a71c22',1,'microbenchmark_config.cpp']]],
+  ['jb_5fdefaults_5fmicrobenchmark_5fwarmup_5fiterations',['JB_DEFAULTS_microbenchmark_warmup_iterations',['../microbenchmark__config_8cpp.html#afe41fbc54d6f32ec0a4e86d11ca22bd1',1,'microbenchmark_config.cpp']]],
+  ['jb_5fdefaults_5ftest_5fcase',['JB_DEFAULTS_test_case',['../bm__time__delay__estimator_8cpp.html#a070182aa832b1851e771dbe4f87c5b30',1,'bm_time_delay_estimator.cpp']]],
   ['jb_5fitch5_5ftest_5fheader',['JB_ITCH5_TEST_HEADER',['../testing__data_8cpp.html#a844f8859753e183f9639fcfc34e60d48',1,'testing_data.cpp']]],
   ['jb_5flog',['JB_LOG',['../log_8hpp.html#a69e7901a14a27585e998359dd544818e',1,'log.hpp']]],
   ['jb_5flog_5fdefaults_5fenable_5fconsole_5flogging',['JB_LOG_DEFAULTS_enable_console_logging',['../log_8cpp.html#a9692c4872613214f4a83214ff3b99aca',1,'log.cpp']]],
@@ -20,5 +27,6 @@ var searchData=
   ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fmillisecond',['JB_OFS_DEFAULTS_max_messages_per_millisecond',['../offline__feed__statistics_8cpp.html#a7eae6dcc5f632c6d0671010eeefb1a61',1,'offline_feed_statistics.cpp']]],
   ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fsecond',['JB_OFS_DEFAULTS_max_messages_per_second',['../offline__feed__statistics_8cpp.html#a992e94492edb304b3ec48833f01de2e3',1,'offline_feed_statistics.cpp']]],
   ['jb_5fofs_5fdefaults_5fmax_5fprocessing_5flatency_5fnanoseconds',['JB_OFS_DEFAULTS_max_processing_latency_nanoseconds',['../offline__feed__statistics_8cpp.html#abbf6b2de533edc5db00be80bf41ea8a4',1,'offline_feed_statistics.cpp']]],
-  ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]]
+  ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]],
+  ['jb_5ftesting_5fmax_5fdifferences',['JB_TESTING_MAX_DIFFERENCES',['../check__complex__close__enough_8hpp.html#a20aeb5a0bdb905aa2be9c2b010886562',1,'check_complex_close_enough.hpp']]]
 ];

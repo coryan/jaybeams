@@ -10,5 +10,6 @@ var searchData=
   ['ipo_5fquotation_5frelease_5ftime',['ipo_quotation_release_time',['../structjb_1_1itch5_1_1ipo__quoting__period__update__message.html#a92effe63c3730c4a63aae945782b1cf8',1,'jb::itch5::ipo_quoting_period_update_message']]],
   ['is_5fpositional',['is_positional',['../structjb_1_1config__object_1_1attribute__descriptor.html#a4009947367cd37a8b06fb30703d80596',1,'jb::config_object::attribute_descriptor']]],
   ['issue_5fclassification',['issue_classification',['../structjb_1_1itch5_1_1stock__directory__message.html#aaf4eb9152a69d2faf67f2d525f453fbf',1,'jb::itch5::stock_directory_message']]],
-  ['issue_5fsubtype',['issue_subtype',['../structjb_1_1itch5_1_1stock__directory__message.html#ab23b6e322284e5ad215ebbdeb20d188c',1,'jb::itch5::stock_directory_message']]]
+  ['issue_5fsubtype',['issue_subtype',['../structjb_1_1itch5_1_1stock__directory__message.html#ab23b6e322284e5ad215ebbdeb20d188c',1,'jb::itch5::stock_directory_message']]],
+  ['iterations',['iterations',['../classjb_1_1testing_1_1microbenchmark__config.html#a0964dc71dc1aff7f74fcf42af2bfb300',1,'jb::testing::microbenchmark_config::iterations()'],['../namespacejb_1_1testing_1_1defaults.html#a37c60b5fb550eaac95e60ad65a1bf1f6',1,'jb::testing::defaults::iterations()']]]
 ];

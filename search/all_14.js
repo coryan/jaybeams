@@ -5,8 +5,10 @@ var searchData=
   ['validate_5fattributes',['validate_attributes',['../classjb_1_1config__object.html#a2ba3291ce2e3faaddb778239c1f49422',1,'jb::config_object']]],
   ['validate_5fissue_5fsubtype',['validate_issue_subtype',['../structjb_1_1itch5_1_1validate__issue__subtype.html',1,'jb::itch5']]],
   ['value_5f',['value_',['../classjb_1_1config__attribute.html#a6bfa4ffde7f294a53dbc566e79a6b454',1,'jb::config_attribute::value_()'],['../classjb_1_1itch5_1_1char__list__field.html#a467b457bc0aa7677c43c1671a92531b3',1,'jb::itch5::char_list_field::value_()'],['../classjb_1_1itch5_1_1price__field.html#a786f6e8a26664bb5d97a0754c0a242c6',1,'jb::itch5::price_field::value_()']]],
-  ['value_5ftype',['value_type',['../classjb_1_1config__attribute.html#ab6f6451e2a051f8eb776babac4659b66',1,'jb::config_attribute']]],
+  ['value_5ftype',['value_type',['../classjb_1_1config__attribute.html#ab6f6451e2a051f8eb776babac4659b66',1,'jb::config_attribute::value_type()'],['../classjb_1_1fftw_1_1allocator.html#a994506bb17131c30d7b22fc2d7f75de7',1,'jb::fftw::allocator::value_type()'],['../classjb_1_1fftw_1_1time__delay__estimator.html#a6c96cfb5f2812284e01e74e810557549',1,'jb::fftw::time_delay_estimator::value_type()']]],
   ['value_5fvalidator_5f',['value_validator_',['../classjb_1_1itch5_1_1short__string__field.html#ae5fff071d656498ac1dcc349c0ae0f10',1,'jb::itch5::short_string_field']]],
   ['value_5fvalidator_5ft',['value_validator_t',['../classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386',1,'jb::itch5::short_string_field']]],
-  ['version',['VERSION',['../jb-config_8hpp.html#a1c6d5de492ac61ad29aec7aa9a436bbf',1,'jb-config.hpp']]]
+  ['verbose',['verbose',['../classjb_1_1testing_1_1microbenchmark__config.html#a0b04016869e2e60f4e6bed24beb9854d',1,'jb::testing::microbenchmark_config::verbose()'],['../namespacejb_1_1testing_1_1defaults.html#a836dbdebd0f0a7c936b86e52958d8c00',1,'jb::testing::defaults::verbose()']]],
+  ['version',['VERSION',['../jb-config_8hpp.html#a1c6d5de492ac61ad29aec7aa9a436bbf',1,'jb-config.hpp']]],
+  ['void_5fpointer',['void_pointer',['../classjb_1_1fftw_1_1allocator.html#a94b5b7537fb496fc3f2a9de739ce9634',1,'jb::fftw::allocator']]]
 ];

@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['plan',['plan',['../classjb_1_1fftw_1_1plan.html',1,'jb::fftw']]],
+  ['plan_3c_20precision_5ftype_20_3e',['plan&lt; precision_type &gt;',['../classjb_1_1fftw_1_1plan.html',1,'jb::fftw']]],
   ['price_5ffield',['price_field',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],
   ['price_5ffield_3c_20std_3a_3auint32_5ft_2c_2010000_20_3e',['price_field&lt; std::uint32_t, 10000 &gt;',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],
   ['price_5ffield_3c_20std_3a_3auint64_5ft_2c_20100000000_20_3e',['price_field&lt; std::uint64_t, 100000000 &gt;',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],

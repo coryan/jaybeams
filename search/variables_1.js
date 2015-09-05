@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['b2tmpb_5f',['b2tmpb_',['../classjb_1_1fftw_1_1time__delay__estimator.html#ac587c2754b371df998538b20004a742e',1,'jb::fftw::time_delay_estimator']]],
   ['binning_5f',['binning_',['../classjb_1_1histogram.html#adadc231b469a58c61a3387ad954fee29',1,'jb::histogram']]],
   ['bins_5f',['bins_',['../classjb_1_1histogram.html#a78798797db9b1e0cf936a4b8e0091be1',1,'jb::histogram']]],
   ['breached_5flevel',['breached_level',['../structjb_1_1itch5_1_1mwcb__breach__message.html#aaafae9a1f322a642f2e94188200aae9d',1,'jb::itch5::mwcb_breach_message']]],

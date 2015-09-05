@@ -3,6 +3,7 @@ var searchData=
   ['canceled_5fshares',['canceled_shares',['../structjb_1_1itch5_1_1order__cancel__message.html#a2bbae989935989bfc3dd89c939f99bef',1,'jb::itch5::order_cancel_message']]],
   ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a3fa935cc03df91b9690a9651cee58c54',1,'worker_config']]],
   ['class_5fname',['class_name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a206024a1c4f2d90ee68e2e340048dac9',1,'jb::config_object::attribute_descriptor']]],
+  ['config_5f',['config_',['../classjb_1_1testing_1_1microbenchmark__base.html#aa44558a2036cfbbd30fc037718972bbd',1,'jb::testing::microbenchmark_base']]],
   ['container_5f',['container_',['../classjb_1_1config__attribute.html#a8e1ec2854f14470e3b47793bcde98321',1,'jb::config_attribute']]],
   ['container_5ftype',['container_type',['../classjb_1_1config__attribute.html#ab00f6d7946f33d3cebb88ff6d4293b7b',1,'jb::config_attribute']]],
   ['count_5f',['count_',['../classjb_1_1itch5_1_1seconds__field.html#a7dceda2a4557c3ef69d04a1d7449a906',1,'jb::itch5::seconds_field']]],
