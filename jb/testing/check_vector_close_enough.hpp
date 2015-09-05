@@ -30,7 +30,7 @@ void check_vector_close_enough(
     BOOST_CHECK_MESSAGE(
         close_enough(actual[i], expected[i], tol),
         "in item i=" << i << " difference higher than tolerance=" << tol
-        << ", actual[i]=" << actual[i])
+        << ", actual[i]=" << actual[i]
         << ", expected[i]=" << expected[i]);
     if (++count > max_differences) {
       return;

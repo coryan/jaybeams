@@ -68,14 +68,16 @@ bool close_enough(real actual[2], real expected[2], int tol = 1) {
           and close_enough(actual[0], expected[0], tol));
 }
 
-template<typename value_type>
-value_type format(value_type t) {
-  return t;
-}
-
+/// Wrap FFTW-style complex numbers in std::complex for iostreaming
 template<typename precision_t>
 std::complex<precision_t> format(precision_t v[2]) {
   return std::complex<precision_t>(v[0], v[1]);
+}
+
+/// Allow generic treatment of FFTW-style complex numbers and other types.
+template<typename value_type>
+value_type format(value_type t) {
+  return t;
 }
 
 #ifndef JB_TESTING_MAX_DIFFERENCES

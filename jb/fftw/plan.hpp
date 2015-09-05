@@ -72,48 +72,55 @@ class plan {
   plan& operator=(plan const&) = delete;
   //@}
 
+  /// Execute the plan for vectors
+  template<typename vector>
+  void execute(vector const& in, vector& out) {
+    if (in.size() != out.size()) {
+      throw std::invalid_argument("mismatched vector size in create_forward()");
+    }
+    execute_impl(fftw_cast(in), fftw_cast(out));
+  }
+
+  /// Create the plan for vectors
+  template<typename vector>
+  static plan create_forward(vector const& in, vector& out) {
+    if (in.size() != out.size()) {
+      throw std::invalid_argument("mismatched vector size in create_forward()");
+    }
+    return create_forward_impl(
+        in.size(), fftw_cast(in), fftw_cast(out));
+  }
+
+  /// Create the plan for vectors
+  template<typename vector>
+  static plan create_backward(vector const& in, vector& out) {
+    if (in.size() != out.size()) {
+      throw std::invalid_argument("mismatched vector size in create_forward()");
+    }
+    return create_backward_impl(
+        in.size(), fftw_cast(in), fftw_cast(out));
+  }
+
+ private:
   /// Execute the plan for arrays of fftw_complex numbers
-  void execute(
+  void execute_impl(
       fftw_complex_type const* in, fftw_complex_type* out) {
     traits::execute_plan(p_, in, out);
   }
 
   /// Create the plan for arrays for fftw_complex numbers
-  static plan create_forward(
+  static plan create_forward_impl(
       std::size_t nsamples, fftw_complex_type const* in,
       fftw_complex_type* out) {
     return plan(traits::create_forward_plan(nsamples, in, out));
   }
 
-  static plan create_backward(
+  static plan create_backward_impl(
       std::size_t nsamples, fftw_complex_type const* in,
       fftw_complex_type* out) {
     return plan(traits::create_backward_plan(nsamples, in, out));
   }
 
-  /// Execute the plan for arrays of fftw_complex numbers
-  void execute(
-      std_complex_type const* in, std_complex_type* out) {
-    execute(fftw_cast_array<precision_type>(in),
-            fftw_cast_array<precision_type>(out));
-  }
-
-  /// Create the plan for arrays for fftw_complex numbers
-  static plan create_forward(
-      std::size_t nsamples, std_complex_type const* in,
-      std_complex_type* out) {
-    return create_forward(
-        nsamples, fftw_cast_array<precision_type>(in),
-        fftw_cast_array<precision_type>(out));
-  }
-
-  static plan create_backward(
-      std::size_t nsamples, std_complex_type const* in,
-      std_complex_type* out) {
-    return create_backward(
-        nsamples, fftw_cast_array<precision_type>(in),
-        fftw_cast_array<precision_type>(out));
-  }
   
  private:
   plan(fftw_plan_type p)

@@ -27,7 +27,7 @@ void check_array_close_enough(
           close_enough(actual[i], expected[i], tol),
           "in item i=" << i << " difference higher than tolerance=" << tol
           << ", actual[i]=" << format(actual[i])
-          << ", expected[i]=" << format(expected[i]));
+          << ", expected[i]=" << format(expected[i]) );
     }
   }
   BOOST_CHECK_MESSAGE(count == 0, "found " << count << " differences");

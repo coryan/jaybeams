@@ -8,38 +8,34 @@ namespace fftw {
 
 template<typename F>
 typename traits<F>::fftw_complex_type*
-fftw_cast_array(typename traits<F>::std_complex_type* ptr) {
+fftw_cast_array(std::complex<F>* ptr) {
   return reinterpret_cast<typename traits<F>::fftw_complex_type*>(ptr);
 }
 
 template<typename F>
 typename traits<F>::fftw_complex_type const*
-fftw_cast_array(typename traits<F>::std_complex_type const* ptr) {
+fftw_cast_array(std::complex<F> const* ptr) {
   return reinterpret_cast<typename traits<F>::fftw_complex_type const*>(ptr);
 }
 
 template<typename F>
-typename traits<F>::precision_type*
-fftw_cast_array(typename traits<F>::precision_type* ptr) {
-  return reinterpret_cast<typename traits<F>::precision_type*>(ptr);
+F* fftw_cast_array(F* ptr) {
+  return ptr;
 }
 
 template<typename F>
-typename traits<F>::precision_type const*
-fftw_cast_array(typename traits<F>::precision_type const* ptr) {
-  return reinterpret_cast<typename traits<F>::precision_type const*>(ptr);
+F const* fftw_cast_array(F const* ptr) {
+  return ptr;
 }
 
 template<typename vector>
-auto fftw_cast(vector& in) -> decltype(
-    fftw_cast_array<vector::value_type>(&in[0])) {
-  return fftw_cast_array<vector::value_type>(&in[0]);
+auto fftw_cast(vector& in) -> decltype(fftw_cast_array(&in[0])) {
+  return fftw_cast_array(&in[0]);
 }
 
 template<typename vector>
-auto fftw_cast(vector const& in) -> decltype(
-    fftw_cast_array<vector::value_type>(&in[0])) {
-  return fftw_cast_array<vector::value_type>(&in[0]);
+auto fftw_cast(vector const& in) -> decltype(fftw_cast_array(&in[0])) {
+  return fftw_cast_array(&in[0]);
 }
 
 } // namespace fftw
