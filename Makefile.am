@@ -138,6 +138,8 @@ jb_ut_itch5_libs = \
 
 jb_ut_fftw_libs = \
   $(FFTW3_LIBS) \
+  $(FFTW3F_LIBS) \
+  $(FFTW3L_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   $(jb_ut_libs)

@@ -4,14 +4,14 @@
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
-/**
- * @test Verify that we can compile jb::fftw::traints<double>
- */
-BOOST_AUTO_TEST_CASE(fftw_traits_double) {
+namespace {
+
+template<typename precision_t>
+void test_fftw_traits() {
   int nsamples = 32768;
   int tol = nsamples;
-  typedef jb::fftw::traits<double> tested;
-  typedef tested::fftw_complex_type fftw_complex_type;
+  typedef jb::fftw::traits<precision_t> tested;
+  typedef typename tested::fftw_complex_type fftw_complex_type;
 
   fftw_complex_type* in = static_cast<fftw_complex_type*>(
       tested::allocate(nsamples * sizeof(fftw_complex_type)));
@@ -27,9 +27,10 @@ BOOST_AUTO_TEST_CASE(fftw_traits_double) {
     in[i + h][0] = h/4.0 - i;
     in[i + h][1] = 0;
   }
-  
-  tested::fftw_plan_type dir = tested::create_forward_plan(nsamples, in, tmp);
-  tested::fftw_plan_type inv = tested::create_backward_plan(nsamples, tmp, out);
+
+  typedef typename tested::fftw_plan_type plan_type;
+  plan_type dir = tested::create_forward_plan(nsamples, in, tmp);
+  plan_type inv = tested::create_backward_plan(nsamples, tmp, out);
 
   tested::execute_plan(dir, in, tmp);
   tested::execute_plan(inv, tmp, out);
@@ -44,4 +45,27 @@ BOOST_AUTO_TEST_CASE(fftw_traits_double) {
   tested::release(out);
   tested::release(tmp);
   tested::release(in);
+}
+
+} // anonymous namespace
+
+/**
+ * @test Verify that we can compile jb::fftw::traits<double>
+ */
+BOOST_AUTO_TEST_CASE(fftw_traits_double) {
+  test_fftw_traits<double>();
+}
+
+/**
+ * @test Verify that we can compile jb::fftw::traits<float>
+ */
+BOOST_AUTO_TEST_CASE(fftw_traits_float) {
+  test_fftw_traits<float>();
+}
+
+/**
+ * @test Verify that we can compile jb::fftw::traits<long double>
+ */
+BOOST_AUTO_TEST_CASE(fftw_traits_long_double) {
+  test_fftw_traits<long double>();
 }
