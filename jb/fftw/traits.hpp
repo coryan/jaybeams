@@ -9,6 +9,8 @@
 namespace jb {
 namespace fftw {
 
+int const default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;
+
 /**
  * Wrap fftw_* types and operations to treat floating point values generically.
  * 
@@ -56,27 +58,31 @@ struct traits<double> {
   }
 
   static fftw_plan_type create_forward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftw_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_FORWARD, FFTW_ESTIMATE);
+        FFTW_FORWARD, flags);
   }
   static fftw_plan_type create_backward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftw_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_BACKWARD, FFTW_ESTIMATE);
+        FFTW_BACKWARD, flags);
   }
 
   static fftw_plan_type create_plan(
-      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+      std::size_t size, precision_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftw_plan_dft_r2c_1d(
-        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<precision_type*>(in), out, flags);
   }
   static fftw_plan_type create_plan(
-      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+      std::size_t size, fftw_complex_type const* in, precision_type* out,
+      int flags = default_flags) {
     return ::fftw_plan_dft_c2r_1d(
-        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<fftw_complex_type*>(in), out, flags);
   }
 
   static void destroy_plan(fftw_plan_type p) {
@@ -118,27 +124,31 @@ struct traits<float> {
   }
 
   static fftw_plan_type create_forward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwf_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_FORWARD, FFTW_ESTIMATE);
+        FFTW_FORWARD, flags);
   }
   static fftw_plan_type create_backward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwf_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_BACKWARD, FFTW_ESTIMATE);
+        FFTW_BACKWARD, flags);
   }
 
   static fftw_plan_type create_plan(
-      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+      std::size_t size, precision_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwf_plan_dft_r2c_1d(
-        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<precision_type*>(in), out, flags);
   }
   static fftw_plan_type create_plan(
-      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+      std::size_t size, fftw_complex_type const* in, precision_type* out,
+      int flags = default_flags) {
     return ::fftwf_plan_dft_c2r_1d(
-        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<fftw_complex_type*>(in), out, flags);
   }
 
   static void destroy_plan(fftw_plan_type p) {
@@ -181,27 +191,31 @@ struct traits<long double> {
   }
 
   static fftw_plan_type create_forward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwl_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_FORWARD, FFTW_ESTIMATE);
+        FFTW_FORWARD, flags);
   }
   static fftw_plan_type create_backward_plan(
-      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out) {
+      std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwl_plan_dft_1d(
         size, const_cast<fftw_complex_type*>(in), out,
-        FFTW_BACKWARD, FFTW_ESTIMATE);
+        FFTW_BACKWARD, flags);
   }
 
   static fftw_plan_type create_plan(
-      std::size_t size, precision_type const* in, fftw_complex_type* out) {
+      std::size_t size, precision_type const* in, fftw_complex_type* out,
+      int flags = default_flags) {
     return ::fftwl_plan_dft_r2c_1d(
-        size, const_cast<precision_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<precision_type*>(in), out, flags);
   }
   static fftw_plan_type create_plan(
-      std::size_t size, fftw_complex_type const* in, precision_type* out) {
+      std::size_t size, fftw_complex_type const* in, precision_type* out,
+      int flags = default_flags) {
     return ::fftwl_plan_dft_c2r_1d(
-        size, const_cast<fftw_complex_type*>(in), out, FFTW_ESTIMATE);
+        size, const_cast<fftw_complex_type*>(in), out, flags);
   }
 
   static void destroy_plan(fftw_plan_type p) {
