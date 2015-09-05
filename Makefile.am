@@ -29,6 +29,7 @@ jb_unit_tests = \
   jb/ut_timeseries
 
 jb_fftw_unit_tests = \
+  jb/fftw/ut_allocator \
   jb/fftw/ut_plan \
   jb/fftw/ut_traits
 
@@ -295,6 +296,7 @@ jb_libitch5_a_LIBADD =
 jb_libjb_fftw_adir = $(includedir)
 jb_libjb_fftw_a_SOURCES =
 jb_libjb_fftw_a_HEADERS = \
+  jb/fftw/allocator.hpp \
   jb/fftw/plan.hpp \
   jb/fftw/traits.hpp
 
@@ -386,6 +388,10 @@ jb_ut_timeseries_LDADD = $(jb_ut_libs)
 ################################################################
 # fftw unit tests
 ################################################################
+
+jb_fftw_ut_allocator_SOURCES = jb/fftw/ut_allocator.cpp
+jb_fftw_ut_allocator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_allocator
+jb_fftw_ut_allocator_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_plan_SOURCES = jb/fftw/ut_plan.cpp
 jb_fftw_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan

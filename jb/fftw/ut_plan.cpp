@@ -86,7 +86,7 @@ void test_plan_errors() {
   BOOST_CHECK_THROW(dir.execute(in, err), std::exception);
 }
 
-} // namespace
+} // anonymous namespace
 
 /**
  * @test Verify that we can create and operate a jb::fftw::plan<double>
