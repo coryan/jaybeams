@@ -122,6 +122,7 @@ class timeseries : private std::vector<sample_t> {
   using container::operator[];
   using container::empty;
   using container::size;
+  using container::resize;
   using container::reserve;
   using container::capacity;
 

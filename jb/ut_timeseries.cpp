@@ -1,6 +1,7 @@
-#include <jb/testing/create_triangle_timeseries.hpp>
+#include <jb/timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <chrono>
 
 /**
  * @test Verify jb::timeseries can be used as expected.

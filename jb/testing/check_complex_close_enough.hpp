@@ -68,6 +68,23 @@ bool close_enough(real actual[2], real expected[2], int tol = 1) {
           and close_enough(actual[0], expected[0], tol));
 }
 
+/**
+ * Verify that a floating point value is "close enough" to 0.
+ */
+template<typename floating>
+void check_small(floating t, double small) {
+  BOOST_CHECK_SMALL(t, floating(small));
+}
+
+/**
+ * Verify that a complex number is "close enough" to 0.
+ */
+template<typename real>
+void check_small(std::complex<real> t, double small) {
+  BOOST_CHECK_SMALL(t.real(), real(small));
+  BOOST_CHECK_SMALL(t.imag(), real(small));
+}
+
 /// Wrap FFTW-style complex numbers in std::complex for iostreaming
 template<typename precision_t>
 std::complex<precision_t> format(precision_t v[2]) {
