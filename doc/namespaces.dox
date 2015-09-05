@@ -5,6 +5,12 @@
  */
 
 /**
+ * @namespace jb::fftw
+ *
+ * Wrappers for the FFTW3 library.
+ */
+
+/**
  * @namespace jb::itch5
  *
  * Contains classes and functions to parse NASDAQ ITCH-5.0 messages,
@@ -34,6 +40,12 @@
  * @namespace jb::examples::defaults
  *
  * Default values for configuration parameters in the examples.
+ */
+
+/**
+ * @namespace jb::testing
+ *
+ * Helper functions and classes to simplify unit tests.        
  */
 
 /**
