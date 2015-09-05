@@ -101,6 +101,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">jb::testing Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Helper functions and classes to simplify unit tests.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -191,7 +194,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af1eba65c6a944932d1447f72b3c80bf1"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#af1eba65c6a944932d1447f72b3c80bf1">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html">microbenchmark_base::summary</a> const &amp;x)</td></tr>
 <tr class="separator:af1eba65c6a944932d1447f72b3c80bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Helper functions and classes to simplify unit tests. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ace3d428f59f80e51f3a5605214013013"></a>
 <div class="memitem">
 <div class="memproto">
@@ -394,8 +399,8 @@ template&lt;typename real &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">a</td><td>the first number to compare </td></tr>
-    <tr><td class="paramname">b</td><td>the second number to compare </td></tr>
+    <tr><td class="paramname">actual</td><td>the first number to compare </td></tr>
+    <tr><td class="paramname">expected</td><td>the second number to compare </td></tr>
     <tr><td class="paramname">tol</td><td>expressed in "number of epsilons", i.e., the function will tolerate errors up to tol * std::numeric_limit&lt;real&gt;::epsilon() </td></tr>
   </table>
   </dd>
