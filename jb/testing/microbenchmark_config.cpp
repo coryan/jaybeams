@@ -70,8 +70,15 @@ microbenchmark_config::microbenchmark_config()
         desc("verbose").help(
             "If true, dump the results of every test to stdout for"
             " statistical analysis."),
-        this, defaults::verbose) {
-}
+        this, defaults::verbose)
+    , test_case(
+        desc("test-case").help(
+            "Some microbenchmarks test completely different configurations"
+            ", settings, or even different algorithms for the same problem."
+            "  Use this option to configure such benchmarks"
+            ", most microbenchmarks will ignore it."),
+        this)
+{}
 
 } // namespace testing
 } // namespace jb

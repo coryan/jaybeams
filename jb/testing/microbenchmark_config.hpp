@@ -2,6 +2,7 @@
 #define jb_testing_microbenchmark_config_hpp
 
 #include <jb/config_object.hpp>
+#include <string>
 
 namespace jb {
 namespace testing {
@@ -23,6 +24,7 @@ class microbenchmark_config : public jb::config_object {
   jb::config_attribute<microbenchmark_config,int> iterations;
   jb::config_attribute<microbenchmark_config,int> size;
   jb::config_attribute<microbenchmark_config,bool> verbose;
+  jb::config_attribute<microbenchmark_config,std::string> test_case;
 };
 
 } // namespace testing

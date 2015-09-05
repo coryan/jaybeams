@@ -10,15 +10,6 @@
  */
 namespace {
 
-class config : public jb::config_object {
- public:
-  config();
-  config_object_constructors(config);
-
-  jb::config_attribute<config,jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config,std::string> clock_name;
-};
-
 /**
  * Base class for the std::chrono clock wrapper.
  */
@@ -48,17 +39,18 @@ typedef jb::testing::microbenchmark<fixture> benchmark;
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.process_cmdline(argc, argv);
+  jb::testing::microbenchmark_config cfg;
+  cfg.test_case("std::chrono::steady_clock")
+      .process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
 
-  benchmark bm(cfg.benchmark());
-  auto r = bm.run(cfg.clock_name());
+  benchmark bm(cfg);
+  auto r = bm.run(cfg.test_case());
 
   benchmark::summary s(r);
-  std::cerr << cfg.clock_name() << " summary " << s << std::endl;
-  if (cfg.benchmark().verbose()) {
+  std::cerr << cfg.test_case() << " summary " << s << std::endl;
+  if (cfg.verbose()) {
     bm.write_results(std::cout, r);
   }
 
@@ -76,32 +68,19 @@ int main(int argc, char* argv[]) try {
 
 
 namespace {
+/**
+ * @namespace defaults
+ *
+ * Define defaults for program parameters.
+ */
 namespace defaults {
-
-#ifndef JB_DEFAULTS_clock_name
-#define JB_DEFAULTS_clock_name "std::chrono::steady_clock"
-#endif // JB_DEFAULTS_clock_name
 
 #ifndef JB_DEFAULTS_clock_repetitions
 #define JB_DEFAULTS_clock_repetitions 1000
 #endif // JB_DEFAULTS_clock_repetitions
 
-std::string clock_name = JB_DEFAULTS_clock_name;
 int clock_repetitions = JB_DEFAULTS_clock_repetitions;
 } // namespace defaults
-
-config::config()
-    : benchmark(
-        desc("benchmark")
-        .help("Benchmark Parameters"), this)
-    , clock_name(
-        desc("clock-name")
-        .help("The name of the clock, must be one of the following options"
-              ": std::chrono::steady_clock"
-              ", std::chrono::high_resolution_clock"
-              ", or std::chrono::system_clock."),
-        this, defaults::clock_name) {
-}
 
 /**
  * Wrap a std::chrono class in a polymorphic class.
@@ -162,8 +141,13 @@ fixture::fixture(int size, std::string const& clock_name) {
     wrapped_clock_.reset(new wrapped_rdtscp(size));
   } else {
     std::ostringstream os;
-    os << "unknown value for --clock-name, was=" << clock_name;
-    throw std::invalid_argument(os.str());
+    os << "unknown value for --clock-name (" << clock_name << ")\n";
+    os << "value must be one of"
+       << ": std::chrono::steady_clock"
+       << ", std::chrono::high_resolution_clock"
+       << ", std::chrono::system_clock"
+       << ", rdtscp";
+    throw jb::usage(os.str(), 1);
   }
 }
 

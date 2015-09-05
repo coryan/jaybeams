@@ -21,15 +21,6 @@ std::chrono::microseconds const expected_delay(1250);
 std::chrono::microseconds const sampling_period(16);
 int nsamples = 32768 / 16;
 
-class config : public jb::config_object {
- public:
-  config();
-  config_object_constructors(config);
-
-  jb::config_attribute<config,jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config,std::string> test_case;
-};
-
 template<typename timeseries_type>
 class fixture {
  public:
@@ -56,14 +47,14 @@ class fixture {
 };
 
 template<typename vector_type>
-void benchmark_test_case(config const& cfg) {
+void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
   typedef jb::testing::microbenchmark<fixture<vector_type>> benchmark;
-  benchmark bm(cfg.benchmark());
+  benchmark bm(cfg);
 
   auto r = bm.run();
   typename benchmark::summary s(r);
   std::cerr << cfg.test_case() << " summary " << s << std::endl;
-  if (cfg.benchmark().verbose()) {
+  if (cfg.verbose()) {
     bm.write_results(std::cout, r);
   }
 }
@@ -71,8 +62,8 @@ void benchmark_test_case(config const& cfg) {
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.process_cmdline(argc, argv);
+  jb::testing::microbenchmark_config cfg;
+  cfg.test_case("float:aligned").process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
 
@@ -93,14 +84,25 @@ int main(int argc, char* argv[]) try {
   } else if (cfg.test_case() == "complex:double:unaligned") {
     benchmark_test_case<std::vector<std::complex<double>>>(cfg);
   } else {
-    std::cerr << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
-    return 1;
+    std::ostringstream os;
+    os << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
+    os << " --test-case must be one of"
+       << ": float:aligned"
+       << ", double:aligned"
+       << ", float:unaligned"
+       << ", double:aligned"
+       << ", complex:float:aligned"
+       << ", complex:double:aligned"
+       << ", complex:float:unaligned"
+       << ", complex:double:unaligned"
+       << std::endl;
+    throw jb::usage(os.str(), 1);
   }
 
   return 0;
 } catch(jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
-  return 1;
+  return ex.exit_status();
 } catch(std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
@@ -108,34 +110,3 @@ int main(int argc, char* argv[]) try {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-
-namespace {
-namespace defaults {
-
-#ifndef JB_DEFAULTS_test_case
-#define JB_DEFAULTS_test_case "float:aligned"
-#endif // JB_DEFAULTS_test_case
-
-std::string test_case = JB_DEFAULTS_test_case;
-} // namespace defaults
-
-config::config()
-    : benchmark(
-        desc("benchmark")
-        .help("Benchmark Parameters"), this)
-    , test_case(
-        desc("test-case")
-        .help("The name of the test case, must be one of the following options"
-              ": float:aligned"
-              ", double:aligned"
-              ", float:unaligned"
-              ", double:aligned"
-              ", complex:float:aligned"
-              ", complex:double:aligned"
-              ", complex:float:unaligned"
-              ", complex:double:unaligned"
-              ),
-        this, defaults::test_case) {
-}
-
-} // anonymous namespace
