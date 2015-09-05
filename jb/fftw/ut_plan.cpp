@@ -31,7 +31,7 @@ void test_plan_complex2complex() {
 
   dir.execute(in, tmp);
   inv.execute(tmp, out);
-  for (std::size_t i = 0; i != nsamples; ++i) {
+  for (std::size_t i = 0; i != std::size_t(nsamples); ++i) {
     out[i] /= nsamples;
   }
   jb::testing::check_vector_close_enough(out, in, tol);
@@ -61,10 +61,29 @@ void test_plan_real2complex() {
 
   dir.execute(in, tmp);
   inv.execute(tmp, out);
-  for (std::size_t i = 0; i != nsamples; ++i) {
+  for (std::size_t i = 0; i != std::size_t(nsamples); ++i) {
     out[i] /= nsamples;
   }
   jb::testing::check_vector_close_enough(out, in, tol);
+}
+
+template<typename precision_t>
+void test_plan_errors() {
+  int nsamples = 1<<15;
+
+  typedef jb::fftw::plan<precision_t> tested;
+  typedef typename tested::precision_type precision_type;
+  typedef std::complex<precision_type> complex;
+
+  std::vector<complex> in(nsamples);
+  std::vector<complex> tmp(nsamples);
+  std::vector<complex> err(nsamples / 2);
+
+  BOOST_CHECK_THROW(tested::create_forward(in, err), std::exception);
+  BOOST_CHECK_THROW(tested::create_backward(in, err), std::exception);
+  
+  tested dir = tested::create_forward(in, tmp);
+  BOOST_CHECK_THROW(dir.execute(in, err), std::exception);
 }
 
 } // namespace
@@ -84,6 +103,13 @@ BOOST_AUTO_TEST_CASE(fftw_plan_double) {
 }
 
 /**
+ * @test Verify jb::fftw::plan<double> detects obvious errors
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_error_double) {
+  test_plan_errors<double>();
+}
+
+/**
  * @test Verify that we can create and operate a jb::fftw::plan<float>
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_complex_float) {
@@ -98,6 +124,13 @@ BOOST_AUTO_TEST_CASE(fftw_plan_float) {
 }
 
 /**
+ * @test Verify jb::fftw::plan<float> detects obvious errors
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_error_float) {
+  test_plan_errors<float>();
+}
+
+/**
  * @test Verify that we can create and operate a jb::fftw::plan<long double>
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_complex_long_double) {
@@ -109,4 +142,11 @@ BOOST_AUTO_TEST_CASE(fftw_plan_complex_long_double) {
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_long_double) {
   test_plan_real2complex<long double>();
+}
+
+/**
+ * @test Verify jb::fftw::plan<long double> detects obvious errors
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_error_long_double) {
+  test_plan_errors<long double>();
 }

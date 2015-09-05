@@ -34,7 +34,7 @@ void test_fftw_traits() {
 
   tested::execute_plan(dir, in, tmp);
   tested::execute_plan(inv, tmp, out);
-  for (std::size_t i = 0; i != nsamples; ++i) {
+  for (std::size_t i = 0; i != std::size_t(nsamples); ++i) {
     out[i][0] /= nsamples;
     out[i][1] /= nsamples;
   }
