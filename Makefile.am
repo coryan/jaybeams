@@ -78,6 +78,7 @@ unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
   $(jb_fftw_unit_tests) $(jb_itch5_unit_tests)
 
 benchmarks = \
+  jb/fftw/bm_time_delay_estimator \
   jb/bm_clocks
 
 examples = \
@@ -403,6 +404,20 @@ jb_fftw_ut_time_delay_estimator_LDADD = $(jb_ut_fftw_libs)
 jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
 jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits
 jb_fftw_ut_traits_LDADD = $(jb_ut_fftw_libs)
+
+################################################################
+# fftw benchmarks
+################################################################
+
+jb_fftw_bm_time_delay_estimator_SOURCES = jb/fftw/bm_time_delay_estimator.cpp
+jb_fftw_bm_time_delay_estimator_CPPFLAGS =
+jb_fftw_bm_time_delay_estimator_LDADD = \
+  $(FFTW3_LIBS) \
+  $(FFTW3F_LIBS) \
+  $(FFTW3L_LIBS) \
+  jb/libjb_testing.a \
+  jb/libjb_fftw.a \
+  jb/libjb.a
 
 ################################################################
 # itch5 unit tests

@@ -44,7 +44,15 @@ class allocator {
   void deallocate(pointer p, size_type count) {
     fftw_free(static_cast<void*>(p));
   }
+
+  bool operator==(allocator const& rhs) const {
+    return true;
+  }
+  bool operator!=(allocator const& rhs) const {
+    return !(*this == rhs);
+  }
 };
+
 
 } // namespace fftw
 } // namespace jb

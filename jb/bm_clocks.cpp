@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) try {
   config cfg;
   cfg.process_cmdline(argc, argv);
 
-  std::cout << "Configuration for test\n" << cfg;
+  std::cout << "Configuration for test\n" << cfg << std::endl;
 
   benchmark bm(cfg.benchmark());
   auto r = bm.run(cfg.clock_name());
