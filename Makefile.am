@@ -192,7 +192,9 @@ jb_libjb_testing_a_SOURCES = \
   jb/testing/microbenchmark_config.cpp
 
 jb_libjb_testing_a_HEADERS = \
-  jb/testing/check_equal_vector.hpp \
+  jb/testing/check_array_close_enough.hpp \
+  jb/testing/check_complex_close_enough.hpp \
+  jb/testing/check_vector_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \

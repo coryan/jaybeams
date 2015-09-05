@@ -1,5 +1,5 @@
-#ifndef jb_testing_check_equal_vector_hpp
-#define jb_testing_check_equal_vector_hpp
+#ifndef jb_testing_check_vector_close_enough_hpp
+#define jb_testing_check_vector_close_enough_hpp
 
 #include <jb/testing/check_complex_close_enough.hpp>
 
@@ -41,5 +41,4 @@ void check_vector_close_enough(
 } // namespace testing
 } // namespace jb
 
-
-#endif // jb_testing_check_equal_vector_hpp
+#endif // jb_testing_check_vector_close_enough_hpp
