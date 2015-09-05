@@ -30,7 +30,6 @@ struct traits<double> {
   typedef double precision_type;
   typedef ::std::complex<double> std_complex_type;
   typedef ::fftw_complex fftw_complex_type;
-
   typedef ::fftw_plan fftw_plan_type;
 
   static void* allocate(std::size_t n) {
@@ -130,7 +129,7 @@ struct traits<float> {
 template<>
 struct traits<long double> {
   typedef long double precision_type;
-  typedef std::complex<long double> std_complex;
+  typedef ::std::complex<double> std_complex_type;
   typedef ::fftwl_complex fftw_complex_type;
   typedef ::fftwl_plan fftw_plan_type;
 

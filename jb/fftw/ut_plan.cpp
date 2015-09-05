@@ -5,15 +5,15 @@
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
-/**
- * @test Verify that we can create fftw_plan.
- */
-BOOST_AUTO_TEST_CASE(fftw_plan_complex_double) {
+namespace {
+
+template<typename precision_t>
+void test_plan_complex2complex() {
   int nsamples = 1<<15;
   int tol = nsamples;
 
-  typedef jb::fftw::plan<double> tested;
-  typedef tested::precision_type precision_type;
+  typedef jb::fftw::plan<precision_t> tested;
+  typedef typename tested::precision_type precision_type;
   typedef std::complex<precision_type> complex;
 
   std::vector<complex> in(nsamples);
@@ -35,4 +35,27 @@ BOOST_AUTO_TEST_CASE(fftw_plan_complex_double) {
     out[i] /= nsamples;
   }
   jb::testing::check_vector_close_enough(out, in, tol);
+}
+
+} // namespace
+
+/**
+ * @test Verify that we can create and operate a jb::fftw::plan<double>
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_complex_double) {
+  test_plan_complex2complex<double>();
+}
+
+/**
+ * @test Verify that we can create and operate a jb::fftw::plan<float>
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_complex_float) {
+  test_plan_complex2complex<float>();
+}
+
+/**
+ * @test Verify that we can create and operate a jb::fftw::plan<long double>
+ */
+BOOST_AUTO_TEST_CASE(fftw_plan_complex_long_double) {
+  test_plan_complex2complex<long double>();
 }
