@@ -14,12 +14,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_simple) {
   typedef jb::fftw::aligned_vector<float> timeseries_type;
   typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
 
-  timeseries_type a;
+  timeseries_type a(nsamples);
+  timeseries_type b(nsamples);
+  tested estimator(a, b);
+
   jb::testing::create_square_timeseries(nsamples, a);
-  timeseries_type b = jb::testing::delay_timeseries_periodic(
+  b = jb::testing::delay_timeseries_periodic(
       a, std::chrono::microseconds(delay), std::chrono::microseconds(1));
 
-  tested estimator(a, b);
   auto e = estimator.estimate_delay(a, b);
   BOOST_CHECK_EQUAL(e.first, true);
   BOOST_CHECK_CLOSE(e.second, double(delay), 0.01);

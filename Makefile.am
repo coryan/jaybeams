@@ -192,6 +192,7 @@ jb_libjb_a_LIBADD =
 
 jb_libjb_testing_adir = $(includedir)
 jb_libjb_testing_a_SOURCES = \
+  jb/testing/compile_info.cpp \
   jb/testing/microbenchmark_base.cpp \
   jb/testing/microbenchmark_config.cpp
 
@@ -205,6 +206,26 @@ jb_libjb_testing_a_HEADERS = \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp
+
+jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
+	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::uname_a[] = R"""(' >>$@; \
+	uname -a >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::compiler[] = R"""(' >>$@; \
+	$(CXX) --version >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::compiler_flags[] = R"""(' >>$@; \
+	echo $(CXXFLAGS) >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
+	$(CXX) -Wl,--version >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@
 
 ################################################################
 # jb/libitch5_testing.a
