@@ -34,6 +34,7 @@ var searchData=
   ['config_5fattribute_3c_20jb_3a_3aoffline_5ffeed_5fstatistics_3a_3aconfig_2c_20std_3a_3aint64_5ft_20_3e',['config_attribute&lt; jb::offline_feed_statistics::config, std::int64_t &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20jb_3a_3atesting_3a_3amicrobenchmark_5fconfig_2c_20bool_20_3e',['config_attribute&lt; jb::testing::microbenchmark_config, bool &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20jb_3a_3atesting_3a_3amicrobenchmark_5fconfig_2c_20int_20_3e',['config_attribute&lt; jb::testing::microbenchmark_config, int &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
+  ['config_5fattribute_3c_20jb_3a_3atesting_3a_3amicrobenchmark_5fconfig_2c_20std_3a_3astring_20_3e',['config_attribute&lt; jb::testing::microbenchmark_config, std::string &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20program_5fconfig_2c_20std_3a_3avector_3c_20std_3a_3astring_20_3e_20_3e',['config_attribute&lt; program_config, std::vector&lt; std::string &gt; &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20program_5fconfig_2c_20std_3a_3avector_3c_20worker_5fconfig_20_3e_20_3e',['config_attribute&lt; program_config, std::vector&lt; worker_config &gt; &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],
   ['config_5fattribute_3c_20thread_5fconfig_2c_20int_20_3e',['config_attribute&lt; thread_config, int &gt;',['../classjb_1_1config__attribute.html',1,'jb']]],

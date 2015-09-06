@@ -96,7 +96,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">jb::fftw Namespace Reference</div>  </div>
 </div><!--header-->
@@ -112,6 +113,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap FFTW3 plan objects to automatically destroy them.  <a href="classjb_1_1fftw_1_1plan.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1always__aligned.html">always_aligned</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if a timeseries tye guarantees alignment.  <a href="structjb_1_1fftw_1_1always__aligned.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.html">always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">time_delay_estimator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple time delay estimator based on cross-correlation.  <a href="classjb_1_1fftw_1_1time__delay__estimator.html#details">More...</a><br/></td></tr>
@@ -157,6 +163,11 @@ const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" hr
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplParams" colspan="2">template&lt;typename vector &gt; </td></tr>
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a8d629f067398c772553c9ae598afb1e2">fftw_cast</a> (vector const &amp;in) -&gt; decltype(<a class="el" href="namespacejb_1_1fftw.html#a384ec2ebb7c26834a165159cc6eda41a">fftw_cast_array</a>(&amp;in[0]))</td></tr>
 <tr class="separator:a8d629f067398c772553c9ae598afb1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a217eee35ab00a78b34c3e693e6be6f50"><td class="memItemLeft" align="right" valign="top">int const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a> = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED</td></tr>
+<tr class="separator:a217eee35ab00a78b34c3e693e6be6f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrappers for the FFTW3 library. </p>
@@ -227,7 +238,7 @@ template&lt;typename vector &gt; </div>
 
 <p>References <a class="el" href="cast_8hpp_source.html#l00011">fftw_cast_array()</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00095">jb::fftw::plan&lt; precision_type &gt;::create_backward()</a>, <a class="el" href="plan_8hpp_source.html#l00086">jb::fftw::plan&lt; precision_type &gt;::create_forward()</a>, and <a class="el" href="plan_8hpp_source.html#l00077">jb::fftw::plan&lt; precision_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00098">jb::fftw::plan&lt; precision_type &gt;::create_backward()</a>, <a class="el" href="plan_8hpp_source.html#l00088">jb::fftw::plan&lt; precision_type &gt;::create_forward()</a>, and <a class="el" href="plan_8hpp_source.html#l00079">jb::fftw::plan&lt; precision_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
@@ -332,6 +343,21 @@ template&lt;typename F &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="cast_8hpp_source.html#l00027">27</a> of file <a class="el" href="cast_8hpp_source.html">cast.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="a217eee35ab00a78b34c3e693e6be6f50"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int const jb::fftw::default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00012">12</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>

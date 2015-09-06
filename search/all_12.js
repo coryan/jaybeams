@@ -2,6 +2,7 @@ var searchData=
 [
   ['t',['t',['../structjb_1_1as__hhmmssu.html#a5c1270ca61eaae5e3922783317421354',1,'jb::as_hhmmssu::t()'],['../structjb_1_1as__hhmmss.html#aeb5eb8cd8738bea0a54f880d99ef909c',1,'jb::as_hhmmss::t()'],['../structjb_1_1as__hh__mm__ss__u.html#af577cc417aa5c2a9c49cc100f065e643',1,'jb::as_hh_mm_ss_u::t()']]],
   ['test_20list',['Test List',['../test.html',1,'']]],
+  ['test_5fcase',['test_case',['../classjb_1_1testing_1_1microbenchmark__config.html#afd120a6def4a99749ee6b4cf03074db6',1,'jb::testing::microbenchmark_config']]],
   ['testing_5fdata_2ecpp',['testing_data.cpp',['../testing__data_8cpp.html',1,'']]],
   ['testing_5fdata_2ehpp',['testing_data.hpp',['../testing__data_8hpp.html',1,'']]],
   ['theoretical_5fmax',['theoretical_max',['../classjb_1_1explicit__cuts__binning.html#a43bbf463ea0eb02cec993cd27f29ee64',1,'jb::explicit_cuts_binning::theoretical_max()'],['../classjb_1_1integer__range__binning.html#aa6d619368828c89d47394c040db806b7',1,'jb::integer_range_binning::theoretical_max()'],['../classjb_1_1binning__strategy__concept.html#a6617790c0477f221e065f33f6872218f',1,'jb::binning_strategy_concept::theoretical_max()']]],

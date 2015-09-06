@@ -37,6 +37,7 @@ var searchData=
   ['decoder_3c_20validate_2c_20std_3a_3auint8_5ft_20_3e',['decoder&lt; validate, std::uint8_t &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01std_1_1uint8__t_01_4.html',1,'jb::itch5']]],
   ['decoder_3c_20validate_2c_20system_5fevent_5fmessage_20_3e',['decoder&lt; validate, system_event_message &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01system__event__message_01_4.html',1,'jb::itch5']]],
   ['decoder_3c_20validate_2c_20timestamp_20_3e',['decoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
+  ['default_5fflags',['default_flags',['../namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50',1,'jb::fftw']]],
   ['default_5fgetenv',['default_getenv',['../structjb_1_1default__getenv.html',1,'jb']]],
   ['default_5fvalidator',['default_validator',['../structjb_1_1default__validator.html',1,'jb']]],
   ['defaults',['defaults',['../namespacedefaults.html',1,'']]],

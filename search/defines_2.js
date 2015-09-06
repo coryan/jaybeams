@@ -2,13 +2,11 @@ var searchData=
 [
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
-  ['jb_5fdefaults_5fclock_5fname',['JB_DEFAULTS_clock_name',['../bm__clocks_8cpp.html#a1d482abf4e41938dc08aa070dfcfde57',1,'bm_clocks.cpp']]],
   ['jb_5fdefaults_5fclock_5frepetitions',['JB_DEFAULTS_clock_repetitions',['../bm__clocks_8cpp.html#a7245ccbe1e373f0fbef94f00c691e875',1,'bm_clocks.cpp']]],
   ['jb_5fdefaults_5fmicrobenchmark_5fiterations',['JB_DEFAULTS_microbenchmark_iterations',['../microbenchmark__config_8cpp.html#a904d9e9064083ecd77457fd134d22eb4',1,'microbenchmark_config.cpp']]],
   ['jb_5fdefaults_5fmicrobenchmark_5fsize',['JB_DEFAULTS_microbenchmark_size',['../microbenchmark__config_8cpp.html#a082e633def5cbfd84e1dc5eab70326de',1,'microbenchmark_config.cpp']]],
   ['jb_5fdefaults_5fmicrobenchmark_5fverbose',['JB_DEFAULTS_microbenchmark_verbose',['../microbenchmark__config_8cpp.html#a2f2535ae27f433e8afaa113d42a71c22',1,'microbenchmark_config.cpp']]],
   ['jb_5fdefaults_5fmicrobenchmark_5fwarmup_5fiterations',['JB_DEFAULTS_microbenchmark_warmup_iterations',['../microbenchmark__config_8cpp.html#afe41fbc54d6f32ec0a4e86d11ca22bd1',1,'microbenchmark_config.cpp']]],
-  ['jb_5fdefaults_5ftest_5fcase',['JB_DEFAULTS_test_case',['../bm__time__delay__estimator_8cpp.html#a070182aa832b1851e771dbe4f87c5b30',1,'bm_time_delay_estimator.cpp']]],
   ['jb_5fitch5_5ftest_5fheader',['JB_ITCH5_TEST_HEADER',['../testing__data_8cpp.html#a844f8859753e183f9639fcfc34e60d48',1,'testing_data.cpp']]],
   ['jb_5flog',['JB_LOG',['../log_8hpp.html#a69e7901a14a27585e998359dd544818e',1,'log.hpp']]],
   ['jb_5flog_5fdefaults_5fenable_5fconsole_5flogging',['JB_LOG_DEFAULTS_enable_console_logging',['../log_8cpp.html#a9692c4872613214f4a83214ff3b99aca',1,'log.cpp']]],

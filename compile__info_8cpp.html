@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>JayBeams: jb/fftw/ut_traits.cpp File Reference</title>
+<title>JayBeams: jb/testing/compile_info.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,90 +89,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d516de0236c3efdac4df1ada1be38080.html">jb</a></li><li class="navelem"><a class="el" href="dir_943f1b78df17416cb915e3c4b0afa101.html">fftw</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d516de0236c3efdac4df1ada1be38080.html">jb</a></li><li class="navelem"><a class="el" href="dir_628811f2f9787230436964515e218c31.html">testing</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">ut_traits.cpp File Reference</div>  </div>
+<div class="title">compile_info.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="traits_8hpp_source.html">jb/fftw/traits.hpp</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="check__array__close__enough_8hpp_source.html">jb/testing/check_array_close_enough.hpp</a>&gt;</code><br/>
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br/>
-<code>#include &lt;algorithm&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="compile__info_8hpp_source.html">jb/testing/compile_info.hpp</a>&gt;</code><br/>
 </div>
-<p><a href="ut__traits_8cpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:aa0e8f33ddc6c477fa1cd502bef1d64f1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__traits_8cpp.html#aa0e8f33ddc6c477fa1cd502bef1d64f1">BOOST_AUTO_TEST_CASE</a> (fftw_traits_double)</td></tr>
-<tr class="separator:aa0e8f33ddc6c477fa1cd502bef1d64f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d5b3cea0e6569310221e43463a9a1ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__traits_8cpp.html#a4d5b3cea0e6569310221e43463a9a1ed">BOOST_AUTO_TEST_CASE</a> (fftw_traits_float)</td></tr>
-<tr class="separator:a4d5b3cea0e6569310221e43463a9a1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a103b0d38ec2b47989c9e004170a46161"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__traits_8cpp.html#a103b0d38ec2b47989c9e004170a46161">BOOST_AUTO_TEST_CASE</a> (fftw_traits_long_double)</td></tr>
-<tr class="separator:a103b0d38ec2b47989c9e004170a46161"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="aa0e8f33ddc6c477fa1cd502bef1d64f1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BOOST_AUTO_TEST_CASE </td>
-          <td>(</td>
-          <td class="paramtype">fftw_traits_double&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000015">Test:</a></b></dt><dd>Verify that we can compile <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html" title="Implement traits for double-precision floating point numbers. ">jb::fftw::traits&lt;double&gt;</a> </dd></dl>
-
-<p>Definition at line <a class="el" href="ut__traits_8cpp_source.html#l00057">57</a> of file <a class="el" href="ut__traits_8cpp_source.html">ut_traits.cpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4d5b3cea0e6569310221e43463a9a1ed"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BOOST_AUTO_TEST_CASE </td>
-          <td>(</td>
-          <td class="paramtype">fftw_traits_float&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000016">Test:</a></b></dt><dd>Verify that we can compile <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html" title="Implement traits for single-precision floating point values. ">jb::fftw::traits&lt;float&gt;</a> </dd></dl>
-
-<p>Definition at line <a class="el" href="ut__traits_8cpp_source.html#l00064">64</a> of file <a class="el" href="ut__traits_8cpp_source.html">ut_traits.cpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a103b0d38ec2b47989c9e004170a46161"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BOOST_AUTO_TEST_CASE </td>
-          <td>(</td>
-          <td class="paramtype">fftw_traits_long_double&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000017">Test:</a></b></dt><dd>Verify that we can compile <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html" title="Implement traits for quad-precision floating point numbers. ">jb::fftw::traits&lt;long double&gt;</a> </dd></dl>
-
-<p>Definition at line <a class="el" href="ut__traits_8cpp_source.html#l00071">71</a> of file <a class="el" href="ut__traits_8cpp_source.html">ut_traits.cpp</a>.</p>
-
-</div>
-</div>
+<p><a href="compile__info_8cpp_source.html">Go to the source code of this file.</a></p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

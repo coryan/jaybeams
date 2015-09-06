@@ -169,12 +169,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        desc(<span class="stringliteral">&quot;verbose&quot;</span>).help(</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="stringliteral">&quot;If true, dump the results of every test to stdout for&quot;</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="stringliteral">&quot; statistical analysis.&quot;</span>),</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        this, defaults::<a class="code" href="namespacejb_1_1testing_1_1defaults.html#a836dbdebd0f0a7c936b86e52958d8c00">verbose</a>) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;} <span class="comment">// namespace testing</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace jb</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        this, defaults::<a class="code" href="namespacejb_1_1testing_1_1defaults.html#a836dbdebd0f0a7c936b86e52958d8c00">verbose</a>)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    , test_case(</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        desc(<span class="stringliteral">&quot;test-case&quot;</span>).help(</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="stringliteral">&quot;Some microbenchmarks test completely different configurations&quot;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="stringliteral">&quot;, settings, or even different algorithms for the same problem.&quot;</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="stringliteral">&quot;  Use this option to configure such benchmarks&quot;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="stringliteral">&quot;, most microbenchmarks will ignore it.&quot;</span>),</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        this)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;{}</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;} <span class="comment">// namespace testing</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;} <span class="comment">// namespace jb</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
 <div class="ttc" id="microbenchmark__config_8hpp_html"><div class="ttname"><a href="microbenchmark__config_8hpp.html">microbenchmark_config.hpp</a></div></div>
 <div class="ttc" id="namespacejb_1_1testing_1_1defaults_html_adb5b124b74ff53a15213a7f4d08d3741"><div class="ttname"><a href="namespacejb_1_1testing_1_1defaults.html#adb5b124b74ff53a15213a7f4d08d3741">jb::testing::defaults::size</a></div><div class="ttdeci">int size</div><div class="ttdef"><b>Definition:</b> <a href="microbenchmark__config_8cpp_source.html#l00049">microbenchmark_config.cpp:49</a></div></div>
 <div class="ttc" id="microbenchmark__config_8cpp_html_a904d9e9064083ecd77457fd134d22eb4"><div class="ttname"><a href="microbenchmark__config_8cpp.html#a904d9e9064083ecd77457fd134d22eb4">JB_DEFAULTS_microbenchmark_iterations</a></div><div class="ttdeci">#define JB_DEFAULTS_microbenchmark_iterations</div><div class="ttdef"><b>Definition:</b> <a href="microbenchmark__config_8cpp_source.html#l00034">microbenchmark_config.cpp:34</a></div></div>
