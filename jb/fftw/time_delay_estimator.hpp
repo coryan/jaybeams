@@ -48,8 +48,13 @@ class time_delay_estimator {
 
   std::pair<bool, precision_type> estimate_delay(
       timeseries_type const& a, timeseries_type const& b) {
-    // TODO() we should validate the size and alignment of the inputs
-    // against the prototypes used in the constructor
+    // Validate the input sizes.  For some types of timeseries the
+    // alignment may be different too, but we only use the alignment
+    // when the type of timeseries guarantees to always be aligned.
+    if (a.size() != tmpa_.size() or b.size() != tmpa_.size()) {
+      throw std::invalid_argument(
+          "size mismatch in time_delay_estimator<>::estimate_delay()");
+    }
     // First we apply the Fourier transform to both inputs ...
     a2tmpa_.execute(a, tmpa_);
     b2tmpb_.execute(b, tmpb_);
@@ -68,8 +73,7 @@ class time_delay_estimator {
         argmax = i;
       }
     }
-    // TODO() the tolerance should be a parameter
-    // TODO() the threshold for acceptance should be configurable,
+    // TODO(#13) the threshold for acceptance should be configurable,
     // maybe we want the value to be close to the expected area of 'a'
     // for example ...
     if (max <= std::numeric_limits<precision_type>::epsilon()) {

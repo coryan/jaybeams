@@ -43,5 +43,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_error) {
   BOOST_CHECK_EQUAL(e.first, false);
 
   b.resize(nsamples / 2);
+  BOOST_CHECK_THROW(estimator.estimate_delay(a, b), std::exception);
+
   BOOST_CHECK_THROW(tested tmp(a, b), std::exception);
 }
