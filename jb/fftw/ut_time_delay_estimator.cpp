@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_simple) {
 }
 
 /**
- * @test Verify that we can create and use a simple time delay estimator.
+ * @test Verify that jb::fftw::time_delay_estimator can handle edge conditions.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_error) {
   int const nsamples = 1<<15;

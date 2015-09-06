@@ -36,7 +36,9 @@ class fixture {
 
   void run() {
     auto e = estimator.estimate_delay(a, b);
-    if (not e.first) throw std::runtime_error("estimation failed");
+    if (not e.first) {
+      throw std::runtime_error("estimation failed");
+    }
   }
 
   typedef jb::fftw::time_delay_estimator<timeseries_type> tested;

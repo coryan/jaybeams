@@ -5,8 +5,19 @@
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>
 
+#include <type_traits>
+
 namespace jb {
 namespace fftw {
+
+/**
+ * Determine if a timeseries tye guarantees alignment.
+ */
+template<typename T>
+struct always_aligned : public std::false_type {};
+
+template<typename T>
+struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 
 /**
  * A simple time delay estimator based on cross-correlation
@@ -25,10 +36,10 @@ class time_delay_estimator {
   time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
       : tmpa_(a.size())
       , tmpb_(b.size())
-      , a2tmpa_(plan::create_forward(a, tmpa_))
-      , b2tmpb_(plan::create_forward(b, tmpb_))
+      , a2tmpa_(plan::create_forward(a, tmpa_, planning_flags()))
+      , b2tmpb_(plan::create_forward(b, tmpb_, planning_flags()))
       , out_(a.size())
-      , tmpa2out_(plan::create_backward(tmpa_, out_))
+      , tmpa2out_(plan::create_backward(tmpa_, out_, planning_flags()))
   {
     if (a.size() != b.size()) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
@@ -65,6 +76,17 @@ class time_delay_estimator {
       return std::make_pair(false, precision_type(0));
     }
     return std::make_pair(true, precision_type(argmax));
+  }
+
+ private:
+  /**
+   * Determine the correct FFTW planning flags given the inputs.
+   */
+  static int planning_flags() {
+    if (always_aligned<timeseries_t>::value) {
+      return FFTW_MEASURE;
+    }
+    return FFTW_MEASURE | FFTW_UNALIGNED;
   }
 
  private:
