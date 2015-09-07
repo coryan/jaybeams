@@ -33,6 +33,9 @@ sudo apt-get -qq -y install boost1.55
 # ... install the FFT3W libraries ...
 sudo apt-get -qq -y install libfftw3-dev
 
+# ... install the OpenCL libraries ...
+sudo apt-get -qq -y install fglrx opencl-headers
+
 # ... install a recent version of autoconf, automake and whatever make
 # comes through that long list of apt sources.  We do not install
 # autoconf because we will need to manually install it ...
