@@ -6,6 +6,7 @@ AC_INIT([JayBeams], [0.1], [coryan@users.noreply.github.com])
 
 # Move as many of the generated files as possible to a subdirectory
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_MACRO_DIR([m4])
 
 # Yes, this is a C++ project.
 AC_LANG([C++])
@@ -38,6 +39,8 @@ AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
 
 # Checks for libraries.
+AX_OPENCL([1.2],[],[AC_MSG_ERROR([unable to find a suitable OpenCL library])])
+
 AX_BOOST_BASE([1.55],[],[
   AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
 ])

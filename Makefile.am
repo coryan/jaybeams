@@ -4,11 +4,12 @@ instdir = $(prefix)/lib
 inst_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_fftw.a \
-  jb/libitch5.a
+  jb/libjb_opencl.a \
+  jb/libjb_itch5.a
 
 noinst_LIBRARIES = \
   jb/libjb_testing.a \
-  jb/libitch5_testing.a
+  jb/libjb_itch5_testing.a
 
 jb_unit_tests = \
   jb/ut_as_hhmmss \
@@ -32,6 +33,10 @@ jb_fftw_unit_tests = \
   jb/fftw/ut_plan \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_traits
+
+jb_opencl_unit_tests = \
+  jb/opencl/ut_config \
+  jb/opencl/ut_device_selector
 
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
@@ -75,7 +80,7 @@ jb_testing_unit_tests = \
   jb/testing/ut_microbenchmark_config
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
-  $(jb_fftw_unit_tests) $(jb_itch5_unit_tests)
+  $(jb_fftw_unit_tests) $(jb_opencl_unit_tests) $(jb_itch5_unit_tests)
 
 benchmarks = \
   jb/fftw/bm_time_delay_estimator \
@@ -134,16 +139,21 @@ jb_ut_testing_libs = \
   $(jb_ut_libs)
 
 jb_ut_itch5_libs = \
-  jb/libitch5_testing.a \
-  jb/libitch5.a \
+  jb/libjb_itch5_testing.a \
+  jb/libjb_itch5.a \
   $(jb_ut_libs)
 
 jb_ut_fftw_libs = \
+  jb/libjb_testing.a \
+  jb/libjb_fftw.a \
   $(FFTW3_LIBS) \
   $(FFTW3F_LIBS) \
   $(FFTW3L_LIBS) \
-  jb/libjb_testing.a \
-  jb/libjb_fftw.a \
+  $(jb_ut_libs)
+
+jb_ut_opencl_libs = \
+  jb/libjb_opencl.a \
+  $(OPENCL_LIB) \
   $(jb_ut_libs)
 
 ################################################################
@@ -228,23 +238,23 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@
 
 ################################################################
-# jb/libitch5_testing.a
+# jb/libjb_itch5_testing.a
 ################################################################
 
-jb_libitch5_testing_adir = $(includedir)
-jb_libitch5_testing_a_SOURCES = \
+jb_libjb_itch5_testing_adir = $(includedir)
+jb_libjb_itch5_testing_a_SOURCES = \
   jb/itch5/testing_data.cpp
-jb_libitch5_testing_a_HEADERS = \
+jb_libjb_itch5_testing_a_HEADERS = \
   jb/itch5/testing_data.hpp
 
 ################################################################
-# jb/libitch5.a
+# jb/libjb_itch5.a
 ################################################################
 
-jb_libitch5_adir = $(includedir)
-nobase_jb_libitch5_a_HEADERS =
+jb_libjb_itch5_adir = $(includedir)
+nobase_jb_libjb_itch5_a_HEADERS =
 
-jb_libitch5_a_SOURCES = \
+jb_libjb_itch5_a_SOURCES = \
   jb/itch5/add_order_message.cpp \
   jb/itch5/add_order_mpid_message.cpp \
   jb/itch5/base_decoders.cpp \
@@ -271,7 +281,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/timestamp.cpp \
   jb/itch5/trade_message.cpp
 
-jb_libitch5_a_HEADERS = \
+jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
   jb/itch5/add_order_mpid_message.hpp \
   jb/itch5/base_decoders.hpp \
@@ -309,7 +319,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/timestamp.hpp \
   jb/itch5/trade_message.hpp
 
-jb_libitch5_a_LIBADD =
+jb_libjb_itch5_a_LIBADD =
 
 ################################################################
 # jb/libjb_fftw.a
@@ -326,6 +336,18 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/traits.hpp
 
 ################################################################
+# jb/libjb_opencl.a
+################################################################
+
+jb_libjb_opencl_adir = $(includedir)
+jb_libjb_opencl_a_SOURCES = \
+  jb/opencl/config.cpp \
+  jb/opencl/device_selector.cpp
+jb_libjb_opencl_a_HEADERS = \
+  jb/opencl/config.hpp \
+  jb/opencl/device_selector.hpp
+
+################################################################
 # examples
 ################################################################
 
@@ -336,7 +358,7 @@ examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wra
 examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
-tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 ################################################################
 # benchmarks and unit tests
@@ -439,6 +461,18 @@ jb_fftw_bm_time_delay_estimator_LDADD = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   jb/libjb.a
+
+################################################################
+# opencl unit tests
+################################################################
+
+jb_opencl_ut_config_SOURCES = jb/opencl/ut_config.cpp
+jb_opencl_ut_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_config
+jb_opencl_ut_config_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
+jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
+jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
 
 ################################################################
 # itch5 unit tests
