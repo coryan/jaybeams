@@ -1,10 +1,22 @@
 # JayBeams uses a non-recursive make, this is the only Makefile.
 
 instdir = $(prefix)/lib
+
+# Conditionally enable the OpenCL components
+if HAVE_OPENCL
+jb_opencl_lib=jb/libjb_opencl.a
+jb_opencl_unit_tests = \
+  jb/opencl/ut_config \
+  jb/opencl/ut_device_selector
+else
+jb_opencl_lib=
+jb_opencl_unit_tests=
+endif
+
 inst_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_fftw.a \
-  jb/libjb_opencl.a \
+  $(jb_opencl_lib) \
   jb/libjb_itch5.a
 
 noinst_LIBRARIES = \
@@ -33,10 +45,6 @@ jb_fftw_unit_tests = \
   jb/fftw/ut_plan \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_traits
-
-jb_opencl_unit_tests = \
-  jb/opencl/ut_config \
-  jb/opencl/ut_device_selector
 
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
@@ -99,12 +107,21 @@ TESTS = $(check_PROGRAMS)
 AM_CXXFLAGS = \
   -DJB_SYSCONFDIR=\"$(sysconfdir)\" \
   -DJB_BINDIR=\"$(bindir)\" \
-  $(YAML_CPP_CFLAGS) \
+  $(YAML_CPP_CPPFLAGS) \
+  $(OPENCL_CPPFLAGS) \
+  $(FFTW3_CPPFLAGS) \
+  $(FFTW3F_CPPFLAGS) \
+  $(FFTW3L_CPPFLAGS) \
   $(BOOST_CPPFLAGS) \
   -DBOOST_LOG_DYN_LINK \
   $(PTHREAD_CFLAGS)
 
 LDFLAGS = \
+  $(YAML_CPP_LDFLAGS) \
+  $(OPENCL_LDFLAGS) \
+  $(FFTW3_LDFLAGS) \
+  $(FFTW3F_LDFLAGS) \
+  $(FFTW3L_LDFLAGS) \
   $(BOOST_LDFLAGS)
 
 YAML_CPP_LIBS=@YAML_CPP_LIBS@
@@ -336,18 +353,6 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/traits.hpp
 
 ################################################################
-# jb/libjb_opencl.a
-################################################################
-
-jb_libjb_opencl_adir = $(includedir)
-jb_libjb_opencl_a_SOURCES = \
-  jb/opencl/config.cpp \
-  jb/opencl/device_selector.cpp
-jb_libjb_opencl_a_HEADERS = \
-  jb/opencl/config.hpp \
-  jb/opencl/device_selector.hpp
-
-################################################################
 # examples
 ################################################################
 
@@ -462,6 +467,19 @@ jb_fftw_bm_time_delay_estimator_LDADD = \
   jb/libjb_fftw.a \
   jb/libjb.a
 
+if HAVE_OPENCL
+################################################################
+# jb/libjb_opencl.a
+################################################################
+
+jb_libjb_opencl_adir = $(includedir)
+jb_libjb_opencl_a_SOURCES = \
+  jb/opencl/config.cpp \
+  jb/opencl/device_selector.cpp
+jb_libjb_opencl_a_HEADERS = \
+  jb/opencl/config.hpp \
+  jb/opencl/device_selector.hpp
+
 ################################################################
 # opencl unit tests
 ################################################################
@@ -473,6 +491,9 @@ jb_opencl_ut_config_LDADD = $(jb_ut_opencl_libs)
 jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
+
+################################################################
+endif
 
 ################################################################
 # itch5 unit tests

@@ -40,6 +40,7 @@ AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
 
 # Checks for libraries.
 AX_OPENCL([1.2],[],[AC_MSG_ERROR([unable to find a suitable OpenCL library])])
+AM_CONDITIONAL([HAVE_OPENCL], [test "x$ax_want_opencl" = "xyes"])
 
 AX_BOOST_BASE([1.55],[],[
   AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
