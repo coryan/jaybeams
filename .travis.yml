@@ -35,17 +35,13 @@ install:
   - (mkdir ${HOME?}/deps && cd ${HOME?}/deps && ${TRAVIS_BUILD_DIR?}/ci/install.sh)
 
 before_script:
-  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
   - cd ${TRAVIS_BUILD_DIR?}
   - source ci/before_script.sh
   - if [ "x${VARIANT}" == "xcov" ]; then lcov --directory . --zerocounters; fi
 
 script:
-  - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?}
-  - ${CXX?} --version
-  - echo ${CXXFLAGS?}
   - ./bootstrap
-  - ./configure
+  - ./configure --without-opencl
   - make
   - make check
 
