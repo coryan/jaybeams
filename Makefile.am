@@ -8,9 +8,12 @@ jb_opencl_lib=jb/libjb_opencl.a
 jb_opencl_unit_tests = \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector
+jb_opencl_examples = \
+  jb/opencl/show_device
 else
 jb_opencl_lib=
 jb_opencl_unit_tests=
+jb_opencl_examples=
 endif
 
 inst_LIBRARIES = \
@@ -97,7 +100,8 @@ benchmarks = \
 examples = \
   examples/fftw_correlation_no_wrappers \
   examples/configuration \
-  tools/itch5stats
+  tools/itch5stats \
+  $(jb_opencl_examples)
 
 noinst_PROGRAMS = $(examples) $(benchmarks)
 
@@ -491,6 +495,14 @@ jb_opencl_ut_config_LDADD = $(jb_ut_opencl_libs)
 jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
+
+################################################################
+# opencl examples
+################################################################
+
+jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
+jb_opencl_show_device_CPPFLAGS = 
+jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 
 ################################################################
 endif
