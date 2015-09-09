@@ -254,7 +254,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
-	$(CXX) -Wl,--version >>$@; \
+	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
 
