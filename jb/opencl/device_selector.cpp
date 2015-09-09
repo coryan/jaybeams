@@ -3,6 +3,19 @@
 
 #include <iostream>
 
+namespace {
+
+void update_selection(
+    cl::Device const& d, int device_type, cl::Device& dev, cl_uint& count) {
+  if (d.getInfo<CL_DEVICE_TYPE>() == device_type
+      and d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > count) {
+    count = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
+    dev = d;
+  }
+}
+
+} // anonymous namespace
+
 cl::Device jb::opencl::device_selector(config const& cfg) {
   std::vector<cl::Platform> platforms;
   (void) cl::Platform::get(&platforms);
@@ -32,24 +45,12 @@ cl::Device jb::opencl::device_selector(config const& cfg) {
     p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
 
     for (auto const& d : devices) {
-      if (d.getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_GPU) {
-        if (d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > best_gpu_count) {
-          best_gpu_count = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
-          best_gpu = d;
-        }
-        continue;
-      }
-      if (d.getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_CPU) {
-        if (d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > best_cpu_count) {
-          best_cpu_count = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
-          best_cpu = d;
-        }
-        continue;
-      }
+      update_selection(d, CL_DEVICE_TYPE_GPU, best_gpu, best_gpu_count);
+      update_selection(d, CL_DEVICE_TYPE_CPU, best_cpu, best_cpu_count);
     }
   }
 
-  if (best_gpu_count != 0) {
+  if (best_gpu_count != 0 and cfg.device_name() != "BESTCPU") {
     return best_gpu;
   }
     

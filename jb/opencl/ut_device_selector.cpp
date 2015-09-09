@@ -88,6 +88,56 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_default) {
 }
 
 /**
+ * @test Verify that the default selection works as expected.
+ */
+BOOST_AUTO_TEST_CASE(opencl_device_selector_bestcpu) {
+  cl::Device dev = jb::opencl::device_selector(
+      jb::opencl::config().device_name("BESTCPU"));
+  BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
+
+  BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
+
+  std::vector<cl::Platform> platforms;
+  cl::Platform::get(&platforms);
+  for (auto const& p : platforms) {
+    std::vector<cl::Device> devices;
+    p.getDevices(CL_DEVICE_TYPE_CPU, &devices);
+
+    for (auto const& d : devices) {
+      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_CPU);
+      BOOST_CHECK_GE(
+          dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
+          d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
+    }
+  }
+}
+
+/**
+ * @test Verify that the default selection works as expected.
+ */
+BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
+  cl::Device dev = jb::opencl::device_selector(
+      jb::opencl::config().device_name("BESTGPU"));
+  BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
+
+  BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
+
+  std::vector<cl::Platform> platforms;
+  cl::Platform::get(&platforms);
+  for (auto const& p : platforms) {
+    std::vector<cl::Device> devices;
+    p.getDevices(CL_DEVICE_TYPE_GPU, &devices);
+
+    for (auto const& d : devices) {
+      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_GPU);
+      BOOST_CHECK_GE(
+          dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
+          d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
+    }
+  }
+}
+
+/**
  * @test Verify that the device selector without config works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_no_config) {
