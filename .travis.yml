@@ -41,9 +41,9 @@ before_script:
 
 script:
   - ./bootstrap
-  - ./configure --without-opencl
+  - ./configure
   - make
-  - make check
+  - BOOST_TEST_CATCH_SYSTEM_ERRORS=no make check
 
 after_success:
 # Upload code coverage results to coveralls.io
