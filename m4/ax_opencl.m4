@@ -69,10 +69,10 @@ if test "x$ax_want_opencl" = "xyes"; then
 
     dnl On 64-bit systems check for both libraries in both the lib and lib64
     dnl directories.
-    ax_libsubdirs="lib"
+    ax_libsubdirs="lib lib/fglrx"
     ax_arch=`uname -m`
     if test $ax_arch = x86_64 -o $ax_arch = ppc64 -o $ax_arch = s390x -o $ax_arch = sparc64; then
-        ax_libsubdirs="lib64 lib lib/x86_64"
+        ax_libsubdirs="lib64 lib lib/x86_64 lib/fglrx"
     fi
 
     dnl regardless of where the library is, this is the only known name for it
@@ -87,7 +87,7 @@ if test "x$ax_want_opencl" = "xyes"; then
       OPENCL_CPPFLAGS="-I$ax_opencl_path/include"
     else
       dnl seach the known paths for the header and the libraries
-      for ax_path_i in /usr/local /opt /opt/local ; do
+      for ax_path_i in /usr /usr/local /opt /opt/local ; do
         if test -r "$ax_path_i/include/CL/cl.hpp" || test -r "$ax_path_i/include/OpenCL/cl.hpp" ; then
           for ax_i in $ax_libsubdirs; do
             if ls "$ax_path_i/$ax_i/libOpenCL"* >/dev/null 2>/dev/null ; then break; fi
