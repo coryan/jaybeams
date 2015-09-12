@@ -77,30 +77,6 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   tested.handle_message(
       now, ++msgcnt, 0, create_stock_directory("HSART"));
   callback.check_called().never();
-
-  // ... improve code coverage for unknown messages ...
-  char const unknownbuf[] = "foobarbaz";
-  tested.handle_unknown(
-      now, ++msgcnt, 0, unknownbuf, sizeof(unknownbuf) - 1);
-
-  // ... a completely new symbol might be slow, but should work ...
-  now = tested.now();
-  tested.handle_message(
-      now, ++msgcnt, 0, add_order_message{
-        {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, BUY, 500, stock_t("CRAZY"), price4_t(150000)} );
-  callback.check_called().once().with(
-      compute_inside::time_point(now), stock_t("CRAZY"),
-      half_quote(price4_t(150000), 500), order_book::empty_offer());
-
-  // ... a duplicate order id should result in no changes ...
-  tested.handle_message(
-      now, ++msgcnt, 0, add_order_message{
-        {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
-  callback.check_called().with(
-      compute_inside::time_point(now), stock_t("CRAZY"),
-      half_quote(price4_t(150000), 500), order_book::empty_offer());
   
   // ... handle a new order ...
   now = tested.now();
@@ -154,7 +130,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 400));
-  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... handle a partial execution with price ...
   now = tested.now();
@@ -168,7 +144,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 300));
-  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... create yet another order ...
   now = tested.now();
@@ -179,7 +155,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 1100), half_quote(price4_t(100100), 300));
-  BOOST_CHECK_EQUAL(tested.live_order_count(), 4);
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
 
   // ... partially cancel the order ...
   now = tested.now();
@@ -269,4 +245,56 @@ BOOST_AUTO_TEST_CASE(compute_inside_replace) {
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(99900), 400), half_quote(price4_t(100500), 500));
+}
+
+/**
+ * @test Improve code coverage for edge cases.
+ */
+BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
+  // We are going to use a mock function to handle the callback
+  // because it is easy to test what values they got ...
+  skye::mock_function<void(
+      compute_inside::time_point, stock_t,
+      half_quote const&, half_quote const&)> callback;
+
+  // ... create a handler ...
+  auto cb = [&callback](compute_inside::time_point a, stock_t b,
+                        half_quote const& c, half_quote const& d) {
+    callback(a, b, c, d);
+  };
+  compute_inside tested(cb);
+
+  // ... force an execution on a non-existing order ...
+  auto now = tested.now();
+  int msgcnt = 0;
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_message{
+        {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
+        4, 100, 123456} );
+  callback.check_called().never();
+
+  // ... improve code coverage for unknown messages ...
+  now = tested.now();
+  char const unknownbuf[] = "foobarbaz";
+  tested.handle_unknown(
+      now, ++msgcnt, 0, unknownbuf, sizeof(unknownbuf) - 1);
+
+  // ... a completely new symbol might be slow, but should work ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+         1, BUY, 500, stock_t("CRAZY"), price4_t(150000)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("CRAZY"),
+      half_quote(price4_t(150000), 500), order_book::empty_offer());
+
+  // ... a duplicate order id should result in no changes ...
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+         1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
+  callback.check_called().with(
+      compute_inside::time_point(now), stock_t("CRAZY"),
+      half_quote(price4_t(150000), 500), order_book::empty_offer());
 }

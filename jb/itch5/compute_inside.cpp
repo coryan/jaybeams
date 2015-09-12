@@ -153,7 +153,7 @@ jb::itch5::compute_inside::handle_reduce_no_update(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     message_header const& header, std::uint64_t order_reference_number,
     std::uint32_t shares, bool all_shares) {
-  // First we need to insert the order into the list of active orders ...
+  // First we need to find the order ...
   auto position = orders_.find(order_reference_number);
   if (position == orders_.end()) {
     // ... ooops, this should not happen, there is a problem with the
@@ -163,6 +163,7 @@ jb::itch5::compute_inside::handle_reduce_no_update(
                     << ", header=" << header;
     return std::make_tuple(false, order_data(), books_.end());
   }
+
   // ... okay, now that the order is located, find the book for that
   // symbol ...
   auto& data = position->second;
@@ -173,7 +174,9 @@ jb::itch5::compute_inside::handle_reduce_no_update(
     JB_LOG(warning) << "missing book for stock=" << data.stock
                     << ", location=" << msgcnt << ":" << msgoffset
                     << ", header=" << header;
-    return std::make_tuple(false, order_data(), books_.end());
+    throw std::runtime_error(
+        "jb::itch5::compute_inside::handle_reduce_no_update - "
+        "internal state corrupted");
   }
 
   // ... now we need to update the data for the order ...
