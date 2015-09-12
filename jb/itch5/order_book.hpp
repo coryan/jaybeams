@@ -51,6 +51,16 @@ class order_book {
   /// Return the best offer price and quantity
   half_quote best_offer() const;
 
+  /// The value used to represent an empty bid
+  static half_quote empty_bid() {
+    return half_quote(price4_t(0), 0);
+  }
+  /// The value used to represent an empty offer
+  static half_quote empty_offer() {
+    return half_quote(max_price_field_value<price4_t>(), 0);
+  }
+
+
   /**
    * Handle a new order.
    *
@@ -60,13 +70,14 @@ class order_book {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param qty the quantity of the order
+   * @return true if the inside changed
    */
-  void handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
+  bool handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
-      handle_add_order(buy_, px, qty);
-    } else {
-      handle_add_order(sell_, px, qty);
+      return handle_add_order(buy_, px, qty);
     }
+    return handle_add_order(sell_, px, qty);
+
   }
 
   /**
@@ -75,14 +86,14 @@ class order_book {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param exec_qty the executed quantity of the order
+   * @returns true if the inside changed
    */
-  void handle_order_reduced(
+  bool handle_order_reduced(
       buy_sell_indicator_t side, price4_t px, int reduced_qty) {
     if (side == buy_sell_indicator_t('B')) {
-      handle_order_reduced(buy_, px, reduced_qty);
-    } else {
-      handle_order_reduced(sell_, px, reduced_qty);
+      return handle_order_reduced(buy_, px, reduced_qty);
     }
+    return handle_order_reduced(sell_, px, reduced_qty);
   }
 
  private:
@@ -94,11 +105,13 @@ class order_book {
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
+   * @returns true if the inside changed
    */
   template<typename book_side>
-  void handle_add_order(book_side& side, price4_t px, int qty) {
+  bool handle_add_order(book_side& side, price4_t px, int qty) {
       auto p = side.emplace(px, 0);
       p.first->second += qty;
+      return p.first == side.begin();
   }
   
   /**
@@ -109,18 +122,29 @@ class order_book {
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
+   * @returns true if the inside changed
    */
   template<typename book_side>
-  void handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
+  bool handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
+    // Find the price level
+    // TODO() we create the price level if it does not exist, that is
+    // fairly inneficient ..
     auto p = side.emplace(px, 0);
+    // ... reduce the quantity ...
     p.first->second -= reduced_qty;
     if (p.first->second < 0) {
+      // ... this is "Not Good[tm]", somehow we missed an order or
+      // processed a delete twice ...
       // TODO() need a lot more details here...
       JB_LOG(warning) << "negative quantity in order book";
     }
+    // ... we may erase the element and invalidate the iterator, so
+    // compute if this was at the inside or not ...
+    bool r = p.first == side.begin();
     if (p.first->second <= 0) {
       side.erase(p.first);
     }
+    return r;
   }
   
  private:

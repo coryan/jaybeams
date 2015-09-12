@@ -28,7 +28,12 @@ void jb::itch5::compute_inside::handle_message(
     auto p = books_.emplace(msg.stock, order_book());
     i = p.first;
   }
-  i->second.handle_add_order(msg.buy_sell_indicator, msg.price, msg.shares);
+  bool changed_inside = i->second.handle_add_order(
+      msg.buy_sell_indicator, msg.price, msg.shares);
+  if (changed_inside) {
+    callback_(
+        recv_ts, msg.stock, i->second.best_bid(), i->second.best_offer());
+  }
 }
 
 void jb::itch5::compute_inside::handle_unknown(
