@@ -58,10 +58,20 @@ class short_string_field
   typedef value_validator value_validator_t;
   
   /// Constructor
-  short_string_field(
+  explicit short_string_field(
       value_validator_t const& validator = value_validator_t())
       : buffer_()
       , value_validator_(validator) {
+  }
+
+  /// Constructor from a std::string
+  explicit short_string_field(
+      std::string const& rhs,
+      value_validator_t const& validator = value_validator_t())
+      : buffer_()
+      , value_validator_(validator) {
+    std::strncpy(buffer_, rhs.c_str(), wire_size);
+    nul_terminate();
   }
 
   /// Return the C-string representation
@@ -109,8 +119,21 @@ class short_string_field
   /// Assignment from a character buffer
   void assign(char const* buf) {
     std::memcpy(buffer_, buf, wire_size);
+    nul_terminate();
+  }
+
+  /// NUL terminate the string
+  void nul_terminate() {
+    // ... write a NUL character at one past the expected length on
+    // the wire, we know this is safe because the buffer is always
+    // larger than the wire size (by construction) ...
     buffer_[wire_size] = '\0';
+    // ... find the first space character, on the wire the strings are
+    // padded with spaces, we want to NUL terminate on the first
+    // space.  We know this will not got beyond the buffer's end
+    // because of the previous NUL terminator ...
     char* p = std::strchr(buffer_, u' ');
+    // ... if there was a space, put a NUL character there ...
     if (p != nullptr) {
       *p = '\0';
     }

@@ -40,6 +40,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_broken_trade_message \
   jb/itch5/ut_char_list_field \
   jb/itch5/ut_char_list_validator \
+  jb/itch5/ut_compute_inside \
   jb/itch5/ut_cross_trade_message \
   jb/itch5/ut_cross_type \
   jb/itch5/ut_decoder \
@@ -252,6 +253,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/base_decoders.cpp \
   jb/itch5/broken_trade_message.cpp \
   jb/itch5/char_list_validator.cpp \
+  jb/itch5/compute_inside.cpp \
   jb/itch5/cross_trade_message.cpp \
   jb/itch5/decoder.cpp \
   jb/itch5/ipo_quoting_period_update_message.cpp \
@@ -281,6 +283,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/broken_trade_message.hpp \
   jb/itch5/char_list_field.hpp \
   jb/itch5/char_list_validator.hpp \
+  jb/itch5/compute_inside.hpp \
   jb/itch5/cross_trade_message.hpp \
   jb/itch5/cross_type.hpp \
   jb/itch5/decoder.hpp \
@@ -474,6 +477,10 @@ jb_itch5_ut_char_list_field_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_char_list_validator_SOURCES = jb/itch5/ut_char_list_validator.cpp
 jb_itch5_ut_char_list_validator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_validator
 jb_itch5_ut_char_list_validator_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_compute_inside_SOURCES = jb/itch5/ut_compute_inside.cpp
+jb_itch5_ut_compute_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_inside
+jb_itch5_ut_compute_inside_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
