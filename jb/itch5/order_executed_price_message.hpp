@@ -25,6 +25,22 @@ struct order_executed_price_message : public order_executed_message {
   printable_t printable;
   price4_t execution_price;
 
+  order_executed_price_message(
+      order_executed_message const& base,
+      printable_t const& p, price4_t const& px)
+      : order_executed_message(base)
+      , printable(p)
+      , execution_price(px)
+  {}
+
+  order_executed_price_message() = default;
+  order_executed_price_message(order_executed_price_message const&) = default;
+  order_executed_price_message(order_executed_price_message&&) = default;
+  order_executed_price_message& operator=(
+      order_executed_price_message const&) = default;
+  order_executed_price_message& operator=(
+      order_executed_price_message&&) = default;
+
   order_executed_price_message& operator=(order_executed_message const& rhs) {
     static_cast<order_executed_message*>(this)->operator=(rhs);
     return *this;

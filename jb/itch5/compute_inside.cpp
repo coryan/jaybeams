@@ -61,14 +61,48 @@ void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_executed_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.executed_shares, false);
+}
+
+void jb::itch5::compute_inside::handle_message(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    order_cancel_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.canceled_shares, false);
+}
+
+void jb::itch5::compute_inside::handle_message(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    order_delete_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      0, true);
+}
+
+void jb::itch5::compute_inside::handle_unknown(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    char const* msgbuf, std::size_t msglen) {
+  JB_LOG(error) << "Unknown message type '" << msgbuf[0] << "'"
+                << " in msgcnt=" << msgcnt << ", msgoffset=" << msgoffset;
+}
+
+void jb::itch5::compute_inside::handle_reduce(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    message_header const& header, std::uint64_t order_reference_number,
+    std::uint32_t shares, bool all_shares) {
   // First we need to insert the order into the list of active orders ...
-  auto position = orders_.find(msg.order_reference_number);
+  auto position = orders_.find(order_reference_number);
   if (position == orders_.end()) {
     // ... ooops, this should not happen, there is a problem with the
     // feed, log the problem and skip the message ...
-    JB_LOG(warning) << "missing order id=" << msg.order_reference_number
+    JB_LOG(warning) << "missing order id=" << order_reference_number
                     << ", location=" << msgcnt << ":" << msgoffset
-                    << ", msg=" << msg;
+                    << ", header=" << header;
     return;
   }
   // ... okay, now that the order is located, find the book for that
@@ -80,33 +114,33 @@ void jb::itch5::compute_inside::handle_message(
     // code, if the order exists, the book should exist too ...
     JB_LOG(warning) << "missing book for stock=" << data.stock
                     << ", location=" << msgcnt << ":" << msgoffset
-                    << ", msg=" << msg;
+                    << ", header=" << header;
     return;
   }
 
-  // ... now we need to update the data for the order, this might
-  // remove the data ...
-  data.qty -= msg.executed_shares;
+  // ... now we need to update the data for the order ...
+  if (all_shares) {
+    shares = data.qty;
+    data.qty = 0;
+  }
+  data.qty -= shares;
+  // ... if the order is finished we need to remove it, otherwise the
+  // number of live orders grows without bound (almost), this might
+  // remove the data, so we make a copy ...
   order_data copy = data;
   if (data.qty <= 0) {
     // ... if this execution finishes the order we need to remove it
     // from the book ...
     orders_.erase(position);
   }
+
   // ... finally we can handle the update ...
   bool changed_inside = i->second.handle_order_reduced(
-      copy.buy_sell_indicator, copy.px, msg.executed_shares);
+      copy.buy_sell_indicator, copy.px, shares);
   if (changed_inside) {
     // ... if there is a change at the inside send that to the
     // callback ...
     callback_(
         recv_ts, copy.stock, i->second.best_bid(), i->second.best_offer());
   }
-}
-
-void jb::itch5::compute_inside::handle_unknown(
-    time_point recv_ts, long msgcnt, std::size_t msgoffset,
-    char const* msgbuf, std::size_t msglen) {
-  JB_LOG(error) << "Unknown message type '" << msgbuf[0] << "'"
-                << " in msgcnt=" << msgcnt << ", msgoffset=" << msgoffset;
 }

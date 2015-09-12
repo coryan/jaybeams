@@ -155,5 +155,49 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 400));
   BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
+
+  // ... handle a partial execution with price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_price_message{
+        order_executed_message{
+          {order_executed_price_message::message_type,
+                0, 0, create_timestamp()},
+          4, 100, 123456},
+        printable_t{u'Y'}, price4_t(100150)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 300));
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
+
+  // ... create yet another order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+        5, BUY, 1000, stock_t("HSART"), price4_t(100000)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 1100), half_quote(price4_t(100100), 300));
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 4);
+
+  // ... partially cancel the order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_cancel_message{
+        {order_cancel_message::message_type, 0, 0, create_timestamp()},
+        5, 200} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 900), half_quote(price4_t(100100), 300));
+
+  // ... fully cancel the order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_delete_message{
+        {order_delete_message::message_type, 0, 0, create_timestamp()}, 5} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 300));
 }
 

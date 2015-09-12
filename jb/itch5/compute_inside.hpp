@@ -81,14 +81,14 @@ class compute_inside {
   }
 
   /**
-   * Handle am order execution.
+   * Handle an order execution.
    */
   void handle_message(
       time_point recv_ts, long msgcnt, std::size_t msgoffset,
       order_executed_message const& msg);
 
   /**
-   * Handle am order execution.
+   * Handle an order execution.
    */
   void handle_message(
       time_point recv_ts, long msgcnt, std::size_t msgoffset,
@@ -99,6 +99,20 @@ class compute_inside {
         static_cast<order_executed_message const&>(msg));
   }
   
+  /**
+   * Handle a partial cancel.
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_cancel_message const& msg);
+
+  /**
+   * Handle a full cancel.
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_delete_message const& msg);
+
   /**
    * Ignore all other message types.
    *
@@ -137,6 +151,13 @@ class compute_inside {
   std::size_t live_order_count() const {
     return orders_.size();
   }
+
+ private:
+  /// Handle both order executions and partial cancels
+  void handle_reduce(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      message_header const& header, std::uint64_t order_reference_number,
+      std::uint32_t shares, bool all_shares);
 
  private:
   /// Store the callback ...
