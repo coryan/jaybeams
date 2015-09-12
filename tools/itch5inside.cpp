@@ -1,84 +1,15 @@
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/itch5/order_book.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
 #include <iostream>
-#include <functional>
-#include <map>
 #include <stdexcept>
 #include <unordered_map>
 
 namespace jb {
 namespace itch5 {
 
-typedef std::pair<price4_t, int> half_quote;
-
-/**
- * Maintain the ITCH-5.0 order book for a single security.
- *
- * ITCH-5.0, like other market data feeds provide order-by-order
- * detail, that is, the feed includes a message for each order
- * received by the exchange, as well as the changes to these 
- * orders, i.e. when the execute, when their quantity (and/or price)
- * is modified, and when they are canceled..  Such feeds are sometimes
- * called Level III feeds.  Typically only orders that do not
- * immediately execute in full are included in the feed.
- *
- * There is substantial variation in the format of the messages, and
- * some variation as to whether executions are represented differently
- * than a partial cancel, and whether changes in price are allowed or
- * create new order ids.
- *
- * This class receives a stream of (unnormalized) ITCH-5.0 messages
- * for a single security, and organizes the orders in a
- * book, i.e. a  data structure where orders at the same price are
- * grouped together, and one can quickly ask:
- *
- * - What is the best bid (highest price of BUY orders) and what is
- * the total quantity available at that price?
- * - What is the best offer (lowest price of SELL orders) and what is
- * the total quantity available at that price?
- *
- * The users of this class can provide a callback functor to notify
- * them of changes to the inside.
- */
-class order_book {
- public:
-  order_book() {}
-
-  half_quote best_bid() const {
-    if (buy_.empty()) {
-      return half_quote(price4_t(0), 0);
-    }
-    auto i = buy_.begin();
-    return half_quote(i->first, i->second);
-  }
-
-  half_quote best_offer() const {
-    if (sell_.empty()) {
-      return half_quote(price4_t(2000000000UL), 0);
-    }
-    auto i = sell_.begin();
-    return half_quote(i->first, i->second);
-  }
-
-  void handle_add(buy_sell_indicator_t side, price4_t px, int qty) {
-    if (side == buy_sell_indicator_t('B')) {
-      auto p = buy_.emplace(px, 0);
-      p.first->second += qty;
-    } else {
-      auto p = sell_.emplace(px, 0);
-      p.first->second += qty;
-    }
-  }
-
- private:
-  typedef std::map<price4_t,int,std::greater<price4_t>> buys;
-  typedef std::map<price4_t,int,std::less<price4_t>> sells;
-
-  buys buy_;
-  sells sell_;
-};
 
 /**
  * An implementation of jb::message_handler_concept to compute the
@@ -121,7 +52,7 @@ class inside_handler {
       auto p = books_.emplace(msg.stock, order_book());
       i = p.first;
     }
-    i->second.handle_add(msg.buy_sell_indicator, msg.price, msg.shares);
+    i->second.handle_add_order(msg.buy_sell_indicator, msg.price, msg.shares);
   }
 
   void handle_message(

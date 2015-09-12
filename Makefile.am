@@ -49,6 +49,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_mwcb_breach_message \
   jb/itch5/ut_mwcb_decline_level_message \
   jb/itch5/ut_net_order_imbalance_indicator_message \
+  jb/itch5/ut_order_book \
   jb/itch5/ut_order_cancel_message \
   jb/itch5/ut_order_delete_message \
   jb/itch5/ut_order_executed_message \
@@ -259,6 +260,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/mwcb_breach_message.cpp \
   jb/itch5/mwcb_decline_level_message.cpp \
   jb/itch5/net_order_imbalance_indicator_message.cpp \
+  jb/itch5/order_book.cpp \
   jb/itch5/order_cancel_message.cpp \
   jb/itch5/order_delete_message.cpp \
   jb/itch5/order_executed_message.cpp \
@@ -289,6 +291,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/mwcb_breach_message.hpp \
   jb/itch5/mwcb_decline_level_message.hpp \
   jb/itch5/net_order_imbalance_indicator_message.hpp \
+  jb/itch5/order_book.hpp \
   jb/itch5/order_cancel_message.hpp \
   jb/itch5/order_delete_message.hpp \
   jb/itch5/order_executed_message.hpp \
@@ -507,6 +510,10 @@ jb_itch5_ut_mwcb_decline_level_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_net_order_imbalance_indicator_message_SOURCES = jb/itch5/ut_net_order_imbalance_indicator_message.cpp
 jb_itch5_ut_net_order_imbalance_indicator_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_net_order_imbalance_indicator_message
 jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_book_SOURCES = jb/itch5/ut_order_book.cpp
+jb_itch5_ut_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book
+jb_itch5_ut_order_book_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_order_cancel_message_SOURCES = jb/itch5/ut_order_cancel_message.cpp
 jb_itch5_ut_order_cancel_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_cancel_message
