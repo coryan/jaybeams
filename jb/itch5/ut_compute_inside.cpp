@@ -93,12 +93,21 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       compute_inside::time_point(now), stock_t("CRAZY"),
       half_quote(price4_t(150000), 500), order_book::empty_offer());
 
+  // ... a duplicate order id should result in no changes ...
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+         1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
+  callback.check_called().with(
+      compute_inside::time_point(now), stock_t("CRAZY"),
+      half_quote(price4_t(150000), 500), order_book::empty_offer());
+  
   // ... handle a new order ...
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, BUY, 100, stock_t("HSART"), price4_t(100000)} );
+        2, BUY, 100, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), order_book::empty_offer());
@@ -108,10 +117,43 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, SELL, 100, stock_t("HSART"), price4_t(100100)} );
+        3, SELL, 100, stock_t("HSART"), price4_t(100100)} );
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 100));
 
+  // ... handle a new order with an mpid ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_mpid_message{
+        add_order_message{
+          {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
+          4, SELL, 500, stock_t("HSART"), price4_t(100100)},
+          mpid_t("LOOF")} );
+  // ... updates the inside just like a regular order ...
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 600));
+
+  // ... handle a partial execution ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_message{
+        {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
+        4, 100, 123456} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 500));
+
+  // ... handle a full execution ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_message{
+        {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
+        3, 100, 123457} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 400));
+  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
 }
 

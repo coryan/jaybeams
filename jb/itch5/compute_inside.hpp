@@ -4,6 +4,11 @@
 #include <jb/itch5/order_book.hpp>
 #include <jb/itch5/add_order_message.hpp>
 #include <jb/itch5/add_order_mpid_message.hpp>
+#include <jb/itch5/order_cancel_message.hpp>
+#include <jb/itch5/order_delete_message.hpp>
+#include <jb/itch5/order_executed_message.hpp>
+#include <jb/itch5/order_executed_price_message.hpp>
+#include <jb/itch5/order_replace_message.hpp>
 #include <jb/itch5/stock_directory_message.hpp>
 
 #include <boost/functional/hash.hpp>
@@ -71,9 +76,29 @@ class compute_inside {
       add_order_mpid_message const& msg) {
     // Delegate on the handler for add_order_message
     handle_message(
-        recv_ts, msgcnt, msgoffset, static_cast<add_order_message const&>(msg));
+        recv_ts, msgcnt, msgoffset,
+        static_cast<add_order_message const&>(msg));
   }
 
+  /**
+   * Handle am order execution.
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_executed_message const& msg);
+
+  /**
+   * Handle am order execution.
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_executed_price_message const& msg) {
+    // Delegate on the handler for add_order_message
+    handle_message(
+        recv_ts, msgcnt, msgoffset,
+        static_cast<order_executed_message const&>(msg));
+  }
+  
   /**
    * Ignore all other message types.
    *
@@ -103,10 +128,15 @@ class compute_inside {
    */
   struct order_data {
     stock_t stock;
-    buy_sell_indicator_t side;
+    buy_sell_indicator_t buy_sell_indicator;
     price4_t px;
     int qty;
   };
+
+  /// An accessor to make testing easier
+  std::size_t live_order_count() const {
+    return orders_.size();
+  }
 
  private:
   /// Store the callback ...

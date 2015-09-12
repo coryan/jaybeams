@@ -15,6 +15,18 @@ struct add_order_mpid_message : public add_order_message {
 
   mpid_t attribution;
 
+  add_order_mpid_message(
+      add_order_message const& base, mpid_t const& a)
+      : add_order_message(base)
+      , attribution(a)
+  {}
+
+  add_order_mpid_message() = default;
+  add_order_mpid_message(add_order_mpid_message const&) = default;
+  add_order_mpid_message(add_order_mpid_message&&) = default;
+  add_order_mpid_message& operator=(add_order_mpid_message const&) = default;
+  add_order_mpid_message& operator=(add_order_mpid_message&&) = default;
+
   add_order_mpid_message& operator=(add_order_message const& rhs) {
     static_cast<add_order_message*>(this)->operator=(rhs);
     return *this;
