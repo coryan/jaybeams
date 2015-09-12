@@ -78,7 +78,23 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       now, ++msgcnt, 0, create_stock_directory("HSART"));
   callback.check_called().never();
 
+  // ... improve code coverage for unknown messages ...
+  char const unknownbuf[] = "foobarbaz";
+  tested.handle_unknown(
+      now, ++msgcnt, 0, unknownbuf, sizeof(unknownbuf) - 1);
+
+  // ... a completely new symbol might be slow, but should work ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+         1, BUY, 500, stock_t("CRAZY"), price4_t(150000)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("CRAZY"),
+      half_quote(price4_t(150000), 500), order_book::empty_offer());
+
   // ... handle a new order ...
+  now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
@@ -87,6 +103,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), order_book::empty_offer());
 
+  // ... handle a new order on the opposite side of the book ...
+  now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
@@ -94,5 +112,6 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 100));
+
 }
 
