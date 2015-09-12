@@ -6,6 +6,7 @@
 #include <jb/itch5/noop_validator.hpp>
 
 #include <boost/operators.hpp>
+#include <boost/functional/hash.hpp>
 
 #include <cstring>
 #include <iostream>
@@ -156,6 +157,12 @@ template<std::size_t size, typename F>
 std::ostream& operator<<(
     std::ostream& os, short_string_field<size,F> const& x) {
   return os << x.c_str();
+}
+
+/// Implement a hash function and integrate with boost::hash
+template<std::size_t size, typename F>
+std::size_t hash_value(short_string_field<size,F> const& x) {
+  return boost::hash_range(x.c_str(), x.c_str() + size);
 }
 
 } // namespace itch5

@@ -84,6 +84,7 @@ benchmarks = \
 examples = \
   examples/fftw_correlation_no_wrappers \
   examples/configuration \
+  tools/itch5inside \
   tools/itch5stats
 
 noinst_PROGRAMS = $(examples) $(benchmarks)
@@ -334,6 +335,9 @@ examples_configuration_LDADD = jb/libjb.a
 
 examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wrappers.cpp
 examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
+
+tools_itch5inside_SOURCES = tools/itch5inside.cpp
+tools_itch5inside_LDADD = jb/libitch5.a jb/libjb.a
 
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
 tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
