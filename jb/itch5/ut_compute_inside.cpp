@@ -201,3 +201,72 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       half_quote(price4_t(100000), 100), half_quote(price4_t(100100), 300));
 }
 
+/**
+ * @test Verify that jb::itch5::order_book works as expected for replace.
+ *
+ * Order replaces have several scenarios, the previous test was
+ * getting too big.
+ */
+BOOST_AUTO_TEST_CASE(compute_inside_replace) {
+  // We are going to use a mock function to handle the callback
+  // because it is easy to test what values they got ...
+  skye::mock_function<void(
+      compute_inside::time_point, stock_t,
+      half_quote const&, half_quote const&)> callback;
+
+  // ... create a handler ...
+  auto cb = [&callback](compute_inside::time_point a, stock_t b,
+                        half_quote const& c, half_quote const& d) {
+    callback(a, b, c, d);
+  };
+  compute_inside tested(cb);
+
+  // ... setup the book with orders on both sides ...
+  auto now = tested.now();
+  int msgcnt = 0;
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+        1, BUY, 500, stock_t("HSART"), price4_t(100000)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 500), order_book::empty_offer());
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+        2, SELL, 500, stock_t("HSART"), price4_t(100500)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100000), 500), half_quote(price4_t(100500), 500));
+
+  // ... handle a replace message that improves the price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_replace_message{
+        {order_replace_message::message_type, 0, 0, create_timestamp()},
+        1, 3, 600, price4_t(100100)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100100), 600), half_quote(price4_t(100500), 500));
+
+  // ... handle a replace that changes the qty ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_replace_message{
+        {order_replace_message::message_type, 0, 0, create_timestamp()},
+        3, 4, 300, price4_t(100100)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(100100), 300), half_quote(price4_t(100500), 500));
+
+  // ... handle a replace that changes lowers the best price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_replace_message{
+        {order_replace_message::message_type, 0, 0, create_timestamp()},
+        4, 9, 400, price4_t(99900)} );
+  callback.check_called().once().with(
+      compute_inside::time_point(now), stock_t("HSART"),
+      half_quote(price4_t(99900), 400), half_quote(price4_t(100500), 500));
+}

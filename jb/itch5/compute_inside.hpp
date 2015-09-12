@@ -114,6 +114,13 @@ class compute_inside {
       order_delete_message const& msg);
 
   /**
+   * Handle an order replace.
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_replace_message const& msg);
+
+  /**
    * Ignore all other message types.
    *
    * We are only interested in a handful of message types, anything
@@ -153,8 +160,30 @@ class compute_inside {
   }
 
  private:
+  /// The list of live orders
+  typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
+
+  /// The collection of order books
+  typedef std::unordered_map<
+    stock_t, order_book, boost::hash<stock_t>> books_by_security;
+
+  /// The result of a reduction is fairly complex ...
+  typedef std::tuple<bool, order_data, books_by_security::iterator> update_result;
+
+  /// Refactor handling of add_order_message for both add_order and
+  /// replace.
+  update_result handle_add_order(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      add_order_message const& msg);
+
   /// Handle both order executions and partial cancels
   void handle_reduce(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      message_header const& header, std::uint64_t order_reference_number,
+      std::uint32_t shares, bool all_shares);
+
+  /// Handle an order reduction, but do not update the callback
+  update_result handle_reduce_no_update(
       time_point recv_ts, long msgcnt, std::size_t msgoffset,
       message_header const& header, std::uint64_t order_reference_number,
       std::uint32_t shares, bool all_shares);
@@ -163,11 +192,8 @@ class compute_inside {
   /// Store the callback ...
   callback_type callback_;
 
-  typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
   orders_by_id orders_;
 
-  typedef std::unordered_map<
-    stock_t, order_book, boost::hash<stock_t>> books_by_security;
   books_by_security books_;
 };
 
