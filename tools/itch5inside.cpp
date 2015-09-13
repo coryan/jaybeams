@@ -22,7 +22,7 @@ class config : public jb::config_object {
   jb::config_attribute<config,jb::log::config> log;
   jb::config_attribute<config,jb::offline_feed_statistics::config> stats;
   jb::config_attribute<config,jb::offline_feed_statistics::config> symbol_stats;
-  jb::config_attribute<config,bool> enable_per_symbol_stats;
+  jb::config_attribute<config,bool> enable_symbol_stats;
 };
 
 } // anonymous namespace
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) try {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
     stats.sample(header.timestamp.ts, pl);
 
-    if (cfg.enable_per_symbol_stats()) {
+    if (cfg.enable_symbol_stats()) {
       auto i = per_symbol.find(stock);
       if (i == per_symbol.end()) {
         auto p = per_symbol.emplace(
@@ -116,7 +116,7 @@ config::config()
     , stats(desc("stats", "offline-feed-statistics"), this)
     , symbol_stats(desc("symbol-stats", "offline-feed-statistics"),
                    this, default_per_symbol_stats())
-    , enable_per_symbol_stats(
+    , enable_symbol_stats(
         desc("enable-symbol-stats").help(
             "If set, enable per-symbol statistics."
             "  Collecting per-symbol statistics is expensive in both"
