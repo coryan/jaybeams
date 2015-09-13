@@ -156,6 +156,7 @@ jb_ut_fftw_libs = \
 jb_libjb_adir = $(includedir)
 nobase_jb_libjb_a_HEADERS = \
   jb/as_hhmmss.hpp \
+  jb/assert_throw.hpp \
   jb/complex_traits.hpp \
   jb/config_attribute.hpp \
   jb/config_files_location.hpp \
@@ -178,6 +179,7 @@ nobase_jb_libjb_a_HEADERS = \
 
 jb_libjb_a_SOURCES = \
   jb/as_hhmmss.cpp \
+  jb/assert_throw.cpp \
   jb/config_files_location.cpp \
   jb/config_object.cpp \
   jb/fileio.cpp \
