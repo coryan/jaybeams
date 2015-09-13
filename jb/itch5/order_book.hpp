@@ -85,7 +85,7 @@ class order_book {
    *
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
-   * @param exec_qty the executed quantity of the order
+   * @param reduced_qty the executed quantity of the order
    * @returns true if the inside changed
    */
   bool handle_order_reduced(
@@ -120,8 +120,8 @@ class order_book {
    * @tparam book_side the type used to represent the buy or sell side
    * of the book
    * @param side the side of the book to update
-   * @param px the price of the new order
-   * @param qty the quantity of the new order
+   * @param px the price of the order that was reduced
+   * @param reduced_qty the quantity reduced in the order
    * @returns true if the inside changed
    */
   template<typename book_side>
