@@ -27,25 +27,42 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_simple) {
 }
 
 /**
- * @test Verify that jb::offline_feed_statistics works as expected.
+ * @test Test jb::offline_feed_statistics csv output.
  */
-BOOST_AUTO_TEST_CASE(offline_feed_statististics_print_empty) {
+BOOST_AUTO_TEST_CASE(offline_feed_statististics_print_csv) {
   jb::offline_feed_statistics::config cfg;
   jb::offline_feed_statistics stats(cfg);
   std::ostringstream header;
   stats.print_csv_header(header);
   BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string("Name,"));
 
+  std::string h = header.str();
+  int nheaders = std::count(h.begin(), h.end(), ',');
+
   std::ostringstream body;
   stats.print_csv("testing", body);
-  BOOST_CHECK_EQUAL(
-      body.str(), std::string("testing,0"
-                              ",,,,,,,,,," // per-sec rate
-                              ",,,,,,,,,," // per-msec rate
-                              ",,,,,,,,,," // per-usec rate
-                              ",,,,,,,,,," // arrival
-                              ",,,,,,,,,," // processing latency
-                              ));
+  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,0,"));
+  std::string b = body.str();
+  int nfields = std::count(b.begin(), b.end(), ',');
+  BOOST_CHECK_EQUAL(nfields, nheaders);
+
+  stats.sample(
+      std::chrono::seconds(600), std::chrono::microseconds(2));
+  stats.sample(
+      std::chrono::seconds(601), std::chrono::microseconds(2));
+  stats.sample(
+      std::chrono::seconds(602), std::chrono::microseconds(2));
+  stats.sample(
+      std::chrono::seconds(603), std::chrono::microseconds(2));
+
+  body.str("");
+  stats.print_csv("testing", body);
+  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,4,"));
+  b = body.str();
+  nfields = std::count(b.begin(), b.end(), ',');
+  BOOST_CHECK_EQUAL(nfields, nheaders);
+
+  BOOST_MESSAGE("CSV Output for inspection: \n" << h << b);
 }
 
 /**

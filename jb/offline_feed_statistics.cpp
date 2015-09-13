@@ -11,14 +11,29 @@ void report_rate(
     std::chrono::nanoseconds ts, char const* period_name,
     event_rate_histogram_t const& histo) {
   JB_LOG(info) << "events/" << period_name << ": " << jb::as_hhmmss(ts)
-               << "  min=" << histo.observed_min()
+               << ", min=" << histo.observed_min()
                << ", p25=" << histo.estimated_quantile(0.25)
                << ", p50=" << histo.estimated_quantile(0.50)
                << ", p75=" << histo.estimated_quantile(0.75)
+               << ", p90=" << histo.estimated_quantile(0.90)
                << ", p99=" << histo.estimated_quantile(0.99)
                << ", p99.9=" << histo.estimated_quantile(0.999)
                << ", p99.99=" << histo.estimated_quantile(0.9999)
-               << ", max=" << histo.observed_max();
+               << ", max=" << histo.observed_max()
+               << ", N=" << histo.nsamples();
+}
+
+template<typename event_rate_histogram_t>
+void csv_rate(std::ostream& os, event_rate_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.estimated_quantile(0.999)
+     << "," << histo.estimated_quantile(0.9999)
+     << "," << histo.observed_max();
 }
 
 template<typename latency_histogram_t>
@@ -26,16 +41,36 @@ void report_arrival(
     std::chrono::nanoseconds ts, char const* name,
     latency_histogram_t const& histo) {
   JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
-               << " n=" << histo.nsamples()
                << ", min=" << histo.observed_min()
-               << ", p0.01=" << histo.estimated_quantile(0.0001)
-               << ", p0.1=" << histo.estimated_quantile(0.001)
-               << ", p01=" << histo.estimated_quantile(0.01)
-               << ", p10=" << histo.estimated_quantile(0.10)
-               << ", p25=" << histo.estimated_quantile(0.25)
-               << ", p50=" << histo.estimated_quantile(0.50)
-               << ", p75=" << histo.estimated_quantile(0.75)
-               << ", max=" << histo.observed_max();
+               << "ns, p0.01=" << histo.estimated_quantile(0.0001)
+               << "ns, p0.1=" << histo.estimated_quantile(0.001)
+               << "ns, p01=" << histo.estimated_quantile(0.01)
+               << "ns, p05=" << histo.estimated_quantile(0.05)
+               << "ns, p10=" << histo.estimated_quantile(0.10)
+               << "ns, p25=" << histo.estimated_quantile(0.25)
+               << "ns, p50=" << histo.estimated_quantile(0.50)
+               << "ns, p75=" << histo.estimated_quantile(0.75)
+               << "ns, p90=" << histo.estimated_quantile(0.90)
+               << "ns, p99=" << histo.estimated_quantile(0.99)
+               << "ns, max=" << histo.observed_max()
+               << "ns, N=" << histo.nsamples();
+
+}
+
+template<typename latency_histogram_t>
+void csv_arrival(std::ostream& os, latency_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.0001)
+     << "," << histo.estimated_quantile(0.001)
+     << "," << histo.estimated_quantile(0.01)
+     << "," << histo.estimated_quantile(0.05)
+     << "," << histo.estimated_quantile(0.10)
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.observed_max();
 }
 
 template<typename latency_histogram_t>
@@ -43,26 +78,45 @@ void report_latency(
     std::chrono::nanoseconds ts, char const* name,
     latency_histogram_t const& histo) {
   JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
-               << " n=" << histo.nsamples()
                << ", min=" << histo.observed_min()
-               << ", p25=" << histo.estimated_quantile(0.25)
-               << ", p50=" << histo.estimated_quantile(0.50)
-               << ", p75=" << histo.estimated_quantile(0.75)
-               << ", p99=" << histo.estimated_quantile(0.99)
-               << ", p99.9=" << histo.estimated_quantile(0.999)
-               << ", p99.99=" << histo.estimated_quantile(0.9999)
-               << ", max=" << histo.observed_max();
+               << "ns, p10=" << histo.estimated_quantile(0.10)
+               << "ns, p25=" << histo.estimated_quantile(0.25)
+               << "ns, p50=" << histo.estimated_quantile(0.50)
+               << "ns, p75=" << histo.estimated_quantile(0.75)
+               << "ns, p90=" << histo.estimated_quantile(0.90)
+               << "ns, p99=" << histo.estimated_quantile(0.99)
+               << "ns, p99.9=" << histo.estimated_quantile(0.999)
+               << "ns, p99.99=" << histo.estimated_quantile(0.9999)
+               << "ns, max=" << histo.observed_max()
+               << "ns, N=" << histo.nsamples();
+}
+
+template<typename latency_histogram_t>
+void csv_latency(std::ostream& os, latency_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.10)
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.estimated_quantile(0.999)
+     << "," << histo.estimated_quantile(0.9999)
+     << "," << histo.observed_max();
 }
 
 } // anonymous namespace
 
 jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
     : per_sec_rate_(
-        cfg.max_messages_per_second(), std::chrono::seconds(1))
+        cfg.max_messages_per_second(),
+        std::chrono::seconds(1), std::chrono::milliseconds(1))
     , per_msec_rate_(
-        cfg.max_messages_per_millisecond(), std::chrono::milliseconds(1))
+        cfg.max_messages_per_millisecond(),
+        std::chrono::milliseconds(1), std::chrono::microseconds(1))
     , per_usec_rate_(
-        cfg.max_messages_per_microsecond(), std::chrono::microseconds(1))
+        cfg.max_messages_per_microsecond(),
+        std::chrono::microseconds(1), std::chrono::nanoseconds(1))
     , interarrival_(interarrival_histogram_t::binning_strategy(
         0, cfg.max_interarrival_time_nanoseconds()))
     , processing_latency_(processing_latency_histogram_t::binning_strategy(
@@ -75,24 +129,28 @@ jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
 void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
   char const* fields[] = {
     "min", "p25", "p50", "p75", "p90", "p99", "p999", "p9999", "max" };
-  char const* tracked[] = {
-    "RatePerSec", "RatePerMSec", "RatePerUSec", "ProcessingLatency" };
-  os << "Name";
+  char const* tracked[] = { "RatePerSec", "RatePerMSec", "RatePerUSec" };
+  os << "Name,NSamples";
   for (auto t : tracked) {
     for (auto f : fields) {
       os << "," << f << t;
     }
   }
-  os << "minArrival,p0001Arrival,p001Arrival,p01Arrival,p25Arrival"
-     << ",p50Arrival,p75Arrival,maxArrival";
+  os << ",minArrival,p0001Arrival,p001Arrival,p01Arrival"
+     << ",p05Arrival,p10Arrival,p25Arrival,p50Arrival,p75Arrival"
+     << ",p90Arrival,p99Arrival,maxArrival";
+  os << ",minProcessing,p10Processing,p25Processing,p50Processing"
+     << ",p75Processing,p90Processing,p99Processing,p999Processing"
+     << ",p9999Processing,maxProcessing";
+  os << "\n";
 }
 
 void jb::offline_feed_statistics::record_sample(
     std::chrono::nanoseconds ts, std::chrono::nanoseconds pl) {
   using namespace std::chrono;
-  per_sec_rate_.sample(duration_cast<milliseconds>(ts));
-  per_msec_rate_.sample(duration_cast<microseconds>(ts));
-  per_usec_rate_.sample(duration_cast<microseconds>(ts));
+  per_sec_rate_.sample(ts);
+  per_msec_rate_.sample(ts);
+  per_usec_rate_.sample(ts);
 
   if (processing_latency_.nsamples() > 0) {
     nanoseconds d = ts - last_ts_;
@@ -116,15 +174,27 @@ void jb::offline_feed_statistics::record_sample(
 
 void jb::offline_feed_statistics::print_csv(
     std::string const& name, std::ostream& os) const {
-  if (interarrival_.nsamples() == 0) {
+  if (per_sec_rate_.nsamples() == 0
+      or per_msec_rate_.nsamples() == 0
+      or per_usec_rate_.nsamples() == 0
+      or interarrival_.nsamples() == 0
+      or processing_latency_.nsamples() == 0) {
     os << name << ",0";
-    os << ",,,,,,,,,,"; // per-second rate
-    os << ",,,,,,,,,,"; // per-millisecond rate
-    os << ",,,,,,,,,,"; // per-microsecond rate
-    os << ",,,,,,,,,,"; // interarrival
-    os << ",,,,,,,,,,"; // processing latency
+    os << ",,,,,,,,,";    // per-second rate
+    os << ",,,,,,,,,";    // per-millisecond rate
+    os << ",,,,,,,,,";    // per-microsecond rate
+    os << ",,,,,,,,,,,,"; // interarrival
+    os << ",,,,,,,,,,";   // processing latency
+    os << "\n";
     return;
   }
+  os << name << "," << processing_latency_.nsamples();
+  csv_rate(os, per_sec_rate_);
+  csv_rate(os, per_msec_rate_);
+  csv_rate(os, per_usec_rate_);
+  csv_arrival(os, interarrival_);
+  csv_latency(os, processing_latency_);
+  os << std::endl;
 }
 
 namespace jb {

@@ -60,7 +60,7 @@ class itch5_stats_handler {
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.load_overrides(
-      argc, argv, std::string("itch5_stats.yaml"), "JB_ROOT");
+      argc, argv, std::string("itch5stats.yaml"), "JB_ROOT");
   jb::log::init();
 
   boost::iostreams::filtering_istream in;

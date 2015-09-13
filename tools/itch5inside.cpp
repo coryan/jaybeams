@@ -1,5 +1,6 @@
 #include <jb/itch5/compute_inside.hpp>
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/offline_feed_statistics.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
@@ -19,15 +20,17 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> input_file;
   jb::config_attribute<config,std::string> output_file;
   jb::config_attribute<config,jb::log::config> log;
+  jb::config_attribute<config,jb::offline_feed_statistics::config> stats;
+  jb::config_attribute<config,jb::offline_feed_statistics::config> symbol_stats;
+  jb::config_attribute<config,bool> enable_symbol_stats;
 };
-
 
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.load_overrides(
-      argc, argv, std::string("itch5_inside.yaml"), "JB_ROOT");
+      argc, argv, std::string("itch5inside.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::iostreams::filtering_istream in;
@@ -36,11 +39,28 @@ int main(int argc, char* argv[]) try {
   boost::iostreams::filtering_ostream out;
   jb::open_output_file(out, cfg.output_file());
 
-  auto cb = [&out](jb::itch5::compute_inside::time_point recv_ts,
-               jb::itch5::message_header const& header,
-               jb::itch5::stock_t const& stock,
-               jb::itch5::half_quote const& bid,
-               jb::itch5::half_quote const& offer) {
+  std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
+  jb::offline_feed_statistics stats(cfg.stats());
+
+  auto cb = [&](
+      jb::itch5::compute_inside::time_point recv_ts,
+      jb::itch5::message_header const& header,
+      jb::itch5::stock_t const& stock,
+      jb::itch5::half_quote const& bid,
+      jb::itch5::half_quote const& offer) {
+    auto pl = std::chrono::steady_clock::now() - recv_ts;
+    stats.sample(header.timestamp.ts, pl);
+
+    if (cfg.enable_symbol_stats()) {
+      auto i = per_symbol.find(stock);
+      if (i == per_symbol.end()) {
+        auto p = per_symbol.emplace(
+            stock, jb::offline_feed_statistics(cfg.symbol_stats()));
+        i = p.first;
+      }
+      i->second.sample(header.timestamp.ts, pl);
+    }
+
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
@@ -53,6 +73,12 @@ int main(int argc, char* argv[]) try {
 
   jb::itch5::compute_inside handler(cb);
   jb::itch5::process_iostream(in, handler);
+
+  jb::offline_feed_statistics::print_csv_header(std::cout);
+  for (auto const& i : per_symbol) {
+    i.second.print_csv(i.first.c_str(), std::cout);
+  }
+  stats.print_csv("__aggregate__", std::cout);
 
   return 0;
 } catch(jb::usage const& u) {
@@ -67,13 +93,35 @@ int main(int argc, char* argv[]) try {
 }
 
 namespace {
+
+// Define the default per-symbol stats
+jb::offline_feed_statistics::config default_per_symbol_stats() {
+  return jb::offline_feed_statistics::config()
+      .reporting_interval_seconds(24 * 3600) // effectively disable updates
+      .max_processing_latency_nanoseconds(10000) // limit memory usage
+      .max_interarrival_time_nanoseconds(10000)  // limit memory usage 
+      .max_messages_per_microsecond(1000)  // limit memory usage
+      .max_messages_per_millisecond(10000) // limit memory usage
+      .max_messages_per_second(10000)      // limit memory usage
+      ;
+}
+
 config::config()
     : input_file(desc("input-file").help(
         "An input file with ITCH-5.0 messages."), this)
     , output_file(desc("output-file").help(
         "The name of the file where to store the inside data."
         "  Files ending in .gz are automatically compressed."), this)
-    , log(desc("log"), this)
+    , log(desc("log", "logging"), this)
+    , stats(desc("stats", "offline-feed-statistics"), this)
+    , symbol_stats(desc("symbol-stats", "offline-feed-statistics"),
+                   this, default_per_symbol_stats())
+    , enable_symbol_stats(
+        desc("enable-symbol-stats").help(
+            "If set, enable per-symbol statistics."
+            "  Collecting per-symbol statistics is expensive in both"
+            " memory and execution time, so it is disabled by default."),
+        this, false)
 {}
 
 void config::validate() const {
@@ -88,6 +136,8 @@ void config::validate() const {
         "  You must specify an output file.", 1);
   }
   log().validate();
+  stats().validate();
+  symbol_stats().validate();
 }
 
 } // anonymous namespace
