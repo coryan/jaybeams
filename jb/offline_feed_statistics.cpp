@@ -23,6 +23,19 @@ void report_rate(
                << ", N=" << histo.nsamples();
 }
 
+template<typename event_rate_histogram_t>
+void csv_rate(std::ostream& os, event_rate_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.estimated_quantile(0.999)
+     << "," << histo.estimated_quantile(0.9999)
+     << "," << histo.observed_max();
+}
+
 template<typename latency_histogram_t>
 void report_arrival(
     std::chrono::nanoseconds ts, char const* name,
@@ -45,6 +58,22 @@ void report_arrival(
 }
 
 template<typename latency_histogram_t>
+void csv_arrival(std::ostream& os, latency_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.0001)
+     << "," << histo.estimated_quantile(0.001)
+     << "," << histo.estimated_quantile(0.01)
+     << "," << histo.estimated_quantile(0.05)
+     << "," << histo.estimated_quantile(0.10)
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.observed_max();
+}
+
+template<typename latency_histogram_t>
 void report_latency(
     std::chrono::nanoseconds ts, char const* name,
     latency_histogram_t const& histo) {
@@ -60,6 +89,20 @@ void report_latency(
                << "ns, p99.99=" << histo.estimated_quantile(0.9999)
                << "ns, max=" << histo.observed_max()
                << "ns, N=" << histo.nsamples();
+}
+
+template<typename latency_histogram_t>
+void csv_latency(std::ostream& os, latency_histogram_t const& histo) {
+  os << "," << histo.observed_min()
+     << "," << histo.estimated_quantile(0.10)
+     << "," << histo.estimated_quantile(0.25)
+     << "," << histo.estimated_quantile(0.50)
+     << "," << histo.estimated_quantile(0.75)
+     << "," << histo.estimated_quantile(0.90)
+     << "," << histo.estimated_quantile(0.99)
+     << "," << histo.estimated_quantile(0.999)
+     << "," << histo.estimated_quantile(0.9999)
+     << "," << histo.observed_max();
 }
 
 } // anonymous namespace
@@ -86,16 +129,20 @@ jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
 void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
   char const* fields[] = {
     "min", "p25", "p50", "p75", "p90", "p99", "p999", "p9999", "max" };
-  char const* tracked[] = {
-    "RatePerSec", "RatePerMSec", "RatePerUSec", "ProcessingLatency" };
-  os << "Name";
+  char const* tracked[] = { "RatePerSec", "RatePerMSec", "RatePerUSec" };
+  os << "Name,NSamples";
   for (auto t : tracked) {
     for (auto f : fields) {
       os << "," << f << t;
     }
   }
-  os << "minArrival,p0001Arrival,p001Arrival,p01Arrival,p25Arrival"
-     << ",p50Arrival,p75Arrival,maxArrival";
+  os << ",minArrival,p0001Arrival,p001Arrival,p01Arrival"
+     << ",p05Arrival,p10Arrival,p25Arrival,p50Arrival,p75Arrival"
+     << ",p90Arrival,p99Arrival,maxArrival";
+  os << ",minProcessing,p10Processing,p25Processing,p50Processing"
+     << ",p75Processing,p90Processing,p99Processing,p999Processing"
+     << ",p9999Processing,maxProcessing";
+  os << "\n";
 }
 
 void jb::offline_feed_statistics::record_sample(
@@ -129,13 +176,21 @@ void jb::offline_feed_statistics::print_csv(
     std::string const& name, std::ostream& os) const {
   if (interarrival_.nsamples() == 0) {
     os << name << ",0";
-    os << ",,,,,,,,,,"; // per-second rate
-    os << ",,,,,,,,,,"; // per-millisecond rate
-    os << ",,,,,,,,,,"; // per-microsecond rate
-    os << ",,,,,,,,,,"; // interarrival
-    os << ",,,,,,,,,,"; // processing latency
+    os << ",,,,,,,,,";    // per-second rate
+    os << ",,,,,,,,,";    // per-millisecond rate
+    os << ",,,,,,,,,";    // per-microsecond rate
+    os << ",,,,,,,,,,,,"; // interarrival
+    os << ",,,,,,,,,,";   // processing latency
+    os << "\n";
     return;
   }
+  os << name << "," << processing_latency_.nsamples();
+  csv_rate(os, per_sec_rate_);
+  csv_rate(os, per_msec_rate_);
+  csv_rate(os, per_usec_rate_);
+  csv_arrival(os, interarrival_);
+  csv_latency(os, processing_latency_);
+  os << std::endl;
 }
 
 namespace jb {
