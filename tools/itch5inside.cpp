@@ -1,5 +1,6 @@
 #include <jb/itch5/compute_inside.hpp>
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/offline_feed_statistics.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
@@ -19,6 +20,7 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> input_file;
   jb::config_attribute<config,std::string> output_file;
   jb::config_attribute<config,jb::log::config> log;
+  jb::config_attribute<config,jb::offline_feed_statistics::config> stats;
 };
 
 
@@ -36,11 +38,16 @@ int main(int argc, char* argv[]) try {
   boost::iostreams::filtering_ostream out;
   jb::open_output_file(out, cfg.output_file());
 
-  auto cb = [&out](jb::itch5::compute_inside::time_point recv_ts,
-               jb::itch5::message_header const& header,
-               jb::itch5::stock_t const& stock,
-               jb::itch5::half_quote const& bid,
-               jb::itch5::half_quote const& offer) {
+  jb::offline_feed_statistics stats(cfg.stats());
+
+  auto cb = [&out,&stats](
+      jb::itch5::compute_inside::time_point recv_ts,
+      jb::itch5::message_header const& header,
+      jb::itch5::stock_t const& stock,
+      jb::itch5::half_quote const& bid,
+      jb::itch5::half_quote const& offer) {
+    auto pl = std::chrono::steady_clock::now() - recv_ts;
+    stats.sample(header.timestamp.ts, pl);
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
@@ -73,7 +80,8 @@ config::config()
     , output_file(desc("output-file").help(
         "The name of the file where to store the inside data."
         "  Files ending in .gz are automatically compressed."), this)
-    , log(desc("log"), this)
+    , log(desc("log", "logging"), this)
+    , stats(desc("stats", "offline-feed-statistics"), this)
 {}
 
 void config::validate() const {
