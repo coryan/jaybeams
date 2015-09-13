@@ -13,7 +13,7 @@ namespace jb {
 
 #define JB_ASSERT_THROW(PRED) \
   do { if(not (PRED)) { \
-      raise_assertion_failure(__FILE__, __LINE__, #PRED); \
+      ::jb::raise_assertion_failure(__FILE__, __LINE__, #PRED); \
   } } while(false)
 
 } // namespace jb
