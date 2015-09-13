@@ -174,7 +174,11 @@ void jb::offline_feed_statistics::record_sample(
 
 void jb::offline_feed_statistics::print_csv(
     std::string const& name, std::ostream& os) const {
-  if (interarrival_.nsamples() == 0) {
+  if (per_sec_rate_.nsamples() == 0
+      or per_msec_rate_.nsamples() == 0
+      or per_usec_rate_.nsamples() == 0
+      or interarrival_.nsamples() == 0
+      or processing_latency_.nsamples() == 0) {
     os << name << ",0";
     os << ",,,,,,,,,";    // per-second rate
     os << ",,,,,,,,,";    // per-millisecond rate
