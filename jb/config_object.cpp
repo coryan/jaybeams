@@ -1,5 +1,6 @@
 #include <jb/config_object.hpp>
 #include <jb/config_files_location.hpp>
+#include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
 #include <boost/program_options.hpp>
@@ -159,13 +160,10 @@ void jb::config_object::merge_values(
   for (auto const& j : source) {
     if (j.second.IsMap()) {
       merge_values(target[j.first.Scalar()], j.second);
-    } else if (j.second.IsSequence()) {
-      throw std::runtime_error("Not implemented");
     } else if (j.second.IsScalar()) {
       target[j.first.Scalar()] = j.second.Scalar();
-    } else if (j.second.IsNull()) {
-      throw std::runtime_error("Not implemented");
     }
+    JB_ASSERT_THROW(j.second.IsScalar() or j.second.IsMap());
   }
 }
 
