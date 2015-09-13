@@ -27,7 +27,8 @@ void jb::itch5::compute_inside::handle_message(
     // ... if there is a change at the inside send that to the
     // callback ...
     callback_(
-        recv_ts, msg.stock, i->second.best_bid(), i->second.best_offer());
+        recv_ts, msg.header, msg.stock,
+        i->second.best_bid(), i->second.best_offer());
   }
 }
 
@@ -85,7 +86,8 @@ void jb::itch5::compute_inside::handle_message(
     // callback ...
     auto i = std::get<2>(r);
     callback_(
-        recv_ts, copy.stock, i->second.best_bid(), i->second.best_offer());
+        recv_ts, msg.header, copy.stock,
+        i->second.best_bid(), i->second.best_offer());
   }
 }
 
@@ -145,7 +147,8 @@ void jb::itch5::compute_inside::handle_reduce(
     // ... if there is a change at the inside send that to the
     // callback ...
     callback_(
-        recv_ts, copy.stock, i->second.best_bid(), i->second.best_offer());
+        recv_ts, header, copy.stock,
+        i->second.best_bid(), i->second.best_offer());
   }
 }
 

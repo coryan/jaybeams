@@ -53,11 +53,16 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
       compute_inside::time_point, stock_t,
       half_quote const&, half_quote const&)> callback;
 
-  // ... create a handler ...
-  auto cb = [&callback](compute_inside::time_point a, stock_t b,
-                        half_quote const& c, half_quote const& d) {
-    callback(a, b, c, d);
+  // ... create a callback that holds a reference to the mock
+  // function, because the handler keeps the callback by value.  Also,
+  // ignore the header, because it is tedious to test for it ...
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) {
+    callback(recv_ts, stock, bid, offer);
   };
+  // ... create the object under testing ...
   compute_inside tested(cb);
 
   // ... we do not expect any callbacks ...
@@ -190,11 +195,16 @@ BOOST_AUTO_TEST_CASE(compute_inside_replace) {
       compute_inside::time_point, stock_t,
       half_quote const&, half_quote const&)> callback;
 
-  // ... create a handler ...
-  auto cb = [&callback](compute_inside::time_point a, stock_t b,
-                        half_quote const& c, half_quote const& d) {
-    callback(a, b, c, d);
+  // ... create a callback that holds a reference to the mock
+  // function, because the handler keeps the callback by value.  Also,
+  // ignore the header, because it is tedious to test for it ...
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) {
+    callback(recv_ts, stock, bid, offer);
   };
+  // ... create the object under testing ...
   compute_inside tested(cb);
 
   // ... setup the book with orders on both sides ...
@@ -257,11 +267,16 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
       compute_inside::time_point, stock_t,
       half_quote const&, half_quote const&)> callback;
 
-  // ... create a handler ...
-  auto cb = [&callback](compute_inside::time_point a, stock_t b,
-                        half_quote const& c, half_quote const& d) {
-    callback(a, b, c, d);
+  // ... create a callback that holds a reference to the mock
+  // function, because the handler keeps the callback by value.  Also,
+  // ignore the header, because it is tedious to test for it ...
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) {
+    callback(recv_ts, stock, bid, offer);
   };
+  // ... create the object under testing ...
   compute_inside tested(cb);
 
   // ... force an execution on a non-existing order ...

@@ -17,6 +17,7 @@ class config : public jb::config_object {
   void validate() const override;
 
   jb::config_attribute<config,std::string> input_file;
+  jb::config_attribute<config,std::string> output_file;
   jb::config_attribute<config,jb::log::config> log;
 };
 
@@ -32,10 +33,23 @@ int main(int argc, char* argv[]) try {
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
 
-  auto cb = [](jb::itch5::compute_inside::time_point,
-               jb::itch5::stock_t,
-               jb::itch5::half_quote const&,
-               jb::itch5::half_quote const&) {};
+  boost::iostreams::filtering_ostream out;
+  jb::open_output_file(out, cfg.output_file());
+
+  auto cb = [&out](jb::itch5::compute_inside::time_point recv_ts,
+               jb::itch5::message_header const& header,
+               jb::itch5::stock_t const& stock,
+               jb::itch5::half_quote const& bid,
+               jb::itch5::half_quote const& offer) {
+    out << header.timestamp.ts.count()
+        << " " << header.stock_locate
+        << " " << stock
+        << " " << bid.first.as_integer()
+        << " " << bid.second
+        << " " << offer.first.as_integer()
+        << " " << offer.second
+        << "\n";
+  };
 
   jb::itch5::compute_inside handler(cb);
   jb::itch5::process_iostream(in, handler);
@@ -56,6 +70,9 @@ namespace {
 config::config()
     : input_file(desc("input-file").help(
         "An input file with ITCH-5.0 messages."), this)
+    , output_file(desc("output-file").help(
+        "The name of the file where to store the inside data."
+        "  Files ending in .gz are automatically compressed."), this)
     , log(desc("log"), this)
 {}
 
@@ -64,6 +81,11 @@ void config::validate() const {
     throw jb::usage(
         "Missing input-file setting."
         "  You must specify an input file.", 1);
+  }
+  if (output_file() == "") {
+    throw jb::usage(
+        "Missing output-file setting."
+        "  You must specify an output file.", 1);
   }
   log().validate();
 }

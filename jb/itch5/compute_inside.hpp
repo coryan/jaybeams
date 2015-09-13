@@ -37,7 +37,8 @@ class compute_inside {
 
   /// Callbacks
   typedef std::function<void(
-      time_point, stock_t, half_quote const&, half_quote const&)> callback_type;
+      time_point, message_header const&, stock_t const&,
+      half_quote const&, half_quote const&)> callback_type;
   //@}
 
   /// Initialize an empty handler
