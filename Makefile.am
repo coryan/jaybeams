@@ -12,6 +12,7 @@ noinst_LIBRARIES = \
 
 jb_unit_tests = \
   jb/ut_as_hhmmss \
+  jb/ut_assert_throw \
   jb/ut_config_files_location \
   jb/ut_config_object \
   jb/ut_event_rate_estimator \
@@ -361,6 +362,10 @@ jb_bm_clocks_LDADD = jb/libjb_testing.a jb/libjb.a
 jb_ut_as_hhmmss_SOURCES = jb/ut_as_hhmmss.cpp
 jb_ut_as_hhmmss_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_as_hhmmss
 jb_ut_as_hhmmss_LDADD = $(jb_ut_libs)
+
+jb_ut_assert_throw_SOURCES = jb/ut_assert_throw.cpp
+jb_ut_assert_throw_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_assert_throw
+jb_ut_assert_throw_LDADD = $(jb_ut_libs)
 
 jb_ut_config_files_location_SOURCES = jb/ut_config_files_location.cpp
 jb_ut_config_files_location_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_files_location
