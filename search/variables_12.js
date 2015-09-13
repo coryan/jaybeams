@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['warmup_5fiterations',['warmup_iterations',['../classjb_1_1testing_1_1microbenchmark__config.html#aa9d3400131ee19799d75411018f87760',1,'jb::testing::microbenchmark_config::warmup_iterations()'],['../namespacejb_1_1testing_1_1defaults.html#ac439ecbfc2de17f840784fea43e8821e',1,'jb::testing::defaults::warmup_iterations()']]],
-  ['wire_5fsize',['wire_size',['../classjb_1_1itch5_1_1short__string__field.html#a21cf501dd52c580a086d388001f48a30',1,'jb::itch5::short_string_field']]],
-  ['workers',['workers',['../classprogram__config.html#a87234bf77e6cb3fcb264d06423b85539',1,'program_config']]],
-  ['writer',['writer',['../classworker__config.html#a3f031ec4061aa3b667e82ccab56ca1a4',1,'worker_config']]]
+  ['value_5f',['value_',['../classjb_1_1config__attribute.html#a6bfa4ffde7f294a53dbc566e79a6b454',1,'jb::config_attribute::value_()'],['../classjb_1_1itch5_1_1char__list__field.html#a467b457bc0aa7677c43c1671a92531b3',1,'jb::itch5::char_list_field::value_()'],['../classjb_1_1itch5_1_1price__field.html#a786f6e8a26664bb5d97a0754c0a242c6',1,'jb::itch5::price_field::value_()']]],
+  ['value_5fvalidator_5f',['value_validator_',['../classjb_1_1itch5_1_1short__string__field.html#ae5fff071d656498ac1dcc349c0ae0f10',1,'jb::itch5::short_string_field']]],
+  ['verbose',['verbose',['../classjb_1_1testing_1_1microbenchmark__config.html#a0b04016869e2e60f4e6bed24beb9854d',1,'jb::testing::microbenchmark_config::verbose()'],['../namespacejb_1_1testing_1_1defaults.html#a836dbdebd0f0a7c936b86e52958d8c00',1,'jb::testing::defaults::verbose()']]]
 ];

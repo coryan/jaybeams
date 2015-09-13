@@ -23,6 +23,7 @@ var searchData=
   ['char_5flist_5fvalidator_3c_20true_20_3e',['char_list_validator&lt; true &gt;',['../structjb_1_1itch5_1_1char__list__validator_3_01true_01_4.html',1,'jb::itch5']]],
   ['char_5flist_5fvalidator_3c_20true_2c_20a_2c_20v_2e_2e_2e_3e',['char_list_validator&lt; true, a, V...&gt;',['../structjb_1_1itch5_1_1char__list__validator_3_01true_00_01a_00_01V_8_8_8_4.html',1,'jb::itch5']]],
   ['check_5fconstraints',['check_constraints',['../structjb_1_1histogram_1_1check__constraints.html',1,'jb::histogram']]],
+  ['compute_5finside',['compute_inside',['../classjb_1_1itch5_1_1compute__inside.html',1,'jb::itch5']]],
   ['config',['config',['../classjb_1_1log_1_1config.html',1,'jb::log']]],
   ['config',['config',['../classjb_1_1offline__feed__statistics_1_1config.html',1,'jb::offline_feed_statistics']]],
   ['config_5fattribute',['config_attribute',['../classjb_1_1config__attribute.html',1,'jb']]],

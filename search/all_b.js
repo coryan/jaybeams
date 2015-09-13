@@ -9,6 +9,7 @@ var searchData=
   ['level_5f2',['level_2',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html#a42ba2f371a0be4ad1781835951e8ad1b',1,'jb::itch5::mwcb_decline_level_message']]],
   ['level_5f3',['level_3',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html#a5a0b6ad26646f6044b034a7975078d4a',1,'jb::itch5::mwcb_decline_level_message']]],
   ['linker',['linker',['../namespacejb_1_1testing.html#a0096e6d140099077625c171d9a8fe73a',1,'jb::testing']]],
+  ['live_5forder_5fcount',['live_order_count',['../classjb_1_1itch5_1_1compute__inside.html#a695a5bcbd36dff9bfa0b4b519dedbcd0',1,'jb::itch5::compute_inside']]],
   ['load_5foverrides',['load_overrides',['../classjb_1_1config__object.html#ae605be26755b7af1e9d90d1e229bb2fa',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::string const &amp;filename, char const *environment_variable_name)'],['../classjb_1_1config__object.html#a08686516f759e8f8be7d1b4eced16afb',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::string const &amp;filename)'],['../classjb_1_1config__object.html#afa9aeb4444edbc3c7658787dc361c8d1',1,'jb::config_object::load_overrides(int &amp;argc, char *argv[], std::istream &amp;is)']]],
   ['log_2ecpp',['log.cpp',['../log_8cpp.html',1,'']]],
   ['log_2ehpp',['log.hpp',['../log_8hpp.html',1,'']]],

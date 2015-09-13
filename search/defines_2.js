@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['jb_5fassert_5fthrow',['JB_ASSERT_THROW',['../assert__throw_8hpp.html#a3c5ff317866876ef0871ba32b5d2b9af',1,'assert_throw.hpp']]],
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
   ['jb_5fdefaults_5fclock_5frepetitions',['JB_DEFAULTS_clock_repetitions',['../bm__clocks_8cpp.html#a7245ccbe1e373f0fbef94f00c691e875',1,'bm_clocks.cpp']]],

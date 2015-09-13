@@ -16,5 +16,6 @@ var searchData=
   ['primary_5fmarket_5fmaker',['primary_market_maker',['../structjb_1_1itch5_1_1market__participant__position__message.html#a17f1d0f35656bc38d5740517382b1ffa',1,'jb::itch5::market_participant_position_message']]],
   ['printable',['printable',['../structjb_1_1itch5_1_1order__executed__price__message.html#a7c18ba4a5fe232f00c18b60d791e0a77',1,'jb::itch5::order_executed_price_message']]],
   ['priority',['priority',['../classthread__config.html#a6d825485047b562f06e95f3ef5188b0e',1,'thread_config']]],
-  ['processing_5flatency_5f',['processing_latency_',['../classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c',1,'jb::offline_feed_statistics']]]
+  ['processing_5flatency_5f',['processing_latency_',['../classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c',1,'jb::offline_feed_statistics']]],
+  ['px',['px',['../classjb_1_1itch5_1_1compute__inside.html#a1a074f23a5d87ce1f80aadf278427a1f',1,'jb::itch5::compute_inside::order_data']]]
 ];

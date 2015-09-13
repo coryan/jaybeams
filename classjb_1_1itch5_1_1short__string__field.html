@@ -132,6 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5eed0943cd2150446492b7910596a6ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a5eed0943cd2150446492b7910596a6ab">short_string_field</a> (<a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a> const &amp;validator=<a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a>())</td></tr>
 <tr class="memdesc:a5eed0943cd2150446492b7910596a6ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a5eed0943cd2150446492b7910596a6ab">More...</a><br/></td></tr>
 <tr class="separator:a5eed0943cd2150446492b7910596a6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4be427adc639f7f908ce40f6e8b09e30"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a4be427adc639f7f908ce40f6e8b09e30">short_string_field</a> (std::string const &amp;rhs, <a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a> const &amp;validator=<a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a>())</td></tr>
+<tr class="memdesc:a4be427adc639f7f908ce40f6e8b09e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a std::string.  <a href="#a4be427adc639f7f908ce40f6e8b09e30">More...</a><br/></td></tr>
+<tr class="separator:a4be427adc639f7f908ce40f6e8b09e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe05f2e5aaca9c13979f3161504b523c"><td class="memItemLeft" align="right" valign="top">char const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#afe05f2e5aaca9c13979f3161504b523c">c_str</a> () const </td></tr>
 <tr class="memdesc:afe05f2e5aaca9c13979f3161504b523c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the C-string representation.  <a href="#afe05f2e5aaca9c13979f3161504b523c">More...</a><br/></td></tr>
 <tr class="separator:afe05f2e5aaca9c13979f3161504b523c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +175,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a5df06e061e2f76c2ed03653c70be0a80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a5df06e061e2f76c2ed03653c70be0a80">assign</a> (char const *buf)</td></tr>
 <tr class="memdesc:a5df06e061e2f76c2ed03653c70be0a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment from a character buffer.  <a href="#a5df06e061e2f76c2ed03653c70be0a80">More...</a><br/></td></tr>
 <tr class="separator:a5df06e061e2f76c2ed03653c70be0a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9259c25875e5873f8a81532d989a036f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a9259c25875e5873f8a81532d989a036f">nul_terminate</a> ()</td></tr>
+<tr class="memdesc:a9259c25875e5873f8a81532d989a036f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NUL terminate the string.  <a href="#a9259c25875e5873f8a81532d989a036f">More...</a><br/></td></tr>
+<tr class="separator:a9259c25875e5873f8a81532d989a036f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a279f0a0a4adaa6710d4f827ac03e6703"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a279f0a0a4adaa6710d4f827ac03e6703">validate</a> () const </td></tr>
 <tr class="memdesc:a279f0a0a4adaa6710d4f827ac03e6703"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate the value using the functor.  <a href="#a279f0a0a4adaa6710d4f827ac03e6703">More...</a><br/></td></tr>
 <tr class="separator:a279f0a0a4adaa6710d4f827ac03e6703"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,7 +213,7 @@ class jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;</h
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00038">38</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00039">39</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a982d1199a237b124df529757d2571386"></a>
 <div class="memitem">
@@ -223,7 +229,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>The type of validator. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00057">57</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00058">58</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -247,14 +253,54 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00060">60</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00061">61</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4be427adc639f7f908ce40f6e8b09e30"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t wire_size_value, typename value_validator = noop_validator&lt;char const*&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html">jb::itch5::short_string_field</a>&lt; wire_size_value, value_validator &gt;::<a class="el" href="classjb_1_1itch5_1_1short__string__field.html">short_string_field</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a> const &amp;&#160;</td>
+          <td class="paramname"><em>validator</em> = <code><a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">value_validator_t</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor from a std::string. </p>
+
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00068">68</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -337,9 +383,9 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>Assignment from a character buffer. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00109">109</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00120">120</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00141">jb::itch5::decoder&lt; validate, short_string_field&lt; wsize, F &gt; &gt;::r()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00165">jb::itch5::decoder&lt; validate, short_string_field&lt; wsize, F &gt; &gt;::r()</a>.</p>
 
 </div>
 </div>
@@ -368,9 +414,40 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>Return the C-string representation. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00067">67</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00078">78</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00156">jb::itch5::operator&lt;&lt;()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00187">jb::itch5::hash_value()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00180">jb::itch5::operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9259c25875e5873f8a81532d989a036f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t wire_size_value, typename value_validator = noop_validator&lt;char const*&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">jb::itch5::short_string_field</a>&lt; wire_size_value, value_validator &gt;::nul_terminate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>NUL terminate the string. </p>
+
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00126">126</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00120">jb::itch5::short_string_field&lt; 8 &gt;::assign()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00068">jb::itch5::short_string_field&lt; 8 &gt;::short_string_field()</a>.</p>
 
 </div>
 </div>
@@ -400,7 +477,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>compare vs another <a class="el" href="classjb_1_1itch5_1_1short__string__field.html" title="A helper type to define short (and fixed sized) string fields. ">short_string_field</a> </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00082">82</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00093">93</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -430,7 +507,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>compare vs a C string </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00092">92</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00103">103</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -512,7 +589,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>compare vs another <a class="el" href="classjb_1_1itch5_1_1short__string__field.html" title="A helper type to define short (and fixed sized) string fields. ">short_string_field</a> </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00077">77</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00088">88</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -542,7 +619,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>compare vs a C string </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00087">87</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00098">98</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -577,7 +654,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00123">123</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00147">147</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -602,7 +679,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00107">107</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00118">118</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -626,7 +703,7 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00106">106</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00117">117</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -653,9 +730,9 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>The in-memory representation. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00131">131</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00155">155</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00109">jb::itch5::short_string_field&lt; 8 &gt;::assign()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00067">jb::itch5::short_string_field&lt; 8 &gt;::c_str()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00082">jb::itch5::short_string_field&lt; 8 &gt;::operator&lt;()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00077">jb::itch5::short_string_field&lt; 8 &gt;::operator==()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00123">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00120">jb::itch5::short_string_field&lt; 8 &gt;::assign()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00078">jb::itch5::short_string_field&lt; 8 &gt;::c_str()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00126">jb::itch5::short_string_field&lt; 8 &gt;::nul_terminate()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00093">jb::itch5::short_string_field&lt; 8 &gt;::operator&lt;()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00088">jb::itch5::short_string_field&lt; 8 &gt;::operator==()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00068">jb::itch5::short_string_field&lt; 8 &gt;::short_string_field()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00147">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
 
 </div>
 </div>
@@ -681,9 +758,9 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>The size of the field in memory. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00054">54</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00055">55</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00082">jb::itch5::short_string_field&lt; 8 &gt;::operator&lt;()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00077">jb::itch5::short_string_field&lt; 8 &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00093">jb::itch5::short_string_field&lt; 8 &gt;::operator&lt;()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00088">jb::itch5::short_string_field&lt; 8 &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -709,9 +786,9 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>The validator. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00134">134</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00158">158</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00123">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00147">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
 
 </div>
 </div>
@@ -737,9 +814,9 @@ template&lt;std::size_t wire_size_value, typename value_validator = noop_validat
 
 <p>The size of the field on the wire. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00051">51</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00052">52</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00109">jb::itch5::short_string_field&lt; 8 &gt;::assign()</a>.</p>
+<p>Referenced by <a class="el" href="short__string__field_8hpp_source.html#l00120">jb::itch5::short_string_field&lt; 8 &gt;::assign()</a>, <a class="el" href="short__string__field_8hpp_source.html#l00126">jb::itch5::short_string_field&lt; 8 &gt;::nul_terminate()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00068">jb::itch5::short_string_field&lt; 8 &gt;::short_string_field()</a>.</p>
 
 </div>
 </div>

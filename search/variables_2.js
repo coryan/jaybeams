@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__inside.html#a53f4f566d3318ecebfbfeb5572fa45ae',1,'jb::itch5::compute_inside']]],
   ['canceled_5fshares',['canceled_shares',['../structjb_1_1itch5_1_1order__cancel__message.html#a2bbae989935989bfc3dd89c939f99bef',1,'jb::itch5::order_cancel_message']]],
   ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a3fa935cc03df91b9690a9651cee58c54',1,'worker_config']]],
   ['class_5fname',['class_name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a206024a1c4f2d90ee68e2e340048dac9',1,'jb::config_object::attribute_descriptor']]],

@@ -230,6 +230,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af476843a73bee87871b7481352208082"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#af476843a73bee87871b7481352208082">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1as__hh__mm__ss__u.html">as_hh_mm_ss_u</a> const &amp;x)</td></tr>
 <tr class="memdesc:af476843a73bee87871b7481352208082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format <a class="el" href="structjb_1_1as__hh__mm__ss__u.html" title="Helper class to print time durations in HH:MM:SS.UUUUUU format. ">as_hh_mm_ss_u</a> into an iostream.  <a href="#af476843a73bee87871b7481352208082">More...</a><br/></td></tr>
 <tr class="separator:af476843a73bee87871b7481352208082"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb3fe116bc252b26920a20b9911d820e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">raise_assertion_failure</a> (char const *filename, int lineno, char const *predicate)</td></tr>
+<tr class="memdesc:acb3fe116bc252b26920a20b9911d820e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise std::exception to indicate an assertion failure.  <a href="#acb3fe116bc252b26920a20b9911d820e">More...</a><br/></td></tr>
+<tr class="separator:acb3fe116bc252b26920a20b9911d820e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2af85800e929a8f320160708a32041c"><td class="memItemLeft" align="right" valign="top">char const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#ad2af85800e929a8f320160708a32041c">sysconfdir</a> ()</td></tr>
 <tr class="memdesc:ad2af85800e929a8f320160708a32041c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the system configuration directory.  <a href="#ad2af85800e929a8f320160708a32041c">More...</a><br/></td></tr>
 <tr class="separator:ad2af85800e929a8f320160708a32041c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -664,7 +667,7 @@ template&lt;typename sample_type &gt; </div>
 
 <p>References <a class="el" href="filetype_8cpp_source.html#l00003">is_gz()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>, and <a class="el" href="itch5stats_8cpp_source.html#l00060">main()</a>.</p>
+<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>, and <a class="el" href="itch5inside_8cpp_source.html#l00027">main()</a>.</p>
 
 </div>
 </div>
@@ -698,7 +701,7 @@ template&lt;typename sample_type &gt; </div>
 
 <p>References <a class="el" href="filetype_8cpp_source.html#l00003">is_gz()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00066">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>.</p>
+<p>Referenced by <a class="el" href="ut__fileio_8cpp_source.html#l00066">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="ut__fileio_8cpp_source.html#l00010">check_read_write()</a>, and <a class="el" href="itch5inside_8cpp_source.html#l00027">main()</a>.</p>
 
 </div>
 </div>
@@ -955,6 +958,42 @@ template&lt;typename sample_type &gt; </div>
 <p>Definition at line <a class="el" href="severity__level_8cpp_source.html#l00052">52</a> of file <a class="el" href="severity__level_8cpp_source.html">severity_level.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="convert__severity__level_8hpp_source.html#l00016">YAML::convert&lt; jb::severity_level &gt;::decode()</a>, and <a class="el" href="severity__level_8cpp_source.html#l00045">operator&gt;&gt;()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acb3fe116bc252b26920a20b9911d820e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::raise_assertion_failure </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lineno</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>predicate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Raise std::exception to indicate an assertion failure. </p>
+
+<p>Definition at line <a class="el" href="assert__throw_8cpp_source.html#l00006">6</a> of file <a class="el" href="assert__throw_8cpp_source.html">assert_throw.cpp</a>.</p>
 
 </div>
 </div>

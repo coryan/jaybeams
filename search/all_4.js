@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['empty_5fbid',['empty_bid',['../classjb_1_1itch5_1_1order__book.html#a17d38ac37b798806214e11243559088c',1,'jb::itch5::order_book']]],
+  ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#af3c05711a7d972b75a6f9a1b5892a0d8',1,'jb::itch5::order_book']]],
   ['enable_5fconsole_5flogging',['enable_console_logging',['../classjb_1_1log_1_1config.html#ad9a4728157c7310a053e6d13d8e259d9',1,'jb::log::config::enable_console_logging()'],['../namespacejb_1_1log_1_1defaults.html#a79eaf93d0011866944e62a67437cfcc1',1,'jb::log::defaults::enable_console_logging()']]],
   ['enable_5ffile_5flogging',['enable_file_logging',['../classjb_1_1log_1_1config.html#ac7475e9429a2efeb3567f75c45355c1d',1,'jb::log::config::enable_file_logging()'],['../namespacejb_1_1log_1_1defaults.html#a5ae3b08c0be6fe1a4e0dc82457e4dd09',1,'jb::log::defaults::enable_file_logging()']]],
   ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;']]],

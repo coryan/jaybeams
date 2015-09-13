@@ -12,6 +12,7 @@ var searchData=
   ['itch5',['itch5',['../namespacejb_1_1itch5.html',1,'jb']]],
   ['jb',['jb',['../namespacejb.html',1,'']]],
   ['jb_2dconfig_2ehpp',['jb-config.hpp',['../jb-config_8hpp.html',1,'']]],
+  ['jb_5fassert_5fthrow',['JB_ASSERT_THROW',['../assert__throw_8hpp.html#a3c5ff317866876ef0871ba32b5d2b9af',1,'assert_throw.hpp']]],
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
   ['jb_5fdefaults_5fclock_5frepetitions',['JB_DEFAULTS_clock_repetitions',['../bm__clocks_8cpp.html#a7245ccbe1e373f0fbef94f00c691e875',1,'bm_clocks.cpp']]],
@@ -40,6 +41,6 @@ var searchData=
   ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]],
   ['jb_5ftesting_5fmax_5fdifferences',['JB_TESTING_MAX_DIFFERENCES',['../check__complex__close__enough_8hpp.html#a20aeb5a0bdb905aa2be9c2b010886562',1,'check_complex_close_enough.hpp']]],
   ['log',['log',['../namespacejb_1_1log.html',1,'jb']]],
-  ['testing',['testing',['../namespacejb_1_1testing.html',1,'jb']]],
-  ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]]
+  ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]],
+  ['testing',['testing',['../namespacejb_1_1testing.html',1,'jb']]]
 ];

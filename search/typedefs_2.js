@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['callback_5ftype',['callback_type',['../classjb_1_1itch5_1_1compute__inside.html#af091e95e952e8ae9e7802f1f9ccab413',1,'jb::itch5::compute_inside']]],
   ['class_5foverrides',['class_overrides',['../namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60',1,'jb']]],
   ['clock',['clock',['../classjb_1_1testing_1_1microbenchmark__base.html#a530f3be24e8d8dc9cf162f3b2ec7bc41',1,'jb::testing::microbenchmark_base']]],
   ['config',['config',['../classjb_1_1testing_1_1microbenchmark.html#a4c6c26872f0c425932f582bbf7782b29',1,'jb::testing::microbenchmark']]],
