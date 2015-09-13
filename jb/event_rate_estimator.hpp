@@ -6,6 +6,7 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 namespace jb {
@@ -168,6 +169,13 @@ class event_rate_estimator {
   /// Estimate the necessary number of buckets
   std::size_t bucket_count(
       duration_type measurement_period, duration_type sampling_period) {
+    if (sampling_period <= duration_type(0)) {
+      std::ostringstream os;
+      os << "jb::event_rate_estimate - sampling period ("
+         << sampling_period.count()
+         << ") must be a positive number";
+      throw std::invalid_argument(os.str());
+    }
     if (sampling_period > measurement_period) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - measurement period ("
@@ -177,13 +185,7 @@ class event_rate_estimator {
          << ")";
       throw std::invalid_argument(os.str());
     }
-    if (sampling_period <= duration_type(0)) {
-      std::ostringstream os;
-      os << "jb::event_rate_estimate - sampling period ("
-         << sampling_period.count()
-         << ") must be a positive number";
-      throw std::invalid_argument(os.str());
-    }
+
     if ((measurement_period % sampling_period).count() != 0) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - measurement period ("
@@ -193,7 +195,14 @@ class event_rate_estimator {
          << ")";
       throw std::invalid_argument(os.str());
     }
-    auto N = measurement_period / sampling_period;
+
+    // ... because measurement_period and sampling_period are positive
+    // numbers N will be a positive number ...
+    typedef typename duration_type::rep rep;
+    typedef typename std::make_unsigned<rep>::type unsigned_rep;
+    unsigned_rep N = measurement_period / sampling_period;
+    // ... beware, the type may be larger than what can be stored in
+    // an std::size_t (weird segmented memory platforms, yuck) ...
     if (N >= std::numeric_limits<std::size_t>::max()) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - measurement period ("

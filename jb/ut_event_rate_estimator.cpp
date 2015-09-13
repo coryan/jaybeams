@@ -157,8 +157,9 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_errors) {
   BOOST_CHECK_THROW(tested(seconds(10), seconds(0)), std::invalid_argument);
   BOOST_CHECK_THROW(tested(seconds(10), seconds(3)), std::invalid_argument);
 
-  typedef jb::event_rate_estimator<std::chrono::nanoseconds> testbig;
+  typedef std::chrono::duration<std::size_t> ticks;
+  typedef jb::event_rate_estimator<ticks> testbig;
   auto big = std::numeric_limits<std::size_t>::max();
   BOOST_CHECK_THROW(
-      testbig(nanoseconds(big), nanoseconds(1)), std::invalid_argument);
+      testbig(ticks(big), ticks(1)), std::invalid_argument);
 }
