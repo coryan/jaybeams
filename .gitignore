@@ -45,6 +45,7 @@ gcov/
 tsan/
 asan/
 ubsan/
+opt/
 
 # Generated documentation goes here
 doc/html/
