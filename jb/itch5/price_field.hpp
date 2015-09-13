@@ -8,6 +8,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <ratio>
 
 namespace jb {
@@ -116,6 +117,19 @@ typedef price_field<std::uint32_t,10000> price4_t;
 
 /// Convenience definition for Price(8) fields.
 typedef price_field<std::uint64_t,100000000> price8_t;
+
+template<typename price_field>
+inline price_field max_price_field_value() {
+  auto v = std::numeric_limits<typename price_field::wire_type>::max();
+  v /= price_field::denom;
+  return price_field(v * price_field::denom);
+}
+
+template<>
+inline price4_t max_price_field_value() {
+  // Per the ITCH-5.0 spec, the maximum value is 200,000.0000
+  return price4_t(std::uint32_t(200000) * std::uint32_t(price4_t::denom));
+}
 
 } // namespace itch5
 } // namespace jb

@@ -91,3 +91,17 @@ minimum-console-severity: NOTICE
   std::ostringstream os;
   BOOST_CHECK_NO_THROW(os << tested);
 }
+
+/**
+ * @test Verify that configuration errors are detected.
+ */
+BOOST_AUTO_TEST_CASE(logging_config_errors) {
+  char const contents[] = R"""(# YAML overrides
+enable-file-logging: true
+)""";
+  jb::log::config tested;
+  std::istringstream is(contents);
+  int argc = 0;
+  BOOST_CHECK_THROW(
+      tested.load_overrides(argc, nullptr, is), jb::usage);
+}

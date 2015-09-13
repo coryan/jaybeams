@@ -1,4 +1,5 @@
 #include <jb/log.hpp>
+#include <jb/assert_throw.hpp>
 #include <jb/as_hhmmss.hpp>
 
 #include <boost/log/attributes.hpp>
@@ -121,12 +122,14 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(
     local_time, "TimeStamp",
     boost::log::attributes::local_clock::value_type)
 
-bool filter_predicate(::boost::log::attribute_value_set const& attributes) {
-  if (*attributes[jb::log::severity] < *attributes[jb::log::min_severity]) {
-    return false;
-  }
-  if (*attributes[jb::log::severity] == jb::severity_level::debug) {
-    return (*attributes[jb::log::transaction] % 10000) == 0;
+bool filter_predicate(::boost::log::attribute_value_set const& attr) {
+  // ... if we got to this point the severity is high enough, but we
+  // need to silence some warnings (and also avoid lines without
+  // coverage) ...
+  JB_ASSERT_THROW(*attr[jb::log::severity] >= *attr[jb::log::min_severity]);
+  // ... debug messages are funny, only print a few ...
+  if (*attr[jb::log::severity] == jb::severity_level::debug) {
+    return (*attr[jb::log::transaction] % 10000) == 0;
   }
   return true;
 }
