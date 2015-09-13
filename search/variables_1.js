@@ -5,7 +5,7 @@ var searchData=
   ['bins_5f',['bins_',['../classjb_1_1histogram.html#a78798797db9b1e0cf936a4b8e0091be1',1,'jb::histogram']]],
   ['books_5f',['books_',['../classjb_1_1itch5_1_1compute__inside.html#a456692d7221b53de1e2f3f2d3eefabb2',1,'jb::itch5::compute_inside']]],
   ['breached_5flevel',['breached_level',['../structjb_1_1itch5_1_1mwcb__breach__message.html#aaafae9a1f322a642f2e94188200aae9d',1,'jb::itch5::mwcb_breach_message']]],
-  ['buckets_5f',['buckets_',['../classjb_1_1event__rate__estimator.html#a77a9e89f3ac61b6157516c656404de5d',1,'jb::event_rate_estimator']]],
+  ['buckets_5f',['buckets_',['../classjb_1_1event__rate__estimator.html#aa6ce1480ba40ec5a10f26273dbe9d866',1,'jb::event_rate_estimator']]],
   ['buffer_5f',['buffer_',['../classjb_1_1itch5_1_1short__string__field.html#a2f29574911a52df5c1a56a13797ed2d2',1,'jb::itch5::short_string_field']]],
   ['buffer_5fsize',['buffer_size',['../classjb_1_1itch5_1_1short__string__field.html#a9bfeb695574700d4c4676b959981b2f5',1,'jb::itch5::short_string_field']]],
   ['buy_5f',['buy_',['../classjb_1_1itch5_1_1order__book.html#aee38fd53908163fe1d17ad5135e7fa77',1,'jb::itch5::order_book']]],

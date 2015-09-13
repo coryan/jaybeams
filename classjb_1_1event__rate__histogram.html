@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>JayBeams: jb::event_rate_histogram&lt; counter_type, duration_type &gt; Class Template Reference</title>
+<title>JayBeams: jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,12 +96,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classjb_1_1event__rate__histogram-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">jb::event_rate_histogram&lt; counter_type, duration_type &gt; Class Template Reference</div>  </div>
+<div class="title">jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -110,44 +109,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for jb::event_rate_histogram&lt; counter_type, duration_type &gt;:</div>
+Inheritance diagram for jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classjb_1_1event__rate__histogram.png" usemap="#jb::event_rate_histogram&lt; counter_type, duration_type &gt;_map" alt=""/>
-  <map id="jb::event_rate_histogram&lt; counter_type, duration_type &gt;_map" name="jb::event_rate_histogram&lt; counter_type, duration_type &gt;_map">
-<area href="classjb_1_1histogram.html" alt="jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;" shape="rect" coords="0,0,406,24"/>
+  <img src="classjb_1_1event__rate__histogram.png" usemap="#jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;_map" alt=""/>
+  <map id="jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;_map" name="jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;_map">
+<area href="classjb_1_1histogram.html" alt="jb::histogram&lt; integer_range_binning&lt; std::uint64_t &gt;, counter_type &gt;" shape="rect" coords="0,0,445,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a9584d042dc8f36572f14034dc65133b5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a><br class="typebreak"/>
-&lt; std::uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#a9584d042dc8f36572f14034dc65133b5">binning_strategy</a></td></tr>
-<tr class="separator:a9584d042dc8f36572f14034dc65133b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad06e35714e8012784770507d1e382e17"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1histogram.html">histogram</a><br class="typebreak"/>
-&lt; <a class="el" href="classjb_1_1event__rate__histogram.html#a9584d042dc8f36572f14034dc65133b5">binning_strategy</a>, <br class="typebreak"/>
-<a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#ad06e35714e8012784770507d1e382e17">rate_histogram</a></td></tr>
-<tr class="separator:ad06e35714e8012784770507d1e382e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Type traits.</div></td></tr>
+<tr class="memitem:aa2190848e4bb073a12dc71c6a3f70be9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a><br class="typebreak"/>
+&lt; std::uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#aa2190848e4bb073a12dc71c6a3f70be9">binning_strategy</a></td></tr>
+<tr class="separator:aa2190848e4bb073a12dc71c6a3f70be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9904205d72f7fa21a0dae8ccf13a7d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1histogram.html">histogram</a><br class="typebreak"/>
+&lt; <a class="el" href="classjb_1_1event__rate__histogram.html#aa2190848e4bb073a12dc71c6a3f70be9">binning_strategy</a>, <br class="typebreak"/>
+<a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#abc9904205d72f7fa21a0dae8ccf13a7d">rate_histogram</a></td></tr>
+<tr class="separator:abc9904205d72f7fa21a0dae8ccf13a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a296a0a7f592457ad5d192aa48a2bbb80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#a296a0a7f592457ad5d192aa48a2bbb80">event_rate_histogram</a> (std::uint64_t max_expected_rate, duration_type period)</td></tr>
-<tr class="memdesc:a296a0a7f592457ad5d192aa48a2bbb80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a296a0a7f592457ad5d192aa48a2bbb80">More...</a><br/></td></tr>
-<tr class="separator:a296a0a7f592457ad5d192aa48a2bbb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8444c5b5b429e0a3bd5012e5020cc857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#a8444c5b5b429e0a3bd5012e5020cc857">sample</a> (duration_type ts)</td></tr>
-<tr class="memdesc:a8444c5b5b429e0a3bd5012e5020cc857"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a new sample.  <a href="#a8444c5b5b429e0a3bd5012e5020cc857">More...</a><br/></td></tr>
-<tr class="separator:a8444c5b5b429e0a3bd5012e5020cc857"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab850e66b03ec8ab0f1779994f5417e4f"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#ab850e66b03ec8ab0f1779994f5417e4f">last_rate</a> () const </td></tr>
-<tr class="memdesc:ab850e66b03ec8ab0f1779994f5417e4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the last sample, if any.  <a href="#ab850e66b03ec8ab0f1779994f5417e4f">More...</a><br/></td></tr>
-<tr class="separator:ab850e66b03ec8ab0f1779994f5417e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc6a5e584843a4685bfed4177bcb9af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#aedc6a5e584843a4685bfed4177bcb9af">event_rate_histogram</a> (std::uint64_t max_expected_rate, duration_type measurement_period, duration_type sampling_period=duration_type(1))</td></tr>
+<tr class="memdesc:aedc6a5e584843a4685bfed4177bcb9af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aedc6a5e584843a4685bfed4177bcb9af">More...</a><br/></td></tr>
+<tr class="separator:aedc6a5e584843a4685bfed4177bcb9af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc4894041b9926c540b8ede21fcfa93e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#adc4894041b9926c540b8ede21fcfa93e">sample</a> (duration_type ts)</td></tr>
+<tr class="memdesc:adc4894041b9926c540b8ede21fcfa93e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a new sample.  <a href="#adc4894041b9926c540b8ede21fcfa93e">More...</a><br/></td></tr>
+<tr class="separator:adc4894041b9926c540b8ede21fcfa93e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9f89fa3c82466a2eae3d57dcef3ed0c"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#ad9f89fa3c82466a2eae3d57dcef3ed0c">last_rate</a> () const </td></tr>
+<tr class="memdesc:ad9f89fa3c82466a2eae3d57dcef3ed0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the last sample, if any.  <a href="#ad9f89fa3c82466a2eae3d57dcef3ed0c">More...</a><br/></td></tr>
+<tr class="separator:ad9f89fa3c82466a2eae3d57dcef3ed0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a7b4f97d00c94708f78ed50ad5373070b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a><br class="typebreak"/>
-&lt; duration_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#a7b4f97d00c94708f78ed50ad5373070b">rate_</a></td></tr>
-<tr class="separator:a7b4f97d00c94708f78ed50ad5373070b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d399bddc2c0f0a086776ccce8cfc721"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#a3d399bddc2c0f0a086776ccce8cfc721">last_rate_</a></td></tr>
-<tr class="separator:a3d399bddc2c0f0a086776ccce8cfc721"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2b7e41ceef0b7fb81a15942083fcfd6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a><br class="typebreak"/>
+&lt; duration_type, <br class="typebreak"/>
+rate_counter_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#ad2b7e41ceef0b7fb81a15942083fcfd6">rate_</a></td></tr>
+<tr class="separator:ad2b7e41ceef0b7fb81a15942083fcfd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2fff9943ac5959eb75bb1f935c026d9"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__histogram.html#ab2fff9943ac5959eb75bb1f935c026d9">last_rate_</a></td></tr>
+<tr class="separator:ab2fff9943ac5959eb75bb1f935c026d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -202,66 +203,79 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:abd04d5c38e88b4c4cef2784e568f3571 inherit pub_methods_classjb_1_1histogram"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt;<br/>
-class jb::event_rate_histogram&lt; counter_type, duration_type &gt;</h3>
+<div class="textblock"><h3>template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt;<br/>
+class jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;</h3>
 
 <p>Keep a histogram of observed event rates. </p>
-<p>This class composes a histogram and an <a class="el" href="classjb_1_1event__rate__estimator.html" title="Helper class to compute statistics about messages frequency. ">event_rate_estimator</a> to collect running statistics about event rates. While an <a class="el" href="classjb_1_1event__rate__estimator.html" title="Helper class to compute statistics about messages frequency. ">event_rate_estimator</a> computes the number of events in the last X seconds, this class keeps a tally of the observed event rates, which can be used to build median, maximum and any other quantile of the message rate.</p>
+<p>This class collects running statistics about event rates. While an <a class="el" href="classjb_1_1event__rate__estimator.html" title="Estimate event rates over a trailing measurement period. ">event_rate_estimator</a> computes the number of events in the last X seconds, this class keeps a tally of the observed event rates, which can be used to build median, maximum and any other quantile of the message rate.</p>
 <p>The user specifies the maximum message rate to keep at full resolution, any rate above that value is simply recorded in the histogram overflow bucket.</p>
+<p>For example to keep track of per-millisecond message rate you would instantiate the class as follows:</p>
+<div class="fragment"><div class="line"><span class="keyword">typedef</span> <a class="code" href="classjb_1_1event__rate__histogram.html#aedc6a5e584843a4685bfed4177bcb9af">event_rate_histogram</a>&lt;</div>
+<div class="line">    int, std::chrono::microseconds&gt; my_rate_histogram;</div>
+<div class="line"><span class="keywordtype">int</span> max_expected_rate = 1000000;</div>
+<div class="line">my_rate_histogram rate_histo(</div>
+<div class="line">    max_expected_rate, std::chrono::microseconds(1000));</div>
+<div class="line"></div>
+<div class="line">...</div>
+<div class="line">rate_histo.sample(timestamp);</div>
+<div class="line">...</div>
+<div class="line">rate_histo.sample(timestamp);</div>
+</div><!-- fragment --><p>The user of the class must provide a maximum expected message rate, higher rates are recorded in a single 'overflow' bucket. If you guess too high on the rate the rate_histo object would consume more memory than necessary. If you guess too low the high quantiles might be less accurate. Memory requirements are low (the data structure is basically a vector of ints), but can be an issue if you create many histograms (for example, one histogram per security when analyzing a market data feed).</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">counter_type</td><td>The type used in the histogram counters. For most applications <em>int</em> is adequate, but you may use a smaller type if (a) you are memory constrained, and (b) you do not expect high values in the counters. </td></tr>
-    <tr><td class="paramname">duration_type</td><td>Define the bucket size for the <a class="el" href="classjb_1_1event__rate__estimator.html" title="Helper class to compute statistics about messages frequency. ">event_rate_estimator</a>. </td></tr>
+    <tr><td class="paramname">duration_type</td><td>Define the units used to measure time. This class assumes all events are timestamped with a class compatible with std::chrono::duration&lt;&gt;, against some epoch that is defined by convention but not explicitly provided to the class. This is convenient because some feeds just provide microseconds or nanoseconds since midnight, while others use microseconds since the Unix Epoch. If you are using some kind of std::chrono::time_point&lt;&gt; object for your timestamps simply call time_since_epoch() on the object before sampling. </td></tr>
+    <tr><td class="paramname">counter_type</td><td>The type used in the histogram counters. For most applications <em>int</em> is adequate, but you may use a smaller type if (a) you are memory constrained, and (b) you do not expect high values in the counters. You might also consider a wider integral type if you expect very high number of events. </td></tr>
+    <tr><td class="paramname">rate_counter_type</td><td>The type used in the event rate counters. Similar tradeofss as <em>counter_type</em>. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00034">34</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00069">69</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="a9584d042dc8f36572f14034dc65133b5"></a>
+<a class="anchor" id="aa2190848e4bb073a12dc71c6a3f70be9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a>&lt;std::uint64_t&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html#a9584d042dc8f36572f14034dc65133b5">binning_strategy</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1integer__range__binning.html">integer_range_binning</a>&lt;std::uint64_t&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html#aa2190848e4bb073a12dc71c6a3f70be9">binning_strategy</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00037">37</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00076">76</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad06e35714e8012784770507d1e382e17"></a>
+<a class="anchor" id="abc9904205d72f7fa21a0dae8ccf13a7d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1histogram.html">histogram</a>&lt;<a class="el" href="classjb_1_1event__rate__histogram.html#a9584d042dc8f36572f14034dc65133b5">binning_strategy</a>,<a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html#ad06e35714e8012784770507d1e382e17">rate_histogram</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1histogram.html">histogram</a>&lt;<a class="el" href="classjb_1_1event__rate__histogram.html#aa2190848e4bb073a12dc71c6a3f70be9">binning_strategy</a>, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html#abc9904205d72f7fa21a0dae8ccf13a7d">rate_histogram</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00038">38</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00077">77</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a296a0a7f592457ad5d192aa48a2bbb80"></a>
+<a class="anchor" id="aedc6a5e584843a4685bfed4177bcb9af"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html">event_rate_histogram</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::<a class="el" href="classjb_1_1event__rate__histogram.html">event_rate_histogram</a> </td>
           <td>(</td>
           <td class="paramtype">std::uint64_t&#160;</td>
           <td class="paramname"><em>max_expected_rate</em>, </td>
@@ -270,7 +284,13 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">duration_type&#160;</td>
-          <td class="paramname"><em>period</em>&#160;</td>
+          <td class="paramname"><em>measurement_period</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">duration_type&#160;</td>
+          <td class="paramname"><em>sampling_period</em> = <code>duration_type(1)</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -288,28 +308,29 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_expected_rate</td><td>The histogram is kept at full resolution up to this rate, any periods with more events are counted only in the overflow bin. </td></tr>
-    <tr><td class="paramname">period</td><td>Count event event <em>period</em> microseconds. </td></tr>
+    <tr><td class="paramname">max_expected_rate</td><td>The histogram is kept at full resolution up to this rate, any periods with more events are counted only in the overflow bin. If this value is too low for the observed rates, the high quantiles may not be very accurate. </td></tr>
+    <tr><td class="paramname">measurement_period</td><td>over what period we measure event rates. </td></tr>
+    <tr><td class="paramname">sampling_period</td><td>how often do we measure event rates. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00048">48</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00090">90</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab850e66b03ec8ab0f1779994f5417e4f"></a>
+<a class="anchor" id="ad9f89fa3c82466a2eae3d57dcef3ed0c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::last_rate </td>
+          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::last_rate </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -324,21 +345,21 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
 
 <p>Get the last sample, if any. </p>
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00063">63</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00106">106</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8444c5b5b429e0a3bd5012e5020cc857"></a>
+<a class="anchor" id="adc4894041b9926c540b8ede21fcfa93e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::sample </td>
+          <td class="memname">void <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::sample </td>
           <td>(</td>
           <td class="paramtype">duration_type&#160;</td>
           <td class="paramname"><em>ts</em></td><td>)</td>
@@ -354,22 +375,22 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
 
 <p>Record a new sample. </p>
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00056">56</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00099">99</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a3d399bddc2c0f0a086776ccce8cfc721"></a>
+<a class="anchor" id="ab2fff9943ac5959eb75bb1f935c026d9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::last_rate_</td>
+          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::last_rate_</td>
         </tr>
       </table>
   </td>
@@ -379,23 +400,23 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00085">85</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00128">128</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__histogram_8hpp_source.html#l00063">jb::event_rate_histogram&lt; int, std::chrono::milliseconds &gt;::last_rate()</a>, and <a class="el" href="event__rate__histogram_8hpp_source.html#l00056">jb::event_rate_histogram&lt; int, std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__histogram_8hpp_source.html#l00106">jb::event_rate_histogram&lt; std::chrono::nanoseconds, std::int64_t &gt;::last_rate()</a>, and <a class="el" href="event__rate__histogram_8hpp_source.html#l00099">jb::event_rate_histogram&lt; std::chrono::nanoseconds, std::int64_t &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7b4f97d00c94708f78ed50ad5373070b"></a>
+<a class="anchor" id="ad2b7e41ceef0b7fb81a15942083fcfd6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename counter_type = int, typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_type = std::chrono::microseconds, typename counter_type = int, typename rate_counter_type = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a>&lt;duration_type&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, duration_type &gt;::rate_</td>
+          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a>&lt;duration_type, rate_counter_type&gt; <a class="el" href="classjb_1_1event__rate__histogram.html">jb::event_rate_histogram</a>&lt; duration_type, <a class="el" href="classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b">counter_type</a>, rate_counter_type &gt;::rate_</td>
         </tr>
       </table>
   </td>
@@ -405,9 +426,9 @@ template&lt;typename counter_type = int, typename duration_type = std::chrono::m
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00084">84</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__histogram_8hpp_source.html#l00127">127</a> of file <a class="el" href="event__rate__histogram_8hpp_source.html">event_rate_histogram.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__histogram_8hpp_source.html#l00056">jb::event_rate_histogram&lt; int, std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__histogram_8hpp_source.html#l00099">jb::event_rate_histogram&lt; std::chrono::nanoseconds, std::int64_t &gt;::sample()</a>.</p>
 
 </div>
 </div>

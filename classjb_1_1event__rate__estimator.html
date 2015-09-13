@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>JayBeams: jb::event_rate_estimator&lt; duration_type &gt; Class Template Reference</title>
+<title>JayBeams: jb::event_rate_estimator&lt; duration_t, counter_t &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -102,108 +102,157 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classjb_1_1event__rate__estimator-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">jb::event_rate_estimator&lt; duration_type &gt; Class Template Reference</div>  </div>
+<div class="title">jb::event_rate_estimator&lt; duration_t, counter_t &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Helper class to compute statistics about messages frequency.  
+<p>Estimate event rates over a trailing measurement period.  
  <a href="classjb_1_1event__rate__estimator.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:acf4cbc12bcec5c37fa79dabff2a332b8"><td class="memItemLeft" align="right" valign="top">typedef std::vector<br class="typebreak"/>
-&lt; std::uint16_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#acf4cbc12bcec5c37fa79dabff2a332b8">buckets</a></td></tr>
-<tr class="separator:acf4cbc12bcec5c37fa79dabff2a332b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cc8967679f69b380ca94fa114e95cca"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; <a class="el" href="classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d">counter_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a2cc8967679f69b380ca94fa114e95cca">buckets</a></td></tr>
+<tr class="separator:a2cc8967679f69b380ca94fa114e95cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Type traits.</div></td></tr>
+<tr class="memitem:a0c97464fbf1de7bc974b548b7bc35355"><td class="memItemLeft" align="right" valign="top">typedef duration_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a></td></tr>
+<tr class="separator:a0c97464fbf1de7bc974b548b7bc35355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20c51ab72c5fc59da908f88d890d25d"><td class="memItemLeft" align="right" valign="top">typedef counter_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d">counter_type</a></td></tr>
+<tr class="separator:ad20c51ab72c5fc59da908f88d890d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f052fc9090b1fd1755b1d00ec5afb9e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a8f052fc9090b1fd1755b1d00ec5afb9e">event_rate_estimator</a> (duration_type period)</td></tr>
-<tr class="memdesc:a8f052fc9090b1fd1755b1d00ec5afb9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build an accumulator to measure events-per-period.  <a href="#a8f052fc9090b1fd1755b1d00ec5afb9e">More...</a><br/></td></tr>
-<tr class="separator:a8f052fc9090b1fd1755b1d00ec5afb9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd315ccda0fd1c308f3c42659fc7109"><td class="memTemplParams" colspan="2">template&lt;typename functor &gt; </td></tr>
-<tr class="memitem:a2dd315ccda0fd1c308f3c42659fc7109"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a2dd315ccda0fd1c308f3c42659fc7109">sample</a> (duration_type ts, functor update)</td></tr>
-<tr class="separator:a2dd315ccda0fd1c308f3c42659fc7109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1453f5c2aeaa4d5018692af9d72fc383"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a1453f5c2aeaa4d5018692af9d72fc383">event_rate_estimator</a> (<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> measurement_period, <a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> sampling_period=<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>(1))</td></tr>
+<tr class="memdesc:a1453f5c2aeaa4d5018692af9d72fc383"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build an accumulator to estimate event rates.  <a href="#a1453f5c2aeaa4d5018692af9d72fc383">More...</a><br/></td></tr>
+<tr class="separator:a1453f5c2aeaa4d5018692af9d72fc383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ba320b3e8d464b489c97be4a445df26"><td class="memTemplParams" colspan="2">template&lt;typename functor &gt; </td></tr>
+<tr class="memitem:a8ba320b3e8d464b489c97be4a445df26"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a8ba320b3e8d464b489c97be4a445df26">sample</a> (<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> ts, functor update)</td></tr>
+<tr class="memdesc:a8ba320b3e8d464b489c97be4a445df26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a sample.  <a href="#a8ba320b3e8d464b489c97be4a445df26">More...</a><br/></td></tr>
+<tr class="separator:a8ba320b3e8d464b489c97be4a445df26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a8a302bf468c8069ceddd9858d7ad5044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a8a302bf468c8069ceddd9858d7ad5044">init</a> (duration_type ts)</td></tr>
-<tr class="separator:a8a302bf468c8069ceddd9858d7ad5044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a572169b3091db972d016c9d08d2aba6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a572169b3091db972d016c9d08d2aba6c">rotate</a> ()</td></tr>
-<tr class="separator:a572169b3091db972d016c9d08d2aba6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99c48501816fb093ad1203aa13caf186"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a99c48501816fb093ad1203aa13caf186">init</a> (<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> ts)</td></tr>
+<tr class="memdesc:a99c48501816fb093ad1203aa13caf186"><td class="mdescLeft">&#160;</td><td class="mdescRight">Just initialize the circular buffer.  <a href="#a99c48501816fb093ad1203aa13caf186">More...</a><br/></td></tr>
+<tr class="separator:a99c48501816fb093ad1203aa13caf186"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7b3216c92860f6908c167c75df01450"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ab7b3216c92860f6908c167c75df01450">rotate</a> ()</td></tr>
+<tr class="memdesc:ab7b3216c92860f6908c167c75df01450"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the circular buffer.  <a href="#ab7b3216c92860f6908c167c75df01450">More...</a><br/></td></tr>
+<tr class="separator:ab7b3216c92860f6908c167c75df01450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a68f2927b01a23bfa3d1f4429c6fad"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ab4a68f2927b01a23bfa3d1f4429c6fad">bucket_count</a> (<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> measurement_period, <a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> sampling_period)</td></tr>
+<tr class="memdesc:ab4a68f2927b01a23bfa3d1f4429c6fad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimate the necessary number of buckets.  <a href="#ab4a68f2927b01a23bfa3d1f4429c6fad">More...</a><br/></td></tr>
+<tr class="separator:ab4a68f2927b01a23bfa3d1f4429c6fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a77a9e89f3ac61b6157516c656404de5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1event__rate__estimator.html#acf4cbc12bcec5c37fa79dabff2a332b8">buckets</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a77a9e89f3ac61b6157516c656404de5d">buckets_</a></td></tr>
-<tr class="memdesc:a77a9e89f3ac61b6157516c656404de5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time period is bucketized in intervals of 1 microsecond.  <a href="#a77a9e89f3ac61b6157516c656404de5d">More...</a><br/></td></tr>
-<tr class="separator:a77a9e89f3ac61b6157516c656404de5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4d72b24ce77b1e9a7c910dea400d809"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ae4d72b24ce77b1e9a7c910dea400d809">running_total_</a></td></tr>
-<tr class="memdesc:ae4d72b24ce77b1e9a7c910dea400d809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current number of events across all buckets.  <a href="#ae4d72b24ce77b1e9a7c910dea400d809">More...</a><br/></td></tr>
-<tr class="separator:ae4d72b24ce77b1e9a7c910dea400d809"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab74a2e7f79c06490f58ec4bc1fb35c75"><td class="memItemLeft" align="right" valign="top">duration_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ab74a2e7f79c06490f58ec4bc1fb35c75">last_event_</a></td></tr>
-<tr class="memdesc:ab74a2e7f79c06490f58ec4bc1fb35c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current end time of the period.  <a href="#ab74a2e7f79c06490f58ec4bc1fb35c75">More...</a><br/></td></tr>
-<tr class="separator:ab74a2e7f79c06490f58ec4bc1fb35c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3582c07a765d3c6b043d105927c9d1e"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ae3582c07a765d3c6b043d105927c9d1e">end_pos_</a></td></tr>
-<tr class="memdesc:ae3582c07a765d3c6b043d105927c9d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">We treat the buckets as a circular buffer, this is the pointer to the end of the buffer.  <a href="#ae3582c07a765d3c6b043d105927c9d1e">More...</a><br/></td></tr>
-<tr class="separator:ae3582c07a765d3c6b043d105927c9d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6ce1480ba40ec5a10f26273dbe9d866"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1event__rate__estimator.html#a2cc8967679f69b380ca94fa114e95cca">buckets</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#aa6ce1480ba40ec5a10f26273dbe9d866">buckets_</a></td></tr>
+<tr class="memdesc:aa6ce1480ba40ec5a10f26273dbe9d866"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time period is bucketized in intervals of 1 sampling period.  <a href="#aa6ce1480ba40ec5a10f26273dbe9d866">More...</a><br/></td></tr>
+<tr class="separator:aa6ce1480ba40ec5a10f26273dbe9d866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58125a6314437b1424aded2b014034aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a58125a6314437b1424aded2b014034aa">sampling_period_</a></td></tr>
+<tr class="memdesc:a58125a6314437b1424aded2b014034aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sampling period.  <a href="#a58125a6314437b1424aded2b014034aa">More...</a><br/></td></tr>
+<tr class="separator:a58125a6314437b1424aded2b014034aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4f620034a296eff4dd35f6bfef57af3"><td class="memItemLeft" align="right" valign="top">std::uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ad4f620034a296eff4dd35f6bfef57af3">running_total_</a></td></tr>
+<tr class="memdesc:ad4f620034a296eff4dd35f6bfef57af3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current number of events across all buckets.  <a href="#ad4f620034a296eff4dd35f6bfef57af3">More...</a><br/></td></tr>
+<tr class="separator:ad4f620034a296eff4dd35f6bfef57af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49c0b84ce85a69da6c7727c1bd2c8d49"><td class="memItemLeft" align="right" valign="top">duration_type::rep&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#a49c0b84ce85a69da6c7727c1bd2c8d49">last_bucket_</a></td></tr>
+<tr class="memdesc:a49c0b84ce85a69da6c7727c1bd2c8d49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current number for the sampling period.  <a href="#a49c0b84ce85a69da6c7727c1bd2c8d49">More...</a><br/></td></tr>
+<tr class="separator:a49c0b84ce85a69da6c7727c1bd2c8d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae79e32c2474047a2d003d8884207bb8c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1event__rate__estimator.html#ae79e32c2474047a2d003d8884207bb8c">end_pos_</a></td></tr>
+<tr class="memdesc:ae79e32c2474047a2d003d8884207bb8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">We treat the buckets as a circular buffer, this is the pointer to the end of the buffer.  <a href="#ae79e32c2474047a2d003d8884207bb8c">More...</a><br/></td></tr>
+<tr class="separator:ae79e32c2474047a2d003d8884207bb8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename duration_type = std::chrono::microseconds&gt;<br/>
-class jb::event_rate_estimator&lt; duration_type &gt;</h3>
+<div class="textblock"><h3>template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt;<br/>
+class jb::event_rate_estimator&lt; duration_t, counter_t &gt;</h3>
 
-<p>Helper class to compute statistics about messages frequency. </p>
-<p>When designing the time delay analysis system it is interesting to answer questions such as these:</p>
-<ul>
-<li>How many messages per second arrive on average? How many per millisecond?</li>
-<li>More generally, what is the distribution of messages per second, millisecond and microsecond?</li>
-</ul>
-<p>This information will define the performance requirements of the system, help us define simulators for the environment, define performance requirements and ultimately measure the performance of the system.</p>
-<p>We are going to need to measure such statistics per-symbol, there are roughly 15,000 symbols in the US market, and we would like to keep memory utilization for this data to be below 8GiB [1]. That leaves us with roughly 600 KiB per symbol. So we cannot be just wasteful with memory.</p>
-<p>Assume you are interested in statistics about messages per millisecond. In that scenario, this class keeps exactly 1000 buckets, representing the last 1000 microseconds or the last rolling millisecond. Each bucket contains a counter representing the number of events in that microsecond.</p>
-<p>If a new sample arrives for the current microsecond we simply increment the counter. If a new sample arrives for the next microsecond we (1) count the number of events in the current buckets, (2) update the statistics, (3) "rotate" the circular buffer by reseting the oldest buffer to 0 and moving the time pointer, and (4) insert the new timestamp in the current bucket. If the new sample skips one more more microseconds then steps 1-3 are repeated until the circular buffer catches up to the new timestamp, and then the counter is incremented.</p>
-<p>[1] This is an arbitrary limit based on the memory on coryan@ workstation (16 GiB). I decided that only 1/2 of the memory would be dedicated to this application.</p>
+<p>Estimate event rates over a trailing measurement period. </p>
+<p>Assume you are interested in statistics about events per millisecond. This class estimates the number of events per trailing millisecond, using an arbitrary sampling period. For example, you could set the sampling period to 1 microsecond, this class would then estimate the event rate over the previous millisecond for every microsecond. Or you could set the sampling period to 1 millisecond, which would then estimate the event rate on each millisecond. Admittedly, for most practical purposes measuring event rates over an exact millisecond boundary or over a trailing millisecond has limited interest, but it was fun to write this class.</p>
+<p>Given a <em>measurement_period:</em> the time over which we want to measure event rates, and <em>sampling_period:</em> how often we want to measure the event rates, the class keeps a circular buffer of N counters, representing the trailing sampling periods. N is chosen such that \( N &gt; {{measurement\_period} \over {sampling\_period}} \).</p>
+<p>As new events arrive the counter for the current sampling period is incremented, once an event in a new sampling period is observed the class emits updates (via a functor) to update the estimated event rate.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">duration_type</td><td>Defines the size of the buckets. </td></tr>
+    <tr><td class="paramname">duration_t</td><td>Defines class used to measure time, this class must be compatible with std::chrono::duration_type. The class assumes that event timestamps are measured as durations with respect to some well-defined (by convention) epoch. For example, some data feeds use timestamps as nanoseconds since midnight, while others use timestamps as microseconds since the Unix Epoch. </td></tr>
+    <tr><td class="paramname">counter_t</td><td>The type of the counters, most of the time a simple integer would work well, but if you need to create a large number of instances of this class, and the values are expected to be very small, you might consider using a 16-bit or even and 8-bit counter. Likewise, if you expect very large values for the counters, such as when measuring event rate per minute, you should consider using a 64-bit counter. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00054">54</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00059">59</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="acf4cbc12bcec5c37fa79dabff2a332b8"></a>
+<a class="anchor" id="a2cc8967679f69b380ca94fa114e95cca"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::vector&lt;std::uint16_t&gt; <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html#acf4cbc12bcec5c37fa79dabff2a332b8">buckets</a></td>
+          <td class="memname">typedef std::vector&lt;<a class="el" href="classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d">counter_type</a>&gt; <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html#a2cc8967679f69b380ca94fa114e95cca">buckets</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00093">93</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00147">147</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad20c51ab72c5fc59da908f88d890d25d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef counter_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d">counter_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00066">66</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0c97464fbf1de7bc974b548b7bc35355"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef duration_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00065">65</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a8f052fc9090b1fd1755b1d00ec5afb9e"></a>
+<a class="anchor" id="a1453f5c2aeaa4d5018692af9d72fc383"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::<a class="el" href="classjb_1_1event__rate__estimator.html">event_rate_estimator</a> </td>
           <td>(</td>
-          <td class="paramtype">duration_type&#160;</td>
-          <td class="paramname"><em>period</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
+          <td class="paramname"><em>measurement_period</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
+          <td class="paramname"><em>sampling_period</em> = <code><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>(1)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -213,26 +262,79 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Build an accumulator to measure events-per-period. </p>
+<p>Build an accumulator to estimate event rates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measurement_period</td><td>over what time period we want to measure message rates </td></tr>
+    <tr><td class="paramname">sampling_period</td><td>how often do we want to measure message rates. Must be smaller than <em>measurement_period</em>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the measurement period is not a multiple of the sampling period. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00059">59</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00079">79</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a8a302bf468c8069ceddd9858d7ad5044"></a>
+<a class="anchor" id="ab4a68f2927b01a23bfa3d1f4429c6fad"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::init </td>
+          <td class="memname">std::size_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::bucket_count </td>
           <td>(</td>
-          <td class="paramtype">duration_type&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
+          <td class="paramname"><em>measurement_period</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
+          <td class="paramname"><em>sampling_period</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Estimate the necessary number of buckets. </p>
+
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00170">170</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a99c48501816fb093ad1203aa13caf186"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
           <td class="paramname"><em>ts</em></td><td>)</td>
           <td></td>
         </tr>
@@ -244,23 +346,25 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00096">96</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Just initialize the circular buffer. </p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">151</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a572169b3091db972d016c9d08d2aba6c"></a>
+<a class="anchor" id="ab7b3216c92860f6908c167c75df01450"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::rotate </td>
+          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::rotate </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -273,17 +377,19 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00103">103</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Rotate the circular buffer. </p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00159">159</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2dd315ccda0fd1c308f3c42659fc7109"></a>
+<a class="anchor" id="a8ba320b3e8d464b489c97be4a445df26"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <div class="memtemplate">
 template&lt;typename functor &gt; </div>
 <table class="mlabels">
@@ -291,9 +397,9 @@ template&lt;typename functor &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::sample </td>
+          <td class="memname">void <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::sample </td>
           <td>(</td>
-          <td class="paramtype">duration_type&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a>&#160;</td>
           <td class="paramname"><em>ts</em>, </td>
         </tr>
         <tr>
@@ -315,24 +421,34 @@ template&lt;typename functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">67</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Record a sample. </p>
+<p>This class keeps the number of events observed over the last N sampling periods. New events in the same sampling period are simply recorded, but no rate estimate is made. When a timestamp in a new sampling period is required to record a sample, the <em>update()</em> functor is called to register the new measurements.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ts</td><td>the timestamp of the sample. </td></tr>
+    <tr><td class="paramname">update</td><td>a functor to update when an event rate is estimated. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Referenced by <a class="el" href="ut__event__rate__estimator_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">102</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__event__rate__estimator_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="event__rate__histogram_8hpp_source.html#l00099">jb::event_rate_histogram&lt; std::chrono::nanoseconds, std::int64_t &gt;::sample()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a77a9e89f3ac61b6157516c656404de5d"></a>
+<a class="anchor" id="aa6ce1480ba40ec5a10f26273dbe9d866"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html#acf4cbc12bcec5c37fa79dabff2a332b8">buckets</a> <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::buckets_</td>
+          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html#a2cc8967679f69b380ca94fa114e95cca">buckets</a> <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::buckets_</td>
         </tr>
       </table>
   </td>
@@ -342,25 +458,25 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>The time period is bucketized in intervals of 1 microsecond. </p>
+<p>The time period is bucketized in intervals of 1 sampling period. </p>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00115">115</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00220">220</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00096">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00103">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00159">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae3582c07a765d3c6b043d105927c9d1e"></a>
+<a class="anchor" id="ae79e32c2474047a2d003d8884207bb8c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::end_pos_</td>
+          <td class="memname">std::size_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::end_pos_</td>
         </tr>
       </table>
   </td>
@@ -372,23 +488,23 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 
 <p>We treat the buckets as a circular buffer, this is the pointer to the end of the buffer. </p>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00125">125</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00233">233</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00096">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00103">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00159">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab74a2e7f79c06490f58ec4bc1fb35c75"></a>
+<a class="anchor" id="a49c0b84ce85a69da6c7727c1bd2c8d49"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">duration_type <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::last_event_</td>
+          <td class="memname">duration_type::rep <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::last_bucket_</td>
         </tr>
       </table>
   </td>
@@ -398,25 +514,25 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Current end time of the period. </p>
+<p>Current number for the sampling period. </p>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00121">121</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00229">229</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00096">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00103">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00159">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae4d72b24ce77b1e9a7c910dea400d809"></a>
+<a class="anchor" id="ad4f620034a296eff4dd35f6bfef57af3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_type &gt;::running_total_</td>
+          <td class="memname">std::uint64_t <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::running_total_</td>
         </tr>
       </table>
   </td>
@@ -428,9 +544,37 @@ template&lt;typename duration_type = std::chrono::microseconds&gt; </div>
 
 <p>Current number of events across all buckets. </p>
 
-<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00118">118</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00226">226</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00096">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00103">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00067">jb::event_rate_estimator&lt; std::chrono::milliseconds &gt;::sample()</a>.</p>
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::init()</a>, <a class="el" href="event__rate__estimator_8hpp_source.html#l00159">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::rotate()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a58125a6314437b1424aded2b014034aa"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t = std::chrono::microseconds, typename counter_t = int&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355">duration_type</a> <a class="el" href="classjb_1_1event__rate__estimator.html">jb::event_rate_estimator</a>&lt; duration_t, counter_t &gt;::sampling_period_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The sampling period. </p>
+
+<p>Definition at line <a class="el" href="event__rate__estimator_8hpp_source.html#l00223">223</a> of file <a class="el" href="event__rate__estimator_8hpp_source.html">event_rate_estimator.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="event__rate__estimator_8hpp_source.html#l00151">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::init()</a>, and <a class="el" href="event__rate__estimator_8hpp_source.html#l00102">jb::event_rate_estimator&lt; duration_type, rate_counter_type &gt;::sample()</a>.</p>
 
 </div>
 </div>

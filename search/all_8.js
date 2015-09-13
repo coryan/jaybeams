@@ -4,7 +4,7 @@ var searchData=
   ['imbalance_5fdirection_5ft',['imbalance_direction_t',['../namespacejb_1_1itch5.html#a21b9b3380ceb5f904362fe9ddb82dc3a',1,'jb::itch5']]],
   ['imbalance_5fshares',['imbalance_shares',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8eb4065c28520c0e678cee59522d92cf',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['info',['info',['../namespacejb.html#a8c91d72478d03f9b72486db893bf4603acaf9b6b99962bf5c2264824231d7a40c',1,'jb']]],
-  ['init',['init',['../classjb_1_1event__rate__estimator.html#a8a302bf468c8069ceddd9858d7ad5044',1,'jb::event_rate_estimator::init()'],['../namespacejb_1_1log.html#a2fdb858d4d11d93a99916df01639a5dd',1,'jb::log::init()']]],
+  ['init',['init',['../classjb_1_1event__rate__estimator.html#a99c48501816fb093ad1203aa13caf186',1,'jb::event_rate_estimator::init()'],['../namespacejb_1_1log.html#a2fdb858d4d11d93a99916df01639a5dd',1,'jb::log::init()']]],
   ['int_5fseconds',['int_seconds',['../classjb_1_1itch5_1_1seconds__field.html#a6c3ed9ab05879e633048bb1d210efcc4',1,'jb::itch5::seconds_field']]],
   ['integer_5frange_5fbinning',['integer_range_binning',['../classjb_1_1integer__range__binning.html',1,'jb']]],
   ['integer_5frange_5fbinning',['integer_range_binning',['../classjb_1_1integer__range__binning.html#ae5627eb8c40f9aa6d9c5d5f378070110',1,'jb::integer_range_binning']]],

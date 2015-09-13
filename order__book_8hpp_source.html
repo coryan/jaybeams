@@ -184,7 +184,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">   * @param side whether the order is a buy or a sell</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">   * @param px the price of the order</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   * @param exec_qty the executed quantity of the order</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   * @param reduced_qty the executed quantity of the order</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">   * @returns true if the inside changed</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">   */</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classjb_1_1itch5_1_1order__book.html#a6eb5b721c11374f45b8d7b67ca44b24f">   91</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classjb_1_1itch5_1_1order__book.html#a6eb5b721c11374f45b8d7b67ca44b24f">handle_order_reduced</a>(</div>
@@ -219,8 +219,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">   * @tparam book_side the type used to represent the buy or sell side</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">   * of the book</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">   * @param side the side of the book to update</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">   * @param px the price of the new order</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">   * @param qty the quantity of the new order</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">   * @param px the price of the order that was reduced</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">   * @param reduced_qty the quantity reduced in the order</span></div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">   * @returns true if the inside changed</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">   */</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> book_s<span class="keywordtype">id</span>e&gt;</div>

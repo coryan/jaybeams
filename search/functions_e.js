@@ -7,7 +7,7 @@ var searchData=
   ['reg_5fsho_5frestriction',['reg_sho_restriction',['../namespacejb_1_1itch5_1_1testing.html#a2b71a80752f62af5034cc49c53c27d4e',1,'jb::itch5::testing']]],
   ['release',['release',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a6728a1c27b3a0c3efb04b3736bf8843a',1,'jb::fftw::traits&lt; double &gt;::release()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#af423c7798ac6322543c582f52b84d705',1,'jb::fftw::traits&lt; float &gt;::release()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a64615a9711707adac85bfe45d47f6665',1,'jb::fftw::traits&lt; long double &gt;::release()']]],
   ['reset',['reset',['../classjb_1_1histogram.html#abd04d5c38e88b4c4cef2784e568f3571',1,'jb::histogram']]],
-  ['rotate',['rotate',['../classjb_1_1event__rate__estimator.html#a572169b3091db972d016c9d08d2aba6c',1,'jb::event_rate_estimator']]],
+  ['rotate',['rotate',['../classjb_1_1event__rate__estimator.html#ab7b3216c92860f6908c167c75df01450',1,'jb::event_rate_estimator']]],
   ['run',['run',['../classjb_1_1testing_1_1microbenchmark.html#a3f27d027d24868c4abfdb174264288d6',1,'jb::testing::microbenchmark']]],
   ['run_5fbase',['run_base',['../classjb_1_1testing_1_1microbenchmark.html#ad500390d23e76ff4c38004c8e00cb97f',1,'jb::testing::microbenchmark']]],
   ['run_5ffixed_5fsize',['run_fixed_size',['../classjb_1_1testing_1_1microbenchmark.html#add4c022ff337515c0ffb946951ff8bb5',1,'jb::testing::microbenchmark']]],

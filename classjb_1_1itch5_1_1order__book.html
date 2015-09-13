@@ -515,7 +515,7 @@ template&lt;typename book_side &gt; </div>
   <table class="params">
     <tr><td class="paramname">side</td><td>whether the order is a buy or a sell </td></tr>
     <tr><td class="paramname">px</td><td>the price of the order </td></tr>
-    <tr><td class="paramname">exec_qty</td><td>the executed quantity of the order </td></tr>
+    <tr><td class="paramname">reduced_qty</td><td>the executed quantity of the order </td></tr>
   </table>
   </dd>
 </dl>
@@ -579,8 +579,8 @@ template&lt;typename book_side &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">side</td><td>the side of the book to update </td></tr>
-    <tr><td class="paramname">px</td><td>the price of the new order </td></tr>
-    <tr><td class="paramname">qty</td><td>the quantity of the new order </td></tr>
+    <tr><td class="paramname">px</td><td>the price of the order that was reduced </td></tr>
+    <tr><td class="paramname">reduced_qty</td><td>the quantity reduced in the order </td></tr>
   </table>
   </dd>
 </dl>

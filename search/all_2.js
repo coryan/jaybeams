@@ -108,7 +108,7 @@ var searchData=
   ['convert_3c_20jb_3a_3aseverity_5flevel_20_3e',['convert&lt; jb::severity_level &gt;',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html',1,'YAML']]],
   ['convert_5fseverity_5flevel_2ehpp',['convert_severity_level.hpp',['../convert__severity__level_8hpp.html',1,'']]],
   ['count_5f',['count_',['../classjb_1_1itch5_1_1seconds__field.html#a7dceda2a4557c3ef69d04a1d7449a906',1,'jb::itch5::seconds_field']]],
-  ['counter_5ftype',['counter_type',['../classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b',1,'jb::histogram']]],
+  ['counter_5ftype',['counter_type',['../classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d',1,'jb::event_rate_estimator::counter_type()'],['../classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b',1,'jb::histogram::counter_type()']]],
   ['counters',['counters',['../classjb_1_1histogram.html#af4ad87cdc2a5e3067bb5416ac616d443',1,'jb::histogram']]],
   ['create_5fbackward',['create_backward',['../classjb_1_1fftw_1_1plan.html#aaca06d1a2822cf2e02ddad8e1ade3b27',1,'jb::fftw::plan']]],
   ['create_5fbackward_5fimpl',['create_backward_impl',['../classjb_1_1fftw_1_1plan.html#a6afb1f0a1ad4d0ee60b5d16aff7674c9',1,'jb::fftw::plan::create_backward_impl(std::size_t nsamples, fftw_complex_type const *in, fftw_complex_type *out, int flags)'],['../classjb_1_1fftw_1_1plan.html#ab8cb2459870bf7f1210c30282f4693fe',1,'jb::fftw::plan::create_backward_impl(std::size_t nsamples, fftw_complex_type const *in, precision_type *out, int flags)']]],
