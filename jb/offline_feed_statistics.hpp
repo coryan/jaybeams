@@ -117,9 +117,9 @@ class offline_feed_statistics {
       std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
 
  private:
-  event_rate_histogram<int,std::chrono::milliseconds> per_sec_rate_;
-  event_rate_histogram<> per_msec_rate_;
-  event_rate_histogram<> per_usec_rate_;
+  event_rate_histogram<std::chrono::nanoseconds> per_sec_rate_;
+  event_rate_histogram<std::chrono::nanoseconds> per_msec_rate_;
+  event_rate_histogram<std::chrono::nanoseconds> per_usec_rate_;
   typedef histogram<integer_range_binning<std::int64_t>>
       interarrival_histogram_t;
   interarrival_histogram_t interarrival_;
