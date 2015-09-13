@@ -29,7 +29,7 @@ class config : public jb::config_object {
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.load_overrides(
-      argc, argv, std::string("itch5_inside.yaml"), "JB_ROOT");
+      argc, argv, std::string("itch5inside.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::iostreams::filtering_istream in;
@@ -38,9 +38,13 @@ int main(int argc, char* argv[]) try {
   boost::iostreams::filtering_ostream out;
   jb::open_output_file(out, cfg.output_file());
 
+  std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  auto cb = [&out,&stats](
+  // We want to disable per-symbol updates
+  auto scfg = cfg.stats();
+  scfg.reporting_interval_seconds(24 * 3600);
+  auto cb = [&out,&stats,&per_symbol,scfg](
       jb::itch5::compute_inside::time_point recv_ts,
       jb::itch5::message_header const& header,
       jb::itch5::stock_t const& stock,
@@ -48,6 +52,13 @@ int main(int argc, char* argv[]) try {
       jb::itch5::half_quote const& offer) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
     stats.sample(header.timestamp.ts, pl);
+    auto i = per_symbol.find(stock);
+    if (i == per_symbol.end()) {
+      auto p = per_symbol.emplace(
+          stock, jb::offline_feed_statistics(scfg));
+      i = p.first;
+    }
+    i->second.sample(header.timestamp.ts, pl);
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
@@ -60,6 +71,12 @@ int main(int argc, char* argv[]) try {
 
   jb::itch5::compute_inside handler(cb);
   jb::itch5::process_iostream(in, handler);
+
+  jb::offline_feed_statistics::print_csv_header(std::cout);
+  for (auto const& i : per_symbol) {
+    i.second.print_csv(i.first.c_str(), std::cout);
+  }
+  stats.print_csv("__aggregate__", std::cout);
 
   return 0;
 } catch(jb::usage const& u) {
