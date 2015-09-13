@@ -145,3 +145,21 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_milliseconds) {
   BOOST_CHECK_EQUAL(nsamples, 101);
   BOOST_CHECK_EQUAL(last, 5);
 }
+
+/**
+ * @test Test error cases
+ */
+BOOST_AUTO_TEST_CASE(event_rate_estimator_errors) {
+  using namespace std::chrono;
+  typedef jb::event_rate_estimator<std::chrono::seconds> tested;
+
+  BOOST_CHECK_THROW(tested(seconds(10), seconds(20)), std::invalid_argument);
+  BOOST_CHECK_THROW(tested(seconds(10), seconds(0)), std::invalid_argument);
+  BOOST_CHECK_THROW(tested(seconds(10), seconds(3)), std::invalid_argument);
+
+  typedef std::chrono::duration<std::size_t> ticks;
+  typedef jb::event_rate_estimator<ticks> testbig;
+  auto big = std::numeric_limits<std::size_t>::max();
+  BOOST_CHECK_THROW(
+      testbig(ticks(big), ticks(1)), std::invalid_argument);
+}
