@@ -21,8 +21,9 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> output_file;
   jb::config_attribute<config,jb::log::config> log;
   jb::config_attribute<config,jb::offline_feed_statistics::config> stats;
+  jb::config_attribute<config,jb::offline_feed_statistics::config> symbol_stats;
+  jb::config_attribute<config,bool> enable_per_symbol_stats;
 };
-
 
 } // anonymous namespace
 
@@ -41,10 +42,7 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  // We want to disable per-symbol updates
-  auto scfg = cfg.stats();
-  scfg.reporting_interval_seconds(24 * 3600);
-  auto cb = [&out,&stats,&per_symbol,scfg](
+  auto cb = [&](
       jb::itch5::compute_inside::time_point recv_ts,
       jb::itch5::message_header const& header,
       jb::itch5::stock_t const& stock,
@@ -52,13 +50,17 @@ int main(int argc, char* argv[]) try {
       jb::itch5::half_quote const& offer) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
     stats.sample(header.timestamp.ts, pl);
-    auto i = per_symbol.find(stock);
-    if (i == per_symbol.end()) {
-      auto p = per_symbol.emplace(
-          stock, jb::offline_feed_statistics(scfg));
-      i = p.first;
+
+    if (cfg.enable_per_symbol_stats()) {
+      auto i = per_symbol.find(stock);
+      if (i == per_symbol.end()) {
+        auto p = per_symbol.emplace(
+            stock, jb::offline_feed_statistics(cfg.symbol_stats()));
+        i = p.first;
+      }
+      i->second.sample(header.timestamp.ts, pl);
     }
-    i->second.sample(header.timestamp.ts, pl);
+
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
@@ -91,6 +93,19 @@ int main(int argc, char* argv[]) try {
 }
 
 namespace {
+
+// Define the default per-symbol stats
+jb::offline_feed_statistics::config default_per_symbol_stats() {
+  return jb::offline_feed_statistics::config()
+      .reporting_interval_seconds(24 * 3600) // effectively disable updates
+      .max_processing_latency_nanoseconds(10000) // limit memory usage
+      .max_interarrival_time_nanoseconds(10000)  // limit memory usage 
+      .max_messages_per_microsecond(1000)  // limit memory usage
+      .max_messages_per_millisecond(10000) // limit memory usage
+      .max_messages_per_second(10000)      // limit memory usage
+      ;
+}
+
 config::config()
     : input_file(desc("input-file").help(
         "An input file with ITCH-5.0 messages."), this)
@@ -99,6 +114,14 @@ config::config()
         "  Files ending in .gz are automatically compressed."), this)
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "offline-feed-statistics"), this)
+    , symbol_stats(desc("symbol-stats", "offline-feed-statistics"),
+                   this, default_per_symbol_stats())
+    , enable_per_symbol_stats(
+        desc("enable-symbol-stats").help(
+            "If set, enable per-symbol statistics."
+            "  Collecting per-symbol statistics is expensive in both"
+            " memory and execution time, so it is disabled by default."),
+        this, false)
 {}
 
 void config::validate() const {
@@ -113,6 +136,8 @@ void config::validate() const {
         "  You must specify an output file.", 1);
   }
   log().validate();
+  stats().validate();
+  symbol_stats().validate();
 }
 
 } // anonymous namespace
