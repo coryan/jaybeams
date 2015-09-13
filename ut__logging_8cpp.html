@@ -114,6 +114,8 @@ Functions</h2></td></tr>
 <tr class="separator:a1dc3a60986f56198f8f32ba2356b6572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1143cb440292ca41e0d0af07167b0d2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__logging_8cpp.html#ac1143cb440292ca41e0d0af07167b0d2">BOOST_AUTO_TEST_CASE</a> (logging_yaml)</td></tr>
 <tr class="separator:ac1143cb440292ca41e0d0af07167b0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08e5375497df203ba23d5d55c26f1628"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__logging_8cpp.html#a08e5375497df203ba23d5d55c26f1628">BOOST_AUTO_TEST_CASE</a> (logging_config_errors)</td></tr>
+<tr class="separator:a08e5375497df203ba23d5d55c26f1628"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a1dc3a60986f56198f8f32ba2356b6572"></a>
@@ -133,7 +135,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="ut__logging_8cpp_source.html#l00012">12</a> of file <a class="el" href="ut__logging_8cpp_source.html">ut_logging.cpp</a>.</p>
 
-<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d">jb::debug</a>, <a class="el" href="log_8cpp_source.html#l00054">jb::log::defaults::enable_file_logging</a>, <a class="el" href="log_8cpp_source.html#l00181">jb::log::init()</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="log_8cpp_source.html#l00051">jb::log::defaults::minimum_severity</a>, <a class="el" href="log_8cpp_source.html#l00176">jb::log::next_tid()</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d">jb::debug</a>, <a class="el" href="log_8cpp_source.html#l00055">jb::log::defaults::enable_file_logging</a>, <a class="el" href="log_8cpp_source.html#l00184">jb::log::init()</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="log_8cpp_source.html#l00052">jb::log::defaults::minimum_severity</a>, <a class="el" href="log_8cpp_source.html#l00179">jb::log::next_tid()</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
 </div>
 </div>
@@ -154,7 +156,28 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="ut__logging_8cpp_source.html#l00076">76</a> of file <a class="el" href="ut__logging_8cpp_source.html">ut_logging.cpp</a>.</p>
 
-<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="config__object_8cpp_source.html#l00015">jb::config_object::load_overrides()</a>, <a class="el" href="log_8hpp_source.html#l00035">jb::log::config::minimum_console_severity</a>, <a class="el" href="log_8hpp_source.html#l00034">jb::log::config::minimum_severity</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aefd2af60c8501931cb9c736b5ad74f65">jb::notice</a>.</p>
+<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="config__object_8cpp_source.html#l00016">jb::config_object::load_overrides()</a>, <a class="el" href="log_8hpp_source.html#l00035">jb::log::config::minimum_console_severity</a>, <a class="el" href="log_8hpp_source.html#l00034">jb::log::config::minimum_severity</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aefd2af60c8501931cb9c736b5ad74f65">jb::notice</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a08e5375497df203ba23d5d55c26f1628"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">logging_config_errors&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000187">Test:</a></b></dt><dd>Verify that configuration errors are detected. </dd></dl>
+
+<p>Definition at line <a class="el" href="ut__logging_8cpp_source.html#l00098">98</a> of file <a class="el" href="ut__logging_8cpp_source.html">ut_logging.cpp</a>.</p>
+
+<p>References <a class="el" href="config__object_8cpp_source.html#l00016">jb::config_object::load_overrides()</a>.</p>
 
 </div>
 </div>

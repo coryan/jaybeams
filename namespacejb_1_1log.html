@@ -122,9 +122,9 @@ Classes</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:ac34eaf064251d6f0714d7f194f43d544"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html#ac34eaf064251d6f0714d7f194f43d544">BOOST_LOG_ATTRIBUTE_KEYWORD</a> (current_thread_id,&quot;ThreadID&quot;, boost::log::attributes::current_thread_id::value_type) BOOST_LOG_ATTRIBUTE_KEYWORD(local_time</td></tr>
 <tr class="separator:ac34eaf064251d6f0714d7f194f43d544"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65fa8c466dc7ffac6c290abc8220096a"><td class="memItemLeft" align="right" valign="top">boost::log::attributes::local_clock::value_type <br class="typebreak"/>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html#a65fa8c466dc7ffac6c290abc8220096a">filter_predicate</a> (::boost::log::attribute_value_set const &amp;attributes)</td></tr>
-<tr class="separator:a65fa8c466dc7ffac6c290abc8220096a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeb104e5d7cf1a4124a67b9ccb39aa3b"><td class="memItemLeft" align="right" valign="top">boost::log::attributes::local_clock::value_type <br class="typebreak"/>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html#adeb104e5d7cf1a4124a67b9ccb39aa3b">filter_predicate</a> (::boost::log::attribute_value_set const &amp;attr)</td></tr>
+<tr class="separator:adeb104e5d7cf1a4124a67b9ccb39aa3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae581422a6b97f68c5ae158adcb996475"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html#ae581422a6b97f68c5ae158adcb996475">format_common</a> (boost::log::record_view const &amp;rec, boost::log::formatting_ostream &amp;strm)</td></tr>
 <tr class="separator:ae581422a6b97f68c5ae158adcb996475"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88747cd1b7f484229e6ecf593101b9ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html#a88747cd1b7f484229e6ecf593101b9ff">format_console</a> (boost::log::record_view const &amp;rec, boost::log::formatting_ostream &amp;strm)</td></tr>
@@ -212,7 +212,7 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a65fa8c466dc7ffac6c290abc8220096a"></a>
+<a class="anchor" id="adeb104e5d7cf1a4124a67b9ccb39aa3b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -220,17 +220,17 @@ Variables</h2></td></tr>
           <td class="memname">boost::log::attributes::local_clock::value_type bool jb::log::filter_predicate </td>
           <td>(</td>
           <td class="paramtype">::boost::log::attribute_value_set const &amp;&#160;</td>
-          <td class="paramname"><em>attributes</em></td><td>)</td>
+          <td class="paramname"><em>attr</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00124">124</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00125">125</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d">jb::debug</a>.</p>
+<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d">jb::debug</a>, and <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00181">init()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00184">init()</a>.</p>
 
 </div>
 </div>
@@ -258,11 +258,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00134">134</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00137">137</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
 <p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d">jb::debug</a>, and <a class="el" href="severity__level_8cpp_source.html#l00077">jb::severity_level_width()</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00148">format_console()</a>, and <a class="el" href="log_8cpp_source.html#l00157">format_logfile()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00151">format_console()</a>, and <a class="el" href="log_8cpp_source.html#l00160">format_logfile()</a>.</p>
 
 </div>
 </div>
@@ -290,11 +290,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00148">148</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00151">151</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="log_8cpp_source.html#l00134">format_common()</a>.</p>
+<p>References <a class="el" href="log_8cpp_source.html#l00137">format_common()</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00181">init()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00184">init()</a>.</p>
 
 </div>
 </div>
@@ -322,11 +322,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00157">157</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00160">160</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="log_8cpp_source.html#l00134">format_common()</a>.</p>
+<p>References <a class="el" href="log_8cpp_source.html#l00137">format_common()</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00181">init()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00184">init()</a>.</p>
 
 </div>
 </div>
@@ -346,9 +346,9 @@ Variables</h2></td></tr>
 
 <p>Initialize the logging functions using the configuration provided. </p>
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00181">181</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00184">184</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="log_8hpp_source.html#l00036">jb::log::config::enable_console_logging</a>, <a class="el" href="log_8hpp_source.html#l00037">jb::log::config::enable_file_logging</a>, <a class="el" href="log_8cpp_source.html#l00124">filter_predicate()</a>, <a class="el" href="log_8cpp_source.html#l00148">format_console()</a>, <a class="el" href="log_8cpp_source.html#l00157">format_logfile()</a>, <a class="el" href="log_8hpp_source.html#l00040">jb::log::config::logfile_archive_directory</a>, <a class="el" href="log_8hpp_source.html#l00038">jb::log::config::logfile_basename</a>, <a class="el" href="log_8hpp_source.html#l00039">jb::log::config::logfile_suffix</a>, <a class="el" href="log_8hpp_source.html#l00041">jb::log::config::maximum_size_archived</a>, <a class="el" href="log_8hpp_source.html#l00035">jb::log::config::minimum_console_severity</a>, <a class="el" href="log_8hpp_source.html#l00042">jb::log::config::minimum_free_space</a>, <a class="el" href="log_8hpp_source.html#l00034">jb::log::config::minimum_severity</a>, and <a class="el" href="log_8cpp_source.html#l00172">tid()</a>.</p>
+<p>References <a class="el" href="log_8hpp_source.html#l00036">jb::log::config::enable_console_logging</a>, <a class="el" href="log_8hpp_source.html#l00037">jb::log::config::enable_file_logging</a>, <a class="el" href="log_8cpp_source.html#l00125">filter_predicate()</a>, <a class="el" href="log_8cpp_source.html#l00151">format_console()</a>, <a class="el" href="log_8cpp_source.html#l00160">format_logfile()</a>, <a class="el" href="log_8hpp_source.html#l00040">jb::log::config::logfile_archive_directory</a>, <a class="el" href="log_8hpp_source.html#l00038">jb::log::config::logfile_basename</a>, <a class="el" href="log_8hpp_source.html#l00039">jb::log::config::logfile_suffix</a>, <a class="el" href="log_8hpp_source.html#l00041">jb::log::config::maximum_size_archived</a>, <a class="el" href="log_8hpp_source.html#l00035">jb::log::config::minimum_console_severity</a>, <a class="el" href="log_8hpp_source.html#l00042">jb::log::config::minimum_free_space</a>, <a class="el" href="log_8hpp_source.html#l00034">jb::log::config::minimum_severity</a>, and <a class="el" href="log_8cpp_source.html#l00175">tid()</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__logging_8cpp_source.html#l00012">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="itch5inside_8cpp_source.html#l00027">main()</a>.</p>
 
@@ -367,9 +367,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00176">176</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00179">179</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="log_8cpp_source.html#l00170">tid_</a>.</p>
+<p>References <a class="el" href="log_8cpp_source.html#l00173">tid_</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__logging_8cpp_source.html#l00012">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -388,11 +388,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00172">172</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00175">175</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>References <a class="el" href="log_8cpp_source.html#l00170">tid_</a>.</p>
+<p>References <a class="el" href="log_8cpp_source.html#l00173">tid_</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00181">init()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00184">init()</a>.</p>
 
 </div>
 </div>
@@ -407,9 +407,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00170">170</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00173">173</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="log_8cpp_source.html#l00176">next_tid()</a>, and <a class="el" href="log_8cpp_source.html#l00172">tid()</a>.</p>
+<p>Referenced by <a class="el" href="log_8cpp_source.html#l00179">next_tid()</a>, and <a class="el" href="log_8cpp_source.html#l00175">tid()</a>.</p>
 
 </div>
 </div>
@@ -423,7 +423,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="log_8cpp_source.html#l00121">121</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8cpp_source.html#l00122">122</a> of file <a class="el" href="log_8cpp_source.html">log.cpp</a>.</p>
 
 </div>
 </div>
