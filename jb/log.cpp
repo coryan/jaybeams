@@ -81,7 +81,7 @@ config::config()
     , logfile_basename(
         desc("logfile-basename").help(
             "Define the name of the logfile,"
-            " used only if enable-file-loggin is true"),
+            " used only if enable-file-logging is true"),
         this)
     , logfile_suffix(
         desc("logfile-suffix").help(
