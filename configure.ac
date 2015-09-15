@@ -41,6 +41,11 @@ AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
 # Checks for libraries.
 AX_OPENCL([1.1],[],[AC_MSG_ERROR([unable to find a suitable OpenCL library])])
 AM_CONDITIONAL([HAVE_OPENCL], [test "x$ax_want_opencl" = "xyes"])
+AM_COND_IF([HAVE_OPENCL],
+  [AX_CHECK_LIBRARY(CLFFT, [clFFT.h], [clFFT],
+                    [CLFFT_LIBS=-lclFFT AC_SUBST(CLFFT_LIBS)],
+                    [AC_MSG_ERROR([Unable to find clFFT library])])
+  ])
 
 AX_BOOST_BASE([1.55],[],[
   AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])

@@ -11,6 +11,18 @@
  */
 
 /**
+ * @namespace jb::opencl
+ *
+ * Wrappers for the OpenCL library.
+ */
+
+/**
+ * @namespace jb::clfft
+ *
+ * Wrappers for the clFFT library.
+ */
+
+/**
  * @namespace jb::itch5
  *
  * Contains classes and functions to parse NASDAQ ITCH-5.0 messages,

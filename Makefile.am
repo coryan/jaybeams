@@ -2,24 +2,9 @@
 
 instdir = $(prefix)/lib
 
-# Conditionally enable the OpenCL components
-if HAVE_OPENCL
-jb_opencl_lib=jb/libjb_opencl.a
-jb_opencl_unit_tests = \
-  jb/opencl/ut_config \
-  jb/opencl/ut_device_selector
-jb_opencl_examples = \
-  jb/opencl/show_device
-else
-jb_opencl_lib=
-jb_opencl_unit_tests=
-jb_opencl_examples=
-endif
-
 inst_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_fftw.a \
-  $(jb_opencl_lib) \
   jb/libjb_itch5.a
 
 noinst_LIBRARIES = \
@@ -94,7 +79,7 @@ jb_testing_unit_tests = \
   jb/testing/ut_microbenchmark_config
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
-  $(jb_fftw_unit_tests) $(jb_opencl_unit_tests) $(jb_itch5_unit_tests)
+  $(jb_fftw_unit_tests) $(jb_itch5_unit_tests)
 
 benchmarks = \
   jb/fftw/bm_time_delay_estimator \
@@ -115,7 +100,6 @@ TESTS = $(check_PROGRAMS)
 AM_CXXFLAGS = \
   -DJB_SYSCONFDIR=\"$(sysconfdir)\" \
   -DJB_BINDIR=\"$(bindir)\" \
-  $(OPENCL_CPPFLAGS) \
   $(FFTW3_CPPFLAGS) \
   $(FFTW3F_CPPFLAGS) \
   $(FFTW3L_CPPFLAGS) \
@@ -124,21 +108,15 @@ AM_CXXFLAGS = \
   -DBOOST_LOG_DYN_LINK \
   $(PTHREAD_CFLAGS)
 
-LDFLAGS = \
-  $(OPENCL_LDFLAGS) \
-  $(FFTW3_LDFLAGS) \
-  $(FFTW3F_LDFLAGS) \
-  $(FFTW3L_LDFLAGS) \
-  $(YAML_CPP_LDFLAGS) \
-  $(BOOST_LDFLAGS)
-
-YAML_CPP_LIBS=@YAML_CPP_LIBS@
-FFTW3_LIBS=@FFTW3_LIBS@
-FFTW3F_LIBS=@FFTW3F_LIBS@
-FFTW3L_LIBS=@FFTW3L_LIBS@
+YAML_CPP_LIBS = @YAML_CPP_LIBS@
+FFTW3_LIBS = @FFTW3_LIBS@
+FFTW3F_LIBS = @FFTW3F_LIBS@
+FFTW3L_LIBS = @FFTW3L_LIBS@
 
 LIBS = \
+  $(YAML_CPP_LDFLAGS) \
   $(YAML_CPP_LIBS) \
+  $(BOOST_LDFLAGS) \
   $(BOOST_LOG_SETUP_LIB) \
   $(BOOST_LOG_LIB) \
   $(BOOST_FILESYSTEM_LIB) \
@@ -171,14 +149,12 @@ jb_ut_itch5_libs = \
 jb_ut_fftw_libs = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
+  $(FFTW3_LDFLAGS) \
   $(FFTW3_LIBS) \
+  $(FFTW3F_LDFLAGS) \
   $(FFTW3F_LIBS) \
+  $(FFTW3L_LDFLAGS) \
   $(FFTW3L_LIBS) \
-  $(jb_ut_libs)
-
-jb_ut_opencl_libs = \
-  jb/libjb_opencl.a \
-  $(OPENCL_LIB) \
   $(jb_ut_libs)
 
 ################################################################
@@ -488,10 +464,46 @@ jb_fftw_bm_time_delay_estimator_LDADD = \
   jb/libjb_fftw.a \
   jb/libjb.a
 
+################################################################
+# Conditionally enable the OpenCL components
+################################################################
 if HAVE_OPENCL
-################################################################
+
+jb_opencl_lib = jb/libjb_opencl.a
+
+jb_opencl_unit_tests = \
+  jb/opencl/ut_config \
+  jb/opencl/ut_device_selector
+
+jb_opencl_examples = \
+  jb/opencl/show_device
+
+jb_clfft_lib = jb/libjb_clfft.a
+
+jb_clfft_unit_tests = \
+  jb/clfft/ut_error \
+  jb/clfft/ut_plan
+
+AM_CXXFLAGS += $(OPENCL_CPPFLAGS) $(CLFFT_CPPFLAGS)
+
+jb_ut_opencl_libs = \
+  $(jb_opencl_lib) \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  $(jb_ut_libs)
+
+jb_ut_clfft_libs = \
+  $(jb_clfft_lib) \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIBS) \
+  $(jb_ut_opencl_libs)
+
+inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
+check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
+
+#
 # jb/libjb_opencl.a
-################################################################
+#
 
 jb_libjb_opencl_adir = $(includedir)
 jb_libjb_opencl_a_SOURCES = \
@@ -501,9 +513,9 @@ jb_libjb_opencl_a_HEADERS = \
   jb/opencl/config.hpp \
   jb/opencl/device_selector.hpp
 
-################################################################
+#
 # opencl unit tests
-################################################################
+#
 
 jb_opencl_ut_config_SOURCES = jb/opencl/ut_config.cpp
 jb_opencl_ut_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_config
@@ -513,15 +525,40 @@ jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
 
-################################################################
+#
 # opencl examples
-################################################################
+#
 
 jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
 jb_opencl_show_device_CPPFLAGS = 
 jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 
-################################################################
+#
+# jb/libjb_clfft.a
+#
+
+jb_libjb_clfft_adir = $(includedir)
+jb_libjb_clfft_a_SOURCES = \
+  jb/clfft/error.cpp \
+  jb/clfft/init.cpp \
+  jb/clfft/plan.cpp
+jb_libjb_clfft_a_HEADERS = \
+  jb/clfft/error.hpp \
+  jb/clfft/init.hpp \
+  jb/clfft/plan.hpp
+
+#
+# clfft unit tests
+#
+
+jb_clfft_ut_error_SOURCES = jb/clfft/ut_error.cpp
+jb_clfft_ut_error_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_error
+jb_clfft_ut_error_LDADD = $(jb_ut_clfft_libs)
+
+jb_clfft_ut_plan_SOURCES = jb/clfft/ut_plan.cpp
+jb_clfft_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_plan
+jb_clfft_ut_plan_LDADD = $(jb_ut_clfft_libs)
+
 endif
 
 ################################################################
