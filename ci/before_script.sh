@@ -25,6 +25,8 @@ elif [ "x${VARIANT?}" == "xcov" ]; then
     CXXFLAGS="-O0 -g -coverage"
 elif [ "x${VARIANT?}" == "xdbg" ]; then
     CXXFLAGS="-O0 -g"
+elif [ "x${VARIANT?}" == "xasan" ]; then
+    CXXFLAGS="-O2 -g -fsanitize=address"
 else
     echo "Unknown variant ${VARIANT?}"
     exit 1
