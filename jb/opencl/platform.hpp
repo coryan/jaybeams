@@ -20,6 +20,11 @@ namespace opencl {
 /// Define the preferred type to handling lists of cl::Events
 typedef std::vector<cl::Event> event_set;
 
+/// Create a cl::Context from a device (work around CL 1.1 limitations)
+inline cl::Context device2context(cl::Device const& device) {
+  return cl::Context(std::vector<cl::Device>({device}));
+}
+
 } // namespace opencl
 } // namespace jb
 

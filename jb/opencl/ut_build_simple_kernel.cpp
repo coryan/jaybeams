@@ -39,7 +39,7 @@ __kernel void add_float(
  */
 BOOST_AUTO_TEST_CASE(build_simple_kernel) {
   cl::Device device = jb::opencl::device_selector();
-  cl::Context context(device);
+  cl::Context context = jb::opencl::device2context(device);
 
   BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
       context, device, valid_program, "add_double"));
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
  */
 BOOST_AUTO_TEST_CASE(build_simple_program) {
   cl::Device device = jb::opencl::device_selector();
-  cl::Context context(device);
+  cl::Context context = jb::opencl::device2context(device);
 
   cl::Program program;
   BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(

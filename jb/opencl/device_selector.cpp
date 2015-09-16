@@ -5,8 +5,23 @@
 
 namespace {
 
+/**
+ * Refactor code to update the device selection.
+ *
+ * Update the @dev and @count parameters if @a d is of device type @a
+ * device_type and it has more compute units than @count.  This is
+ * used in the loops to search for the GPU with the highest compute
+ * unit count, and the CPU with the highest compute unit count.
+ *
+ * @param d the device to test.
+ * @param device_type the desired device type.
+ * @param @dev the current device selection.
+ * @param @count the number of compute units in the current device
+ *   selection.
+ */
 void update_selection(
-    cl::Device const& d, int device_type, cl::Device& dev, cl_uint& count) {
+    cl::Device const& d, cl_device_type device_type,
+    cl::Device& dev, cl_uint& count) {
   if (d.getInfo<CL_DEVICE_TYPE>() == device_type
       and d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > count) {
     count = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
