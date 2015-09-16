@@ -26,6 +26,9 @@ real-time is extra challenging.  The current implementation is based
 on cross-correlation of the two signals, using FFTs on GPUs to
 efficiently implement the cross-correlations.
 
+You can find more details about the motivation, and the performance
+requirements on [my posts](htts://coryan.github.io/)
+
 #### Really, that is the movation?
 
 I confess, I wanted to learn how to program GPUs, and given my
