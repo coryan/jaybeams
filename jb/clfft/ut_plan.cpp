@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_default) {
  */
 BOOST_AUTO_TEST_CASE(clfft_plan_move) {
   cl::Device device = jb::opencl::device_selector();
-  cl::Context context(device);
+  cl::Context context = jb::opencl::device2context(device);
   cl::CommandQueue queue(context, device);
   jb::clfft::init init;
 
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   int const tol = 1 << 8;
 
   cl::Device device = jb::opencl::device_selector();
-  cl::Context context(device);
+  cl::Context context = jb::opencl::device2context(device);
   cl::CommandQueue queue(context, device);
   jb::clfft::init init;
 
