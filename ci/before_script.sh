@@ -20,7 +20,6 @@ export CC
 
 LD_LIBRARY_PATH=$HOME/deps/clFFT-2.6.1-Linux-x64/lib64:${LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
-ENABLE_OPENCL=yes
 
 # ... set the CXXFLAGS based on the VARIANT ...
 if [ "x${VARIANT?}" == "xopt" ]; then
@@ -31,7 +30,6 @@ elif [ "x${VARIANT?}" == "xdbg" ]; then
     CXXFLAGS="-O0 -g"
 elif [ "x${VARIANT?}" == "xasan" ]; then
     CXXFLAGS="-O2 -g -fsanitize=address"
-    ENABLE_OPENCL="no"
 else
     echo "Unknown variant ${VARIANT?}"
     exit 1
