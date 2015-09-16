@@ -42,9 +42,9 @@ before_script:
 script:
   - ./bootstrap
   - if [ "x${ENABLE_OPENCL}" == "xyes" ]; then
-      ./configure --with-clfft=$HOME/deps/clFFT-2.6.1-Linux-x64
+      ./configure --with-clfft=$HOME/deps/clFFT-2.6.1-Linux-x64;
     else
-      ./configure --without-opencl
+      ./configure --without-opencl;
     fi
   - make
   - BOOST_TEST_CATCH_SYSTEM_ERRORS=no make check
