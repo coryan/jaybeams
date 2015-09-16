@@ -28,6 +28,29 @@ tar -xf Skye-0.1.tar.gz
 (cd Skye && ./configure && make check && sudo make install)
 @endcode
 
+# OpenCL
+
+# clFFT (FFT library for OpenCL)
+# Download clFFT code
+wget https://github.com/clMathLibraries/clFFT/archive/v2.6.1.tar.gz
+tar xf clFFT-2.6.1.tar.gz
+
+# Compile clFFT
+cd clFFT-2.6.1/src
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.6.1 -DOPENCL_ROOT=/opt/AMDAPPSDK-2.9-1 .
+make
+sudo make install
+cd ..
+
+You most likely want to make the clFFT library always loadable without
+the need to setup LD_LIBRARY_PATH:
+
+@code
+echo /usr/local/clFFT-2.6.1/lib64 >/tmp/clfft-2.6.1.conf
+sudo cp /tmp/clfft-2.6.1.conf /etc/ld.so.conf.d/
+sudo ldconfig
+@endcode
+
 @section fedora_build Checkout the Code and Build
 
 This is the easy part:
@@ -100,5 +123,6 @@ make
 make check
 #
 @endcode
+
 
 */
