@@ -18,6 +18,10 @@ fi
 export CXX
 export CC
 
+LD_LIBRARY_PATH=$HOME/deps/clFFT-2.6.1-Linux-x64/lib64:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
+ENABLE_OPENCL=yes
+
 # ... set the CXXFLAGS based on the VARIANT ...
 if [ "x${VARIANT?}" == "xopt" ]; then
     CXXFLAGS="-O3"
@@ -27,6 +31,7 @@ elif [ "x${VARIANT?}" == "xdbg" ]; then
     CXXFLAGS="-O0 -g"
 elif [ "x${VARIANT?}" == "xasan" ]; then
     CXXFLAGS="-O2 -g -fsanitize=address"
+    ENABLE_OPENCL="no"
 else
     echo "Unknown variant ${VARIANT?}"
     exit 1
@@ -45,12 +50,4 @@ if [ "x${GENDOCS}" == "xyes" ]; then
         GENDOCS=disabled
     fi
 fi
-
-LD_LIBRARY_PATH=$HOME/deps/clFFT-2.6.1-Linux-x64/lib64:${LD_LIBRARY_PATH}
-export LD_LIBRARY_PATH
-CLFFT_CPPFLAGS=-I$HOME/deps/clFFT-2.6.1-Linux-x64/include
-export CLFFT_CPPFLAGS
-CLFFT_LDFLAGS=-L$HOME/deps/clFFT-2.6.1-Linux-x64/lib64
-export CLFFT_LDFLAGS
-
 
