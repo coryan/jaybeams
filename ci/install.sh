@@ -33,9 +33,6 @@ sudo apt-get -qq -y install boost1.55
 # ... install the FFT3W libraries ...
 sudo apt-get -qq -y install libfftw3-dev
 
-# ... install the OpenCL libraries ...
-sudo apt-get -qq -y install freeglut3-dev fglrx opencl-headers
-
 # ... install a recent version of autoconf, automake and whatever make
 # comes through that long list of apt sources.  We do not install
 # autoconf because we will need to manually install it ...
@@ -78,5 +75,13 @@ tar -xf skye-0.2.tar.gz
 wget -q http://http.debian.net/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
 tar xf lcov_1.11.orig.tar.gz
 sudo make -C lcov-1.11/ install
+
+# ... install the OpenCL libraries ...
+sudo apt-get -qq -y install freeglut3-dev fglrx opencl-headers
+
+# ... manually download a recent version of clFFT from github, extract
+# it, configure it and compile it ...
+wget https://github.com/clMathLibraries/clFFT/releases/download/v2.6.1/clFFT-2.6.1-Linux-x64.tar.gz
+tar xf clFFT-2.6.1-Linux-x64.tar.gz
 
 exit 0

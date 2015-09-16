@@ -45,3 +45,12 @@ if [ "x${GENDOCS}" == "xyes" ]; then
         GENDOCS=disabled
     fi
 fi
+
+LD_LIBRARY_PATH=$HOME/deps/clFFT-2.6.1-Linux-x64/lib64:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
+CLFFT_CPPFLAGS=-I$HOME/deps/clFFT-2.6.1-Linux-x64/include
+export CLFFT_CPPFLAGS
+CLFFT_LDFLAGS=-I$HOME/deps/clFFT-2.6.1-Linux-x64/lib64
+export CLFFT_LDFLAGS
+
+
