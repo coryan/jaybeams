@@ -65,7 +65,21 @@ cl::Device jb::opencl::device_selector(config const& cfg) {
     }
   }
 
-  if (best_gpu_count != 0 and cfg.device_name() != "BESTCPU") {
+  if (cfg.device_name() == "BESTGPU") {
+    if (best_gpu_count == 0) {
+      throw std::runtime_error("No GPU available with BESTGPU selector");
+    }
+    return best_gpu;
+  }
+
+  if (cfg.device_name() == "BESTCPU") {
+    if (best_cpu_count == 0) {
+      throw std::runtime_error("No CPU (WAT!?) available with BESTCPU selector");
+    }
+    return best_cpu;
+  }
+
+  if (best_gpu_count != 0) {
     return best_gpu;
   }
     

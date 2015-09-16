@@ -7,21 +7,6 @@
  * @test Verify that we can select devices by name.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_by_name) {
-
-  {
-    cl::Context context(CL_DEVICE_TYPE_CPU, 0, nullptr, nullptr);
-
-    auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
-    for (auto const& d : devices) {
-      std::string expected = d.getInfo<CL_DEVICE_NAME>();
-      BOOST_MESSAGE("searching for " << expected);
-      cl::Device dev = jb::opencl::device_selector(
-          jb::opencl::config().device_name(expected));
-      
-      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_NAME>(), expected);
-    }
-  }
-
   std::vector<cl::Platform> platforms;
   cl::Platform::get(&platforms);
   for (auto const& p : platforms) {
@@ -116,8 +101,14 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_bestcpu) {
  * @test Verify that the default selection works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
-  cl::Device dev = jb::opencl::device_selector(
-      jb::opencl::config().device_name("BESTGPU"));
+  cl::Device dev;
+  try {
+    dev = jb::opencl::device_selector(
+        jb::opencl::config().device_name("BESTGPU"));
+  } catch(std::exception const& ex) {
+    BOOST_MESSAGE("No available GPU, abort test");
+    return;
+  }
   BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
 
   BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
