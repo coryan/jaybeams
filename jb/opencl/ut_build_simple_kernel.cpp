@@ -2,6 +2,7 @@
 #include <jb/opencl/device_selector.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <sstream>
 
 // Define a program with two kernels, nothing fancy
 char const valid_program[] = R"""(
@@ -47,6 +48,16 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
       context, device, valid_program, "add_float"));
   BOOST_CHECK_THROW(jb::opencl::build_simple_kernel(
       context, device, invalid_program, "add_float"), std::exception);
+
+  std::istringstream is(valid_program);
+  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
+      context, device, is, "add_double"));
+  is.str(valid_program); is.clear();
+  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
+      context, device, is, "add_float"));
+  is.str(invalid_program); is.clear();
+  BOOST_CHECK_THROW(jb::opencl::build_simple_kernel(
+          context, device, is, "add_float"), std::exception);
 }
 
 /**
@@ -64,4 +75,14 @@ BOOST_AUTO_TEST_CASE(build_simple_program) {
 
   BOOST_CHECK_THROW(jb::opencl::build_simple_program(
       context, device, invalid_program), std::exception);
+
+  std::istringstream is(valid_program);
+  BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(
+      context, device, is));
+  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_float"));
+  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_double"));
+
+  is.str(invalid_program); is.clear();
+  BOOST_CHECK_THROW(jb::opencl::build_simple_program(
+      context, device, is), std::exception);
 }
