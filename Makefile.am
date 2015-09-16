@@ -500,7 +500,7 @@ jb_ut_opencl_libs = \
 jb_ut_clfft_libs = \
   $(jb_clfft_lib) \
   $(CLFFT_LDFLAGS) \
-  $(CLFFT_LIBS) \
+  $(CLFFT_LIB) \
   $(jb_ut_opencl_libs)
 
 #
