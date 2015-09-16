@@ -472,6 +472,7 @@ if HAVE_OPENCL
 jb_opencl_lib = jb/libjb_opencl.a
 
 jb_opencl_unit_tests = \
+  jb/opencl/ut_build_simple_kernel \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector
 
@@ -484,7 +485,11 @@ jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
 
-AM_CXXFLAGS += $(OPENCL_CPPFLAGS) $(CLFFT_CPPFLAGS)
+AM_CXXFLAGS += \
+  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS)
+
+inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
+check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
 
 jb_ut_opencl_libs = \
   $(jb_opencl_lib) \
@@ -498,24 +503,27 @@ jb_ut_clfft_libs = \
   $(CLFFT_LIBS) \
   $(jb_ut_opencl_libs)
 
-inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
-check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
-
 #
 # jb/libjb_opencl.a
 #
 
 jb_libjb_opencl_adir = $(includedir)
 jb_libjb_opencl_a_SOURCES = \
+  jb/opencl/build_simple_kernel.cpp \
   jb/opencl/config.cpp \
   jb/opencl/device_selector.cpp
 jb_libjb_opencl_a_HEADERS = \
+  jb/opencl/build_simple_kernel.hpp \
   jb/opencl/config.hpp \
   jb/opencl/device_selector.hpp
 
 #
 # opencl unit tests
 #
+
+jb_opencl_ut_build_simple_kernel_SOURCES = jb/opencl/ut_build_simple_kernel.cpp
+jb_opencl_ut_build_simple_kernel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_build_simple_kernel
+jb_opencl_ut_build_simple_kernel_LDADD = $(jb_ut_opencl_libs)
 
 jb_opencl_ut_config_SOURCES = jb/opencl/ut_config.cpp
 jb_opencl_ut_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_config
