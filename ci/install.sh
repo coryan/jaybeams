@@ -93,7 +93,7 @@ tar -xf v0.4.tar.gz
         cmake \
           -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
           -DBOOST_COMPUTE_THREAD_SAFE=ON \
-          -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" .. && \
+          -DCMAKE_CXX_FLAGS="-Wall -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCL_VERSION_1_1" .. && \
         make && sudo make install)
 
 exit 0
