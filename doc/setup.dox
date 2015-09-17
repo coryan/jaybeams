@@ -14,44 +14,61 @@ instructions were originally written for Fedora 21, I will try to make
 them more generic over time.  Please submit patches to support other
 systems.
 
-Installing the developement tools:
+@subsection fedora_install_tools Installing the Developement Tools
+
+The first thing you should do is install the basic development tools
+and libraries. 
 
 @code
-sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive
-
-# YAML-CPP (C++ Wrappers for YAML files)
+sudo yum install git gcc-c++ make clang autoconf automake autoconf-archive
+sudo yum install boost-devel boost
+sudo yum install fftw-devel fftw-libs-single fftw-libs-double fftw-libs-quad
+sudo yum install ocl-icd opencl-headers
 sudo yum install yaml-cpp-devel
+@endcode
 
-# Skye (Small Mocking framework)
+@subsection fedora_install_libraries Installing Additional Libraries
+
+<b>Skye (Small Mocking framework)</b>
+
+@code
 wget -q https://github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz
 tar -xf Skye-0.1.tar.gz
 (cd Skye && ./configure && make check && sudo make install)
 @endcode
 
-# OpenCL
+<b>clFFT (FFT library for OpenCL)</b>
 
-# clFFT (FFT library for OpenCL)
-# Download clFFT code
+@code
 wget https://github.com/clMathLibraries/clFFT/archive/v2.6.1.tar.gz
 tar xf clFFT-2.6.1.tar.gz
-
-# Compile clFFT
 cd clFFT-2.6.1/src
-cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.6.1 -DOPENCL_ROOT=/opt/AMDAPPSDK-2.9-1 .
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.6.1 .
 make
 sudo make install
 cd ..
 
-You most likely want to make the clFFT library always loadable without
-the need to setup LD_LIBRARY_PATH:
-
-@code
+# ... use this to avoid settint LD_LIBRARY_PATH everywhere ...
 echo /usr/local/clFFT-2.6.1/lib64 >/tmp/clfft-2.6.1.conf
 sudo cp /tmp/clfft-2.6.1.conf /etc/ld.so.conf.d/
 sudo ldconfig
 @endcode
 
-@section fedora_build Checkout the Code and Build
+<b>Download and install Boost.Compute</b>
+
+@code
+wget https://github.com/boostorg/compute/archive/v0.4.tar.gz
+tar -xf v0.4.tar.gz
+mkdir build ; cd build
+CC=clang CXX=clang++ cmake \
+  -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
+  -DBOOST_COMPUTE_THREAD_SAFE=ON \
+  -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" ..
+make
+sudo make install
+@endcode
+
+@subsection fedora_build Checkout the Code and Build
 
 This is the easy part:
 
@@ -99,14 +116,54 @@ sudo apt-get -qq -y install cmake
 wget -q https://github.com/jbeder/yaml-cpp/archive/release-0.5.1.tar.gz
 tar -xf release-0.5.1.tar.gz
 (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
+@endcode
 
-# Skye (Small Mocking framework)
+@subsection ubuntu_install_libraries Installing Additional Libraries
+
+Even after all that, you still need to install a number of additional
+libraries:
+
+<b>Skye (Small Mocking framework)</b>
+
+@code
 wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
 tar -xf skye-0.2.tar.gz
 (cd skye-0.2 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
 @endcode
 
-@section ubuntu_build Checkout the Code and Build
+<b>clFFT (FFT library for OpenCL)</b>
+
+@code
+wget https://github.com/clMathLibraries/clFFT/archive/v2.6.1.tar.gz
+tar xf clFFT-2.6.1.tar.gz
+cd clFFT-2.6.1/src
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.6.1 .
+make
+sudo make install
+cd ..
+
+# ... use this to avoid settint LD_LIBRARY_PATH everywhere ...
+echo /usr/local/clFFT-2.6.1/lib64 >/tmp/clfft-2.6.1.conf
+sudo cp /tmp/clfft-2.6.1.conf /etc/ld.so.conf.d/
+sudo ldconfig
+@endcode
+
+
+<b>Download and install Boost.Compute</b>
+
+@code
+wget https://github.com/boostorg/compute/archive/v0.4.tar.gz
+tar -xf v0.4.tar.gz
+mkdir build ; cd build
+CC=clang CXX=clang++ cmake \
+  -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
+  -DBOOST_COMPUTE_THREAD_SAFE=ON \
+  -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_1 -Wno-deprecated-declarations -Wno-constant-logical-operand" ..
+make
+sudo make install
+@endcode
+
+@subsection ubuntu_build Checkout the Code and Build
 
 This is the easy part:
 
@@ -116,13 +173,12 @@ cd jaybeams
 ./bootstrap
 mkdir clang
 cd clang
-CXX=clang++-3.6 CC=clang-3.6 ../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/
+CXX=clang++-3.6 CC=clang-3.6 ../configure
 # Just compile the code
 make
 # Compile the code, the tests and run the tests
 make check
 #
 @endcode
-
 
 */
