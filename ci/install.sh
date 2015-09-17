@@ -88,13 +88,12 @@ tar xf clFFT-2.6.1-Linux-x64.tar.gz
 # install it (there is no compilation really) ...
 wget https://github.com/boostorg/compute/archive/v0.4.tar.gz
 tar -xf v0.4.tar.gz
-mkdir build ; cd build
-CC=clang CXX=clang++ cmake \
-  -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
-  -DBOOST_COMPUTE_THREAD_SAFE=ON \
-  -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" ..
-make
-sudo make install
-cd ../..
+(source ${TRAVIS_BUILD_DIR?}/ci/before_script.sh && \
+        cd compute-0.4 && mkdir build && cd build && \
+        cmake \
+          -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
+          -DBOOST_COMPUTE_THREAD_SAFE=ON \
+          -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" .. && \
+        make && sudo make install)
 
 exit 0
