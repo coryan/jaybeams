@@ -34,6 +34,26 @@ AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 # ... enable all warnings ...
 AX_CXXFLAGS_WARN_ALL
 
+# ... we need Boost with a version higher than 1.55 because Boost.Log ...
+AX_BOOST_BASE([1.55], [], [
+    AC_MSG_ERROR([
+        unable to find a suitable Boost library, need version >= 1.55.
+    ])
+])
+
+# ... then check for each specific Boost.* library we use ...
+AX_BOOST_LOG
+AX_BOOST_LOG_SETUP
+AX_BOOST_FILESYSTEM
+AX_BOOST_SYSTEM
+AX_BOOST_DATE_TIME
+AX_BOOST_THREAD
+AX_BOOST_IOSTREAMS
+AX_BOOST_PROGRAM_OPTIONS
+AX_BOOST_UNIT_TEST_FRAMEWORK
+
+AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
+
 # ... avoid spurious warnings from clang ...
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
@@ -50,27 +70,13 @@ AM_CONDITIONAL([HAVE_OPENCL], [test "x$ax_want_opencl" = "xyes"])
 
 # ... we want to use clFFT only if OpenCL is enabled ..
 AM_COND_IF([HAVE_OPENCL], [
-    AX_CLFFT([], [ AC_MSG_ERROR([Unable to find clFFT library.]) ])
-])
-
-# ... we need Boost with a version higher than 1.55 because Boost.Log ...
-AX_BOOST_BASE([1.55], [], [
-    AC_MSG_ERROR([
-        unable to find a suitable Boost library, need version >= 1.55.
+    AX_CLFFT([], [
+        AC_MSG_ERROR([Unable to find clFFT library.])
+    ])
+    AX_BOOST_COMPUTE([], [
+        AC_MSG_ERROR([Unable to find Boost.Compute library.])
     ])
 ])
-# ... then check for each specific Boost.* library we use ...
-AX_BOOST_LOG
-AX_BOOST_LOG_SETUP
-AX_BOOST_FILESYSTEM
-AX_BOOST_SYSTEM
-AX_BOOST_DATE_TIME
-AX_BOOST_THREAD
-AX_BOOST_IOSTREAMS
-AX_BOOST_PROGRAM_OPTIONS
-AX_BOOST_UNIT_TEST_FRAMEWORK
-
-AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
 
 # ... YAML-CPP is a library to parse YAML files ...
 AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
