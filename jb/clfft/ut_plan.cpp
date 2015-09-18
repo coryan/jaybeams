@@ -87,7 +87,6 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   typedef boost::compute::vector<std::complex<float>> outvector;
 
   std::vector<std::complex<float>> src(size);
-  std::vector<std::complex<float>> dst(size);
   jb::testing::create_square_timeseries(size, src);
 
   invector in(size, context);
@@ -100,8 +99,9 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
 
   fft.enqueue(tmp, in, queue).wait();
-  ifft.enqueue(out, in, queue).wait();
+  ifft.enqueue(out, tmp, queue).wait();
 
+  std::vector<std::complex<float>> dst(size);
   boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
 
   jb::testing::check_vector_close_enough(dst, src, tol);
