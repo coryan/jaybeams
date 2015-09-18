@@ -486,7 +486,7 @@ jb_clfft_unit_tests = \
   jb/clfft/ut_plan
 
 AM_CXXFLAGS += \
-  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS)
+  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
 
 inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
 check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
@@ -548,8 +548,7 @@ jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 jb_libjb_clfft_adir = $(includedir)
 jb_libjb_clfft_a_SOURCES = \
   jb/clfft/error.cpp \
-  jb/clfft/init.cpp \
-  jb/clfft/plan.cpp
+  jb/clfft/init.cpp
 jb_libjb_clfft_a_HEADERS = \
   jb/clfft/error.hpp \
   jb/clfft/init.hpp \

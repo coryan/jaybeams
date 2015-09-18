@@ -8,17 +8,17 @@
 #include <complex>
 #include <vector>
 
-typedef std::vector<std::complex<float>> timeseries_type;
-
 /**
  * @test Verify that we can create and destroy default initialized plans.
  */
 BOOST_AUTO_TEST_CASE(clfft_plan_default) {
   jb::clfft::init init;
   {
-    jb::clfft::plan x;
-    jb::clfft::plan y;
-    jb::clfft::plan z;
+    typedef boost::compute::vector<std::complex<float>> invector;
+    typedef boost::compute::vector<std::complex<float>> outvector;
+    typedef jb::clfft::plan<invector, outvector> tested_type;
+    tested_type x;
+    tested_type y;
   }
 }
 
@@ -26,49 +26,46 @@ BOOST_AUTO_TEST_CASE(clfft_plan_default) {
  * @test Verify that we use move copy constructor and assignment on plans.
  */
 BOOST_AUTO_TEST_CASE(clfft_plan_move) {
-  cl::Device device = jb::opencl::device_selector();
-  cl::Context context = jb::opencl::device2context(device);
-  cl::CommandQueue queue(context, device);
+  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::context context(device);
+  boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
 
   std::size_t size = 128;
-  cl::Buffer in_buf(context, CL_MEM_READ_WRITE, size * 2 * sizeof(cl_float));
-  cl::Buffer tmp_buf(context, CL_MEM_READ_WRITE, size * 2 * sizeof(cl_float));
-  timeseries_type in(size);
+  typedef boost::compute::vector<std::complex<float>> invector;
+  typedef boost::compute::vector<std::complex<float>> outvector;
 
-  jb::opencl::event_set upload(1);
-  queue.enqueueWriteBuffer(
-      in_buf, false, 0, size * 2 * sizeof(cl_float), &in[0],
-      nullptr, &upload[0]);
+  std::vector<std::complex<float>> src(size);
+  jb::testing::create_square_timeseries(size, src);
 
+  invector in(size, context);
+  outvector out(size, context);
+
+  boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
 
   {
-    jb::clfft::plan fft = jb::clfft::plan::dft_1d(size, context, queue);
+    auto fft = jb::clfft::create_forward_plan_1d(out, in, context, queue);
 
-    jb::clfft::plan p(std::move(fft));
+    auto p(std::move(fft));
 
-    cl::Event ev;
-    BOOST_CHECK_NO_THROW(p.enqueue(queue, in_buf, tmp_buf, upload, ev));
-    BOOST_CHECK_THROW(fft.enqueue(queue, in_buf, tmp_buf, upload, ev), std::exception);
+    BOOST_CHECK_NO_THROW(p.enqueue(out, in, queue).wait());
+    BOOST_CHECK_THROW(fft.enqueue(out, in, queue), std::exception);
   }
   {
-    jb::clfft::plan fft = jb::clfft::plan::dft_1d(size, context, queue);
+    auto fft = jb::clfft::create_forward_plan_1d(out, in, context, queue);
 
-    jb::clfft::plan p;
+    jb::clfft::plan<invector, outvector> p;
     p = std::move(fft);
-    cl::Event ev;
-    BOOST_CHECK_NO_THROW(p.enqueue(queue, in_buf, tmp_buf, upload, ev));
-    BOOST_CHECK_THROW(fft.enqueue(queue, in_buf, tmp_buf, upload, ev), std::exception);
+    BOOST_CHECK_NO_THROW(p.enqueue(out, in, queue).wait());
+    BOOST_CHECK_THROW(fft.enqueue(out, in, queue), std::exception);
   }
   {
-    jb::clfft::plan p;
+    jb::clfft::plan<invector, outvector> p;
 
-    p = std::move(jb::clfft::plan::dft_1d(size, context, queue));
-    cl::Event ev;
-    BOOST_CHECK_NO_THROW(p.enqueue(queue, in_buf, tmp_buf, upload, ev));
+    p = std::move(jb::clfft::create_forward_plan_1d(out, in, context, queue));
+    BOOST_CHECK_NO_THROW(p.enqueue(out, in, queue).wait());
   }
 }
-
 
 /**
  * @test Verify that we can create clfft_plan objects and they work as expected.
@@ -81,40 +78,32 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   // a good guess to the maximum error:
   int const tol = 1 << 8;
 
-  cl::Device device = jb::opencl::device_selector();
-  cl::Context context = jb::opencl::device2context(device);
-  cl::CommandQueue queue(context, device);
+  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::context context(device);
+  boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
 
-  timeseries_type in(size);
-  timeseries_type out(size);
+  typedef boost::compute::vector<std::complex<float>> invector;
+  typedef boost::compute::vector<std::complex<float>> outvector;
 
-  jb::testing::create_square_timeseries(size, in);
+  std::vector<std::complex<float>> src(size);
+  std::vector<std::complex<float>> dst(size);
+  jb::testing::create_square_timeseries(size, src);
 
-  jb::clfft::plan fft = jb::clfft::plan::dft_1d(size, context, queue);
-  jb::clfft::plan ifft = jb::clfft::plan::dft_1d_inv(size, context, queue);
+  invector in(size, context);
+  outvector tmp(size, context);
+  invector out(size, context);
 
-  cl::Buffer in_buf(context, CL_MEM_READ_WRITE, size * 2 * sizeof(cl_float));
-  cl::Buffer tmp_buf(context, CL_MEM_READ_WRITE, size * 2 * sizeof(cl_float));
-  cl::Buffer out_buf(context, CL_MEM_READ_WRITE, size * 2 * sizeof(cl_float));
+  auto fft = jb::clfft::create_forward_plan_1d(tmp, in, context, queue);
+  auto ifft = jb::clfft::create_inverse_plan_1d(out, tmp, context, queue);
 
-  jb::opencl::event_set upload(1);
-  queue.enqueueWriteBuffer(
-      in_buf, false, 0, size * 2 * sizeof(cl_float), &in[0],
-      nullptr, &upload[0]);
+  boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
 
-  jb::opencl::event_set fft_done(1);
-  fft.enqueue(queue, in_buf, tmp_buf, upload, fft_done[0]);
+  fft.enqueue(tmp, in, queue).wait();
+  ifft.enqueue(out, in, queue).wait();
 
-  jb::opencl::event_set ifft_done(1);
-  ifft.enqueue(queue, tmp_buf, out_buf, fft_done, ifft_done[0]);
+  boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
 
-  cl::Event read_done;
-  queue.enqueueReadBuffer(
-      out_buf, false, 0, size * 2 * sizeof(cl_float), &out[0],
-      &ifft_done, &read_done);
-
-  read_done.wait();
-
-  jb::testing::check_vector_close_enough(in, out, tol);
+  jb::testing::check_vector_close_enough(dst, src, tol);
 }
+
