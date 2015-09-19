@@ -1,6 +1,7 @@
 #include <jb/opencl/build_simple_kernel.hpp>
 #include <jb/opencl/device_selector.hpp>
 
+#include <boost/compute/context.hpp>
 #include <boost/test/unit_test.hpp>
 #include <sstream>
 
@@ -39,8 +40,8 @@ __kernel void add_float(
  * @test Make sure jb::opencl::build_simple_kernel works as expected.
  */
 BOOST_AUTO_TEST_CASE(build_simple_kernel) {
-  cl::Device device = jb::opencl::device_selector();
-  cl::Context context = jb::opencl::device2context(device);
+  boost::compute::device device = jb::opencl::device_selector();
+  boost::compute::context context(device);
 
   BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
       context, device, valid_program, "add_double"));
@@ -64,14 +65,14 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
  * @test Make sure jb::opencl::build_simple_program works as expected.
  */
 BOOST_AUTO_TEST_CASE(build_simple_program) {
-  cl::Device device = jb::opencl::device_selector();
-  cl::Context context = jb::opencl::device2context(device);
+  boost::compute::device device = jb::opencl::device_selector();
+  boost::compute::context context(device);
 
-  cl::Program program;
+  boost::compute::program program;
   BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(
       context, device, valid_program));
-  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_float"));
-  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_double"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
 
   BOOST_CHECK_THROW(jb::opencl::build_simple_program(
       context, device, invalid_program), std::exception);
@@ -79,8 +80,8 @@ BOOST_AUTO_TEST_CASE(build_simple_program) {
   std::istringstream is(valid_program);
   BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(
       context, device, is));
-  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_float"));
-  BOOST_CHECK_NO_THROW(cl::Kernel(program, "add_double"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
 
   is.str(invalid_program); is.clear();
   BOOST_CHECK_THROW(jb::opencl::build_simple_program(

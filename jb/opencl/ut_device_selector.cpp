@@ -1,26 +1,21 @@
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/config.hpp>
 
+#include <boost/compute/system.hpp>
 #include <boost/test/unit_test.hpp>
 
 /**
  * @test Verify that we can select devices by name.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_by_name) {
-  std::vector<cl::Platform> platforms;
-  cl::Platform::get(&platforms);
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-
-    for (auto const& d : devices) {
-      std::string expected = d.getInfo<CL_DEVICE_NAME>();
-      BOOST_MESSAGE("searching for " << expected);
-      cl::Device dev = jb::opencl::device_selector(
-          jb::opencl::config().device_name(expected));
+  auto devices = boost::compute::system::devices();
+  for (auto const& d : devices) {
+    BOOST_MESSAGE("searching for " << d.name());
+    boost::compute::device actual = jb::opencl::device_selector(
+        jb::opencl::config().device_name(d.name()));
       
-      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_NAME>(), expected);
-    }
+    BOOST_CHECK_EQUAL(d.name(), actual.name());
+    BOOST_CHECK_EQUAL(d.id(), actual.id());
   }
 }
 
@@ -28,71 +23,27 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_by_name) {
  * @test Verify that the default selection works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_default) {
+  auto expected = boost::compute::system::default_device();
 
-  cl::Device dev = jb::opencl::device_selector(jb::opencl::config());
-  BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
+  auto actual = jb::opencl::device_selector(jb::opencl::config());
+  BOOST_MESSAGE("Default selector picked " << actual.name());
 
-  BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
-
-  bool has_gpu = false;
-
-  std::vector<cl::Platform> platforms;
-  cl::Platform::get(&platforms);
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-
-    for (auto const& d : devices) {
-      if (d.getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_GPU) {
-        has_gpu = true;
-        BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_GPU);
-        BOOST_CHECK_GE(
-            dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
-            d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
-      }
-    }
-  }
-
-  if (has_gpu) {
-    return;
-  }
-
-  BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_CPU);
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-
-    for (auto const& d : devices) {
-      if (d.getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_CPU) {
-        BOOST_CHECK_GE(
-            dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
-            d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
-      }
-    }
-  }
+  BOOST_CHECK_EQUAL(expected.name(), actual.name());
+  BOOST_CHECK_EQUAL(expected.id(), actual.id());
 }
 
 /**
  * @test Verify that the default selection works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_bestcpu) {
-  cl::Device dev = jb::opencl::device_selector(
+  auto actual = jb::opencl::device_selector(
       jb::opencl::config().device_name("BESTCPU"));
-  BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
+  BOOST_MESSAGE("Default selector picked " << actual.name());
 
-  BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
-
-  std::vector<cl::Platform> platforms;
-  cl::Platform::get(&platforms);
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_CPU, &devices);
-
-    for (auto const& d : devices) {
-      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_CPU);
-      BOOST_CHECK_GE(
-          dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
-          d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
+  for (auto const& d : boost::compute::system::devices()) {
+    if (d.type() == boost::compute::device::cpu) {
+      BOOST_MESSAGE("checking compute unit count for " << d.name());
+      BOOST_CHECK_GE(actual.compute_units(), d.compute_units());
     }
   }
 }
@@ -101,29 +52,20 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_bestcpu) {
  * @test Verify that the default selection works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
-  cl::Device dev;
+  boost::compute::device actual;
   try {
-    dev = jb::opencl::device_selector(
+    actual = jb::opencl::device_selector(
         jb::opencl::config().device_name("BESTGPU"));
   } catch(std::exception const& ex) {
     BOOST_MESSAGE("No available GPU, abort test");
     return;
   }
-  BOOST_MESSAGE("Default selector picked " << dev.getInfo<CL_DEVICE_NAME>());
+  BOOST_MESSAGE("Default selector picked " << actual.name());
 
-  BOOST_CHECK_NO_THROW(dev.getInfo<CL_DEVICE_NAME>());
-
-  std::vector<cl::Platform> platforms;
-  cl::Platform::get(&platforms);
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_GPU, &devices);
-
-    for (auto const& d : devices) {
-      BOOST_CHECK_EQUAL(dev.getInfo<CL_DEVICE_TYPE>(), CL_DEVICE_TYPE_GPU);
-      BOOST_CHECK_GE(
-          dev.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>(),
-          d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
+  for (auto const& d : boost::compute::system::devices()) {
+    if (d.type() == boost::compute::device::gpu) {
+      BOOST_MESSAGE("checking compute unit count for " << d.name());
+      BOOST_CHECK_GE(actual.compute_units(), d.compute_units());
     }
   }
 }
@@ -132,10 +74,10 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
  * @test Verify that the device selector without config works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_no_config) {
-  cl::Device expected = jb::opencl::device_selector(
+  auto expected = jb::opencl::device_selector(
       jb::opencl::config());
-  cl::Device got = jb::opencl::device_selector();
+  auto actual = jb::opencl::device_selector();
 
-  BOOST_CHECK_EQUAL(
-      got.getInfo<CL_DEVICE_NAME>(), expected.getInfo<CL_DEVICE_NAME>());
+  BOOST_CHECK_EQUAL(expected.id(), actual.id());
+  BOOST_CHECK_EQUAL(expected.name(), actual.name());
 }

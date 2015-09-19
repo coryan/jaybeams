@@ -1,91 +1,45 @@
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/config.hpp>
 
+#include <boost/compute/system.hpp>
 #include <iostream>
 
 namespace {
 
-/**
- * Refactor code to update the device selection.
- *
- * Update the @dev and @count parameters if @a d is of device type @a
- * device_type and it has more compute units than @count.  This is
- * used in the loops to search for the GPU with the highest compute
- * unit count, and the CPU with the highest compute unit count.
- *
- * @param d the device to test.
- * @param device_type the desired device type.
- * @param @dev the current device selection.
- * @param @count the number of compute units in the current device
- *   selection.
- */
-void update_selection(
-    cl::Device const& d, cl_device_type device_type,
-    cl::Device& dev, cl_uint& count) {
-  if (d.getInfo<CL_DEVICE_TYPE>() == device_type
-      and d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > count) {
-    count = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
-    dev = d;
+/// Return the best available device of the given type
+boost::compute::device best_device(int device_type, char const *type_name) {
+  boost::compute::device selection;
+  unsigned int count = 0;
+  for (auto const& d : boost::compute::system::devices()) {
+    if (d.type() == device_type and d.compute_units() > count) {
+      count = d.compute_units();
+      selection = d;
+    }
   }
+  if (count == 0) {
+    std::ostringstream os;
+    os << "Could not find a device of type " << type_name
+       << " (" << device_type << ")";
+    throw std::runtime_error(os.str());
+  }
+  return selection;
 }
 
 } // anonymous namespace
 
-cl::Device jb::opencl::device_selector(config const& cfg) {
-  std::vector<cl::Platform> platforms;
-  (void) cl::Platform::get(&platforms);
-  if (platforms.empty()) {
-    throw std::runtime_error("Cannot find any OpenCL platform");
-  }
-
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-
-    for (auto const& d : devices) {
-      if (d.getInfo<CL_DEVICE_NAME>() == cfg.device_name()) {
-        return d;
-      }
-    }
-  }
-
-  // Not searching by name or name not found, find the GPU with the
-  // largest number of compute units ...
-  cl::Device best_gpu;
-  cl_uint best_gpu_count = 0;
-  cl::Device best_cpu;
-  cl_uint best_cpu_count = 0;
-  for (auto const& p : platforms) {
-    std::vector<cl::Device> devices;
-    p.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-
-    for (auto const& d : devices) {
-      update_selection(d, CL_DEVICE_TYPE_GPU, best_gpu, best_gpu_count);
-      update_selection(d, CL_DEVICE_TYPE_CPU, best_cpu, best_cpu_count);
-    }
-  }
-
-  if (cfg.device_name() == "BESTGPU") {
-    if (best_gpu_count == 0) {
-      throw std::runtime_error("No GPU available with BESTGPU selector");
-    }
-    return best_gpu;
-  }
-
+boost::compute::device jb::opencl::device_selector(config const& cfg) {
   if (cfg.device_name() == "BESTCPU") {
-    if (best_cpu_count == 0) {
-      throw std::runtime_error("No CPU (WAT!?) available with BESTCPU selector");
-    }
-    return best_cpu;
+    return best_device(boost::compute::device::cpu, "CPU");
   }
-
-  if (best_gpu_count != 0) {
-    return best_gpu;
+  if (cfg.device_name() == "BESTGPU") {
+    return best_device(boost::compute::device::gpu, "GPU");
   }
-    
-  return best_cpu;
+  if (cfg.device_name() == "") {
+    return boost::compute::system::default_device();
+  }
+  return boost::compute::system::find_device(cfg.device_name());
 }
 
-cl::Device jb::opencl::device_selector() {
+boost::compute::device jb::opencl::device_selector() {
   return jb::opencl::device_selector(jb::opencl::config());
 }

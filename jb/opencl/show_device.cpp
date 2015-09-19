@@ -4,10 +4,10 @@
 int main(int argc, char* argv[]) try {
   jb::opencl::config cfg;
   cfg.process_cmdline(argc, argv);
-  cl::Device dev = jb::opencl::device_selector(cfg);
+  auto dev = jb::opencl::device_selector(cfg);
 
   std::cout << "jb::opencl::device_selector picked "
-            << dev.getInfo<CL_DEVICE_NAME>() << std::endl;
+            << dev.name() << std::endl;
   return 0;
 } catch(jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;

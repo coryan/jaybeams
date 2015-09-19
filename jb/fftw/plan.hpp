@@ -12,17 +12,21 @@ namespace fftw {
 int const default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;
 
 /**
- * Wrap FFTW3 plan objects to automatically destroy them.
+ * Wrap FFTW3 plan objects.
  *
  * The FFTW3 optimizes execution by pre-computing coefficients and
  * execution plans for a DFT based on the original types, size and
- * alingment of the data.  These plans must be destroyed to release
- * resources.  FFTW3, being a C library, requires wrappers to automate
- * the destruction of these objects.
+ * alingment of the data.  In C++, we prefer the type system to
+ * remember details like this instead of getting an error message when
+ * we use the wrong types (or a crash).
  *
  * In addition, the FFTW3 library uses different names for the types
  * that have single (fftwf_*), double (fftw_*) or quad-precision
  * (fftwl_*).  In C++ we prefer to hide such details in generics.
+ *
+ * Finally, these plans must be destroyed to release resources.
+ * FFTW3, being a C library, requires wrappers to automate the
+ * destruction of these objects.
  *
  * @tparam precision_t the type of floating point value to use, must
  * be either float, double or long double.
