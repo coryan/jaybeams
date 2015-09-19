@@ -8,9 +8,6 @@
 #include <string>
 #include <stdexcept>
 
-/**
- * Convenience types and functions for benchmarking std::chrono clocks.
- */
 namespace {
 
 // We expect delays to be around 1250 microseconds, max delays are
