@@ -20,16 +20,16 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_by_name) {
 }
 
 /**
- * @test Verify that the default selection works as expected.
+ * @test Verify that the selection with an empty name works as expected.
  */
-BOOST_AUTO_TEST_CASE(opencl_device_selector_default) {
-  auto expected = boost::compute::system::default_device();
-
+BOOST_AUTO_TEST_CASE(opencl_device_selector_empty) {
   auto actual = jb::opencl::device_selector(jb::opencl::config());
   BOOST_MESSAGE("Default selector picked " << actual.name());
 
-  BOOST_CHECK_EQUAL(expected.name(), actual.name());
-  BOOST_CHECK_EQUAL(expected.id(), actual.id());
+  for (auto const& d : boost::compute::system::devices()) {
+    BOOST_MESSAGE("checking compute unit count for " << d.name());
+    BOOST_CHECK_GE(actual.compute_units(), d.compute_units());
+  }
 }
 
 /**
@@ -57,6 +57,8 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
     actual = jb::opencl::device_selector(
         jb::opencl::config().device_name("BESTGPU"));
   } catch(std::exception const& ex) {
+    // On machines without a GPU we do not want to fail the test, the
+    // expected result is that no device is found ...
     BOOST_MESSAGE("No available GPU, abort test");
     return;
   }
@@ -74,10 +76,32 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_bestgpu) {
  * @test Verify that the device selector without config works as expected.
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_no_config) {
-  auto expected = jb::opencl::device_selector(
-      jb::opencl::config());
   auto actual = jb::opencl::device_selector();
+  auto expected = jb::opencl::device_selector(jb::opencl::config());
 
   BOOST_CHECK_EQUAL(expected.id(), actual.id());
   BOOST_CHECK_EQUAL(expected.name(), actual.name());
+}
+
+/**
+ * @test Verify that the device selector for "SYSTEM:DEFAULT" works as expected.
+ */
+BOOST_AUTO_TEST_CASE(opencl_device_selector_system_default) {
+  auto actual = jb::opencl::device_selector(
+      jb::opencl::config().device_name("SYSTEM:DEFAULT"));
+  auto expected = boost::compute::system::default_device();
+
+  BOOST_CHECK_EQUAL(expected.id(), actual.id());
+  BOOST_CHECK_EQUAL(expected.name(), actual.name());
+}
+
+/**
+ * @test Verify that detail::best_device() helper fails as expected.
+ */
+BOOST_AUTO_TEST_CASE(opencl_device_selector_filter_failure) {
+  using boost::compute::device;
+  BOOST_CHECK_THROW(jb::opencl::detail::best_device(
+      [](device const&) { return false; }, "FAIL"), std::runtime_error);
+  BOOST_CHECK_NO_THROW(jb::opencl::detail::best_device(
+      [](device const&) { return true; }, "ANY"));
 }
