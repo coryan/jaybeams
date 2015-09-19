@@ -107,3 +107,24 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   jb::testing::check_vector_close_enough(dst, src, tol);
 }
 
+
+/**
+ * @test Verify that the plan detects errors and reports them.
+ */
+BOOST_AUTO_TEST_CASE(clfft_plan_error) {
+  typedef boost::compute::vector<std::complex<float>> invector;
+  typedef boost::compute::vector<std::complex<float>> outvector;
+
+  std::size_t const size = 1 << 8;
+  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::context context(device);
+  boost::compute::command_queue queue(context, device);
+  jb::clfft::init init;
+
+  invector in(size, context);
+  outvector tmp(size - 1, context);
+
+  BOOST_CHECK_THROW(
+      jb::clfft::create_forward_plan_1d(tmp, in, context, queue),
+      std::invalid_argument);
+}
