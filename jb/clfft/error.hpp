@@ -1,8 +1,7 @@
 #ifndef jb_clfft_error_hpp
 #define jb_clfft_error_hpp
 
-#include <jb/opencl/platform.hpp>
-
+#include <boost/compute/exception/opencl_error.hpp>
 #include <stdexcept>
 
 namespace jb {

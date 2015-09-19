@@ -3,7 +3,6 @@
 
 #include <jb/clfft/error.hpp>
 #include <jb/clfft/init.hpp>
-#include <jb/opencl/platform.hpp>
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/context.hpp>
