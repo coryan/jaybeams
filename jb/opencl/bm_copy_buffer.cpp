@@ -1,11 +1,11 @@
-#include <jb/clfft/plan.hpp>
 #include <jb/opencl/config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
+#include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <chrono>
+#include <boost/compute/container/vector.hpp>
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -38,49 +38,36 @@ class fixture {
       boost::compute::context& context,
       boost::compute::command_queue& q)
       : src(size)
-      , in(size, context)
-      , out(size, context)
+      , dev(size, context)
       , dst(size)
       , queue(q)
-      , fft(jb::clfft::create_forward_plan_1d(out, in, context, queue))
   {}
 
   void run() {
-    boost::compute::copy(
-        src.begin(), src.end(), in.begin(), queue);
-    fft.enqueue(out, in, queue).wait();
-    boost::compute::copy(
-        out.begin(), out.end(), dst.begin(), queue);
+    auto upload_done = boost::compute::copy_async(
+        src.begin(), src.end(), dev.begin(), queue);
+    auto download_done = jb::opencl::copy_to_host_async(
+        dev.begin(), dev.end(), dst.begin(), queue,
+        boost::compute::wait_list(upload_done.get_event()));
+    download_done.wait();
   }
 
  private:
-  typedef boost::compute::vector<std::complex<float>> invector;
-  typedef boost::compute::vector<std::complex<float>> outvector;
   std::vector<std::complex<float>> src;
-  invector in;
-  outvector out;
+  boost::compute::vector<std::complex<float>> dev;
   std::vector<std::complex<float>> dst;
   boost::compute::command_queue queue;
-  jb::clfft::plan<invector, outvector> fft;
 };
 
 template<>
-void fixture<true>::run() {
-  using namespace boost::compute;
-  auto upload_done = copy_async(
-      src.begin(), src.end(), in.begin(), queue);
-  auto fft_done = fft.enqueue(
-      out, in, queue, wait_list(upload_done.get_event()));
-  auto download_done = jb::opencl::copy_to_host_async(
-      out.begin(), out.end(), dst.begin(), queue,
-      wait_list(fft_done));
-  download_done.wait();
+void fixture<false>::run() {
+  boost::compute::copy(src.begin(), src.end(), dev.begin(), queue);
+  boost::compute::copy(dev.begin(), dev.end(), dst.begin(), queue);
 }
 
 template<bool pipelined>
 void benchmark_test_case(
     config const& cfg) {
-  jb::clfft::init init;
   boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);

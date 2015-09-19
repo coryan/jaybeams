@@ -478,6 +478,9 @@ jb_opencl_unit_tests = \
 jb_opencl_examples = \
   jb/opencl/show_device
 
+jb_opencl_benchmarks = \
+  jb/opencl/bm_copy_buffer
+
 jb_clfft_lib = jb/libjb_clfft.a
 
 jb_clfft_unit_tests = \
@@ -493,7 +496,10 @@ AM_CXXFLAGS += \
 inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
 check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
 
-noinst_PROGRAMS += $(jb_opencl_examples) $(jb_clfft_benchmarks)
+noinst_PROGRAMS += \
+  $(jb_opencl_examples) \
+  $(jb_opencl_benchmarks) \
+  $(jb_clfft_benchmarks)
 
 jb_ut_opencl_libs = \
   $(jb_opencl_lib) \
@@ -544,6 +550,14 @@ jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
 jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
 jb_opencl_show_device_CPPFLAGS = 
 jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
+
+#
+# opencl benchmarks
+#
+
+jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
+jb_opencl_bm_copy_buffer_CPPFLAGS = 
+jb_opencl_bm_copy_buffer_LDADD = jb/libjb_testing.a jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 
 #
 # jb/libjb_clfft.a
