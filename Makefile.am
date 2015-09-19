@@ -479,7 +479,8 @@ jb_opencl_examples = \
   jb/opencl/show_device
 
 jb_opencl_benchmarks = \
-  jb/opencl/bm_copy_buffer
+  jb/opencl/bm_copy_buffer \
+  jb/opencl/bm_launch_kernel
 
 jb_clfft_lib = jb/libjb_clfft.a
 
@@ -558,6 +559,10 @@ jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
 jb_opencl_bm_copy_buffer_CPPFLAGS = 
 jb_opencl_bm_copy_buffer_LDADD = jb/libjb_testing.a jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
+
+jb_opencl_bm_launch_kernel_SOURCES = jb/opencl/bm_launch_kernel.cpp
+jb_opencl_bm_launch_kernel_CPPFLAGS = 
+jb_opencl_bm_launch_kernel_LDADD = jb/libjb_testing.a jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
 
 #
 # jb/libjb_clfft.a
