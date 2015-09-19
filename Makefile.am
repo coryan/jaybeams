@@ -89,8 +89,7 @@ examples = \
   examples/fftw_correlation_no_wrappers \
   examples/configuration \
   tools/itch5inside \
-  tools/itch5stats \
-  $(jb_opencl_examples)
+  tools/itch5stats
 
 noinst_PROGRAMS = $(examples) $(benchmarks)
 
@@ -485,11 +484,16 @@ jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
 
+jb_clfft_benchmarks = \
+  jb/clfft/bm_single_fft
+
 AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
 
 inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
 check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
+
+noinst_PROGRAMS += $(jb_opencl_examples) $(jb_clfft_benchmarks)
 
 jb_ut_opencl_libs = \
   $(jb_opencl_lib) \
@@ -565,6 +569,22 @@ jb_clfft_ut_error_LDADD = $(jb_ut_clfft_libs)
 jb_clfft_ut_plan_SOURCES = jb/clfft/ut_plan.cpp
 jb_clfft_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_plan
 jb_clfft_ut_plan_LDADD = $(jb_ut_clfft_libs)
+
+#
+# clfft benchmarks
+#
+
+jb_clfft_bm_single_fft_SOURCES = jb/clfft/bm_single_fft.cpp
+jb_clfft_bm_single_fft_CPPFLAGS =
+jb_clfft_bm_single_fft_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_clfft.a \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  jb/libjb_opencl.a \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  jb/libjb.a
 
 endif
 
