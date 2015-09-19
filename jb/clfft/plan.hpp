@@ -165,7 +165,6 @@ plan<invector, outvector> create_inverse_plan_1d(
   return plan<invector, outvector>::create_inverse_plan_1d(out, in, ct, q);
 }
 
-
 } // namespace clfft
 } // namespace jb
 

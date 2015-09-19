@@ -3,16 +3,41 @@
 
 #include <jb/opencl/platform.hpp>
 
+#include <stdexcept>
+
 namespace jb {
 namespace clfft {
 
 /**
- * Raise an OpenCL error as an exception.
+ * A run-time clFFT error.
  *
- * In JayBeams all errors are reported using C++ exceptions, this is
- * used to adapt OpenCL error codes to that protocol.
+ * This class represents an error return a clFFT function.
  */
-[[noreturn]] void raise_opencl_error(cl_int err, char const* msg);
+class clfft_error : public std::runtime_error {
+ public:
+  /// Constructor from a clFFT error code and a message
+  clfft_error(cl_int error, char const* msg);
+  
+  /// Destructor
+  ~clfft_error() noexcept
+  {}
+
+  /// Returns the numeric error code.
+  cl_int error_code() const noexcept {
+    return error_;
+  }
+
+  /// Convert error code to a string
+  static std::string to_string(cl_int error);
+
+ private:
+  /// Generate a what() string given an error code and message
+  std::string to_what(cl_int error, char const* msg);
+  
+ private:
+  cl_int error_;
+  std::string what_;
+};
 
 /**
  * Check in an OpenCL error code is really an error and raise an
@@ -22,7 +47,7 @@ inline void check_error_code(cl_int err, char const* msg) {
   if (err == CL_SUCCESS) {
     return;
   }
-  raise_opencl_error(err, msg);
+  throw jb::clfft::clfft_error(err, msg);
 }
 
 } // namespace clfft
