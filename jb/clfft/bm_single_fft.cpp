@@ -13,6 +13,7 @@ namespace {
 
 int nsamples = 2048;
 
+template<bool pipelined>
 class fixture {
  public:
   fixture(
@@ -33,29 +34,11 @@ class fixture {
   {}
 
   void run() {
-    using boost::compute::wait_list;
-    auto upload_done = boost::compute::copy_async(
+    boost::compute::copy(
         src.begin(), src.end(), in.begin(), queue);
-    auto fft_done = fft.enqueue(
-        out, in, queue, wait_list(upload_done.get_event()));
-    // TODO() need to contribute a copy_async() implementation with a
-    // wait_list ...
-    typedef std::iterator_traits<outvector::iterator>::value_type value_type;
-    std::size_t count = boost::compute::detail::iterator_range_size(
-        out.begin(), out.end());
-    if (count == 0) {
-      fft_done.wait();
-      return;
-    }
-    auto first = out.begin();
-    boost::compute::buffer const& buffer = first.get_buffer();
-    std::size_t offset = out.begin().get_index();
-    auto download_done =
-        queue.enqueue_read_buffer_async(
-            buffer, offset * sizeof(value_type), count * sizeof(value_type),
-            boost::addressof(*dst.begin()),
-            wait_list(fft_done));
-    download_done.wait();
+    fft.enqueue(out, in, queue).wait();
+    boost::compute::copy(
+        out.begin(), out.end(), dst.begin(), queue);
   }
 
  private:
@@ -69,13 +52,41 @@ class fixture {
   jb::clfft::plan<invector, outvector> fft;
 };
 
+template<>
+void fixture<true>::run() {
+  using namespace boost::compute;
+  auto upload_done = copy_async(
+      src.begin(), src.end(), in.begin(), queue);
+  auto fft_done = fft.enqueue(
+      out, in, queue, wait_list(upload_done.get_event()));
+  // TODO() need to contribute a copy_async() implementation with a
+  // wait_list ...
+  auto first = out.begin();
+  auto last = out.end();
+  typedef std::iterator_traits<outvector::iterator>::value_type value_type;
+  std::size_t count = detail::iterator_range_size(first, last);
+  if (count == 0) {
+    fft_done.wait();
+    return;
+  }
+  buffer const& buffer = first.get_buffer();
+  std::size_t offset = first.get_index();
+  auto download_done =
+      queue.enqueue_read_buffer_async(
+          buffer, offset * sizeof(value_type), count * sizeof(value_type),
+          ::boost::addressof(*dst.begin()),
+          wait_list(fft_done));
+  download_done.wait();
+}
+
+template<bool pipelined>
 void benchmark_test_case(
     jb::testing::microbenchmark_config const& cfg) {
   jb::clfft::init init;
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
-  typedef jb::testing::microbenchmark<fixture> benchmark;
+  typedef jb::testing::microbenchmark<fixture<pipelined>> benchmark;
   benchmark bm(cfg);
 
   auto r = bm.run(context, queue);
@@ -90,10 +101,14 @@ void benchmark_test_case(
 
 int main(int argc, char* argv[]) try {
   jb::testing::microbenchmark_config cfg;
-  cfg.test_case("complex:float:unaligned").process_cmdline(argc, argv);
+  cfg.test_case("complex:float:async").process_cmdline(argc, argv);
 
-  if (cfg.test_case() == "complex:float:unaligned") {
-    benchmark_test_case(cfg);
+  std::cout << "Configuration for test\n" << cfg << std::endl;
+
+  if (cfg.test_case() == "complex:float:async") {
+    benchmark_test_case<true>(cfg);
+  } else if (cfg.test_case() == "complex:float:sync") {
+    benchmark_test_case<false>(cfg);
   } else {
     std::ostringstream os;
     os << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
