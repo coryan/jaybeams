@@ -1,4 +1,5 @@
 #include <jb/clfft/plan.hpp>
+#include <jb/opencl/config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
@@ -10,6 +11,17 @@
 #include <stdexcept>
 
 namespace {
+
+class config : public jb::config_object {
+ public:
+  config()
+      : benchmark(desc("benchmark"), this)
+      , opencl(desc("opencl"), this)
+  {}
+
+  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
+  jb::config_attribute<config, jb::opencl::config> opencl;
+};
 
 int nsamples = 2048;
 
@@ -81,18 +93,18 @@ void fixture<true>::run() {
 
 template<bool pipelined>
 void benchmark_test_case(
-    jb::testing::microbenchmark_config const& cfg) {
+    config const& cfg) {
   jb::clfft::init init;
-  boost::compute::device device = jb::opencl::device_selector();
+  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   typedef jb::testing::microbenchmark<fixture<pipelined>> benchmark;
-  benchmark bm(cfg);
+  benchmark bm(cfg.benchmark());
 
   auto r = bm.run(context, queue);
   typename benchmark::summary s(r);
-  std::cerr << cfg.test_case() << " summary " << s << std::endl;
-  if (cfg.verbose()) {
+  std::cerr << cfg.benchmark().test_case() << " summary " << s << std::endl;
+  if (cfg.benchmark().verbose()) {
     bm.write_results(std::cout, r);
   }
 }
@@ -100,20 +112,24 @@ void benchmark_test_case(
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
-  jb::testing::microbenchmark_config cfg;
-  cfg.test_case("complex:float:async").process_cmdline(argc, argv);
+  config cfg;
+  cfg.benchmark(
+      jb::testing::microbenchmark_config().test_case("complex:float:async"))
+      .process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
 
-  if (cfg.test_case() == "complex:float:async") {
+  auto test_case = cfg.benchmark().test_case();
+  if (test_case == "complex:float:async") {
     benchmark_test_case<true>(cfg);
-  } else if (cfg.test_case() == "complex:float:sync") {
+  } else if (test_case == "complex:float:sync") {
     benchmark_test_case<false>(cfg);
   } else {
     std::ostringstream os;
-    os << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
+    os << "Unknown test case (" << test_case << ")" << std::endl;
     os << " --test-case must be one of"
-       << ": complex:float:unaligned"
+       << ": complex:float:async"
+       << ", complex:float:sync"
        << std::endl;
     throw jb::usage(os.str(), 1);
   }
