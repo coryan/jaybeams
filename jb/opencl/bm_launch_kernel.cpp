@@ -68,11 +68,7 @@ void benchmark_test_case(config const& cfg) {
   benchmark bm(cfg.benchmark());
 
   auto r = bm.run(context, queue);
-  typename benchmark::summary s(r);
-  std::cerr << cfg.benchmark().test_case() << " summary " << s << std::endl;
-  if (cfg.benchmark().verbose()) {
-    bm.write_results(std::cout, r);
-  }
+  bm.typical_output(r);
 }
 
 } // anonymous namespace

@@ -51,11 +51,7 @@ void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
   benchmark bm(cfg);
 
   auto r = bm.run();
-  typename benchmark::summary s(r);
-  std::cerr << cfg.test_case() << " summary " << s << std::endl;
-  if (cfg.verbose()) {
-    bm.write_results(std::cout, r);
-  }
+  bm.typical_output(r);
 }
 
 } // anonymous namespace
