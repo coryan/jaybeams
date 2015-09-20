@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) try {
       jb::testing::microbenchmark_config().test_case("complex:float:async"))
       .process_cmdline(argc, argv);
 
-  std::cout << "Configuration for test\n" << cfg << std::endl;
+  std::cerr << "Configuration for test\n" << cfg << std::endl;
 
   auto test_case = cfg.benchmark().test_case();
   if (test_case == "complex:float:async") {
