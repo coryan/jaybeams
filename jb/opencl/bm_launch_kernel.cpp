@@ -5,6 +5,7 @@
 
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/utility/wait_list.hpp>
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -32,23 +33,29 @@ class fixture {
   fixture(
       boost::compute::context& context,
       boost::compute::command_queue& q)
-      : fixture(0, context, q)
+      : fixture(1, context, q)
   {}
   fixture(
       int size,
       boost::compute::context& context,
       boost::compute::command_queue& q)
-      : kernel(jb::opencl::build_simple_kernel(
+      : chain_length(size)
+      , kernel(jb::opencl::build_simple_kernel(
           context, context.get_device(), source, "empty"))
       , queue(q)
   {}
 
   void run() {
-    auto event = queue.enqueue_task(kernel);
-    event.wait();
+    boost::compute::wait_list wait;
+    for (int i = 0; i != chain_length; ++i) {
+      auto event = queue.enqueue_task(kernel, wait);
+      wait = boost::compute::wait_list(event);
+    }
+    wait.wait();
   }
 
  private:
+  int chain_length;
   boost::compute::kernel kernel;
   boost::compute::command_queue queue;
 };
@@ -73,7 +80,7 @@ void benchmark_test_case(config const& cfg) {
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.process_cmdline(argc, argv);
-  std::cout << "Configuration for test\n" << cfg << std::endl;
+  std::cerr << "Configuration for test\n" << cfg << std::endl;
 
   benchmark_test_case(cfg);
 
