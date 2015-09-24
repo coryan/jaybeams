@@ -5,7 +5,8 @@ instdir = $(prefix)/lib
 inst_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_fftw.a \
-  jb/libjb_itch5.a
+  jb/libjb_itch5.a \
+  jb/libjb_tde.a
 
 noinst_LIBRARIES = \
   jb/libjb_testing.a \
@@ -342,6 +343,14 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/traits.hpp
 
 ################################################################
+# jb/libjb_fftw.a
+################################################################
+
+jb_libjb_tde_adir = $(includedir)
+jb_libjb_tde_a_SOURCES =
+jb_libjb_tde_a_HEADERS =
+
+################################################################
 # examples
 ################################################################
 
@@ -491,11 +500,18 @@ jb_clfft_unit_tests = \
 jb_clfft_benchmarks = \
   jb/clfft/bm_single_fft
 
+jb_tde_lib = jb/libjb_tde.a
+jb_tde_unit_tests = \
+  jb/tde/ut_conjugate_and_multiply
+
 AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
 
-inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib)
-check_PROGRAMS += $(jb_opencl_unit_tests) $(jb_clfft_unit_tests)
+inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib) $(jb_tde_lib)
+check_PROGRAMS += \
+  $(jb_opencl_unit_tests) \
+  $(jb_clfft_unit_tests) \
+  $(jb_tde_unit_tests)
 
 noinst_PROGRAMS += \
   $(jb_opencl_examples) \
@@ -513,6 +529,10 @@ jb_ut_clfft_libs = \
   $(CLFFT_LDFLAGS) \
   $(CLFFT_LIB) \
   $(jb_ut_opencl_libs)
+
+jb_ut_tde_libs = \
+  $(jb_tde_lib) \
+  $(jb_ut_clfft_libs)
 
 #
 # jb/libjb_opencl.a
@@ -604,6 +624,30 @@ jb_clfft_bm_single_fft_LDADD = \
   $(OPENCL_LDFLAGS) \
   $(OPENCL_LIB) \
   jb/libjb.a
+
+#
+# jb/libjb_tde.a
+#
+
+jb_libjb_tde_a_SOURCES += \
+  jb/tde/conjugate_and_multiply_kernel.cpp
+jb_libjb_tde_a_HEADERS += \
+  jb/tde/conjugate_and_multiply_kernel.hpp
+
+jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::conjugate_and_multiply_kernel_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+#
+# tde unit tests
+#
+
+jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
+jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
+jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
 
 endif
 
