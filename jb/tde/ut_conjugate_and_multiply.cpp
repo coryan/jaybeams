@@ -9,30 +9,30 @@
 #include <random>
 #include <sstream>
 
-/**
- * @test Make sure we can call the operation.
- */
-BOOST_AUTO_TEST_CASE(conjugate_and_multiply_operation_float) {
+namespace {
+
+template<typename precision_t>
+void check_conjugate_and_multiply() {
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
 
   unsigned int seed = std::random_device()();
   std::mt19937 gen(seed);
-  std::uniform_real_distribution<> dis(-1000, 1000);
+  std::uniform_real_distribution<precision_t> dis(-1000, 1000);
   auto generator = [&gen, &dis]() { return dis(gen); };
   BOOST_MESSAGE("SEED = " << seed);
 
   constexpr std::size_t size = 32768;
-  std::vector<std::complex<float>> asrc;
+  std::vector<std::complex<precision_t>> asrc;
   jb::testing::create_random_timeseries(generator, size, asrc);
-  std::vector<std::complex<float>> bsrc;
+  std::vector<std::complex<precision_t>> bsrc;
   jb::testing::create_random_timeseries(generator, size, bsrc);
 
-  boost::compute::vector<std::complex<float>> a(size, context);
-  boost::compute::vector<std::complex<float>> b(size, context);
-  boost::compute::vector<std::complex<float>> out(size, context);
-  std::vector<std::complex<float>> actual(size);
+  boost::compute::vector<std::complex<precision_t>> a(size, context);
+  boost::compute::vector<std::complex<precision_t>> b(size, context);
+  boost::compute::vector<std::complex<precision_t>> out(size, context);
+  std::vector<std::complex<precision_t>> actual(size);
 
   boost::compute::copy(
       asrc.begin(), asrc.end(), a.begin(), queue);
@@ -46,11 +46,29 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_operation_float) {
       out.begin(), out.end(), actual.begin(), queue,
       boost::compute::wait_list(future.get_event()));
 
-  std::vector<std::complex<float>> expected(size);
+  std::vector<std::complex<precision_t>> expected(size);
   for (std::size_t i = 0; i != size; ++i) {
     expected[i] = std::conj(asrc[i]) * bsrc[i];
   }
   done.wait();
 
   jb::testing::check_vector_close_enough(actual, expected);
+}
+
+} // anonymous namespace
+
+/**
+ * @test Make sure the jb::tde::conjugate_and_multiply() works as
+ * expected.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
+  check_conjugate_and_multiply<float>();
+}
+
+/**
+ * @test Make sure the jb::tde::conjugate_and_multiply() works as
+ * expected.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double) {
+  check_conjugate_and_multiply<double>();
 }
