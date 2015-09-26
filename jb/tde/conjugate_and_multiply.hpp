@@ -98,7 +98,7 @@ conjugate_and_multiply(
   kernel.set_arg(0, dst_buffer);
   kernel.set_arg(1, a_buffer);
   kernel.set_arg(2, b_buffer);
-  kernel.set_arg(3, a_count);
+  kernel.set_arg(3, cl_uint(a_count));
 
   auto event =
       queue.enqueue_1d_range_kernel(kernel, a_offset, a_count, 0, wait);
