@@ -36,11 +36,11 @@ inline boost::compute::future<HostIterator> copy_to_host_async(
   namespace bcdetail = boost::compute::detail;
 
   static_assert(
-      bcdetail::is_device_iterator<DeviceIterator>::value,
+      bc::is_device_iterator<DeviceIterator>::value,
       "jb::opencl::copy_to_host_async() input range must be"
       " a device container");
   static_assert(
-      not bcdetail::is_device_iterator<HostIterator>::value,
+      not bc::is_device_iterator<HostIterator>::value,
       "jb::opencl::copy_to_host_async() input range must be"
       " a host container");
   static_assert(

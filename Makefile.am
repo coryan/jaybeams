@@ -502,7 +502,8 @@ jb_clfft_benchmarks = \
 
 jb_tde_lib = jb/libjb_tde.a
 jb_tde_unit_tests = \
-  jb/tde/ut_conjugate_and_multiply
+  jb/tde/ut_conjugate_and_multiply \
+  jb/tde/ut_reduce_argmax_real
 
 AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
@@ -648,6 +649,10 @@ jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.c
 jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
 jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
 jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_ut_reduce_argmax_real_SOURCES = jb/tde/ut_reduce_argmax_real.cpp
+jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_reduce_argmax_real
+jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_libs)
 
 endif
 

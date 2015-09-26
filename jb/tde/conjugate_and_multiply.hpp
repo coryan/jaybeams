@@ -70,11 +70,11 @@ conjugate_and_multiply(
       "jb::td::conjugate_and_multiply() value type must be an instance"
       " of std::complex");
   static_assert(
-      bcdetail::is_device_iterator<InputIterator>::value,
+      bc::is_device_iterator<InputIterator>::value,
       "jb::td::conjugate_and_multiply() input range must be"
       " a device container");
   static_assert(
-      bcdetail::is_device_iterator<OutputIterator>::value,
+      bc::is_device_iterator<OutputIterator>::value,
       "jb::td::conjugate_and_multiply() output range must be"
       " a device container");
 
