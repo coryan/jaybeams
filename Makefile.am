@@ -478,32 +478,42 @@ jb_fftw_bm_time_delay_estimator_LDADD = \
 if HAVE_OPENCL
 
 jb_opencl_lib = jb/libjb_opencl.a
-
 jb_opencl_unit_tests = \
   jb/opencl/ut_build_simple_kernel \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector
-
 jb_opencl_examples = \
   jb/opencl/show_device
-
 jb_opencl_benchmarks = \
   jb/opencl/bm_copy_buffer \
   jb/opencl/bm_launch_kernel
+jb_ut_opencl_libs = \
+  $(jb_opencl_lib) \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  $(jb_ut_libs)
 
 jb_clfft_lib = jb/libjb_clfft.a
-
 jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
-
 jb_clfft_benchmarks = \
   jb/clfft/bm_single_fft
+jb_ut_clfft_libs = \
+  $(jb_clfft_lib) \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  $(jb_ut_opencl_libs)
 
 jb_tde_lib = jb/libjb_tde.a
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
   jb/tde/ut_reduce_argmax_real
+jb_tde_benchmarks = \
+  jb/tde/bm_reduce_argmax_real
+jb_ut_tde_libs = \
+  $(jb_tde_lib) \
+  $(jb_ut_clfft_libs)
 
 AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
@@ -517,23 +527,8 @@ check_PROGRAMS += \
 noinst_PROGRAMS += \
   $(jb_opencl_examples) \
   $(jb_opencl_benchmarks) \
-  $(jb_clfft_benchmarks)
-
-jb_ut_opencl_libs = \
-  $(jb_opencl_lib) \
-  $(OPENCL_LDFLAGS) \
-  $(OPENCL_LIB) \
-  $(jb_ut_libs)
-
-jb_ut_clfft_libs = \
-  $(jb_clfft_lib) \
-  $(CLFFT_LDFLAGS) \
-  $(CLFFT_LIB) \
-  $(jb_ut_opencl_libs)
-
-jb_ut_tde_libs = \
-  $(jb_tde_lib) \
-  $(jb_ut_clfft_libs)
+  $(jb_clfft_benchmarks) \
+  $(jb_tde_benchmarks)
 
 #
 # jb/libjb_opencl.a
@@ -549,10 +544,6 @@ jb_libjb_opencl_a_HEADERS = \
   jb/opencl/config.hpp \
   jb/opencl/device_selector.hpp
 
-#
-# opencl unit tests
-#
-
 jb_opencl_ut_build_simple_kernel_SOURCES = jb/opencl/ut_build_simple_kernel.cpp
 jb_opencl_ut_build_simple_kernel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_build_simple_kernel
 jb_opencl_ut_build_simple_kernel_LDADD = $(jb_ut_opencl_libs)
@@ -565,17 +556,9 @@ jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
 
-#
-# opencl examples
-#
-
 jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
 jb_opencl_show_device_CPPFLAGS = 
 jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
-
-#
-# opencl benchmarks
-#
 
 jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
 jb_opencl_bm_copy_buffer_CPPFLAGS = 
@@ -598,10 +581,6 @@ jb_libjb_clfft_a_HEADERS = \
   jb/clfft/init.hpp \
   jb/clfft/plan.hpp
 
-#
-# clfft unit tests
-#
-
 jb_clfft_ut_error_SOURCES = jb/clfft/ut_error.cpp
 jb_clfft_ut_error_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_error
 jb_clfft_ut_error_LDADD = $(jb_ut_clfft_libs)
@@ -609,10 +588,6 @@ jb_clfft_ut_error_LDADD = $(jb_ut_clfft_libs)
 jb_clfft_ut_plan_SOURCES = jb/clfft/ut_plan.cpp
 jb_clfft_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_plan
 jb_clfft_ut_plan_LDADD = $(jb_ut_clfft_libs)
-
-#
-# clfft benchmarks
-#
 
 jb_clfft_bm_single_fft_SOURCES = jb/clfft/bm_single_fft.cpp
 jb_clfft_bm_single_fft_CPPFLAGS =
@@ -642,10 +617,6 @@ jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.c
 	cat $< >>$@; \
 	echo ')""";' >> $@
 
-#
-# tde unit tests
-#
-
 jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
 jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
 jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
@@ -653,6 +624,19 @@ jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
 jb_tde_ut_reduce_argmax_real_SOURCES = jb/tde/ut_reduce_argmax_real.cpp
 jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_reduce_argmax_real
 jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_bm_reduce_argmax_real_SOURCES = jb/tde/bm_reduce_argmax_real.cpp
+jb_tde_bm_reduce_argmax_real_CPPFLAGS =
+jb_tde_bm_reduce_argmax_real_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_tde.a \
+  jb/libjb_clfft.a \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  jb/libjb_opencl.a \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  jb/libjb.a
 
 endif
 

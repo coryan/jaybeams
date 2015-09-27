@@ -7,7 +7,6 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/types/complex.hpp>
-#include <boost/compute/lambda/placeholders.hpp>
 #include <boost/test/unit_test.hpp>
 #include <random>
 #include <sstream>
