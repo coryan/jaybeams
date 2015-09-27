@@ -7,7 +7,11 @@ void jb::testing::microbenchmark_base::typical_output(results const& r) const {
   if (config_.test_case() != "") {
     std::cerr << config_.test_case() << " ";
   }
-  std::cerr << "summary " << s << std::endl;
+  std::cerr << "summary ";
+  if (config_.size() != 0) {
+    std::cerr << "size=" << config_.size() << " ";
+  }
+  std::cerr << s << std::endl;
   if (config_.verbose()) {
     write_results(std::cout, r);
   }

@@ -89,15 +89,18 @@ print_environment() {
 # Print out the summary results in Markdown format
 summary_as_markdown() {
     cat <<EOF
-| test case | min | p25 | p50 | p75 | p90 | p99 | p99.9 | max |  N |
-|-----------|-----|-----|-----|-----|-----|-----|-------|-----|----|
+| test case | size | min | p25 | p50 | p75 | p90 | p99 | p99.9 | max |  N |
+|-----------|------|-----|-----|-----|-----|-----|-----|-------|-----|----|
 EOF
     if [ $LOG != "/dev/stdout" ]; then
         grep ' summary' $LOG | \
-            sed -e 's/summary/|/' -e 's/us,/ |/g' \
-                -e 's/N=//' -e 's/min=//' \
-                -e 's/max=//' -e 's/p[0-9\.]*=//g' \
-                -e 's/^# /|/' | \
+            sed -e 's/^# /| /' \
+                -e 's/ summary size=/ | /' \
+                -e 's/ summary / | /g' \
+                -e 's/ min=/ | /g' \
+                -e 's/us, max=/ | /g' \
+                -e 's/us, p[0-9\.]*=/ | /g' \
+                -e 's/us, N=/ | /g' | \
             awk '{print $0, "|"}'
     fi
 }
