@@ -76,6 +76,9 @@ AM_COND_IF([HAVE_OPENCL], [
     AX_BOOST_COMPUTE([], [
         AC_MSG_ERROR([Unable to find Boost.Compute library.])
     ])
+    # Boost.Compute uses deprecated features of OpenCL 1.1
+    AX_CHECK_COMPILE_FLAG([-Wnod-eprecated-declarations],
+        [AX_APPEND_FLAG(-Wno-deprecated-declarations, CXXFLAGS)], [])
 ])
 
 # ... YAML-CPP is a library to parse YAML files ...
