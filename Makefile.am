@@ -508,6 +508,7 @@ jb_ut_clfft_libs = \
 jb_tde_lib = jb/libjb_tde.a
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
+  jb/tde/ut_generic_reduce \
   jb/tde/ut_reduce_argmax_real
 jb_tde_benchmarks = \
   jb/tde/bm_reduce_argmax_real
@@ -606,14 +607,30 @@ jb_clfft_bm_single_fft_LDADD = \
 #
 
 jb_libjb_tde_a_SOURCES += \
-  jb/tde/conjugate_and_multiply_kernel.cpp
+  jb/tde/conjugate_and_multiply_kernel.cpp \
+  jb/tde/generic_reduce_program.cpp
 jb_libjb_tde_a_HEADERS += \
-  jb/tde/conjugate_and_multiply_kernel.hpp
+  jb/tde/conjugate_and_multiply_kernel.hpp \
+  jb/tde/generic_reduce_program.hpp
 
 jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.cl Makefile
 	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
 	echo '' >>$@; \
 	echo 'char const jb::tde::conjugate_and_multiply_kernel_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+jb/tde/reduce_argmax_real_kernel.cpp: jb/tde/reduce_argmax_real_kernel.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/reduce_argmax_real_kernel.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::reduce_argmax_real_kernel_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+jb/tde/generic_reduce_program.cpp: jb/tde/generic_reduce_program.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/generic_reduce_program.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::generic_reduce_program_source[] = R"""(' >>$@; \
 	cat $< >>$@; \
 	echo ')""";' >> $@
 
@@ -624,6 +641,10 @@ jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
 jb_tde_ut_reduce_argmax_real_SOURCES = jb/tde/ut_reduce_argmax_real.cpp
 jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_reduce_argmax_real
 jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_ut_generic_reduce_SOURCES = jb/tde/ut_generic_reduce.cpp
+jb_tde_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_generic_reduce
+jb_tde_ut_generic_reduce_LDADD = $(jb_ut_tde_libs)
 
 jb_tde_bm_reduce_argmax_real_SOURCES = jb/tde/bm_reduce_argmax_real.cpp
 jb_tde_bm_reduce_argmax_real_CPPFLAGS =

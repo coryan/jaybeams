@@ -40,7 +40,7 @@ done
 
 # ... produce a SVG graph using R ..
 echo "Running R script to produce SVG graph"
-Rscript $bindir/benchmark_opencl_launch_kernel.R $LOG
+Rscript $bindir/benchmark_reduce_argmax_real.R $LOG
 
 # ... if the LOG file was a real log file we can print the summary in
 # Markdown format ...
