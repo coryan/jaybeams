@@ -27,6 +27,7 @@ jb_unit_tests = \
   jb/ut_integer_range_binning \
   jb/ut_logging \
   jb/ut_offline_feed_statistics \
+  jb/ut_p2ceil \
   jb/ut_severity_level \
   jb/ut_strtonum
 
@@ -59,7 +60,6 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_order_executed_message \
   jb/itch5/ut_order_executed_price_message \
   jb/itch5/ut_order_replace_message \
-  jb/itch5/ut_p2ceil \
   jb/itch5/ut_price_field \
   jb/itch5/ut_process_buffer_mlist \
   jb/itch5/ut_process_iostream_mlist \
@@ -181,6 +181,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/integer_range_binning.hpp \
   jb/log.hpp \
   jb/offline_feed_statistics.hpp \
+  jb/p2ceil.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/usage.hpp
@@ -310,7 +311,6 @@ jb_libjb_itch5_a_HEADERS = \
   jb/itch5/order_executed_message.hpp \
   jb/itch5/order_executed_price_message.hpp \
   jb/itch5/order_replace_message.hpp \
-  jb/itch5/p2ceil.hpp \
   jb/itch5/price_field.hpp \
   jb/itch5/process_buffer_mlist.hpp \
   jb/itch5/process_iostream_mlist.hpp \
@@ -425,6 +425,10 @@ jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 jb_ut_logging_SOURCES = jb/ut_logging.cpp
 jb_ut_logging_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_logging
 jb_ut_logging_LDADD = $(jb_ut_libs)
+
+jb_ut_p2ceil_SOURCES = jb/ut_p2ceil.cpp
+jb_ut_p2ceil_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_p2ceil
+jb_ut_p2ceil_LDADD = $(jb_ut_libs)
 
 jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
@@ -729,6 +733,10 @@ jb_itch5_ut_net_order_imbalance_indicator_message_SOURCES = jb/itch5/ut_net_orde
 jb_itch5_ut_net_order_imbalance_indicator_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_net_order_imbalance_indicator_message
 jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_libs)
 
+jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
+jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
+jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_libs)
+
 jb_itch5_ut_order_book_SOURCES = jb/itch5/ut_order_book.cpp
 jb_itch5_ut_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book
 jb_itch5_ut_order_book_LDADD = $(jb_ut_itch5_libs)
@@ -752,14 +760,6 @@ jb_itch5_ut_order_executed_price_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_order_replace_message_SOURCES = jb/itch5/ut_order_replace_message.cpp
 jb_itch5_ut_order_replace_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_replace_message
 jb_itch5_ut_order_replace_message_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_p2ceil_SOURCES = jb/itch5/ut_p2ceil.cpp
-jb_itch5_ut_p2ceil_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_p2ceil
-jb_itch5_ut_p2ceil_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
-jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
-jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
 jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist

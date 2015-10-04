@@ -28,15 +28,15 @@ void reduce_scratch(__local reduce_output_t* scratch, uint size);
 // First phase of a generic transform-reduce.  Need to transform
 __kernel void generic_transform_reduce_initial(
     __global reduce_output_t* dst,
-    unsigned int const N , __global reduce_input_t const* src) {
+    unsigned long VPT, unsigned long TPB, __local reduce_output_t* scratch,
+    unsigned long const N , __global reduce_input_t const* src) {
   uint const offset = get_group_id(0) * VPT * TPB;
   uint const lid = get_local_id(0);
-  __local reduce_output_t scratch[TPB]; // Threads-per-Block
 
   reduce_output_t p;
   reduce_initialize(&p);
   for (uint i = 0; i < VPT; ++i) {
-    uint loc = offset + lid + i*TPB;
+    uint loc = offset + lid + i * TPB;
     if (loc < N) {
       reduce_output_t tmp;
       reduce_transform(&tmp, src, loc);
@@ -52,18 +52,17 @@ __kernel void generic_transform_reduce_initial(
 
 __kernel void generic_transform_reduce_intermediate(
     __global reduce_output_t* dst,
-    unsigned int const N, __global reduce_output_t *src) {
+    unsigned long VPT, unsigned long TPB, __local reduce_output_t* scratch,
+    unsigned long const N, __global reduce_output_t const *src) {
   uint const offset = get_group_id(0) * VPT * TPB;
   uint const lid = get_local_id(0);
-  __local reduce_output_t scratch[TPB]; // Threads-per-Block
   
   reduce_output_t p;
   reduce_initialize(&p);
   for (uint i = 0; i < VPT; ++i) {
-    uint loc = offset + lid + i*TPB;
+    uint loc = offset + lid + i * TPB;
     if (loc < N) {
-      reduce_output_t tmp;
-      reduce_transform(&tmp, src, loc);
+      reduce_output_t tmp = src[loc];
       reduce_combine(&p, &tmp);
     }
   }
@@ -76,13 +75,20 @@ __kernel void generic_transform_reduce_intermediate(
 
 void reduce_scratch(__local reduce_output_t* scratch, uint size) {
   uint const lid = get_local_id(0);
-  for (int i = 1; i < size; i <<= 1) {
+  for (int i = size / 2; i >= 1; i >>= 1) {
     barrier(CLK_LOCAL_MEM_FENCE);
-    // turn off threads 0, then 0 and 1, then 0, 1, 2, 3, etc...
-    uint mask = (i << 1) - 1;
-    if ((lid & mask) == 0) {
+    // keep the processing threads consolidated ...
+    if (lid < i) {
       reduce_combine_local2local(scratch + lid, scratch + lid + i);
     }
   }
   barrier(CLK_LOCAL_MEM_FENCE);
+}
+
+__kernel void scratch_element_size(__global ulong* result) {
+  uint const lid = get_local_id(0);
+  uint const gid = get_local_id(0);
+  if (gid == 0 && lid == 0) {
+    *result = sizeof(reduce_output_t);
+  }
 }

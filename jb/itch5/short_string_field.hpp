@@ -2,8 +2,8 @@
 #define jb_itch5_short_string_field_hpp
 
 #include <jb/itch5/decoder.hpp>
-#include <jb/itch5/p2ceil.hpp>
 #include <jb/itch5/noop_validator.hpp>
+#include <jb/p2ceil.hpp>
 
 #include <boost/operators.hpp>
 #include <boost/functional/hash.hpp>
@@ -52,7 +52,7 @@ class short_string_field
   constexpr static std::size_t wire_size = wire_size_value;
 
   /// The size of the field in memory
-  constexpr static std::size_t buffer_size = jb::itch5::p2ceil(wire_size_value);
+  constexpr static std::size_t buffer_size = jb::p2ceil(wire_size_value);
 
   /// The type of validator
   typedef value_validator value_validator_t;
