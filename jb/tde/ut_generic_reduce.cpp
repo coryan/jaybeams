@@ -61,15 +61,18 @@ class reduce_sum {
     // ... so in a single pass we will need this many workgroups to
     // handle all the data ...
     auto workgroups = std::max(
-        std::size_t(1), size / effective_workgroup_size_);
+        std::size_t(1), size_ / effective_workgroup_size_);
 
     BOOST_MESSAGE("Reducer plan settings:"
+                  << "\n  size_ = " << size_
                   << "\n  sizeof(output)=" << sizeof_output_type_
                   << "\n  scratch_size=" << scratch_size_
                   << "\n  local_mem_size=" << local_mem_size
                   << "\n  max_workgroup_size=" << max_workgroup_size_
                   << "\n  effective_workgroup_size=" << effective_workgroup_size_
-                  << "\n  workgroups=" << workgroups);
+                  << "\n  workgroups=" << workgroups
+                  << "\n  workgroups * effective_workgroup_size="
+                  << workgroups * effective_workgroup_size_);
 
     // ... a lot of that silly math was to size the output buffer ...
     ping_ = boost::compute::vector<int>(workgroups, queue_.get_context());
@@ -88,17 +91,25 @@ class reduce_sum {
     if (workgroups == 0) {
       workgroups = 1;
     }
-
-    std::size_t local_work_size = max_workgroup_size_;
-    std::size_t global_work_size =
-        (src.size() / local_work_size) * local_work_size;
-    if (global_work_size < src.size()) {
-      global_work_size += local_work_size;
-    }
     auto div = std::div(
         static_cast<long long>(size_),
         static_cast<long long>(workgroups * workgroup_size));
     auto VPT = div.quot + (div.rem != 0);
+
+    BOOST_MESSAGE("Executing (initial) reducer plan for :"
+                  << "\n    size_ = " << size_
+                  << "\n    sizeof(output)=" << sizeof_output_type_
+                  << "\n    scratch_size=" << scratch_size_
+                  << "\n    max_workgroup_size=" << max_workgroup_size_
+                  << "\n    effective_workgroup_size=" << effective_workgroup_size_
+                  << "\n    workgroups=" << workgroups
+                  << "\n    workgroup_size=" << workgroup_size
+                  << "\n    worgroups*workgroup_size="
+                  << workgroups * workgroup_size
+                  << "\n    arg.VPT=" << VPT
+                  << "\n    arg.TPB=" << workgroup_size
+                  << "\n    arg.N=" << size_
+                  );
     
     int arg = 0;
     initial_.set_arg(arg++, ping_);
@@ -124,7 +135,27 @@ class reduce_sum {
       if (workgroups == 0) {
         workgroups = 1;
       }
-      VPT = 1;
+      auto div = std::div(
+          static_cast<long long>(pass_output_size),
+          static_cast<long long>(workgroups * workgroup_size));
+      auto VPT = div.quot + (div.rem != 0);
+
+      BOOST_MESSAGE("  executing (intermediate) reducer plan with :"
+                    << "\n    size_ = " << size_
+                    << "\n    sizeof(output)=" << sizeof_output_type_
+                    << "\n    scratch_size=" << scratch_size_
+                    << "\n    max_workgroup_size=" << max_workgroup_size_
+                    << "\n    effective_workgroup_size=" << effective_workgroup_size_
+                    << "\n    workgroups=" << workgroups
+                    << "\n    workgroup_size=" << workgroup_size
+                    << "\n    worgroups*workgroup_size="
+                    << workgroups * workgroup_size
+                    << "\n    pass_output_size=" << pass_output_size
+                    << "\n    arg.VPT=" << VPT
+                    << "\n    arg.TPB=" << workgroup_size
+                    << "\n    arg.N=" << pass_output_size
+                    );
+      
 
       // ... prepare the kernel ...
       int arg = 0;
@@ -272,5 +303,26 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_2e20) {
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_int_1000000) {
   std::size_t const size = 1000 * 1000;
+  check_generic_reduce<int>(size);
+}
+
+/**
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected for 1000000
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_int_PRIMES) {
+  std::size_t const size = 2 * 3 * 5 * 7 * 11 * 13 * 17 * 19;
+  check_generic_reduce<int>(size);
+}
+
+/**
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected for something around a billion
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_int_MAX) {
+  boost::compute::device device = jb::opencl::device_selector();
+  auto max_mem = device.max_memory_alloc_size();
+  std::size_t const size = max_mem / sizeof(int);
+  BOOST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
   check_generic_reduce<int>(size);
 }
