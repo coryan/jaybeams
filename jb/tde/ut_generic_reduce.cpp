@@ -1,22 +1,26 @@
 #include <jb/tde/generic_reduce_program.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
-#include <jb/p2ceil.hpp>
+#include <jb/complex_traits.hpp>
 #include <jb/log.hpp>
-#include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/p2ceil.hpp>
+#include <jb/testing/check_complex_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 
 #include <boost/compute/container.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/type_traits.hpp>
 #include <boost/compute/types/complex.hpp>
 #include <boost/test/unit_test.hpp>
+#include <memory>
 #include <random>
 #include <sstream>
 
 namespace jb {
 namespace tde {
 
+template<typename T>
 class reduce_sum {
  public:
   reduce_sum(std::size_t size, boost::compute::command_queue const& queue)
@@ -63,24 +67,26 @@ class reduce_sum {
     auto workgroups = std::max(
         std::size_t(1), size_ / effective_workgroup_size_);
 
-    BOOST_MESSAGE("Reducer plan settings:"
-                  << "\n  size_ = " << size_
-                  << "\n  sizeof(output)=" << sizeof_output_type_
-                  << "\n  scratch_size=" << scratch_size_
-                  << "\n  local_mem_size=" << local_mem_size
-                  << "\n  max_workgroup_size=" << max_workgroup_size_
-                  << "\n  effective_workgroup_size=" << effective_workgroup_size_
-                  << "\n  workgroups=" << workgroups
-                  << "\n  workgroups * effective_workgroup_size="
-                  << workgroups * effective_workgroup_size_);
+    JB_LOG(trace)
+        << "Reducer plan settings:"
+        << "\n  size_ = " << size_
+        << "\n  sizeof(output)=" << sizeof_output_type_
+        << "\n  scratch_size=" << scratch_size_
+        << "\n  local_mem_size=" << local_mem_size
+        << "\n  max_workgroup_size=" << max_workgroup_size_
+        << "\n  effective_workgroup_size=" << effective_workgroup_size_
+        << "\n  workgroups=" << workgroups
+        << "\n  workgroups * effective_workgroup_size="
+        << workgroups * effective_workgroup_size_;
 
     // ... a lot of that silly math was to size the output buffer ...
-    ping_ = boost::compute::vector<int>(workgroups, queue_.get_context());
-    pong_ = boost::compute::vector<int>(workgroups, queue_.get_context());
+    ping_ = boost::compute::vector<T>(workgroups, queue_.get_context());
+    pong_ = boost::compute::vector<T>(workgroups, queue_.get_context());
   }
 
-  boost::compute::future<boost::compute::vector<int>::iterator> execute(
-      boost::compute::vector<int> const& src,
+  typedef typename boost::compute::vector<T>::iterator vector_iterator;
+  boost::compute::future<vector_iterator> execute(
+      boost::compute::vector<T> const& src,
       boost::compute::wait_list const& wait = boost::compute::wait_list()) {
     if (src.size() != size_) {
       throw std::invalid_argument("mismatched size");
@@ -96,20 +102,21 @@ class reduce_sum {
         static_cast<long long>(workgroups * workgroup_size));
     auto VPT = div.quot + (div.rem != 0);
 
-    BOOST_MESSAGE("Executing (initial) reducer plan for :"
-                  << "\n    size_ = " << size_
-                  << "\n    sizeof(output)=" << sizeof_output_type_
-                  << "\n    scratch_size=" << scratch_size_
-                  << "\n    max_workgroup_size=" << max_workgroup_size_
-                  << "\n    effective_workgroup_size=" << effective_workgroup_size_
-                  << "\n    workgroups=" << workgroups
-                  << "\n    workgroup_size=" << workgroup_size
-                  << "\n    worgroups*workgroup_size="
-                  << workgroups * workgroup_size
-                  << "\n    arg.VPT=" << VPT
-                  << "\n    arg.TPB=" << workgroup_size
-                  << "\n    arg.N=" << size_
-                  );
+    JB_LOG(trace)
+        << "Executing (initial) reducer plan for :"
+        << "\n    size_ = " << size_
+        << "\n    sizeof(output)=" << sizeof_output_type_
+        << "\n    scratch_size=" << scratch_size_
+        << "\n    max_workgroup_size=" << max_workgroup_size_
+        << "\n    effective_workgroup_size=" << effective_workgroup_size_
+        << "\n    workgroups=" << workgroups
+        << "\n    workgroup_size=" << workgroup_size
+        << "\n    worgroups*workgroup_size="
+        << workgroups * workgroup_size
+        << "\n    arg.VPT=" << VPT
+        << "\n    arg.TPB=" << workgroup_size
+        << "\n    arg.N=" << size_
+        ;
     
     int arg = 0;
     initial_.set_arg(arg++, ping_);
@@ -140,21 +147,21 @@ class reduce_sum {
           static_cast<long long>(workgroups * workgroup_size));
       auto VPT = div.quot + (div.rem != 0);
 
-      BOOST_MESSAGE("  executing (intermediate) reducer plan with :"
-                    << "\n    size_ = " << size_
-                    << "\n    sizeof(output)=" << sizeof_output_type_
-                    << "\n    scratch_size=" << scratch_size_
-                    << "\n    max_workgroup_size=" << max_workgroup_size_
-                    << "\n    effective_workgroup_size=" << effective_workgroup_size_
-                    << "\n    workgroups=" << workgroups
-                    << "\n    workgroup_size=" << workgroup_size
-                    << "\n    worgroups*workgroup_size="
-                    << workgroups * workgroup_size
-                    << "\n    pass_output_size=" << pass_output_size
-                    << "\n    arg.VPT=" << VPT
-                    << "\n    arg.TPB=" << workgroup_size
-                    << "\n    arg.N=" << pass_output_size
-                    );
+      JB_LOG(trace)
+          << "  executing (intermediate) reducer plan with :"
+          << "\n    size_ = " << size_
+          << "\n    sizeof(output)=" << sizeof_output_type_
+          << "\n    scratch_size=" << scratch_size_
+          << "\n    max_workgroup_size=" << max_workgroup_size_
+          << "\n    effective_workgroup_size=" << effective_workgroup_size_
+          << "\n    workgroups=" << workgroups
+          << "\n    workgroup_size=" << workgroup_size
+          << "\n    worgroups*workgroup_size=" << workgroups * workgroup_size
+          << "\n    pass_output_size=" << pass_output_size
+          << "\n    arg.VPT=" << VPT
+          << "\n    arg.TPB=" << workgroup_size
+          << "\n    arg.N=" << pass_output_size
+          ;
       
 
       // ... prepare the kernel ...
@@ -179,27 +186,38 @@ class reduce_sum {
   boost::compute::program create_program(
       boost::compute::command_queue const& queue) {
     std::ostringstream os;
+    os << "#define REDUCE_TYPENAME_INPUT "
+       << boost::compute::type_name<T>()
+       << "\n";
+    os << "#define REDUCE_TYPENAME_OUTPUT "
+       << boost::compute::type_name<T>()
+       << "\n";
     os << R"""(
-void reduce_initialize(int* lhs) {
-  *lhs = 0;
+void reduce_initialize(REDUCE_TYPENAME_OUTPUT* lhs) {
+  *lhs = (REDUCE_TYPENAME_OUTPUT)(0);
 }
 void reduce_transform(
-    int* accumulated, __global int const* value, int offset) {
+    REDUCE_TYPENAME_OUTPUT* accumulated,
+    __global REDUCE_TYPENAME_INPUT const* value, int offset) {
   *accumulated = value[offset];
 }
-void reduce_combine(int* accumulated, int* value) {
+void reduce_combine(
+    REDUCE_TYPENAME_OUTPUT* accumulated,
+    REDUCE_TYPENAME_INPUT* value) {
   *accumulated = *accumulated + *value;
 }
 
 )""";
     os << generic_reduce_program_source;
-    std::ostringstream flags;
-    flags << "-DREDUCE_TYPENAME_INPUT=int"
-          << " -DREDUCE_TYPENAME_OUTPUT=int";
+    JB_LOG(info)
+        << "================ cut here ================\n"
+        << os.str() << "\n"
+        << "================ cut here ================\n"
+        ;
     auto program = boost::compute::program::create_with_source(
         os.str(), queue.get_context());
     try {
-      program.build(flags.str());
+      program.build();
     } catch(boost::compute::opencl_error const& ex) {
       JB_LOG(error) << "errors building program: "
                     << ex.what() << "\n"
@@ -220,8 +238,8 @@ void reduce_combine(int* accumulated, int* value) {
   std::size_t sizeof_output_type_;
   std::size_t scratch_size_;
   std::size_t effective_workgroup_size_;
-  boost::compute::vector<int> ping_;
-  boost::compute::vector<int> pong_;
+  boost::compute::vector<T> ping_;
+  boost::compute::vector<T> pong_;
 };
 
 
@@ -229,6 +247,33 @@ void reduce_combine(int* accumulated, int* value) {
 } // namespace jb
 
 namespace {
+
+template<typename T>
+std::function<T()> create_random_generator(unsigned int seed) {
+  std::mt19937 gen(seed);
+  std::uniform_int_distribution<T> dis(-1000, 1000);
+  typedef std::pair<std::mt19937, std::uniform_int_distribution<T>> state_type;
+  std::shared_ptr<state_type> state(new state_type(gen, dis));
+  return [state]() { return state->second(state->first); };
+}
+
+template<>
+std::function<float()> create_random_generator<float>(unsigned int seed) {
+  std::mt19937 gen(seed);
+  std::uniform_real_distribution<float> dis(100, 200);
+  typedef std::pair<std::mt19937, std::uniform_real_distribution<float>> state_type;
+  std::shared_ptr<state_type> state(new state_type(gen, dis));
+  return [state]() { return state->second(state->first); };
+}
+
+template<>
+std::function<double()> create_random_generator<double>(unsigned int seed) {
+  std::mt19937 gen(seed);
+  std::uniform_real_distribution<double> dis(100, 200);
+  typedef std::pair<std::mt19937, std::uniform_real_distribution<double>> state_type;
+  std::shared_ptr<state_type> state(new state_type(gen, dis));
+  return [state]() { return state->second(state->first); };
+}
 
 template<typename value_type>
 void check_generic_reduce(std::size_t size) {
@@ -239,10 +284,9 @@ void check_generic_reduce(std::size_t size) {
   boost::compute::command_queue queue(context, device);
 
   unsigned int seed = std::random_device()();
-  std::mt19937 gen(seed);
-  std::uniform_int_distribution<value_type> dis(-1000, 1000);
-  auto generator = [&gen, &dis]() { return dis(gen); };
   BOOST_MESSAGE("SEED = " << seed);
+  typedef typename jb::extract_value_type<value_type>::precision scalar_type;
+  auto generator = create_random_generator<scalar_type>(seed);
 
   std::vector<value_type> asrc;
   jb::testing::create_random_timeseries(generator, size, asrc);
@@ -251,13 +295,17 @@ void check_generic_reduce(std::size_t size) {
 
   boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
 
-  jb::tde::reduce_sum reducer(size, queue);
+  jb::tde::reduce_sum<value_type> reducer(size, queue);
   auto done = reducer.execute(a);
   done.wait();
 
-  int expected = std::accumulate(asrc.begin(), asrc.end(), 0);
-  int actual = *done.get();
-  BOOST_CHECK_EQUAL(expected, actual);
+  value_type expected = std::accumulate(
+      asrc.begin(), asrc.end(), value_type(0));
+  value_type actual = *done.get();
+  BOOST_CHECK_MESSAGE(
+      jb::testing::close_enough(actual, expected, size),
+      "mismatched GPU vs. CPU results expected=" << expected
+      << " actual=" << actual);
 }
 
 } // anonymous namespace
@@ -325,4 +373,31 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_MAX) {
   std::size_t const size = max_mem / sizeof(int);
   BOOST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
   check_generic_reduce<int>(size);
+}
+
+/**
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected for a number without a lot of powers of 2
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_float_PRIMES) {
+  std::size_t const size = 2 * 3 * 5 * 7 * 11 * 13 * 17;
+  check_generic_reduce<float>(size);
+}
+
+/**
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected for a number without a lot of powers of 2
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_complex_float_PRIMES) {
+  std::size_t const size = 2 * 3 * 5 * 7 * 11 * 13;
+  check_generic_reduce<std::complex<float>>(size);
+}
+
+/**
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected for a number without a lot of powers of 2
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_complex_double_PRIMES) {
+  std::size_t const size = 2 * 3 * 5 * 7 * 11 * 13;
+  check_generic_reduce<std::complex<double>>(size);
 }
