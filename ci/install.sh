@@ -91,7 +91,7 @@ tar xf clFFT-2.6.1-Linux-x64.tar.gz
 
 # ... manually download Boost.Compute from github.com, extract it, and
 # install it (there is no compilation really) ...
-git clone --depth 8 https://github.com/coryan/compute 
+git clone https://github.com/coryan/compute 
 (cd compute ; git checkout develop)
 (source ${TRAVIS_BUILD_DIR?}/ci/before_script.sh && \
         cd compute && mkdir build && cd build && \
