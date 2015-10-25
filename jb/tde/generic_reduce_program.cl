@@ -1,19 +1,11 @@
 /* -*- c -*- */
 
-typedef REDUCE_TYPENAME_INPUT reduce_input_t;
-typedef REDUCE_TYPENAME_OUTPUT reduce_output_t;
+// typedef ... reduce_input_t;
+// typedef ... reduce_output_t;
 
-// void reduce_initialize(__local REDUCE_TYPENAME_OUTPUT*);
-// void reduce_transform(
-//     __local REDUCE_TYPENAME_OUTPUT* dst,
-//     __global REDUCE_TYPENAME_INPUT const* src,
-//     int offset);
-// void reduce_combine(
-//     __local REDUCE_TYPENAME_OUTPUT* accumulated,
-//     REDUCE_TYPENAME_OUTPUT* tmp);
-
-// const int TPB = ...; // Threads-per-Block
-// const int VPT = ...; // Values-per-Thread
+// void reduce_initialize(reduce_output_t*);
+// void reduce_transform(reduce_output_t* dst, reduce_input_t const* src);
+// void reduce_combine(reduce_output_t* lsh, reduce_output_t const* tmp);
 
 inline void reduce_combine_local2local(
     __local reduce_output_t* accumulated, __local reduce_output_t* value) {
@@ -23,23 +15,31 @@ inline void reduce_combine_local2local(
   *accumulated = acc;
 }
 
+inline void reduce_transform_global(
+    reduce_output_t* lhs,
+    __global reduce_input_t const* src, unsigned long offset) {
+  reduce_input_t val = src[offset];
+  reduce_transform(lhs, &val);
+}
+
 void reduce_scratch(__local reduce_output_t* scratch, uint size);
 
 // First phase of a generic transform-reduce.  Need to transform
 __kernel void generic_transform_reduce_initial(
     __global reduce_output_t* dst,
-    unsigned long VPT, unsigned long TPB, __local reduce_output_t* scratch,
-    unsigned long const N , __global reduce_input_t const* src) {
-  uint const offset = get_group_id(0) * VPT * TPB;
+    unsigned long VPT, unsigned long TPB,
+    unsigned long const N , __global reduce_input_t const* src,
+    __local reduce_output_t* scratch) {
+  uint const offset = get_group_id(0) * TPB;
   uint const lid = get_local_id(0);
 
   reduce_output_t p;
   reduce_initialize(&p);
   for (uint i = 0; i < VPT; ++i) {
-    uint loc = offset + lid + i * TPB;
+    ulong loc = offset + lid + i * get_global_size(0);
     if (loc < N) {
       reduce_output_t tmp;
-      reduce_transform(&tmp, src, loc);
+      reduce_transform_global(&tmp, src, loc);
       reduce_combine(&p, &tmp);
     }
   }
@@ -52,15 +52,16 @@ __kernel void generic_transform_reduce_initial(
 
 __kernel void generic_transform_reduce_intermediate(
     __global reduce_output_t* dst,
-    unsigned long VPT, unsigned long TPB, __local reduce_output_t* scratch,
-    unsigned long const N, __global reduce_output_t const *src) {
-  uint const offset = get_group_id(0) * VPT * TPB;
+    unsigned long VPT, unsigned long TPB,
+    unsigned long const N, __global reduce_output_t const *src,
+    __local reduce_output_t* scratch) {
+  uint const offset = get_group_id(0) * TPB;
   uint const lid = get_local_id(0);
   
   reduce_output_t p;
   reduce_initialize(&p);
   for (uint i = 0; i < VPT; ++i) {
-    uint loc = offset + lid + i * TPB;
+    uint loc = offset + lid + i * get_global_size(0);
     if (loc < N) {
       reduce_output_t tmp = src[loc];
       reduce_combine(&p, &tmp);

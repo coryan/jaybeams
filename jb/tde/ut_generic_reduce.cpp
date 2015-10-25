@@ -1,6 +1,7 @@
 #include <jb/tde/generic_reduce_program.hpp>
-#include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
+#include <jb/opencl/config.hpp>
+#include <jb/opencl/device_selector.hpp>
 #include <jb/complex_traits.hpp>
 #include <jb/log.hpp>
 #include <jb/p2ceil.hpp>
@@ -28,7 +29,7 @@ class reduce_sum {
       , queue_(queue)
       , program_(create_program(queue))
       , initial_(program_, "generic_transform_reduce_initial")
-      , intermediate_(program_, "generic_transform_reduce_initial")
+      , intermediate_(program_, "generic_transform_reduce_intermediate")
   {
     // ... size the first pass of the reduction.  We need to balance two
     // constraints:
@@ -86,6 +87,7 @@ class reduce_sum {
 
   typedef typename boost::compute::vector<T>::iterator vector_iterator;
   boost::compute::future<vector_iterator> execute(
+      std::vector<T> const& orig,
       boost::compute::vector<T> const& src,
       boost::compute::wait_list const& wait = boost::compute::wait_list()) {
     if (src.size() != size_) {
@@ -117,17 +119,18 @@ class reduce_sum {
         << "\n    arg.TPB=" << workgroup_size
         << "\n    arg.N=" << size_
         ;
-    
+
     int arg = 0;
     initial_.set_arg(arg++, ping_);
     initial_.set_arg(arg++, boost::compute::ulong_(VPT));
     initial_.set_arg(arg++, boost::compute::ulong_(workgroup_size));
-    initial_.set_arg(
-        arg++, boost::compute::local_buffer<int>(workgroup_size));
     initial_.set_arg(arg++, boost::compute::ulong_(size_));
     initial_.set_arg(arg++, src);
+    initial_.set_arg(
+        arg++, boost::compute::local_buffer<T>(workgroup_size));
     auto event = queue_.enqueue_1d_range_kernel(
         initial_, 0, workgroups * workgroup_size, workgroup_size, wait);
+
     for (auto pass_output_size = workgroups;
          pass_output_size > 1;
          pass_output_size = workgroups) {
@@ -162,17 +165,16 @@ class reduce_sum {
           << "\n    arg.TPB=" << workgroup_size
           << "\n    arg.N=" << pass_output_size
           ;
-      
 
       // ... prepare the kernel ...
       int arg = 0;
       intermediate_.set_arg(arg++, pong_);
       intermediate_.set_arg(arg++, boost::compute::ulong_(VPT));
       intermediate_.set_arg(arg++, boost::compute::ulong_(workgroup_size) /* TPB */);
-      intermediate_.set_arg(
-          arg++, boost::compute::local_buffer<int>(workgroup_size));
       intermediate_.set_arg(arg++, boost::compute::ulong_(pass_output_size));
       intermediate_.set_arg(arg++, ping_);
+      intermediate_.set_arg(
+          arg++, boost::compute::local_buffer<T>(workgroup_size));
       event = queue_.enqueue_1d_range_kernel(
           intermediate_, 0, workgroups * workgroup_size, workgroup_size,
           boost::compute::wait_list(event));
@@ -186,30 +188,24 @@ class reduce_sum {
   boost::compute::program create_program(
       boost::compute::command_queue const& queue) {
     std::ostringstream os;
-    os << "#define REDUCE_TYPENAME_INPUT "
-       << boost::compute::type_name<T>()
-       << "\n";
-    os << "#define REDUCE_TYPENAME_OUTPUT "
-       << boost::compute::type_name<T>()
-       << "\n";
+    os << "typedef " << boost::compute::type_name<T>() << " reduce_input_t;\n";
+    os << "typedef " << boost::compute::type_name<T>() << " reduce_output_t;\n";
     os << R"""(
-void reduce_initialize(REDUCE_TYPENAME_OUTPUT* lhs) {
-  *lhs = (REDUCE_TYPENAME_OUTPUT)(0);
+inline void reduce_initialize(reduce_output_t* lhs) {
+  *lhs = (reduce_output_t)(0);
 }
-void reduce_transform(
-    REDUCE_TYPENAME_OUTPUT* accumulated,
-    __global REDUCE_TYPENAME_INPUT const* value, int offset) {
-  *accumulated = value[offset];
+inline void reduce_transform(
+    reduce_output_t* lhs, reduce_input_t const* value) {
+  *lhs = *value;
 }
-void reduce_combine(
-    REDUCE_TYPENAME_OUTPUT* accumulated,
-    REDUCE_TYPENAME_INPUT* value) {
+inline void reduce_combine(
+    reduce_output_t* accumulated, reduce_output_t* value) {
   *accumulated = *accumulated + *value;
 }
 
 )""";
     os << generic_reduce_program_source;
-    JB_LOG(info)
+    JB_LOG(trace)
         << "================ cut here ================\n"
         << os.str() << "\n"
         << "================ cut here ================\n"
@@ -260,7 +256,7 @@ std::function<T()> create_random_generator(unsigned int seed) {
 template<>
 std::function<float()> create_random_generator<float>(unsigned int seed) {
   std::mt19937 gen(seed);
-  std::uniform_real_distribution<float> dis(100, 200);
+  std::uniform_real_distribution<float> dis(1, 2);
   typedef std::pair<std::mt19937, std::uniform_real_distribution<float>> state_type;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
@@ -269,7 +265,7 @@ std::function<float()> create_random_generator<float>(unsigned int seed) {
 template<>
 std::function<double()> create_random_generator<double>(unsigned int seed) {
   std::mt19937 gen(seed);
-  std::uniform_real_distribution<double> dis(100, 200);
+  std::uniform_real_distribution<double> dis(1, 2);
   typedef std::pair<std::mt19937, std::uniform_real_distribution<double>> state_type;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
@@ -278,7 +274,7 @@ std::function<double()> create_random_generator<double>(unsigned int seed) {
 template<typename value_type>
 void check_generic_reduce(std::size_t size) {
   BOOST_MESSAGE("Testing with size = " << size);
-  boost::compute::device device = jb::opencl::device_selector();
+  boost::compute::device device = jb::opencl::device_selector(jb::opencl::config().device_name("BESTCPU"));
   BOOST_MESSAGE("Running on device = " << device.name());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
@@ -294,9 +290,14 @@ void check_generic_reduce(std::size_t size) {
   boost::compute::vector<value_type> a(size, context);
 
   boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
+  std::vector<value_type> acpy(size);
+  boost::compute::copy(a.begin(), a.end(), acpy.begin(), queue);
+  for (std::size_t i = 0; i != acpy.size(); ++i) {
+    JB_LOG(trace) << "    " << i << " " << acpy[i] << " " << asrc[i];
+  }
 
   jb::tde::reduce_sum<value_type> reducer(size, queue);
-  auto done = reducer.execute(a);
+  auto done = reducer.execute(asrc, a);
   done.wait();
 
   value_type expected = std::accumulate(
@@ -304,8 +305,9 @@ void check_generic_reduce(std::size_t size) {
   value_type actual = *done.get();
   BOOST_CHECK_MESSAGE(
       jb::testing::close_enough(actual, expected, size),
-      "mismatched GPU vs. CPU results expected=" << expected
-      << " actual=" << actual);
+      "mismatched CPU vs. GPU results expected(CPU)=" << expected
+      << " actual(GPU)=" << actual
+      << " delta=" << (actual - expected));
 }
 
 } // anonymous namespace
@@ -363,6 +365,7 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_PRIMES) {
   check_generic_reduce<int>(size);
 }
 
+#if 0
 /**
  * @test Make sure the jb::tde::generic_reduce() works as
  * expected for something around a billion
@@ -374,6 +377,7 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_MAX) {
   BOOST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
   check_generic_reduce<int>(size);
 }
+#endif /* 0 */
 
 /**
  * @test Make sure the jb::tde::generic_reduce() works as
