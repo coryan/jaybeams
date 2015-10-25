@@ -274,7 +274,7 @@ std::function<double()> create_random_generator<double>(unsigned int seed) {
 template<typename value_type>
 void check_generic_reduce(std::size_t size) {
   BOOST_MESSAGE("Testing with size = " << size);
-  boost::compute::device device = jb::opencl::device_selector(jb::opencl::config().device_name("BESTCPU"));
+  boost::compute::device device = jb::opencl::device_selector(jb::opencl::config());
   BOOST_MESSAGE("Running on device = " << device.name());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
