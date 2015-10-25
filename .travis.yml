@@ -32,7 +32,7 @@ before_install:
 install:
   # ... all dependencies are installed from the $HOME/deps directory, to
   # keep the source clean ...
-  - (mkdir ${HOME?}/deps && cd ${HOME?}/deps && ${TRAVIS_BUILD_DIR?}/ci/install.sh)
+  - ${TRAVIS_BUILD_DIR?}/ci/install.sh
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR?}

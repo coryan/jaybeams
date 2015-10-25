@@ -3,6 +3,11 @@
 # Exit on error
 set -ev
 
+# ... create a new directory to download and compile the code ...
+cd ${HOME?}
+mkdir deps
+cd deps
+
 # ... when testing in my workstation I need to set GEM_HOME ...
 if [ "x${TRAVIS_BUILD_DIR}" != "x" -a "x${VARIANT}" == "xcov" ]; then
   # ... this is used to upload coverage information to coveralls.io
@@ -86,10 +91,10 @@ tar xf clFFT-2.6.1-Linux-x64.tar.gz
 
 # ... manually download Boost.Compute from github.com, extract it, and
 # install it (there is no compilation really) ...
-wget https://github.com/boostorg/compute/archive/v0.4.tar.gz
-tar -xf v0.4.tar.gz
+git clone --depth 8 https://github.com/coryan/compute 
+(cd compute ; git checkout develop)
 (source ${TRAVIS_BUILD_DIR?}/ci/before_script.sh && \
-        cd compute-0.4 && mkdir build && cd build && \
+        cd compute && mkdir build && cd build && \
         cmake \
           -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-0.4 \
           -DBOOST_COMPUTE_THREAD_SAFE=ON \
