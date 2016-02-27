@@ -50,5 +50,5 @@ std::string jb::clfft::clfft_error::to_string(cl_int error) {
 std::string jb::clfft::clfft_error::to_what(cl_int error, char const* msg) {
   std::ostringstream os;
   os << msg << ": " << to_string(error) << " (" << error << ")";
-  return std::move(os.str());
+  return os.str();
 }

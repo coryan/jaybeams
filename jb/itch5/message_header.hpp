@@ -68,7 +68,7 @@ struct decoder<validate,message_header> {
     x.stock_locate = decoder<validate,std::uint16_t>::r(size, buf, off + 1);
     x.tracking_number = decoder<validate,std::uint16_t>::r(size, buf, off + 3);
     x.timestamp    = decoder<validate,timestamp>    ::r(size, buf, off + 5);
-    return std::move(x);
+    return x;
   }
 };
 

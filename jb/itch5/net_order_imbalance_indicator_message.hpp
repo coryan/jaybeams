@@ -69,7 +69,7 @@ struct decoder<V,net_order_imbalance_indicator_message> {
         decoder<V,cross_type_t>                ::r(size, buf, off + 48);
     x.price_variation_indicator =
         decoder<V,price_variation_indicator_t> ::r(size, buf, off + 49);
-    return std::move(x);
+    return x;
   }
 };
 

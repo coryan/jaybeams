@@ -30,7 +30,7 @@ struct decoder<V,order_cancel_message> {
         decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
     x.canceled_shares =
         decoder<V,std::uint32_t>        ::r(size, buf, off + 19);
-    return std::move(x);
+    return x;
   }
 };
 

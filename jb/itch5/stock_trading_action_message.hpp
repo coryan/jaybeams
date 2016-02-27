@@ -48,7 +48,7 @@ struct decoder<V,stock_trading_action_message> {
         decoder<V,std::uint8_t>    ::r(size, buf, off + 20);
     x.reason =
         decoder<V,reason_t>        ::r(size, buf, off + 21);
-    return std::move(x);
+    return x;
   }
 };
 

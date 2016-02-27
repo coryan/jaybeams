@@ -47,7 +47,7 @@ struct decoder<V,ipo_quoting_period_update_message> {
         decoder<V,ipo_quotation_release_qualifier_t> ::r(size, buf, off + 23);
     x.ipo_price =
         decoder<V,price4_t>                          ::r(size, buf, off + 24);
-    return std::move(x);
+    return x;
   }
 };
 

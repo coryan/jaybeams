@@ -17,6 +17,10 @@ class generic_reduce {
   typedef input_type_t input_type;
   typedef output_type_t output_type;
 
+  /**
+   * Constructor.  Initialize a generic reduce for a given size and
+   * device queue.
+   */
   generic_reduce(std::size_t size, boost::compute::command_queue const& queue)
       : size_(size)
       , queue_(queue)

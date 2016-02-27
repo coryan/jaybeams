@@ -1,6 +1,8 @@
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/config.hpp>
 
+#include <iostream>
+
 int main(int argc, char* argv[]) try {
   jb::opencl::config cfg;
   cfg.process_cmdline(argc, argv);

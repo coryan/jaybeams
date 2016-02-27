@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_move) {
   {
     jb::clfft::plan<invector, outvector> p;
 
-    p = std::move(jb::clfft::create_forward_plan_1d(out, in, context, queue));
+    p = jb::clfft::create_forward_plan_1d(out, in, context, queue);
     BOOST_CHECK_NO_THROW(p.enqueue(out, in, queue).wait());
   }
 }

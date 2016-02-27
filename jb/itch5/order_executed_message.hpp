@@ -33,7 +33,7 @@ struct decoder<V,order_executed_message> {
         decoder<V,std::uint32_t>        ::r(size, buf, off + 19);
     x.match_number =
         decoder<V,std::uint64_t>        ::r(size, buf, off + 23);
-    return std::move(x);
+    return x;
   }
 };
 

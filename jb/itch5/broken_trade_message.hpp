@@ -28,7 +28,7 @@ struct decoder<V,broken_trade_message> {
         decoder<V,message_header>       ::r(size, buf, off + 0);
     x.match_number =
         decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
-    return std::move(x);
+    return x;
   }
 };
 
