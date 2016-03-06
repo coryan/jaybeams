@@ -82,7 +82,7 @@ tar xf lcov_1.11.orig.tar.gz
 sudo make -C lcov-1.11/ install
 
 # ... install the OpenCL libraries ...
-sudo apt-get -qq -y install freeglut3-dev fglrx opencl-headers
+sudo apt-get -qq -y install freeglut3-dev opencl-headers
 
 # ... manually download a recent version of clFFT from github, extract
 # it, configure it and compile it ...
