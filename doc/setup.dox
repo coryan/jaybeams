@@ -19,6 +19,9 @@ Installing the developement tools:
 @code
 sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive
 
+# Patch the autoconf library
+rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
+
 # YAML-CPP (C++ Wrappers for YAML files)
 sudo yum install yaml-cpp-devel
 
