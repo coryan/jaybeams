@@ -45,7 +45,7 @@ struct decoder<V,trade_message> {
         decoder<V,price4_t>             ::r(size, buf, off + 32);
     x.match_number =
         decoder<V,std::uint64_t>        ::r(size, buf, off + 36);
-    return std::move(x);
+    return x;
   }
 };
 

@@ -46,7 +46,7 @@ struct decoder<V,add_order_mpid_message> {
     add_order_mpid_message x;
     x =             decoder<V,add_order_message> ::r(size, buf, off + 0);
     x.attribution = decoder<V,mpid_t>            ::r(size, buf, off + 36);
-    return std::move(x);
+    return x;
   }
 };
 

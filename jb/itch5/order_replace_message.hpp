@@ -39,7 +39,7 @@ struct decoder<V,order_replace_message> {
         decoder<V,std::uint32_t>        ::r(size, buf, off + 27);
     x.price =
         decoder<V,price4_t>             ::r(size, buf, off + 31);
-    return std::move(x);
+    return x;
   }
 };
 

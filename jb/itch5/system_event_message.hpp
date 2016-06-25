@@ -33,7 +33,7 @@ struct decoder<validate,system_event_message> {
     system_event_message x;
     x.header     = decoder<validate,message_header>::r(size, buf, off + 0);
     x.event_code = decoder<validate,event_code_t>  ::r(size, buf, off + 11);
-    return std::move(x);
+    return x;
   }
 };
 

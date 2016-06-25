@@ -42,7 +42,7 @@ struct decoder<V,add_order_message> {
         decoder<V,stock_t>              ::r(size, buf, off + 24);
     x.price =
         decoder<V,price4_t>             ::r(size, buf, off + 32);
-    return std::move(x);
+    return x;
   }
 };
 

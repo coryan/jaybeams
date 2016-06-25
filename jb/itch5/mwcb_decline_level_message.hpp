@@ -39,7 +39,7 @@ struct decoder<V,mwcb_decline_level_message> {
         decoder<V,price8_t>       ::r(size, buf, off + 19);
     x.level_3 =
         decoder<V,price8_t>       ::r(size, buf, off + 27);
-    return std::move(x);
+    return x;
   }
 };
 

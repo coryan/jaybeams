@@ -57,20 +57,28 @@ AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
                  [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
                  [AC_MSG_ERROR([Unable to find yaml-cpp library])])
 
-# FFTW3 Single Precision
-AX_CHECK_LIBRARY(FFTW3F, [fftw3.h], [fftw3f],
+AC_ARG_ENABLE([fftw3],
+        AS_HELP_STRING([--enable-fftw3],
+                [Enable FFTW3-based time delay analysis components]))
+
+AS_IF([test "x$enable_fftw3" = "xyes"], [
+  # FFTW3 Single Precision
+  AX_CHECK_LIBRARY(FFTW3F, [fftw3.h], [fftw3f],
 	[FFTW3F_LIBS=-lfftw3f AC_SUBST(FFTW3F_LIBS)],
         [AC_MSG_ERROR([Unable to find single-precision FFTW3 library])])
 
-# FFTW3 Double Precision
-AX_CHECK_LIBRARY(FFTW3, [fftw3.h], [fftw3],
+  # FFTW3 Double Precision
+  AX_CHECK_LIBRARY(FFTW3, [fftw3.h], [fftw3],
 	[FFTW3_LIBS=-lfftw3 AC_SUBST(FFTW3_LIBS)],
         [AC_MSG_ERROR([Unable to find double-precision FFTW3 library])])
 
-# FFTW3 Quad (long double) Precision
-AX_CHECK_LIBRARY(FFTW3L, [fftw3.h], [fftw3l],
+  # FFTW3 Quad (long double) Precision
+  AX_CHECK_LIBRARY(FFTW3L, [fftw3.h], [fftw3l],
 	[FFTW3L_LIBS=-lfftw3l AC_SUBST(FFTW3L_LIBS)],
         [AC_MSG_ERROR([Unable to find quad-precision FFTW3 library])])
+])
+
+AM_CONDITIONAL([USE_FFTW3], [test "x$enable_fftw3" = "xyes"])
 
 # Checks for header files (and header-only libraries)
 

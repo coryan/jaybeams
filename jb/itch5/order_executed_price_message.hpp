@@ -64,7 +64,7 @@ struct decoder<V,order_executed_price_message> {
         decoder<V,printable_t>            ::r(size, buf, off + 31);
     x.execution_price =
         decoder<V,price4_t>               ::r(size, buf, off + 32);
-    return std::move(x);
+    return x;
   }
 };
 

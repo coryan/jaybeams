@@ -42,7 +42,7 @@ struct decoder<V,cross_trade_message> {
         decoder<V,std::uint64_t>        ::r(size, buf, off + 31);
     x.cross_type =
         decoder<V,cross_type_t>         ::r(size, buf, off + 39);
-    return std::move(x);
+    return x;
   }
 };
 

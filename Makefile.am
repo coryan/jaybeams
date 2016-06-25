@@ -3,7 +3,6 @@
 instdir = $(prefix)/lib
 inst_LIBRARIES = \
   jb/libjb.a \
-  jb/libjb_fftw.a \
   jb/libitch5.a
 
 noinst_LIBRARIES = \
@@ -27,12 +26,6 @@ jb_unit_tests = \
   jb/ut_offline_feed_statistics \
   jb/ut_severity_level \
   jb/ut_strtonum
-
-jb_fftw_unit_tests = \
-  jb/fftw/ut_allocator \
-  jb/fftw/ut_plan \
-  jb/fftw/ut_time_delay_estimator \
-  jb/fftw/ut_traits
 
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
@@ -78,14 +71,12 @@ jb_testing_unit_tests = \
   jb/testing/ut_microbenchmark_config
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
-  $(jb_fftw_unit_tests) $(jb_itch5_unit_tests)
+  $(jb_itch5_unit_tests)
 
 benchmarks = \
-  jb/fftw/bm_time_delay_estimator \
   jb/bm_clocks
 
 examples = \
-  examples/fftw_correlation_no_wrappers \
   examples/configuration \
   tools/itch5inside \
   tools/itch5stats
@@ -98,25 +89,16 @@ TESTS = $(check_PROGRAMS)
 AM_CXXFLAGS = \
   -DJB_SYSCONFDIR=\"$(sysconfdir)\" \
   -DJB_BINDIR=\"$(bindir)\" \
-  $(FFTW3_CPPFLAGS) \
-  $(FFTW3F_CPPFLAGS) \
-  $(FFTW3L_CPPFLAGS) \
   $(YAML_CPP_CPPFLAGS) \
   $(BOOST_CPPFLAGS) \
   -DBOOST_LOG_DYN_LINK \
   $(PTHREAD_CFLAGS)
 
 LDFLAGS = \
-  $(FFTW3_LDFLAGS) \
-  $(FFTW3F_LDFLAGS) \
-  $(FFTW3L_LDFLAGS) \
   $(YAML_CPP_LDFLAGS) \
   $(BOOST_LDFLAGS)
 
 YAML_CPP_LIBS=@YAML_CPP_LIBS@
-FFTW3_LIBS=@FFTW3_LIBS@
-FFTW3F_LIBS=@FFTW3F_LIBS@
-FFTW3L_LIBS=@FFTW3L_LIBS@
 
 LIBS = \
   $(YAML_CPP_LIBS) \
@@ -149,6 +131,24 @@ jb_ut_itch5_libs = \
   jb/libitch5.a \
   $(jb_ut_libs)
 
+################################################################
+# Optional FFTW stuff
+################################################################
+
+if USE_FFTW3
+inst_LIBRARIES += jb/libjb_fftw.a
+unit_tests += jb/fftw/ut_allocator \
+  jb/fftw/ut_plan \
+  jb/fftw/ut_time_delay_estimator \
+  jb/fftw/ut_traits
+benchmarks += jb/fftw/bm_time_delay_estimator
+examples += examples/fftw_correlation_no_wrappers
+AM_CXXFLAGS += $(FFTW3_CPPFLAGS) \
+  $(FFTW3F_CPPFLAGS) \
+  $(FFTW3L_CPPFLAGS)
+LDFLAGS += $(FFTW3_LDFLAGS) \
+  $(FFTW3F_LDFLAGS) \
+  $(FFTW3L_LDFLAGS)
 jb_ut_fftw_libs = \
   $(FFTW3_LIBS) \
   $(FFTW3F_LIBS) \
@@ -156,6 +156,11 @@ jb_ut_fftw_libs = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   $(jb_ut_libs)
+else
+jb_ut_fftw_libs =
+endif !USE_FFTW3
+
+
 
 ################################################################
 # jb/libjb.a

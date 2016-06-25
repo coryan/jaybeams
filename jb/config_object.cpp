@@ -201,7 +201,7 @@ jb::class_overrides jb::config_object::clone(class_overrides const& by_class) {
   for (auto const& i : by_class) {
     tmp.emplace(i.first, YAML::Clone(i.second));
   }
-  return std::move(tmp);
+  return tmp;
 }
 
 std::string jb::config_object::cmdline_arg_name(
@@ -212,7 +212,7 @@ std::string jb::config_object::cmdline_arg_name(
   std::string tmp = prefix;
   tmp += ".";
   tmp += name;
-  return std::move(tmp);
+  return tmp;
 }
 
 YAML::Node jb::config_object::to_yaml() const {
