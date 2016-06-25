@@ -38,7 +38,7 @@ struct decoder<V,reg_sho_restriction_message> {
         decoder<V,stock_t>          ::r(size, buf, off + 11);
     x.reg_sho_action =
         decoder<V,reg_sho_action_t> ::r(size, buf, off + 19);
-    return std::move(x);
+    return x;
   }
 };
 

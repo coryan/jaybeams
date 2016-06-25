@@ -183,7 +183,7 @@ struct decoder<V,stock_directory_message> {
         decoder<V,std::uint32_t>                    ::r(size, buf, off + 34);
     x.inverse_indicator =
         decoder<V,inverse_indicator_t>              ::r(size, buf, off + 38);
-    return std::move(x);
+    return x;
   }
 };
 

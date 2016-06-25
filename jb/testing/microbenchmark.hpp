@@ -114,7 +114,7 @@ class microbenchmark : public microbenchmark_base {
     Fixture fixture(std::forward<Args>(args)...);
     results r;
     run_base(fixture, r, 0);
-    return std::move(r);
+    return r;
   }
 
   /**
@@ -125,7 +125,7 @@ class microbenchmark : public microbenchmark_base {
     Fixture fixture;
     results r;
     run_base(fixture, r, 0);
-    return std::move(r);
+    return r;
   }
 
   /**
@@ -139,7 +139,7 @@ class microbenchmark : public microbenchmark_base {
   results run_fixed_size(Args&&... args) {
     results r;
     run_sized(config_.size(), r, std::forward<Args>(args)...);
-    return std::move(r);
+    return r;
   }
 
   /**

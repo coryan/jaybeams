@@ -6,7 +6,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 
 #include <fstream>
-
+#include <iostream>
 
 void jb::open_output_file(
     boost::iostreams::filtering_ostream& out,

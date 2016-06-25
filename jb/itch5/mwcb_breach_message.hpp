@@ -38,7 +38,7 @@ struct decoder<V,mwcb_breach_message> {
         decoder<V,message_header>   ::r(size, buf, off + 0);
     x.breached_level =
         decoder<V,breached_level_t> ::r(size, buf, off + 11);
-    return std::move(x);
+    return x;
   }
 };
 

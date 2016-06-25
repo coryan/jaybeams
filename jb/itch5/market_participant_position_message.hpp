@@ -72,7 +72,7 @@ struct decoder<V,market_participant_position_message> {
         decoder<V,market_maker_mode_t>        ::r(size, buf, off + 24);
     x.market_participant_state =
         decoder<V,market_participant_state_t> ::r(size, buf, off + 25);
-    return std::move(x);
+    return x;
   }
 };
 
