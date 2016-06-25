@@ -96,6 +96,9 @@ Fedora 21 and 22</h1>
 <p>Installing the developement tools:</p>
 <div class="fragment"><div class="line">sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive</div>
 <div class="line"></div>
+<div class="line"><span class="preprocessor"># Patch the autoconf library</span></div>
+<div class="line"><span class="preprocessor"></span>rpm -q autoconf-archive | grep -q 2016.03.20 &amp;&amp; sudo patch -p0 &lt; m4/ax_cxx_compile_stdcxx.m4.patch </div>
+<div class="line"></div>
 <div class="line"><span class="preprocessor"># YAML-CPP (C++ Wrappers for YAML files)</span></div>
 <div class="line"><span class="preprocessor"></span>sudo yum install yaml-cpp-devel</div>
 <div class="line"></div>
