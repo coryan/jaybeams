@@ -24,6 +24,7 @@ jb_unit_tests = \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
   jb/ut_logging \
+  jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
   jb/ut_severity_level \
   jb/ut_strtonum
@@ -186,6 +187,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
   jb/log.hpp \
+  jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
@@ -200,6 +202,7 @@ jb_libjb_a_SOURCES = \
   jb/filetype.cpp \
   jb/histogram_summary.cpp \
   jb/log.cpp \
+  jb/merge_yaml.cpp \
   jb/offline_feed_statistics.cpp \
   jb/severity_level.cpp
 
@@ -427,6 +430,10 @@ jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 jb_ut_logging_SOURCES = jb/ut_logging.cpp
 jb_ut_logging_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_logging
 jb_ut_logging_LDADD = $(jb_ut_libs)
+
+jb_ut_merge_yaml_SOURCES = jb/ut_merge_yaml.cpp
+jb_ut_merge_yaml_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_merge_yaml
+jb_ut_merge_yaml_LDADD = $(jb_ut_libs)
 
 jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
