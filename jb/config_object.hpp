@@ -315,6 +315,14 @@ class config_object {
   static void merge_values(YAML::Node target, YAML::Node const& source);
 
   /**
+   * Merge all the values from te @a source sequence into @a target
+   *
+   * Unlike a simple assignment, if @a source does not have a value
+   * for a given key, we keep the value from @a target.
+   */
+  static void merge_sequences(YAML::Node target, YAML::Node const& source);
+  
+  /**
    * Merge the class-overrides from @a source into @a by_class.
    */
   static void merge(class_overrides& by_class, YAML::Node source);

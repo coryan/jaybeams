@@ -158,12 +158,25 @@ void jb::config_object::merge_values(
     YAML::Node target, YAML::Node const& source) {
   // TODO(#2) this only works for relatively flat objects.
   for (auto const& j : source) {
-    if (j.second.IsSequence() or j.second.IsMap()) {
+    if (j.second.IsSequence()) {
+      merge_sequences(target[j.first.Scalar()], j.second);
+    } else if(j.second.IsMap()) {
       merge_values(target[j.first.Scalar()], j.second);
     } else if (j.second.IsScalar()) {
       target[j.first.Scalar()] = j.second.Scalar();
     }
     JB_ASSERT_THROW(j.second.IsSequence() or j.second.IsMap() or j.second.IsScalar());
+  }
+}
+
+void jb::config_object::merge_sequences(
+    YAML::Node target, YAML::Node const& source) {
+  for (std::size_t i = 0; i != source.size(); ++i) {
+    if (i < target.size()) {
+      merge_values(target[i], source[i]);
+    } else {
+      target.push_back(source[i]);
+    }
   }
 }
 
