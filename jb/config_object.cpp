@@ -156,7 +156,6 @@ void jb::config_object::validate_attributes() const {
 
 void jb::config_object::merge_values(
     YAML::Node target, YAML::Node const& source) {
-  // TODO(#2) this only works for relatively flat objects.
   for (auto const& j : source) {
     if (j.second.IsSequence()) {
       merge_sequences(target[j.first.Scalar()], j.second);
