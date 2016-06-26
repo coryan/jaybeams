@@ -158,12 +158,12 @@ void jb::config_object::merge_values(
     YAML::Node target, YAML::Node const& source) {
   // TODO(#2) this only works for relatively flat objects.
   for (auto const& j : source) {
-    if (j.second.IsMap()) {
+    if (j.second.IsSequence() or j.second.IsMap()) {
       merge_values(target[j.first.Scalar()], j.second);
     } else if (j.second.IsScalar()) {
       target[j.first.Scalar()] = j.second.Scalar();
     }
-    JB_ASSERT_THROW(j.second.IsScalar() or j.second.IsMap());
+    JB_ASSERT_THROW(j.second.IsSequence() or j.second.IsMap() or j.second.IsScalar());
   }
 }
 
@@ -175,10 +175,8 @@ void jb::config_object::merge(
   // ... iterate over the node, searching for nodes with a key starting
   // with ':' ...
   for (auto i : node) {
-    // ... no key, probably a sequence, skip ...
-    if (not i.first) {
-      continue;
-    }
+    // ... the node is a map, there should be keys for all sub nodes ...
+    JB_ASSERT_THROW(i.first);
     // ... found a key, check the format ...
     std::string key = i.first.as<std::string>();
     if (key.find(":") != 0) {

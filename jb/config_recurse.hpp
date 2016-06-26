@@ -73,11 +73,19 @@ struct config_recurse {
   apply_overrides(
       Sequence& lhs, YAML::Node const& by_name,
       class_overrides const& by_class) {
+    std::size_t idx = 0;
     Sequence tmp;
     for (auto i : by_name) {
       typename Sequence::value_type v;
+      if (idx < lhs.size()) {
+        v = std::move(lhs[idx]);
+      }
       apply_overrides(v, i, by_class);
-      tmp.push_back(v);
+      tmp.push_back(std::move(v));
+      ++idx;
+    }
+    for (; idx < lhs.size(); ++idx) {
+      tmp.push_back(std::move(lhs[idx]));
     }
     lhs.swap(tmp);
   }

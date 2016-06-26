@@ -14,6 +14,7 @@ jb_unit_tests = \
   jb/ut_assert_throw \
   jb/ut_config_files_location \
   jb/ut_config_object \
+  jb/ut_config_object_vector \
   jb/ut_event_rate_estimator \
   jb/ut_event_rate_histogram \
   jb/ut_explicit_cuts_binning \
@@ -386,6 +387,10 @@ jb_ut_config_files_location_LDADD = $(jb_ut_libs)
 jb_ut_config_object_SOURCES = jb/ut_config_object.cpp
 jb_ut_config_object_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_object
 jb_ut_config_object_LDADD = $(jb_ut_libs)
+
+jb_ut_config_object_vector_SOURCES = jb/ut_config_object_vector.cpp
+jb_ut_config_object_vector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_object_vector
+jb_ut_config_object_vector_LDADD = $(jb_ut_libs)
 
 jb_ut_event_rate_estimator_SOURCES = jb/ut_event_rate_estimator.cpp
 jb_ut_event_rate_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_event_rate_estimator
