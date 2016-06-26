@@ -15,7 +15,7 @@ var searchData=
   ['check_5ftimestamp_5frange_3c_20true_20_3e',['check_timestamp_range&lt; true &gt;',['../namespacejb_1_1itch5.html#a264db5e21d72403a07eafc7b3516bd49',1,'jb::itch5']]],
   ['check_5fvector_5fclose_5fenough',['check_vector_close_enough',['../namespacejb_1_1testing.html#a9c61b8f98b889134b6c1e89b7c1b37d1',1,'jb::testing']]],
   ['class_5fname',['class_name',['../classjb_1_1config__object_1_1attribute__base.html#aa3a213945dd0e96a65213ed9762c3fa3',1,'jb::config_object::attribute_base']]],
-  ['clone',['clone',['../classjb_1_1config__object.html#a92fb389cf026440b9c6c9e63d7ea0a6d',1,'jb::config_object']]],
+  ['clone',['clone',['../namespacejb_1_1yaml.html#a1be35fc9d86455bf9bdfc97bcae5144b',1,'jb::yaml']]],
   ['close_5fenough',['close_enough',['../namespacejb_1_1testing.html#a51cd9a4af36e91adf96772bdc8dd41f8',1,'jb::testing::close_enough(real actual, real expected, int tol)'],['../namespacejb_1_1testing.html#aa1b43c10fea35dbdef8ccc0752a15c25',1,'jb::testing::close_enough(std::complex&lt; real &gt; const &amp;actual, std::complex&lt; real &gt; const &amp;expected, int tol=1)'],['../namespacejb_1_1testing.html#aa697bf9aa0ed0e580e4d5c651dd4427e',1,'jb::testing::close_enough(real actual[2], real expected[2], int tol=1)']]],
   ['cmdline_5farg_5fname',['cmdline_arg_name',['../classjb_1_1config__object.html#ac87ab822bf7787f6a59c9ec0e77b6da3',1,'jb::config_object']]],
   ['compute_5finside',['compute_inside',['../classjb_1_1itch5_1_1compute__inside.html#a4b645d932a1379255f263b04c18b6506',1,'jb::itch5::compute_inside']]],

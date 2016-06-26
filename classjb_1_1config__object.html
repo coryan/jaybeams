@@ -215,15 +215,6 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ac87ab822bf7787f6a59c9ec0e77b6da3"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1config__object.html#ac87ab822bf7787f6a59c9ec0e77b6da3">cmdline_arg_name</a> (std::string const &amp;prefix, std::string const &amp;name)</td></tr>
 <tr class="memdesc:ac87ab822bf7787f6a59c9ec0e77b6da3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the full name of a command-line argument, given its prefix and short name.  <a href="#ac87ab822bf7787f6a59c9ec0e77b6da3">More...</a><br/></td></tr>
 <tr class="separator:ac87ab822bf7787f6a59c9ec0e77b6da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18e98f483bec736b9145eeedf29c34aa"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1config__object.html#a18e98f483bec736b9145eeedf29c34aa">merge_values</a> (YAML::Node target, YAML::Node const &amp;source)</td></tr>
-<tr class="memdesc:a18e98f483bec736b9145eeedf29c34aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge all the values from <em>source</em> into <em>target</em>.  <a href="#a18e98f483bec736b9145eeedf29c34aa">More...</a><br/></td></tr>
-<tr class="separator:a18e98f483bec736b9145eeedf29c34aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae398d6d5cbb8d3d61fc4946bcfde3155"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1config__object.html#ae398d6d5cbb8d3d61fc4946bcfde3155">merge</a> (<a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">class_overrides</a> &amp;by_class, YAML::Node source)</td></tr>
-<tr class="memdesc:ae398d6d5cbb8d3d61fc4946bcfde3155"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge the class-overrides from <em>source</em> into <em>by_class</em>.  <a href="#ae398d6d5cbb8d3d61fc4946bcfde3155">More...</a><br/></td></tr>
-<tr class="separator:ae398d6d5cbb8d3d61fc4946bcfde3155"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92fb389cf026440b9c6c9e63d7ea0a6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">class_overrides</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1config__object.html#a92fb389cf026440b9c6c9e63d7ea0a6d">clone</a> (<a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">class_overrides</a> const &amp;by_class)</td></tr>
-<tr class="memdesc:a92fb389cf026440b9c6c9e63d7ea0a6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively clone all the overrides in <em>by_class</em>.  <a href="#a92fb389cf026440b9c6c9e63d7ea0a6d">More...</a><br/></td></tr>
-<tr class="separator:a92fb389cf026440b9c6c9e63d7ea0a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -245,7 +236,7 @@ Friends</h2></td></tr>
 <p>Please </p>
 <dl class="section see"><dt>See Also</dt><dd>listing:examples:configurations for some <a class="el" href="namespacejb_1_1examples.html" title="Contains types and functions useful in the examples. ">examples</a>. </dd></dl>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00033">33</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00030">30</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="abe0c8ac5dd817aed0baa02e601762ea3"></a>
 <div class="memitem">
@@ -292,7 +283,7 @@ Friends</h2></td></tr>
 <p>Copy constructor. </p>
 <p>Derived classes should implement member-by-member copying using the config_attribute(container*, config_attribute const&amp;) constructor. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00053">53</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00050">50</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -321,7 +312,7 @@ Friends</h2></td></tr>
 <p>Move constructor. </p>
 <p>Derived classes should implement member-by-member move using the config_attribute(container*, config_attribute&amp;&amp;) constructor. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00063">63</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00060">60</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -348,7 +339,7 @@ Friends</h2></td></tr>
 
 <p>Destructor. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00068">68</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00065">65</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -395,7 +386,7 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00124">124</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00179">jb::config_object::attribute_descriptor::helpmsg</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00176">jb::config_object::attribute_descriptor::helpmsg</a>.</p>
 
 </div>
 </div>
@@ -469,6 +460,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00058">58</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
+<p>References <a class="el" href="merge__yaml_8cpp_source.html#l00043">jb::yaml::merge()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ada9821d7e127fac559e2be1d6484f96b"></a>
@@ -514,6 +507,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00064">64</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
+<p>References <a class="el" href="merge__yaml_8cpp_source.html#l00071">jb::yaml::clone()</a>, and <a class="el" href="merge__yaml_8cpp_source.html#l00043">jb::yaml::merge()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a27839bef4c99cf6e65496c01041ebe39"></a>
@@ -540,35 +535,7 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00142">142</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config__object_8cpp_source.html#l00227">jb::config_object::attribute_base::attribute_base()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a92fb389cf026440b9c6c9e63d7ea0a6d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">jb::class_overrides</a> jb::config_object::clone </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">class_overrides</a> const &amp;&#160;</td>
-          <td class="paramname"><em>by_class</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Recursively clone all the overrides in <em>by_class</em>. </p>
-
-<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00199">199</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
+<p>Referenced by <a class="el" href="config__object_8cpp_source.html#l00177">jb::config_object::attribute_base::attribute_base()</a>.</p>
 
 </div>
 </div>
@@ -613,9 +580,9 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00207">207</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00157">157</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config__recurse_8hpp_source.html#l00090">jb::config_recurse::add_options()</a>, and <a class="el" href="config__recurse_8hpp_source.html#l00211">jb::config_recurse::apply_cmdline_values()</a>.</p>
+<p>Referenced by <a class="el" href="config__recurse_8hpp_source.html#l00098">jb::config_recurse::add_options()</a>, and <a class="el" href="config__recurse_8hpp_source.html#l00219">jb::config_recurse::apply_cmdline_values()</a>.</p>
 
 </div>
 </div>
@@ -643,7 +610,7 @@ Friends</h2></td></tr>
 
 <p>Convenience function to create attribute descriptors with less typing. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00245">245</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00242">242</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -681,7 +648,7 @@ Friends</h2></td></tr>
 
 <p>Convenience function to create attribute descriptors with less typing. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00250">250</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00247">247</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -833,85 +800,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae398d6d5cbb8d3d61fc4946bcfde3155"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void jb::config_object::merge </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">class_overrides</a> &amp;&#160;</td>
-          <td class="paramname"><em>by_class</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">YAML::Node&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Merge the class-overrides from <em>source</em> into <em>by_class</em>. </p>
-
-<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00170">170</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a18e98f483bec736b9145eeedf29c34aa"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void jb::config_object::merge_values </td>
-          <td>(</td>
-          <td class="paramtype">YAML::Node&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">YAML::Node const &amp;&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Merge all the values from <em>source</em> into <em>target</em>. </p>
-<p>Unlike a simple assignment, if <em>source</em> does not have a value for a given key, we keep the value from <em>target</em>. </p>
-
-<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00157">157</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
-
-<p>References <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ab5a8be7145df411dd592a28d5353094e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -936,9 +824,9 @@ Friends</h2></td></tr>
 
 <p>Copy &amp; swap assignment. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00074">74</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00071">71</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00082">swap()</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00079">swap()</a>.</p>
 
 </div>
 </div>
@@ -998,9 +886,9 @@ Friends</h2></td></tr>
 
 <p>Derived classes should implement member by member swap. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00082">82</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00079">79</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config__object_8hpp_source.html#l00074">operator=()</a>.</p>
+<p>Referenced by <a class="el" href="config__object_8hpp_source.html#l00071">operator=()</a>.</p>
 
 </div>
 </div>
@@ -1022,7 +910,7 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00119">119</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config__object_8hpp_source.html#l00335">jb::operator&lt;&lt;()</a>.</p>
+<p>Referenced by <a class="el" href="config__object_8hpp_source.html#l00314">jb::operator&lt;&lt;()</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +937,7 @@ Friends</h2></td></tr>
 
 <p>Print out the configuration settings in <a class="el" href="namespaceYAML.html" title="Types and functions for the yaml-cpp library. ">YAML</a> format. </p>
 
-<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00218">218</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8cpp_source.html#l00168">168</a> of file <a class="el" href="config__object_8cpp_source.html">config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -1161,7 +1049,7 @@ Friends</h2></td></tr>
 
 <p>Validate both the <a class="el" href="classjb_1_1config__object.html" title="Base class for all configuration objects. ">config_object</a> and each attribute. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00292">292</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00289">289</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -1183,7 +1071,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00285">285</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00282">282</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>
@@ -1208,7 +1096,7 @@ Friends</h2></td></tr>
 
 <p>The list of attributes. </p>
 
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00332">332</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00311">311</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
 </div>
 </div>

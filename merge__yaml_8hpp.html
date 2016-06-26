@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>JayBeams: jb/ut_event_rate_histogram.cpp File Reference</title>
+<title>JayBeams: jb/merge_yaml.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -94,62 +94,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">ut_event_rate_histogram.cpp File Reference</div>  </div>
+<div class="title">merge_yaml.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="event__rate__histogram_8hpp_source.html">jb/event_rate_histogram.hpp</a>&gt;</code><br/>
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br/>
+<div class="textblock"><code>#include &lt;yaml-cpp/yaml.h&gt;</code><br/>
+<code>#include &lt;map&gt;</code><br/>
 </div>
-<p><a href="ut__event__rate__histogram_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="merge__yaml_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
+<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacejb_1_1yaml"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html">jb::yaml</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a1f477677705f6b1e951bdb1ab6e0dd60"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, <br class="typebreak"/>
+YAML::Node &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html#a1f477677705f6b1e951bdb1ab6e0dd60">jb::class_overrides</a></td></tr>
+<tr class="memdesc:a1f477677705f6b1e951bdb1ab6e0dd60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store the overrides for each class.  <a href="#a1f477677705f6b1e951bdb1ab6e0dd60">More...</a><br/></td></tr>
+<tr class="separator:a1f477677705f6b1e951bdb1ab6e0dd60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0651d3debc05ebd17d9bf235d7b13b23"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__event__rate__histogram_8cpp.html#a0651d3debc05ebd17d9bf235d7b13b23">BOOST_AUTO_TEST_CASE</a> (event_rate_histogram_basics)</td></tr>
-<tr class="separator:a0651d3debc05ebd17d9bf235d7b13b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a175d39e545a3f58126b23365b676f025"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__event__rate__histogram_8cpp.html#a175d39e545a3f58126b23365b676f025">BOOST_AUTO_TEST_CASE</a> (event_rate_histogram_repeats)</td></tr>
-<tr class="separator:a175d39e545a3f58126b23365b676f025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74da83b82e81823048a60f03b0a166d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html#a74da83b82e81823048a60f03b0a166d5">jb::yaml::merge_node</a> (YAML::Node target, YAML::Node const &amp;source)</td></tr>
+<tr class="memdesc:a74da83b82e81823048a60f03b0a166d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two <a class="el" href="namespaceYAML.html" title="Types and functions for the yaml-cpp library. ">YAML</a> nodes.  <a href="#a74da83b82e81823048a60f03b0a166d5">More...</a><br/></td></tr>
+<tr class="separator:a74da83b82e81823048a60f03b0a166d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fca498ea74cbc8552c250bcd573f463"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html#a5fca498ea74cbc8552c250bcd573f463">jb::yaml::merge_map</a> (YAML::Node target, YAML::Node const &amp;source)</td></tr>
+<tr class="memdesc:a5fca498ea74cbc8552c250bcd573f463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge all the values from <em>source</em> into <em>target</em>.  <a href="#a5fca498ea74cbc8552c250bcd573f463">More...</a><br/></td></tr>
+<tr class="separator:a5fca498ea74cbc8552c250bcd573f463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220d8340394984ec8e7024c35a48f424"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html#a220d8340394984ec8e7024c35a48f424">jb::yaml::merge_sequences</a> (YAML::Node target, YAML::Node const &amp;source)</td></tr>
+<tr class="memdesc:a220d8340394984ec8e7024c35a48f424"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memberwise merge two sequences, from <em>source</em> into <em>target</em>.  <a href="#a220d8340394984ec8e7024c35a48f424">More...</a><br/></td></tr>
+<tr class="separator:a220d8340394984ec8e7024c35a48f424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdd45451f1ae60a9166b0339b8f9e367"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html#afdd45451f1ae60a9166b0339b8f9e367">jb::yaml::merge</a> (class_overrides &amp;by_class, YAML::Node source)</td></tr>
+<tr class="memdesc:afdd45451f1ae60a9166b0339b8f9e367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge the class-overrides from <em>source</em> into <em>by_class</em>.  <a href="#afdd45451f1ae60a9166b0339b8f9e367">More...</a><br/></td></tr>
+<tr class="separator:afdd45451f1ae60a9166b0339b8f9e367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be35fc9d86455bf9bdfc97bcae5144b"><td class="memItemLeft" align="right" valign="top">class_overrides&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1yaml.html#a1be35fc9d86455bf9bdfc97bcae5144b">jb::yaml::clone</a> (class_overrides const &amp;by_class)</td></tr>
+<tr class="memdesc:a1be35fc9d86455bf9bdfc97bcae5144b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively clone all the overrides in <em>by_class</em>.  <a href="#a1be35fc9d86455bf9bdfc97bcae5144b">More...</a><br/></td></tr>
+<tr class="separator:a1be35fc9d86455bf9bdfc97bcae5144b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a0651d3debc05ebd17d9bf235d7b13b23"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BOOST_AUTO_TEST_CASE </td>
-          <td>(</td>
-          <td class="paramtype">event_rate_histogram_basics&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000166">Test:</a></b></dt><dd>Test the basic functionality of a event_rate_histogram. </dd></dl>
-
-<p>Definition at line <a class="el" href="ut__event__rate__histogram_8cpp_source.html#l00008">8</a> of file <a class="el" href="ut__event__rate__histogram_8cpp_source.html">ut_event_rate_histogram.cpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a175d39e545a3f58126b23365b676f025"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BOOST_AUTO_TEST_CASE </td>
-          <td>(</td>
-          <td class="paramtype">event_rate_histogram_repeats&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000167">Test:</a></b></dt><dd>Test that even rate histograms capture repeated elements properly. </dd></dl>
-
-<p>Definition at line <a class="el" href="ut__event__rate__histogram_8cpp_source.html#l00027">27</a> of file <a class="el" href="ut__event__rate__histogram_8cpp_source.html">ut_event_rate_histogram.cpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
