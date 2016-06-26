@@ -1,20 +1,17 @@
 #ifndef jb_config_object_hpp
 #define jb_config_object_hpp
 
+#include <jb/merge_yaml.hpp>
 #include <jb/usage.hpp>
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/variables_map.hpp>
 #include <yaml-cpp/yaml.h>
 #include <iosfwd>
-#include <map>
 #include <string>
 #include <vector>
 
 namespace jb {
-
-/// Store the overrides for each class.
-typedef std::map<std::string,YAML::Node> class_overrides;
 
 // Forward declare because we need to make it a 'friend'
 struct config_recurse;
@@ -306,24 +303,6 @@ class config_object {
       boost::program_options::variables_map const& vm,
       std::string const& prefix);
 
-  /**
-   * Merge all the values from @a source into @a target
-   *
-   * Unlike a simple assignment, if @a source does not have a value
-   * for a given key, we keep the value from @a target.
-   */
-  static void merge_values(YAML::Node target, YAML::Node const& source);
-
-  /**
-   * Merge the class-overrides from @a source into @a by_class.
-   */
-  static void merge(class_overrides& by_class, YAML::Node source);
-
-  /**
-   * Recursively clone all the overrides in @a by_class.
-   */
-  static class_overrides clone(class_overrides const& by_class);
-
   /// Print out the configuration settings in YAML format
   YAML::Node to_yaml() const;
 
@@ -347,4 +326,4 @@ inline std::ostream& operator<<(std::ostream& os, config_object const& x) {
 #include <jb/config_recurse.hpp>
 #include <jb/config_attribute.hpp>
 
-#endif // jb_config_attribute_hpp
+#endif // jb_config_object_hpp

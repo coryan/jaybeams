@@ -177,7 +177,7 @@ class config1 : public jb::config_object {
  */
 BOOST_AUTO_TEST_CASE(config_object_apply) {
   char const contents[] = R"""(# YAML overrides
-# This applys to all objects of type 'config0'
+# This applies to all objects of type 'config0'
 :config0:
   x: -1
   y: -2

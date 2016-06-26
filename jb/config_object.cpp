@@ -57,7 +57,7 @@ void jb::config_object::load_overrides(
 
 void jb::config_object::apply_overrides(YAML::Node const& doc) {
   class_overrides by_class;
-  merge(by_class, doc);
+  jb::yaml::merge(by_class, doc);
   apply_overrides(doc, by_class);
 }
 
@@ -71,8 +71,8 @@ void jb::config_object::apply_overrides(
         i->apply_overrides(n->second, by_class);
       }
     }
-    class_overrides new_scope = clone(by_class);
-    merge(new_scope, by_name[i->name()]);
+    class_overrides new_scope = jb::yaml::clone(by_class);
+    jb::yaml::merge(new_scope, by_name[i->name()]);
     i->apply_overrides(by_name[i->name()], new_scope);
   }
 }
@@ -152,56 +152,6 @@ void jb::config_object::validate_attributes() const {
   for (auto i : attributes_) {
     i->validate();
   }
-}
-
-void jb::config_object::merge_values(
-    YAML::Node target, YAML::Node const& source) {
-  // TODO(#2) this only works for relatively flat objects.
-  for (auto const& j : source) {
-    if (j.second.IsMap()) {
-      merge_values(target[j.first.Scalar()], j.second);
-    } else if (j.second.IsScalar()) {
-      target[j.first.Scalar()] = j.second.Scalar();
-    }
-    JB_ASSERT_THROW(j.second.IsScalar() or j.second.IsMap());
-  }
-}
-
-void jb::config_object::merge(
-    class_overrides& by_class, YAML::Node node) {
-  if (not node.IsMap()) {
-    return;
-  }
-  // ... iterate over the node, searching for nodes with a key starting
-  // with ':' ...
-  for (auto i : node) {
-    // ... no key, probably a sequence, skip ...
-    if (not i.first) {
-      continue;
-    }
-    // ... found a key, check the format ...
-    std::string key = i.first.as<std::string>();
-    if (key.find(":") != 0) {
-      continue;
-    }
-    // ... try to insert into the map ...
-    auto ins = by_class.emplace(key, i.second);
-    if (ins.second == true) {
-      // ... good insert, nothing left to do ...
-      continue;
-    }
-    // ... okay there was a node for the class in the map already,
-    // need to merge the values ...
-    merge_values(ins.first->second, i.second);
-  }
-}
-
-jb::class_overrides jb::config_object::clone(class_overrides const& by_class) {
-  class_overrides tmp;
-  for (auto const& i : by_class) {
-    tmp.emplace(i.first, YAML::Clone(i.second));
-  }
-  return tmp;
 }
 
 std::string jb::config_object::cmdline_arg_name(
