@@ -17,7 +17,7 @@ systems.
 Installing the developement tools:
 
 @code
-sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive
+sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make
 
 # Patch the autoconf library
 rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
@@ -26,12 +26,12 @@ rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compi
 sudo yum install yaml-cpp-devel
 
 # Skye (Small Mocking framework)
-wget -q https://github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz
-tar -xf Skye-0.1.tar.gz
-(cd Skye && ./configure && make check && sudo make install)
+wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
+tar -xf skye-0.3.tar.gz
+(cd skye-0.3 && ./configure && make check && sudo make install)
 @endcode
 
-@section fedora_build Checkout the Code and Build
+@subsection fedora_build Checkout the Code and Build
 
 This is the easy part:
 
@@ -47,6 +47,38 @@ make
 # Compile the code, the tests and run the tests
 make check
 #
+@endcode
+
+@section ubuntu_xenial Ubuntu 16.04 (Xenial Xenus LTS)
+
+@code
+# Install the tools, compilers, etc.
+sudo apt-get install automake g++ gcc libfftw3-dev libyaml-cpp-dev libboost-all-dev autoconf-archive git make
+
+# Skye (Small Mocking framework)
+wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
+tar -xf skye-0.3.tar.gz
+(cd skye-0.3 && CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && make check && sudo make install)
+@endcode
+
+@subsection ubuntu_xenial_build
+
+This should be the easy part:
+
+@code
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+./bootstrap
+mkdir gcc && cd gcc
+CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+make -j 4 check
+@endcode
+
+If you want to use FFTW3 to run time delay analysis use:
+
+@code
+CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu --enable-fftw3
+make -j 4 check
 @endcode
 
 @section ubuntu_precise Ubuntu 12.04 (Precise Pangolin LTS)
@@ -81,9 +113,9 @@ tar -xf release-0.5.1.tar.gz
 (cd yaml-cpp-release-0.5.1 && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make test && sudo make install)
 
 # Skye (Small Mocking framework)
-wget -q https://github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz
-tar -xf skye-0.2.tar.gz
-(cd skye-0.2 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
+wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
+tar -xf skye-0.3.tar.gz
+(cd skye-0.3 && CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ && make check && sudo make install)
 @endcode
 
 @section ubuntu_build Checkout the Code and Build
