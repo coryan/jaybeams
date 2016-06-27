@@ -37,7 +37,7 @@ struct config_recurse {
   void apply_overrides(
       T& lhs, YAML::Node const& by_name, class_overrides const& by_class,
       Args...) {
-    if (not by_name) {
+    if (not by_name or not by_name.IsDefined() or by_name.IsNull()) {
       // ... the node is not defined, nothing to override ...
       return;
     }

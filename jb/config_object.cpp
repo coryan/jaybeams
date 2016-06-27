@@ -72,8 +72,12 @@ void jb::config_object::apply_overrides(
       }
     }
     class_overrides new_scope = jb::yaml::clone(by_class);
-    jb::yaml::merge(new_scope, by_name[i->name()]);
-    i->apply_overrides(by_name[i->name()], new_scope);
+    YAML::Node nested;
+    if (by_name and by_name.IsMap() and by_name[i->name()]) {
+      nested = by_name[i->name()];
+    }
+    jb::yaml::merge(new_scope, nested);
+    i->apply_overrides(nested, new_scope);
   }
 }
 
