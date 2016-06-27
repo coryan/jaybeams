@@ -94,7 +94,7 @@ Introduction</h1>
 Fedora 21 and 22</h1>
 <p>We assume that you have superuser privileges in your workstation. The instructions were originally written for Fedora 21, I will try to make them more generic over time. Please submit patches to support other systems.</p>
 <p>Installing the developement tools:</p>
-<div class="fragment"><div class="line">sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive</div>
+<div class="fragment"><div class="line">sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Patch the autoconf library</span></div>
 <div class="line"><span class="preprocessor"></span>rpm -q autoconf-archive | grep -q 2016.03.20 &amp;&amp; sudo patch -p0 &lt; m4/ax_cxx_compile_stdcxx.m4.patch </div>
@@ -103,11 +103,11 @@ Fedora 21 and 22</h1>
 <div class="line"><span class="preprocessor"></span>sudo yum install yaml-cpp-devel</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Skye (Small Mocking framework)</span></div>
-<div class="line"><span class="preprocessor"></span>wget -q https:<span class="comment">//github.com/coryan/Skye/releases/download/v0.1/Skye-0.1.tar.gz</span></div>
-<div class="line">tar -xf Skye-0.1.tar.gz</div>
-<div class="line">(cd Skye &amp;&amp; ./configure &amp;&amp; make check &amp;&amp; sudo make install)</div>
-</div><!-- fragment --><h1><a class="anchor" id="fedora_build"></a>
-Checkout the Code and Build</h1>
+<div class="line"><span class="preprocessor"></span>wget -q https:<span class="comment">//github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz</span></div>
+<div class="line">tar -xf skye-0.3.tar.gz</div>
+<div class="line">(cd skye-0.3 &amp;&amp; ./configure &amp;&amp; make check &amp;&amp; sudo make install)</div>
+</div><!-- fragment --><h2><a class="anchor" id="fedora_build"></a>
+Checkout the Code and Build</h2>
 <p>This is the easy part:</p>
 <div class="fragment"><div class="line">git <a class="code" href="namespacejb_1_1yaml.html#a1be35fc9d86455bf9bdfc97bcae5144b">clone</a> https:<span class="comment">//github.com/coryan/jaybeams.git</span></div>
 <div class="line">cd jaybeams</div>
@@ -120,6 +120,27 @@ Checkout the Code and Build</h1>
 <div class="line"><span class="preprocessor"># Compile the code, the tests and run the tests</span></div>
 <div class="line"><span class="preprocessor"></span>make check</div>
 <div class="line"><span class="preprocessor">#</span></div>
+</div><!-- fragment --><h1><a class="anchor" id="ubuntu_xenial"></a>
+Ubuntu 16.04 (Xenial Xenus LTS)</h1>
+<div class="fragment"><div class="line"><span class="preprocessor"># Install the tools, compilers, etc.</span></div>
+<div class="line"><span class="preprocessor"></span>sudo apt-<span class="keyword">get</span> install automake g++ gcc libfftw3-dev libyaml-cpp-dev libboost-all-dev autoconf-archive git make</div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor"># Skye (Small Mocking framework)</span></div>
+<div class="line"><span class="preprocessor"></span>wget -q https:<span class="comment">//github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz</span></div>
+<div class="line">tar -xf skye-0.3.tar.gz</div>
+<div class="line">(cd skye-0.3 &amp;&amp; CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu &amp;&amp; make check &amp;&amp; sudo make install)</div>
+</div><!-- fragment --><h2><a class="anchor" id="ubuntu_xenial_build"></a>
+ubuntu_xenial_build</h2>
+<p>This should be the easy part:</p>
+<div class="fragment"><div class="line">git <a class="code" href="namespacejb_1_1yaml.html#a1be35fc9d86455bf9bdfc97bcae5144b">clone</a> https:<span class="comment">//github.com/coryan/jaybeams.git</span></div>
+<div class="line">cd jaybeams</div>
+<div class="line">./bootstrap</div>
+<div class="line">mkdir gcc &amp;&amp; cd gcc</div>
+<div class="line">CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu</div>
+<div class="line">make -j 4 check</div>
+</div><!-- fragment --><p>If you want to use FFTW3 to run time delay analysis use:</p>
+<div class="fragment"><div class="line">CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu --enable-fftw3</div>
+<div class="line">make -j 4 check</div>
 </div><!-- fragment --><h1><a class="anchor" id="ubuntu_precise"></a>
 Ubuntu 12.04 (Precise Pangolin LTS)</h1>
 <p>This is a popular platform for Cloud services and, consequently, for hosted continuous integration environments. Unfortunately the platform is also rather old, so you need to install backports of most of the development tools.</p>
@@ -147,9 +168,9 @@ Ubuntu 12.04 (Precise Pangolin LTS)</h1>
 <div class="line">(cd yaml-cpp-release-0.5.1 &amp;&amp; mkdir build &amp;&amp; cd build &amp;&amp; cmake -DCMAKE_INSTALL_PREFIX=/usr .. &amp;&amp; make &amp;&amp; make test &amp;&amp; sudo make install)</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Skye (Small Mocking framework)</span></div>
-<div class="line"><span class="preprocessor"></span>wget -q https:<span class="comment">//github.com/coryan/Skye/releases/download/v0.2/skye-0.2.tar.gz</span></div>
-<div class="line">tar -xf skye-0.2.tar.gz</div>
-<div class="line">(cd skye-0.2 &amp;&amp; CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ &amp;&amp; make check &amp;&amp; sudo make install)</div>
+<div class="line"><span class="preprocessor"></span>wget -q https:<span class="comment">//github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz</span></div>
+<div class="line">tar -xf skye-0.3.tar.gz</div>
+<div class="line">(cd skye-0.3 &amp;&amp; CXX=g++-4.9 CC=gcc-4.9 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu/ &amp;&amp; make check &amp;&amp; sudo make install)</div>
 </div><!-- fragment --><h1><a class="anchor" id="ubuntu_build"></a>
 Checkout the Code and Build</h1>
 <p>This is the easy part:</p>
