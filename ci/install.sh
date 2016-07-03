@@ -31,8 +31,6 @@ fi
 sudo apt-get -qq -y install \
     autoconf-archive \
     automake \
-    g++ \
-    gcc \
     git \
     libboost1.55-all-dev \
     libfftw3-dev \
