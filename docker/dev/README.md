@@ -9,8 +9,9 @@ actually usable.
 
 Just use docker, e.g.
 
-     docker build -t coryan/jaybeamsdev:ubuntun14.04 docker/dev/ubuntu14.04
-     docker build -t coryan/jaybeamsdev:ubuntun16.04 docker/dev/ubuntu16.04
+     docker build -t coryan/jaybeamsdev-ubuntun14.04 docker/dev/ubuntu14.04
+     docker build -t coryan/jaybeamsdev-ubuntun16.04 docker/dev/ubuntu16.04
+     docker build -t coryan/jaybeamsdev-fedora23 docker/dev/fedora23
 
 ### Testing images
 

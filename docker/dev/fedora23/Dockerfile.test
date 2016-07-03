@@ -1,0 +1,16 @@
+ARG user=developer
+
+WORKDIR /
+RUN useradd -m $user
+USER $user
+WORKDIR /home/$user
+RUN git clone --depth=2 https://github.com/coryan/jaybeams.git
+WORKDIR /home/$user/jaybeams
+RUN ./bootstrap
+
+# We need to explicitly create the directory otherwise it is owned by root
+RUN mkdir clang
+
+WORKDIR /home/$user/jaybeams/clang
+RUN CXX=clang++ CC=clang ../configure --enable-fftw3
+RUN make -j 4 check
