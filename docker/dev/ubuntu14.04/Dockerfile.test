@@ -1,0 +1,14 @@
+ARG user=developer
+
+WORKDIR /
+RUN useradd -m $user
+USER $user
+WORKDIR /home/$user
+RUN git clone --depth=2 https://github.com/coryan/jaybeams.git
+WORKDIR /home/$user/jaybeams
+RUN ./bootstrap
+# We need to explicitly create the directory otherwise it is owned by root
+RUN mkdir gcc
+WORKDIR /home/$user/jaybeams/gcc
+RUN CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu --enable-fftw3
+RUN make -j 4 check
