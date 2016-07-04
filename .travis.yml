@@ -46,8 +46,8 @@ notifications:
 
 env:
   matrix:
-    - COMPILER=gcc   VERSION=-4.8  VARIANT=opt  GENDOCS=no
-    - COMPILER=gcc   VERSION=-4.8  VARIANT=cov  GENDOCS=no
+    - COMPILER=gcc   VERSION=-5  VARIANT=opt  GENDOCS=no
+    - COMPILER=gcc   VERSION=-5  VARIANT=cov  GENDOCS=no
     - COMPILER=clang VERSION=-3.6  VARIANT=dbg  GENDOCS=yes
     - COMPILER=clang VERSION=-3.6  VARIANT=opt  GENDOCS=no
   global:

@@ -22,7 +22,7 @@ sudo apt-get update
 if [ "x${COMPILER?}" == "xclang" ]; then
     sudo apt-get -qq -y install clang${VERSION?}
 elif [ "x${COMPILER?}" == "xgcc" ]; then
-    sudo apt-get -qq -y install g++${VERSION?}
+    sudo apt-get -qq -y install g++${VERSION?} gcc${VERSION}
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++${VERSION?} 90
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc${VERSION?} 90
     sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov${VERSION?} 90
