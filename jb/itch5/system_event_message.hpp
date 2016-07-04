@@ -43,4 +43,4 @@ std::ostream& operator<<(std::ostream& os, system_event_message const& x);
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_system_event_message_hpp */
+#endif // jb_itch5_system_event_message_hpp

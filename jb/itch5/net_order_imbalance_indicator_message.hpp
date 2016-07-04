@@ -80,4 +80,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_net_order_imbalance_indicator_hpp */
+#endif // jb_itch5_net_order_imbalance_indicator_message_hpp

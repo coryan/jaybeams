@@ -24,4 +24,4 @@ struct noop_validator {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_noop_validator_hpp */
+#endif // jb_itch5_noop_validator_hpp

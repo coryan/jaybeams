@@ -29,4 +29,4 @@ inline sample_type histogram_binning_linear_interpolation(
 
 } // namespace jb
 
-#endif // jb_histogram_binning_liner_interpolation_hpp
+#endif // jb_histogram_binning_linear_interpolation_hpp

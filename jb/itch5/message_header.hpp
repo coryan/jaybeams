@@ -78,4 +78,4 @@ std::ostream& operator<<(std::ostream& os, message_header const& x);
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_message_header_hpp */
+#endif // jb_itch5_message_header_hpp

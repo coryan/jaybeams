@@ -14,5 +14,5 @@ typedef char_list_field<u'S', u'B'> buy_sell_indicator_t;
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_buy_sell_indicator_hpp */
+#endif // jb_itch5_buy_sell_indicator_hpp
 

@@ -34,4 +34,4 @@ int severity_level_width();
 
 } // namespace jb
 
-#endif // jb_severity_level
+#endif // jb_severity_level_hpp

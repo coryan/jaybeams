@@ -99,4 +99,4 @@ constexpr std::uint8_t p2ceil(std::uint8_t n) {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_p2ceil_hpp */
+#endif // jb_itch5_p2ceil_hpp

@@ -49,4 +49,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_reg_sho_restriction_message_hpp */
+#endif // jb_itch5_reg_sho_restriction_message_hpp

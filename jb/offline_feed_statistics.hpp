@@ -156,4 +156,4 @@ class offline_feed_statistics::config : public jb::config_object {
 
 } // namespace jb
 
-#endif // jb_offline_feed_stats_hpp
+#endif // jb_offline_feed_statistics_hpp

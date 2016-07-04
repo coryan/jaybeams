@@ -15,4 +15,4 @@ constexpr int static_digits(std::intmax_t value) {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_static_digits_hpp */
+#endif // jb_itch5_static_digits_hpp

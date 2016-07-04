@@ -59,4 +59,4 @@ struct decoder<validate,std::uint64_t> {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_base_decoders_hpp */
+#endif // jb_itch5_base_decoders_hpp

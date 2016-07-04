@@ -58,4 +58,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_ipo_quoting_period_update_message_hpp */
+#endif // jb_itch5_ipo_quoting_period_update_message_hpp

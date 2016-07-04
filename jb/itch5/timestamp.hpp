@@ -62,4 +62,4 @@ std::ostream& operator<<(std::ostream& os, timestamp const& x);
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_timestamp_hpp */
+#endif // jb_itch5_timestamp_hpp

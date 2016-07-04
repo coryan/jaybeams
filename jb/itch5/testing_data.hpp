@@ -47,4 +47,4 @@ std::pair<char const*, std::size_t> trade();
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_testing_data_hpp */
+#endif // jb_itch5_testing_data_hpp

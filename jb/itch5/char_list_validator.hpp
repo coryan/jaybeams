@@ -60,4 +60,4 @@ struct char_list_validator<true,a,V...> {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_char_list_validator_hpp */
+#endif // jb_itch5_char_list_validator_hpp

@@ -101,4 +101,4 @@ std::ostream& operator<<(std::ostream& os, char_list_field<V...> const& x) {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_char_list_field_hpp */
+#endif // jb_itch5_char_list_field_hpp

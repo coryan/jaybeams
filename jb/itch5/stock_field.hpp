@@ -20,5 +20,5 @@ typedef jb::itch5::short_string_field<8> stock_t;
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_stock_field_hpp */
+#endif // jb_itch5_stock_field_hpp
 

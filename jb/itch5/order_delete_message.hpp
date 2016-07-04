@@ -38,4 +38,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_order_delete_message_hpp */
+#endif // jb_itch5_order_delete_message_hpp

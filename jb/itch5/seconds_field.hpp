@@ -86,4 +86,4 @@ std::ostream& operator<<(std::ostream& os, seconds_field const& x);
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_seconds_field_hpp */
+#endif // jb_itch5_seconds_field_hpp

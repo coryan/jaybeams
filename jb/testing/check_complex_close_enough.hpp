@@ -99,7 +99,7 @@ value_type format(value_type t) {
 
 #ifndef JB_TESTING_MAX_DIFFERENCES
 #define JB_TESTING_MAX_DIFFERENCES 8
-#endif
+#endif // JB_TESTING_MAX_DIFFERENCES
 
 } // namespace testing
 } // namespace jb

@@ -49,4 +49,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_mwcb_breach_message_hpp */
+#endif // jb_itch5_mwcb_breach_message_hpp

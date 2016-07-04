@@ -3,7 +3,7 @@
 
 #ifndef jb_config_object_hpp
 #error "This file should only be included from jb/config_object.hpp"
-#endif // jb_config_object_hpp
+#endif // !jb_config_object_hpp
 
 #include <utility>
 

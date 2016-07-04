@@ -134,4 +134,4 @@ inline price4_t max_price_field_value() {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_price_field_hpp */
+#endif // jb_itch5_price_field_hpp

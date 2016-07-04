@@ -59,4 +59,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_stock_trading_action_message_hpp */
+#endif // jb_itch5_stock_trading_action_message_hpp

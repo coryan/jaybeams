@@ -191,4 +191,4 @@ std::size_t hash_value(short_string_field<size,F> const& x) {
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_short_string_field_hpp */
+#endif // jb_itch5_short_string_field_hpp

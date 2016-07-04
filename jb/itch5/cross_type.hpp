@@ -15,4 +15,4 @@ typedef char_list_field<u'O', u'C', u'H', u'I'> cross_type_t;
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_cross_type_hpp */
+#endif // jb_itch5_cross_type_hpp

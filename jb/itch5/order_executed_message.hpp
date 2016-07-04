@@ -44,4 +44,4 @@ std::ostream& operator<<(
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_order_executed_message_hpp */
+#endif // jb_itch5_order_executed_message_hpp

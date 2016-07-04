@@ -193,4 +193,4 @@ std::ostream& operator<<(std::ostream& os, stock_directory_message const& x);
 } // namespace itch5
 } // namespace jb
 
-#endif /* jb_itch5_stock_directory_message_hpp */
+#endif // jb_itch5_stock_directory_message_hpp
