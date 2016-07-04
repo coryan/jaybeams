@@ -10,6 +10,7 @@ RUN apt-get install -y \
     doxygen \
     g++-5 \
     gcc-5 \
+    clang-3.6 \
     git \
     lcov \
     libboost1.55-all-dev \
@@ -20,6 +21,8 @@ RUN apt-get install -y \
     wget \
     xz-utils
 
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 90
+RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 90
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
 RUN update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
@@ -39,3 +42,4 @@ RUN cd skye-0.3 && \
 
 WORKDIR /root
 RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
+
