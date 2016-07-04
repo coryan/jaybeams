@@ -77,5 +77,5 @@ std::ostream& operator<<(std::ostream& os, as_hh_mm_ss_u const& x);
 
 } // namespace jb
 
-#endif // jb_timestamp_hpp
+#endif // jb_as_hhmmss_hpp
 
