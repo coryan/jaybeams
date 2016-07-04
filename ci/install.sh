@@ -49,7 +49,9 @@ sudo apt-get -qq -y install \
 # autoconf-archive, we need support for C++-14 detection ...
 wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.20.tar.xz		
 tar -xf autoconf-archive-2016.03.20.tar.xz		
-(cd autoconf-archive-2016.03.20 && ./configure --prefix=/usr && make && make install)
+(cd autoconf-archive-2016.03.20 && ./configure --prefix=/usr && \
+        make && \
+        sudo make install)
 
 # ... manually download Skye (one of my own libraries), extract it,
 # compile it (it is a header-only library, but the tests are executed
