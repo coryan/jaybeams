@@ -31,7 +31,8 @@ sudo apt-get -qq -y install \
     xz-utils
 
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 90
-sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 90
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
 sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
 
