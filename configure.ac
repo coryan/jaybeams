@@ -28,7 +28,7 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 
 # ... the code is going to be C++11, make sure the compiler supports it ...
-AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
+AX_CXX_COMPILE_STDCXX_14(noext, mandatory)
 
 # ... enable all warnings ...
 AX_CXXFLAGS_WARN_ALL
