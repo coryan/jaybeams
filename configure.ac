@@ -41,6 +41,7 @@ AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
 AX_BOOST_BASE([1.55],[],[
   AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
 ])
+AX_BOOST_ASIO
 AX_BOOST_LOG
 AX_BOOST_LOG_SETUP
 AX_BOOST_FILESYSTEM
