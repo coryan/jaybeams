@@ -36,17 +36,26 @@ class replayer {
 
   /// Initialize an empty handler
   replayer(boost::asio::ip::udp::socket&& s,
-           boost::asio::ip::udp::endpoint const& ep) {}
+           boost::asio::ip::udp::endpoint const& ep)
+      : socket_(std::move(s))
+      , endpoint_(ep)
+  {}
 
   /// Handle all messages as blobs
   void handle_unknown(
       time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
-      char const* msgbuf, std::size_t msglen) {}
+      char const* msgbuf, std::size_t msglen) {
+    socket_.send_to(boost::asio::buffer(msgbuf, msglen), endpoint_);
+  }
 
   /// Return the current timestamp for delay measurements
   time_point now() const {
     return std::chrono::steady_clock::now();
   }
+
+ private:
+  boost::asio::ip::udp::socket socket_;
+  boost::asio::ip::udp::endpoint endpoint_;
 };
 
 } // anonymous namespace
@@ -79,7 +88,7 @@ int main(int argc, char* argv[]) try {
 
   return 0;
 } catch(jb::usage const& u) {
-  std::cerr << u.what() << std::endl;
+  std::cout << u.what() << std::endl;
   return u.exit_status();
 } catch(std::exception const& ex) {
   std::cerr << "Standard exception raised: " << ex.what() << std::endl;
