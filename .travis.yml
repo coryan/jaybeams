@@ -33,6 +33,7 @@ script:
   - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
   - make
   - make check
+  - cat config.log
 
 after_success:
 # Upload code coverage results to coveralls.io
