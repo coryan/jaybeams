@@ -48,7 +48,7 @@ env:
   matrix:
     - COMPILER=gcc   VARIANT=opt  GENDOCS=no
     - COMPILER=gcc   VARIANT=cov  GENDOCS=no
-    - COMPILER=clang VARIANT=dbg  GENDOCS=yes
+    - COMPILER=gcc   VARIANT=dbg  GENDOCS=yes
     - COMPILER=clang VARIANT=opt  GENDOCS=no
   global:
 # TODO(#1) change this to a robot account
