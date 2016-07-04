@@ -2,6 +2,10 @@
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/tokenizer.hpp>
+
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
@@ -31,7 +35,8 @@ class replayer {
   //@}
 
   /// Initialize an empty handler
-  replayer() {}
+  replayer(boost::asio::ip::udp::socket&& s,
+           boost::asio::ip::udp::endpoint const& ep) {}
 
   /// Handle all messages as blobs
   void handle_unknown(
@@ -52,11 +57,25 @@ int main(int argc, char* argv[]) try {
       argc, argv, std::string("itch5moldreplay.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
+  boost::tokenizer<boost::char_separator<char>> tok(
+      cfg.destination(), boost::char_separator<char>(":"));
+  std::vector<std::string> tokens(tok.begin(), tok.end());
+  if (tokens.size() != 2) {
+    throw jb::usage(
+        "--destination must be in host:port format.", 1);
+  }
+
+  boost::asio::io_service io_service;
+  using boost::asio::ip::udp;
+  udp::socket s(io_service, udp::endpoint(udp::v4(), 0));
+  udp::resolver resolver(io_service);
+  udp::endpoint endpoint = *resolver.resolve({udp::v4(), tokens[0], tokens[1]});
+  
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
 
-  replayer replay;
-  jb::itch5::process_iostream_mlist<replayer>(in, replay);
+  replayer rep(std::move(s), endpoint);
+  jb::itch5::process_iostream_mlist<replayer>(in, rep);
 
   return 0;
 } catch(jb::usage const& u) {
