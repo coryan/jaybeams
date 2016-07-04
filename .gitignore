@@ -46,7 +46,9 @@ tsan/
 asan/
 ubsan/
 opt/
+ub14/
+ub16/
+fc23/
 
 # Generated documentation goes here
 doc/html/
-u14/
