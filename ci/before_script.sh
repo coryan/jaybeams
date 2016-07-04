@@ -5,11 +5,11 @@
 
 # ... set the CXX and CC variables based on COMPILER and VERSION
 if [ "x${COMPILER?}" == "xgcc" ]; then
-    CXX=g++${VERSION}
-    CC=gcc${VERSION}
+    CXX=g++
+    CC=gcc
 elif [ "x${COMPILER?}" == "xclang" ]; then
-    CXX=clang++${VERSION}
-    CC=clang${VERSION}
+    CXX=clang++
+    CC=clang
 else
     echo "Unknown compiler ${COMPILER?}"
     exit 1

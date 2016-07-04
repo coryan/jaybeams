@@ -9,32 +9,17 @@ if [ "x${TRAVIS_BUILD_DIR}" != "x" -a "x${VARIANT}" == "xcov" ]; then
   gem install coveralls-lcov
 fi
 
-# ... make sure VERSION is set to something, even if it is an empty string ...
-if [ "x${VERSION}" == "x" ]; then
-    VERSION=""
-fi
-
 sudo apt-get install -y software-properties-common
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo apt-get update
-
-# ... only install the compiler that we are planning to use ...
-if [ "x${COMPILER?}" == "xclang" ]; then
-    sudo apt-get -qq -y install clang${VERSION?}
-elif [ "x${COMPILER?}" == "xgcc" ]; then
-    sudo apt-get -qq -y install g++${VERSION?} gcc${VERSION}
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++${VERSION?} 90
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc${VERSION?} 90
-    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov${VERSION?} 90
-else
-    echo "Unknown compiler ${COMPILER?}"
-    exit 1
-fi
 
 # ... install all the dependencies ...
 sudo apt-get -qq -y install \
     automake \
     doxygen \
+    g++-5 \
+    gcc-5 \
+    clang-3.6 \
     git \
     lcov \
     libboost1.55-all-dev \
@@ -44,6 +29,11 @@ sudo apt-get -qq -y install \
     tar \
     wget \
     xz-utils
+
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 90
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
+sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
 
 # ... manually download and install a recent version of
 # autoconf-archive, we need support for C++-14 detection ...
