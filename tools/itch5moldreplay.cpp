@@ -43,9 +43,8 @@ class replayer {
 
   /// Handle all messages as blobs
   void handle_unknown(
-      time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
-      char const* msgbuf, std::size_t msglen) {
-    socket_.send_to(boost::asio::buffer(msgbuf, msglen), endpoint_);
+      time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
+    socket_.send_to(boost::asio::buffer(msg.buf(), msg.len()), endpoint_);
   }
 
   /// Return the current timestamp for delay measurements

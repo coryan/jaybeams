@@ -46,7 +46,7 @@ class jb::itch5::message_handler_concept {
    * @param m the message itself
    */
   template<typename message_type_t> void handle_message(
-      time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point const& recv_ts, std::uint64_t msgcnt, std::size_t msgoffset,
       message_type_t const& m);
 
   /**
@@ -57,12 +57,8 @@ class jb::itch5::message_handler_concept {
    *
    * @param recv_ts the timestamp when the message was received by the
    * processor.
-   * @param msgbuf the raw contents of the message
-   * @param msglen the length of the message
-   * @param msgcnt the number of messages received before this message
-   * @param msgoffset the number of bytes received before this message
+   * @param msg the unknown message details and contents
    */
   void handle_unknown(
-      time_point const& recv_ts, long msgcnt, std::size_t msgoffset,
-      char const* msgbuf, std::size_t msglen);
+      time_point const& recv_ts, unknown_message const& msg);
 };

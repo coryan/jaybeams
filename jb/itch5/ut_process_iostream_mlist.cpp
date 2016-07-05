@@ -18,8 +18,8 @@ class mock_message_handler {
   typedef int time_point;
 
   skye::mock_function<int()> now;
-  skye::mock_function<void(int const&, long, std::size_t,
-                           char const*, std::size_t)> handle_unknown;
+  skye::mock_function<void(
+      int const&, jb::itch5::unknown_message const&)> handle_unknown;
 
   skye::mock_template_function<void> handle_message;
 };

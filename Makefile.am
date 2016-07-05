@@ -336,7 +336,8 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/stock_trading_action_message.hpp \
   jb/itch5/system_event_message.hpp \
   jb/itch5/timestamp.hpp \
-  jb/itch5/trade_message.hpp
+  jb/itch5/trade_message.hpp \
+  jb/itch5/unknown_message.hpp
 
 jb_libitch5_a_LIBADD =
 

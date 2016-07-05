@@ -2,6 +2,7 @@
 #define jb_itch5_process_buffer_mlist_hpp
 
 #include <jb/itch5/decoder.hpp>
+#include <jb/itch5/unknown_message.hpp>
 
 #include <cstddef>
 
@@ -53,9 +54,10 @@ class process_buffer_mlist<message_handler> {
   static void process(
       message_handler& handler,
       typename message_handler::time_point const& recv_ts,
-      long msgcnt, std::size_t msgoffset,
+      std::uint64_t msgcnt, std::size_t msgoffset,
       char const* msgbuf, std::size_t msglen) {
-    handler.handle_unknown(recv_ts, msgcnt, msgoffset, msgbuf, msglen);
+    handler.handle_unknown(
+        recv_ts, jb::itch5::unknown_message(msgcnt, msgoffset, msglen, msgbuf));
   }
 };
 
@@ -89,7 +91,7 @@ class process_buffer_mlist<message_handler,head_t,tail_t...> {
   static void process(
       message_handler& handler,
       typename message_handler::time_point const& recv_ts,
-      long msgcnt, std::size_t msgoffset,
+      std::uint64_t msgcnt, std::size_t msgoffset,
       char const* msgbuf, std::size_t msglen) {
     // if the message received matches the head then ...
     if (msgbuf[0] == head_t::message_type) {

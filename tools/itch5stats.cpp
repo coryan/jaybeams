@@ -45,10 +45,11 @@ class itch5_stats_handler {
   }
 
   void handle_unknown(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      char const* msgbuf, std::size_t msglen) {
-    JB_LOG(error) << "Unknown message type '" << msgbuf[0] << "'"
-                  << " in msgcnt=" << msgcnt << ", msgoffset=" << msgoffset;
+      time_point recv_ts, jb::itch5::unknown_message const& msg) {
+    char msgtype = *static_cast<char const*>(msg.buf());
+    JB_LOG(error) << "Unknown message type '" << msgtype << "'("
+                  << int(msgtype) << ") in msgcnt=" << msg.count()
+                  << ", msgoffset=" << msg.offset();
   }
 
  private:

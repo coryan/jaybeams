@@ -292,7 +292,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
   now = tested.now();
   char const unknownbuf[] = "foobarbaz";
   tested.handle_unknown(
-      now, ++msgcnt, 0, unknownbuf, sizeof(unknownbuf) - 1);
+      now, jb::itch5::unknown_message(
+          ++msgcnt, 0, sizeof(unknownbuf) - 1, unknownbuf));
 
   // ... a completely new symbol might be slow, but should work ...
   now = tested.now();

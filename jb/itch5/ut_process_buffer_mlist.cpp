@@ -17,8 +17,8 @@ class mock_message_handler {
   typedef int time_point;
 
   skye::mock_function<int()> now;
-  skye::mock_function<void(int const&, long, std::size_t,
-                           char const*, std::size_t)> handle_unknown;
+  skye::mock_function<
+    void(int const&, jb::itch5::unknown_message const&)> handle_unknown;
 
   skye::mock_template_function<void> handle_message;
 };
@@ -38,10 +38,6 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_empty) {
       .once();
   BOOST_CHECK_EQUAL(
       std::get<0>(handler.handle_unknown.at(0)), 42);
-  BOOST_CHECK_EQUAL(
-      std::get<1>(handler.handle_unknown.at(0)), 2);
-  BOOST_CHECK_EQUAL(
-      std::get<2>(handler.handle_unknown.at(0)), 100);
 }
 
 /**
@@ -72,10 +68,6 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_single) {
       .once();
   BOOST_CHECK_EQUAL(
       std::get<0>(handler.handle_unknown.at(0)), 4242);
-  BOOST_CHECK_EQUAL(
-      std::get<1>(handler.handle_unknown.at(0)), 3);
-  BOOST_CHECK_EQUAL(
-      std::get<2>(handler.handle_unknown.at(0)), 200);
 }
 
 /**

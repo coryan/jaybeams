@@ -92,10 +92,11 @@ void jb::itch5::compute_inside::handle_message(
 }
 
 void jb::itch5::compute_inside::handle_unknown(
-    time_point recv_ts, long msgcnt, std::size_t msgoffset,
-    char const* msgbuf, std::size_t msglen) {
-  JB_LOG(error) << "Unknown message type '" << msgbuf[0] << "'"
-                << " in msgcnt=" << msgcnt << ", msgoffset=" << msgoffset;
+    time_point recv_ts, unknown_message const& msg) {
+  char msgtype = *static_cast<char const*>(msg.buf());
+  JB_LOG(error) << "Unknown message type '" << msgtype << "'("
+                << int(msgtype) << ") in msgcnt=" << msg.count()
+                << ", msgoffset=" << msg.offset();
 }
 
 jb::itch5::compute_inside::update_result

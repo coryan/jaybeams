@@ -27,7 +27,7 @@ namespace itch5 {
 template<typename message_handler, typename... message_types>
 void process_iostream_mlist(std::istream& is, message_handler& handler) {
   std::size_t msgoffset = 0;
-  for (long msgcnt = 0; is.good(); ++msgcnt) {
+  for (std::uint64_t msgcnt = 0; is.good(); ++msgcnt) {
     // We only use the side-effects of this call, particularly during
     // testing.
     (void) handler.now();

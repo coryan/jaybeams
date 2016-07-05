@@ -10,6 +10,7 @@
 #include <jb/itch5/order_executed_price_message.hpp>
 #include <jb/itch5/order_replace_message.hpp>
 #include <jb/itch5/stock_directory_message.hpp>
+#include <jb/itch5/unknown_message.hpp>
 
 #include <boost/functional/hash.hpp>
 #include <chrono>
@@ -136,9 +137,7 @@ class compute_inside {
   /**
    * Log any unknown message types.
    */
-  void handle_unknown(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      char const* msgbuf, std::size_t msglen);
+  void handle_unknown(time_point recv_ts, unknown_message const& msg);
 
   /**
    * A convenient container for per-order data.

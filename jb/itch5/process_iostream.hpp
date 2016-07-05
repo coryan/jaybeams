@@ -22,6 +22,7 @@
 #include <jb/itch5/stock_trading_action_message.hpp>
 #include <jb/itch5/system_event_message.hpp>
 #include <jb/itch5/trade_message.hpp>
+#include <jb/itch5/unknown_message.hpp>
 
 namespace jb {
 namespace itch5 {
