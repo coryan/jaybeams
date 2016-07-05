@@ -43,6 +43,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_ipo_quoting_period_update_message \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
+  jb/itch5/ut_mold_udp_pacer \
   jb/itch5/ut_mwcb_breach_message \
   jb/itch5/ut_mwcb_decline_level_message \
   jb/itch5/ut_net_order_imbalance_indicator_message \
@@ -541,6 +542,10 @@ jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_message_header_SOURCES = jb/itch5/ut_message_header.cpp
 jb_itch5_ut_message_header_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_message_header
 jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
+jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer
+jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
 jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message
