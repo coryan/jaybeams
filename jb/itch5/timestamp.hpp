@@ -45,7 +45,7 @@ void check_timestamp_range<true>(timestamp const& t);
 template<bool validate>
 struct decoder<validate,timestamp> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static timestamp r(std::size_t size, char const* buf, std::size_t offset) {
+  static timestamp r(std::size_t size, void const* buf, std::size_t offset) {
     check_offset<validate>("timestamp", size, offset, 6);
     std::uint64_t hi = decoder<false,std::uint32_t>::r(size, buf, offset);
     std::uint64_t lo = decoder<false,std::uint16_t>::r(size, buf, offset + 4);

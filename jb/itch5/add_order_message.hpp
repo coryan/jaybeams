@@ -28,7 +28,7 @@ template<bool V>
 struct decoder<V,add_order_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static add_order_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     add_order_message x;
     x.header =
         decoder<V,message_header>       ::r(size, buf, off + 0);

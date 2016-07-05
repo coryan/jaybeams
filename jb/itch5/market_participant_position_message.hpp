@@ -58,7 +58,7 @@ template<bool V>
 struct decoder<V,market_participant_position_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static market_participant_position_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     market_participant_position_message x;
     x.header =
         decoder<V,message_header>             ::r(size, buf, off + 0);

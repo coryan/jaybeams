@@ -2,7 +2,7 @@
 #define jb_itch5_char_list_field_hpp
 
 #include <jb/itch5/char_list_validator.hpp>
-#include <jb/itch5/decoder.hpp>
+#include <jb/itch5/base_decoders.hpp>
 
 #include <boost/operators.hpp>
 
@@ -79,9 +79,9 @@ template<bool validate, int...V>
 struct decoder<validate,char_list_field<V...>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static char_list_field<V...> r(
-      std::size_t size, char const* buffer, std::size_t offset) {
+      std::size_t size, void const* buf, std::size_t offset) {
     char_list_field<V...> tmp;
-    tmp.value_ = buffer[offset];
+    tmp.value_ = decoder<false,std::uint8_t>::r(size, buf, offset);
 
     char_list_validator<validate,V...> validator;
     validator(tmp.as_int());

@@ -42,7 +42,7 @@ template<bool V>
 struct decoder<V,add_order_mpid_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static add_order_mpid_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     add_order_mpid_message x;
     x =             decoder<V,add_order_message> ::r(size, buf, off + 0);
     x.attribution = decoder<V,mpid_t>            ::r(size, buf, off + 36);

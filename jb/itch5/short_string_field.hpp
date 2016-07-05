@@ -163,12 +163,12 @@ template<bool validate, std::size_t wsize, typename F>
 struct decoder<validate, short_string_field<wsize,F>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static short_string_field<wsize,F> r(
-      std::size_t size, char const* buffer, std::size_t offset) {
+      std::size_t size, void const* buffer, std::size_t offset) {
     jb::itch5::check_offset<validate>(
         "short_string_field<>", size, offset, wsize);
 
     short_string_field<wsize,F> tmp;
-    tmp.assign(buffer + offset);
+    tmp.assign(static_cast<char const*>(buffer) + offset);
     if (validate) { tmp.validate(); }
     return tmp;
   }

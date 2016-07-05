@@ -96,9 +96,9 @@ template<bool validate, typename wire_type_t, std::intmax_t denom_v>
 struct decoder<validate,price_field<wire_type_t,denom_v>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static price_field<wire_type_t,denom_v> r(
-      std::size_t size, char const* msg, std::size_t offset) {
+      std::size_t size, void const* buf, std::size_t offset) {
     price_field<wire_type_t,denom_v> tmp(
-        decoder<validate,wire_type_t>::r(size, msg, offset));
+        decoder<validate,wire_type_t>::r(size, buf, offset));
     return tmp;
   }
 };

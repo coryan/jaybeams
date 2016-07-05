@@ -29,7 +29,7 @@ template<bool validate>
 struct decoder<validate,system_event_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static system_event_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     system_event_message x;
     x.header     = decoder<validate,message_header>::r(size, buf, off + 0);
     x.event_code = decoder<validate,event_code_t>  ::r(size, buf, off + 11);

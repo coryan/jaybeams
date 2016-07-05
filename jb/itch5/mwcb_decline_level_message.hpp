@@ -29,7 +29,7 @@ template<bool V>
 struct decoder<V,mwcb_decline_level_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static mwcb_decline_level_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     mwcb_decline_level_message x;
     x.header =
         decoder<V,message_header>  ::r(size, buf, off + 0);

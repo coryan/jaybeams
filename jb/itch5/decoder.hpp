@@ -34,7 +34,7 @@ struct decoder {
    *
    * @throws std::runtime_error if the message cannot be parsed.
    */
-  static T r(std::size_t size, char const* msg, std::size_t offset);
+  static T r(std::size_t size, void const* msg, std::size_t offset);
 };
 
 } // namespace itch5

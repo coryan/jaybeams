@@ -56,7 +56,7 @@ template<bool V>
 struct decoder<V,order_executed_price_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static order_executed_price_message r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     order_executed_price_message x;
     x =
         decoder<V,order_executed_message> ::r(size, buf, off + 0);

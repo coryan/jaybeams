@@ -62,7 +62,7 @@ template<bool validate>
 struct decoder<validate,message_header> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static message_header r(
-      std::size_t size, char const* buf, std::size_t off) {
+      std::size_t size, void const* buf, std::size_t off) {
     message_header x;
     x.message_type = decoder<validate,std::uint8_t> ::r(size, buf, off + 0);
     x.stock_locate = decoder<validate,std::uint16_t>::r(size, buf, off + 1);
