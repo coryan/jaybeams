@@ -1,7 +1,9 @@
+#include <jb/itch5/encoder.hpp>
 #include <jb/itch5/message_header.hpp>
 #include <jb/itch5/short_string_field.hpp>
 #include <jb/itch5/testing_data.hpp>
 #include <jb/itch5/unknown_message.hpp>
+
 #include <jb/assert_throw.hpp>
 
 #include <chrono>
@@ -15,10 +17,13 @@
 #include <skye/mock_template_function.hpp>
 
 struct mock_socket {
-  skye::mock_function<void(int,std::vector<char>)> calls;
+  std::vector<std::vector<char>> packets;
 
   template<typename ConstBufferSequence>
   void send(ConstBufferSequence const& buffers) {
+    std::vector<char> packet(boost::asio::buffer_size(buffers));
+    buffer_copy(boost::asio::buffer(packet), buffers);
+    packets.push_back(packet);
   }
 };
 
@@ -192,21 +197,15 @@ class mold_udp_pacer {
     // and over.
     // ... write down the sequence number field of the packet header,
     // this is the number of the first block ...
-    std::uint8_t* seqno = boost::asio::buffer_cast<std::uint8_t*>(
-        packet_ + sequence_number_offset);
-    seqno[0] = (first_block_ & 0xff);
-    seqno[1] = (first_block_ & 0xff00) >> 8;
-    seqno[2] = (first_block_ & 0xff0000) >> 16;
-    seqno[3] = (first_block_ & 0xff000000) >> 24;
-    seqno[4] = (first_block_ & 0xff00000000) >> 32;
-    seqno[5] = (first_block_ & 0xff0000000000) >> 40;
-    seqno[6] = (first_block_ & 0xff000000000000) >> 48;
-    seqno[7] = (first_block_ & 0xff00000000000000) >> 56;
+    auto seqno = packet_ + sequence_number_offset;
+    encoder<true,std::uint64_t>::w(
+        boost::asio::buffer_size(seqno),
+        boost::asio::buffer_cast<void*>(seqno), 0, first_block_);
     // ... then write down the block field ...
-    std::uint8_t* blkcnt = boost::asio::buffer_cast<std::uint8_t*>(
-        packet_ + block_count_offset);
-    blkcnt[0] = (block_count_ & 0xff);
-    blkcnt[1] = (block_count_ & 0xff00) >> 8;
+    auto blkcnt = packet_ + block_count_offset;
+    encoder<true,std::uint16_t>::w(
+        boost::asio::buffer_size(blkcnt),
+        boost::asio::buffer_cast<void*>(blkcnt), 0, block_count_);
   }
 
   /**
@@ -218,7 +217,7 @@ class mold_udp_pacer {
     sink.send(boost::asio::buffer(packet_, packet_size_));
     first_block_ = first_block_ + block_count_;
     block_count_ = 0;
-    packet_size_ = 0;
+    packet_size_ = header_size;
   }
 
   /**
@@ -263,7 +262,8 @@ struct mock_clock : public std::chrono::steady_clock {
 skye::mock_function<mock_clock::time_point()> mock_clock::now;
 
 /**
- * @test Verify that the packet pacer works as expected.
+ * @test Verify that the packet pacer works as expected for a simple
+ * stream of messages.
  */
 BOOST_AUTO_TEST_CASE(packet_pacer_basic) {
 
@@ -271,15 +271,36 @@ BOOST_AUTO_TEST_CASE(packet_pacer_basic) {
   mock_socket socket;
   jb::itch5::mold_udp_pacer<mock_clock> p;
 
-  std::size_t const msglen = 24;
-  char msgbuf[msglen] = {0};
-
   mock_clock::now.action([]() {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
     });
 
+  /// Send 3 messages every 10 usecs, of different sizes and types
+  auto m1 = jb::itch5::testing::create_message(
+      'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
   p.handle_message(
-      mock_clock::time_point(), jb::itch5::unknown_message(
-          0, 0, msglen, msgbuf), socket, mock_sleep);
+      mock_clock::now(), jb::itch5::unknown_message(
+          0, 0, m1.size(), &m1[0]), socket, mock_sleep);
+
+  auto m2 = jb::itch5::testing::create_message(
+      'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(
+          0, 0, m2.size(), &m2[0]), socket, mock_sleep);
+
+  auto m3 = jb::itch5::testing::create_message(
+      'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(
+          0, 0, m3.size(), &m3[0]), socket, mock_sleep);
+
+  p.flush(socket);
+
+  auto hdrsize = p.header_size;
+  BOOST_REQUIRE_GE(socket.packets.size(), 3);
+  BOOST_CHECK_EQUAL(socket.packets.size(), 3);
+  BOOST_CHECK_EQUAL(100 + 2 + hdrsize, socket.packets.at(0).size());
+  BOOST_CHECK_EQUAL(90 + 2 + hdrsize, socket.packets.at(1).size());
+  BOOST_CHECK_EQUAL(80 + 2 + hdrsize, socket.packets.at(2).size());
 }

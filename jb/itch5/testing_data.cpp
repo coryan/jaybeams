@@ -1,4 +1,8 @@
 #include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/timestamp.hpp>
+
+#include <sstream>
+#include <stdexcept>
 
 namespace jb {
 namespace itch5 {
@@ -292,6 +296,30 @@ std::pair<char const*, std::size_t> trade() {
       ;
   std::size_t const bufsize = sizeof(buf) - 1;
   return std::make_pair(buf, bufsize);
+}
+
+std::vector<char> create_message(
+    int message_type, jb::itch5::timestamp ts, std::size_t total_size) {
+  if (total_size < 11) {
+    throw std::range_error("ITCH-5.x packets must be at least 11 bytes long");
+  }
+  std::vector<char> msg(total_size);
+  if (message_type < 0 or message_type > 255) {
+    std::ostringstream os;
+    os << "out of range message type <" << message_type
+       << "> valid range is [0,255]";
+    throw std::range_error(os.str());
+  }
+  void* buf = &msg[0];
+  // message type
+  jb::itch5::encoder<true,std::uint8_t>::w(total_size, buf, 0, message_type);
+  // stock locate
+  jb::itch5::encoder<true,std::uint16_t>::w(total_size, buf, 1, 0);
+  // tracking number
+  jb::itch5::encoder<true,std::uint16_t>::w(total_size, buf, 3, 0);
+  // timestamp
+  jb::itch5::encoder<true,jb::itch5::timestamp>::w(total_size, buf, 5, ts);
+  return msg;
 }
 
 } // namespace testing

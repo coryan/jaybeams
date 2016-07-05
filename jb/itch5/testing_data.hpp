@@ -4,9 +4,13 @@
 #include <chrono>
 #include <cstddef>
 #include <utility>
+#include <vector>
 
 namespace jb {
 namespace itch5 {
+
+struct timestamp;
+
 namespace testing {
 
 /// Return the expected timestamp for all the test messages
@@ -42,6 +46,16 @@ std::pair<char const*, std::size_t> stock_trading_action();
 std::pair<char const*, std::size_t> system_event();
 std::pair<char const*, std::size_t> trade();
 //@}
+
+/**
+ * Generate test messages with a more-or-less valid header.
+ *
+ * For most tests we only need messages with a valid timestamp and
+ * message type and a known length.  This is a simple function to
+ * generate such messages.
+ */
+std::vector<char> create_message(
+    int message_type, jb::itch5::timestamp ts, std::size_t total_size);
 
 } // namespace testing
 } // namespace itch5
