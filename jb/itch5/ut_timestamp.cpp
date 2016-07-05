@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(encode_timestamp) {
   using jb::itch5::encoder;
 
   using namespace std::chrono;
-  jb::itch5::timestamp expected{
+  timestamp expected{
     hours(9) + minutes(31) + seconds(10) + nanoseconds(1234)};
 
   char buffer[32];
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(encode_timestamp) {
   actual = decoder<false,timestamp>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual.ts.count(), expected.ts.count());
 
-  jb::itch5::timestamp ts;
+  timestamp ts{seconds(100)};
   BOOST_CHECK_NO_THROW((encoder<true,timestamp>::w(16, buffer, 2, ts)));
   BOOST_CHECK_NO_THROW((encoder<true,timestamp>::w(16, buffer, 10, ts)));
   BOOST_CHECK_THROW(
