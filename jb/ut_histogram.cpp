@@ -96,6 +96,13 @@ BOOST_AUTO_TEST_CASE(histogram_underflow) {
   BOOST_CHECK_EQUAL(h.overflow_count(), 0);
   BOOST_CHECK_EQUAL(h.observed_min(), 5);
   BOOST_CHECK_EQUAL(h.observed_max(), 10);
+
+  h.weighted_sample(50, 0);
+  BOOST_CHECK_EQUAL(h.nsamples(), 6);
+  BOOST_CHECK_EQUAL(h.underflow_count(), 6);
+  BOOST_CHECK_EQUAL(h.overflow_count(), 0);
+  BOOST_CHECK_EQUAL(h.observed_min(), 5);
+  BOOST_CHECK_EQUAL(h.observed_max(), 10);
 }
 
 /**
