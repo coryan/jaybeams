@@ -101,3 +101,48 @@ BOOST_AUTO_TEST_CASE(stream_timestamp) {
     BOOST_CHECK_EQUAL(os.str(), "160000.000000000");
   }
 }
+
+/**
+ * @test Verify that jb::itch5::encoder works for jb::itch5::timestamp
+ * as expected.
+ */
+BOOST_AUTO_TEST_CASE(encode_timestamp) {
+  using jb::itch5::timestamp;
+  using jb::itch5::decoder;
+  using jb::itch5::encoder;
+
+  using namespace std::chrono;
+  jb::itch5::timestamp expected{
+    hours(9) + minutes(31) + seconds(10) + nanoseconds(1234)};
+
+  char buffer[32];
+  encoder<true,timestamp>::w(16, buffer, 0, expected);
+  auto actual = decoder<true,timestamp>::r(16, buffer, 0);
+  BOOST_CHECK_EQUAL(actual.ts.count(), expected.ts.count());
+
+  encoder<false,timestamp>::w(16, buffer, 0, expected);
+  actual = decoder<false,timestamp>::r(16, buffer, 0);
+  BOOST_CHECK_EQUAL(actual.ts.count(), expected.ts.count());
+
+  jb::itch5::timestamp ts;
+  BOOST_CHECK_NO_THROW((encoder<true,timestamp>::w(16, buffer, 2, ts)));
+  BOOST_CHECK_NO_THROW((encoder<true,timestamp>::w(16, buffer, 10, ts)));
+  BOOST_CHECK_THROW(
+      (encoder<true,timestamp>::w(16, buffer, 11, ts)), std::runtime_error);
+  BOOST_CHECK_NO_THROW((encoder<false,timestamp>::w(16, buffer, 11, ts)));
+}
+
+/**
+ * @test Verify that the jb::itch5::decoder detects out of range
+ * errors for jb::itch5::timestamp.
+ */
+BOOST_AUTO_TEST_CASE(encode_timestamp_range) {
+  using jb::itch5::timestamp;
+  using jb::itch5::encoder;
+  char buffer[32];
+
+  timestamp ts{ std::chrono::hours(48) };
+  BOOST_CHECK_THROW(
+      (encoder<true,timestamp>::w(16, buffer, 0, ts)), std::runtime_error);
+  BOOST_CHECK_NO_THROW((encoder<false,timestamp>::w(16, buffer, 0, ts)));
+}
