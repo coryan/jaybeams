@@ -22,7 +22,7 @@ struct encoder<validate,std::uint8_t> {
 template<bool validate>
 struct encoder<validate,std::uint16_t> {
   /// Please see the generic documentation for jb::itch5::encoder<>::w()
-  static std::uint16_t w(
+  static void w(
       std::size_t size, void* msg, std::size_t offset, std::uint16_t x) {
     check_offset<validate>("encode std::uint16_t", size, offset, 2);
     encoder<false,std::uint8_t>::w(
@@ -36,7 +36,7 @@ struct encoder<validate,std::uint16_t> {
 template<bool validate>
 struct encoder<validate,std::uint32_t> {
   /// Please see the generic documentation for jb::itch5::encoder<>::w()
-  static std::uint32_t w(
+  static void w(
       std::size_t size, void* msg, std::size_t offset, std::uint32_t x) {
     check_offset<validate>("encode std::uint32_t", size, offset, 4);
     encoder<false,std::uint16_t>::w(
@@ -50,13 +50,13 @@ struct encoder<validate,std::uint32_t> {
 template<bool validate>
 struct encoder<validate,std::uint64_t> {
   /// Please see the generic documentation for jb::itch5::encoder<>::w()
-  static std::uint64_t w(
+  static void w(
       std::size_t size, void* msg, std::size_t offset, std::uint64_t x) {
     check_offset<validate>("encode std::uint32_t", size, offset, 8);
     encoder<false,std::uint32_t>::w(
-        size, msg, offset, std::uint16_t(x >> 32));
+        size, msg, offset, std::uint32_t(x >> 32));
     encoder<false,std::uint32_t>::w(
-        size, msg, offset, std::uint16_t(x & 0xffffffff));
+        size, msg, offset + 4, std::uint32_t(x & 0xffffffff));
   }
 };
 

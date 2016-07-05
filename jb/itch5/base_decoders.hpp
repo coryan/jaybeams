@@ -11,9 +11,9 @@ namespace itch5 {
 template<bool validate>
 struct decoder<validate,std::uint8_t> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static std::uint8_t r(std::size_t size, char const* msg, std::size_t offset) {
+  static std::uint8_t r(std::size_t size, void const* msg, std::size_t offset) {
     check_offset<validate>("std::uint8_t", size, offset, 1);
-    return msg[offset];
+    return static_cast<std::uint8_t const*>(msg)[offset];
   }
 };
 
@@ -22,7 +22,7 @@ template<bool validate>
 struct decoder<validate,std::uint16_t> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static std::uint16_t r(
-      std::size_t size, char const* msg, std::size_t offset) {
+      std::size_t size, void const* msg, std::size_t offset) {
     check_offset<validate>("std::uint16_t", size, offset, 2);
     std::uint8_t hi = decoder<false,std::uint8_t>::r(size, msg, offset);
     std::uint8_t lo = decoder<false,std::uint8_t>::r(size, msg, offset + 1);
@@ -35,7 +35,7 @@ template<bool validate>
 struct decoder<validate,std::uint32_t> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static std::uint32_t r(
-      std::size_t size, char const* msg, std::size_t offset) {
+      std::size_t size, void const* msg, std::size_t offset) {
     check_offset<validate>("std::uint32_t", size, offset, 4);
     std::uint16_t hi = decoder<false,std::uint16_t>::r(size, msg, offset);
     std::uint16_t lo = decoder<false,std::uint16_t>::r(size, msg, offset + 2);
@@ -48,7 +48,7 @@ template<bool validate>
 struct decoder<validate,std::uint64_t> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static std::uint64_t r(
-      std::size_t size, char const* msg, std::size_t offset) {
+      std::size_t size, void const* msg, std::size_t offset) {
     check_offset<validate>("std::uint32_t", size, offset, 8);
     std::uint32_t hi = decoder<false,std::uint32_t>::r(size, msg, offset);
     std::uint32_t lo = decoder<false,std::uint32_t>::r(size, msg, offset + 4);
