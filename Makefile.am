@@ -316,7 +316,9 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/ipo_quoting_period_update_message.hpp \
   jb/itch5/market_participant_position_message.hpp \
   jb/itch5/message_header.hpp \
+  jb/itch5/mold_udp_pacer.hpp \
   jb/itch5/mold_udp_pacer_config.hpp \
+  jb/itch5/mold_udp_protocol_constants.hpp \
   jb/itch5/mpid_field.hpp \
   jb/itch5/mwcb_breach_message.hpp \
   jb/itch5/mwcb_decline_level_message.hpp \
