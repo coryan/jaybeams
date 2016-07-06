@@ -81,6 +81,7 @@ class mold_udp_pacer {
       , packet_(rawbuf, rawbufsize)
       , packet_size_(mold_udp_protocol::header_size)
       , first_block_(0)
+      , first_block_ts_{std::chrono::microseconds(0)}
       , block_count_(0)
   {}
 
@@ -94,40 +95,44 @@ class mold_udp_pacer {
   void handle_message(
       time_point ts, unknown_message const& msg,
       message_sink_type& sink,
-      sleep_functor_type sleeper = std::this_thread::sleep_for) {
+      sleep_functor_type& sleeper = std::this_thread::sleep_for) {
     message_header msghdr = msg.decode_header<false>();
     
     // how long since the last send() call...
+    if (msg.count() == 0) {
+      // ... on the first message initialize the timestamp, otherwise
+      // we would likely flush the first message always ...
+      last_send_ = msghdr.timestamp;
+    }
     auto elapsed = msghdr.timestamp.ts - last_send_.ts;
-
-    if (elapsed <= max_delay_) {
+    if (elapsed < max_delay_) {
       // ... save the message to send later, potentially flushing if
       // the queue is big enough ...
-      coalesce(ts, msg, sink);
+      coalesce(ts, msg, msghdr.timestamp, sink);
       return;
     }
     // ... flush whatever is in the queue ...
-    flush(sink);
+    flush(msghdr.timestamp, sink);
     // ... until the timer has expired ...
     sleeper(elapsed);
     // ... send the message immediately ...
-    coalesce(ts, msg, sink);
+    coalesce(ts, msg, msghdr.timestamp, sink);
   }
 
   /// Flush the current messages, if any
   template<typename message_sink_type>
-  void flush(message_sink_type& sink) {
+  void flush(timestamp ts, message_sink_type& sink) {
     if (block_count_ == 0) {
       return;
     }
-    flush_impl(sink);
+    flush_impl(ts, sink);
   }
 
   /// Send a heartbeat messages, which can be simply the result of
   /// flushing the current pending messages
   template<typename message_sink_type>
   void heartbeat(message_sink_type& sink) {
-    flush_impl(sink);
+    flush_impl(first_block_ts_, sink);
   }
 
  private:
@@ -141,8 +146,8 @@ class mold_udp_pacer {
    */
   template<typename message_sink_type>
   void coalesce(
-      time_point ts, unknown_message const& msg,
-      message_sink_type& sink) {
+      time_point recv_ts, unknown_message const& msg,
+      timestamp ts, message_sink_type& sink) {
     // Make sure the message is small enough to be represented in a
     // single MoldUDP64 block ...
     JB_ASSERT_THROW(msg.len() < (1<<16));
@@ -153,9 +158,12 @@ class mold_udp_pacer {
     // ... if the packet is too full to accept the current message,
     // flush first ...
     if (packet_full(msg.len())) {
-      flush(sink);
-      first_block_ = msg.count();
+      flush(ts, sink);
     }
+    if (block_count_ == 0) {
+      first_block_ = msg.count();
+      first_block_ts_ = ts;
+    }      
     // ... append the message as a new block in the MoldUDP packet,
     // first update the block header ...
     boost::asio::mutable_buffer block_header = packet_ + packet_size_;
@@ -194,9 +202,10 @@ class mold_udp_pacer {
    * Implement the flush() and hearbeat() member functions.
    */
   template<typename message_sink_type>
-  void flush_impl(message_sink_type& sink) {
+  void flush_impl(timestamp ts, message_sink_type& sink) {
     fillup_header_fields();
     sink.send(boost::asio::buffer(packet_, packet_size_));
+    last_send_ = ts;
     first_block_ = first_block_ + block_count_;
     block_count_ = 0;
     packet_size_ = mold_udp_protocol::header_size;
@@ -231,6 +240,7 @@ class mold_udp_pacer {
   std::size_t packet_size_;
 
   std::uint32_t first_block_;
+  timestamp first_block_ts_;
   std::uint16_t block_count_;
 };
 
