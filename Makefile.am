@@ -45,6 +45,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
   jb/itch5/ut_mold_udp_pacer \
+  jb/itch5/ut_mold_udp_pacer_config \
   jb/itch5/ut_mwcb_breach_message \
   jb/itch5/ut_mwcb_decline_level_message \
   jb/itch5/ut_net_order_imbalance_indicator_message \
@@ -334,6 +335,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/process_buffer_mlist.hpp \
   jb/itch5/process_iostream_mlist.hpp \
   jb/itch5/process_iostream.hpp \
+  jb/itch5/protocol_constants.hpp \
   jb/itch5/reg_sho_restriction_message.hpp \
   jb/itch5/seconds_field.hpp \
   jb/itch5/short_string_field.hpp \
@@ -558,6 +560,10 @@ jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
 jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer
 jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_mold_udp_pacer_config_SOURCES = jb/itch5/ut_mold_udp_pacer_config.cpp
+jb_itch5_ut_mold_udp_pacer_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer_config
+jb_itch5_ut_mold_udp_pacer_config_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
 jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message

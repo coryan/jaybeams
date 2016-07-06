@@ -1,4 +1,5 @@
 #include <jb/itch5/mold_udp_pacer_config.hpp>
+#include <jb/itch5/mold_udp_protocol_constants.hpp>
 
 #include <chrono>
 #include <sstream>
@@ -66,19 +67,21 @@ void mold_udp_pacer_config::validate() const {
   // that is completely wrong for the type of data that MoldUDP64
   // carries ...
   int const max_udp_payload = (1<<16) - 1;
-  if (maximum_transmission_unit() < 0
+  if (maximum_transmission_unit() < mold_udp_protocol::header_size
       or maximum_transmission_unit() >= max_udp_payload) {
     std::ostringstream os;
-    os << "--maximum-transimission-unit must be in the [0,"
+    os << "--maximum-transimission-unit must be in the ["
+       << mold_udp_protocol::header_size << ","
        << max_udp_payload << "] range, value="
        << maximum_transmission_unit();
     throw jb::usage{os.str(), 1};
   }
 
-  // ... a delay for over a day makes no sense for this type of data ...
+  // ... a delay for more than 5 minutes makes no sense for this type
+  // of data ...
   using namespace std::chrono;
-  auto const day_in_usecs = duration_cast<microseconds>(hours(24));
-  if (maximum_delay_microseconds() < 0
+  auto const day_in_usecs = duration_cast<microseconds>(minutes(5));
+  if (maximum_delay_microseconds() <= 0
       or maximum_delay_microseconds() >= day_in_usecs.count()) {
     std::ostringstream os;
     os << "--maximum-delay-microseconds must be in the [0,"

@@ -1,5 +1,6 @@
 #include <jb/itch5/testing_data.hpp>
 #include <jb/itch5/timestamp.hpp>
+#include <jb/itch5/protocol_constants.hpp>
 
 #include <sstream>
 #include <stdexcept>
@@ -300,9 +301,15 @@ std::pair<char const*, std::size_t> trade() {
 
 std::vector<char> create_message(
     int message_type, jb::itch5::timestamp ts, std::size_t total_size) {
-  if (total_size < 11) {
-    throw std::range_error("ITCH-5.x packets must be at least 11 bytes long");
+  if (total_size < protocol::header_size
+      or total_size > protocol::max_message_size) {
+    std::ostringstream os;
+    os << "ITCH-5.x messages size in bytes must be in the ["
+       << protocol::header_size
+       << "," << protocol::max_message_size << "] range";
+    throw std::range_error(os.str());
   }
+
   std::vector<char> msg(total_size);
   if (message_type < 0 or message_type > 255) {
     std::ostringstream os;
