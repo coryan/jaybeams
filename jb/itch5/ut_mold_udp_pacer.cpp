@@ -263,7 +263,6 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
       .maximum_transmission_unit(1024));
 
   using namespace std::chrono;
-  int msgcnt = 0;
   jb::itch5::timestamp ts{std::chrono::microseconds(5)};
   auto m = jb::itch5::testing::create_message('A', ts, 100);
   p.handle_message(
@@ -289,7 +288,7 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
   // ... while a heartbeat() request should result in an additional
   // packet ...
   p.heartbeat(socket);
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 0);
+  BOOST_REQUIRE_EQUAL(socket.packets.size(), 2);
   BOOST_CHECK_EQUAL(hdrsize, socket.packets.at(1).size());
 }
 
