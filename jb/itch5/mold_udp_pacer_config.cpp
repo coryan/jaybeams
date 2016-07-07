@@ -67,7 +67,8 @@ void mold_udp_pacer_config::validate() const {
   // that is completely wrong for the type of data that MoldUDP64
   // carries ...
   int const max_udp_payload = (1<<16) - 1;
-  if (maximum_transmission_unit() < mold_udp_protocol::header_size
+  if (maximum_transmission_unit() < static_cast<int>(
+          mold_udp_protocol::header_size)
       or maximum_transmission_unit() >= max_udp_payload) {
     std::ostringstream os;
     os << "--maximum-transimission-unit must be in the ["
