@@ -12,23 +12,22 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=ubuntu14.04 COMPILER=g++-5
-
-    - os: linux
-      compiler: gcc
-      env: IMAGE=ubuntu16.04 COMPILER=g++-6 GENDOCS=yes
-
-services:
-  - docker
+      env: IMAGE=jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
 before_install:
   - docker ps -a
 
 install:
   # ... all dependencies are installed from the $HOME/deps directory
-  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} VARIANT=${VARIANT}
-  - docker pull coryan/jaybeamsdev-ubuntu14.04
+  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
+  - docker pull coryan/${IMAGE?}
 
 script:
   - uname -a
+  - BUILDIMAGE=$(./ci/create-build-image.sh)
   - docker images
+  - docker run --rm -it -v $PWD:/home/$USER/jaybeams $BUILDIMAGE /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
+  - if [ $? -ne 0 ]; then
+    cat build/test-suite.log || echo "Could not print test logs" ;
+    fi
+  - docker ps -a
