@@ -1,17 +1,16 @@
 #!/bin/sh
 
-(cat <<__EOF__
-FROM coryan/${IMAGE}
+docker build -q - <<__EOF__
+FROM coryan/${IMAGE?}
 ARG user
 ARG uid
 
 WORKDIR /
-RUN useradd -m -u \$uid \$user
+RUN useradd -m -u ${UID?} ${USER?}
 
-VOLUME /home/\$user/jaybeams
+VOLUME /home/${USER?}/jaybeams
 
-USER \$user
-WORKDIR /home/\$user/jaybeams
+USER ${USER?}
+WORKDIR /home/${USER?}/jaybeams
 __EOF__
-) | docker build -q --build-arg user=$USER --build-arg uid=$UID -
 
