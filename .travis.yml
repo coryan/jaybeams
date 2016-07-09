@@ -22,7 +22,6 @@ services:
   - docker
 
 before_install:
-  - sudo apt-get update
   - docker ps -a
 
 install:
@@ -32,5 +31,4 @@ install:
 
 script:
   - uname -a
-  - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?} VARIANT=${VARIANT?}
   - docker images
