@@ -1,55 +1,36 @@
-sudo: required
-dist: trusty
 language: cpp
+
+dist: trusty
+sudo: required
+
+env:
+  global:
+   # TODO(#1) change this to a robot account
+   - secure: "n9xlk1SpwtyBBB/U3B+o7EQomk4wPS+lj+9pYQCJwLkmR4Yh6hoz/bsl5vlYYK1V6xFhAaXqPWBnQmhrsIf8lOWqqrKCOPFsJ1AxDgPY3zFt+G91BqOuaTSG2eCbnyEVPidBchaUTeg2NiOpCAHyzA17h65c1Hl4l6IBUWGpYft5MWZhkeYz5r0bP2KAIb2NWRhuAW3PYxmFArWhBpnTICMx7rXzYWYCPUiXYra2JNebS1JAp+4JPly0efvNNjtjv4dyxq8qMdTDgz5Kj9wGo8ByPpseyWgx5Il0SSHmeUN5/NhJj4Wx2lVjOSv/EfoFmDN86V+P2zCwkl0tKV8sYONNvAIDqPDadRfQhbUAAFidSYiS2O6ttbInxegs3jStus/jxD0Myn8BgvOgddPbe1p0WFhCtcPDPA5J9/ic8M1NclYlMp04QNED+PnxxVt94tTmU7zCsNGXX4rxa7B1Q4EjTvEmjtvPA99kBla8JGOOxws8Xo5+WkfWVfbinveqs6G3kqg2bKTcurvgCeT7gqc/uVymdti7xdn+xALfzSohH91qN/T0Md1NVBJOlIN+J6oQ+qmZMcTQ6RrPOKDKPqcFTgpp5Np/lvq0yMUL7s+rS544hXZvtZ96E25wCorbJv6DVl0m5D1crBsJGmMzYfcGtRc8smTpF4+YcRkUIfc="
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      env: IMAGE=ubuntu14.04 COMPILER=g++-5
+
+    - os: linux
+      compiler: gcc
+      env: IMAGE=ubuntu16.04 COMPILER=g++-6 GENDOCS=yes
 
 services:
   - docker
-
-compiler: gcc
-
-os:
-  - linux
 
 before_install:
   - sudo apt-get update
   - docker ps -a
 
 install:
-# ... all dependencies are installed from the $HOME/deps directory, to
-# keep the source clean ...
-  - (mkdir ${HOME?}/deps && cd ${HOME?}/deps && ${TRAVIS_BUILD_DIR?}/ci/install.sh)
-
-before_script:
-  - echo COMPILER=${COMPILER} VERSION=${VERSION} VARIANT=${VARIANT} GENDOCS=${GENDOCS}
-  - cd ${TRAVIS_BUILD_DIR?}
-  - source ci/before_script.sh
-  - if [ "x${VARIANT}" == "xcov" ]; then lcov --directory . --zerocounters; fi
+  # ... all dependencies are installed from the $HOME/deps directory
+  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} VARIANT=${VARIANT}
+  - docker pull coryan/jaybeamsdev-ubuntu14.04
 
 script:
-  - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?}
-  - ${CXX?} --version
-  - echo ${CXXFLAGS?}
-  - ./bootstrap
-  - ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
-  - make
-  - make check
-
-after_success:
-# Upload code coverage results to coveralls.io
-  - cd ${TRAVIS_BUILD_DIR?}
-  - if [ "x${VARIANT?}" == "xcov" ]; then ci/coverage.sh; fi
-# Upload documentation to gh-pages
-  - if [ "x${GENDOCS?}" == "xyes" ]; then ci/gendocs.sh; fi
-
-notifications:
-  email: false
-
-env:
-  matrix:
-    - COMPILER=gcc   VARIANT=opt  GENDOCS=no
-    - COMPILER=gcc   VARIANT=cov  GENDOCS=no
-    - COMPILER=gcc   VARIANT=dbg  GENDOCS=yes
-    - COMPILER=clang VARIANT=opt  GENDOCS=no
-  global:
-# TODO(#1) change this to a robot account
-    - secure: "n9xlk1SpwtyBBB/U3B+o7EQomk4wPS+lj+9pYQCJwLkmR4Yh6hoz/bsl5vlYYK1V6xFhAaXqPWBnQmhrsIf8lOWqqrKCOPFsJ1AxDgPY3zFt+G91BqOuaTSG2eCbnyEVPidBchaUTeg2NiOpCAHyzA17h65c1Hl4l6IBUWGpYft5MWZhkeYz5r0bP2KAIb2NWRhuAW3PYxmFArWhBpnTICMx7rXzYWYCPUiXYra2JNebS1JAp+4JPly0efvNNjtjv4dyxq8qMdTDgz5Kj9wGo8ByPpseyWgx5Il0SSHmeUN5/NhJj4Wx2lVjOSv/EfoFmDN86V+P2zCwkl0tKV8sYONNvAIDqPDadRfQhbUAAFidSYiS2O6ttbInxegs3jStus/jxD0Myn8BgvOgddPbe1p0WFhCtcPDPA5J9/ic8M1NclYlMp04QNED+PnxxVt94tTmU7zCsNGXX4rxa7B1Q4EjTvEmjtvPA99kBla8JGOOxws8Xo5+WkfWVfbinveqs6G3kqg2bKTcurvgCeT7gqc/uVymdti7xdn+xALfzSohH91qN/T0Md1NVBJOlIN+J6oQ+qmZMcTQ6RrPOKDKPqcFTgpp5Np/lvq0yMUL7s+rS544hXZvtZ96E25wCorbJv6DVl0m5D1crBsJGmMzYfcGtRc8smTpF4+YcRkUIfc="
+  - uname -a
+  - echo CXX=${CXX?} CXXFLAGS=${CXXFLAGS?} GENDOCS=${GENDOCS?} VARIANT=${VARIANT?}
+  - docker images
