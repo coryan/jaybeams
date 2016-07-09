@@ -12,6 +12,9 @@ matrix:
   include:
     - os: linux
       compiler: gcc
+      addons:
+        apt:
+          packages: ['docker']
       env: IMAGE=jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
 services:
@@ -19,8 +22,11 @@ services:
 
 script:
   - uname -a
+  - id
   - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
+  - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull coryan/${IMAGE?}
+  - docker build --help
   - BUILDIMAGE=$(./ci/create-build-image.sh)
   - docker images
   - docker run --rm -it -v $PWD:/home/$USER/jaybeams $BUILDIMAGE /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
