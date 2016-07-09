@@ -1,6 +1,7 @@
 var searchData=
 [
   ['have_5fboost',['HAVE_BOOST',['../jb-config_8hpp.html#a1644f282a4f84575a270f96b98d4f3c6',1,'jb-config.hpp']]],
+  ['have_5fboost_5fasio',['HAVE_BOOST_ASIO',['../jb-config_8hpp.html#af6997754ef39558161f9cbce861fefcf',1,'jb-config.hpp']]],
   ['have_5fboost_5fdate_5ftime',['HAVE_BOOST_DATE_TIME',['../jb-config_8hpp.html#a864cdfb0b5b3b2fbed2808a33562efb9',1,'jb-config.hpp']]],
   ['have_5fboost_5ffilesystem',['HAVE_BOOST_FILESYSTEM',['../jb-config_8hpp.html#a547dd280b4b8c381d9d69581ca861c87',1,'jb-config.hpp']]],
   ['have_5fboost_5fiostreams',['HAVE_BOOST_IOSTREAMS',['../jb-config_8hpp.html#aff6c63c8f38407d4448c6525aa534b2b',1,'jb-config.hpp']]],
@@ -10,7 +11,7 @@ var searchData=
   ['have_5fboost_5fsystem',['HAVE_BOOST_SYSTEM',['../jb-config_8hpp.html#a4d123235b596d41b8269e2f1672dad42',1,'jb-config.hpp']]],
   ['have_5fboost_5fthread',['HAVE_BOOST_THREAD',['../jb-config_8hpp.html#a8440ed88a386b99b76d65ae079a52356',1,'jb-config.hpp']]],
   ['have_5fboost_5funit_5ftest_5fframework',['HAVE_BOOST_UNIT_TEST_FRAMEWORK',['../jb-config_8hpp.html#a4abddb862d64c2962541b503613f4d89',1,'jb-config.hpp']]],
-  ['have_5fcxx11',['HAVE_CXX11',['../jb-config_8hpp.html#adad73cb262d6d08e869992f5ba0e0f58',1,'jb-config.hpp']]],
+  ['have_5fcxx14',['HAVE_CXX14',['../jb-config_8hpp.html#ae734d93598cc7af570ecbad61dc25087',1,'jb-config.hpp']]],
   ['have_5finttypes_5fh',['HAVE_INTTYPES_H',['../jb-config_8hpp.html#ab90a030ff2790ebdc176660a6dd2a478',1,'jb-config.hpp']]],
   ['have_5fmemory_5fh',['HAVE_MEMORY_H',['../jb-config_8hpp.html#ae93a78f9d076138897af441c9f86f285',1,'jb-config.hpp']]],
   ['have_5fpthread',['HAVE_PTHREAD',['../jb-config_8hpp.html#aac699f6be8f38e3c8a5f375df9a12aaf',1,'jb-config.hpp']]],

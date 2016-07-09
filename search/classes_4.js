@@ -1,5 +1,11 @@
 var searchData=
 [
+  ['encoder',['encoder',['../structjb_1_1itch5_1_1encoder.html',1,'jb::itch5']]],
+  ['encoder_3c_20validate_2c_20std_3a_3auint16_5ft_20_3e',['encoder&lt; validate, std::uint16_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint16__t_01_4.html',1,'jb::itch5']]],
+  ['encoder_3c_20validate_2c_20std_3a_3auint32_5ft_20_3e',['encoder&lt; validate, std::uint32_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint32__t_01_4.html',1,'jb::itch5']]],
+  ['encoder_3c_20validate_2c_20std_3a_3auint64_5ft_20_3e',['encoder&lt; validate, std::uint64_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint64__t_01_4.html',1,'jb::itch5']]],
+  ['encoder_3c_20validate_2c_20std_3a_3auint8_5ft_20_3e',['encoder&lt; validate, std::uint8_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint8__t_01_4.html',1,'jb::itch5']]],
+  ['encoder_3c_20validate_2c_20timestamp_20_3e',['encoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
   ['error',['error',['../structjb_1_1histogram_1_1check__constraints.html#structjb_1_1histogram_1_1check__constraints_1_1error',1,'jb::histogram::check_constraints']]],
   ['event_5frate_5festimator',['event_rate_estimator',['../classjb_1_1event__rate__estimator.html',1,'jb']]],
   ['event_5frate_5festimator_3c_20duration_5ftype_2c_20rate_5fcounter_5ftype_20_3e',['event_rate_estimator&lt; duration_type, rate_counter_type &gt;',['../classjb_1_1event__rate__estimator.html',1,'jb']]],

@@ -1,6 +1,8 @@
 var searchData=
 [
   ['rate_5f',['rate_',['../classjb_1_1event__rate__histogram.html#ad2b7e41ceef0b7fb81a15942083fcfd6',1,'jb::event_rate_histogram']]],
+  ['rawbuf',['rawbuf',['../classjb_1_1itch5_1_1mold__udp__pacer.html#a38dc7505259361c9e7e7043e5c38cbb4',1,'jb::itch5::mold_udp_pacer']]],
+  ['rawbufsize',['rawbufsize',['../classjb_1_1itch5_1_1mold__udp__pacer.html#a72a0cdfc68cd22656e976e5fe4f27f7a',1,'jb::itch5::mold_udp_pacer']]],
   ['reader',['reader',['../classworker__config.html#adf433fdf13998b679f47589070e02e18',1,'worker_config']]],
   ['reason',['reason',['../structjb_1_1itch5_1_1stock__trading__action__message.html#aa79c18c421554568a5d95edbd18f2abe',1,'jb::itch5::stock_trading_action_message']]],
   ['reg_5fsho_5faction',['reg_sho_action',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html#a871ee476567dbe73e83625452a7d43dd',1,'jb::itch5::reg_sho_restriction_message']]],

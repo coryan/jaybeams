@@ -168,6 +168,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ad100e1197355b7f2306d310eab4ced37"><td class="memItemLeft" align="right" valign="top">std::pair&lt; char const <br class="typebreak"/>
 *, std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1testing.html#ad100e1197355b7f2306d310eab4ced37">trade</a> ()</td></tr>
 <tr class="separator:ad100e1197355b7f2306d310eab4ced37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a7198f1c9340222344af0cf16e46728"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1testing.html#a8a7198f1c9340222344af0cf16e46728">create_message</a> (int message_type, <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp">jb::itch5::timestamp</a> ts, std::size_t total_size)</td></tr>
+<tr class="memdesc:a8a7198f1c9340222344af0cf16e46728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate test messages with a more-or-less valid header.  <a href="#a8a7198f1c9340222344af0cf16e46728">More...</a><br/></td></tr>
+<tr class="separator:a8a7198f1c9340222344af0cf16e46728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Functions used in testing <a class="el" href="namespacejb_1_1itch5.html" title="Contains classes and functions to parse NASDAQ ITCH-5.0 messages, more information about ITCH-5...">jb::itch5</a> entities. </p>
@@ -185,9 +188,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00028">28</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00033">33</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__add__order__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -206,9 +209,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00043">43</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00048">48</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__add__order__mpid__message_8cpp_source.html#l00013">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -227,11 +230,52 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00059">59</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00064">64</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__broken__trade__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a7198f1c9340222344af0cf16e46728"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; char &gt; jb::itch5::testing::create_message </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>message_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp">jb::itch5::timestamp</a>&#160;</td>
+          <td class="paramname"><em>ts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>total_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generate test messages with a more-or-less valid header. </p>
+<p>For most tests we only need messages with a valid timestamp and message type and a known length. This is a simple function to generate such messages. </p>
+
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00302">302</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+
+<p>References <a class="el" href="protocol__constants_8hpp_source.html#l00014">jb::itch5::protocol::header_size</a>, <a class="el" href="protocol__constants_8hpp_source.html#l00024">jb::itch5::protocol::max_message_size</a>, and <a class="el" href="structjb_1_1itch5_1_1encoder.html#a641f908ddff6e6d928af7ed9fdfe639e">jb::itch5::encoder&lt; validate, T &gt;::w()</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00033">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -248,9 +292,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00070">70</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00075">75</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__cross__trade__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -271,7 +315,7 @@ Functions</h2></td></tr>
 
 <p>Return the expected timestamp for all the test messages. </p>
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00013">13</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00018">18</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__add__order__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -290,9 +334,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00086">86</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00091">91</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__ipo__quoting__period__update__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -311,9 +355,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00099">99</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00104">104</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__market__participant__position__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -332,9 +376,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00019">19</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00024">24</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__message__header_8cpp_source.html#l00009">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -353,9 +397,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00113">113</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00118">118</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__mwcb__breach__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -374,9 +418,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00123">123</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00128">128</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__mwcb__decline__level__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -395,9 +439,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00135">135</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00140">140</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__net__order__imbalance__indicator__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -416,9 +460,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00155">155</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00160">160</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__order__cancel__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -437,9 +481,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00167">167</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00172">172</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__order__delete__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -458,9 +502,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00178">178</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00183">183</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__order__executed__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -479,9 +523,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00192">192</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00197">197</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__order__executed__price__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -500,9 +544,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00208">208</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00213">213</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__order__replace__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -521,9 +565,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00223">223</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00228">228</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__reg__sho__restriction__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -542,11 +586,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00234">234</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00239">239</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__process__buffer__mlist_8cpp_source.html#l00051">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__process__buffer__mlist_8cpp_source.html#l00047">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -563,9 +607,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00257">257</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00262">262</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__stock__trading__action__message_8cpp_source.html#l00010">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -584,9 +628,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00270">270</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00275">275</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00049">jb::testing::defaults::size</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00049">jb::testing::defaults::size</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__process__buffer__mlist_8cpp_source.html#l00031">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -605,9 +649,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00280">280</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
+<p>Definition at line <a class="el" href="testing__data_8cpp_source.html#l00285">285</a> of file <a class="el" href="testing__data_8cpp_source.html">testing_data.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00008">JB_ITCH5_TEST_HEADER</a>.</p>
+<p>References <a class="el" href="testing__data_8cpp_source.html#l00013">JB_ITCH5_TEST_HEADER</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__process__iostream__mlist_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
 

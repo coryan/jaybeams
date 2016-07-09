@@ -6,6 +6,10 @@ var searchData=
   ['microbenchmark',['microbenchmark',['../classjb_1_1testing_1_1microbenchmark.html',1,'jb::testing']]],
   ['microbenchmark_5fbase',['microbenchmark_base',['../classjb_1_1testing_1_1microbenchmark__base.html',1,'jb::testing']]],
   ['microbenchmark_5fconfig',['microbenchmark_config',['../classjb_1_1testing_1_1microbenchmark__config.html',1,'jb::testing']]],
+  ['mock_5fclock',['mock_clock',['../structmock__clock.html',1,'']]],
+  ['mock_5fsink',['mock_sink',['../structmock__sink.html',1,'']]],
+  ['mold_5fudp_5fpacer',['mold_udp_pacer',['../classjb_1_1itch5_1_1mold__udp__pacer.html',1,'jb::itch5']]],
+  ['mold_5fudp_5fpacer_5fconfig',['mold_udp_pacer_config',['../classjb_1_1itch5_1_1mold__udp__pacer__config.html',1,'jb::itch5']]],
   ['mwcb_5fbreach_5fmessage',['mwcb_breach_message',['../structjb_1_1itch5_1_1mwcb__breach__message.html',1,'jb::itch5']]],
   ['mwcb_5fdecline_5flevel_5fmessage',['mwcb_decline_level_message',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html',1,'jb::itch5']]]
 ];

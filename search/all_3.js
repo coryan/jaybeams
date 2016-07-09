@@ -3,8 +3,8 @@ var searchData=
   ['deallocate',['deallocate',['../classjb_1_1fftw_1_1allocator.html#a19a735d101ef36eb224121bca6010525',1,'jb::fftw::allocator']]],
   ['debug',['debug',['../namespacejb.html#a8c91d72478d03f9b72486db893bf4603aad42f6697b035b7580e4fef93be20b4d',1,'jb']]],
   ['decode',['decode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#a5930c365ba231d378f666aa0f3ea5a4e',1,'YAML::convert&lt; jb::severity_level &gt;']]],
+  ['decode_5fheader',['decode_header',['../classjb_1_1itch5_1_1unknown__message.html#a1594621f218a6bae961feff4549ea2fb',1,'jb::itch5::unknown_message']]],
   ['decoder',['decoder',['../structjb_1_1itch5_1_1decoder.html',1,'jb::itch5']]],
-  ['decoder_2ecpp',['decoder.cpp',['../decoder_8cpp.html',1,'']]],
   ['decoder_2ehpp',['decoder.hpp',['../decoder_8hpp.html',1,'']]],
   ['decoder_3c_20false_2c_20char_5flist_5ffield_20_3e',['decoder&lt; false, char_list_field &gt;',['../classjb_1_1itch5_1_1char__list__field.html#a78f93a92819b788725ceb631f7f43939',1,'jb::itch5::char_list_field']]],
   ['decoder_3c_20true_2c_20char_5flist_5ffield_20_3e',['decoder&lt; true, char_list_field &gt;',['../classjb_1_1itch5_1_1char__list__field.html#a914a9bbdc8037687c8f755417f0ddd25',1,'jb::itch5::char_list_field']]],
@@ -53,6 +53,6 @@ var searchData=
   ['destroy',['destroy',['../classjb_1_1fftw_1_1allocator.html#ab5552f4e219d366cb6c509ef07de6685',1,'jb::fftw::allocator']]],
   ['destroy_5fplan',['destroy_plan',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a898cd3e7b6baf88093d50b0f943da548',1,'jb::fftw::traits&lt; double &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#ae3eccdbe618a250766aeaf9826448225',1,'jb::fftw::traits&lt; float &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff',1,'jb::fftw::traits&lt; long double &gt;::destroy_plan()']]],
   ['difference_5ftype',['difference_type',['../classjb_1_1fftw_1_1allocator.html#a59d26b2b7c8604f8b02eaa40c07ea71d',1,'jb::fftw::allocator']]],
-  ['duration',['duration',['../classjb_1_1testing_1_1microbenchmark__base.html#a75b1b3af82f33a23b8d6b99894a2c426',1,'jb::testing::microbenchmark_base']]],
+  ['duration',['duration',['../classjb_1_1itch5_1_1mold__udp__pacer.html#a0383eb886fcffbf533eaf0049c969f63',1,'jb::itch5::mold_udp_pacer::duration()'],['../classjb_1_1testing_1_1microbenchmark__base.html#a75b1b3af82f33a23b8d6b99894a2c426',1,'jb::testing::microbenchmark_base::duration()']]],
   ['duration_5ftype',['duration_type',['../classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355',1,'jb::event_rate_estimator']]]
 ];

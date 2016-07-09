@@ -168,9 +168,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad0a00c0ed92a5f755e2bc59d1b7aba65"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__inside.html#ad0a00c0ed92a5f755e2bc59d1b7aba65">handle_message</a> (<a class="el" href="classjb_1_1itch5_1_1compute__inside.html#a9862e4fd648fb447cc6d8f518119a2f7">time_point</a> recv_ts, long msgcnt, std::size_t msgoffset, message_type const &amp;msg)</td></tr>
 <tr class="memdesc:ad0a00c0ed92a5f755e2bc59d1b7aba65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ignore all other message types.  <a href="#ad0a00c0ed92a5f755e2bc59d1b7aba65">More...</a><br/></td></tr>
 <tr class="separator:ad0a00c0ed92a5f755e2bc59d1b7aba65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97d4c2b25399af417536923dd9c730e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__inside.html#a97d4c2b25399af417536923dd9c730e9">handle_unknown</a> (<a class="el" href="classjb_1_1itch5_1_1compute__inside.html#a9862e4fd648fb447cc6d8f518119a2f7">time_point</a> recv_ts, long msgcnt, std::size_t msgoffset, char const *msgbuf, std::size_t msglen)</td></tr>
-<tr class="memdesc:a97d4c2b25399af417536923dd9c730e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log any unknown message types.  <a href="#a97d4c2b25399af417536923dd9c730e9">More...</a><br/></td></tr>
-<tr class="separator:a97d4c2b25399af417536923dd9c730e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad756fb99708a0679fe81a5dc3864c2f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__inside.html#ad756fb99708a0679fe81a5dc3864c2f6">handle_unknown</a> (<a class="el" href="classjb_1_1itch5_1_1compute__inside.html#a9862e4fd648fb447cc6d8f518119a2f7">time_point</a> recv_ts, <a class="el" href="classjb_1_1itch5_1_1unknown__message.html">unknown_message</a> const &amp;msg)</td></tr>
+<tr class="memdesc:ad756fb99708a0679fe81a5dc3864c2f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log any unknown message types.  <a href="#ad756fb99708a0679fe81a5dc3864c2f6">More...</a><br/></td></tr>
+<tr class="separator:ad756fb99708a0679fe81a5dc3864c2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a695a5bcbd36dff9bfa0b4b519dedbcd0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__inside.html#a695a5bcbd36dff9bfa0b4b519dedbcd0">live_order_count</a> () const </td></tr>
 <tr class="memdesc:a695a5bcbd36dff9bfa0b4b519dedbcd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">An accessor to make testing easier.  <a href="#a695a5bcbd36dff9bfa0b4b519dedbcd0">More...</a><br/></td></tr>
 <tr class="separator:a695a5bcbd36dff9bfa0b4b519dedbcd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,7 +218,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>An implementation of jb::message_handler_concept to compute the inside. </p>
 <p>Keep a collection of all the order books, and forward the right updates to them as it handles the different message types in ITCH-5.0. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00029">29</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00030">30</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 </div><hr/><h2 class="groupheader">Class Documentation</h2>
 <a name="structjb_1_1itch5_1_1compute__inside_1_1order__data" id="structjb_1_1itch5_1_1compute__inside_1_1order__data"></a>
 <div class="memitem">
@@ -232,7 +232,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>A convenient container for per-order data. </p>
 <p>Most market data feeds resend the security identifier and side with each order update, but ITCH-5.0 does not. One needs to lookup that information based on the order id. This literal type is used to keep that information around. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00151">151</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00150">150</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -284,7 +284,7 @@ stock</td>
 
 <p>The collection of order books. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00169">169</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00168">168</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -300,7 +300,7 @@ stock</td>
 
 <p>Callbacks. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00041">41</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00042">42</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -324,7 +324,7 @@ stock</td>
 
 <p>The list of live orders. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00165">165</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00164">164</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -340,7 +340,7 @@ stock</td>
 
 <p>Define the clock used to measure processing delays. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00036">36</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00037">37</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -364,7 +364,7 @@ stock</td>
 
 <p>The result of a reduction is fairly complex ... </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00172">172</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00171">171</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -436,7 +436,7 @@ stock</td>
 
 <p>Refactor handling of <a class="el" href="structjb_1_1itch5_1_1add__order__message.html" title="Represent an &#39;Add Order&#39; message in the ITCH-5.0 protocol. ">add_order_message</a> for both add_order and replace. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00102">102</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00103">103</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
 
 <p>References <a class="el" href="add__order__message_8hpp_source.html#l00020">jb::itch5::add_order_message::buy_sell_indicator</a>, <a class="el" href="add__order__message_8hpp_source.html#l00019">jb::itch5::add_order_message::order_reference_number</a>, <a class="el" href="add__order__message_8hpp_source.html#l00023">jb::itch5::add_order_message::price</a>, <a class="el" href="add__order__message_8hpp_source.html#l00021">jb::itch5::add_order_message::shares</a>, and <a class="el" href="add__order__message_8hpp_source.html#l00022">jb::itch5::add_order_message::stock</a>.</p>
 
@@ -485,7 +485,7 @@ stock</td>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__compute__inside_8cpp_source.html#l00049">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="compute__inside_8hpp_source.html#l00075">handle_message()</a>.</p>
+<p>Referenced by <a class="el" href="ut__compute__inside_8cpp_source.html#l00049">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="compute__inside_8hpp_source.html#l00076">handle_message()</a>.</p>
 
 </div>
 </div>
@@ -579,7 +579,7 @@ stock</td>
 
 <p>Handle a new order with MPID. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00075">75</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00076">76</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 <p>References <a class="el" href="compute__inside_8cpp_source.html#l00010">handle_message()</a>.</p>
 
@@ -675,7 +675,7 @@ stock</td>
 
 <p>Handle an order execution. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00094">94</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00095">95</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 <p>References <a class="el" href="compute__inside_8cpp_source.html#l00010">handle_message()</a>.</p>
 
@@ -809,7 +809,7 @@ stock</td>
 
 <p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00062">62</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
 
-<p>References <a class="el" href="compute__inside_8hpp_source.html#l00153">jb::itch5::compute_inside::order_data::buy_sell_indicator</a>, <a class="el" href="add__order__message_8hpp_source.html#l00018">jb::itch5::add_order_message::header</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__inside_8hpp_source.html#l00152">jb::itch5::compute_inside::order_data::stock</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
+<p>References <a class="el" href="compute__inside_8hpp_source.html#l00152">jb::itch5::compute_inside::order_data::buy_sell_indicator</a>, <a class="el" href="add__order__message_8hpp_source.html#l00018">jb::itch5::add_order_message::header</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__inside_8hpp_source.html#l00151">jb::itch5::compute_inside::order_data::stock</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
 </div>
 </div>
@@ -862,7 +862,7 @@ template&lt;typename message_type &gt; </div>
 <p>Ignore all other message types. </p>
 <p>We are only interested in a handful of message types, anything else is captured by this template function and ignored. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00131">131</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00132">132</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -930,7 +930,7 @@ template&lt;typename message_type &gt; </div>
 
 <p>Handle both order executions and partial cancels. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00137">137</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00138">138</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
 
 </div>
 </div>
@@ -998,13 +998,13 @@ template&lt;typename message_type &gt; </div>
 
 <p>Handle an order reduction, but do not update the callback. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00156">156</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00157">157</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
 
-<p>References <a class="el" href="compute__inside_8hpp_source.html#l00153">jb::itch5::compute_inside::order_data::buy_sell_indicator</a>, <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__inside_8hpp_source.html#l00154">jb::itch5::compute_inside::order_data::px</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="compute__inside_8hpp_source.html#l00152">jb::itch5::compute_inside::order_data::buy_sell_indicator</a>, <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__inside_8hpp_source.html#l00153">jb::itch5::compute_inside::order_data::px</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a97d4c2b25399af417536923dd9c730e9"></a>
+<a class="anchor" id="ad756fb99708a0679fe81a5dc3864c2f6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1017,26 +1017,8 @@ template&lt;typename message_type &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>msgcnt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>msgoffset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>msgbuf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>msglen</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1unknown__message.html">unknown_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1050,7 +1032,7 @@ template&lt;typename message_type &gt; </div>
 
 <p>Definition at line <a class="el" href="compute__inside_8cpp_source.html#l00094">94</a> of file <a class="el" href="compute__inside_8cpp_source.html">compute_inside.cpp</a>.</p>
 
-<p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, and <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>.</p>
+<p>References <a class="el" href="unknown__message_8hpp_source.html#l00040">jb::itch5::unknown_message::buf()</a>, <a class="el" href="unknown__message_8hpp_source.html#l00031">jb::itch5::unknown_message::count()</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="unknown__message_8hpp_source.html#l00034">jb::itch5::unknown_message::offset()</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__compute__inside_8cpp_source.html#l00263">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -1079,9 +1061,9 @@ template&lt;typename message_type &gt; </div>
 
 <p>An accessor to make testing easier. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00159">159</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00158">158</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
-<p>References <a class="el" href="compute__inside_8hpp_source.html#l00196">orders_</a>.</p>
+<p>References <a class="el" href="compute__inside_8hpp_source.html#l00195">orders_</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__compute__inside_8cpp_source.html#l00049">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -1110,7 +1092,7 @@ template&lt;typename message_type &gt; </div>
 
 <p>Return the current timestamp for delay measurements. </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00048">48</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00049">49</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__compute__inside_8cpp_source.html#l00049">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -1135,7 +1117,7 @@ template&lt;typename message_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00198">198</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00197">197</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -1159,7 +1141,7 @@ template&lt;typename message_type &gt; </div>
 
 <p>Store the callback ... </p>
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00194">194</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00193">193</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
 </div>
 </div>
@@ -1181,9 +1163,9 @@ template&lt;typename message_type &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00196">196</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__inside_8hpp_source.html#l00195">195</a> of file <a class="el" href="compute__inside_8hpp_source.html">compute_inside.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="compute__inside_8hpp_source.html#l00159">live_order_count()</a>.</p>
+<p>Referenced by <a class="el" href="compute__inside_8hpp_source.html#l00158">live_order_count()</a>.</p>
 
 </div>
 </div>

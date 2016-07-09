@@ -112,6 +112,10 @@ Functions</h2></td></tr>
 <tr class="separator:a57524d27ef0635cb143daf1d2c8705cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40ec018025a23bc26c74c3e747982c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__timestamp_8cpp.html#aa40ec018025a23bc26c74c3e747982c5">BOOST_AUTO_TEST_CASE</a> (stream_timestamp)</td></tr>
 <tr class="separator:aa40ec018025a23bc26c74c3e747982c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a217f4acb5a7c2b7fae38baffabdb95ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__timestamp_8cpp.html#a217f4acb5a7c2b7fae38baffabdb95ea">BOOST_AUTO_TEST_CASE</a> (encode_timestamp)</td></tr>
+<tr class="separator:a217f4acb5a7c2b7fae38baffabdb95ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f25c94462788717400b4990b094438b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__timestamp_8cpp.html#a4f25c94462788717400b4990b094438b">BOOST_AUTO_TEST_CASE</a> (encode_timestamp_range)</td></tr>
+<tr class="separator:a4f25c94462788717400b4990b094438b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="afddbcefc5d44c6ae8d39394313f2b6ed"></a>
@@ -127,7 +131,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000111">Test:</a></b></dt><dd>Verify that <a class="el" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields. ">jb::itch5::decoder</a> works for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a> as expected. </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000122">Test:</a></b></dt><dd>Verify that <a class="el" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields. ">jb::itch5::decoder</a> works for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a> as expected. </dd></dl>
 
 <p>Definition at line <a class="el" href="ut__timestamp_8cpp_source.html#l00009">9</a> of file <a class="el" href="ut__timestamp_8cpp_source.html">ut_timestamp.cpp</a>.</p>
 
@@ -146,7 +150,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000112">Test:</a></b></dt><dd>Verify that the <a class="el" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields. ">jb::itch5::decoder</a> detects out of range errors for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a>. </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000123">Test:</a></b></dt><dd>Verify that the <a class="el" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields. ">jb::itch5::decoder</a> detects out of range errors for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a>. </dd></dl>
 
 <p>Definition at line <a class="el" href="ut__timestamp_8cpp_source.html#l00040">40</a> of file <a class="el" href="ut__timestamp_8cpp_source.html">ut_timestamp.cpp</a>.</p>
 
@@ -165,9 +169,47 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000113">Test:</a></b></dt><dd>Verify that <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a> iostream operator works as expected. </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000124">Test:</a></b></dt><dd>Verify that <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a> iostream operator works as expected. </dd></dl>
 
 <p>Definition at line <a class="el" href="ut__timestamp_8cpp_source.html#l00060">60</a> of file <a class="el" href="ut__timestamp_8cpp_source.html">ut_timestamp.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a217f4acb5a7c2b7fae38baffabdb95ea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">encode_timestamp&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000125">Test:</a></b></dt><dd>Verify that <a class="el" href="structjb_1_1itch5_1_1encoder.html" title="TODO(#19) all this code should be replaced with Boost.Endian. ">jb::itch5::encoder</a> works for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a> as expected. </dd></dl>
+
+<p>Definition at line <a class="el" href="ut__timestamp_8cpp_source.html#l00109">109</a> of file <a class="el" href="ut__timestamp_8cpp_source.html">ut_timestamp.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4f25c94462788717400b4990b094438b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">encode_timestamp_range&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000126">Test:</a></b></dt><dd>Verify that the <a class="el" href="structjb_1_1itch5_1_1decoder.html" title="Define the interface to decode ITCH-5.0 messages and message fields. ">jb::itch5::decoder</a> detects out of range errors for <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp" title="Represent a ITCH-5.0 timestamp. ">jb::itch5::timestamp</a>. </dd></dl>
+
+<p>Definition at line <a class="el" href="ut__timestamp_8cpp_source.html#l00139">139</a> of file <a class="el" href="ut__timestamp_8cpp_source.html">ut_timestamp.cpp</a>.</p>
 
 </div>
 </div>

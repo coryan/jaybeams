@@ -108,13 +108,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2451a8d0ddd88d99cacf3659d7f52fb6"><td class="memTemplParams" colspan="2">template&lt;typename message_type_t &gt; </td></tr>
-<tr class="memitem:a2451a8d0ddd88d99cacf3659d7f52fb6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a2451a8d0ddd88d99cacf3659d7f52fb6">handle_message</a> (<a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a">time_point</a> const &amp;recv_ts, long msgcnt, std::size_t msgoffset, message_type_t const &amp;m)</td></tr>
-<tr class="memdesc:a2451a8d0ddd88d99cacf3659d7f52fb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a message.  <a href="#a2451a8d0ddd88d99cacf3659d7f52fb6">More...</a><br/></td></tr>
-<tr class="separator:a2451a8d0ddd88d99cacf3659d7f52fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a766ac89b36f6b75fcc2c64f328b9c934"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a766ac89b36f6b75fcc2c64f328b9c934">handle_unknown</a> (<a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a">time_point</a> const &amp;recv_ts, long msgcnt, std::size_t msgoffset, char const *msgbuf, std::size_t msglen)</td></tr>
-<tr class="memdesc:a766ac89b36f6b75fcc2c64f328b9c934"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle completely unknown or unexpected messages.  <a href="#a766ac89b36f6b75fcc2c64f328b9c934">More...</a><br/></td></tr>
-<tr class="separator:a766ac89b36f6b75fcc2c64f328b9c934"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb29e719ae536e7dde12fafaed911011"><td class="memTemplParams" colspan="2">template&lt;typename message_type_t &gt; </td></tr>
+<tr class="memitem:afb29e719ae536e7dde12fafaed911011"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#afb29e719ae536e7dde12fafaed911011">handle_message</a> (<a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a">time_point</a> const &amp;recv_ts, std::uint64_t msgcnt, std::size_t msgoffset, message_type_t const &amp;m)</td></tr>
+<tr class="memdesc:afb29e719ae536e7dde12fafaed911011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a message.  <a href="#afb29e719ae536e7dde12fafaed911011">More...</a><br/></td></tr>
+<tr class="separator:afb29e719ae536e7dde12fafaed911011"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1284508af632414a66f95a306fcb8d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#ac1284508af632414a66f95a306fcb8d8">handle_unknown</a> (<a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a">time_point</a> const &amp;recv_ts, <a class="el" href="classjb_1_1itch5_1_1unknown__message.html">unknown_message</a> const &amp;msg)</td></tr>
+<tr class="memdesc:ac1284508af632414a66f95a306fcb8d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle completely unknown or unexpected messages.  <a href="#ac1284508af632414a66f95a306fcb8d8">More...</a><br/></td></tr>
+<tr class="separator:ac1284508af632414a66f95a306fcb8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
 Time measurement</h2></td></tr>
@@ -134,7 +134,7 @@ Time measurement</h2></td></tr>
 
 <p>Definition at line <a class="el" href="message__handler__concept_8dox_source.html#l00009">9</a> of file <a class="el" href="message__handler__concept_8dox_source.html">message_handler_concept.dox</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a2451a8d0ddd88d99cacf3659d7f52fb6"></a>
+<a class="anchor" id="afb29e719ae536e7dde12fafaed911011"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -149,7 +149,7 @@ template&lt;typename message_type_t &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long&#160;</td>
+          <td class="paramtype">std::uint64_t&#160;</td>
           <td class="paramname"><em>msgcnt</em>, </td>
         </tr>
         <tr>
@@ -192,7 +192,7 @@ template&lt;typename message_type_t &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a766ac89b36f6b75fcc2c64f328b9c934"></a>
+<a class="anchor" id="ac1284508af632414a66f95a306fcb8d8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -205,26 +205,8 @@ template&lt;typename message_type_t &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>msgcnt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>msgoffset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>msgbuf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>msglen</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1unknown__message.html">unknown_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -239,10 +221,7 @@ template&lt;typename message_type_t &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">recv_ts</td><td>the timestamp when the message was received by the processor. </td></tr>
-    <tr><td class="paramname">msgbuf</td><td>the raw contents of the message </td></tr>
-    <tr><td class="paramname">msglen</td><td>the length of the message </td></tr>
-    <tr><td class="paramname">msgcnt</td><td>the number of messages received before this message </td></tr>
-    <tr><td class="paramname">msgoffset</td><td>the number of bytes received before this message </td></tr>
+    <tr><td class="paramname">msg</td><td>the unknown message details and contents </td></tr>
   </table>
   </dd>
 </dl>

@@ -144,72 +144,77 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keywordtype">void</span> handle_unknown(</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      time_point recv_ts, <span class="keywordtype">long</span> msgcnt, std::size_t msgoffset,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="keywordtype">char</span> <span class="keyword">const</span>* msgbuf, std::size_t msglen) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(error) &lt;&lt; <span class="stringliteral">&quot;Unknown message type &#39;&quot;</span> &lt;&lt; msgbuf[0] &lt;&lt; <span class="stringliteral">&quot;&#39;&quot;</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                  &lt;&lt; <span class="stringliteral">&quot; in msgcnt=&quot;</span> &lt;&lt; msgcnt &lt;&lt; <span class="stringliteral">&quot;, msgoffset=&quot;</span> &lt;&lt; msgoffset;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <a class="code" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> stats_;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// anonymous namespace</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">   60</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) <span class="keyword">try</span> {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  config cfg;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  cfg.load_overrides(</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      argc, argv, std::string(<span class="stringliteral">&quot;itch5stats.yaml&quot;</span>), <span class="stringliteral">&quot;JB_ROOT&quot;</span>);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <a class="code" href="namespacejb_1_1log.html#a2fdb858d4d11d93a99916df01639a5dd">jb::log::init</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  boost::iostreams::filtering_istream in;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <a class="code" href="namespacejb.html#aef61243e879f0e23dc9904070d38804c">jb::open_input_file</a>(in, cfg.input_file());</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  itch5_stats_handler handler(cfg);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <a class="code" href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">jb::itch5::process_iostream</a>(in, handler);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="keywordflow">catch</span>(<a class="code" href="classjb_1_1usage.html">jb::usage</a> <span class="keyword">const</span>&amp; u) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  std::cerr &lt;&lt; u.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordflow">return</span> u.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;} <span class="keywordflow">catch</span>(std::exception <span class="keyword">const</span>&amp; ex) {</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  std::cerr &lt;&lt; <span class="stringliteral">&quot;Standard exception raised: &quot;</span> &lt;&lt; ex.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="keywordflow">catch</span>(...) {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  std::cerr &lt;&lt; <span class="stringliteral">&quot;Unknown exception raised&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">namespace </span>{</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;config::config()</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    : input_file(desc(<span class="stringliteral">&quot;input-file&quot;</span>).help(</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="stringliteral">&quot;An input file with ITCH-5.0 messages.&quot;</span>), this)</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    , stats(desc(<span class="stringliteral">&quot;stats&quot;</span>, <span class="stringliteral">&quot;offline-feed-statistics&quot;</span>), this)</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;{}</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keywordtype">void</span> config::validate()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <span class="keywordflow">if</span> (input_file() == <span class="stringliteral">&quot;&quot;</span>) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">throw</span> <a class="code" href="classjb_1_1usage.html">jb::usage</a>(</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="stringliteral">&quot;Missing input-file setting.&quot;</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="stringliteral">&quot;  You must specify an input file.&quot;</span>, 1);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  stats().validate();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;} <span class="comment">// anonymous namespace</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      time_point recv_ts, <a class="code" href="classjb_1_1itch5_1_1unknown__message.html">jb::itch5::unknown_message</a> <span class="keyword">const</span>&amp; msg) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">char</span> msgtype = *<span class="keyword">static_cast&lt;</span><span class="keywordtype">char</span> const*<span class="keyword">&gt;</span>(msg.<a class="code" href="classjb_1_1itch5_1_1unknown__message.html#ab37d9112eeb428d1e7b5ab990f240037">buf</a>());</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(error) &lt;&lt; <span class="stringliteral">&quot;Unknown message type &#39;&quot;</span> &lt;&lt; msgtype &lt;&lt; <span class="stringliteral">&quot;&#39;(&quot;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                  &lt;&lt; int(msgtype) &lt;&lt; <span class="stringliteral">&quot;) in msgcnt=&quot;</span> &lt;&lt; msg.<a class="code" href="classjb_1_1itch5_1_1unknown__message.html#a506b4a1e00124484b5e738fce1d0fcab">count</a>()</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                  &lt;&lt; <span class="stringliteral">&quot;, msgoffset=&quot;</span> &lt;&lt; msg.<a class="code" href="classjb_1_1itch5_1_1unknown__message.html#a8f2b8ec305f3afeebe7ca55b2f1f100e">offset</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <a class="code" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> stats_;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <span class="comment">// anonymous namespace</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">   61</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) <span class="keyword">try</span> {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  config cfg;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  cfg.load_overrides(</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      argc, argv, std::string(<span class="stringliteral">&quot;itch5stats.yaml&quot;</span>), <span class="stringliteral">&quot;JB_ROOT&quot;</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <a class="code" href="namespacejb_1_1log.html#a2fdb858d4d11d93a99916df01639a5dd">jb::log::init</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  boost::iostreams::filtering_istream in;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <a class="code" href="namespacejb.html#aef61243e879f0e23dc9904070d38804c">jb::open_input_file</a>(in, cfg.input_file());</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  itch5_stats_handler handler(cfg);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <a class="code" href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">jb::itch5::process_iostream</a>(in, handler);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="keywordflow">catch</span>(<a class="code" href="classjb_1_1usage.html">jb::usage</a> <span class="keyword">const</span>&amp; u) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  std::cerr &lt;&lt; u.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keywordflow">return</span> u.<a class="code" href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">exit_status</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="keywordflow">catch</span>(std::exception <span class="keyword">const</span>&amp; ex) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  std::cerr &lt;&lt; <span class="stringliteral">&quot;Standard exception raised: &quot;</span> &lt;&lt; ex.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="keywordflow">catch</span>(...) {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  std::cerr &lt;&lt; <span class="stringliteral">&quot;Unknown exception raised&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">namespace </span>{</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;config::config()</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    : input_file(desc(<span class="stringliteral">&quot;input-file&quot;</span>).help(</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="stringliteral">&quot;An input file with ITCH-5.0 messages.&quot;</span>), this)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    , stats(desc(<span class="stringliteral">&quot;stats&quot;</span>, <span class="stringliteral">&quot;offline-feed-statistics&quot;</span>), this)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{}</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keywordtype">void</span> config::validate()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keywordflow">if</span> (input_file() == <span class="stringliteral">&quot;&quot;</span>) {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">throw</span> <a class="code" href="classjb_1_1usage.html">jb::usage</a>(</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="stringliteral">&quot;Missing input-file setting.&quot;</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="stringliteral">&quot;  You must specify an input file.&quot;</span>, 1);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  }</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  stats().validate();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;}</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;} <span class="comment">// anonymous namespace</span></div>
+<div class="ttc" id="classjb_1_1itch5_1_1unknown__message_html_a8f2b8ec305f3afeebe7ca55b2f1f100e"><div class="ttname"><a href="classjb_1_1itch5_1_1unknown__message.html#a8f2b8ec305f3afeebe7ca55b2f1f100e">jb::itch5::unknown_message::offset</a></div><div class="ttdeci">std::uint64_t offset() const </div><div class="ttdef"><b>Definition:</b> <a href="unknown__message_8hpp_source.html#l00034">unknown_message.hpp:34</a></div></div>
 <div class="ttc" id="classjb_1_1config__object_html"><div class="ttname"><a href="classjb_1_1config__object.html">jb::config_object</a></div><div class="ttdoc">Base class for all configuration objects. </div><div class="ttdef"><b>Definition:</b> <a href="config__object_8hpp_source.html#l00030">config_object.hpp:30</a></div></div>
 <div class="ttc" id="fileio_8hpp_html"><div class="ttname"><a href="fileio_8hpp.html">fileio.hpp</a></div></div>
 <div class="ttc" id="process__iostream_8hpp_html"><div class="ttname"><a href="process__iostream_8hpp.html">process_iostream.hpp</a></div></div>
 <div class="ttc" id="classjb_1_1offline__feed__statistics_html"><div class="ttname"><a href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a></div><div class="ttdoc">Keep statistics about a feed and its offline processor. </div><div class="ttdef"><b>Definition:</b> <a href="offline__feed__statistics_8hpp_source.html#l00040">offline_feed_statistics.hpp:40</a></div></div>
-<div class="ttc" id="itch5stats_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> <a href="itch5stats_8cpp_source.html#l00060">itch5stats.cpp:60</a></div></div>
-<div class="ttc" id="namespacejb_1_1itch5_html_acc62372a33f6aeac5ec64d35ac3e70e2"><div class="ttname"><a href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">jb::itch5::process_iostream</a></div><div class="ttdeci">void process_iostream(std::istream &amp;in, message_handler &amp;handler)</div><div class="ttdoc">Process an iostream of ITCH-5.0 messages. </div><div class="ttdef"><b>Definition:</b> <a href="process__iostream_8hpp_source.html#l00060">process_iostream.hpp:60</a></div></div>
+<div class="ttc" id="itch5stats_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="itch5stats_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> <a href="itch5stats_8cpp_source.html#l00061">itch5stats.cpp:61</a></div></div>
+<div class="ttc" id="namespacejb_1_1itch5_html_acc62372a33f6aeac5ec64d35ac3e70e2"><div class="ttname"><a href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">jb::itch5::process_iostream</a></div><div class="ttdeci">void process_iostream(std::istream &amp;in, message_handler &amp;handler)</div><div class="ttdoc">Process an iostream of ITCH-5.0 messages. </div><div class="ttdef"><b>Definition:</b> <a href="process__iostream_8hpp_source.html#l00061">process_iostream.hpp:61</a></div></div>
 <div class="ttc" id="offline__feed__statistics_8hpp_html"><div class="ttname"><a href="offline__feed__statistics_8hpp.html">offline_feed_statistics.hpp</a></div></div>
 <div class="ttc" id="namespacejb_1_1log_html_a2fdb858d4d11d93a99916df01639a5dd"><div class="ttname"><a href="namespacejb_1_1log.html#a2fdb858d4d11d93a99916df01639a5dd">jb::log::init</a></div><div class="ttdeci">void init(config const &amp;cfg)</div><div class="ttdoc">Initialize the logging functions using the configuration provided. </div><div class="ttdef"><b>Definition:</b> <a href="log_8cpp_source.html#l00184">log.cpp:184</a></div></div>
+<div class="ttc" id="classjb_1_1itch5_1_1unknown__message_html_ab37d9112eeb428d1e7b5ab990f240037"><div class="ttname"><a href="classjb_1_1itch5_1_1unknown__message.html#ab37d9112eeb428d1e7b5ab990f240037">jb::itch5::unknown_message::buf</a></div><div class="ttdeci">void const * buf() const </div><div class="ttdef"><b>Definition:</b> <a href="unknown__message_8hpp_source.html#l00040">unknown_message.hpp:40</a></div></div>
 <div class="ttc" id="config__object_8hpp_html_a0cc79b81f23b416c77f04fb0cb00cae0"><div class="ttname"><a href="config__object_8hpp.html#a0cc79b81f23b416c77f04fb0cb00cae0">config_object_constructors</a></div><div class="ttdeci">#define config_object_constructors(NAME)</div><div class="ttdef"><b>Definition:</b> <a href="config__object_8hpp_source.html#l00320">config_object.hpp:320</a></div></div>
+<div class="ttc" id="classjb_1_1itch5_1_1unknown__message_html_a506b4a1e00124484b5e738fce1d0fcab"><div class="ttname"><a href="classjb_1_1itch5_1_1unknown__message.html#a506b4a1e00124484b5e738fce1d0fcab">jb::itch5::unknown_message::count</a></div><div class="ttdeci">std::uint32_t count() const </div><div class="ttdef"><b>Definition:</b> <a href="unknown__message_8hpp_source.html#l00031">unknown_message.hpp:31</a></div></div>
 <div class="ttc" id="classjb_1_1config__attribute_html"><div class="ttname"><a href="classjb_1_1config__attribute.html">jb::config_attribute</a></div><div class="ttdoc">Helper class to easily define configuration attributes. </div><div class="ttdef"><b>Definition:</b> <a href="config__attribute_8hpp_source.html#l00039">config_attribute.hpp:39</a></div></div>
 <div class="ttc" id="classjb_1_1usage_html_a41f66e8d056d13a36beee6e013f5f677"><div class="ttname"><a href="classjb_1_1usage.html#a41f66e8d056d13a36beee6e013f5f677">jb::usage::exit_status</a></div><div class="ttdeci">int exit_status() const </div><div class="ttdef"><b>Definition:</b> <a href="usage_8hpp_source.html#l00021">usage.hpp:21</a></div></div>
 <div class="ttc" id="classjb_1_1config__object_html_aa903bdd0eda12d96d6e44069c8a12c66"><div class="ttname"><a href="classjb_1_1config__object.html#aa903bdd0eda12d96d6e44069c8a12c66">jb::config_object::validate</a></div><div class="ttdeci">virtual void validate() const </div><div class="ttdoc">Validate the settings. </div><div class="ttdef"><b>Definition:</b> <a href="config__object_8cpp_source.html#l00120">config_object.cpp:120</a></div></div>
 <div class="ttc" id="classjb_1_1usage_html"><div class="ttname"><a href="classjb_1_1usage.html">jb::usage</a></div><div class="ttdoc">A simple class to communicate the result of parsing the options. </div><div class="ttdef"><b>Definition:</b> <a href="usage_8hpp_source.html#l00011">usage.hpp:11</a></div></div>
+<div class="ttc" id="classjb_1_1itch5_1_1unknown__message_html"><div class="ttname"><a href="classjb_1_1itch5_1_1unknown__message.html">jb::itch5::unknown_message</a></div><div class="ttdoc">A simple. </div><div class="ttdef"><b>Definition:</b> <a href="unknown__message_8hpp_source.html#l00012">unknown_message.hpp:12</a></div></div>
 <div class="ttc" id="namespacejb_html_aef61243e879f0e23dc9904070d38804c"><div class="ttname"><a href="namespacejb.html#aef61243e879f0e23dc9904070d38804c">jb::open_input_file</a></div><div class="ttdeci">void open_input_file(boost::iostreams::filtering_istream &amp;in, std::string const &amp;filename)</div><div class="ttdoc">Open a file for reading. </div><div class="ttdef"><b>Definition:</b> <a href="fileio_8cpp_source.html#l00028">fileio.cpp:28</a></div></div>
 <div class="ttc" id="log_8hpp_html"><div class="ttname"><a href="log_8hpp.html">log.hpp</a></div></div>
 <div class="ttc" id="log_8hpp_html_a69e7901a14a27585e998359dd544818e"><div class="ttname"><a href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a></div><div class="ttdeci">#define JB_LOG(lvl)</div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00070">log.hpp:70</a></div></div>

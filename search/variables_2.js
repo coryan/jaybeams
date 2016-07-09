@@ -9,7 +9,7 @@ var searchData=
   ['config_5f',['config_',['../classjb_1_1testing_1_1microbenchmark__base.html#aa44558a2036cfbbd30fc037718972bbd',1,'jb::testing::microbenchmark_base']]],
   ['container_5f',['container_',['../classjb_1_1config__attribute.html#a8e1ec2854f14470e3b47793bcde98321',1,'jb::config_attribute']]],
   ['container_5ftype',['container_type',['../classjb_1_1config__attribute.html#ab00f6d7946f33d3cebb88ff6d4293b7b',1,'jb::config_attribute']]],
-  ['count_5f',['count_',['../classjb_1_1itch5_1_1seconds__field.html#a7dceda2a4557c3ef69d04a1d7449a906',1,'jb::itch5::seconds_field']]],
+  ['count_5f',['count_',['../classjb_1_1itch5_1_1seconds__field.html#a7dceda2a4557c3ef69d04a1d7449a906',1,'jb::itch5::seconds_field::count_()'],['../classjb_1_1itch5_1_1unknown__message.html#a5bab5905f423795c7cf473e0e0af3be9',1,'jb::itch5::unknown_message::count_()']]],
   ['cross_5fprice',['cross_price',['../structjb_1_1itch5_1_1cross__trade__message.html#ae2c1a7db468bd912d72f60764158399f',1,'jb::itch5::cross_trade_message']]],
   ['cross_5ftype',['cross_type',['../structjb_1_1itch5_1_1cross__trade__message.html#a3d89e6eec80416504891a572a859e03c',1,'jb::itch5::cross_trade_message::cross_type()'],['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ac853ff1be3a320bf148e55b2381e7ce1',1,'jb::itch5::net_order_imbalance_indicator_message::cross_type()']]],
   ['current_5freference_5fprice',['current_reference_price',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a5d4e7a016ce301991f56c127510a7e72',1,'jb::itch5::net_order_imbalance_indicator_message']]],
