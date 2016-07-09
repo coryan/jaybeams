@@ -14,16 +14,13 @@ matrix:
       compiler: gcc
       env: IMAGE=jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
-before_install:
-  - docker ps -a
-
-install:
-  # ... all dependencies are installed from the $HOME/deps directory
-  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
-  - docker pull coryan/${IMAGE?}
+services:
+  - docker
 
 script:
   - uname -a
+  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
+  - docker pull coryan/${IMAGE?}
   - BUILDIMAGE=$(./ci/create-build-image.sh)
   - docker images
   - docker run --rm -it -v $PWD:/home/$USER/jaybeams $BUILDIMAGE /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
