@@ -7,8 +7,6 @@ fi
 
 docker build -q - <<__EOF__
 FROM ${IMAGE?}
-ARG user
-ARG uid
 
 WORKDIR /
 RUN useradd -m -u ${UID?} ${USER?}
