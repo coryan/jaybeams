@@ -12,10 +12,15 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      addons:
-        apt:
-          packages: ['docker']
-      env: IMAGE=jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g
+
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-O3
 
 services:
   - docker
@@ -23,13 +28,11 @@ services:
 script:
   - uname -a
   - id
-  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS} GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
+  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS}
+  - echo GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
   - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull coryan/${IMAGE?}
-  - docker build --help
-  - BUILDIMAGE=$(./ci/create-build-image.sh)
-  - docker images
-  - docker run --rm -it -v $PWD:/home/$USER/jaybeams $BUILDIMAGE /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
+  - BUILDIMAGE=$(./ci/create-build-image.sh) && docker run --rm -it -v $PWD:/home/$USER/jaybeams ${BUILDIMAGE?} /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
   - if [ $? -ne 0 ]; then
     cat build/test-suite.log || echo "Could not print test logs" ;
     fi
