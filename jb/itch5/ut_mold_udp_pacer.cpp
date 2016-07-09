@@ -7,18 +7,13 @@
 #include <skye/mock_function.hpp>
 
 /**
- * A simple class to mock Boost.ASIO sockets.
- *
- * Boost.ASIO sockets use template member functions in their
- * implementation, which makes them a pain to mock.  This simply
- * captures all the results in a vector of vectors that the user can
- * analyze later.
+ * A simple class to mock a suitable sink for jb::itch5::mold_udp_pacer.
  */
-struct mock_socket {
+struct mock_sink {
   std::vector<std::vector<char>> packets;
 
   template<typename const_buffer_sequence>
-  void send(const_buffer_sequence const& buffers) {
+  void operator()(const_buffer_sequence const& buffers) {
     std::vector<char> packet(boost::asio::buffer_size(buffers));
     buffer_copy(boost::asio::buffer(packet), buffers);
     packets.push_back(packet);
@@ -37,7 +32,7 @@ skye::mock_function<mock_clock::time_point()> mock_clock::now;
  */
 BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_basic) {
   skye::mock_function<void(mock_clock::duration const&)> mock_sleep;
-  mock_socket socket;
+  mock_sink sink;
   mock_clock::now.action([]() {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
@@ -51,27 +46,27 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_basic) {
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          0, 0, m1.size(), &m1[0]), socket, mock_sleep);
+          0, 0, m1.size(), &m1[0]), sink, mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          1, 0, m2.size(), &m2[0]), socket, mock_sleep);
+          1, 0, m2.size(), &m2[0]), sink, mock_sleep);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          2, 0, m3.size(), &m3[0]), socket, mock_sleep);
+          2, 0, m3.size(), &m3[0]), sink, mock_sleep);
 
-  p.heartbeat(socket);
+  p.heartbeat(sink);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 3);
-  BOOST_CHECK_EQUAL(100 + 2 + hdrsize, socket.packets.at(0).size());
-  BOOST_CHECK_EQUAL(90 + 2 + hdrsize, socket.packets.at(1).size());
-  BOOST_CHECK_EQUAL(80 + 2 + hdrsize, socket.packets.at(2).size());
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 3);
+  BOOST_CHECK_EQUAL(100 + 2 + hdrsize, sink.packets.at(0).size());
+  BOOST_CHECK_EQUAL(90 + 2 + hdrsize, sink.packets.at(1).size());
+  BOOST_CHECK_EQUAL(80 + 2 + hdrsize, sink.packets.at(2).size());
 }
 
 /**
@@ -85,7 +80,7 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_coalesce) {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
     });
-  mock_socket socket;
+  mock_sink sink;
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a second ...
@@ -101,31 +96,31 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_coalesce) {
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m1.size(), &m1[0]), socket, mock_sleep);
+          msgcnt++, 0, m1.size(), &m1[0]), sink, mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m2.size(), &m2[0]), socket, mock_sleep);
+          msgcnt++, 0, m2.size(), &m2[0]), sink, mock_sleep);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m3.size(), &m3[0]), socket, mock_sleep);
+          msgcnt++, 0, m3.size(), &m3[0]), sink, mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
-  BOOST_CHECK_EQUAL(socket.packets.size(), 0);
+  BOOST_CHECK_EQUAL(sink.packets.size(), 0);
 
   // ... we force a flush ...
-  p.heartbeat(socket);
+  p.heartbeat(sink);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... we should receive a single packet with all 3 messages ...
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 1);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
   BOOST_CHECK_EQUAL(
-      hdrsize + 100 + 2 + 90 + 2 + 80 + 2, socket.packets.at(0).size());
+      hdrsize + 100 + 2 + 90 + 2 + 80 + 2, sink.packets.at(0).size());
 }
 
 /**
@@ -139,7 +134,7 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_full) {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
     });
-  mock_socket socket;
+  mock_sink sink;
 
   // ... create a pacer that commits up to 220 bytes and blocks for
   // up to a second ...
@@ -155,34 +150,34 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_full) {
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m1.size(), &m1[0]), socket, mock_sleep);
+          msgcnt++, 0, m1.size(), &m1[0]), sink, mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m2.size(), &m2[0]), socket, mock_sleep);
+          msgcnt++, 0, m2.size(), &m2[0]), sink, mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
-  BOOST_CHECK_EQUAL(socket.packets.size(), 0);
+  BOOST_CHECK_EQUAL(sink.packets.size(), 0);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m3.size(), &m3[0]), socket, mock_sleep);
+          msgcnt++, 0, m3.size(), &m3[0]), sink, mock_sleep);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... we should receive a single packet with the first 2 messages ...
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 1);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
   BOOST_CHECK_EQUAL(
-      hdrsize + 100 + 2 + 90 + 2, socket.packets.at(0).size());
+      hdrsize + 100 + 2 + 90 + 2, sink.packets.at(0).size());
 
   // ... create a heartbeat, that should flush the last message ...
-  p.heartbeat(socket);
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 2);
+  p.heartbeat(sink);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 2);
   BOOST_CHECK_EQUAL(
-      hdrsize + 80 + 2, socket.packets.at(1).size());
+      hdrsize + 80 + 2, sink.packets.at(1).size());
 }
 
 /**
@@ -195,7 +190,7 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
     });
-  mock_socket socket;
+  mock_sink sink;
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
@@ -211,29 +206,29 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m1.size(), &m1[0]), socket, mock_sleep);
+          msgcnt++, 0, m1.size(), &m1[0]), sink, mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m2.size(), &m2[0]), socket, mock_sleep);
+          msgcnt++, 0, m2.size(), &m2[0]), sink, mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
-  BOOST_CHECK_EQUAL(socket.packets.size(), 0);
+  BOOST_CHECK_EQUAL(sink.packets.size(), 0);
 
   // ... the next message is much later ...
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(2025)}, 80);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          msgcnt++, 0, m3.size(), &m3[0]), socket, mock_sleep);
+          msgcnt++, 0, m3.size(), &m3[0]), sink, mock_sleep);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... that should immediately flush the first two messages ...
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 1);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
   BOOST_CHECK_EQUAL(
-      hdrsize + 100 + 2 + 90 + 2, socket.packets.at(0).size());
+      hdrsize + 100 + 2 + 90 + 2, sink.packets.at(0).size());
 
   // ... it should also create a call to sleep for 1025 - 15
   // microseconds ...
@@ -253,7 +248,7 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
       static int ts = 0;
       return mock_clock::time_point(std::chrono::microseconds(++ts));
     });
-  mock_socket socket;
+  mock_sink sink;
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
@@ -267,29 +262,29 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
   auto m = jb::itch5::testing::create_message('A', ts, 100);
   p.handle_message(
       mock_clock::now(), jb::itch5::unknown_message(
-          0, 0, m.size(), &m[0]), socket, mock_sleep);
+          0, 0, m.size(), &m[0]), sink, mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
-  BOOST_CHECK_EQUAL(socket.packets.size(), 0);
+  BOOST_CHECK_EQUAL(sink.packets.size(), 0);
 
   // ... this flush() request should result in at least one packet ...
-  p.flush(ts, socket);
+  p.flush(ts, sink);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... that should immediately flush the first two messages ...
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 1);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
   BOOST_CHECK_EQUAL(
-      hdrsize + 100 + 2, socket.packets.at(0).size());
+      hdrsize + 100 + 2, sink.packets.at(0).size());
 
   // ... this flush() request should result in no more packets ...
-  p.flush(ts, socket);
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 1);
+  p.flush(ts, sink);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
 
   // ... while a heartbeat() request should result in an additional
   // packet ...
-  p.heartbeat(socket);
-  BOOST_REQUIRE_EQUAL(socket.packets.size(), 2);
-  BOOST_CHECK_EQUAL(hdrsize, socket.packets.at(1).size());
+  p.heartbeat(sink);
+  BOOST_REQUIRE_EQUAL(sink.packets.size(), 2);
+  BOOST_CHECK_EQUAL(hdrsize, sink.packets.at(1).size());
 }
 
 /**

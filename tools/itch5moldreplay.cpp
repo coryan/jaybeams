@@ -1,4 +1,5 @@
 #include <jb/itch5/process_iostream_mlist.hpp>
+#include <jb/itch5/mold_udp_pacer.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
@@ -9,6 +10,7 @@
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
+#include <thread>
 #include <unordered_map>
 
 namespace {
@@ -23,6 +25,7 @@ class config : public jb::config_object {
   jb::config_attribute<config,std::string> input_file;
   jb::config_attribute<config,std::string> destination;
   jb::config_attribute<config,jb::log::config> log;
+  jb::config_attribute<config,jb::itch5::mold_udp_pacer_config> pacer;
 };
 
 class replayer {
@@ -36,15 +39,25 @@ class replayer {
 
   /// Initialize an empty handler
   replayer(boost::asio::ip::udp::socket&& s,
-           boost::asio::ip::udp::endpoint const& ep)
+           boost::asio::ip::udp::endpoint const& ep,
+           jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
-  {}
+      , pacer_(cfg)
+  {
+    socket_.connect(ep);
+  }
 
   /// Handle all messages as blobs
   void handle_unknown(
       time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
-    socket_.send_to(boost::asio::buffer(msg.buf(), msg.len()), endpoint_);
+    auto sink = [this](auto buffers) {
+      socket_.send_to(buffers, endpoint_);
+    };
+    auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration const& d) {
+      std::this_thread::sleep_for(d);
+    };
+    pacer_.handle_message(recv_ts, msg, sink, sleeper);
   }
 
   /// Return the current timestamp for delay measurements
@@ -55,6 +68,7 @@ class replayer {
  private:
   boost::asio::ip::udp::socket socket_;
   boost::asio::ip::udp::endpoint endpoint_;
+  jb::itch5::mold_udp_pacer<> pacer_;
 };
 
 } // anonymous namespace
@@ -82,7 +96,7 @@ int main(int argc, char* argv[]) try {
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
 
-  replayer rep(std::move(s), endpoint);
+  replayer rep(std::move(s), endpoint, cfg.pacer());
   jb::itch5::process_iostream_mlist<replayer>(in, rep);
 
   return 0;
@@ -106,6 +120,7 @@ config::config()
         "The destination for the UDP messages, in address:port format. "
         "The destination can be a unicast or multicast address."), this)
     , log(desc("log", "logging"), this)
+    , pacer(desc("pacer", "mold-udp-pacer"), this)
 {}
 
 void config::validate() const {

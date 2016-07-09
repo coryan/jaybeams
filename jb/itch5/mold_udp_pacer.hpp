@@ -11,8 +11,6 @@
 
 #include <boost/asio/buffer.hpp>
 
-#include <thread>
-
 namespace jb {
 namespace itch5 {
 
@@ -68,7 +66,6 @@ class mold_udp_pacer {
     mold_udp_protocol::session_id_size> session_id_type;
   //@}
 
-  // TODO() all these parameters should be configurable ...
   /**
    * Initialize a MoldUDP pacer object.
    */
@@ -88,14 +85,24 @@ class mold_udp_pacer {
   /**
    * Process a raw ITCH-5.x message.
    *
-   * @param ts The wall-clock when the message was received, as
+   * @param ts the wall-clock when the message was received, as
    * defined by @a clock_type
+   * @param msg the message received, the timestamp in the message is
+   * used to pace the outgoing MoldUDP64 packets
+   * @param sink a functor to send the MoldUDP64 packets
+   * @param sleeper a functor to sleep and effectively pace the
+   * messages
+   *
+   * @tparam message_sink_type the type of the @a sink functor.  The
+   * signature must be compatible with void(auto buffers) where
+   * buffers meets the requirements of a Boost.Asio ConstBufferSequence.
+   * @tparam sleep_functor_type the type of the sleeper function, the
+   * signature must be compatible with void(clock_type::duration const&)
    */
   template<typename message_sink_type, typename sleep_functor_type>
   void handle_message(
       time_point ts, unknown_message const& msg,
-      message_sink_type& sink,
-      sleep_functor_type& sleeper = std::this_thread::sleep_for) {
+      message_sink_type& sink, sleep_functor_type& sleeper) {
     message_header msghdr = msg.decode_header<false>();
     
     // how long since the last send() call...
@@ -119,7 +126,14 @@ class mold_udp_pacer {
     coalesce(ts, msg, msghdr.timestamp, sink);
   }
 
-  /// Flush the current messages, if any
+  /**
+   * Flush the current messages, if any
+   *
+   * @param ts the wall clock time when the message was received
+   * @param sink the destination for the MoldUDP64 packets
+   *
+   * @tparam message_sink_type please see handle_message() for details
+   */
   template<typename message_sink_type>
   void flush(timestamp ts, message_sink_type& sink) {
     if (block_count_ == 0) {
@@ -128,8 +142,17 @@ class mold_udp_pacer {
     flush_impl(ts, sink);
   }
 
-  /// Send a heartbeat messages, which can be simply the result of
-  /// flushing the current pending messages
+  /**
+   * Send a heartbeat packet.
+   *
+   * If there are any pending messages those messages are flushed and
+   * the resulting packet constitutes the heartbeat.
+   *
+   * @param ts the wall clock time when the message was received
+   * @param sink the destination for the MoldUDP64 packets
+   *
+   * @tparam message_sink_type please see handle_message() for details
+   */
   template<typename message_sink_type>
   void heartbeat(message_sink_type& sink) {
     flush_impl(first_block_ts_, sink);
@@ -204,7 +227,7 @@ class mold_udp_pacer {
   template<typename message_sink_type>
   void flush_impl(timestamp ts, message_sink_type& sink) {
     fillup_header_fields();
-    sink.send(boost::asio::buffer(packet_, packet_size_));
+    sink(boost::asio::buffer(packet_, packet_size_));
     last_send_ = ts;
     first_block_ = first_block_ + block_count_;
     block_count_ = 0;
