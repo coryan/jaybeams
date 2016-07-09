@@ -32,7 +32,9 @@ script:
   - echo GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
   - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull ${IMAGE?}
-  - BUILDIMAGE=$(./ci/create-build-image.sh) && docker run --rm -it -v $PWD:/home/$USER/jaybeams ${BUILDIMAGE?} /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
+  - BUILDIMAGE=$(./ci/create-build-image.sh)
+  - export BUILDIMAGE
+  - docker run --rm -it -v $PWD:/home/$USER/jaybeams ${BUILDIMAGE?} /bin/sh -c "./bootstrap ; mkdir build ; cd build ; CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} ; make -j 2 check"
   - if [ $? -ne 0 ]; then
     cat build/test-suite.log || echo "Could not print test logs" ;
     fi
