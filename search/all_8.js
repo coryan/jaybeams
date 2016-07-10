@@ -14,7 +14,7 @@ var searchData=
   ['interarrival_5f',['interarrival_',['../classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d',1,'jb::offline_feed_statistics']]],
   ['interarrival_5fhistogram_5ft',['interarrival_histogram_t',['../classjb_1_1offline__feed__statistics.html#a03b6232679a392f12effd5f03ab2eff5',1,'jb::offline_feed_statistics']]],
   ['interpolate',['interpolate',['../classjb_1_1explicit__cuts__binning.html#a890e8213de5a7a0a9be6faaddeaac486',1,'jb::explicit_cuts_binning::interpolate()'],['../classjb_1_1integer__range__binning.html#a66a357e07b84a24d4bebf119c87ca65f',1,'jb::integer_range_binning::interpolate()'],['../classjb_1_1binning__strategy__concept.html#af63d07692cb2876a22631abac3a08f49',1,'jb::binning_strategy_concept::interpolate()']]],
-  ['interpolate_5freturn_5ftype',['interpolate_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a82f30ca8c81ad8062d4d235702a71b52',1,'jb::histogram::check_constraints']]],
+  ['interpolate_5freturn_5ftype',['interpolate_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a12872f4590bfe9bd33ecbb6d5a9b017f',1,'jb::histogram::check_constraints']]],
   ['inverse_5findicator',['inverse_indicator',['../structjb_1_1itch5_1_1stock__directory__message.html#a9be35b0375230ac42c540107747b7a70',1,'jb::itch5::stock_directory_message']]],
   ['inverse_5findicator_5ft',['inverse_indicator_t',['../namespacejb_1_1itch5.html#ac88bb095270355309609a3e0be6d6411',1,'jb::itch5']]],
   ['ipo_5fflag',['ipo_flag',['../structjb_1_1itch5_1_1stock__directory__message.html#a7c5bbbe73694dc0c7156a9d9510054d1',1,'jb::itch5::stock_directory_message']]],
@@ -38,5 +38,5 @@ var searchData=
   ['itch5moldreplay_2ecpp',['itch5moldreplay.cpp',['../itch5moldreplay_8cpp.html',1,'']]],
   ['itch5stats_2ecpp',['itch5stats.cpp',['../itch5stats_8cpp.html',1,'']]],
   ['iterations',['iterations',['../classjb_1_1testing_1_1microbenchmark__config.html#a0964dc71dc1aff7f74fcf42af2bfb300',1,'jb::testing::microbenchmark_config::iterations()'],['../namespacejb_1_1testing_1_1defaults.html#a37c60b5fb550eaac95e60ad65a1bf1f6',1,'jb::testing::defaults::iterations()']]],
-  ['itch_2d5_2e0_3a_20confused_20about_20securities_2c_20symbols_2c_20and_20tickers',['ITCH-5.0: Confused about Securities, Symbols, and Tickers',['../md_jb_itch5_securities_and_tickers.html',1,'']]]
+  ['itch_2d5_2e0_3a_20confused_20about_20securities_2c_20symbols_2c_20and_20tickers',['ITCH-5.0: Confused about Securities, Symbols, and Tickers',['../securities-vs-symbols.html',1,'']]]
 ];

@@ -7,7 +7,7 @@ var searchData=
   ['best_5fbid',['best_bid',['../classjb_1_1itch5_1_1order__book.html#ae07edf0d65c213d2a589603cbacf2022',1,'jb::itch5::order_book']]],
   ['best_5foffer',['best_offer',['../classjb_1_1itch5_1_1order__book.html#ae0b2d49eba05763c6bfa887c2d10be7c',1,'jb::itch5::order_book']]],
   ['bin2sample',['bin2sample',['../classjb_1_1explicit__cuts__binning.html#af451be0ff04c7e8c6d75a7c09de62283',1,'jb::explicit_cuts_binning::bin2sample()'],['../classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960',1,'jb::integer_range_binning::bin2sample()'],['../classjb_1_1binning__strategy__concept.html#a118eab7594bd240ce3427a506453b628',1,'jb::binning_strategy_concept::bin2sample()']]],
-  ['bin2sample_5freturn_5ftype',['bin2sample_return_type',['../structjb_1_1histogram_1_1check__constraints.html#affa3216c96dc6121e6296f53396b8fc5',1,'jb::histogram::check_constraints']]],
+  ['bin2sample_5freturn_5ftype',['bin2sample_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a19f1027fe86d81b416d27c6de6c8d2ae',1,'jb::histogram::check_constraints']]],
   ['bindir',['bindir',['../namespacejb.html#a13ac12ee0cdd5aa7551c45ec44a36192',1,'jb']]],
   ['binning_5f',['binning_',['../classjb_1_1histogram.html#adadc231b469a58c61a3387ad954fee29',1,'jb::histogram']]],
   ['binning_5fstrategy',['binning_strategy',['../classjb_1_1event__rate__histogram.html#aa2190848e4bb073a12dc71c6a3f70be9',1,'jb::event_rate_histogram::binning_strategy()'],['../classjb_1_1histogram.html#aace3e6c50f3a9381209cece0e28693d8',1,'jb::histogram::binning_strategy()']]],
