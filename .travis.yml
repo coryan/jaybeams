@@ -16,10 +16,6 @@ matrix:
 
     - os: linux
       compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['lcov']
       env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
     - os: linux
@@ -48,19 +44,21 @@ script:
 install:
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
 
-before_script:
-  # Always cleanup the code coverage metrics before starting the build ...
-  - if [ "x${COVERAGE}" = "xyes" ]; then lcov --directory . --zerocounters ; fi
-
 after_success:
   # We take some additional action on successful builds ...
   - cd ${TRAVIS_BUILD_DIR?}
   # ... if this is a code coverage build we upload the coverage results ...
-  - if [ "x${COVERAGE}" = "xyes" ]; then ci/coverage.sh; fi
-  # ... if this is the a documentation build we generate the docs ...
-  - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
-  - if [ "x${GENDOCS?}" == "xyes" ]; then ci/gendocs.sh; fi
-  - echo GENDOCS=${GENDOCS}
+  - if [ "x${COVERAGE}" = "xyes" ]; then
+    docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/coverage.sh" ;
+    coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
+    fi
+  # ... if this is a documentation build we generate the docs ...
+  # - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
+  - if [ "x${GENDOCS?}" == "xyes" ]; then
+    docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
+    # ... and now we push the changes (if any) to the gh-pages branch
+    echo git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages ;
+    fi
 
 notifications:
   email: false

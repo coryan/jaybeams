@@ -15,6 +15,5 @@ lcov --remove coverage.info \
 
 # Show the code coverage results in the Travis CI log
 lcov --list coverage.info
-coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
 
 exit 0

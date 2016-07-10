@@ -27,11 +27,5 @@ git add --all .
 # commit exit successfully ...
 git commit -q -m"Automatically generated documentation" || exit 0
 
-# ... I want some minimal output so I can see it in the Travis log ...
-echo "pushing doxygen docs"
-
-# ... and now we push the changes (if any) to the gh-pages branch
-git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages
-
 exit 0
 
