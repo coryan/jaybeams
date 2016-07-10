@@ -36,7 +36,7 @@ script:
   - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS=${CXXFLAGS} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
+  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
   - cat test-suite.log || echo "Could not print test logs"
 
 install:
