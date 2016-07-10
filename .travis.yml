@@ -12,11 +12,11 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes
 
     - os: linux
       compiler: gcc
@@ -31,12 +31,13 @@ services:
 
 script:
   - uname -a
+  - docker build --help
   - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS}
   - echo GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
   - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
+  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
   - cat test-suite.log || echo "Could not print test logs"
 
 install:
@@ -47,7 +48,7 @@ after_success:
   - cd ${TRAVIS_BUILD_DIR?}
   # ... if this is a code coverage build we upload the coverage results ...
   - if [ "x${COVERAGE}" = "xyes" ]; then
-    docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/coverage.sh" ;
+    docker run --rm -it -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ci/coverage.sh" ;
     coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
     fi
   # ... if this is a documentation build we generate the docs ...
@@ -56,7 +57,7 @@ after_success:
   # and then push it using the host ...
   - if [ "x${GENDOCS}" == "xyes" ]; then
     docker run --rm -it --env GIT_NAME=${GIT_NAME?} --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages ;
+    (cd doc/html ; git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages) ;
     fi
 
 notifications:
