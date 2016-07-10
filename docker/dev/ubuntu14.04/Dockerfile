@@ -7,10 +7,10 @@ RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
 RUN apt-get update
 RUN apt-get install -y \
     automake \
+    clang-3.6 \
     doxygen \
     g++-5 \
     gcc-5 \
-    clang-3.6 \
     git \
     lcov \
     libboost1.55-all-dev \
@@ -33,10 +33,10 @@ RUN tar -xf autoconf-archive-2016.03.20.tar.xz
 RUN cd autoconf-archive-2016.03.20 && ./configure --prefix=/usr && make && make install
  
 WORKDIR /var/tmp/build-skye
-RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
-RUN tar -xf skye-0.3.tar.gz
-RUN cd skye-0.3 && \
-    CXX=g++ CC=gcc ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
+RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
+RUN tar -xf skye-0.3.2.tar.gz
+RUN cd skye-0.3.2 && \
+    CXX=g++ CC=gcc ./configure && \
     make check && \
     make install
 

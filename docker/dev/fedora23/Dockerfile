@@ -8,6 +8,7 @@ RUN dnf update -y && dnf install -y \
     boost \
     boost-devel \
     clang \
+    doxygen \
     fftw-devel \
     gcc-c++ \
     git \
