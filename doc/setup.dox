@@ -15,7 +15,7 @@ create an image with all the necessary tools, we will use Ubuntu
 
 We are going to call this image `jbdevub14.04`, you may want
 to a shorter or longer name to suite your taste.
-We assume that [docker](https://docker.io) is installed and configured
+We assume that [docker](https://docker.com) is installed and configured
 in your workstation.
 We also assume the current user has enough privileges to
 run the docker command, otherwise all such commands need to be
@@ -34,7 +34,8 @@ source code and compile it, in this case:
 
 @code
 docker run --rm -it jbdevub14.04 /bin/bash
-# The following commands are executed inside the shell
+# The following commands are executed inside the container, their
+# output is discarded once you leave the shell.
 git clone https://github.com/coryan/jaybeams.git
 cd jaybeams
 ./bootstrap
@@ -65,10 +66,14 @@ pre-installed.  You can then use it as normal, for example:
 
 @code
 ./docker/dev/runvariant.sh docker/dev/ubuntu14.04
+# The following commands are executed inside the container, the
+# /home/$USER/jaybeams directory is shared with the host, any changes
+# are preserved after the shell exits.
 whoami
 ls -l
-# You can edit files inside the docker container or in the host
 ./bootstrap
+# Consider using a different build subdirectory for each container, e.g.
+# mkdir ${HOSTNAME?} && cd ${HOSTNAME?}
 mkdir build
 cd build
 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
@@ -88,10 +93,15 @@ and want to test it, simply run:
 cat docker/dev/fedora23/Dockerfile{,.test} | docker build -
 @endcode
 
-@section fedora Fedora 21 and 22
+@subsection docker_as_docs Using the Dockerfiles as Documentation
+
+If you prefer not to use docker, the scripts are fairly easy to read.
+Each `RUN` command is a step that you must follow manually.
+
+@section fedora Fedora 23
 
 We assume that you have superuser privileges in your workstation.  The
-instructions were originally written for Fedora 21, I will try to make
+instructions were originally written for Fedora 23, I will try to make
 them more generic over time.  Please submit patches to support other
 systems.
 
@@ -99,9 +109,6 @@ Installing the developement tools:
 
 @code
 sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make
-
-# Patch the autoconf library
-rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
 
 # YAML-CPP (C++ Wrappers for YAML files)
 sudo yum install yaml-cpp-devel
@@ -119,10 +126,22 @@ This is the easy part:
 @code
 git clone https://github.com/coryan/jaybeams.git
 cd jaybeams
+@endcode
+
+The `autoconf-archive` distributed with Fedora 23 triggers a bug in
+clang++ when determining if it supports C++11, to work around this
+problem you can patch the macros:
+
+@code
+# Patch the autoconf library
+rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
+@endcode
+
+With the code compiled in this way, you can now 
+
+@code
 ./bootstrap
-mkdir clang
-cd clang
-CXX=clang++ CC=clang ../configure
+CXX=clang++ CC=clang ./configure
 # Just compile the code
 make
 # Compile the code, the tests and run the tests
@@ -130,35 +149,14 @@ make check
 #
 @endcode
 
-@section ubuntu_xenial Ubuntu 16.04 (Xenial Xenus LTS)
+Optionally, consider building in a subdirectory, change the path to
+the configure script below in this case:
 
 @code
-# Install the tools, compilers, etc.
-sudo apt-get install automake g++ gcc libfftw3-dev libyaml-cpp-dev libboost-all-dev autoconf-archive git make
-
-# Skye (Small Mocking framework)
-wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
-tar -xf skye-0.3.tar.gz
-(cd skye-0.3 && CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && make check && sudo make install)
-@endcode
-
-@subsection ubuntu_xenial_build
-
-This should be the easy part:
-
-@code
-git clone https://github.com/coryan/jaybeams.git
-cd jaybeams
 ./bootstrap
-mkdir gcc && cd gcc
-CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu
-make -j 4 check
-@endcode
-
-If you want to use FFTW3 to run time delay analysis use:
-
-@code
-CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ../configure  --with-boost-libdir=/usr/lib/x86_64-linux-gnu --enable-fftw3
+mkdir clang
+cd clang
+CXX=clang++ CC=clang ../configure
 make -j 4 check
 @endcode
 
