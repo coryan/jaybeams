@@ -188,9 +188,7 @@ pos:
   y: 4
 )""";
 
-  BOOST_MESSAGE("Applying overrides from\n"
-                << contents
-                << "\n");
+  BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config1 tested;
   std::vector<std::string> expected({"ini", "mini", "myni", "mo"});
   BOOST_CHECK_EQUAL_COLLECTIONS(
@@ -244,9 +242,7 @@ vars:
       z: 3
 )""";
 
-  BOOST_MESSAGE("Applying overrides from\n"
-                << contents
-                << "\n");
+  BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
 
   config2 tested;
   std::istringstream is(contents);
@@ -368,9 +364,7 @@ myni:
     z: 5
 )""";
 
-  BOOST_MESSAGE("Applying overrides from doc\n"
-                << contents
-                << "\n");
+  BOOST_TEST_MESSAGE("Applying overrides from doc\n" << contents << "\n");
 
   config4 tested;
   std::istringstream is(contents);
@@ -579,7 +573,7 @@ baz:
 )""";
   namespace fs = boost::filesystem;
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
-  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
   std::shared_ptr<int> delete_dir(
       new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
@@ -589,7 +583,7 @@ baz:
     fs::path base = fs::path(jb::sysconfdir()).filename();
     BOOST_REQUIRE(fs::create_directories(tmpdir / base));
     fs::path fullpath = tmpdir / base / filename;
-    BOOST_MESSAGE("writing contents to " << fullpath.string());
+    BOOST_TEST_MESSAGE("writing contents to " << fullpath.string());
     std::ofstream os(fullpath.string());
     os << contents;
   }
@@ -615,7 +609,7 @@ baz:
 BOOST_AUTO_TEST_CASE(config_object_config_file_missing_with_env) {
   namespace fs = boost::filesystem;
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
-  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
   std::shared_ptr<int> delete_dir(
       new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
@@ -651,7 +645,7 @@ baz:
 )""";
   namespace fs = boost::filesystem;
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
-  BOOST_MESSAGE("creating unique tempdir at " << tmpdir);
+  BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
   std::shared_ptr<int> delete_dir(
       new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
@@ -661,7 +655,7 @@ baz:
     fs::path base = fs::path(jb::sysconfdir()).filename();
     BOOST_REQUIRE(fs::create_directories(tmpdir / base));
     fs::path fullpath = tmpdir / base / filename;
-    BOOST_MESSAGE("writing contents to " << fullpath.string());
+    BOOST_TEST_MESSAGE("writing contents to " << fullpath.string());
     std::ofstream os(fullpath.string());
     os << contents;
   }

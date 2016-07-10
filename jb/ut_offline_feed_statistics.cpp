@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_print_csv) {
   nfields = std::count(b.begin(), b.end(), ',');
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
-  BOOST_MESSAGE("CSV Output for inspection: \n" << h << b);
+  BOOST_TEST_MESSAGE("CSV Output for inspection: \n" << h << b);
 }
 
 /**

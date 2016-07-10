@@ -79,20 +79,18 @@ input: bar
 outputs: [ {bar: 6} ]
 )""";
 
-  BOOST_MESSAGE("Applying overrides from\n"
-                << contents
-                << "\n");
+  BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config tested;
   tested
       .input("foo")
       .outputs(std::vector<simple>(
         { simple().foo("1").bar("2"), simple().foo("3").bar("4") }));
-  BOOST_MESSAGE("Initial Configuration\n" << tested << "\n");
+  BOOST_TEST_MESSAGE("Initial Configuration\n" << tested << "\n");
   std::istringstream is(contents);
   int argc = 0;
   tested.load_overrides(argc, nullptr, is);
 
-  BOOST_MESSAGE("Post-Override Configuration\n" << tested << "\n");
+  BOOST_TEST_MESSAGE("Post-Override Configuration\n" << tested << "\n");
 
   BOOST_CHECK_EQUAL(tested.input(), "bar");
   std::vector<simple> expected(
@@ -112,20 +110,18 @@ input: bar
 outputs: [ {bar: 6}, {}, {foo: 7, bar: 8} ]
 )""";
 
-  BOOST_MESSAGE("Applying overrides from\n"
-                << contents
-                << "\n");
+  BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config tested;
   tested
       .input("foo")
       .outputs(std::vector<simple>(
         { simple().foo("1").bar("2"), simple().foo("3").bar("4") }));
-  BOOST_MESSAGE("Initial Configuration\n" << tested << "\n");
+  BOOST_TEST_MESSAGE("Initial Configuration\n" << tested << "\n");
   std::istringstream is(contents);
   int argc = 0;
   tested.load_overrides(argc, nullptr, is);
 
-  BOOST_MESSAGE("Post-Override Configuration\n" << tested << "\n");
+  BOOST_TEST_MESSAGE("Post-Override Configuration\n" << tested << "\n");
 
   BOOST_CHECK_EQUAL(tested.input(), "bar");
   std::vector<simple> expected(

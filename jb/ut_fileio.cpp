@@ -8,7 +8,7 @@
  * Implement the common part of the tests.
  */
 void check_read_write(boost::filesystem::path const& path) {
-  BOOST_MESSAGE("Using path=<" << path.string() << ">\n");
+  BOOST_TEST_MESSAGE("Using path=<" << path.string() << ">\n");
 
   std::vector<std::string> lines{
     "This is a sample file",
@@ -20,7 +20,7 @@ void check_read_write(boost::filesystem::path const& path) {
     boost::iostreams::filtering_ostream out;
     jb::open_output_file(out, path.string());
     for (auto const& line : lines) {
-      BOOST_MESSAGE("Writing: " << line);
+      BOOST_TEST_MESSAGE("Writing: " << line);
       out << line << "\n";
     }
   }
