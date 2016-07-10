@@ -36,10 +36,8 @@ script:
   - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ./bootstrap && mkdir build && cd build && CXX=${COMPILER?} ../configure ${CONFIGUREFLAGS} && make -j 2 check"
-  - if [ $? -ne 0 ]; then
-    cat build/test-suite.log || echo "Could not print test logs" ;
-    fi
+  - docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ./bootstrap && CXX=${COMPILER?} ./configure ${CONFIGUREFLAGS} && make -j 2 check"
+  - cat build/test-suite.log || echo "Could not print test logs"
 
 install:
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
@@ -56,9 +54,9 @@ after_success:
   # - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
   # ... create the Doxygen documentation inside the docker container,
   # and then push it using the host ...
-  - if [ "x${GENDOCS?}" == "xyes" ]; then
+  - if [ "x${GENDOCS}" == "xyes" ]; then
     docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    echo git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages ;
+    git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages ;
     fi
 
 notifications:
