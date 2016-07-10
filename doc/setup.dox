@@ -7,6 +7,87 @@ These are my notes on how to prepare your environment to build
 JayBeams.  If you find a problem with the instructions, please submit
 a patch for the instructions so I can fix the problem.
 
+@section docker Setting up a Docker based Development Environment
+
+Use any of the Dockerfiles found in the `docker/dev/*/Dockerfile` to
+create an image with all the necessary tools, we will use Ubuntu
+14.04 as an example, but all of them would work in a similar fashion.
+
+We are going to call this image `jbdevub14.04`, you may want
+to a shorter or longer name to suite your taste.
+We assume that [docker](https://docker.io) is installed and configured
+in your workstation.
+We also assume the current user has enough privileges to
+run the docker command, otherwise all such commands need to be
+prefixed with `sudo`.
+
+@code
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+docker build -t jbdevub14.04 docker/dev/ubuntu14.04
+@endcode
+
+@subsection docker_build Building a Docker Image for Development
+
+You could then run a shell within that image, download the Jaybeams
+source code and compile it, in this case:
+
+@code
+docker run --rm -it jbdevub14.04 /bin/bash
+# The following commands are executed inside the shell
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+./bootstrap
+./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+make -j 4 check
+@endcode
+
+@subsection docker_mount Using the Working Directory in the Docker Container
+
+Sometimes it is convenient to use the jaybeams working directory
+inside the container, that allows you to test the same code with
+multiple distributions and compilers before you push the data.
+We provide a script that creates a docker image with a clone of your
+USER and UID inside the container, and mounts your current working
+copy as a volume.
+
+To test it run:
+
+@code
+git clone https://github.com/coryan/jaybeams.git
+cd jaybeams
+./docker/dev/runvariant.sh docker/dev/ubuntu14.04
+@endcode
+
+That command will drop you into a shell inside the container for
+Ubuntu 14.04 with all the necessary development tools and dependencies
+pre-installed.  You can then use it as normal, for example:
+
+@code
+./docker/dev/runvariant.sh docker/dev/ubuntu14.04
+whoami
+ls -l
+# You can edit files inside the docker container or in the host
+./bootstrap
+mkdir build
+cd build
+./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+make -j 4 check
+@endcode
+
+@subsection docker_test Testing Docker Development Images
+
+From time to time you may need to modify or add a docker image, for example,
+to add new dependencies, or because a new version of a distribution or
+compiler has become available.  Each directory has a helper Dockerfile
+that can be used to test if the image can be used for development.
+For example, let's suppose you have modified the Fedora 23 Dockerfile
+and want to test it, simply run:
+
+@code
+cat docker/dev/fedora23/Dockerfile{,.test} | docker build -
+@endcode
+
 @section fedora Fedora 21 and 22
 
 We assume that you have superuser privileges in your workstation.  The
