@@ -17,6 +17,7 @@ struct encoder {
    * @param size the size of the message
    * @param msg the contents of the message
    * @param offset where in the message to start encoding
+   * @param x the value to encode
    *
    * @throws std::runtime_error if the buffer cannot hold the message.
    */

@@ -148,7 +148,6 @@ class mold_udp_pacer {
    * If there are any pending messages those messages are flushed and
    * the resulting packet constitutes the heartbeat.
    *
-   * @param ts the wall clock time when the message was received
    * @param sink the destination for the MoldUDP64 packets
    *
    * @tparam message_sink_type please see handle_message() for details
@@ -163,8 +162,9 @@ class mold_udp_pacer {
    * Add another message to the current queue, flushing first if
    * necessary.
    *
-   * @param ts the timestamp when the message was received
+   * @param recv_ts the timestamp when the message was received
    * @param msg the message contents and location
+   * @param ts the timestamp when the last message was sent
    * @param sink the destination for the MoldUDP64 packets
    */
   template<typename message_sink_type>
