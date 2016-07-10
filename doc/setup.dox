@@ -34,7 +34,7 @@ source code and compile it, in this case:
 
 @code
 docker run --rm -it jbdevub14.04 /bin/bash
-@code
+@endcode
 
 The following commands are executed inside the container, their
 output is discarded once you leave the shell.
