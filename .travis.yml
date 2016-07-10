@@ -52,7 +52,7 @@ after_success:
     coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
     fi
   # ... if this is a documentation build we generate the docs ...
-  # - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
+  - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
   # ... create the Doxygen documentation inside the docker container,
   # and then push it using the host ...
   - if [ "x${GENDOCS}" == "xyes" ]; then
