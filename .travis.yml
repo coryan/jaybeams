@@ -12,11 +12,15 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++-5 CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['lcov']
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS=--with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
     - os: linux
       compiler: gcc
@@ -40,6 +44,9 @@ script:
   - if [ $? -ne 0 ]; then
     cat build/test-suite.log || echo "Could not print test logs" ;
     fi
+
+install:
+  - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
 
 before_script:
   # Always cleanup the code coverage metrics before starting the build ...
