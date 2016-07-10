@@ -54,9 +54,10 @@ after_success:
     fi
   # ... if this is a documentation build we generate the docs ...
   # - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
+  # ... create the Doxygen documentation inside the docker container,
+  # and then push it using the host ...
   - if [ "x${GENDOCS?}" == "xyes" ]; then
     docker run --rm -it -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    # ... and now we push the changes (if any) to the gh-pages branch
     echo git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages ;
     fi
 
