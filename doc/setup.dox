@@ -34,8 +34,12 @@ source code and compile it, in this case:
 
 @code
 docker run --rm -it jbdevub14.04 /bin/bash
-# The following commands are executed inside the container, their
-# output is discarded once you leave the shell.
+@code
+
+The following commands are executed inside the container, their
+output is discarded once you leave the shell.
+
+@code
 git clone https://github.com/coryan/jaybeams.git
 cd jaybeams
 ./bootstrap
@@ -66,14 +70,23 @@ pre-installed.  You can then use it as normal, for example:
 
 @code
 ./docker/dev/runvariant.sh docker/dev/ubuntu14.04
-# The following commands are executed inside the container, the
-# /home/$USER/jaybeams directory is shared with the host, any changes
-# are preserved after the shell exits.
+@endcode
+
+The following commands are executed inside the container, the
+`/home/$USER/jaybeams` directory is shared with the host, any changes
+are preserved after the shell exits.
+
+@code
 whoami
 ls -l
 ./bootstrap
-# Consider using a different build subdirectory for each container, e.g.
-# mkdir ${HOSTNAME?} && cd ${HOSTNAME?}
+@endcode
+
+In this example we compile and test in a `build` subdirectory, you
+should onsider using a different build subdirectory for each
+container, e.g. `mkdir ${HOSTNAME?} && cd ${HOSTNAME?}`
+
+@code
 mkdir build
 cd build
 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
@@ -108,15 +121,16 @@ systems.
 Installing the developement tools:
 
 @code
-sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make
+sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make yaml-cpp-devel
+@endcode
 
-# YAML-CPP (C++ Wrappers for YAML files)
-sudo yum install yaml-cpp-devel
+We are going to manually install a small mocking framework
+[Skye](https://github.com/coryan/Skye)
 
-# Skye (Small Mocking framework)
-wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
-tar -xf skye-0.3.tar.gz
-(cd skye-0.3 && ./configure && make check && sudo make install)
+@code
+wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
+tar -xf skye-0.3.2.tar.gz
+(cd skye-0.3.2 && ./configure && make check && sudo make install)
 @endcode
 
 @subsection fedora_build Checkout the Code and Build
@@ -133,30 +147,31 @@ clang++ when determining if it supports C++11, to work around this
 problem you can patch the macros:
 
 @code
-# Patch the autoconf library
 rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
 @endcode
 
-With the code compiled in this way, you can now 
+With the code compiled in this way, you can now compile the code:
 
 @code
 ./bootstrap
-CXX=clang++ CC=clang ./configure
-# Just compile the code
+./configure
 make
-# Compile the code, the tests and run the tests
-make check
-#
 @endcode
 
-Optionally, consider building in a subdirectory, change the path to
-the configure script below in this case:
+To compile and run the test use the `check` make target:
+
+@code
+make check
+@endcode
+
+Optionally, consider building in a subdirectory, for example if you
+want to test with llvm:
 
 @code
 ./bootstrap
 mkdir clang
 cd clang
-CXX=clang++ CC=clang ../configure
+CXX=clang++ ../configure
 make -j 4 check
 @endcode
 
