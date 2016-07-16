@@ -130,6 +130,7 @@ void config::validate() const {
         "  You must specify an input file.", 1);
   }
   log().validate();
+  pacer().validate();
 }
 
 } // anonymous namespace
