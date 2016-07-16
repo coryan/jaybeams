@@ -5,7 +5,6 @@
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/udp.hpp>
-#include <boost/tokenizer.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -24,6 +23,7 @@ class config : public jb::config_object {
 
   jb::config_attribute<config,std::string> input_file;
   jb::config_attribute<config,std::string> destination;
+  jb::config_attribute<config,int> port;
   jb::config_attribute<config,jb::log::config> log;
   jb::config_attribute<config,jb::itch5::mold_udp_pacer_config> pacer;
 };
@@ -44,9 +44,7 @@ class replayer {
       : socket_(std::move(s))
       , endpoint_(ep)
       , pacer_(cfg)
-  {
-    socket_.connect(ep);
-  }
+  {}
 
   /// Handle all messages as blobs
   void handle_unknown(
@@ -79,19 +77,11 @@ int main(int argc, char* argv[]) try {
       argc, argv, std::string("itch5moldreplay.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
-  boost::tokenizer<boost::char_separator<char>> tok(
-      cfg.destination(), boost::char_separator<char>(":"));
-  std::vector<std::string> tokens(tok.begin(), tok.end());
-  if (tokens.size() != 2) {
-    throw jb::usage(
-        "--destination must be in host:port format.", 1);
-  }
-
   boost::asio::io_service io_service;
-  using boost::asio::ip::udp;
-  udp::socket s(io_service, udp::endpoint(udp::v4(), 0));
-  udp::resolver resolver(io_service);
-  udp::endpoint endpoint = *resolver.resolve({udp::v4(), tokens[0], tokens[1]});
+  auto address = boost::asio::ip::address::from_string(cfg.destination());
+  boost::asio::ip::udp::endpoint endpoint(address, cfg.port());
+  JB_LOG(info) << "Sending to endpoint=" << endpoint;
+  boost::asio::ip::udp::socket s(io_service, endpoint.protocol());
   
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
@@ -113,12 +103,24 @@ int main(int argc, char* argv[]) try {
 
 namespace {
 
+int default_multicast_port() {
+  return 50000;
+}
+
+std::string default_multicast_group() {
+  return "FF01::1";
+}
+
 config::config()
     : input_file(desc("input-file").help(
         "An input file with ITCH-5.0 messages."), this)
     , destination(desc("destination").help(
-        "The destination for the UDP messages, in address:port format. "
-        "The destination can be a unicast or multicast address."), this)
+        "The destination for the UDP messages. "
+        "The destination can be a unicast or multicast address."), this,
+                  default_multicast_group())
+    , port(desc("port").help(
+        "The destination port for the UDP messages. "), this,
+           default_multicast_port())
     , log(desc("log", "logging"), this)
     , pacer(desc("pacer", "mold-udp-pacer"), this)
 {}
