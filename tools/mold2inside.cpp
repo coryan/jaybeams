@@ -1,11 +1,13 @@
 #include <jb/itch5/compute_inside.hpp>
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/offline_feed_statistics.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/udp.hpp>
+#include <boost/asio/ip/multicast.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -30,6 +32,28 @@ class config : public jb::config_object {
   jb::config_attribute<config,bool> enable_symbol_stats;
 };
 
+class mold_channel {
+ public:
+  mold_channel(
+      boost::asio::io_service& io,
+      std::string const& listen_address,
+      int multicast_port,
+      std::string const& multicast_group);
+
+ private:
+  void restart_async_receive_from();
+  void handle_received(
+      boost::system::error_code const& ec, size_t bytes_received);
+
+ private:
+  boost::asio::ip::udp::socket socket_;
+  std::uint64_t expected_sequence_number_;
+
+  static std::size_t const buflen = 1<<16;
+  char buffer_[buflen];
+  boost::asio::ip::udp::endpoint sender_endpoint_;
+};
+
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
@@ -40,41 +64,13 @@ int main(int argc, char* argv[]) try {
 
   boost::asio::io_service io_service;
 
-  auto address = boost::asio::ip::address::from_string(cfg.listen_address());
-  boost::asio::ip::udp::endpoint endpoint(address, cfg.multicast_port());
-  boost::asio::ip::udp::socket socket(io_service, endpoint);
-  JB_LOG(info) << "Listening on endpoint=" << endpoint
-               << ", local_endpoint=" << socket.local_endpoint();
+  mold_channel channel(
+      io_service, cfg.listen_address(), cfg.multicast_port(),
+      cfg.multicast_group());
+
+  io_service.run();
 
 #if 0
-  udp::endpoint listen_endpoint(
-      boost::asio::ip::address::from_string("0.0.0.0"), tokens[1]);
-  auto address = boost::asio::ip::address::from_string(tokens[0]);
-
-  udp::socket s(io_service);
-  s.open(listen_endpoint.protocol());
-  s.set_option(socket::reuse_address(true));
-  s.bind(listen_endpoint);
-  s.set_option(boost::asio::ip::multicast::join_group(address));
-
-  std::size_t const max_udp_length = 1<<16;
-  char buffer[max_udp_length];
-
-  boost::asio::ip::udp sender_endpoint;
-  auto receive_callback = [&s](
-      boost::system::error_coder& error,
-      size_t bytes_received) {
-  };
-  s.async_receive_from(
-      boost::asio::buffer(buffer, max_udp_length), sender_endpoint,
-      [receive_callback](boost::system::error_coder& error,
-                         size_t bytes_received) {
-        received_callback(error, bytes_received);
-        s.async_receive_from(
-            boost::asio::buffer(buffer, max_udp_length), sender_endpoint,
-            
-      });
-  
   boost::iostreams::filtering_ostream out;
   jb::open_output_file(out, cfg.output_file());
 
@@ -191,6 +187,59 @@ void config::validate() const {
   log().validate();
   stats().validate();
   symbol_stats().validate();
+}
+
+mold_channel::mold_channel(
+    boost::asio::io_service& io,
+    std::string const& listen_address,
+    int multicast_port,
+    std::string const& multicast_group)
+    : socket_(io)
+    , expected_sequence_number_(0) {
+  auto address = boost::asio::ip::address::from_string(listen_address);
+  boost::asio::ip::udp::endpoint endpoint(address, multicast_port);
+  boost::asio::ip::udp::socket socket(io);
+  socket_.open(endpoint.protocol());
+  socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
+  socket_.bind(endpoint);
+
+  auto group_address = boost::asio::ip::address::from_string(multicast_group);
+  socket_.set_option(boost::asio::ip::multicast::join_group(group_address));
+
+  JB_LOG(info) << "Listening on endpoint=" << socket_.local_endpoint()
+               << ", requested=" << endpoint
+               << " for data in multicast group=" << group_address;
+
+  restart_async_receive_from();
+}
+
+void mold_channel::restart_async_receive_from() {
+  socket_.async_receive_from(
+      boost::asio::buffer(buffer_, buflen), sender_endpoint_,
+      [this](boost::system::error_code const& ec, size_t bytes_received) {
+        handle_received(ec, bytes_received);
+      });
+}
+
+void mold_channel::handle_received(
+    boost::system::error_code const& ec, size_t bytes_received) {
+  if (!ec and bytes_received > 0) {
+    auto sequence_number = jb::itch5::decoder<true,std::uint64_t>::r(
+        bytes_received, buffer_,
+        jb::itch5::mold_udp_protocol::sequence_number_offset);
+
+    auto block_count = jb::itch5::decoder<true,std::uint16_t>::r(
+        bytes_received, buffer_,
+        jb::itch5::mold_udp_protocol::block_count_offset);
+
+    if (sequence_number != expected_sequence_number_) {
+      JB_LOG(info) << "Mismatched sequence number, expected="
+                   << expected_sequence_number_
+                   << ", got=" << sequence_number;
+    }
+    expected_sequence_number_ += sequence_number + block_count;
+  }
+  restart_async_receive_from();
 }
 
 } // anonymous namespace
