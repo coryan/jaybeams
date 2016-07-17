@@ -295,7 +295,6 @@ void mold_channel::handle_received(
         bytes_received, buffer_,
         jb::itch5::mold_udp_protocol::block_count_offset);
 
-    JB_LOG(info) << "Received packet with starting seqno=" << sequence_number;
     // ... if the message is out of order we simply print the problem,
     // in a more realistic application we would need to reorder them
     // and gap fill if needed, and sometimes do even more complicated
@@ -309,7 +308,7 @@ void mold_channel::handle_received(
     
 
     //  offset represents the start of the MoldUDP64 block ...
-    std::size_t offset = jb::itch5::mold_udp_protocol::block_count_offset + 2;
+    std::size_t offset = jb::itch5::mold_udp_protocol::header_size;
     // ... process each message in the MoldUDP64 packet, in order.
     for (std::size_t block = 0; block != block_count; ++block) {
       // ... fetch the block size ...
@@ -327,6 +326,7 @@ void mold_channel::handle_received(
       // proceesed ...
       sequence_number++;
       message_offset_ += message_size;
+      offset += message_size;
     }
     // ... since we are not dealing with gaps, or message reordering
     // just reset the next expected number ...
