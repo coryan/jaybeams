@@ -86,7 +86,8 @@ examples = \
   tools/itch5inside \
   tools/itch5moldreplay \
   tools/itch5stats \
-  tools/mold2inside
+  tools/mold2inside \
+  tools/moldheartbeat
 
 noinst_PROGRAMS = $(examples) $(benchmarks)
 
@@ -386,6 +387,9 @@ tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
 
 tools_mold2inside_SOURCES = tools/mold2inside.cpp
 tools_mold2inside_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
+
+tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
+tools_moldheartbeat_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
 
 ################################################################
 # benchmarks and unit tests
