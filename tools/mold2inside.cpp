@@ -181,7 +181,7 @@ std::string default_listen_address() {
 }
 
 std::string default_multicast_group() {
-  return "ffa1::aa";
+  return "::1";
 }
 
 int default_multicast_port() {
