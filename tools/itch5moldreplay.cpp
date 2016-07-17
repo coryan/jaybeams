@@ -44,7 +44,7 @@ class replayer {
            jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
-      , pacer_(cfg)
+      , pacer_(cfg, jb::itch5::mold_udp_pacer<>::session_id_type("ITCH/RPLY"))
   {}
 
   /// Handle all messages as blobs
