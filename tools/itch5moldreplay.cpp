@@ -2,15 +2,16 @@
 #include <jb/itch5/mold_udp_pacer.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
+#include <jb/as_hhmmss.hpp>
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/udp.hpp>
+#include <boost/asio/ip/multicast.hpp>
 
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
 #include <thread>
-#include <unordered_map>
 
 namespace {
 
@@ -52,7 +53,11 @@ class replayer {
     auto sink = [this](auto buffers) {
       socket_.send_to(buffers, endpoint_);
     };
-    auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration const& d) {
+    auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
+      if (d > std::chrono::seconds(10)) {
+        JB_LOG(info) << "Sleep request for " << jb::as_hh_mm_ss_u(d);
+        d = std::chrono::seconds(10);
+      }
       std::this_thread::sleep_for(d);
     };
     pacer_.handle_message(recv_ts, msg, sink, sleeper);
@@ -82,6 +87,7 @@ int main(int argc, char* argv[]) try {
   boost::asio::ip::udp::endpoint endpoint(address, cfg.port());
   JB_LOG(info) << "Sending to endpoint=" << endpoint;
   boost::asio::ip::udp::socket s(io_service, endpoint.protocol());
+  s.set_option(boost::asio::ip::multicast::enable_loopback(true));
   
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
@@ -108,7 +114,7 @@ int default_multicast_port() {
 }
 
 std::string default_multicast_group() {
-  return "FF01::1";
+  return "::1";
 }
 
 config::config()
