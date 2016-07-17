@@ -177,7 +177,7 @@ jb::offline_feed_statistics::config default_per_symbol_stats() {
 }
 
 std::string default_listen_address() {
-  return "::";
+  return "";
 }
 
 std::string default_multicast_group() {
@@ -233,21 +233,39 @@ mold_channel::mold_channel(
     , socket_(io)
     , expected_sequence_number_(0)
     , message_offset_(0) {
-  auto address = boost::asio::ip::address::from_string(listen_address);
+  auto group_address = boost::asio::ip::address::from_string(multicast_group);
+
+  boost::asio::ip::address address;
+
+  // Automatically configure the best listening address ...
+  if (listen_address != "") {
+    // ... the user speficied a listening address, use that ...
+    address = boost::asio::ip::address::from_string(listen_address);
+  } else if (not group_address.is_multicast()) {
+    address = group_address;
+  } else {
+    // ... pick a default based on the protocol for the listening
+    // group ...
+    if (group_address.is_v6()) {
+      address = boost::asio::ip::address_v6();
+    } else {
+      address = boost::asio::ip::address_v4();
+    }
+  }
+  
   boost::asio::ip::udp::endpoint endpoint(address, multicast_port);
   boost::asio::ip::udp::socket socket(io);
   socket_.open(endpoint.protocol());
   socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
 
   JB_LOG(info) << "Requested endpoint=" << endpoint;
-  auto group_address = boost::asio::ip::address::from_string(multicast_group);
+  socket_.bind(endpoint);
+  JB_LOG(info) << " .. bound to endpoint=" << socket_.local_endpoint();
   if (group_address.is_multicast()) {
-    socket_.set_option(boost::asio::ip::multicast::join_group(group_address));
+    socket_.set_option(
+        boost::asio::ip::multicast::join_group(group_address));
     socket_.set_option(boost::asio::ip::multicast::enable_loopback(true));
     JB_LOG(info) << " .. joining multicast group=" << group_address;
-  } else {
-    socket_.bind(endpoint);
-    JB_LOG(info) << " .. bound to endpoint=" << socket_.local_endpoint();
   }
 
   restart_async_receive_from();
