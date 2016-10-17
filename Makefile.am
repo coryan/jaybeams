@@ -26,6 +26,7 @@ jb_unit_tests = \
   jb/ut_logging \
   jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
+  jb/ut_book_depth_statistics \
   jb/ut_severity_level \
   jb/ut_strtonum
 
@@ -39,6 +40,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_char_list_validator \
   jb/itch5/ut_check_offset \
   jb/itch5/ut_compute_inside \
+  jb/itch5/ut_compute_book_depth \
   jb/itch5/ut_cross_trade_message \
   jb/itch5/ut_cross_type \
   jb/itch5/ut_ipo_quoting_period_update_message \
@@ -50,6 +52,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_mwcb_decline_level_message \
   jb/itch5/ut_net_order_imbalance_indicator_message \
   jb/itch5/ut_order_book \
+  jb/itch5/ut_order_book_depth \
   jb/itch5/ut_order_cancel_message \
   jb/itch5/ut_order_delete_message \
   jb/itch5/ut_order_executed_message \
@@ -84,6 +87,7 @@ benchmarks = \
 examples = \
   examples/configuration \
   tools/itch5inside \
+  tools/itch5bookdepth \
   tools/itch5moldreplay \
   tools/itch5stats
 
@@ -194,6 +198,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/log.hpp \
   jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
+  jb/book_depth_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/usage.hpp
@@ -209,6 +214,7 @@ jb_libjb_a_SOURCES = \
   jb/log.cpp \
   jb/merge_yaml.cpp \
   jb/offline_feed_statistics.cpp \
+  jb/book_depth_statistics.cpp \
   jb/severity_level.cpp
 
 jb_libjb_a_LIBADD = 
@@ -279,6 +285,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/char_list_validator.cpp \
   jb/itch5/check_offset.cpp \
   jb/itch5/compute_inside.cpp \
+  jb/itch5/compute_book_depth.cpp \
   jb/itch5/cross_trade_message.cpp \
   jb/itch5/ipo_quoting_period_update_message.cpp \
   jb/itch5/market_participant_position_message.cpp \
@@ -288,6 +295,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/mwcb_decline_level_message.cpp \
   jb/itch5/net_order_imbalance_indicator_message.cpp \
   jb/itch5/order_book.cpp \
+  jb/itch5/order_book_depth.cpp \
   jb/itch5/order_cancel_message.cpp \
   jb/itch5/order_delete_message.cpp \
   jb/itch5/order_executed_message.cpp \
@@ -311,6 +319,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/char_list_validator.hpp \
   jb/itch5/check_offset.hpp \
   jb/itch5/compute_inside.hpp \
+  jb/itch5/compute_book_depth.hpp \
   jb/itch5/cross_trade_message.hpp \
   jb/itch5/cross_type.hpp \
   jb/itch5/decoder.hpp \
@@ -325,6 +334,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/mwcb_decline_level_message.hpp \
   jb/itch5/net_order_imbalance_indicator_message.hpp \
   jb/itch5/order_book.hpp \
+  jb/itch5/order_book_depth.hpp \
   jb/itch5/order_cancel_message.hpp \
   jb/itch5/order_delete_message.hpp \
   jb/itch5/order_executed_message.hpp \
@@ -376,6 +386,9 @@ examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5inside_SOURCES = tools/itch5inside.cpp
 tools_itch5inside_LDADD = jb/libitch5.a jb/libjb.a
+
+tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
+tools_itch5bookdepth_LDADD = jb/libitch5.a jb/libjb.a
 
 tools_itch5moldreplay_SOURCES = tools/itch5moldreplay.cpp
 tools_itch5moldreplay_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIB)
@@ -454,6 +467,10 @@ jb_ut_merge_yaml_LDADD = $(jb_ut_libs)
 jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
 jb_ut_offline_feed_statistics_LDADD = $(jb_ut_libs)
+
+jb_ut_book_depth_statistics_SOURCES = jb/ut_book_depth_statistics.cpp
+jb_ut_book_depth_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_book_depth_statistics
+jb_ut_book_depth_statistics_LDADD = $(jb_ut_libs)
 
 jb_ut_severity_level_SOURCES = jb/ut_severity_level.cpp
 jb_ut_severity_level_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_severity_level
@@ -537,6 +554,10 @@ jb_itch5_ut_compute_inside_SOURCES = jb/itch5/ut_compute_inside.cpp
 jb_itch5_ut_compute_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_inside
 jb_itch5_ut_compute_inside_LDADD = $(jb_ut_itch5_libs)
 
+jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
+jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
+jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
+
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
 jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
@@ -580,6 +601,10 @@ jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_order_book_SOURCES = jb/itch5/ut_order_book.cpp
 jb_itch5_ut_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book
 jb_itch5_ut_order_book_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_order_book_depth_SOURCES = jb/itch5/ut_order_book_depth.cpp
+jb_itch5_ut_order_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book_depth
+jb_itch5_ut_order_book_depth_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_order_cancel_message_SOURCES = jb/itch5/ut_order_cancel_message.cpp
 jb_itch5_ut_order_cancel_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_cancel_message
