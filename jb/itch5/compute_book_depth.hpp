@@ -36,12 +36,21 @@ class compute_book_depth {
   /// Define the clock used to measure processing delays
   typedef std::chrono::steady_clock::time_point time_point;
 
+  /* Ticket #?001 
   /// Callbacks
   typedef std::function<void(
       time_point, message_header const&, stock_t const&,
       half_quote const&, half_quote const&)> callback_type;
   //@}
-
+  * Callback continues returning
+  *     time_point, _header, stock 
+  * but does not return the BBO (half_quote) any longer
+  * returns the book_depth instead
+  */
+  typedef std::function<void(
+      time_point, message_header const&, stock_t const&,
+      book_depth_t const&)> callback_type;
+  
   /// Initialize an empty handler
   compute_book_depth(callback_type const& callback);
 

@@ -46,13 +46,13 @@ int main(int argc, char* argv[]) try {
 
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
   jb::book_depth_statistics stats(cfg.stats());
-  
+
+  // Ticket #?001 : callback changed, see compute_book_depth.hpp for details
   auto cb = [&](
       jb::itch5::compute_book_depth::time_point recv_ts,
       jb::itch5::message_header const& header,
       jb::itch5::stock_t const& stock,
-      jb::itch5::half_quote const& bid,
-      jb::itch5::half_quote const& offer) {
+      jb::itch5::book_depth_t const& book_depth) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
     stats.sample(header.timestamp.ts, pl);
     
@@ -69,10 +69,7 @@ int main(int argc, char* argv[]) try {
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
-        << " " << bid.first.as_integer()
-        << " " << bid.second
-        << " " << offer.first.as_integer()
-        << " " << offer.second
+        << " " << book_depth
         << "\n";
     
   };
@@ -84,13 +81,13 @@ int main(int argc, char* argv[]) try {
   jb::itch5::process_iostream(in, handler);
 
   std::cout << "printing... " << std::endl;
-  /*
-  jb::offline_feed_statistics::print_csv_header(std::cout);
+  
+  jb::book_depth_statistics::print_csv_header(std::cout);
   for (auto const& i : per_symbol) {
     i.second.print_csv(i.first.c_str(), std::cout);
   }
   stats.print_csv("__aggregate__", std::cout);
-  */
+  
   high_resolution_t::time_point t2 = high_resolution_t::now();
   auto duration = std::chrono::duration_cast<microseconds_t>( t2 - t1 ).count();
   std::cout << "duration:  " << duration << std::endl;
