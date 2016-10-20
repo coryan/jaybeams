@@ -12,8 +12,11 @@
 namespace jb {
 namespace itch5 {
 
-/// A simple represetation for price + quantity
+// A simple representation for price + quantity
 typedef std::pair<price4_t, int> half_quote;
+
+  // To keep the depth of book per symbol
+typedef unsigned long int book_depth_t;   
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
@@ -46,6 +49,12 @@ class order_book_depth {
   /// Initialize an empty order book.
   order_book_depth() {}
 
+  /* Ticket #?001 
+   * Return the book_depth on this order_book  
+   * @RETURN : const reference to book_depth_
+   */
+  const book_depth_t& get_book_depth() const {return book_depth_;};
+  
   /// Return the best bid price and quantity
   half_quote best_bid() const;
   /// Return the best offer price and quantity
@@ -105,13 +114,19 @@ class order_book_depth {
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
-   * @returns true if the inside changed
+   *
+   * Ticket #?001
+   * @returns true. This is always an event 
+   * Event is defined as the reception of a message that changes the order book
+   * Increments order_book_ when a new price (px) is emplace into the map
    */
   template<typename book_side>
   bool handle_add_order(book_side& side, price4_t px, int qty) {
       auto p = side.emplace(px, 0);
       p.first->second += qty;
-      return p.first == side.begin();
+      if (p.second)         // if there was a insertion
+	++book_depth_;      // then, there is a new price level
+      return true;
   }
   
   /**
@@ -122,29 +137,45 @@ class order_book_depth {
    * @param side the side of the book to update
    * @param px the price of the order that was reduced
    * @param reduced_qty the quantity reduced in the order
-   * @returns true if the inside changed
-   */
+   *
+   * Ticket #?001
+   * @returns true if it is an event 
+   * Event is defined as the reception of a message that changes the order book
+   * Decrements order_book_ when a price (px) is erase from the map
+   *
+   * Check if the px level exists first. The use of find is ok since 
+   * the price level "has" to exist, and the iterator returned is used 
+   * to update the quantity (or erase it if qty is 0 or less)
+   * The following exceptions (no Throw executed) are logged as warnings
+   * into JOB_LOG
+   * EXC1: trying to reduce a non-existing price level
+   * EXC2: negative quantity in order book 
+   * EXC3: negative book_depth in order book
+  */
   template<typename book_side>
   bool handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
-    // Find the price level
-    // TODO() we create the price level if it does not exist, that is
-    // fairly inneficient ..
-    auto p = side.emplace(px, 0);
+    auto pf = side.find(px);
+    if (pf == side.end()) {
+      JB_LOG(warning) << "trying to reduce a non-existing price level";  // EXC1
+      return false;    // no event
+    }
     // ... reduce the quantity ...
-    p.first->second -= reduced_qty;
-    if (p.first->second < 0) {
+    pf->second -= reduced_qty;
+    if (pf->second < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       // TODO() need a lot more details here...
-      JB_LOG(warning) << "negative quantity in order book";
+      JB_LOG(warning) << "negative quantity in order book";    // EXC2
     }
-    // ... we may erase the element and invalidate the iterator, so
-    // compute if this was at the inside or not ...
-    bool r = p.first == side.begin();
-    if (p.first->second <= 0) {
-      side.erase(p.first);
+    // now we can erase this element (pf.first) if qty <=0
+    if (pf->second <= 0) {
+      side.erase(pf);
+      if (book_depth_ == 0) 
+        JB_LOG(warning) << "negative book_depth in order book";    // EXC3	
+      else
+	--book_depth_;    // safe to decrement the unsigned book_depth_t
     }
-    return r;
+    return true;     // is an event
   }
   
  private:
@@ -153,6 +184,7 @@ class order_book_depth {
 
   buys buy_;
   sells sell_;
+  book_depth_t book_depth_ = 0;       
 };
 
 } // namespace itch5
