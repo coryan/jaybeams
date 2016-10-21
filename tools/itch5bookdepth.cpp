@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include <chrono>
+#include <limits>
 
 namespace {
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[]) try {
       jb::itch5::stock_t const& stock,
       jb::itch5::book_depth_t const& book_depth) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
-    stats.sample(header.timestamp.ts, pl);
+    stats.sample(header.timestamp.ts, book_depth);
     
     if (cfg.enable_symbol_stats()) {
       auto i = per_symbol.find(stock);
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]) try {
             stock, jb::book_depth_statistics(cfg.symbol_stats()));
         i = p.first;
      }
-      i->second.sample(header.timestamp.ts, pl);
+      i->second.sample(header.timestamp.ts, book_depth);
     }
     
     out << header.timestamp.ts.count()
@@ -110,12 +111,7 @@ namespace {
 // Define the default per-symbol stats
 jb::book_depth_statistics::config default_per_symbol_stats() {
   return jb::book_depth_statistics::config()
-      .reporting_interval_seconds(24 * 3600) // effectively disable updates
-      .max_processing_latency_nanoseconds(10000) // limit memory usage
-      .max_interarrival_time_nanoseconds(10000)  // limit memory usage 
-      .max_messages_per_microsecond(1000)  // limit memory usage
-      .max_messages_per_millisecond(10000) // limit memory usage
-      .max_messages_per_second(10000)      // limit memory usage
+    .max_book_depth(std::numeric_limits<jb::book_depth_stats_t>::max())      // limit memory usage
       ;
 }
 

@@ -36,7 +36,12 @@ namespace jb {
  * interrupts, or CPU cycles vs. elapsed time).  The only requirement
  * is for the measurements to be compatible with
  * std::chono::duration<>.
+ *
+ * Note: In order to get the book_depth_t here jb/itch5/order_book_depth.hpp
+ * needs to be included. I decided to define book_depth_stats_t here to avoid that include
  */
+typedef unsigned long int book_depth_stats_t;
+
 class book_depth_statistics {
  public:
   class config;
@@ -45,63 +50,37 @@ class book_depth_statistics {
   explicit book_depth_statistics(config const& cfg);
 
   /**
-   * Record a sample, that is process a message received at the given
-   * timestamp.
+   * Record a sample, that is book depth after the event
    *
    * @tparam event_timestamp_t the type used to record the event
    * timestamps.
-   * @tparam duration_t the type used to record the processing latency
-   * for the event.
+   * @tparam book_depth_t the type used to record the book depth after processing the event
    *
    * @param ts the event timestamp, please see the class documentation
    * for timestamps vs. time points.
-   * @param processing_latency the time it took to process the event.
+   * @param book_depth : the book depth after processing the event.
    */
-  template<typename event_timestamp_t, typename duration_t>
-  void sample(event_timestamp_t ts, duration_t processing_latency) {
-    using namespace std::chrono;
-    record_sample(
-        duration_cast<nanoseconds>(ts),
-        duration_cast<nanoseconds>(processing_latency));
+  template<typename event_timestamp_t, typename book_depth_stats_t>
+  void sample(event_timestamp_t ts, const book_depth_stats_t& book_depth) {
+    record_sample_book_depth(std::chrono::duration_cast<std::chrono::nanoseconds>(ts),
+			     book_depth);
   }
 
   /**
    * Print a CSV header.
    *
-   * Assuming there are many offline_feed_statistics<> objects (say
-   * one for each symbol, or one for each minute interval) this
-   * function can be used to print the CSV header for all of them.
-   *
    * The fields include:
-   * - name: the name of the offline_feed_statistics<> object.
+   * - name: the name of the book_depth_statistics<> object.
    * - nsamples: the number of samples received.
-   * - minRatePerSec: the minimum messages/second rate
-   * - p25RatePerSec: the 25th percentile for the messages/second rate
-   * - p50RatePerSec: the 50th percentile for the messages/second rate
-   * - p75RatePerSec: the 75th percentile for the messages/second rate
-   * - p90RatePerSec: the 90th percentile for the messages/second rate
-   * - p99RatePerSec: the 99th percentile for the messages/second rate
-   * - p999RatePerSec: the 99.9th percentile for the messages/second rate
-   * - p9999RatePerSec: the 99.99th percentile for the messages/second rate
-   * - maxRatePerSec: the maximum for the messages/second rate
-   * - minRatePerMSec, p25RatePerMSec, ..., maxRatePerMSec: the
-   *   statistics for the messages/millisecond rate.
-   * - minRatePerUSec, p25RatePerUSec, ..., maxRatePerUSec: the
-   *   statistics for the messages/microsecond rate.
-   * - minProcessingLatency, ..., maxProcessingLatency: the statistics
-   *   for processing latency of the events, in nanoseconds.
-   * - minArrival: the minimum of the timestamp difference between two
-   *   consecutive messages, in nanoseconds.
-   * - p0001Arrival: the 0.01th percentile of the timestamp difference
-   *   between two consecutive messages, in nanoseconds.
-   * - p001Arrival: the 0.1th percentile of the timestamp difference
-   *   between two consecutive messages, in nanoseconds.
-   * - p01Arrival: the 1st percentile of the timestamp difference
-   *   between two consecutive messages, in nanoseconds.
-   * - p10Arrival: the 10th percentile of the timestamp difference
-   *   between two consecutive messages, in nanoseconds.
-   * - p25Arrival, p50Arrival, p75Arrival, maxArrival: more statistics
-   *   about the arrival time.
+   * - minBookDepth: the minimum book depth observed
+   * - p25BookDepth: the 25th percentile for book depth observed
+   * - p50BookDepth: the 50th percentile for book depth observed
+   * - p75BookDepth: the 75th percentile for book depth observed
+   * - p90BookDepth: the 90th percentile for book depth observed
+   * - p99BookDepth: the 99th percentile for book depth observed
+   * - p999BookDepth: the 99.9th percentile for book depth observed
+   * - p9999BookDepth: the 99.99th percentile for book depth observed
+   * - maxBookDepth: the maximum for book depth observed
    *
    * @param os the output stream
    */
@@ -113,10 +92,11 @@ class book_depth_statistics {
   void print_csv(std::string const& name, std::ostream& os) const;
 
  private:
-  void record_sample(
-      std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
+  void record_sample_book_depth(std::chrono::nanoseconds ts, const book_depth_stats_t& book_depth);
 
  private:
+  /* Ticket #?001 : Remove histogram no longer used
+ 
   typedef event_rate_histogram<
    std::chrono::nanoseconds, std::int64_t> rate_histogram;
   rate_histogram per_sec_rate_;
@@ -133,6 +113,14 @@ class book_depth_statistics {
   std::chrono::seconds reporting_interval_;
   std::chrono::nanoseconds last_ts_;
   std::chrono::nanoseconds last_report_ts_;
+  */
+  /*
+  * Add the new histogram to handle depth of book
+  * 
+  */
+  typedef histogram<integer_range_binning<book_depth_stats_t>> book_depth_histogram_t;
+  book_depth_histogram_t book_depth_;
+  
 };
 
 /**
@@ -146,12 +134,8 @@ class book_depth_statistics::config : public jb::config_object {
   /// Validate the configuration
   void validate() const override;
 
-  jb::config_attribute<config,int> max_messages_per_second;
-  jb::config_attribute<config,int> max_messages_per_millisecond;
-  jb::config_attribute<config,int> max_messages_per_microsecond;
-  jb::config_attribute<config,std::int64_t> max_interarrival_time_nanoseconds;
-  jb::config_attribute<config,int> max_processing_latency_nanoseconds;
-  jb::config_attribute<config,int> reporting_interval_seconds;
+  // no more than this value is recorded 
+  jb::config_attribute<config,book_depth_stats_t> max_book_depth;  
 };
 
 } // namespace jb
