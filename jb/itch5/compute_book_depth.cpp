@@ -1,17 +1,6 @@
 #include <jb/itch5/compute_book_depth.hpp>
 #include <jb/assert_throw.hpp>
 
-/* Ticket #?001 
- *
- * A result update has (bool::if the was an event,
- *                      order_data,
- *                      books_by_security::iterator :: see next line)
- * A book_by_security has (stock_t, class order_book_depth)
- * Therefore to access the book_depth, we get the iterator ([2] on result update)
- * and then ->second to get the object
- * ->second.get_book_depth() to get a const reference to to depth of that stock book
- */
-
 jb::itch5::compute_book_depth::compute_book_depth(callback_type const& cb)
     : callback_(cb)
     , orders_()
@@ -34,8 +23,8 @@ void jb::itch5::compute_book_depth::handle_message(
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   auto r = handle_add_order(recv_ts, msgcnt, msgoffset, msg);
   if (std::get<0>(r)) {
-    // Ticket #?001 if there is an event, send that to the callback 
-    auto i = std::get<2>(r);      // gets the books_by_security::iterator from the map
+    auto i = std::get<2>(r);
+    // ... if there is an event send that to the callback ...
     callback_(
         recv_ts, msg.header, msg.stock,
         i->second.get_book_depth());
@@ -90,13 +79,13 @@ void jb::itch5::compute_book_depth::handle_message(
         msg.header, msg.new_order_reference_number,
         copy.buy_sell_indicator, msg.shares, copy.stock, msg.price} );
 
-  // ... finally we can decide if a callback is needed ...
+  // ... finally we can decide if an update is needed ...
   if (std::get<0>(a) or std::get<0>(r)) {
-    // Ticket #?001 if there is an event, send that to the callback 
-    auto i = std::get<2>(r);      // gets the books_by_security::iterator from the map
+    // ... if there is amn event send that to the callback ...
+    auto i = std::get<2>(r);
     callback_(
-	      recv_ts, msg.header, copy.stock,
-	      i->second.get_book_depth());
+        recv_ts, msg.header, copy.stock,
+        i->second.get_book_depth());
   }
 }
 
@@ -137,9 +126,8 @@ jb::itch5::compute_book_depth::handle_add_order(
     auto p = books_.emplace(msg.stock, order_book_depth());
     i = p.first;
   }
-  // Ticket #?001 
-  // ... add the order to the book and determine and return if it is an event
-  // ..
+  // ... add the order to the book and determine if there is an event
+  // ...
   bool is_event = i->second.handle_add_order(
       msg.buy_sell_indicator, msg.price, msg.shares);
   return std::make_tuple(is_event, position.first->second, i);
@@ -155,8 +143,7 @@ void jb::itch5::compute_book_depth::handle_reduce(
   if (std::get<0>(r)) {
     auto const& copy = std::get<1>(r);
     auto i = std::get<2>(r);
-   // Ticket #?001 
-   // ... if there is an event send that to the callback ...
+    // ... if there is an event send that to the callback ...
     callback_(
         recv_ts, header, copy.stock,
         i->second.get_book_depth());
@@ -201,7 +188,6 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
     orders_.erase(position);
   }
 
-  // Ticket #?001 : report if is an event
   // ... finally we can handle the update ...
   bool is_event = i->second.handle_order_reduced(
       copy.buy_sell_indicator, copy.px, shares);

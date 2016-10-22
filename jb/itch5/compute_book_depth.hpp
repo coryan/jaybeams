@@ -20,6 +20,14 @@
 namespace jb {
 namespace itch5 {
 
+/* Ticket https://github.com/coryan/jaybeams/issues/20
+ * 
+ * Uses order_book_depth to get the book depth
+ * Change the callback signature to report it
+ * Calls the callback on any event (changes to the book)
+ *
+ */
+
 /**
  * An implementation of jb::message_handler_concept to compute the inside.
  *
@@ -36,12 +44,7 @@ class compute_book_depth {
   /// Define the clock used to measure processing delays
   typedef std::chrono::steady_clock::time_point time_point;
 
-  /* Ticket #?001 
-  /// Callbacks
-  typedef std::function<void(
-      time_point, message_header const&, stock_t const&,
-      half_quote const&, half_quote const&)> callback_type;
-  //@}
+ /* Ticket #20
   * Callback continues returning
   *     time_point, _header, stock 
   * but does not return the BBO (half_quote) any longer
@@ -58,7 +61,6 @@ class compute_book_depth {
   time_point now() const {
     return std::chrono::steady_clock::now();
   }
-
 
   /**
    * Pre-populate the books based on the symbol directory.

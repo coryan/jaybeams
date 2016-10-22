@@ -12,9 +12,6 @@
 namespace jb {
 namespace itch5 {
 
-// A simple representation for price + quantity
-typedef std::pair<price4_t, int> half_quote;
-
   // To keep the depth of book per symbol
 typedef unsigned long int book_depth_t;   
 
@@ -49,26 +46,12 @@ class order_book_depth {
   /// Initialize an empty order book.
   order_book_depth() {}
 
-  /* Ticket #?001 
+  /* Ticket https://github.com/coryan/jaybeams/issues/20
+   * 
    * Return the book_depth on this order_book  
    * @RETURN : const reference to book_depth_
    */
   const book_depth_t& get_book_depth() const {return book_depth_;};
-  
-  /// Return the best bid price and quantity
-  half_quote best_bid() const;
-  /// Return the best offer price and quantity
-  half_quote best_offer() const;
-
-  /// The value used to represent an empty bid
-  static half_quote empty_bid() {
-    return half_quote(price4_t(0), 0);
-  }
-  /// The value used to represent an empty offer
-  static half_quote empty_offer() {
-    return half_quote(max_price_field_value<price4_t>(), 0);
-  }
-
 
   /**
    * Handle a new order.
@@ -86,7 +69,6 @@ class order_book_depth {
       return handle_add_order(buy_, px, qty);
     }
     return handle_add_order(sell_, px, qty);
-
   }
 
   /**
@@ -115,7 +97,7 @@ class order_book_depth {
    * @param px the price of the new order
    * @param qty the quantity of the new order
    *
-   * Ticket #?001
+   * Ticket https://github.com/coryan/jaybeams/issues/20
    * @returns true. This is always an event 
    * Event is defined as the reception of a message that changes the order book
    * Increments order_book_ when a new price (px) is emplace into the map
@@ -128,7 +110,7 @@ class order_book_depth {
 	++book_depth_;      // then, there is a new price level
       return true;
   }
-  
+ 
   /**
    * Refactor handle_order_reduce()
    *
@@ -138,7 +120,7 @@ class order_book_depth {
    * @param px the price of the order that was reduced
    * @param reduced_qty the quantity reduced in the order
    *
-   * Ticket #?001
+   * Ticket https://github.com/coryan/jaybeams/issues/20
    * @returns true if it is an event 
    * Event is defined as the reception of a message that changes the order book
    * Decrements order_book_ when a price (px) is erase from the map

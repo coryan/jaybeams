@@ -6,19 +6,6 @@
 
 using namespace jb::itch5;
 
-namespace std { // oh the horror
-
-bool operator==(
-    jb::itch5::half_quote const& lhs, jb::itch5::half_quote const& rhs) {
-  return lhs.first == rhs.first and lhs.second == rhs.second;
-}
-
-std::ostream& operator<<(std::ostream& os, jb::itch5::half_quote const& x) {
-  return os << "{" << x.first << "," << x.second << "}";
-}
-
-} // namespace std
-
 namespace {
 
 buy_sell_indicator_t const BUY(u'B');
@@ -49,7 +36,6 @@ stock_directory_message create_stock_directory(char const* symbol) {
 BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  // Ticket #?001 : callback changed, see *.hpp for details
   skye::mock_function<void(
       compute_book_depth::time_point, stock_t, book_depth_t)> callback;
 

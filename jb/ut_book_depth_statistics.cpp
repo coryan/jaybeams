@@ -28,31 +28,40 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string("Name,"));
 
   std::string h = header.str();
-  int nheaders = std::count(h.begin(), h.end(), ',');
+  int nheaders = std::count(h.begin(), h.end(), ',');  // save number of headers
 
   std::ostringstream body;
+
+  // testing header format
   stats.print_csv("testing", body);
   BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,0,"));
   std::string b = body.str();
   int nfields = std::count(b.begin(), b.end(), ',');
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
+  // 4 samples, book_depth {2..5}
   stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(1),5);
   stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(2),2);
   stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(3),3);
   stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(4),4);
 
+  // check 4 samples... 
   body.str("");
   stats.print_csv("testing", body);
-  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,2,"));
+  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,4,"));
+  // ... minBookDepth = 2
+  BOOST_CHECK_EQUAL(body.str().substr(10, 2), std::string("2,"));
+  // ... number of fields = to #headers
   b = body.str();
   nfields = std::count(b.begin(), b.end(), ',');
   BOOST_CHECK_EQUAL(nfields, nheaders);
-
+  
+  // add one more sample (# 5), book_depth now {1..5}
   stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(5),1);
   body.str("");
   stats.print_csv("testing", body);
-  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,1,"));
+  BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,5,"));
+  BOOST_CHECK_EQUAL(body.str().substr(10, 2), std::string("1,"));
 
   BOOST_TEST_MESSAGE("CSV Output for inspection: \n" << h << b);
 }

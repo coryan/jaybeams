@@ -9,7 +9,13 @@
 #include <unordered_map>
 
 #include <chrono>
-#include <limits>
+
+/* Ticket https://github.com/coryan/jaybeams/issues/20
+ *
+ * See https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
+ * for design details
+ *
+ */
 
 namespace {
 
@@ -48,7 +54,6 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
   jb::book_depth_statistics stats(cfg.stats());
 
-  // Ticket #?001 : callback changed, see compute_book_depth.hpp for details
   auto cb = [&](
       jb::itch5::compute_book_depth::time_point recv_ts,
       jb::itch5::message_header const& header,
@@ -65,37 +70,26 @@ int main(int argc, char* argv[]) try {
         i = p.first;
      }
       i->second.sample(header.timestamp.ts, book_depth);
-    }
-    
+    } 
     out << header.timestamp.ts.count()
         << " " << header.stock_locate
         << " " << stock
         << " " << book_depth
-        << "\n";
-    
+        << "\n";  
   };
-
-  high_resolution_t::time_point t1 = high_resolution_t::now();
-  std::cout << "working.....:  " << std::endl;
-
+    
   jb::itch5::compute_book_depth handler(cb);
   jb::itch5::process_iostream(in, handler);
 
-  std::cout << "printing... " << std::endl;
-  
-  jb::book_depth_statistics::print_csv_header(std::cout);
+  // now print the stats per simbol, and aggregated to output file
+  jb::book_depth_statistics::print_csv_header(out);
   for (auto const& i : per_symbol) {
-    i.second.print_csv(i.first.c_str(), std::cout);
+    i.second.print_csv(i.first.c_str(), out);
   }
-  stats.print_csv("__aggregate__", std::cout);
-  
-  high_resolution_t::time_point t2 = high_resolution_t::now();
-  auto duration = std::chrono::duration_cast<microseconds_t>( t2 - t1 ).count();
-  std::cout << "duration:  " << duration << std::endl;
-
-  
+  stats.print_csv("__aggregate__", out);
   return 0;
-} catch(jb::usage const& u) {
+
+ } catch(jb::usage const& u) {
   std::cerr << u.what() << std::endl;
   return u.exit_status();
 } catch(std::exception const& ex) {
@@ -111,7 +105,7 @@ namespace {
 // Define the default per-symbol stats
 jb::book_depth_statistics::config default_per_symbol_stats() {
   return jb::book_depth_statistics::config()
-    .max_book_depth(std::numeric_limits<jb::book_depth_stats_t>::max())      // limit memory usage
+    .max_book_depth(10000)      // limit memory usage
       ;
 }
 
@@ -122,15 +116,15 @@ config::config()
         "The name of the file where to store the inside data."
         "  Files ending in .gz are automatically compressed."), this)
     , log(desc("log", "logging"), this)
-    , stats(desc("stats", "offline-feed-statistics"), this)
-    , symbol_stats(desc("symbol-stats", "offline-feed-statistics"),
+    , stats(desc("stats", "book-depth-statistics"), this)
+    , symbol_stats(desc("symbol-stats", "book-depth-statistics-per-symbol"),
                    this, default_per_symbol_stats())
     , enable_symbol_stats(
         desc("enable-symbol-stats").help(
             "If set, enable per-symbol statistics."
             "  Collecting per-symbol statistics is expensive in both"
-            " memory and execution time, so it is disabled by default."),
-        this, false)
+            " memory and execution time"),
+        this, true)      // changes default to true
 {}
 
 void config::validate() const {

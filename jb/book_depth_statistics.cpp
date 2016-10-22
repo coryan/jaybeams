@@ -12,7 +12,7 @@ namespace {
  **/
 template<typename book_depth_histogram_t>
 void csv_rate(std::ostream& os, book_depth_histogram_t const& histo) {
-  os << "," << histo.observed_min()
+  os << histo.observed_min()
      << "," << histo.estimated_quantile(0.25)
      << "," << histo.estimated_quantile(0.50)
      << "," << histo.estimated_quantile(0.75)
@@ -28,6 +28,7 @@ void report_rate(
     std::chrono::nanoseconds ts, 
     book_depth_histogram_t const& histo) {
   JB_LOG(info) << ": " << jb::as_hhmmss(ts)
+               << ", NSamples =" << histo.nsamples()
                << ", min=" << histo.observed_min()
                << ", p25=" << histo.estimated_quantile(0.25)
                << ", p50=" << histo.estimated_quantile(0.50)
@@ -36,8 +37,7 @@ void report_rate(
                << ", p99=" << histo.estimated_quantile(0.99)
                << ", p99.9=" << histo.estimated_quantile(0.999)
                << ", p99.99=" << histo.estimated_quantile(0.9999)
-               << ", max=" << histo.observed_max()
-               << ", N=" << histo.nsamples();
+               << ", max=" << histo.observed_max();
 }
   
 } // anonymous namespace
@@ -47,28 +47,28 @@ jb::book_depth_statistics::book_depth_statistics(config const& cfg)
 {}
 
 void jb::book_depth_statistics::print_csv_header(std::ostream& os) {
-  os << "Name,NSamples";
-  os << ",minBookDepth,p25BookDepth,p50BookDepth"
-     << ",p75BookDepth,p90BookDepth,p99BookDepth,p999BookDepth"
-     << ",maxBookDepth";
-  os << "\n";  
+  os << "Name,NSamples"
+     << ",minBookDepth,p25BookDepth,p50BookDepth,p75BookDepth"
+     << ",p90BookDepth,p99BookDepth,p999BookDepth,p9999BookDepth"
+     << ",maxBookDepth"
+     << "\n";  
 }
 
 void jb::book_depth_statistics::record_sample_book_depth(
     std::chrono::nanoseconds ts, const book_depth_stats_t& _book_depth) {
   book_depth_.sample(_book_depth);
-  report_rate(ts, book_depth_);
+  //  report_rate(ts, book_depth_); // add a config_verbose maybe?
 }
 
 void jb::book_depth_statistics::print_csv(
     std::string const& name, std::ostream& os) const {
   if (book_depth_.nsamples() == 0 ) {
     os << name << ",0";
-    os << ",,,,,,,,";   // book depth
+    os << ",,,,,,,,,";   // book depth
     os << "\n";
     return;
   }
-  os << name;
+  os << name << "," << book_depth_.nsamples() << ",";
   csv_rate(os, book_depth_);
   os << std::endl;
 }
@@ -79,16 +79,21 @@ namespace defaults {
 #ifndef JB_OFS_DEFAULTS_max_book_depth
 #define JB_OFS_DEFAULTS_max_book_depth (std::numeric_limits<book_depth_stats_t>::max())
 #endif
-
-  //  book_depth_stats_t max_book_depth = JB_OFS_DEFAULTS_max_book_depth;
-  book_depth_stats_t max_book_depth = 100000;
+  /*
+#ifndef JB_OFS_DEFAULTS_max_book_depth
+#define JB_OFS_DEFAULTS_max_book_depth (std::numeric_limits<book_depth_stats_t>::max())
+#endif
+  
+  book_depth_stats_t max_book_depth = JB_OFS_DEFAULTS_max_book_depth;
+  */
+  book_depth_stats_t max_book_depth = 10000;
 
 } // namespace defaults
 } // namespace jb
 
 jb::book_depth_statistics::config::config()
     :  max_book_depth(
-        desc(" max-book-depth").help(
+        desc("max-book-depth").help(
             "Configure the book_depth histogram to expect"
             " no more than this many values"
             "   Higher values consume more memory, but give more accurate"

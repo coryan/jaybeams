@@ -10,6 +10,14 @@
 
 namespace jb {
 
+/* Ticket https://github.com/coryan/jaybeams/issues/20
+ *
+ * Remove all the histograms copied from offline_statistics.*
+ * Create a new histogram to handle book depth samples
+ * Set the memory limit to 10000
+ *
+ */
+  
 /**
  * Keep statistics about a feed and its offline processor.
  *
@@ -87,7 +95,7 @@ class book_depth_statistics {
   static void print_csv_header(std::ostream& os);
 
   /**
-   * Print all the measurements in CSV format.
+   * Print all the measurements in CSV format
    */
   void print_csv(std::string const& name, std::ostream& os) const;
 
@@ -95,36 +103,12 @@ class book_depth_statistics {
   void record_sample_book_depth(std::chrono::nanoseconds ts, const book_depth_stats_t& book_depth);
 
  private:
-  /* Ticket #?001 : Remove histogram no longer used
- 
-  typedef event_rate_histogram<
-   std::chrono::nanoseconds, std::int64_t> rate_histogram;
-  rate_histogram per_sec_rate_;
-  rate_histogram per_msec_rate_;
-  rate_histogram per_usec_rate_;
-  typedef histogram<integer_range_binning<std::int64_t>>
-      interarrival_histogram_t;
-  interarrival_histogram_t interarrival_;
-
-  typedef histogram<integer_range_binning<std::uint64_t>>
-      processing_latency_histogram_t;
-  processing_latency_histogram_t processing_latency_;
-
-  std::chrono::seconds reporting_interval_;
-  std::chrono::nanoseconds last_ts_;
-  std::chrono::nanoseconds last_report_ts_;
-  */
-  /*
-  * Add the new histogram to handle depth of book
-  * 
-  */
   typedef histogram<integer_range_binning<book_depth_stats_t>> book_depth_histogram_t;
-  book_depth_histogram_t book_depth_;
-  
+  book_depth_histogram_t book_depth_;  
 };
 
 /**
- * Configure an book_depth_statistics object
+ * Configure a book_depth_statistics object
  */
 class book_depth_statistics::config : public jb::config_object {
  public:
