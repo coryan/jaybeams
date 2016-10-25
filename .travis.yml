@@ -47,7 +47,7 @@ after_success:
   # We take some additional action on successful builds ...
   - cd ${TRAVIS_BUILD_DIR?}
   # ... if this is a code coverage build we upload the coverage results ...
-  - if [ "x${COVERAGE}" = "xyes" ]; then
+  - if [ "x$TRAVIS_PULL_REQUEST" == "xfalse" -a "x${COVERAGE}" = "xyes" ]; then
     docker run --rm -it -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ci/coverage.sh" ;
     coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
     fi
@@ -55,7 +55,7 @@ after_success:
   - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
   # ... create the Doxygen documentation inside the docker container,
   # and then push it using the host ...
-  - if [ "x${GENDOCS}" == "xyes" ]; then
+  - if [ "x$TRAVIS_PULL_REQUEST" == "xfalse" -a "x${GENDOCS}" == "xyes" ]; then
     docker run --rm -it --env GIT_NAME=${GIT_NAME?} --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
     (cd doc/html ; git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages) ;
     fi
