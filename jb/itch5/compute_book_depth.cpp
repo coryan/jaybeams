@@ -21,13 +21,12 @@ void jb::itch5::compute_book_depth::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     add_order_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  auto r = handle_add_order(recv_ts, msgcnt, msgoffset, msg);
-  if (std::get<0>(r)) {
-    auto i = std::get<2>(r);
-    // ... if there is an event send that to the callback ...
+  auto result = handle_add_order(recv_ts, msgcnt, msgoffset, msg);    
+  if (std::get<0>(result)) {     // check if handler reports event = true
+    auto book_it = std::get<2>(result);     // ... if so, gets the book iterator
     callback_(
         recv_ts, msg.header, msg.stock,
-        i->second.get_book_depth());
+        book_it->second.get_book_depth());
   }
 }
 
@@ -65,27 +64,27 @@ void jb::itch5::compute_book_depth::handle_message(
   // First we treat the replace as a full cancel, but we do not want
   // to send an update because the operation is supposed to be atomic
   // ...
-  auto r = handle_reduce_no_update(
+  auto result_reduce = handle_reduce_no_update(
       recv_ts, msgcnt, msgoffset, msg.header,
       msg.original_order_reference_number, 0, true);
-  // ... the result contains a copy of the state of the order before
+  // ... result_reduce contains a copy of the state of the order before
   // it was removed, use it to create the missing attributes of the
   // new order ...
-  order_data const& copy = std::get<1>(r);
+  order_data const& copy = std::get<1>(result_reduce);
   // ... handle the replacing order as a new order, but delay the
   // decision to update the callback ...
-  auto a = handle_add_order(
+  auto result_add = handle_add_order(
       recv_ts, msgcnt, msgoffset, add_order_message{
         msg.header, msg.new_order_reference_number,
         copy.buy_sell_indicator, msg.shares, copy.stock, msg.price} );
 
   // ... finally we can decide if an update is needed ...
-  if (std::get<0>(a) or std::get<0>(r)) {
+  if (std::get<0>(result_add) or std::get<0>(result_reduce)) {
     // ... if there is an event send that to the callback ...
-    auto i = std::get<2>(r);
+    auto book_it = std::get<2>(result_reduce);      // does not matter which result, same book
     callback_(
         recv_ts, msg.header, copy.stock,
-        i->second.get_book_depth());
+        book_it->second.get_book_depth());
   }
 }
 
@@ -121,32 +120,31 @@ jb::itch5::compute_book_depth::handle_add_order(
   // ... okay, now that the order is inserted, let's make sure there
   // is a book for the symbol, we avoid creating a full order book in
   // the normal case ...
-  auto i = books_.find(msg.stock);
-  if (i == books_.end()) {
-    auto p = books_.emplace(msg.stock, order_book_depth());
-    i = p.first;
+  auto stock_book_it = books_.find(msg.stock);
+  if (stock_book_it == books_.end()) {
+    auto book_pair = books_.emplace(msg.stock, order_book_depth());
+    stock_book_it = book_pair.first;                      // iterator to the new order book
   }
-  // ... add the order to the book and determine if there is an event
-  // ...
-  bool is_event = i->second.handle_add_order(
+  // ... add the order to the book
+  bool is_event = stock_book_it->second.handle_add_order(
       msg.buy_sell_indicator, msg.price, msg.shares);
-  return std::make_tuple(is_event, position.first->second, i);
+  return std::make_tuple(is_event, position.first->second, stock_book_it);
 }
 
 void jb::itch5::compute_book_depth::handle_reduce(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     message_header const& header, std::uint64_t order_reference_number,
     std::uint32_t shares, bool all_shares) {
-  auto r = handle_reduce_no_update(
+  auto result = handle_reduce_no_update(
       recv_ts, msgcnt, msgoffset, header, order_reference_number,
       shares, all_shares);
-  if (std::get<0>(r)) {
-    auto const& copy = std::get<1>(r);
-    auto i = std::get<2>(r);
+  if (std::get<0>(result)) {
+    auto const& copy = std::get<1>(result);
+    auto stock_book_it = std::get<2>(result);
     // ... if there is an event send that to the callback ...
     callback_(
         recv_ts, header, copy.stock,
-        i->second.get_book_depth());
+        stock_book_it->second.get_book_depth());
   }
 }
 
@@ -169,8 +167,8 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
   // ... okay, now that the order is located, find the book for that
   // symbol ...
   auto& data = position->second;
-  auto i = books_.find(data.stock);
-  JB_ASSERT_THROW(i != books_.end());
+  auto stock_book_it = books_.find(data.stock);
+  JB_ASSERT_THROW(stock_book_it != books_.end());
 
   // ... now we need to update the data for the order ...
   if (all_shares) {
@@ -189,7 +187,7 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
   }
 
   // ... finally we can handle the update ...
-  bool is_event = i->second.handle_order_reduced(
+  bool is_event = stock_book_it->second.handle_order_reduced(
       copy.buy_sell_indicator, copy.px, shares);
-  return std::make_tuple(is_event, copy, i);
+  return std::make_tuple(is_event, copy, stock_book_it);
 }
