@@ -9,9 +9,9 @@ matrix:
       compiler: gcc
       env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3
 
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes
 
 #    - os: linux
 #      compiler: gcc
