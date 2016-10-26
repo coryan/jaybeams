@@ -74,6 +74,13 @@ BOOST_AUTO_TEST_CASE(order_book_buy) {
   BOOST_CHECK_EQUAL(r, false);  
   // .. and the book_depth should not be decremented
   BOOST_CHECK_EQUAL(tested.get_book_depth(), 1);
+
+  // ... deleting the last price takes book depth to 0
+  r = tested.handle_order_reduced(BUY, price4_t(99900), 400);
+  // handler should return true...
+  BOOST_CHECK_EQUAL(r, true);  
+  // .. and the book_depth should be decremented
+  BOOST_CHECK_EQUAL(tested.get_book_depth(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(order_book_sell) {
@@ -138,4 +145,11 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
   BOOST_CHECK_EQUAL(r, false);  
   // .. and the book_depth should not be decremented
   BOOST_CHECK_EQUAL(tested.get_book_depth(), 1);
+
+  // ... deleting the remaining price takes the book depth to 0
+  r = tested.handle_order_reduced(SELL, price4_t(100100), 400);
+  // handler should return true
+  BOOST_CHECK_EQUAL(r, true);  
+  // .. and the book_depth should be decremented
+  BOOST_CHECK_EQUAL(tested.get_book_depth(), 0);
 }
