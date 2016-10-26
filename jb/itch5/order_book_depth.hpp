@@ -3,6 +3,7 @@
 
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/buy_sell_indicator.hpp>
+#include <jb/itch5/order_book_depth_def.hpp>
 #include <jb/log.hpp>
 
 #include <functional>
@@ -11,9 +12,6 @@
 
 namespace jb {
 namespace itch5 {
-
-/// Keep the book depth type.
-typedef unsigned long int book_depth_t;   
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.

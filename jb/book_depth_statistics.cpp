@@ -52,7 +52,7 @@ void jb::book_depth_statistics::print_csv_header(std::ostream& os) {
 }
 
 void jb::book_depth_statistics::record_sample_book_depth(
-    std::chrono::nanoseconds ts, const book_depth_stats_t& _book_depth) {
+    std::chrono::nanoseconds ts, const book_depth_t& _book_depth) {
   book_depth_.sample(_book_depth);
   //  report_rate(ts, book_depth_); // add a config_verbose maybe?
 }
@@ -73,10 +73,11 @@ void jb::book_depth_statistics::print_csv(
 namespace jb {
 namespace defaults {
 
-#ifndef JB_OFS_DEFAULTS_max_book_depth
-#define JB_OFS_DEFAULTS_max_book_depth (std::numeric_limits<book_depth_stats_t>::max())
+#ifndef JB_BOOK_DEPTH_STATS_DEFAULTS_max_book_depth
+#define JB_BOOK_DEPTH_STATS_DEFAULTS_max_book_depth 8192
 #endif
-  book_depth_stats_t max_book_depth = 10000;
+  
+  book_depth_t max_book_depth = JB_BOOK_DEPTH_STATS_DEFAULTS_max_book_depth;
 
 } // namespace defaults
 } // namespace jb

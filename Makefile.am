@@ -335,6 +335,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/net_order_imbalance_indicator_message.hpp \
   jb/itch5/order_book.hpp \
   jb/itch5/order_book_depth.hpp \
+  jb/itch5/order_book_depth_def.hpp \
   jb/itch5/order_cancel_message.hpp \
   jb/itch5/order_delete_message.hpp \
   jb/itch5/order_executed_message.hpp \
