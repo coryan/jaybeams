@@ -13,13 +13,13 @@ matrix:
       compiler: gcc
       env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes
 
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes
 
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-O3
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-O3
 
 services:
   - docker
@@ -27,10 +27,6 @@ services:
 script:
   - uname -a
   - docker build --help
-  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS}
-  - echo GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
-  - echo HOME=$HOME USER=$USER UID=$UID
-  - echo NAME = $GIT_NAME =
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
   - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
