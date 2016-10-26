@@ -54,7 +54,7 @@ void jb::book_depth_statistics::print_csv_header(std::ostream& os) {
 void jb::book_depth_statistics::record_sample_book_depth(
     std::chrono::nanoseconds ts, const book_depth_t& _book_depth) {
   book_depth_.sample(_book_depth);
-  //  report_rate(ts, book_depth_); // add a config_verbose maybe?
+  report_rate(ts, book_depth_);
 }
 
 void jb::book_depth_statistics::print_csv(
