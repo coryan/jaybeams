@@ -12,7 +12,7 @@
 namespace jb {
 namespace itch5 {
 
-  // To keep the depth of book per symbol
+/// Keep the book depth type.
 typedef unsigned long int book_depth_t;   
 
 /**
@@ -46,10 +46,8 @@ class order_book_depth {
   /// Initialize an empty order book.
   order_book_depth() {}
 
-  /* Ticket https://github.com/coryan/jaybeams/issues/20
-   * 
-   * Return the book_depth on this order_book  
-   * @RETURN : const reference to book_depth_
+  /**
+   * @return the book depth (i.e. number of price levels) on this order book.
    */
   const book_depth_t& get_book_depth() const {return book_depth_;};
 
@@ -62,7 +60,7 @@ class order_book_depth {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param qty the quantity of the order
-   * @return true if the inside changed
+   * @return true if there is a change on the order book (what is considered an event)
    */
   bool handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
@@ -77,7 +75,7 @@ class order_book_depth {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param reduced_qty the executed quantity of the order
-   * @returns true if the inside changed
+   * @return true if there is a change on the order book (what is considered an event)
    */
   bool handle_order_reduced(
       buy_sell_indicator_t side, price4_t px, int reduced_qty) {
@@ -89,18 +87,16 @@ class order_book_depth {
 
  private:
   /**
-   * Refactor handle_add_order()
+   * Refactor handle_add_order().
    *
+   * Increments order_book_ if a new price (px) is emplaced into the map.
+   * Generates a false positive when qty is 0.
    * @tparam book_side the type used to represent the buy or sell side
    * of the book
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
-   *
-   * Ticket https://github.com/coryan/jaybeams/issues/20
-   * @returns true. This is always an event 
-   * Event is defined as the reception of a message that changes the order book
-   * Increments order_book_ when a new price (px) is emplace into the map
+   * @return true always. This is always a true (other than qty == 0) order book change (what is considered an event).
    */
   template<typename book_side>
   bool handle_add_order(book_side& side, price4_t px, int qty) {
@@ -119,13 +115,11 @@ class order_book_depth {
    * @param side the side of the book to update
    * @param px the price of the order that was reduced
    * @param reduced_qty the quantity reduced in the order
-   *
-   * Ticket https://github.com/coryan/jaybeams/issues/20
-   * @returns true if it is an event 
+   * @return true if it is an order book change
    * Event is defined as the reception of a message that changes the order book
-   * Decrements order_book_ when a price (px) is erase from the map
+   * Decrements order_book_ if a price (px) is erased from the map
    *
-   * Check if the px level exists first. The use of find is ok since 
+   * Check first if the px level exists. The use of find is ok since 
    * the price level "has" to exist, and the iterator returned is used 
    * to update the quantity (or erase it if qty is 0 or less)
    * The following exceptions (no Throw executed) are logged as warnings

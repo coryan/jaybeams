@@ -2,13 +2,10 @@
 
 #include <boost/test/unit_test.hpp>
 
-  /* Ticket https://github.com/coryan/jaybeams/issues/20
-   *
-   * Remove old test (duplicated from ut_order_book.cpp
-   * Add tests to verify class handles Book Depth correctly
-   *
-   */
-
+/**
+ * Test order_book_depth class.
+ * Tests to verify it handles Book Depth correctly
+ */
 BOOST_AUTO_TEST_CASE(order_book_trivial) {
   jb::itch5::order_book_depth tested;
   //  book_depth should be 0

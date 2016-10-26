@@ -7,9 +7,6 @@
 
 namespace {
 
-/**
- * Create the histogram for book_depth
- **/
 template<typename book_depth_histogram_t>
 void csv_rate(std::ostream& os, book_depth_histogram_t const& histo) {
   os << histo.observed_min()
@@ -79,13 +76,6 @@ namespace defaults {
 #ifndef JB_OFS_DEFAULTS_max_book_depth
 #define JB_OFS_DEFAULTS_max_book_depth (std::numeric_limits<book_depth_stats_t>::max())
 #endif
-  /*
-#ifndef JB_OFS_DEFAULTS_max_book_depth
-#define JB_OFS_DEFAULTS_max_book_depth (std::numeric_limits<book_depth_stats_t>::max())
-#endif
-  
-  book_depth_stats_t max_book_depth = JB_OFS_DEFAULTS_max_book_depth;
-  */
   book_depth_stats_t max_book_depth = 10000;
 
 } // namespace defaults

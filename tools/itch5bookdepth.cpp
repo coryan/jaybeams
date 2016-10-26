@@ -10,13 +10,13 @@
 
 #include <chrono>
 
-/* Ticket https://github.com/coryan/jaybeams/issues/20
+/**
+ * Compute ITCH5 Depth of Book statistics.
  *
+ * Generate statistics per symbol and aggregated.
  * See https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
- * for design details
- *
+ * for design and implementation details.
  */
-
 namespace {
 
 class config : public jb::config_object {
@@ -81,7 +81,6 @@ int main(int argc, char* argv[]) try {
   jb::itch5::compute_book_depth handler(cb);
   jb::itch5::process_iostream(in, handler);
 
-  // now print the stats per simbol, and aggregated to output file
   jb::book_depth_statistics::print_csv_header(out);
   for (auto const& i : per_symbol) {
     i.second.print_csv(i.first.c_str(), out);
