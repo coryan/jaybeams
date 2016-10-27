@@ -20,7 +20,6 @@
 namespace jb {
 namespace itch5 {
 
-
 /** 
  * An implementation of jb::message_handler_concept to compute the book depth.
  *
@@ -29,9 +28,20 @@ namespace itch5 {
  * ITCH-5.0.
  *
  * Uses the order_book_depth object to get the book depth
- * Calls the callback on any event (changes to the book)
+ * Calls the callback based on the following rules:
+ * ANY_EVENT: Calls on any modification to the order book
+ * CHANGE_INSIDE: Calls only when the inside changes
  */
 
+/*
+#ifndef JB_ITCH5_COMPUTE_BOOK_DEPTH_ANY_EVENT
+#define JB_ITCH5_COMPUTE_BOOK_DEPTH_ANY_EVENT 1
+#endif
+  
+#ifndef JB_ITCH5_COMPUTE_BOOK_DEPTH_CHANGE_INSIDE
+#define JB_ITCH5_COMPUTE_BOOK_DEPTH_CHANGE_INSIDE 2
+#endif
+*/
 class compute_book_depth {
  public:
   //@{
@@ -44,17 +54,26 @@ class compute_book_depth {
   /// Callbacks
   typedef std::function<void(
       time_point, message_header const&, stock_t const&,
+      half_quote const&, half_quote const&,
       book_depth_t const&)> callback_type;
   //@}
 
-  /// Initialize an empty handler
-  compute_book_depth(callback_type const& callback);
+  /// Initialize an empty handler and its call candition
+  compute_book_depth(callback_type const& _callback, short int const _callback_cond);
 
   /// Return the current timestamp for delay measurements
   time_point now() const {
     return std::chrono::steady_clock::now();
   }
 
+  /**
+   * Verify  callback condition, call the callback if successful.
+   */
+  void check_callback(
+      time_point, message_header const&, stock_t const&,
+      half_quote const&, half_quote const&,
+      book_depth_t const, bool const);
+  
   /**
    * Pre-populate the books based on the symbol directory.
    *
@@ -199,6 +218,9 @@ class compute_book_depth {
   orders_by_id orders_;
 
   books_by_security books_;
+
+  /// Callback condition
+  short int callback_cond_;
 };
 
 } // namespace itch5

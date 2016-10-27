@@ -6,6 +6,19 @@
 
 using namespace jb::itch5;
 
+namespace std { // oh the horror
+
+bool operator==(
+    jb::itch5::half_quote const& lhs, jb::itch5::half_quote const& rhs) {
+  return lhs.first == rhs.first and lhs.second == rhs.second;
+}
+
+std::ostream& operator<<(std::ostream& os, jb::itch5::half_quote const& x) {
+  return os << "{" << x.first << "," << x.second << "}";
+}
+
+} // namespace std
+
 namespace {
 
 buy_sell_indicator_t const BUY(u'B');
@@ -37,7 +50,9 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
   skye::mock_function<void(
-      compute_book_depth::time_point, stock_t, book_depth_t)> callback;
+      compute_book_depth::time_point, stock_t,
+      book_depth_t const& book_depth
+      )> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
@@ -45,12 +60,14 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
       stock_t const& stock,
+      half_quote const& bid, half_quote const& offer,
       book_depth_t const& book_depth) {
     callback(recv_ts, stock, book_depth);
   };
-  
+
+  const short int cond = 1;
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
+  compute_book_depth tested(cb, cond);
 
   // ... we do not expect any callbacks ...
   callback.check_called().never();
@@ -206,11 +223,14 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock, book_depth_t const& book_depth) {
+      stock_t const& stock,
+      half_quote const& bid, half_quote const& offer,
+      book_depth_t const& book_depth) {
     callback(recv_ts, stock, book_depth);
   };
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
+  const short int cond  = 1;
+  compute_book_depth tested(cb, cond);
 
   // ... setup the book with orders on both sides ...
   auto now = tested.now();
@@ -269,29 +289,33 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
   skye::mock_function<void(
-      compute_book_depth::time_point, stock_t, book_depth_t)> callback;
+      compute_book_depth::time_point, stock_t,
+      book_depth_t const& book_depth
+      )> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock, 
+      stock_t const& stock,
+      half_quote const& bid, half_quote const& offer,
       book_depth_t const& book_depth) {
     callback(recv_ts, stock, book_depth);
   };
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
-
-  // ... force an execution on a non-existing order ...
-  auto now = tested.now();
+  const short int cond = 1;
+  compute_book_depth tested(cb, cond);
   int msgcnt = 0;
+  auto now = tested.now();
+   
+  // ... force an execution on a non-existing order ...
   tested.handle_message(
       now, ++msgcnt, 0, order_executed_message{
         {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
         4, 100, 123456} );
   callback.check_called().never();
-
+  
   // ... improve code coverage for unknown messages ...
   now = tested.now();
   char const unknownbuf[] = "foobarbaz";
@@ -308,9 +332,8 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   callback.check_called().once().with(
       compute_book_depth::time_point(now), stock_t("CRAZY"),
       1);      // new symbol, new price
-
+  
   // ... a duplicate order id should result in no changes ...
-  // Ticket #?001 : is this an event?
  tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
@@ -319,3 +342,4 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
       compute_book_depth::time_point(now), stock_t("CRAZY"),
       1);      // no new price
 }
+

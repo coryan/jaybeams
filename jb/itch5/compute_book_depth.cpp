@@ -1,11 +1,33 @@
 #include <jb/itch5/compute_book_depth.hpp>
 #include <jb/assert_throw.hpp>
 
-jb::itch5::compute_book_depth::compute_book_depth(callback_type const& cb)
+jb::itch5::compute_book_depth::compute_book_depth(
+		     callback_type const& cb,
+	             short int const _call_cond)
     : callback_(cb)
     , orders_()
     , books_()
+    , callback_cond_(_call_cond)  
 {}
+
+void jb::itch5::compute_book_depth::check_callback(
+		     time_point ts, message_header const& msg_header, stock_t const& stock,
+		     half_quote const& best_bid, half_quote const& best_offer,
+		     book_depth_t const book_depth, bool const is_inside) {
+  if (callback_cond_ == 1) 
+      callback_(
+        ts, msg_header, stock,
+        best_bid, best_offer,
+        book_depth);
+    else {
+      if ( (callback_cond_ == 2)
+	   && is_inside ) 
+	callback_(
+		  ts, msg_header, stock,
+		  best_bid, best_offer,
+		  book_depth);
+    }
+}
 
 void jb::itch5::compute_book_depth::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
@@ -22,11 +44,12 @@ void jb::itch5::compute_book_depth::handle_message(
     add_order_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   auto result = handle_add_order(recv_ts, msgcnt, msgoffset, msg);    
-  if (std::get<0>(result)) {     // check if handler reports event = true
-    auto book_it = std::get<2>(result);     // ... if so, gets the book iterator
-    callback_(
+  auto book_it = std::get<2>(result);     // ... gets the book iterator
+  if (book_it != books_.end()) {
+      check_callback(
         recv_ts, msg.header, msg.stock,
-        book_it->second.get_book_depth());
+	book_it->second.best_bid(), book_it->second.best_offer(),
+        book_it->second.get_book_depth(), std::get<0>(result));
   }
 }
 
@@ -70,22 +93,24 @@ void jb::itch5::compute_book_depth::handle_message(
   // ... result_reduce contains a copy of the state of the order before
   // it was removed, use it to create the missing attributes of the
   // new order ...
+  auto book_it = std::get<2>(result_reduce);   // gets the book if any
+  if (book_it == books_.end())
+    return;    // could not find the order to replace, skip the message
   order_data const& copy = std::get<1>(result_reduce);
-  // ... handle the replacing order as a new order, but delay the
-  // decision to update the callback ...
+  // ... handle the replacing order as a new order
   auto result_add = handle_add_order(
       recv_ts, msgcnt, msgoffset, add_order_message{
         msg.header, msg.new_order_reference_number,
         copy.buy_sell_indicator, msg.shares, copy.stock, msg.price} );
-
-  // ... finally we can decide if an update is needed ...
-  if (std::get<0>(result_add) or std::get<0>(result_reduce)) {
-    // ... if there is an event send that to the callback ...
-    auto book_it = std::get<2>(result_reduce);      // does not matter which result, same book
-    callback_(
+  auto check_book_it = std::get<2>(result_add);   // gets the book if any
+  if (check_book_it == books_.end())
+    return;    // could not add the order, skip the message  
+  // ...  otherwise, send to the callback ...
+  bool is_inside = (std::get<0>(result_add) or std::get<0>(result_reduce));
+  check_callback(
         recv_ts, msg.header, copy.stock,
-        book_it->second.get_book_depth());
-  }
+	check_book_it->second.best_bid(), check_book_it->second.best_offer(),
+        check_book_it->second.get_book_depth(), is_inside);
 }
 
 void jb::itch5::compute_book_depth::handle_unknown(
@@ -126,9 +151,9 @@ jb::itch5::compute_book_depth::handle_add_order(
     stock_book_it = book_pair.first;                      // iterator to the new order book
   }
   // ... add the order to the book
-  bool is_event = stock_book_it->second.handle_add_order(
+  bool is_inside = stock_book_it->second.handle_add_order(
       msg.buy_sell_indicator, msg.price, msg.shares);
-  return std::make_tuple(is_event, position.first->second, stock_book_it);
+  return std::make_tuple(is_inside, position.first->second, stock_book_it);
 }
 
 void jb::itch5::compute_book_depth::handle_reduce(
@@ -138,14 +163,17 @@ void jb::itch5::compute_book_depth::handle_reduce(
   auto result = handle_reduce_no_update(
       recv_ts, msgcnt, msgoffset, header, order_reference_number,
       shares, all_shares);
-  if (std::get<0>(result)) {
-    auto const& copy = std::get<1>(result);
-    auto stock_book_it = std::get<2>(result);
-    // ... if there is an event send that to the callback ...
-    callback_(
+  // verify there is a normal condition (!books_.end())
+  auto book_it = std::get<2>(result);    // gets the book if any
+  if (book_it == books_.end())
+    return;  // error: did not find the order to reduce, skip the message
+  auto const& copy = std::get<1>(result);
+  auto stock_book_it = std::get<2>(result);
+    // ... send that to the callback ...
+  check_callback(
         recv_ts, header, copy.stock,
-        stock_book_it->second.get_book_depth());
-  }
+	stock_book_it->second.best_bid(), stock_book_it->second.best_offer(),
+        stock_book_it->second.get_book_depth(), std::get<0>(result));
 }
 
 jb::itch5::compute_book_depth::update_result
@@ -163,13 +191,20 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
                     << ", header=" << header;
     return std::make_tuple(false, order_data(), books_.end());
   }
-
   // ... okay, now that the order is located, find the book for that
   // symbol ...
   auto& data = position->second;
   auto stock_book_it = books_.find(data.stock);
-  JB_ASSERT_THROW(stock_book_it != books_.end());
-
+  if (stock_book_it == books_.end()) {
+    // ... ooops, this should not happen, there is a problem with the
+    // book... an order existed (position) but there is no book for that symbol
+    // ...log the problem and skip the message ...
+    JB_LOG(warning) << "missing book for symbol id: " << data.stock 
+                    << ", order id=" << order_reference_number
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", header=" << header;
+    return std::make_tuple(false, order_data(), books_.end());    // error= books_.end()
+  }
   // ... now we need to update the data for the order ...
   if (all_shares) {
     shares = data.qty;
@@ -185,9 +220,8 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
     // from the book ...
     orders_.erase(position);
   }
-
   // ... finally we can handle the update ...
-  bool is_event = stock_book_it->second.handle_order_reduced(
+  bool is_inside = stock_book_it->second.handle_order_reduced(
       copy.buy_sell_indicator, copy.px, shares);
-  return std::make_tuple(is_event, copy, stock_book_it);
+  return std::make_tuple(is_inside, copy, stock_book_it);
 }

@@ -13,6 +13,9 @@
 namespace jb {
 namespace itch5 {
 
+/// A simple representation for price + quantity
+typedef std::pair<price4_t, int> half_quote;
+
 /**
  * Maintain the ITCH-5.0 order book for a single security.
  *
@@ -44,10 +47,24 @@ class order_book_depth {
   /// Initialize an empty order book.
   order_book_depth() {}
 
+  /// Return the best bid price and quantity
+  half_quote best_bid() const;
+  /// Return the best offer price and quantity
+  half_quote best_offer() const;
+
+  /// The value used to represent an empty bid
+  static half_quote empty_bid() {
+    return half_quote(price4_t(0), 0);
+  }
+  /// The value used to represent an empty offer
+  static half_quote empty_offer() {
+    return half_quote(max_price_field_value<price4_t>(), 0);
+  }
+  
   /**
    * @return the book depth (i.e. number of price levels) on this order book.
    */
-  const book_depth_t& get_book_depth() const {return book_depth_;};
+  book_depth_t get_book_depth() const {return book_depth_;};
 
   /**
    * Handle a new order.
@@ -58,7 +75,7 @@ class order_book_depth {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param qty the quantity of the order
-   * @return true if there is a change on the order book (what is considered an event)
+   * @return true if the inside changed
    */
   bool handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
@@ -73,7 +90,7 @@ class order_book_depth {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param reduced_qty the executed quantity of the order
-   * @return true if there is a change on the order book (what is considered an event)
+   * @return true if the inside changed
    */
   bool handle_order_reduced(
       buy_sell_indicator_t side, price4_t px, int reduced_qty) {
@@ -84,7 +101,7 @@ class order_book_depth {
   }
 
  private:
-  /**
+ /**
    * Refactor handle_add_order().
    *
    * Increments order_book_ if a new price (px) is emplaced into the map.
@@ -94,7 +111,7 @@ class order_book_depth {
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
-   * @return true always. This is always a true (other than qty == 0) order book change (what is considered an event).
+   * @return true if the inside changed
    */
   template<typename book_side>
   bool handle_add_order(book_side& side, price4_t px, int qty) {
@@ -102,8 +119,8 @@ class order_book_depth {
       p.first->second += qty;
       if (p.second)         // if there was a insertion
 	++book_depth_;      // then, there is a new price level
-      return true;
-  }
+      return p.first == side.begin();
+ }
  
   /**
    * Refactor handle_order_reduce()
@@ -113,8 +130,7 @@ class order_book_depth {
    * @param side the side of the book to update
    * @param px the price of the order that was reduced
    * @param reduced_qty the quantity reduced in the order
-   * @return true if it is an order book change
-   * Event is defined as the reception of a message that changes the order book
+   * @return true if the inside changed
    * Decrements order_book_ if a price (px) is erased from the map
    *
    * Check first if the px level exists. The use of find is ok since 
@@ -131,7 +147,7 @@ class order_book_depth {
     auto pf = side.find(px);
     if (pf == side.end()) {
       JB_LOG(warning) << "trying to reduce a non-existing price level";  // EXC1
-      return false;    // no event
+      return false;    // no change at the inside. Nothing else can be done
     }
     // ... reduce the quantity ...
     pf->second -= reduced_qty;
@@ -141,6 +157,9 @@ class order_book_depth {
       // TODO() need a lot more details here...
       JB_LOG(warning) << "negative quantity in order book";    // EXC2
     }
+    // ... we may erase the element and invalidate the iterator, so
+    // compute first if this was at the inside or not ...
+    bool change_inside = (pf == side.begin());
     // now we can erase this element (pf.first) if qty <=0
     if (pf->second <= 0) {
       side.erase(pf);
@@ -149,7 +168,7 @@ class order_book_depth {
       else
 	--book_depth_;    // safe to decrement the unsigned book_depth_t
     }
-    return true;     // is an event
+    return change_inside;     // report if inside changes
   }
   
  private:
