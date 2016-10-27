@@ -1,4 +1,4 @@
-#include <jb/itch5/compute_book_depth.hpp>
+#include <jb/itch5/compute_base.hpp>
 #include <jb/as_hhmmss.hpp>
 
 #include <skye/mock_function.hpp>
@@ -31,33 +31,32 @@ stock_directory_message create_stock_directory(char const* symbol) {
 } // anonymous namespace
 
 /**
- * @test Verify that jb::itch5::compute_book_depth works as expected.
+ * @test Verify that jb::itch5::compute_base works as expected.
  */
-BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
+BOOST_AUTO_TEST_CASE(compute_base_simple) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
   skye::mock_function<void(
-      compute_book_depth::time_point, stock_t, book_depth_t)> callback;
+      compute_base::time_point, stock_t)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
-      compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock,
-      book_depth_t const& book_depth) {
-    callback(recv_ts, stock, book_depth);
+      compute_base::time_point recv_ts, message_header const&,
+      stock_t const& stock) {
+    callback(recv_ts, stock);
   };
   
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
+  compute_base tested(cb);
 
   // ... we do not expect any callbacks ...
   callback.check_called().never();
 
   // ... send a couple of stock directory messages, do not much care
   // about their contents other than the symbol ...
-  compute_book_depth::time_point now = tested.now();
+  compute_base::time_point now = tested.now();
   long msgcnt = 0;
   tested.handle_message(
       now, ++msgcnt, 0, create_stock_directory("HSART"));
@@ -77,8 +76,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         2, BUY, 100, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      1);     // new price on the book
+        compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a new order on the opposite side of the book ...
   now = tested.now();
@@ -87,8 +85,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         3, SELL, 100, stock_t("HSART"), price4_t(100100)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // new price on the book
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a new order with an mpid ...
   now = tested.now();
@@ -100,9 +97,8 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
           mpid_t("LOOF")} );
   // ... updates the book just like a regular order ...
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // it is NOT a new price, same previous book_depth
- 
+				      compute_base::time_point(now), stock_t("HSART"));
+  
   // ... handle a partial execution ...
   now = tested.now();
   tested.handle_message(
@@ -110,8 +106,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
         4, 100, 123456} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // still 500 remaining on that price  
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a full execution ...
   now = tested.now();
@@ -120,8 +115,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_mpid_message::message_type, 0, 0, create_timestamp()},
         3, 100, 123457} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // still 400 remaining on that price  
+				      compute_base::time_point(now), stock_t("HSART"));
   BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... handle a partial execution with price ...
@@ -134,8 +128,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
           4, 100, 123456},
         printable_t{u'Y'}, price4_t(100150)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // still 300 remaining on that price  
+				      compute_base::time_point(now), stock_t("HSART"));
   BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... create yet another order ...
@@ -145,9 +138,8 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         5, BUY, 1000, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // no new price  
-  BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
+				      compute_base::time_point(now), stock_t("HSART"));
+   BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
 
   // ... partially cancel the order ...
   now = tested.now();
@@ -156,8 +148,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {order_cancel_message::message_type, 0, 0, create_timestamp()},
         5, 200} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // still 900 remaining on that price  
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... fully cancel the order ...
   now = tested.now();
@@ -165,8 +156,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
       now, ++msgcnt, 0, order_delete_message{
         {order_delete_message::message_type, 0, 0, create_timestamp()}, 5} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);     // still 100 remaining on that price  
+				      compute_base::time_point(now), stock_t("HSART"));
 
    // ... handle a new order, new price ...
   now = tested.now();
@@ -175,8 +165,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         6, BUY, 100, stock_t("HSART"), price4_t(99900)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      3);     // new price on the book
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a new order, new price...
   now = tested.now();
@@ -185,32 +174,31 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         7, SELL, 100, stock_t("HSART"), price4_t(100200)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      4);     // new price on the book
+				      compute_base::time_point(now), stock_t("HSART"));
 }
 
 /**
- * @test Verify that jb::itch5::compute_book_depth works as expected for replace.
+ * @test Verify that jb::itch5::compute_base works as expected for replace.
  *
  * Order replaces have several scenarios, the previous test was
  * getting too big.
  */
-BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
+BOOST_AUTO_TEST_CASE(compute_base_replace) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
   skye::mock_function<void(
-      compute_book_depth::time_point, stock_t, book_depth_t)> callback;
+      compute_base::time_point, stock_t)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
-      compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock, book_depth_t const& book_depth) {
-    callback(recv_ts, stock, book_depth);
+      compute_base::time_point recv_ts, message_header const&,
+      stock_t const& stock) {
+    callback(recv_ts, stock);
   };
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
+  compute_base tested(cb);
 
   // ... setup the book with orders on both sides ...
   auto now = tested.now();
@@ -220,16 +208,14 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
         1, BUY, 500, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      1);        // new price 
+				      compute_base::time_point(now), stock_t("HSART"));
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
         2, SELL, 500, stock_t("HSART"), price4_t(100500)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);        // new price
+				      compute_base::time_point(now), stock_t("HSART"));
   
   // ... handle a replace message that improves the price ...
   now = tested.now();
@@ -238,8 +224,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
         {order_replace_message::message_type, 0, 0, create_timestamp()},
         1, 3, 600, price4_t(100100)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-      2);       // new price (100100) but one out (100000)
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a replace that changes the qty ...
   now = tested.now();
@@ -248,8 +233,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
         {order_replace_message::message_type, 0, 0, create_timestamp()},
         3, 4, 300, price4_t(100100)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-       2);     // still 100100 
+				      compute_base::time_point(now), stock_t("HSART"));
 
   // ... handle a replace that changes lowers the best price ...
   now = tested.now();
@@ -258,30 +242,28 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
         {order_replace_message::message_type, 0, 0, create_timestamp()},
         4, 9, 400, price4_t(99900)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("HSART"),
-       2);     // new price (99900) but one out (100100) 
+				      compute_base::time_point(now), stock_t("HSART"));
 }
 
 /**
  * @test Improve code coverage for edge cases.
  */
-BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
+BOOST_AUTO_TEST_CASE(compute_base_edge_cases) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
   skye::mock_function<void(
-      compute_book_depth::time_point, stock_t, book_depth_t)> callback;
+      compute_base::time_point, stock_t)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
-      compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock, 
-      book_depth_t const& book_depth) {
-    callback(recv_ts, stock, book_depth);
+      compute_base::time_point recv_ts, message_header const&,
+      stock_t const& stock) {
+    callback(recv_ts, stock);
   };
   // ... create the object under testing ...
-  compute_book_depth tested(cb);
+  compute_base tested(cb);
 
   // ... force an execution on a non-existing order ...
   auto now = tested.now();
@@ -306,8 +288,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
          1, BUY, 500, stock_t("CRAZY"), price4_t(150000)} );
   callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("CRAZY"),
-      1);      // new symbol, new price
+				      compute_base::time_point(now), stock_t("CRAZY"));
 
   // ... a duplicate order id should result in no changes ...
   // Ticket #?001 : is this an event?
@@ -316,6 +297,5 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
         {add_order_message::message_type, 0, 0, create_timestamp()},
          1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
  callback.check_called().once().with(
-      compute_book_depth::time_point(now), stock_t("CRAZY"),
-      1);      // no new price
+				     compute_base::time_point(now), stock_t("CRAZY"));
 }

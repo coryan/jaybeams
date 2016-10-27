@@ -44,7 +44,7 @@ stock_directory_message create_stock_directory(char const* symbol) {
 } // anonymous namespace
 
 /**
- * @test Verify that jb::itch5::order_book works as expected.
+ * @test Verify that jb::itch5::compute_inside works as expected.
  */
 BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   // We are going to use a mock function to handle the callback
@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
         2, BUY, 100, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
-      half_quote(price4_t(100000), 100), order_book::empty_offer());
+      half_quote(price4_t(100000), 100), order_book_depth::empty_offer());
 
   // ... handle a new order on the opposite side of the book ...
   now = tested.now();
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
 }
 
 /**
- * @test Verify that jb::itch5::order_book works as expected for replace.
+ * @test Verify that jb::itch5::compute_inside works as expected for replace.
  *
  * Order replaces have several scenarios, the previous test was
  * getting too big.
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_replace) {
         1, BUY, 500, stock_t("HSART"), price4_t(100000)} );
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("HSART"),
-      half_quote(price4_t(100000), 500), order_book::empty_offer());
+      half_quote(price4_t(100000), 500), order_book_depth::empty_offer());
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
          1, BUY, 500, stock_t("CRAZY"), price4_t(150000)} );
   callback.check_called().once().with(
       compute_inside::time_point(now), stock_t("CRAZY"),
-      half_quote(price4_t(150000), 500), order_book::empty_offer());
+      half_quote(price4_t(150000), 500), order_book_depth::empty_offer());
 
   // ... a duplicate order id should result in no changes ...
   tested.handle_message(
@@ -312,5 +312,5 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
          1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
   callback.check_called().with(
       compute_inside::time_point(now), stock_t("CRAZY"),
-      half_quote(price4_t(150000), 500), order_book::empty_offer());
+      half_quote(price4_t(150000), 500), order_book_depth::empty_offer());
 }

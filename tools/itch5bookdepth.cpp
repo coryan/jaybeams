@@ -32,7 +32,6 @@ class config : public jb::config_object {
   jb::config_attribute<config,jb::book_depth_statistics::config> stats;
   jb::config_attribute<config,jb::book_depth_statistics::config> symbol_stats;
   jb::config_attribute<config,bool> enable_symbol_stats;
-  jb::config_attribute<config,short int> callback_condition;  
 };
 
 } // anonymous namespace
@@ -59,8 +58,6 @@ int main(int argc, char* argv[]) try {
       jb::itch5::compute_book_depth::time_point recv_ts,
       jb::itch5::message_header const& header,
       jb::itch5::stock_t const& stock,
-      jb::itch5::half_quote const& bid,
-      jb::itch5::half_quote const& offer,
       jb::itch5::book_depth_t const& book_depth) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
     stats.sample(header.timestamp.ts, book_depth);
@@ -78,10 +75,10 @@ int main(int argc, char* argv[]) try {
         << " " << header.stock_locate
         << " " << stock
         << " " << book_depth
-        << "\n";  
+        << "\n";
   };
     
-  jb::itch5::compute_book_depth handler(cb, cfg.callback_condition());
+  jb::itch5::compute_book_depth handler(cb);
   jb::itch5::process_iostream(in, handler);
 
   jb::book_depth_statistics::print_csv_header(out);
@@ -127,8 +124,6 @@ config::config()
             "  Collecting per-symbol statistics is expensive in both"
             " memory and execution time"),
         this, true)      // changes default to true
-    , callback_condition(desc("callback-condition", "callback-condition"),
-                   this, 1)
 {}
 
 void config::validate() const {
