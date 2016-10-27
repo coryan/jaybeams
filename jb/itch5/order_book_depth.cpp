@@ -1,6 +1,6 @@
-#include <jb/itch5/order_book.hpp>
+#include <jb/itch5/order_book_depth.hpp>
 
-jb::itch5::half_quote jb::itch5::order_book::best_bid() const {
+jb::itch5::half_quote jb::itch5::order_book_depth::best_bid() const {
   if (buy_.empty()) {
     return empty_bid();
   }
@@ -8,7 +8,7 @@ jb::itch5::half_quote jb::itch5::order_book::best_bid() const {
   return half_quote(i->first, i->second);
 }
 
-jb::itch5::half_quote jb::itch5::order_book::best_offer() const {
+jb::itch5::half_quote jb::itch5::order_book_depth::best_offer() const {
   if (sell_.empty()) {
     return empty_offer();
   }

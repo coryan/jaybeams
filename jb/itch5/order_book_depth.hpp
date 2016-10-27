@@ -1,8 +1,9 @@
-#ifndef jb_itch5_order_book_hpp
-#define jb_itch5_order_book_hpp
+#ifndef jb_itch5_order_book_depth_hpp
+#define jb_itch5_order_book_depth_hpp
 
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/buy_sell_indicator.hpp>
+#include <jb/itch5/order_book_depth_def.hpp>
 #include <jb/log.hpp>
 
 #include <functional>
@@ -12,7 +13,7 @@
 namespace jb {
 namespace itch5 {
 
-/// A simple represetation for price + quantity
+/// A simple representation for price + quantity
 typedef std::pair<price4_t, int> half_quote;
 
 /**
@@ -41,10 +42,10 @@ typedef std::pair<price4_t, int> half_quote;
  * - What is the best offer (lowest price of SELL orders) and what is
  * the total quantity available at that price?
  */
-class order_book {
+class order_book_depth {
  public:
   /// Initialize an empty order book.
-  order_book() {}
+  order_book_depth() {}
 
   /// Return the best bid price and quantity
   half_quote best_bid() const;
@@ -59,7 +60,11 @@ class order_book {
   static half_quote empty_offer() {
     return half_quote(max_price_field_value<price4_t>(), 0);
   }
-
+  
+  /**
+   * @return the book depth (i.e. number of price levels) on this order book.
+   */
+  book_depth_t get_book_depth() const {return book_depth_;};
 
   /**
    * Handle a new order.
@@ -77,7 +82,6 @@ class order_book {
       return handle_add_order(buy_, px, qty);
     }
     return handle_add_order(sell_, px, qty);
-
   }
 
   /**
@@ -86,7 +90,7 @@ class order_book {
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param reduced_qty the executed quantity of the order
-   * @returns true if the inside changed
+   * @return true if the inside changed
    */
   bool handle_order_reduced(
       buy_sell_indicator_t side, price4_t px, int reduced_qty) {
@@ -97,23 +101,27 @@ class order_book {
   }
 
  private:
-  /**
-   * Refactor handle_add_order()
+ /**
+   * Refactor handle_add_order().
    *
+   * Increments order_book_ if a new price (px) is emplaced into the map.
+   * Generates a false positive when qty is 0.
    * @tparam book_side the type used to represent the buy or sell side
    * of the book
    * @param side the side of the book to update
    * @param px the price of the new order
    * @param qty the quantity of the new order
-   * @returns true if the inside changed
+   * @return true if the inside changed
    */
   template<typename book_side>
   bool handle_add_order(book_side& side, price4_t px, int qty) {
       auto p = side.emplace(px, 0);
       p.first->second += qty;
+      if (p.second)         // if there was a insertion
+	++book_depth_;      // then, there is a new price level
       return p.first == side.begin();
-  }
-  
+ }
+ 
   /**
    * Refactor handle_order_reduce()
    *
@@ -122,29 +130,45 @@ class order_book {
    * @param side the side of the book to update
    * @param px the price of the order that was reduced
    * @param reduced_qty the quantity reduced in the order
-   * @returns true if the inside changed
-   */
+   * @return true if the inside changed
+   * Decrements order_book_ if a price (px) is erased from the map
+   *
+   * Check first if the px level exists. The use of find is ok since 
+   * the price level "has" to exist, and the iterator returned is used 
+   * to update the quantity (or erase it if qty is 0 or less)
+   * The following exceptions (no Throw executed) are logged as warnings
+   * into JOB_LOG
+   * EXC1: trying to reduce a non-existing price level
+   * EXC2: negative quantity in order book 
+   * EXC3: negative book_depth in order book
+  */
   template<typename book_side>
   bool handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
-    // Find the price level
-    // TODO() we create the price level if it does not exist, that is
-    // fairly inneficient ..
-    auto p = side.emplace(px, 0);
+    auto pf = side.find(px);
+    if (pf == side.end()) {
+      JB_LOG(warning) << "trying to reduce a non-existing price level";  // EXC1
+      return false;    // no change at the inside. Nothing else can be done
+    }
     // ... reduce the quantity ...
-    p.first->second -= reduced_qty;
-    if (p.first->second < 0) {
+    pf->second -= reduced_qty;
+    if (pf->second < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       // TODO() need a lot more details here...
-      JB_LOG(warning) << "negative quantity in order book";
+      JB_LOG(warning) << "negative quantity in order book";    // EXC2
     }
     // ... we may erase the element and invalidate the iterator, so
-    // compute if this was at the inside or not ...
-    bool r = p.first == side.begin();
-    if (p.first->second <= 0) {
-      side.erase(p.first);
+    // compute first if this was at the inside or not ...
+    bool change_inside = (pf == side.begin());
+    // now we can erase this element (pf.first) if qty <=0
+    if (pf->second <= 0) {
+      side.erase(pf);
+      if (book_depth_ == 0) 
+        JB_LOG(warning) << "negative book_depth in order book";    // EXC3	
+      else
+	--book_depth_;    // safe to decrement the unsigned book_depth_t
     }
-    return r;
+    return change_inside;     // report if inside changes
   }
   
  private:
@@ -153,9 +177,10 @@ class order_book {
 
   buys buy_;
   sells sell_;
+  book_depth_t book_depth_ = 0;       
 };
 
 } // namespace itch5
 } // namespace jb
 
-#endif // jb_itch5_order_book_hpp
+#endif // jb_itch5_order_book_depth_hpp
