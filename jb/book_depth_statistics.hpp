@@ -5,7 +5,7 @@
 #include <jb/event_rate_histogram.hpp>
 #include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
-#include <jb/itch5/order_book_depth_def.hpp>
+#include <jb/itch5/order_book_def.hpp>
 
 #include <iosfwd>
 

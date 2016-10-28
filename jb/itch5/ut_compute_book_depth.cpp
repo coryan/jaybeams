@@ -284,6 +284,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   compute_book_depth tested(cb);
 
   // ... force an execution on a non-existing order ...
+  // an exception is triggered
   auto now = tested.now();
   int msgcnt = 0;
   tested.handle_message(
@@ -310,12 +311,16 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
       1);      // new symbol, new price
 
   // ... a duplicate order id should result in no changes ...
-  // Ticket #?001 : is this an event?
- tested.handle_message(
+  // an exception is triggered
+  now = tested.now();
+  tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, SELL, 700, stock_t("CRAZY"), price4_t(160000)} );
- callback.check_called().once().with(
+         1, BUY, 700, stock_t("CRAZY"), price4_t(160000)} );
+ // no callback is expected
+ //   callback.check_called().never();
+  callback.check_called().once().with(
       compute_book_depth::time_point(now), stock_t("CRAZY"),
-      1);      // no new price
+      1);      // new symbol, new price
+
 }

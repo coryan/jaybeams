@@ -1,7 +1,7 @@
 #ifndef jb_itch5_compute_book_depth_hpp
 #define jb_itch5_compute_book_depth_hpp
 
-#include <jb/itch5/order_book_depth.hpp>
+#include <jb/itch5/order_book.hpp>
 #include <jb/itch5/add_order_message.hpp>
 #include <jb/itch5/add_order_mpid_message.hpp>
 #include <jb/itch5/order_cancel_message.hpp>
@@ -27,8 +27,6 @@ namespace itch5 {
  * Keep a collection of all the order books, and forward the right
  * updates to them as it handles the different message types in
  * ITCH-5.0.
- *
- * Uses the order_book_depth object to get the book depth
  * Calls the callback on any event (changes to the book)
  */
 
@@ -169,14 +167,14 @@ class compute_book_depth {
 
   /// The collection of order book depths
   typedef std::unordered_map<
-    stock_t, order_book_depth, boost::hash<stock_t>> books_by_security;
+    stock_t, order_book, boost::hash<stock_t>> books_by_security;
 
   /// The result of a reduction is fairly complex ...
   typedef std::tuple<bool, order_data, books_by_security::iterator> update_result;
 
   /// Refactor handling of add_order_message for both add_order and
-  /// replace.
-  update_result handle_add_order(
+  /// replace, but do not update the callback
+  update_result handle_add_no_update(
       time_point recv_ts, long msgcnt, std::size_t msgoffset,
       add_order_message const& msg);
 
