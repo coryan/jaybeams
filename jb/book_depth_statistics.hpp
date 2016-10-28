@@ -26,18 +26,13 @@ class book_depth_statistics {
   /**
    * Record a sample, that is book depth value after the event.
    *
-   * @tparam event_timestamp_t the type used to record the event
-   * timestamps.
    * @tparam book_depth_t the type used to record the book depth after processing the event
    *
-   * @param ts the event timestamp, please see the class documentation
-   * for timestamps vs. time points.
    * @param book_depth : the book depth (after processing the event) to be recorded.
    */
-  template<typename event_timestamp_t, typename book_depth_t>
-  void sample(event_timestamp_t ts, const book_depth_t& book_depth) {
-    record_sample_book_depth(std::chrono::duration_cast<std::chrono::nanoseconds>(ts),
-			     book_depth);
+  template<typename book_depth_t>
+  void sample(book_depth_t book_depth) {
+    book_depth_.sample(book_depth);
   }
 
   /**
@@ -64,9 +59,6 @@ class book_depth_statistics {
    * Print all the measurements in CSV format.
    */
   void print_csv(std::string const& name, std::ostream& os) const;
-
- private:
-  void record_sample_book_depth(std::chrono::nanoseconds ts, const book_depth_t& book_depth);
 
  private:
   typedef histogram<integer_range_binning<book_depth_t>> book_depth_histogram_t;

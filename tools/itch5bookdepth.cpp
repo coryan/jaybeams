@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) try {
       jb::itch5::stock_t const& stock,
       jb::itch5::book_depth_t const& book_depth) {
     auto pl = std::chrono::steady_clock::now() - recv_ts;
-    stats.sample(header.timestamp.ts, book_depth);
+    stats.sample(book_depth);
     
     if (cfg.enable_symbol_stats()) {
       auto i = per_symbol.find(stock);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) try {
             stock, jb::book_depth_statistics(cfg.symbol_stats()));
         i = p.first;
      }
-      i->second.sample(header.timestamp.ts, book_depth);
+      i->second.sample(book_depth);
     } 
     out << header.timestamp.ts.count()
         << " " << header.stock_locate

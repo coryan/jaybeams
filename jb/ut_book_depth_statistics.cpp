@@ -11,11 +11,11 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_simple) {
   jb::book_depth_statistics::config cfg;
   jb::book_depth_statistics stats(cfg);
   
-  stats.sample(std::chrono::seconds(1),1);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(1),2);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(2),3);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(3),4);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(4),5);
+  stats.sample(1);
+  stats.sample(2);
+  stats.sample(3);
+  stats.sample(4);
+  stats.sample(5);
 
   BOOST_STATIC_ASSERT_MSG(eqTypes() , "inconsistent types jb:: and jb::itch5:: book_depth_t");
 }
@@ -43,10 +43,10 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
   // 4 samples, book_depth {2..5}
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(1),5);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(2),2);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(3),3);
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(4),4);
+  stats.sample(5);
+  stats.sample(2);
+  stats.sample(3);
+  stats.sample(4);
 
   // check 4 samples... 
   body.str("");
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   BOOST_CHECK_EQUAL(nfields, nheaders);
   
   // add one more sample (# 5), book_depth now {1..5}
-  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(5),1);
+  stats.sample(1);
   body.str("");
   stats.print_csv("testing", body);
   BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,5,"));
