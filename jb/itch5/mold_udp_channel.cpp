@@ -2,6 +2,7 @@
 
 #include <jb/itch5/base_decoders.hpp>
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
+#include <jb/itch5/make_socket_udp_recv.hpp>
 #include <jb/log.hpp>
 
 #include <boost/asio/ip/multicast.hpp>
@@ -16,43 +17,10 @@ mold_udp_channel::mold_udp_channel(
     int multicast_port,
     std::string const& multicast_group)
     : handler_(handler)
-    , socket_(io)
+    , socket_(make_socket_udp_recv<>(
+        io, multicast_group, multicast_port, listen_address))
     , expected_sequence_number_(0)
     , message_offset_(0) {
-  auto group_address = boost::asio::ip::address::from_string(multicast_group);
-
-  boost::asio::ip::address address;
-
-  // Automatically configure the best listening address ...
-  if (listen_address != "") {
-    // ... the user speficied a listening address, use that ...
-    address = boost::asio::ip::address::from_string(listen_address);
-  } else if (not group_address.is_multicast()) {
-    address = group_address;
-  } else {
-    // ... pick a default based on the protocol for the listening
-    // group ...
-    if (group_address.is_v6()) {
-      address = boost::asio::ip::address_v6();
-    } else {
-      address = boost::asio::ip::address_v4();
-    }
-  }
-  
-  boost::asio::ip::udp::endpoint endpoint(address, multicast_port);
-  boost::asio::ip::udp::socket socket(io);
-  socket_.open(endpoint.protocol());
-  socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
-
-  JB_LOG(info) << "Requested endpoint=" << endpoint;
-  socket_.bind(endpoint);
-  JB_LOG(info) << " .. bound to endpoint=" << socket_.local_endpoint();
-  if (group_address.is_multicast()) {
-    socket_.set_option(
-        boost::asio::ip::multicast::join_group(group_address));
-    socket_.set_option(boost::asio::ip::multicast::enable_loopback(true));
-    JB_LOG(info) << " .. joining multicast group=" << group_address;
-  }
 
   restart_async_receive_from();
 }
