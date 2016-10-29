@@ -9,7 +9,6 @@ ColumnLimit: 80
 Standard: Cpp11
 AllowShortFunctionsOnASingleLine: None
 AllowShortBlocksOnASingleLine: false
-PenaltyBreakBeforeFirstCallParameter: 1000
 PointerAlignment: Left
 BreakConstructorInitializersBeforeComma: true
 # SpaceAfterTemplateKeyword: false
