@@ -146,7 +146,7 @@ jb_ut_itch5_libs = \
 ################################################################
 check-style:
 	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' | \
-	  xargs echo clang-format -i
+	  xargs clang-format -i
 	$(AM_V_at)git diff --exit-code
 .PHONY: check-style
 
