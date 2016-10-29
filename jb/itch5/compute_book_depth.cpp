@@ -31,8 +31,8 @@ void jb::itch5::compute_book_depth::handle_message(
         recv_ts, msg.header, msg.stock,
         book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-    JB_LOG(warning) << "add_order_message skipping the message, "
-                       "exception caught: " << fe.what();
+    JB_LOG(warning) << "add_order_message skipping the message: "
+                     << fe.what();
   }
 }
 
@@ -91,8 +91,8 @@ void jb::itch5::compute_book_depth::handle_message(
         recv_ts, msg.header, copy.stock,
         book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-    JB_LOG(warning) << "order_replace_message skipping the message,"
-                       "exception caught: " << fe.what();
+    JB_LOG(warning) << "order_replace_message skipping the message: "
+                    << fe.what();
   }
 }
 
@@ -155,8 +155,8 @@ void jb::itch5::compute_book_depth::handle_reduce(
         recv_ts, header, copy.stock,
         stock_book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-        JB_LOG(warning) << "handle_reduce skipping the message,"
-	                   "exception caught: " << fe.what();
+        JB_LOG(warning) << "handle_reduce skipping the message: "
+	                << fe.what();
   }
 }
 

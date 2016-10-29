@@ -299,9 +299,9 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   tested.handle_unknown(
       now, jb::itch5::unknown_message(
           ++msgcnt, 0, sizeof(unknownbuf) - 1, unknownbuf));
+  callback.check_called().never();
 
   // ... a completely new symbol might be slow, but should work ...
-  now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
@@ -309,18 +309,25 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   callback.check_called().once().with(
       compute_book_depth::time_point(now), stock_t("CRAZY"),
       1);      // new symbol, new price
-
-  // ... a duplicate order id should result in no changes ...
-  // an exception is triggered
-  now = tested.now();
+  // sell side now with different symbol....
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{
         {add_order_message::message_type, 0, 0, create_timestamp()},
-         1, BUY, 700, stock_t("CRAZY"), price4_t(160000)} );
- // no callback is expected
- //   callback.check_called().never();
+         10, SELL, 1000, stock_t("DIFFSYM"), price4_t(180000)} );
+  callback.check_called().once().with(
+      compute_book_depth::time_point(now), stock_t("DIFFSYM"),
+      1);      // new symbol, new price  
+
+  // ... a duplicate order id should result in no changes ...
+  // add_order_mesage with same id=1, DIFFSYM this time
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{
+        {add_order_message::message_type, 0, 0, create_timestamp()},
+         1, BUY, 700, stock_t("DIFFSYM"), price4_t(160000)} );
+  // no *new* callback is expected ....
+  // ... therefore verifies it gets the first add_order_message
+  // value still on the (memory) logs of calls (CRAZY)
   callback.check_called().once().with(
       compute_book_depth::time_point(now), stock_t("CRAZY"),
-      1);      // new symbol, new price
-
+      1);      // previous logged callback 
 }
