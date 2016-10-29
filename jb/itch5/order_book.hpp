@@ -3,7 +3,9 @@
 
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/buy_sell_indicator.hpp>
+#include <jb/itch5/order_book_def.hpp>
 #include <jb/log.hpp>
+#include <jb/feed_error.hpp>
 
 #include <functional>
 #include <map>
@@ -12,7 +14,7 @@
 namespace jb {
 namespace itch5 {
 
-/// A simple represetation for price + quantity
+/// A simple representation for price + quantity
 typedef std::pair<price4_t, int> half_quote;
 
 /**
@@ -60,6 +62,11 @@ class order_book {
     return half_quote(max_price_field_value<price4_t>(), 0);
   }
 
+  /**
+   * Return the book depth.
+   * This is the number of price levels on this order book.
+   */
+  book_depth_t get_book_depth() const {return buy_.size() + sell_.size();};   
 
   /**
    * Handle a new order.
@@ -77,11 +84,11 @@ class order_book {
       return handle_add_order(buy_, px, qty);
     }
     return handle_add_order(sell_, px, qty);
-
   }
 
   /**
-   * Handle an order reduction, which includes executions, cancels and replaces.
+   * Handle an order reduction, which includes executions, 
+   * cancels and replaces.
    *
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
@@ -109,9 +116,9 @@ class order_book {
    */
   template<typename book_side>
   bool handle_add_order(book_side& side, price4_t px, int qty) {
-      auto p = side.emplace(px, 0);
-      p.first->second += qty;
-      return p.first == side.begin();
+      auto emp_tup = side.emplace(px, 0);
+      emp_tup.first->second += qty;
+      return emp_tup.first == side.begin();
   }
   
   /**
@@ -126,25 +133,23 @@ class order_book {
    */
   template<typename book_side>
   bool handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
-    // Find the price level
-    // TODO() we create the price level if it does not exist, that is
-    // fairly inneficient ..
-    auto p = side.emplace(px, 0);
+    auto price_it = side.find(px);
+    if (price_it == side.end()) {
+      throw(jb::feed_error("trying to reduce a non-existing price level"));
+    }
     // ... reduce the quantity ...
-    p.first->second -= reduced_qty;
-    if (p.first->second < 0) {
+    price_it->second -= reduced_qty;
+    if (price_it->second < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
-      // TODO() need a lot more details here...
-      JB_LOG(warning) << "negative quantity in order book";
+      JB_LOG(warning) << "negative quantity in order book"; 
     }
-    // ... we may erase the element and invalidate the iterator, so
-    // compute if this was at the inside or not ...
-    bool r = p.first == side.begin();
-    if (p.first->second <= 0) {
-      side.erase(p.first);
+    // now we can erase this element (pf.first) if qty <=0
+    bool inside_change = (price_it == side.begin());
+    if (price_it->second <= 0) {
+      side.erase(price_it);
     }
-    return r;
+    return inside_change;
   }
   
  private:
