@@ -54,7 +54,7 @@ struct mock_socket {
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_basic) {
   boost::asio::io_service io;
 
-  // A simple unicast socket ...
+  // A simple unicast socket on the default interface ...
   mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
       io, "::1", 50000, "");
   socket.open.check_called().once();
@@ -66,11 +66,12 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_basic) {
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv4) {
   boost::asio::io_service io;
 
-  // A simple unicast socket ...
+  // Create a IPv4 multicast socket on the default interface ...
   mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
       io, "239.128.1.1", 50000, "");
   socket.open.check_called().once();
-  socket.bind.check_called().once();
+  socket.bind.check_called().once().with(
+      boost::asio::ip::udp::endpoint(boost::asio::ip::address_v4(), 50000));
   socket.set_option_join_group.check_called().once();
   socket.set_option_enable_loopback.check_called().once();
 }
@@ -78,11 +79,27 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv4) {
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv6) {
   boost::asio::io_service io;
 
-  // A simple unicast socket ...
+  // Create a IPv6 multicast socket on the default interface ...
   mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
       io, "ff05::", 50000, "");
   socket.open.check_called().once();
-  socket.bind.check_called().once();
+  socket.bind.check_called().once().with(
+      boost::asio::ip::udp::endpoint(boost::asio::ip::address_v6(), 50000));
+  socket.set_option_join_group.check_called().once();
+  socket.set_option_enable_loopback.check_called().once();
+}
+
+BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_listen_address) {
+  boost::asio::io_service io;
+
+  // Create a multicast socket on an specific interface ...
+  char const* interface = "2001:db8:ca2:2::1";
+  mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
+      io, "ff05::", 50000, interface);
+  socket.open.check_called().once();
+  socket.bind.check_called().once().with(
+      boost::asio::ip::udp::endpoint(
+          boost::asio::ip::address::from_string(interface), 50000));
   socket.set_option_join_group.check_called().once();
   socket.set_option_enable_loopback.check_called().once();
 }
