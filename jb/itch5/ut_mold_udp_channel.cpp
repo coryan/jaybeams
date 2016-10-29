@@ -12,5 +12,5 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   };
 
   boost::asio::io_service io;
-  jb::itch5::mold_udp_channel channel(handler, io, "", 50000, "::1");
+  jb::itch5::mold_udp_channel channel(io, handler, "::1", 50000, "");
 }

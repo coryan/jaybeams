@@ -105,8 +105,8 @@ int main(int argc, char* argv[]) try {
   };
 
   jb::itch5::mold_udp_channel channel(
-      process_buffer, io_service, cfg.listen_address(), cfg.multicast_port(),
-      cfg.multicast_group());
+      io_service, process_buffer, cfg.multicast_group(), cfg.multicast_port(),
+      cfg.listen_address());
 
   io_service.run();
 
