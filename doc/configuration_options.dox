@@ -1,0 +1,199 @@
+/*!
+@page jb_configuration Configuration in JayBeams
+
+@section jb_configuration_intro Introduction
+
+Many classes in the JayBeams library have configuration parameters.
+The configuration parameters are designed to dynamically load the
+configuration at program startup time from either a configuration file
+or command-line arguments.
+
+This document describes how a typical program would use the
+configuration facilities in JayBeams.  If you prefer to use a
+different configuration system that is possible, and a relative simple
+exercise to the reader [@ref footnote "1"].
+
+@section jb_configuration_goals Goals
+
+We set ourselves the following goals for the configuration system:
+
+-# It must be possible to read the configuration from a simple ASCII
+file. 
+-# Users and developers can override configuration parameters using
+  command-line options.
+-# Adding new attributes in the configuration file and command-line
+  should not require writing the same code twice.
+-# Classes can reuse the configuration parameters for their members,
+configuration is composable.
+-# The file can be located in the usual places for the platform where
+the program is running, so administrators can set the configuration
+for all users.
+-# The users can override the default location for configuration files.
+-# Developers can use configuration files in the same location as the
+  program to quickly test.
+-# If both a configuration file and a command-line option is present,
+  the command-line option takes precedence.
+
+
+We also have a number of secondary goals, such as:
+
+-# Programs can override the default value for a configuration class.
+-# The default values can be set at compile-time without modifying the
+code.
+
+@section jb_configuration_hierarchy The jb::config_object Hierarchy
+
+In JayBeams, configuration parameters are defined as a hierarchy of
+jb::config_object objects nested into each other.  Each node in the
+hierarchy has a name, and optionally a class.  Each leaf is a
+parameter that we want to configure.  In a (YAML)[http://www.yaml.org)
+configuration the
+nodes are represented by, well, YAML nodes.  Each leaf also becomes a
+command-line argument, using the path of all the nodes to compose a
+the argument flag.
+
+For example, suppose a JayBeams "Window" class has three configuration
+parameters, `name`, `height`, and `width`.  And suppose a JayBeams
+program uses two windows, the `history` and `current` windows.  A
+configuration file for such a program may read:
+
+    history:
+      name: "Long Term Trends"
+      width: 1000
+      height: 200
+    current:
+      name: "Recent Events"
+      width: 1000
+      height: 500
+
+The user could override the height for the history window by passing
+the `--history.height=300` option in the command-line.
+
+To create such a configuration the developer needs to create two
+classes, first a building block for the configuration of a single
+window:
+
+@code
+class wcfg : public jb::config_object {
+public:
+  wcfg()
+    : name(desc("name").help("The name of the window"), this)
+    , width(desc("width", "window"), this)
+    , height(desc("height", "window"), this)
+  {}
+
+  config_object_constructors(wcfg);
+
+  jb::config_attribute<wcfg, std::string> name;
+  jb::config_attribute<wcfg, int> width;
+  jb::config_attribute<wcfg, int> height;
+};
+@endcode
+
+And compose that building block using another class:
+
+@code
+class pcfg : public jb::config_object
+public:
+  pcfg()
+    : history(desc("history"), this)
+    , current(desc("current"), this)
+  {}
+  config_object_constructors(pcfg);
+
+  jb::config_attribute<pcfg, wcfg> history;
+  jb::config_attribute<pcfg, wcfg> current;
+};
+@endcode
+
+Then you can use that class as your main configuration point in your
+`main()` program:
+
+@code
+int main(int argc, char *argv[]) try {
+  pcfg config;
+  config.load_overrides(argc, argv, ...);
+}
+@endcode
+
+That tells JayBeams to load the configuration parameters from the
+command-line.  The command-line arguments are defined based on the
+hierarchy of objects, in this case the program would have a
+`--history.width` as well as a `--current.width` option.  
+
+In some programs it might be tedious to constantly type
+the same configuration parameters over and over.  You can instruct
+JayBeams to load the configuration from a file:
+
+@code
+int main(int argc, char *argv[]) try {
+  pcfg config;
+  config.load_overrides(argc, argv, std::string("program.yaml"), ...);
+}
+@endcode
+
+JayBeams will search for `program.yaml` in a number of predefined
+locations (on Linux, first on the `/etc/` directory, and then the same
+directory that has the binary for program).
+If found the configuration file is loaded first, and
+then any overrides from the command-line are parsed second.
+
+If you want to provide an environment variable to control where the
+file is located you can also do so:
+
+@code
+int main(int argc, char *argv[]) try {
+  pcfg config;
+  config.load_overrides(argc, argv, std::string("program.yaml"), "JB_ROOT");
+}
+@endcode
+
+In this case, if JB_ROOT is defined, JayBeams first tries to load the
+file from the `${JB_ROOT}/etc` directory, before trying the standard
+locations.
+
+@section jb_configuration_file The YAML File Format
+
+If you are familiar with YAML the configuration should be familiar to
+you.  Each option is a key, and the hierarchy of YAML Nodes matches
+the hierarchy of configuration objects.  In the example we have been
+using that would be:
+
+@code
+current:
+  name: Current Events View
+  width: 500
+  height: 200
+history:
+  name: History of Events View
+  width: 500
+  height: 300
+@endcode
+
+The only convention that might be unfamiliar is the definition of
+"classes".  In some cases one may want to set all the instances of a
+certain parameter, regardless of its location in the hierarchy, for
+example let's say that we want all "windows" to be 500 units in
+width.  Your configuration file could then say:
+
+@code
+:window:
+  width: 600
+current:
+  name: Current Events View
+  height: 200
+history:
+  name: History of Events View
+  height: 300
+@endcode
+
+Per-instance overrides take precedence over class overrides.  In other
+words, if you set the same parameter for a class and a particular
+instance the value set at the instance wins.
+
+@anchor footnote 1. Load your configuration from whatever sources you
+use into the configuration parameters that the JayBeams classes you
+require.  Or dynamically create a std::istream with the YAML
+configuration you want.
+
+*/
