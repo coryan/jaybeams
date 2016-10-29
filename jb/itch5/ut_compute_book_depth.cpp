@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
       stock_t const& stock,
-      book_depth_t const& book_depth) {
+      book_depth_t book_depth) {
     callback(recv_ts, stock, book_depth);
   };
   
@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_replace) {
   // ignore the header, because it is tedious to test for it ...
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
-      stock_t const& stock, book_depth_t const& book_depth) {
+      stock_t const& stock, book_depth_t book_depth) {
     callback(recv_ts, stock, book_depth);
   };
   // ... create the object under testing ...
@@ -277,7 +277,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_edge_cases) {
   auto cb = [&callback](
       compute_book_depth::time_point recv_ts, message_header const&,
       stock_t const& stock, 
-      book_depth_t const& book_depth) {
+      book_depth_t book_depth) {
     callback(recv_ts, stock, book_depth);
   };
   // ... create the object under testing ...
