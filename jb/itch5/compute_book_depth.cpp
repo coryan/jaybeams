@@ -26,13 +26,13 @@ void jb::itch5::compute_book_depth::handle_message(
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   try {
     auto result = handle_add_no_update(recv_ts, msgcnt, msgoffset, msg);    
-    auto book_it = std::get<2>(result);     // ...gets the book iterator
+    auto book_it = std::get<2>(result);   // ...gets the book iterator
     callback_(
         recv_ts, msg.header, msg.stock,
         book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-    JB_LOG(warning) << "add_order_message skipping the message: "
-                     << fe.what();
+      JB_LOG(warning) << "add_order_message skipping the message: "
+                      << fe.what();
   }
 }
 
@@ -68,8 +68,7 @@ void jb::itch5::compute_book_depth::handle_message(
     order_replace_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   // First we treat the replace as a full cancel, but we do not want
-  // to send an update because the operation is supposed to be atomic
-  // ...
+  // to send an update because the operation is supposed to be atomic...
   try {
     auto result_reduce = handle_reduce_no_update(
         recv_ts, msgcnt, msgoffset, msg.header,
@@ -81,18 +80,19 @@ void jb::itch5::compute_book_depth::handle_message(
   // ... handle the replacing order as a new order, but delay the
   // decision to update the callback ...
     auto result_add = handle_add_no_update(
-  		          recv_ts, msgcnt, msgoffset, add_order_message{
-                          msg.header, msg.new_order_reference_number,
-                          copy.buy_sell_indicator, msg.shares, copy.stock, msg.price} );
+        recv_ts, msgcnt, msgoffset,
+	add_order_message{
+            msg.header, msg.new_order_reference_number,
+            copy.buy_sell_indicator, msg.shares, copy.stock, msg.price});
 
-    // ... there is an event, send that to the callback ...
-    auto book_it = std::get<2>(result_add);   // does not matter which result, same book
+    // ... there is an event, send that to the callback
+    auto book_it = std::get<2>(result_add);  
     callback_(
         recv_ts, msg.header, copy.stock,
         book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-    JB_LOG(warning) << "order_replace_message skipping the message: "
-                    << fe.what();
+      JB_LOG(warning) << "order_replace_message skipping the message: "
+                      << fe.what();
   }
 }
 
@@ -110,12 +110,13 @@ jb::itch5::compute_book_depth::handle_add_no_update(
     add_order_message const& msg) {
   // First we need to insert the order into the list of active orders ...
   auto position = orders_.emplace(
-      msg.order_reference_number, order_data{
-        msg.stock, msg.buy_sell_indicator, msg.price, msg.shares});
+      msg.order_reference_number,
+      order_data{msg.stock, msg.buy_sell_indicator, msg.price, msg.shares});
   if (position.second == false) {
     // ... ooops, this should not happen, there is a problem with the
-    // feed, log the problem and skip the message ...
-    // ... strictly speaking the new duplicate message data is in the orders_ now
+    // feed, throw an exception to skip the message ...
+    // ... strictly speaking the new duplicate message data
+    // is in the orders_ now (so no really skip...)
     auto const& data = position.first->second;
     std::ostringstream os;
     os << "duplicate order id=" << msg.order_reference_number
@@ -133,7 +134,7 @@ jb::itch5::compute_book_depth::handle_add_no_update(
   auto stock_book_it = books_.find(msg.stock);
   if (stock_book_it == books_.end()) {
     auto book_pair = books_.emplace(msg.stock, order_book());
-    stock_book_it = book_pair.first;                      // iterator to the new order book
+    stock_book_it = book_pair.first;  // iterator to the new order book
   }
   // ... add the order to the book, ignore the bool return
   stock_book_it->second.handle_add_order(
@@ -147,16 +148,16 @@ void jb::itch5::compute_book_depth::handle_reduce(
     std::uint32_t shares, bool all_shares) {
   try {
     auto result = handle_reduce_no_update(
-            recv_ts, msgcnt, msgoffset, header, order_reference_number,
-            shares, all_shares);
+        recv_ts, msgcnt, msgoffset, header, order_reference_number,
+        shares, all_shares);
     auto const& copy = std::get<1>(result);
     auto stock_book_it = std::get<2>(result);
     callback_(
         recv_ts, header, copy.stock,
         stock_book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
-        JB_LOG(warning) << "handle_reduce skipping the message: "
-	                << fe.what();
+      JB_LOG(warning) << "handle_reduce skipping the message: "
+                      << fe.what();
   }
 }
 
@@ -169,18 +170,17 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
   auto position = orders_.find(order_reference_number);
   if (position == orders_.end()) {
     // ... ooops, this should not happen, there is a problem with the
-    // feed, skip the message ...
+    // feed, throw an exception to skip the message ...
     std::ostringstream os;
     os << "missing order id=" << order_reference_number
        << ", location=" << msgcnt << ":" << msgoffset
        << ", header=" << header;
     throw jb::feed_error(os.str());
   }
-  // ... okay, now that the order is located, find the book for that
-  // symbol ...
+  // ..okay, now that the order is located, find the book for that symbol
   auto& data = position->second;
   auto stock_book_it = books_.find(data.stock);
-  JB_ASSERT_THROW(stock_book_it != books_.end());
+  JB_ASSERT_THROW(stock_book_it != books_.end());  // runtime error
 
   // ... now we need to update the data for the order ...
   if (all_shares) {
@@ -197,7 +197,7 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
     // from the book ...
     orders_.erase(position);
   }
-  // ... handle the update, ignored the return :: if it is an inside change
+  // ... reduce the quantity at the price...
   stock_book_it->second.handle_order_reduced(
       copy.buy_sell_indicator, copy.px, shares);
   return std::make_tuple(true, copy, stock_book_it);

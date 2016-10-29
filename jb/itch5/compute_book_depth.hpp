@@ -25,8 +25,7 @@ namespace itch5 {
  * An implementation of jb::message_handler_concept to compute the book depth.
  *
  * Keep a collection of all the order books, and forward the right
- * updates to them as it handles the different message types in
- * ITCH-5.0.
+ * updates to them as it handles the different message types in ITCH-5.0.
  * Calls the callback on any event (changes to the book)
  */
 
@@ -42,7 +41,7 @@ class compute_book_depth {
   /// Callbacks
   typedef std::function<void(
       time_point, message_header const&, stock_t const&,
-      book_depth_t const&)> callback_type;
+      book_depth_t)> callback_type;
   //@}
 
   /// Initialize an empty handler
@@ -150,10 +149,10 @@ class compute_book_depth {
    * is used to keep that information around.
    */
   struct order_data {
-    stock_t stock;
-    buy_sell_indicator_t buy_sell_indicator;
-    price4_t px;
-    int qty;
+    stock_t stock;                           /**<symbol                  */
+    buy_sell_indicator_t buy_sell_indicator; /**<buy or sell book        */
+    price4_t px;                             /**<price level             */
+    int qty;                                 /**<quantity at price level */
   };
 
   /// An accessor to make testing easier
@@ -165,12 +164,23 @@ class compute_book_depth {
   /// The list of live orders
   typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
 
-  /// The collection of order book depths
+  /** 
+   * The collection of order books.
+   * @arg stock_t : symbol
+   * @arg order_book : order book for the symbol
+   */ 
   typedef std::unordered_map<
     stock_t, order_book, boost::hash<stock_t>> books_by_security;
 
-  /// The result of a reduction is fairly complex ...
-  typedef std::tuple<bool, order_data, books_by_security::iterator> update_result;
+  /**
+   * The result of a book update (add or reduce).
+   * @arg bool : true indicates inside change
+   * @arg order_data : container of book order data updated
+   * @arg books_by_security::iterator : iterator to the book updated
+   */
+  typedef std::tuple<
+      bool ,order_data, books_by_security::iterator
+      > update_result;
 
   /// Refactor handling of add_order_message for both add_order and
   /// replace, but do not update the callback

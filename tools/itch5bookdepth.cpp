@@ -14,7 +14,8 @@
  * Compute ITCH5 Depth of Book statistics.
  *
  * Generate statistics per symbol and aggregated.
- * See https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
+ * See:
+ * https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
  * for design and implementation details.
  */
 namespace {
@@ -58,8 +59,7 @@ int main(int argc, char* argv[]) try {
       jb::itch5::compute_book_depth::time_point recv_ts,
       jb::itch5::message_header const& header,
       jb::itch5::stock_t const& stock,
-      jb::itch5::book_depth_t const& book_depth) {
-    auto pl = std::chrono::steady_clock::now() - recv_ts;
+      jb::itch5::book_depth_t book_depth) {
     stats.sample(book_depth);
     
     if (cfg.enable_symbol_stats()) {
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) try {
   stats.print_csv("__aggregate__", out);
   return 0;
 
- } catch(jb::usage const& u) {
+} catch(jb::usage const& u) {
   std::cerr << u.what() << std::endl;
   return u.exit_status();
 } catch(std::exception const& ex) {

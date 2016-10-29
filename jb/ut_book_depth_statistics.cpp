@@ -2,7 +2,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-constexpr bool eqTypes() { return std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value; }
+constexpr bool eqTypes() {
+  return std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value;}
 
 /**
  * @test Verify that jb::book_depth_statistics works as expected.
@@ -17,7 +18,8 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_simple) {
   stats.sample(4);
   stats.sample(5);
 
-  BOOST_STATIC_ASSERT_MSG(eqTypes() , "inconsistent types jb:: and jb::itch5:: book_depth_t");
+  BOOST_STATIC_ASSERT_MSG(eqTypes(),
+      "inconsistent types jb:: and jb::itch5:: book_depth_t");
 }
 
 /**
@@ -31,7 +33,8 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   BOOST_CHECK_EQUAL(header.str().substr(0, 5), std::string("Name,"));
 
   std::string h = header.str();
-  int nheaders = std::count(h.begin(), h.end(), ',');  // save number of headers
+  // save number of headers...
+  int nheaders = std::count(h.begin(), h.end(), ',');
 
   std::ostringstream body;
 

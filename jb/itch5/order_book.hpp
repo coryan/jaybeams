@@ -63,9 +63,10 @@ class order_book {
   }
 
   /**
-   * @return the book depth (i.e. number of price levels) on this order book.
+   * Return the book depth.
+   * This is the number of price levels on this order book.
    */
-  book_depth_t get_book_depth() const {return buy_.size() + sell_.size(); };   
+  book_depth_t get_book_depth() const {return buy_.size() + sell_.size();};   
 
   /**
    * Handle a new order.
@@ -86,7 +87,8 @@ class order_book {
   }
 
   /**
-   * Handle an order reduction, which includes executions, cancels and replaces.
+   * Handle an order reduction, which includes executions, 
+   * cancels and replaces.
    *
    * @param side whether the order is a buy or a sell
    * @param px the price of the order

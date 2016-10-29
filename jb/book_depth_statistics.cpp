@@ -40,7 +40,8 @@ void report_rate(
 } // anonymous namespace
 
 jb::book_depth_statistics::book_depth_statistics(config const& cfg)
-  : book_depth_(book_depth_histogram_t::binning_strategy(0, cfg.max_book_depth()))
+  : book_depth_(
+        book_depth_histogram_t::binning_strategy(0, cfg.max_book_depth()))
 {}
 
 void jb::book_depth_statistics::print_csv_header(std::ostream& os) {

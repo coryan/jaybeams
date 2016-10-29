@@ -14,7 +14,6 @@ namespace jb {
   
 /**
  * Keep statistics about a feed and its book depth.
- *
  */
 class book_depth_statistics {
  public:
@@ -26,9 +25,10 @@ class book_depth_statistics {
   /**
    * Record a sample, that is book depth value after the event.
    *
-   * @tparam book_depth_t the type used to record the book depth after processing the event
-   *
-   * @param book_depth : the book depth (after processing the event) to be recorded.
+   * @tparam book_depth_t the type used to record 
+   * the book depth after processing the event.
+   * @param book_depth : the book depth (after processing the event) 
+   * to be recorded.
    */
   template<typename book_depth_t>
   void sample(book_depth_t book_depth) {
@@ -61,7 +61,8 @@ class book_depth_statistics {
   void print_csv(std::string const& name, std::ostream& os) const;
 
  private:
-  typedef histogram<integer_range_binning<book_depth_t>> book_depth_histogram_t;
+  typedef histogram<integer_range_binning<book_depth_t>
+      > book_depth_histogram_t;
   book_depth_histogram_t book_depth_;  
 };
 
