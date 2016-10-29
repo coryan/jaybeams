@@ -20,7 +20,7 @@ namespace testing {
  *   will tolerate errors up to tol * std::numeric_limit<real>::epsilon()
  * @tparam real the type of floating point number (float, double, long double)
  */
-template<typename real>
+template <typename real>
 bool close_enough(real actual, real expected, int tol) {
   real const eps = tol * std::numeric_limits<real>::epsilon();
   if (std::abs(expected) < eps) {
@@ -41,12 +41,11 @@ bool close_enough(real actual, real expected, int tol) {
  *   will tolerate errors up to tol * std::numeric_limit<real>::epsilon()
  * @tparam real the type of floating point number (float, double, long double)
  */
-template<typename real>
-bool close_enough(
-    std::complex<real> const& actual, std::complex<real> const& expected,
-    int tol = 1) {
-  return (close_enough(actual.real(), expected.real(), tol)
-          and close_enough(actual.imag(), expected.imag(), tol));
+template <typename real>
+bool close_enough(std::complex<real> const& actual,
+                  std::complex<real> const& expected, int tol = 1) {
+  return (close_enough(actual.real(), expected.real(), tol) and
+          close_enough(actual.imag(), expected.imag(), tol));
 }
 
 /**
@@ -62,38 +61,35 @@ bool close_enough(
  *   will tolerate errors up to tol * std::numeric_limit<real>::epsilon()
  * @tparam real the type of floating point number (float, double, long double)
  */
-template<typename real>
+template <typename real>
 bool close_enough(real actual[2], real expected[2], int tol = 1) {
-  return (close_enough(actual[0], expected[0], tol)
-          and close_enough(actual[0], expected[0], tol));
+  return (close_enough(actual[0], expected[0], tol) and
+          close_enough(actual[0], expected[0], tol));
 }
 
 /**
  * Verify that a floating point value is "close enough" to 0.
  */
-template<typename floating>
-void check_small(floating t, double small) {
+template <typename floating> void check_small(floating t, double small) {
   BOOST_CHECK_SMALL(t, floating(small));
 }
 
 /**
  * Verify that a complex number is "close enough" to 0.
  */
-template<typename real>
-void check_small(std::complex<real> t, double small) {
+template <typename real> void check_small(std::complex<real> t, double small) {
   BOOST_CHECK_SMALL(t.real(), real(small));
   BOOST_CHECK_SMALL(t.imag(), real(small));
 }
 
 /// Wrap FFTW-style complex numbers in std::complex for iostreaming
-template<typename precision_t>
+template <typename precision_t>
 std::complex<precision_t> format(precision_t v[2]) {
   return std::complex<precision_t>(v[0], v[1]);
 }
 
 /// Allow generic treatment of FFTW-style complex numbers and other types.
-template<typename value_type>
-value_type format(value_type t) {
+template <typename value_type> value_type format(value_type t) {
   return t;
 }
 

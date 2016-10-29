@@ -17,18 +17,18 @@ BOOST_AUTO_TEST_CASE(decode_uint8) {
   buffer[1] = 20;
   buffer[3] = 25;
 
-  auto actual = decoder<true,std::uint8_t>::r(16, buffer, 1);
+  auto actual = decoder<true, std::uint8_t>::r(16, buffer, 1);
   BOOST_CHECK_EQUAL(actual, 20);
 
-  actual = decoder<false,std::uint8_t>::r(16, buffer, 3);
+  actual = decoder<false, std::uint8_t>::r(16, buffer, 3);
   BOOST_CHECK_EQUAL(actual, 25);
 
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint8_t>::r(16, buffer, 0)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint8_t>::r(16, buffer, 8)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint8_t>::r(16, buffer, 15)));
-  BOOST_CHECK_THROW(
-      (decoder<true,std::uint8_t>::r(16, buffer, 16)), std::runtime_error);
-  BOOST_CHECK_NO_THROW((decoder<false,std::uint8_t>::r(16, buffer, 16)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 0)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 8)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 15)));
+  BOOST_CHECK_THROW((decoder<true, std::uint8_t>::r(16, buffer, 16)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, std::uint8_t>::r(16, buffer, 16)));
 }
 
 /**
@@ -40,18 +40,18 @@ BOOST_AUTO_TEST_CASE(decode_uint16) {
   buffer[0] = 10;
   buffer[1] = 20;
 
-  auto actual = decoder<true,std::uint16_t>::r(16, buffer, 0);
+  auto actual = decoder<true, std::uint16_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, 10 * 256 + 20);
 
-  actual = decoder<false,std::uint16_t>::r(16, buffer, 0);
+  actual = decoder<false, std::uint16_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, 10 * 256 + 20);
 
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint16_t>::r(16, buffer, 0)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint16_t>::r(16, buffer, 8)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint16_t>::r(16, buffer, 14)));
-  BOOST_CHECK_THROW(
-      (decoder<true,std::uint16_t>::r(16, buffer, 15)), std::runtime_error);
-  BOOST_CHECK_NO_THROW((decoder<false,std::uint16_t>::r(16, buffer, 15)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 0)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 8)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 14)));
+  BOOST_CHECK_THROW((decoder<true, std::uint16_t>::r(16, buffer, 15)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, std::uint16_t>::r(16, buffer, 15)));
 }
 
 /**
@@ -65,18 +65,18 @@ BOOST_AUTO_TEST_CASE(decode_uint32) {
   buffer[2] = 30;
   buffer[3] = 40;
 
-  auto actual = decoder<true,std::uint32_t>::r(16, buffer, 0);
+  auto actual = decoder<true, std::uint32_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, ((10 * 256 + 20) * 256 + 30) * 256 + 40);
 
-  actual = decoder<false,std::uint32_t>::r(16, buffer, 0);
+  actual = decoder<false, std::uint32_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, ((10 * 256 + 20) * 256 + 30) * 256 + 40);
 
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint32_t>::r(16, buffer, 0)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint32_t>::r(16, buffer, 8)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint32_t>::r(16, buffer, 12)));
-  BOOST_CHECK_THROW(
-      (decoder<true,std::uint32_t>::r(16, buffer, 13)), std::runtime_error);
-  BOOST_CHECK_NO_THROW((decoder<false,std::uint32_t>::r(16, buffer, 13)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 0)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 8)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 12)));
+  BOOST_CHECK_THROW((decoder<true, std::uint32_t>::r(16, buffer, 13)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, std::uint32_t>::r(16, buffer, 13)));
 }
 
 /**
@@ -92,15 +92,15 @@ BOOST_AUTO_TEST_CASE(decode_uint64) {
     expected = expected * 256 + values[i];
   }
 
-  auto actual = decoder<true,std::uint64_t>::r(16, buffer, 0);
+  auto actual = decoder<true, std::uint64_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, expected);
 
-  actual = decoder<false,std::uint64_t>::r(16, buffer, 0);
+  actual = decoder<false, std::uint64_t>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, expected);
 
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint64_t>::r(16, buffer, 2)));
-  BOOST_CHECK_NO_THROW((decoder<true,std::uint64_t>::r(16, buffer, 7)));
-  BOOST_CHECK_THROW(
-      (decoder<true,std::uint64_t>::r(16, buffer, 9)), std::runtime_error);
-  BOOST_CHECK_NO_THROW((decoder<false,std::uint64_t>::r(16, buffer, 9)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint64_t>::r(16, buffer, 2)));
+  BOOST_CHECK_NO_THROW((decoder<true, std::uint64_t>::r(16, buffer, 7)));
+  BOOST_CHECK_THROW((decoder<true, std::uint64_t>::r(16, buffer, 9)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, std::uint64_t>::r(16, buffer, 9)));
 }

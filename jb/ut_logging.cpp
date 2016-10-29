@@ -10,11 +10,10 @@
  * @test Verify that basic logging functions work as expected.
  */
 BOOST_AUTO_TEST_CASE(logging_basic) {
-  jb::log::init(
-      jb::log::config()
-      .minimum_severity(jb::severity_level::debug)
-      .enable_file_logging(true)
-      .logfile_basename("ut_logging"));
+  jb::log::init(jb::log::config()
+                    .minimum_severity(jb::severity_level::debug)
+                    .enable_file_logging(true)
+                    .logfile_basename("ut_logging"));
 
   JB_LOG(trace) << "tracing tracing tracing";
   for (int i = 0; i != 30000; ++i) {
@@ -31,7 +30,7 @@ BOOST_AUTO_TEST_CASE(logging_basic) {
 
   auto expensive = [](int n) {
     int s = 0;
-    for(int i = 0; i != n; ++i) {
+    for (int i = 0; i != n; ++i) {
       s += n;
     }
     return s;
@@ -47,16 +46,15 @@ BOOST_AUTO_TEST_CASE(logging_basic) {
 
   JB_LOG(notice) << "x=" << x << ", foo=" << foo << " y=" << y;
   JB_LOG(debug) << "x=" << x << ", foo=" << foo << " y=" << y;
-  JB_LOG(error) <<  "x=" << x << ", foo=" << foo << " y=" << y;
+  JB_LOG(error) << "x=" << x << ", foo=" << foo << " y=" << y;
 
   std::ostringstream os;
   auto core = boost::log::core::get();
   auto backend = boost::make_shared<boost::log::sinks::text_ostream_backend>();
-  backend->add_stream(
-      boost::shared_ptr< std::ostream >(&os, [](void const*){} ));
+  backend->add_stream(boost::shared_ptr<std::ostream>(&os, [](void const*) {}));
   backend->auto_flush(true);
   typedef boost::log::sinks::synchronous_sink<
-    boost::log::sinks::text_ostream_backend> sink_t;
+      boost::log::sinks::text_ostream_backend> sink_t;
   auto sink = boost::make_shared<sink_t>(backend);
   core->add_sink(sink);
 
@@ -83,10 +81,9 @@ minimum-console-severity: NOTICE
   int argc = 0;
   tested.load_overrides(argc, nullptr, is);
 
-  BOOST_CHECK_EQUAL(
-      tested.minimum_severity(), jb::severity_level::error);
-  BOOST_CHECK_EQUAL(
-      tested.minimum_console_severity(), jb::severity_level::notice);
+  BOOST_CHECK_EQUAL(tested.minimum_severity(), jb::severity_level::error);
+  BOOST_CHECK_EQUAL(tested.minimum_console_severity(),
+                    jb::severity_level::notice);
 
   std::ostringstream os;
   BOOST_CHECK_NO_THROW(os << tested);
@@ -102,6 +99,5 @@ enable-file-logging: true
   jb::log::config tested;
   std::istringstream is(contents);
   int argc = 0;
-  BOOST_CHECK_THROW(
-      tested.load_overrides(argc, nullptr, is), jb::usage);
+  BOOST_CHECK_THROW(tested.load_overrides(argc, nullptr, is), jb::usage);
 }

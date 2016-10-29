@@ -20,12 +20,12 @@ namespace jb {
  * binning strategies might provide a non-linear interpolation, but in
  * practice this (linear) solution is used in most cases.
  */
-template<typename sample_type>
-inline sample_type histogram_binning_linear_interpolation(
-      sample_type x_a, sample_type x_b, double y_a, double s, double q) {
+template <typename sample_type>
+inline sample_type
+histogram_binning_linear_interpolation(sample_type x_a, sample_type x_b,
+                                       double y_a, double s, double q) {
   return sample_type(std::floor(x_a + (q - y_a) * (x_b - x_a) / s));
 }
-
 
 } // namespace jb
 

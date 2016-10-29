@@ -9,7 +9,7 @@
  * @test Verify that we can create and use a simple time delay estimator.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_simple) {
-  int const nsamples = 1<<15;
+  int const nsamples = 1 << 15;
   int const delay = 1250;
   typedef jb::fftw::aligned_vector<float> timeseries_type;
   typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_simple) {
  * @test Verify that jb::fftw::time_delay_estimator can handle edge conditions.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_error) {
-  int const nsamples = 1<<15;
+  int const nsamples = 1 << 15;
   typedef jb::fftw::aligned_vector<float> timeseries_type;
   typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
 

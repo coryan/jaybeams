@@ -20,8 +20,7 @@
 namespace jb {
 namespace itch5 {
 
-
-/** 
+/**
  * An implementation of jb::message_handler_concept to compute the book depth.
  *
  * Keep a collection of all the order books, and forward the right
@@ -30,7 +29,7 @@ namespace itch5 {
  */
 
 class compute_book_depth {
- public:
+public:
   //@{
   /**
    * @name Type traits
@@ -39,9 +38,8 @@ class compute_book_depth {
   typedef std::chrono::steady_clock::time_point time_point;
 
   /// Callbacks
-  typedef std::function<void(
-      time_point, message_header const&, stock_t const&,
-      book_depth_t)> callback_type;
+  typedef std::function<void(time_point, message_header const&, stock_t const&,
+                             book_depth_t)> callback_type;
   //@}
 
   /// Initialize an empty handler
@@ -60,68 +58,58 @@ class compute_book_depth {
    * pre-populate the map of books and avoid hash map updates during
    * the critical path.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      stock_directory_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      stock_directory_message const& msg);
 
   /**
    * Handle a new order.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      add_order_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      add_order_message const& msg);
 
   /**
    * Handle a new order with MPID.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      add_order_mpid_message const& msg) {
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      add_order_mpid_message const& msg) {
     // Delegate on the handler for add_order_message
-    handle_message(
-        recv_ts, msgcnt, msgoffset,
-        static_cast<add_order_message const&>(msg));
+    handle_message(recv_ts, msgcnt, msgoffset,
+                   static_cast<add_order_message const&>(msg));
   }
 
   /**
    * Handle an order execution.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      order_executed_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      order_executed_message const& msg);
 
   /**
    * Handle an order execution.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      order_executed_price_message const& msg) {
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      order_executed_price_message const& msg) {
     // Delegate on the handler for add_order_message
-    handle_message(
-        recv_ts, msgcnt, msgoffset,
-        static_cast<order_executed_message const&>(msg));
+    handle_message(recv_ts, msgcnt, msgoffset,
+                   static_cast<order_executed_message const&>(msg));
   }
-  
+
   /**
    * Handle a partial cancel.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      order_cancel_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      order_cancel_message const& msg);
 
   /**
    * Handle a full cancel.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      order_delete_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      order_delete_message const& msg);
 
   /**
    * Handle an order replace.
    */
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      order_replace_message const& msg);
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      order_replace_message const& msg);
 
   /**
    * Ignore all other message types.
@@ -129,11 +117,10 @@ class compute_book_depth {
    * We are only interested in a handful of message types, anything
    * else is captured by this template function and ignored.
    */
-  template<typename message_type>
-  void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      message_type const& msg)
-  {}
+  template <typename message_type>
+  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                      message_type const& msg) {
+  }
 
   /**
    * Log any unknown message types.
@@ -160,17 +147,17 @@ class compute_book_depth {
     return orders_.size();
   }
 
- private:
+private:
   /// The list of live orders
   typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
 
-  /** 
+  /**
    * The collection of order books.
    * @arg stock_t : symbol
    * @arg order_book : order book for the symbol
-   */ 
-  typedef std::unordered_map<
-    stock_t, order_book, boost::hash<stock_t>> books_by_security;
+   */
+  typedef std::unordered_map<stock_t, order_book, boost::hash<stock_t>>
+      books_by_security;
 
   /**
    * The result of a book update (add or reduce).
@@ -178,29 +165,29 @@ class compute_book_depth {
    * @arg order_data : container of book order data updated
    * @arg books_by_security::iterator : iterator to the book updated
    */
-  typedef std::tuple<
-      bool ,order_data, books_by_security::iterator
-      > update_result;
+  typedef std::tuple<bool, order_data, books_by_security::iterator>
+      update_result;
 
   /// Refactor handling of add_order_message for both add_order and
   /// replace, but do not update the callback
-  update_result handle_add_no_update(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      add_order_message const& msg);
+  update_result handle_add_no_update(time_point recv_ts, long msgcnt,
+                                     std::size_t msgoffset,
+                                     add_order_message const& msg);
 
   /// Handle both order executions and partial cancels
-  void handle_reduce(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      message_header const& header, std::uint64_t order_reference_number,
-      std::uint32_t shares, bool all_shares);
+  void handle_reduce(time_point recv_ts, long msgcnt, std::size_t msgoffset,
+                     message_header const& header,
+                     std::uint64_t order_reference_number, std::uint32_t shares,
+                     bool all_shares);
 
   /// Handle an order reduction, but do not update the callback
-  update_result handle_reduce_no_update(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
-      message_header const& header, std::uint64_t order_reference_number,
-      std::uint32_t shares, bool all_shares);
+  update_result handle_reduce_no_update(time_point recv_ts, long msgcnt,
+                                        std::size_t msgoffset,
+                                        message_header const& header,
+                                        std::uint64_t order_reference_number,
+                                        std::uint32_t shares, bool all_shares);
 
- private:
+private:
   /// Store the callback ...
   callback_type callback_;
 

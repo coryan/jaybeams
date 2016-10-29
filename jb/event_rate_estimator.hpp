@@ -53,11 +53,10 @@ namespace jb {
  *   counters, such as when measuring event rate per minute, you
  *   should consider using a 64-bit counter.
  */
-template<
-  typename duration_t = std::chrono::microseconds,
-  typename counter_t = int>
+template <typename duration_t = std::chrono::microseconds,
+          typename counter_t = int>
 class event_rate_estimator {
- public:
+public:
   //@{
   /**
    * @name Type traits.
@@ -76,9 +75,8 @@ class event_rate_estimator {
    * @throw std::invalid_argument if the measurement period is not a
    *   multiple of the sampling period.
    */
-  event_rate_estimator(
-      duration_type measurement_period,
-      duration_type sampling_period = duration_type(1))
+  event_rate_estimator(duration_type measurement_period,
+                       duration_type sampling_period = duration_type(1))
       : buckets_(bucket_count(measurement_period, sampling_period))
       , sampling_period_(sampling_period)
       , running_total_()
@@ -98,8 +96,7 @@ class event_rate_estimator {
    * @param ts the timestamp of the sample.
    * @param update a functor to update when an event rate is estimated.
    */
-  template<typename functor>
-  void sample(duration_type ts, functor update) {
+  template <typename functor> void sample(duration_type ts, functor update) {
     if (end_pos_ >= buckets_.size()) {
       // ... this is the first event sample, initialize the circular
       // buffer and just return, there is no rate with a single sample
@@ -119,7 +116,7 @@ class event_rate_estimator {
 
     // ... yay! new timestamp, rotate the buffer until we get to the
     // new timestamp ...
-    while(last_bucket_ < bucket and running_total_ > 0) {
+    while (last_bucket_ < bucket and running_total_ > 0) {
       // ... before rotating, issue an estimate based on the number of
       // samples contained in the circular buffer ...
       update(running_total_, 1);
@@ -146,7 +143,7 @@ class event_rate_estimator {
 
   typedef std::vector<counter_type> buckets;
 
- private:
+private:
   /// Just initialize the circular buffer
   void init(duration_type ts) {
     end_pos_ = 0;
@@ -167,22 +164,19 @@ class event_rate_estimator {
   }
 
   /// Estimate the necessary number of buckets
-  std::size_t bucket_count(
-      duration_type measurement_period, duration_type sampling_period) {
+  std::size_t bucket_count(duration_type measurement_period,
+                           duration_type sampling_period) {
     if (sampling_period <= duration_type(0)) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - sampling period ("
-         << sampling_period.count()
-         << ") must be a positive number";
+         << sampling_period.count() << ") must be a positive number";
       throw std::invalid_argument(os.str());
     }
     if (sampling_period > measurement_period) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - measurement period ("
-         << measurement_period.count()
-         << ") is smaller than sampling period ("
-         << sampling_period.count()
-         << ")";
+         << measurement_period.count() << ") is smaller than sampling period ("
+         << sampling_period.count() << ")";
       throw std::invalid_argument(os.str());
     }
 
@@ -191,8 +185,7 @@ class event_rate_estimator {
       os << "jb::event_rate_estimate - measurement period ("
          << measurement_period.count()
          << ") must be a multiple of the sampling period ("
-         << sampling_period.count()
-         << ")";
+         << sampling_period.count() << ")";
       throw std::invalid_argument(os.str());
     }
 
@@ -206,16 +199,14 @@ class event_rate_estimator {
     if (N >= std::numeric_limits<std::size_t>::max()) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - measurement period ("
-         << measurement_period.count()
-         << ") is too large for sampling period ("
-         << sampling_period.count()
-         << ")";
+         << measurement_period.count() << ") is too large for sampling period ("
+         << sampling_period.count() << ")";
       throw std::invalid_argument(os.str());
     }
     return static_cast<std::size_t>(N);
   }
 
- private:
+private:
   /// The time period is bucketized in intervals of 1 sampling period.
   buckets buckets_;
 

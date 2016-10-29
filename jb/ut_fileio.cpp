@@ -3,7 +3,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/test/unit_test.hpp>
 
-
 /**
  * Implement the common part of the tests.
  */
@@ -11,10 +10,9 @@ void check_read_write(boost::filesystem::path const& path) {
   BOOST_TEST_MESSAGE("Using path=<" << path.string() << ">\n");
 
   std::vector<std::string> lines{
-    "This is a sample file",
-        "with more than one line",
-        "yet entirely too short",
-        };
+      "This is a sample file", "with more than one line",
+      "yet entirely too short",
+  };
 
   {
     boost::iostreams::filtering_ostream out;

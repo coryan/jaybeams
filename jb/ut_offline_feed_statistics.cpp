@@ -9,21 +9,16 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_simple) {
   jb::offline_feed_statistics::config cfg;
   jb::offline_feed_statistics stats(cfg);
 
-  stats.sample(
-      std::chrono::seconds(1), std::chrono::microseconds(1));
-  stats.sample(
-      std::chrono::seconds(1) + std::chrono::microseconds(1),
-      std::chrono::microseconds(1));
-  stats.sample(
-      std::chrono::seconds(1) + std::chrono::microseconds(2),
-      std::chrono::microseconds(1));
-  stats.sample(
-      std::chrono::seconds(1) + std::chrono::microseconds(3),
-      std::chrono::microseconds(1));
+  stats.sample(std::chrono::seconds(1), std::chrono::microseconds(1));
+  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(1),
+               std::chrono::microseconds(1));
+  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(2),
+               std::chrono::microseconds(1));
+  stats.sample(std::chrono::seconds(1) + std::chrono::microseconds(3),
+               std::chrono::microseconds(1));
 
-  stats.sample(
-      std::chrono::seconds(601) + std::chrono::microseconds(1),
-      std::chrono::microseconds(2));
+  stats.sample(std::chrono::seconds(601) + std::chrono::microseconds(1),
+               std::chrono::microseconds(2));
 }
 
 /**
@@ -46,14 +41,10 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_print_csv) {
   int nfields = std::count(b.begin(), b.end(), ',');
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
-  stats.sample(
-      std::chrono::seconds(600), std::chrono::microseconds(2));
-  stats.sample(
-      std::chrono::seconds(601), std::chrono::microseconds(2));
-  stats.sample(
-      std::chrono::seconds(602), std::chrono::microseconds(2));
-  stats.sample(
-      std::chrono::seconds(603), std::chrono::microseconds(2));
+  stats.sample(std::chrono::seconds(600), std::chrono::microseconds(2));
+  stats.sample(std::chrono::seconds(601), std::chrono::microseconds(2));
+  stats.sample(std::chrono::seconds(602), std::chrono::microseconds(2));
+  stats.sample(std::chrono::seconds(603), std::chrono::microseconds(2));
 
   body.str("");
   stats.print_csv("testing", body);
@@ -72,18 +63,16 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_config_simple) {
   typedef jb::offline_feed_statistics::config config;
 
   BOOST_CHECK_NO_THROW(config().validate());
-  BOOST_CHECK_THROW(
-      config().max_messages_per_second(-7).validate(), jb::usage);
-  BOOST_CHECK_THROW(
-      config().max_messages_per_millisecond(-7).validate(), jb::usage);
-  BOOST_CHECK_THROW(
-      config().max_messages_per_microsecond(-7).validate(), jb::usage);
-  BOOST_CHECK_THROW(
-      config().max_interarrival_time_nanoseconds(-7).validate(), jb::usage);
-  BOOST_CHECK_THROW(
-      config().max_processing_latency_nanoseconds(-7).validate(), jb::usage);
-  BOOST_CHECK_THROW(
-      config().reporting_interval_seconds(-1).validate(), jb::usage);
-  BOOST_CHECK_NO_THROW(
-      config().reporting_interval_seconds(0).validate());
+  BOOST_CHECK_THROW(config().max_messages_per_second(-7).validate(), jb::usage);
+  BOOST_CHECK_THROW(config().max_messages_per_millisecond(-7).validate(),
+                    jb::usage);
+  BOOST_CHECK_THROW(config().max_messages_per_microsecond(-7).validate(),
+                    jb::usage);
+  BOOST_CHECK_THROW(config().max_interarrival_time_nanoseconds(-7).validate(),
+                    jb::usage);
+  BOOST_CHECK_THROW(config().max_processing_latency_nanoseconds(-7).validate(),
+                    jb::usage);
+  BOOST_CHECK_THROW(config().reporting_interval_seconds(-1).validate(),
+                    jb::usage);
+  BOOST_CHECK_NO_THROW(config().reporting_interval_seconds(0).validate());
 }

@@ -23,7 +23,7 @@ namespace defaults {
  * may be significantly smaller (or larger!).
  *
  * The only guarantee is that all hosts should be prepared to accept
- * datagrams of up to 576 octets: 
+ * datagrams of up to 576 octets:
  *   https://tools.ietf.org/html/rfc791
  * effectively, 576 is the "minimum" value for the MTU.
  *
@@ -46,19 +46,20 @@ int maximum_transmission_unit = JB_ITCH5_DEFAULTS_maximum_transmission_unit;
 } // namespace defaults
 
 mold_udp_pacer_config::mold_udp_pacer_config()
-    : maximum_delay_microseconds(
-        desc("maximum-delay-microseconds").help(
-            "Maximum time a MoldUDP packet is delayed before sending it."),
-        this, defaults::maximum_delay_microseconds)
+    : maximum_delay_microseconds(desc("maximum-delay-microseconds")
+                                     .help("Maximum time a MoldUDP packet is "
+                                           "delayed before sending it."),
+                                 this, defaults::maximum_delay_microseconds)
     , maximum_transmission_unit(
-        desc("maximum-transmission-unit").help(
-            "Maximum MoldUDP message to be sent in a single UDP message. "
-            "The default value is extremely conservative. "
-            "If your Ethernet network is configured for an MTU of 1500, "
-            "use 1432 for this value.  Beware of VLANs and other details "
-            "that may consume your available bytes."),
-        this, defaults::maximum_transmission_unit)
-{}
+          desc("maximum-transmission-unit")
+              .help(
+                  "Maximum MoldUDP message to be sent in a single UDP message. "
+                  "The default value is extremely conservative. "
+                  "If your Ethernet network is configured for an MTU of 1500, "
+                  "use 1432 for this value.  Beware of VLANs and other details "
+                  "that may consume your available bytes."),
+          this, defaults::maximum_transmission_unit) {
+}
 
 void mold_udp_pacer_config::validate() const {
   // The UDP payload length is encoded in a 16-bit number, so no
@@ -66,15 +67,14 @@ void mold_udp_pacer_config::validate() const {
   // 1.  Well, with jumbograms you could go as big as 1<<32 - 1, but
   // that is completely wrong for the type of data that MoldUDP64
   // carries ...
-  int const max_udp_payload = (1<<16) - 1;
-  if (maximum_transmission_unit() < static_cast<int>(
-          mold_udp_protocol::header_size)
-      or maximum_transmission_unit() >= max_udp_payload) {
+  int const max_udp_payload = (1 << 16) - 1;
+  if (maximum_transmission_unit() <
+          static_cast<int>(mold_udp_protocol::header_size) or
+      maximum_transmission_unit() >= max_udp_payload) {
     std::ostringstream os;
     os << "--maximum-transimission-unit must be in the ["
-       << mold_udp_protocol::header_size << ","
-       << max_udp_payload << "] range, value="
-       << maximum_transmission_unit();
+       << mold_udp_protocol::header_size << "," << max_udp_payload
+       << "] range, value=" << maximum_transmission_unit();
     throw jb::usage{os.str(), 1};
   }
 
@@ -82,12 +82,12 @@ void mold_udp_pacer_config::validate() const {
   // of data ...
   using namespace std::chrono;
   auto const day_in_usecs = duration_cast<microseconds>(minutes(5));
-  if (maximum_delay_microseconds() <= 0
-      or maximum_delay_microseconds() >= day_in_usecs.count()) {
+  if (maximum_delay_microseconds() <= 0 or
+      maximum_delay_microseconds() >= day_in_usecs.count()) {
     std::ostringstream os;
     os << "--maximum-delay-microseconds must be in the [0,"
-       << day_in_usecs.count() << " (24 hours)] range, value="
-       << maximum_delay_microseconds();
+       << day_in_usecs.count()
+       << " (24 hours)] range, value=" << maximum_delay_microseconds();
     throw jb::usage{os.str(), 1};
   }
 }

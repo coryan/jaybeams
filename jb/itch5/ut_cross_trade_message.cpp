@@ -14,9 +14,8 @@ BOOST_AUTO_TEST_CASE(decode_cross_trade_message) {
   auto buf = jb::itch5::testing::cross_trade();
   auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,cross_trade_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(
-      x.header.message_type, cross_trade_message::message_type);
+  auto x = decoder<true, cross_trade_message>::r(buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(x.header.message_type, cross_trade_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -26,9 +25,8 @@ BOOST_AUTO_TEST_CASE(decode_cross_trade_message) {
   BOOST_CHECK_EQUAL(x.match_number, 2340600ULL);
   BOOST_CHECK_EQUAL(x.cross_type, cross_type_t(u'H'));
 
-  x = decoder<false,cross_trade_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(
-      x.header.message_type, cross_trade_message::message_type);
+  x = decoder<false, cross_trade_message>::r(buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(x.header.message_type, cross_trade_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -48,16 +46,14 @@ BOOST_AUTO_TEST_CASE(stream_cross_trade_message) {
   using namespace jb::itch5;
 
   auto buf = jb::itch5::testing::cross_trade();
-  auto tmp = decoder<false,cross_trade_message>::r(buf.second, buf.first, 0);
+  auto tmp = decoder<false, cross_trade_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(
-      os.str(), "message_type=Q,stock_locate=0"
-      ",tracking_number=1,timestamp=113231.123456789"
-      ",shares=424200"
-      ",stock=HSART"
-      ",cross_price=123.0500"
-      ",match_number=2340600"
-      ",cross_type=H"
-      );
+  BOOST_CHECK_EQUAL(os.str(), "message_type=Q,stock_locate=0"
+                              ",tracking_number=1,timestamp=113231.123456789"
+                              ",shares=424200"
+                              ",stock=HSART"
+                              ",cross_price=123.0500"
+                              ",match_number=2340600"
+                              ",cross_type=H");
 }

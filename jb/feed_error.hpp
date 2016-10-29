@@ -9,9 +9,10 @@ namespace jb {
  * Communicate feed error exceptions.
  */
 class feed_error : public std::runtime_error {
- public:
+public:
   feed_error(std::string const& msg)
-      : std::runtime_error("Feed error exception caught -> " + msg) {}
+      : std::runtime_error("Feed error exception caught -> " + msg) {
+  }
 };
 
 } // namespace jb

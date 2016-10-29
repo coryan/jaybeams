@@ -14,9 +14,10 @@ BOOST_AUTO_TEST_CASE(decode_stock_trading_action_message) {
   auto buf = jb::itch5::testing::stock_trading_action();
   auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true,stock_trading_action_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(
-      x.header.message_type, stock_trading_action_message::message_type);
+  auto x =
+      decoder<true, stock_trading_action_message>::r(buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(x.header.message_type,
+                    stock_trading_action_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -24,9 +25,9 @@ BOOST_AUTO_TEST_CASE(decode_stock_trading_action_message) {
   BOOST_CHECK_EQUAL(x.trading_state, u'T');
   BOOST_CHECK_EQUAL(x.reason, u8"MWC1");
 
-  x = decoder<false,stock_trading_action_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(
-      x.header.message_type, stock_trading_action_message::message_type);
+  x = decoder<false, stock_trading_action_message>::r(buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(x.header.message_type,
+                    stock_trading_action_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -44,18 +45,16 @@ BOOST_AUTO_TEST_CASE(stream_stock_trading_action_message) {
   using namespace jb::itch5;
 
   auto buf = jb::itch5::testing::stock_trading_action();
-  auto tmp = decoder<false,stock_trading_action_message>::r(
-      buf.second, buf.first, 0);
+  auto tmp =
+      decoder<false, stock_trading_action_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(
-      os.str(), "message_type=H,stock_locate=0"
-      ",tracking_number=1,timestamp=113231.123456789"
-      ",stock=HSART"
-      ",trading_state=T"
-      ",reserved=0"
-      ",reason=MWC1"
-      );
+  BOOST_CHECK_EQUAL(os.str(), "message_type=H,stock_locate=0"
+                              ",tracking_number=1,timestamp=113231.123456789"
+                              ",stock=HSART"
+                              ",trading_state=T"
+                              ",reserved=0"
+                              ",reason=MWC1");
 }
 
 /**

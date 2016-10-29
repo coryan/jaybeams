@@ -21,17 +21,18 @@ std::chrono::microseconds const expected_delay(1250);
 std::chrono::microseconds const sampling_period(16);
 int nsamples = 32768 / 16;
 
-template<typename timeseries_type>
-class fixture {
- public:
-  fixture() : fixture(nsamples) {}
+template <typename timeseries_type> class fixture {
+public:
+  fixture()
+      : fixture(nsamples) {
+  }
   fixture(int size)
       : a(size)
       , b(size)
       , estimator(a, b) {
     jb::testing::create_square_timeseries(size, a);
-    b = jb::testing::delay_timeseries_periodic(
-        a, expected_delay, sampling_period);
+    b = jb::testing::delay_timeseries_periodic(a, expected_delay,
+                                               sampling_period);
   }
 
   void run() {
@@ -42,13 +43,14 @@ class fixture {
   }
 
   typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
- private:
+
+private:
   timeseries_type a;
   timeseries_type b;
   tested estimator;
 };
 
-template<typename vector_type>
+template <typename vector_type>
 void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
   typedef jb::testing::microbenchmark<fixture<vector_type>> benchmark;
   benchmark bm(cfg);
@@ -96,19 +98,18 @@ int main(int argc, char* argv[]) try {
        << ", complex:float:aligned"
        << ", complex:double:aligned"
        << ", complex:float:unaligned"
-       << ", complex:double:unaligned"
-       << std::endl;
+       << ", complex:double:unaligned" << std::endl;
     throw jb::usage(os.str(), 1);
   }
 
   return 0;
-} catch(jb::usage const& ex) {
+} catch (jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
   return ex.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }

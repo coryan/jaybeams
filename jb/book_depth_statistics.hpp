@@ -10,13 +10,13 @@
 #include <iosfwd>
 
 namespace jb {
-  typedef itch5::book_depth_t book_depth_t;
-  
+typedef itch5::book_depth_t book_depth_t;
+
 /**
  * Keep statistics about a feed and its book depth.
  */
 class book_depth_statistics {
- public:
+public:
   class config;
 
   /// Constructor
@@ -25,13 +25,12 @@ class book_depth_statistics {
   /**
    * Record a sample, that is book depth value after the event.
    *
-   * @tparam book_depth_t the type used to record 
+   * @tparam book_depth_t the type used to record
    * the book depth after processing the event.
-   * @param book_depth : the book depth (after processing the event) 
+   * @param book_depth : the book depth (after processing the event)
    * to be recorded.
    */
-  template<typename book_depth_t>
-  void sample(book_depth_t book_depth) {
+  template <typename book_depth_t> void sample(book_depth_t book_depth) {
     book_depth_.sample(book_depth);
   }
 
@@ -60,25 +59,24 @@ class book_depth_statistics {
    */
   void print_csv(std::string const& name, std::ostream& os) const;
 
- private:
-  typedef histogram<integer_range_binning<book_depth_t>
-      > book_depth_histogram_t;
-  book_depth_histogram_t book_depth_;  
+private:
+  typedef histogram<integer_range_binning<book_depth_t>> book_depth_histogram_t;
+  book_depth_histogram_t book_depth_;
 };
 
 /**
  * Configure a book_depth_statistics object.
  */
 class book_depth_statistics::config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
   /// Validate the configuration
   void validate() const override;
 
-  /// No more than this value is recorded 
-  jb::config_attribute<config,book_depth_t> max_book_depth;  
+  /// No more than this value is recorded
+  jb::config_attribute<config, book_depth_t> max_book_depth;
 };
 
 } // namespace jb

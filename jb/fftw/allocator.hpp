@@ -14,9 +14,8 @@ namespace fftw {
  * FFTW3 provides functions to allocate memory aligned to whatever
  * requirements the vectorized instructions require.
  */
-template<typename T>
-class allocator {
- public:
+template <typename T> class allocator {
+public:
   typedef T value_type;
   typedef value_type* pointer;
   typedef value_type const* const_pointer;
@@ -24,15 +23,18 @@ class allocator {
   typedef void const* const_void_pointer;
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
-  template<typename U> struct rebind { typedef allocator<U> other; };
+  template <typename U> struct rebind { typedef allocator<U> other; };
 
-  pointer address(T& object) const { return &object; }
-  const_pointer address(T const& object) const { return &object; }
+  pointer address(T& object) const {
+    return &object;
+  }
+  const_pointer address(T const& object) const {
+    return &object;
+  }
   size_type max_size() const {
     return std::numeric_limits<std::size_t>::max();
   }
-  template<typename... Args>
-  void construct(pointer p, Args&&... args) {
+  template <typename... Args> void construct(pointer p, Args&&... args) {
     new (static_cast<void*>(p)) T(std::forward<Args>(args)...);
   }
   void destroy(pointer p) {
@@ -52,7 +54,6 @@ class allocator {
     return !(*this == rhs);
   }
 };
-
 
 } // namespace fftw
 } // namespace jb

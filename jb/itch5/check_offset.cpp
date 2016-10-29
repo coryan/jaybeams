@@ -3,9 +3,9 @@
 #include <sstream>
 #include <stdexcept>
 
-template<>
-void jb::itch5::check_offset<true>(
-    char const* msg, std::size_t size, std::size_t offset, std::size_t n) {
+template <>
+void jb::itch5::check_offset<true>(char const* msg, std::size_t size,
+                                   std::size_t offset, std::size_t n) {
   if (0 < n and offset < size and offset + n <= size) {
     return;
   }
@@ -15,10 +15,8 @@ void jb::itch5::check_offset<true>(
   throw std::runtime_error(os.str());
 }
 
-void jb::itch5::raise_validation_failed(
-    char const* where, char const* what) {
+void jb::itch5::raise_validation_failed(char const* where, char const* what) {
   std::ostringstream os;
-  os << "message or field validation failed in " << where
-     << ": " << what;
+  os << "message or field validation failed in " << where << ": " << what;
   throw std::runtime_error(os.str());
 }

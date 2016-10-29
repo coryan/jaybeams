@@ -23,29 +23,24 @@ struct order_replace_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_replace_message
-template<bool V>
-struct decoder<V,order_replace_message> {
+template <bool V> struct decoder<V, order_replace_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_replace_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static order_replace_message r(std::size_t size, void const* buf,
+                                 std::size_t off) {
     order_replace_message x;
-    x.header =
-        decoder<V,message_header>       ::r(size, buf, off + 0);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.original_order_reference_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
+        decoder<V, std::uint64_t>::r(size, buf, off + 11);
     x.new_order_reference_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 19);
-    x.shares =
-        decoder<V,std::uint32_t>        ::r(size, buf, off + 27);
-    x.price =
-        decoder<V,price4_t>             ::r(size, buf, off + 31);
+        decoder<V, std::uint64_t>::r(size, buf, off + 19);
+    x.shares = decoder<V, std::uint32_t>::r(size, buf, off + 27);
+    x.price = decoder<V, price4_t>::r(size, buf, off + 31);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::order_replace_message.
-std::ostream& operator<<(
-    std::ostream& os, order_replace_message const& x);
+std::ostream& operator<<(std::ostream& os, order_replace_message const& x);
 
 } // namespace itch5
 } // namespace jb

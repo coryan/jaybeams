@@ -12,47 +12,47 @@
  */
 namespace {
 class simple : public jb::config_object {
- public:
+public:
   simple()
       : foo(desc("foo"), this)
-      , bar(desc("bar"), this)
-  {}
+      , bar(desc("bar"), this) {
+  }
   config_object_constructors(simple);
 
-  jb::config_attribute<simple,std::string> foo;
-  jb::config_attribute<simple,std::string> bar;
+  jb::config_attribute<simple, std::string> foo;
+  jb::config_attribute<simple, std::string> bar;
 };
 
 class config : public jb::config_object {
- public:
+public:
   config()
       : input(desc("input"), this)
-      , outputs(desc("outputs"), this)
-  {}
+      , outputs(desc("outputs"), this) {
+  }
   config_object_constructors(config);
 
-  jb::config_attribute<config,std::string> input;
-  jb::config_attribute<config,std::vector<simple>> outputs;
+  jb::config_attribute<config, std::string> input;
+  jb::config_attribute<config, std::vector<simple>> outputs;
 };
 
 class nested : public jb::config_object {
- public:
+public:
   nested()
-      : baz(desc("baz", "config"), this)
-  {}
+      : baz(desc("baz", "config"), this) {
+  }
   config_object_constructors(nested);
-  jb::config_attribute<nested,config> baz;
+  jb::config_attribute<nested, config> baz;
 };
 
 class verynested : public jb::config_object {
- public:
+public:
   verynested()
       : qux(desc("qux", "nested"), this)
-      , quz(desc("quz", "nested"), this)
-  {}
+      , quz(desc("quz", "nested"), this) {
+  }
   config_object_constructors(verynested);
-  jb::config_attribute<verynested,nested> qux;
-  jb::config_attribute<verynested,nested> quz;
+  jb::config_attribute<verynested, nested> qux;
+  jb::config_attribute<verynested, nested> quz;
 };
 
 // Convenience functions for the unit tests.
@@ -81,10 +81,8 @@ outputs: [ {bar: 6} ]
 
   BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config tested;
-  tested
-      .input("foo")
-      .outputs(std::vector<simple>(
-        { simple().foo("1").bar("2"), simple().foo("3").bar("4") }));
+  tested.input("foo").outputs(std::vector<simple>(
+      {simple().foo("1").bar("2"), simple().foo("3").bar("4")}));
   BOOST_TEST_MESSAGE("Initial Configuration\n" << tested << "\n");
   std::istringstream is(contents);
   int argc = 0;
@@ -94,10 +92,10 @@ outputs: [ {bar: 6} ]
 
   BOOST_CHECK_EQUAL(tested.input(), "bar");
   std::vector<simple> expected(
-      { simple().foo("1").bar("6"), simple().foo("3").bar("4")});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.outputs().begin(), tested.outputs().end(),
-      expected.begin(), expected.end());
+      {simple().foo("1").bar("6"), simple().foo("3").bar("4")});
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.outputs().begin(),
+                                tested.outputs().end(), expected.begin(),
+                                expected.end());
 }
 
 /**
@@ -112,10 +110,8 @@ outputs: [ {bar: 6}, {}, {foo: 7, bar: 8} ]
 
   BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config tested;
-  tested
-      .input("foo")
-      .outputs(std::vector<simple>(
-        { simple().foo("1").bar("2"), simple().foo("3").bar("4") }));
+  tested.input("foo").outputs(std::vector<simple>(
+      {simple().foo("1").bar("2"), simple().foo("3").bar("4")}));
   BOOST_TEST_MESSAGE("Initial Configuration\n" << tested << "\n");
   std::istringstream is(contents);
   int argc = 0;
@@ -124,12 +120,12 @@ outputs: [ {bar: 6}, {}, {foo: 7, bar: 8} ]
   BOOST_TEST_MESSAGE("Post-Override Configuration\n" << tested << "\n");
 
   BOOST_CHECK_EQUAL(tested.input(), "bar");
-  std::vector<simple> expected(
-      { simple().foo("1").bar("6"), simple().foo("3").bar("4"),
-        simple().foo("7").bar("8") });
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.outputs().begin(), tested.outputs().end(),
-      expected.begin(), expected.end());
+  std::vector<simple> expected({simple().foo("1").bar("6"),
+                                simple().foo("3").bar("4"),
+                                simple().foo("7").bar("8")});
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.outputs().begin(),
+                                tested.outputs().end(), expected.begin(),
+                                expected.end());
 }
 
 /**
@@ -161,17 +157,15 @@ quz:
 
   BOOST_CHECK_EQUAL(tested.qux().baz().input(), "qux.baz");
   std::vector<simple> expected(
-      { simple().foo("1").bar("2"), simple().foo("3").bar("") });
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.qux().baz().outputs().begin(), tested.qux().baz().outputs().end(),
-      expected.begin(), expected.end());
+      {simple().foo("1").bar("2"), simple().foo("3").bar("")});
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.qux().baz().outputs().begin(),
+                                tested.qux().baz().outputs().end(),
+                                expected.begin(), expected.end());
 
   BOOST_CHECK_EQUAL(tested.quz().baz().input(), "quz.baz");
-  expected.assign(
-      { simple().foo("11").bar("22"), simple().foo("33").bar("4"),
-        simple().foo("5").bar("6") });
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.quz().baz().outputs().begin(), tested.quz().baz().outputs().end(),
-      expected.begin(), expected.end());
+  expected.assign({simple().foo("11").bar("22"), simple().foo("33").bar("4"),
+                   simple().foo("5").bar("6")});
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.quz().baz().outputs().begin(),
+                                tested.quz().baz().outputs().end(),
+                                expected.begin(), expected.end());
 }
-

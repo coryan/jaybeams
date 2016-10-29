@@ -14,7 +14,7 @@ namespace jb {
  * point for tests.
  */
 struct default_getenv {
-  char const * operator()(char const * name);
+  char const* operator()(char const* name);
 };
 
 /**
@@ -32,12 +32,12 @@ struct default_validator {
  * the implementation to a non-template class.
  */
 class config_files_locations_base {
- public:
+public:
   std::vector<boost::filesystem::path> const& search_path() const {
     return search_path_;
   }
 
- protected:
+protected:
   /**
    * Constructor.
    *
@@ -49,10 +49,9 @@ class config_files_locations_base {
    * @param getenv a function to fetch the values of environment
    *   variables.  Just used for dependency injection.
    */
-  config_files_locations_base(
-      boost::filesystem::path const& argv0,
-      std::function<char const*(char const*)> getenv,
-      char const* program_root_variable);
+  config_files_locations_base(boost::filesystem::path const& argv0,
+                              std::function<char const*(char const*)> getenv,
+                              char const* program_root_variable);
 
   /**
    * Constructor.
@@ -62,11 +61,10 @@ class config_files_locations_base {
    * @param getenv a function to fetch the values of environment
    *   variables.  Just used for dependency injection.
    */
-  config_files_locations_base(
-      boost::filesystem::path const& argv0,
-      std::function<char const*(char const*)> getenv);
+  config_files_locations_base(boost::filesystem::path const& argv0,
+                              std::function<char const*(char const*)> getenv);
 
- private:
+private:
   std::vector<boost::filesystem::path> search_path_;
 };
 
@@ -97,11 +95,10 @@ class config_files_locations_base {
  *   path is readable.  This is used for dependency injection during
  *   testing.
  */
-template<
-  typename getenv_functor = default_getenv,
-  typename validator_functor = default_validator>
+template <typename getenv_functor = default_getenv,
+          typename validator_functor = default_validator>
 class config_files_locations : public config_files_locations_base {
- public:
+public:
   /**
    * Constructor.
    *
@@ -113,12 +110,10 @@ class config_files_locations : public config_files_locations_base {
    * environment variable for this program, i.e., its *_ROOT variable.
    * @param getenv the functor object to use
    */
-  config_files_locations(
-      boost::filesystem::path const& argv0,
-      char const* program_root_variable,
-      getenv_functor getenv)
-      : config_files_locations_base(
-          argv0, getenv, program_root_variable) {
+  config_files_locations(boost::filesystem::path const& argv0,
+                         char const* program_root_variable,
+                         getenv_functor getenv)
+      : config_files_locations_base(argv0, getenv, program_root_variable) {
   }
 
   /**
@@ -130,11 +125,9 @@ class config_files_locations : public config_files_locations_base {
    * @param argv0 the program path, typically argv[0] from main()
    * @param getenv the functor object to use
    */
-  config_files_locations(
-      boost::filesystem::path const& argv0,
-      getenv_functor getenv)
-      : config_files_locations_base(
-          argv0, getenv) {
+  config_files_locations(boost::filesystem::path const& argv0,
+                         getenv_functor getenv)
+      : config_files_locations_base(argv0, getenv) {
   }
 
   ///@{
@@ -143,39 +136,28 @@ class config_files_locations : public config_files_locations_base {
    *
    * Apply common conversions and create functors as needed.
    */
-  config_files_locations(
-      boost::filesystem::path const& argv0,
-      char const* program_root_variable)
-      : config_files_locations(
-          argv0, program_root_variable, getenv_functor()) {
+  config_files_locations(boost::filesystem::path const& argv0,
+                         char const* program_root_variable)
+      : config_files_locations(argv0, program_root_variable, getenv_functor()) {
   }
-  explicit config_files_locations(
-      boost::filesystem::path const& argv0)
-      : config_files_locations(
-          argv0, getenv_functor()) {
+  explicit config_files_locations(boost::filesystem::path const& argv0)
+      : config_files_locations(argv0, getenv_functor()) {
   }
-  config_files_locations(
-      char const* argv0,
-      char const* program_root_variable,
-      getenv_functor getenv)
-      : config_files_locations(
-          boost::filesystem::path(argv0), program_root_variable, getenv) {
+  config_files_locations(char const* argv0, char const* program_root_variable,
+                         getenv_functor getenv)
+      : config_files_locations(boost::filesystem::path(argv0),
+                               program_root_variable, getenv) {
   }
-  config_files_locations(
-      char const* argv0,
-      char const* program_root_variable)
-      : config_files_locations(
-          boost::filesystem::path(argv0), program_root_variable, getenv_functor()) {
+  config_files_locations(char const* argv0, char const* program_root_variable)
+      : config_files_locations(boost::filesystem::path(argv0),
+                               program_root_variable, getenv_functor()) {
   }
-  config_files_locations(
-      char const* argv0, getenv_functor getenv)
-      : config_files_locations_base(
-          boost::filesystem::path(argv0), getenv) {
+  config_files_locations(char const* argv0, getenv_functor getenv)
+      : config_files_locations_base(boost::filesystem::path(argv0), getenv) {
   }
-  explicit config_files_locations(
-      char const* argv0)
-      : config_files_locations_base(
-          boost::filesystem::path(argv0), getenv_functor()) {
+  explicit config_files_locations(char const* argv0)
+      : config_files_locations_base(boost::filesystem::path(argv0),
+                                    getenv_functor()) {
   }
   //@}
 
@@ -188,8 +170,9 @@ class config_files_locations : public config_files_locations_base {
    * @returns the path to load
    * @throws std::runtime_error if no suitable file was found.
    */
-  boost::filesystem::path find_configuration_file(
-      std::string const& filename, validator_functor validator) const {
+  boost::filesystem::path
+  find_configuration_file(std::string const& filename,
+                          validator_functor validator) const {
     for (auto const& path : search_path()) {
       auto full = path / filename;
       if (validator(full)) {
@@ -209,8 +192,8 @@ class config_files_locations : public config_files_locations_base {
    * @returns the path to load
    * @throws std::runtime_error if no suitable file was found.
    */
-  boost::filesystem::path find_configuration_file(
-      std::string const& filename) const {
+  boost::filesystem::path
+  find_configuration_file(std::string const& filename) const {
     return find_configuration_file(filename, validator_functor());
   }
 };
@@ -222,7 +205,7 @@ class config_files_locations : public config_files_locations_base {
  * change depending on how JayBeams was configured and the target
  * platform.
  */
-char const * sysconfdir();
+char const* sysconfdir();
 
 /**
  * Return the binary installation directory directory.
@@ -231,7 +214,7 @@ char const * sysconfdir();
  * can change depending on how JayBeams was configured and the
  * target platform.
  */
-char const * bindir();
+char const* bindir();
 
 } // namespace jb
 

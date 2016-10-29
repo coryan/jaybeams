@@ -13,7 +13,7 @@ namespace testing {
  * Given two collections of floating point or complex numbers find the
  * differences and report them via Boost.Test functions.
  */
-template<typename value_type>
+template <typename value_type>
 void check_array_close_enough(
     std::size_t size, value_type const* actual, value_type const* expected,
     int tol = 1, int max_differences = JB_TESTING_MAX_DIFFERENCES) {
@@ -26,8 +26,8 @@ void check_array_close_enough(
       BOOST_CHECK_MESSAGE(
           close_enough(actual[i], expected[i], tol),
           "in item i=" << i << " difference higher than tolerance=" << tol
-          << ", actual[i]=" << format(actual[i])
-          << ", expected[i]=" << format(expected[i]) );
+                       << ", actual[i]=" << format(actual[i])
+                       << ", expected[i]=" << format(expected[i]));
     }
   }
   BOOST_CHECK_MESSAGE(count == 0, "found " << count << " differences");

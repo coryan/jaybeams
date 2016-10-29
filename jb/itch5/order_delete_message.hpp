@@ -17,23 +17,20 @@ struct order_delete_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_delete_message
-template<bool V>
-struct decoder<V,order_delete_message> {
+template <bool V> struct decoder<V, order_delete_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_delete_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static order_delete_message r(std::size_t size, void const* buf,
+                                std::size_t off) {
     order_delete_message x;
-    x.header =
-        decoder<V,message_header>       ::r(size, buf, off + 0);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.order_reference_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
+        decoder<V, std::uint64_t>::r(size, buf, off + 11);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::order_delete_message.
-std::ostream& operator<<(
-    std::ostream& os, order_delete_message const& x);
+std::ostream& operator<<(std::ostream& os, order_delete_message const& x);
 
 } // namespace itch5
 } // namespace jb

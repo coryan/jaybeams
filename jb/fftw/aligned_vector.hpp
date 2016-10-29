@@ -16,7 +16,7 @@ namespace fftw {
  * type alias makes it easy to create std::vectors using the
  * allocator.
  */
-template<typename T>
+template <typename T>
 using aligned_vector = std::vector<T, jb::fftw::allocator<T>>;
 
 } // namespace fftw

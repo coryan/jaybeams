@@ -16,20 +16,20 @@
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
   void validate() const override;
 
-  jb::config_attribute<config,std::string> input_file;
-  jb::config_attribute<config,std::string> destination;
-  jb::config_attribute<config,jb::log::config> log;
-  jb::config_attribute<config,jb::itch5::mold_udp_pacer_config> pacer;
+  jb::config_attribute<config, std::string> input_file;
+  jb::config_attribute<config, std::string> destination;
+  jb::config_attribute<config, jb::log::config> log;
+  jb::config_attribute<config, jb::itch5::mold_udp_pacer_config> pacer;
 };
 
 class replayer {
- public:
+public:
   //@{
   /**
    * @name Type traits
@@ -43,17 +43,14 @@ class replayer {
            jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
-      , pacer_(cfg)
-  {
+      , pacer_(cfg) {
     socket_.connect(ep);
   }
 
   /// Handle all messages as blobs
-  void handle_unknown(
-      time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
-    auto sink = [this](auto buffers) {
-      socket_.send_to(buffers, endpoint_);
-    };
+  void handle_unknown(time_point const& recv_ts,
+                      jb::itch5::unknown_message const& msg) {
+    auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_); };
     auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration const& d) {
       std::this_thread::sleep_for(d);
     };
@@ -65,7 +62,7 @@ class replayer {
     return std::chrono::steady_clock::now();
   }
 
- private:
+private:
   boost::asio::ip::udp::socket socket_;
   boost::asio::ip::udp::endpoint endpoint_;
   jb::itch5::mold_udp_pacer<> pacer_;
@@ -75,16 +72,15 @@ class replayer {
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.load_overrides(
-      argc, argv, std::string("itch5moldreplay.yaml"), "JB_ROOT");
+  cfg.load_overrides(argc, argv, std::string("itch5moldreplay.yaml"),
+                     "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::tokenizer<boost::char_separator<char>> tok(
       cfg.destination(), boost::char_separator<char>(":"));
   std::vector<std::string> tokens(tok.begin(), tok.end());
   if (tokens.size() != 2) {
-    throw jb::usage(
-        "--destination must be in host:port format.", 1);
+    throw jb::usage("--destination must be in host:port format.", 1);
   }
 
   boost::asio::io_service io_service;
@@ -92,7 +88,7 @@ int main(int argc, char* argv[]) try {
   udp::socket s(io_service, udp::endpoint(udp::v4(), 0));
   udp::resolver resolver(io_service);
   udp::endpoint endpoint = *resolver.resolve({udp::v4(), tokens[0], tokens[1]});
-  
+
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
 
@@ -100,13 +96,13 @@ int main(int argc, char* argv[]) try {
   jb::itch5::process_iostream_mlist<replayer>(in, rep);
 
   return 0;
-} catch(jb::usage const& u) {
+} catch (jb::usage const& u) {
   std::cout << u.what() << std::endl;
   return u.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "Standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "Unknown exception raised" << std::endl;
   return 1;
 }
@@ -114,20 +110,24 @@ int main(int argc, char* argv[]) try {
 namespace {
 
 config::config()
-    : input_file(desc("input-file").help(
-        "An input file with ITCH-5.0 messages."), this)
-    , destination(desc("destination").help(
-        "The destination for the UDP messages, in address:port format. "
-        "The destination can be a unicast or multicast address."), this)
+    : input_file(
+          desc("input-file").help("An input file with ITCH-5.0 messages."),
+          this)
+    , destination(
+          desc("destination")
+              .help("The destination for the UDP messages, in address:port "
+                    "format. "
+                    "The destination can be a unicast or multicast address."),
+          this)
     , log(desc("log", "logging"), this)
-    , pacer(desc("pacer", "mold-udp-pacer"), this)
-{}
+    , pacer(desc("pacer", "mold-udp-pacer"), this) {
+}
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage(
-        "Missing input-file setting."
-        "  You must specify an input file.", 1);
+    throw jb::usage("Missing input-file setting."
+                    "  You must specify an input file.",
+                    1);
   }
   log().validate();
 }

@@ -15,10 +15,9 @@ namespace itch5 {
  *
  * @tparam T the type of the input, must be an integer type.
  */
-template<typename T>
-constexpr T p2ceil_kernel(int shift, T n) {
-  static_assert(
-      std::is_integral<T>::value, "p2ceil_kernel input type must be integral");
+template <typename T> constexpr T p2ceil_kernel(int shift, T n) {
+  static_assert(std::is_integral<T>::value,
+                "p2ceil_kernel input type must be integral");
   return n | (n >> shift);
 }
 
@@ -27,7 +26,7 @@ constexpr T p2ceil_kernel(int shift, T n) {
  *
  * The algorithm can be executed at compile time, so it is suitable
  * for use in template expressions.  The algorithm first computes all
- * the 
+ * the
  *
  * @param n the input number, must be smaller or equal to 2^63.
  * @returns the smallest power of two larger than @a n.
@@ -49,12 +48,13 @@ constexpr std::uint64_t p2ceil(std::uint64_t n) {
   // Because we are performing this operations in a constexpr (under
   // C++11), we cannot use intermediate variables, but we can use
   // recursive calls to other constexpr functions:
-  return 1 + p2ceil_kernel(
-      32, p2ceil_kernel(
-          16, p2ceil_kernel(
-              8, p2ceil_kernel(
-                  4, p2ceil_kernel(
-                      2, p2ceil_kernel(1, n))))));
+  return 1 +
+         p2ceil_kernel(
+             32,
+             p2ceil_kernel(
+                 16, p2ceil_kernel(
+                         8, p2ceil_kernel(
+                                4, p2ceil_kernel(2, p2ceil_kernel(1, n))))));
 }
 
 /**
@@ -64,11 +64,11 @@ constexpr std::uint64_t p2ceil(std::uint64_t n) {
  * @returns the smallest power of two larger than @a n.
  */
 constexpr std::uint32_t p2ceil(std::uint32_t n) {
-  return 1 + p2ceil_kernel(
-      16, p2ceil_kernel(
-          8, p2ceil_kernel(
-              4, p2ceil_kernel(
-                  2, p2ceil_kernel(1, n)))));
+  return 1 +
+         p2ceil_kernel(
+             16,
+             p2ceil_kernel(
+                 8, p2ceil_kernel(4, p2ceil_kernel(2, p2ceil_kernel(1, n)))));
 }
 
 /**
@@ -79,9 +79,7 @@ constexpr std::uint32_t p2ceil(std::uint32_t n) {
  */
 constexpr std::uint16_t p2ceil(std::uint16_t n) {
   return 1 + p2ceil_kernel(
-      8, p2ceil_kernel(
-          4, p2ceil_kernel(
-              2, p2ceil_kernel(1, n))));
+                 8, p2ceil_kernel(4, p2ceil_kernel(2, p2ceil_kernel(1, n))));
 }
 
 /**
@@ -91,9 +89,7 @@ constexpr std::uint16_t p2ceil(std::uint16_t n) {
  * @returns the smallest power of two larger than @a n.
  */
 constexpr std::uint8_t p2ceil(std::uint8_t n) {
-  return 1 + p2ceil_kernel(
-      4, p2ceil_kernel(
-          2, p2ceil_kernel(1, n)));
+  return 1 + p2ceil_kernel(4, p2ceil_kernel(2, p2ceil_kernel(1, n)));
 }
 
 } // namespace itch5

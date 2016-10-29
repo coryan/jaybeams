@@ -15,11 +15,10 @@ struct add_order_mpid_message : public add_order_message {
 
   mpid_t attribution;
 
-  add_order_mpid_message(
-      add_order_message const& base, mpid_t const& a)
+  add_order_mpid_message(add_order_message const& base, mpid_t const& a)
       : add_order_message(base)
-      , attribution(a)
-  {}
+      , attribution(a) {
+  }
 
   add_order_mpid_message() = default;
   add_order_mpid_message(add_order_mpid_message const&) = default;
@@ -38,21 +37,19 @@ struct add_order_mpid_message : public add_order_message {
 };
 
 /// Specialize decoder for a jb::itch5::add_order_mpid_message
-template<bool V>
-struct decoder<V,add_order_mpid_message> {
+template <bool V> struct decoder<V, add_order_mpid_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static add_order_mpid_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static add_order_mpid_message r(std::size_t size, void const* buf,
+                                  std::size_t off) {
     add_order_mpid_message x;
-    x =             decoder<V,add_order_message> ::r(size, buf, off + 0);
-    x.attribution = decoder<V,mpid_t>            ::r(size, buf, off + 36);
+    x = decoder<V, add_order_message>::r(size, buf, off + 0);
+    x.attribution = decoder<V, mpid_t>::r(size, buf, off + 36);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::add_order_mpid_message.
-std::ostream& operator<<(
-    std::ostream& os, add_order_mpid_message const& x);
+std::ostream& operator<<(std::ostream& os, add_order_mpid_message const& x);
 
 } // namespace itch5
 } // namespace jb

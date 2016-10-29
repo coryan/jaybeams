@@ -31,29 +31,25 @@ struct ipo_quoting_period_update_message {
 };
 
 /// Specialize decoder for a jb::itch5::ipo_quoting_period_update_message
-template<bool V>
-struct decoder<V,ipo_quoting_period_update_message> {
+template <bool V> struct decoder<V, ipo_quoting_period_update_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static ipo_quoting_period_update_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static ipo_quoting_period_update_message r(std::size_t size, void const* buf,
+                                             std::size_t off) {
     ipo_quoting_period_update_message x;
-    x.header =
-        decoder<V,message_header>                    ::r(size, buf, off + 0);
-    x.stock =
-        decoder<V,stock_t>                           ::r(size, buf, off + 11);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
+    x.stock = decoder<V, stock_t>::r(size, buf, off + 11);
     x.ipo_quotation_release_time =
-        decoder<V,seconds_field>                     ::r(size, buf, off + 19);
+        decoder<V, seconds_field>::r(size, buf, off + 19);
     x.ipo_quotation_release_qualifier =
-        decoder<V,ipo_quotation_release_qualifier_t> ::r(size, buf, off + 23);
-    x.ipo_price =
-        decoder<V,price4_t>                          ::r(size, buf, off + 24);
+        decoder<V, ipo_quotation_release_qualifier_t>::r(size, buf, off + 23);
+    x.ipo_price = decoder<V, price4_t>::r(size, buf, off + 24);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::ipo_quoting_period_update_message.
-std::ostream& operator<<(
-    std::ostream& os, ipo_quoting_period_update_message const& x);
+std::ostream& operator<<(std::ostream& os,
+                         ipo_quoting_period_update_message const& x);
 
 } // namespace itch5
 } // namespace jb

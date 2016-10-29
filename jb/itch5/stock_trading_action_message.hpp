@@ -32,29 +32,23 @@ struct stock_trading_action_message {
 };
 
 /// Specialize decoder for a jb::itch5::stock_trading_action_message
-template<bool V>
-struct decoder<V,stock_trading_action_message> {
+template <bool V> struct decoder<V, stock_trading_action_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static stock_trading_action_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static stock_trading_action_message r(std::size_t size, void const* buf,
+                                        std::size_t off) {
     stock_trading_action_message x;
-    x.header =
-        decoder<V,message_header>  ::r(size, buf, off + 0);
-    x.stock =
-        decoder<V,stock_t>         ::r(size, buf, off + 11);
-    x.trading_state =
-        decoder<V,trading_state_t> ::r(size, buf, off + 19);
-    x.reserved =
-        decoder<V,std::uint8_t>    ::r(size, buf, off + 20);
-    x.reason =
-        decoder<V,reason_t>        ::r(size, buf, off + 21);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
+    x.stock = decoder<V, stock_t>::r(size, buf, off + 11);
+    x.trading_state = decoder<V, trading_state_t>::r(size, buf, off + 19);
+    x.reserved = decoder<V, std::uint8_t>::r(size, buf, off + 20);
+    x.reason = decoder<V, reason_t>::r(size, buf, off + 21);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::stock_trading_action_message.
-std::ostream& operator<<(
-    std::ostream& os, stock_trading_action_message const& x);
+std::ostream& operator<<(std::ostream& os,
+                         stock_trading_action_message const& x);
 
 } // namespace itch5
 } // namespace jb

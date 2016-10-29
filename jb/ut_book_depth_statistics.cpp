@@ -3,7 +3,8 @@
 #include <boost/test/unit_test.hpp>
 
 constexpr bool eqTypes() {
-  return std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value;}
+  return std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value;
+}
 
 /**
  * @test Verify that jb::book_depth_statistics works as expected.
@@ -11,15 +12,15 @@ constexpr bool eqTypes() {
 BOOST_AUTO_TEST_CASE(book_depth_statistics_simple) {
   jb::book_depth_statistics::config cfg;
   jb::book_depth_statistics stats(cfg);
-  
+
   stats.sample(1);
   stats.sample(2);
   stats.sample(3);
   stats.sample(4);
   stats.sample(5);
 
-  BOOST_STATIC_ASSERT_MSG(eqTypes(),
-      "inconsistent types jb:: and jb::itch5:: book_depth_t");
+  BOOST_STATIC_ASSERT_MSG(
+      eqTypes(), "inconsistent types jb:: and jb::itch5:: book_depth_t");
 }
 
 /**
@@ -51,7 +52,7 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   stats.sample(3);
   stats.sample(4);
 
-  // check 4 samples... 
+  // check 4 samples...
   body.str("");
   stats.print_csv("testing", body);
   BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,4,"));
@@ -61,7 +62,7 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_print_csv) {
   b = body.str();
   nfields = std::count(b.begin(), b.end(), ',');
   BOOST_CHECK_EQUAL(nfields, nheaders);
-  
+
   // add one more sample (# 5), book_depth now {1..5}
   stats.sample(1);
   body.str("");
@@ -79,6 +80,5 @@ BOOST_AUTO_TEST_CASE(book_depth_statististics_config_simple) {
   typedef jb::book_depth_statistics::config config;
 
   BOOST_CHECK_NO_THROW(config().validate());
-  BOOST_CHECK_THROW(
-    config().max_book_depth(0).validate(), jb::usage);
+  BOOST_CHECK_THROW(config().max_book_depth(0).validate(), jb::usage);
 }

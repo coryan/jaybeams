@@ -13,10 +13,10 @@ namespace testing {
  * Given two collections of floating point or complex numbers find the
  * differences and report them via Boost.Test functions.
  */
-template<typename vector>
+template <typename vector>
 void check_vector_close_enough(
-    vector const& actual, vector const& expected,
-    int tol = 1, int max_differences = JB_TESTING_MAX_DIFFERENCES) {
+    vector const& actual, vector const& expected, int tol = 1,
+    int max_differences = JB_TESTING_MAX_DIFFERENCES) {
   BOOST_CHECK_EQUAL(actual.size(), expected.size());
   if (actual.size() != expected.size()) {
     return;
@@ -27,11 +27,11 @@ void check_vector_close_enough(
     if (close_enough(actual[i], expected[i], tol)) {
       continue;
     }
-    BOOST_CHECK_MESSAGE(
-        close_enough(actual[i], expected[i], tol),
-        "in item i=" << i << " difference higher than tolerance=" << tol
-        << ", actual[i]=" << actual[i]
-        << ", expected[i]=" << expected[i]);
+    BOOST_CHECK_MESSAGE(close_enough(actual[i], expected[i], tol),
+                        "in item i="
+                            << i << " difference higher than tolerance=" << tol
+                            << ", actual[i]=" << actual[i]
+                            << ", expected[i]=" << expected[i]);
     if (++count > max_differences) {
       return;
     }

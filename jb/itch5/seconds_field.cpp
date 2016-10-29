@@ -4,7 +4,7 @@
 #include <sstream>
 #include <stdexcept>
 
-template<>
+template <>
 void jb::itch5::check_seconds_field_range<true>(seconds_field const& t) {
   auto full_day = std::chrono::seconds(24 * 3600);
 
@@ -25,7 +25,7 @@ std::ostream& jb::itch5::operator<<(std::ostream& os, seconds_field const& x) {
   auto mm = t % 60;
   t /= 60;
   auto hh = t;
-  return os << std::setw(2) << std::setfill('0') << hh
-            << ':' << std::setw(2) << std::setfill('0') << mm
-            << ':' << std::setw(2) << std::setfill('0') << ss;
+  return os << std::setw(2) << std::setfill('0') << hh << ':' << std::setw(2)
+            << std::setfill('0') << mm << ':' << std::setw(2)
+            << std::setfill('0') << ss;
 }

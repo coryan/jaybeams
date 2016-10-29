@@ -29,9 +29,8 @@ namespace jb {
  *
  * @tparam sample_type_t the type of samples, should be an integer type.
  */
-template<typename sample_type_t>
-class explicit_cuts_binning {
- public:
+template <typename sample_type_t> class explicit_cuts_binning {
+public:
   /// type traits as required by @ref binning_strategy_concept
   typedef sample_type_t sample_type;
 
@@ -39,13 +38,13 @@ class explicit_cuts_binning {
    * Constructor based on an initializer list.
    */
   explicit_cuts_binning(std::initializer_list<sample_type> const& il)
-      : explicit_cuts_binning(il.begin(), il.end())
-  {}
+      : explicit_cuts_binning(il.begin(), il.end()) {
+  }
 
   /**
    * Constructor based on an iterator range.
    */
-  template<typename iterator_t>
+  template <typename iterator_t>
   explicit_cuts_binning(iterator_t begin, iterator_t end)
       : cuts_(begin, end) {
     if (cuts_.size() < 2) {
@@ -88,13 +87,13 @@ class explicit_cuts_binning {
   sample_type bin2sample(std::size_t i) const {
     return cuts_[i];
   }
-  sample_type interpolate(
-      sample_type x_a, sample_type x_b, double y_a, double s, double q) const {
+  sample_type interpolate(sample_type x_a, sample_type x_b, double y_a,
+                          double s, double q) const {
     return histogram_binning_linear_interpolation(x_a, x_b, y_a, s, q);
   }
   //@}
 
- private:
+private:
   std::vector<sample_type> cuts_;
 };
 

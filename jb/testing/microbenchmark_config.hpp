@@ -11,7 +11,7 @@ namespace testing {
  * Configure a micro-benchmark.
  */
 class microbenchmark_config : public jb::config_object {
- public:
+public:
   /**
    * Default constructor.
    *
@@ -20,11 +20,11 @@ class microbenchmark_config : public jb::config_object {
   microbenchmark_config();
   config_object_constructors(microbenchmark_config);
 
-  jb::config_attribute<microbenchmark_config,int> warmup_iterations;
-  jb::config_attribute<microbenchmark_config,int> iterations;
-  jb::config_attribute<microbenchmark_config,int> size;
-  jb::config_attribute<microbenchmark_config,bool> verbose;
-  jb::config_attribute<microbenchmark_config,std::string> test_case;
+  jb::config_attribute<microbenchmark_config, int> warmup_iterations;
+  jb::config_attribute<microbenchmark_config, int> iterations;
+  jb::config_attribute<microbenchmark_config, int> size;
+  jb::config_attribute<microbenchmark_config, bool> verbose;
+  jb::config_attribute<microbenchmark_config, std::string> test_case;
 };
 
 } // namespace testing

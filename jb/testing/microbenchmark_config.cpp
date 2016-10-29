@@ -42,44 +42,37 @@ namespace defaults {
 #define JB_DEFAULTS_microbenchmark_verbose false
 #endif
 
-int warmup_iterations =
-    JB_DEFAULTS_microbenchmark_warmup_iterations;
-int iterations =
-    JB_DEFAULTS_microbenchmark_iterations;
-int size = 
-    JB_DEFAULTS_microbenchmark_size;
-bool verbose =
-    JB_DEFAULTS_microbenchmark_verbose;
+int warmup_iterations = JB_DEFAULTS_microbenchmark_warmup_iterations;
+int iterations = JB_DEFAULTS_microbenchmark_iterations;
+int size = JB_DEFAULTS_microbenchmark_size;
+bool verbose = JB_DEFAULTS_microbenchmark_verbose;
 
 } // namespace defaults
 
 microbenchmark_config::microbenchmark_config()
     : warmup_iterations(
-        desc("warmup-iterations").help(
-            "The number of warmup iterations in the benchmark."),
-        this, defaults::warmup_iterations)
-    , iterations(
-        desc("iterations").help(
-            "Number of iterations to run for a fixed size."),
-        this, defaults::iterations)
-    , size(
-        desc("size").help(
-            "If set (and not zero) control the size of the test."),
-        this, defaults::size)
-    , verbose(
-        desc("verbose").help(
-            "If true, dump the results of every test to stdout for"
-            " statistical analysis."),
-        this, defaults::verbose)
-    , test_case(
-        desc("test-case").help(
-            "Some microbenchmarks test completely different configurations"
-            ", settings, or even different algorithms for the same problem."
-            "  Use this option to configure such benchmarks"
-            ", most microbenchmarks will ignore it."),
-        this)
-{}
+          desc("warmup-iterations")
+              .help("The number of warmup iterations in the benchmark."),
+          this, defaults::warmup_iterations)
+    , iterations(desc("iterations")
+                     .help("Number of iterations to run for a fixed size."),
+                 this, defaults::iterations)
+    , size(desc("size")
+               .help("If set (and not zero) control the size of the test."),
+           this, defaults::size)
+    , verbose(desc("verbose")
+                  .help("If true, dump the results of every test to stdout for"
+                        " statistical analysis."),
+              this, defaults::verbose)
+    , test_case(desc("test-case")
+                    .help("Some microbenchmarks test completely different "
+                          "configurations"
+                          ", settings, or even different algorithms for the "
+                          "same problem."
+                          "  Use this option to configure such benchmarks"
+                          ", most microbenchmarks will ignore it."),
+                this) {
+}
 
 } // namespace testing
 } // namespace jb
-
