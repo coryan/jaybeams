@@ -63,7 +63,7 @@ socket_t make_socket_udp_recv(
 
   // ... the rest if fairly mechanical stuff ..
   boost::asio::ip::udp::endpoint endpoint(local_address, port);
-  boost::asio::ip::udp::socket socket(io);
+  socket_t socket(io);
   socket.open(endpoint.protocol());
   socket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
   socket.bind(endpoint);
