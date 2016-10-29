@@ -19,7 +19,11 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-O3
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=g++ CXXFLAGS=-g
+
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3
 
 services:
   - docker
