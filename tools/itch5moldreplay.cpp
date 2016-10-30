@@ -2,16 +2,16 @@
 #include <jb/itch5/mold_udp_pacer.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
+#include <jb/as_hhmmss.hpp>
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/udp.hpp>
-#include <boost/tokenizer.hpp>
+#include <boost/asio/ip/multicast.hpp>
 
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
 #include <thread>
-#include <unordered_map>
 
 namespace {
 
@@ -24,6 +24,7 @@ public:
 
   jb::config_attribute<config, std::string> input_file;
   jb::config_attribute<config, std::string> destination;
+  jb::config_attribute<config, int> port;
   jb::config_attribute<config, jb::log::config> log;
   jb::config_attribute<config, jb::itch5::mold_udp_pacer_config> pacer;
 };
@@ -43,15 +44,18 @@ public:
            jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
-      , pacer_(cfg) {
-    socket_.connect(ep);
+      , pacer_(cfg, jb::itch5::mold_udp_pacer<>::session_id_type("ITCH/RPLY")) {
   }
 
   /// Handle all messages as blobs
   void handle_unknown(time_point const& recv_ts,
                       jb::itch5::unknown_message const& msg) {
     auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_); };
-    auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration const& d) {
+    auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
+      if (d > std::chrono::seconds(10)) {
+        JB_LOG(info) << "Sleep request for " << jb::as_hh_mm_ss_u(d);
+        d = std::chrono::seconds(10);
+      }
       std::this_thread::sleep_for(d);
     };
     pacer_.handle_message(recv_ts, msg, sink, sleeper);
@@ -76,18 +80,12 @@ int main(int argc, char* argv[]) try {
                      "JB_ROOT");
   jb::log::init(cfg.log());
 
-  boost::tokenizer<boost::char_separator<char>> tok(
-      cfg.destination(), boost::char_separator<char>(":"));
-  std::vector<std::string> tokens(tok.begin(), tok.end());
-  if (tokens.size() != 2) {
-    throw jb::usage("--destination must be in host:port format.", 1);
-  }
-
   boost::asio::io_service io_service;
-  using boost::asio::ip::udp;
-  udp::socket s(io_service, udp::endpoint(udp::v4(), 0));
-  udp::resolver resolver(io_service);
-  udp::endpoint endpoint = *resolver.resolve({udp::v4(), tokens[0], tokens[1]});
+  auto address = boost::asio::ip::address::from_string(cfg.destination());
+  boost::asio::ip::udp::endpoint endpoint(address, cfg.port());
+  JB_LOG(info) << "Sending to endpoint=" << endpoint;
+  boost::asio::ip::udp::socket s(io_service, endpoint.protocol());
+  s.set_option(boost::asio::ip::multicast::enable_loopback(true));
 
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
@@ -109,16 +107,25 @@ int main(int argc, char* argv[]) try {
 
 namespace {
 
+int default_multicast_port() {
+  return 50000;
+}
+
+std::string default_multicast_group() {
+  return "::1";
+}
+
 config::config()
     : input_file(
           desc("input-file").help("An input file with ITCH-5.0 messages."),
           this)
     , destination(
           desc("destination")
-              .help("The destination for the UDP messages, in address:port "
-                    "format. "
+              .help("The destination for the UDP messages. "
                     "The destination can be a unicast or multicast address."),
-          this)
+          this, default_multicast_group())
+    , port(desc("port").help("The destination port for the UDP messages. "),
+           this, default_multicast_port())
     , log(desc("log", "logging"), this)
     , pacer(desc("pacer", "mold-udp-pacer"), this) {
 }
@@ -130,6 +137,7 @@ void config::validate() const {
                     1);
   }
   log().validate();
+  pacer().validate();
 }
 
 } // anonymous namespace

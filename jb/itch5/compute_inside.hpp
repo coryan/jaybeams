@@ -182,8 +182,11 @@ private:
   /// Store the callback ...
   callback_type callback_;
 
+  /// The active (i.e. exclude completely executed or canceled) orders
+  /// received so far.
   orders_by_id orders_;
 
+  /// The order books indexed by security.
   books_by_security books_;
 };
 

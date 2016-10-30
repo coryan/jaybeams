@@ -44,10 +44,12 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_cross_trade_message \
   jb/itch5/ut_cross_type \
   jb/itch5/ut_ipo_quoting_period_update_message \
+  jb/itch5/ut_make_socket_udp_recv \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
   jb/itch5/ut_mold_udp_pacer \
   jb/itch5/ut_mold_udp_pacer_config \
+  jb/itch5/ut_mold_udp_channel \
   jb/itch5/ut_mwcb_breach_message \
   jb/itch5/ut_mwcb_decline_level_message \
   jb/itch5/ut_net_order_imbalance_indicator_message \
@@ -88,7 +90,9 @@ examples = \
   tools/itch5bookdepth \
   tools/itch5inside \
   tools/itch5moldreplay \
-  tools/itch5stats
+  tools/itch5stats \
+  tools/mold2inside \
+  tools/moldheartbeat
 
 noinst_PROGRAMS = $(examples) $(benchmarks)
 
@@ -299,6 +303,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/ipo_quoting_period_update_message.cpp \
   jb/itch5/market_participant_position_message.cpp \
   jb/itch5/message_header.cpp \
+  jb/itch5/mold_udp_channel.cpp \
   jb/itch5/mold_udp_pacer_config.cpp \
   jb/itch5/mwcb_breach_message.cpp \
   jb/itch5/mwcb_decline_level_message.cpp \
@@ -332,8 +337,10 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/cross_type.hpp \
   jb/itch5/decoder.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
+  jb/itch5/make_socket_udp_recv.hpp \
   jb/itch5/market_participant_position_message.hpp \
   jb/itch5/message_header.hpp \
+  jb/itch5/mold_udp_channel.hpp \
   jb/itch5/mold_udp_pacer.hpp \
   jb/itch5/mold_udp_pacer_config.hpp \
   jb/itch5/mold_udp_protocol_constants.hpp \
@@ -403,6 +410,12 @@ tools_itch5moldreplay_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIB)
 
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
 tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
+
+tools_mold2inside_SOURCES = tools/mold2inside.cpp
+tools_mold2inside_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
+
+tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
+tools_moldheartbeat_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
 
 ################################################################
 # benchmarks and unit tests
@@ -578,6 +591,10 @@ jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_
 jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
 jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_libs)
 
+jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
+jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
+jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_libs)
+
 jb_itch5_ut_market_participant_position_message_SOURCES = jb/itch5/ut_market_participant_position_message.cpp
 jb_itch5_ut_market_participant_position_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_market_participant_position_message
 jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_libs)
@@ -585,6 +602,10 @@ jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_message_header_SOURCES = jb/itch5/ut_message_header.cpp
 jb_itch5_ut_message_header_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_message_header
 jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_mold_udp_channel_SOURCES = jb/itch5/ut_mold_udp_channel.cpp
+jb_itch5_ut_mold_udp_channel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_channel
+jb_itch5_ut_mold_udp_channel_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
 jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer

@@ -19,6 +19,9 @@ RUN dnf update -y && dnf install -y \
     tar \
     wget \
     yaml-cpp-devel
+RUN dnf install -y \
+    llvm \
+    sudo
 
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
@@ -30,3 +33,4 @@ RUN cd skye-0.3.2 && \
 
 WORKDIR /root
 RUN /bin/rm -fr /var/tmp/build-skye
+
