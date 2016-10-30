@@ -21,7 +21,19 @@ namespace itch5 {
  */
 class mold_udp_channel {
  public:
-  /// A callback function type to process any received ITCH-5.0 messages
+  /**
+   * A callback function type to process any received ITCH-5.0
+   * messages
+   *
+   * The parameters represent (in order)
+   * - When was the MoldUDP64 packet containing this message received
+   * - The sequence number for this particular message
+   * - The offset (in bytes) from the beginning of the MoldUDP64
+   * stream for this message
+   * - The message, including the ITCH-5.0 headers but excluding any
+   * MoldUDP64 headers.
+   * - The size of the message, in bytes.
+   */
   typedef std::function<void(
       std::chrono::steady_clock::time_point, std::uint64_t, std::size_t,
       char const*, std::size_t)> buffer_handler;
