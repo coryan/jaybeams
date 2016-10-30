@@ -69,7 +69,14 @@ private:
    */
   void restart_async_receive_from();
 
-  /// The Boost.ASIO callback for I/O events
+  /**
+   * The Boost.ASIO callback for I/O events
+   *
+   * @param ec contains the error code, if any, detected while trying
+   * to read the data
+   * @param bytes_received the number of bytes received, the actual
+   * bytes are in the buffer_ class member.
+   */
   void handle_received(boost::system::error_code const& ec,
                        size_t bytes_received);
 

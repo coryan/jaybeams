@@ -44,6 +44,9 @@ std::vector<char> create_mold_udp_packet(std::uint64_t sequence_number,
 
 namespace jb {
 namespace itch5 {
+/**
+ * Break encapsulation in jb::itch5::mold_udp_channel for testing purposes.
+ */
 struct mold_udp_channel_tester {
   static void call_with_empty_packet(mold_udp_channel& tested) {
     tested.handle_received(boost::system::error_code(), 0);
