@@ -34,10 +34,10 @@ namespace itch5 {
  * local address.
  *
  */
-template<class socket_t = boost::asio::ip::udp::socket>
-socket_t make_socket_udp_recv(
-    boost::asio::io_service& io, std::string const& receive_address, int port,
-    std::string const& listen_address) {
+template <class socket_t = boost::asio::ip::udp::socket>
+socket_t make_socket_udp_recv(boost::asio::io_service& io,
+                              std::string const& receive_address, int port,
+                              std::string const& listen_address) {
   auto r_address = boost::asio::ip::address::from_string(receive_address);
 
   boost::asio::ip::address local_address;
@@ -68,8 +68,7 @@ socket_t make_socket_udp_recv(
   socket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
   socket.bind(endpoint);
   if (r_address.is_multicast()) {
-    socket.set_option(
-        boost::asio::ip::multicast::join_group(r_address));
+    socket.set_option(boost::asio::ip::multicast::join_group(r_address));
     socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
   }
 

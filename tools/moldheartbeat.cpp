@@ -16,24 +16,23 @@
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
   void validate() const override;
 
-  jb::config_attribute<config,std::string> destination;
-  jb::config_attribute<config,std::string> port;
-  jb::config_attribute<config,jb::log::config> log;
-  jb::config_attribute<config,jb::itch5::mold_udp_pacer_config> pacer;
+  jb::config_attribute<config, std::string> destination;
+  jb::config_attribute<config, std::string> port;
+  jb::config_attribute<config, jb::log::config> log;
+  jb::config_attribute<config, jb::itch5::mold_udp_pacer_config> pacer;
 };
 
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.load_overrides(
-      argc, argv, std::string("moldheartbeat.yaml"), "JB_ROOT");
+  cfg.load_overrides(argc, argv, std::string("moldheartbeat.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::asio::io_service io_service;
@@ -49,7 +48,7 @@ int main(int argc, char* argv[]) try {
     throw std::runtime_error("cannot resolve destination address or port");
   }
   endpoint = *i;
-  
+
   JB_LOG(info) << "Sending to endpoint=" << endpoint;
   boost::asio::ip::udp::socket socket(io_service, endpoint.protocol());
   socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
@@ -67,13 +66,13 @@ int main(int argc, char* argv[]) try {
   }
 
   return 0;
-} catch(jb::usage const& u) {
+} catch (jb::usage const& u) {
   std::cout << u.what() << std::endl;
   return u.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "Standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "Unknown exception raised" << std::endl;
   return 1;
 }
@@ -89,16 +88,16 @@ std::string default_destination() {
 }
 
 config::config()
-    : destination(desc("destination").help(
-        "The destination for the UDP messages. "
-        "The destination can be a unicast or multicast address."), this,
-                  default_destination())
-    , port(desc("port").help(
-        "The destination port for the UDP messages. "), this,
-           default_udp_port())
+    : destination(
+          desc("destination")
+              .help("The destination for the UDP messages. "
+                    "The destination can be a unicast or multicast address."),
+          this, default_destination())
+    , port(desc("port").help("The destination port for the UDP messages. "),
+           this, default_udp_port())
     , log(desc("log", "logging"), this)
-    , pacer(desc("pacer", "mold-udp-pacer"), this)
-{}
+    , pacer(desc("pacer", "mold-udp-pacer"), this) {
+}
 
 void config::validate() const {
   log().validate();
@@ -106,4 +105,3 @@ void config::validate() const {
 }
 
 } // anonymous namespace
-

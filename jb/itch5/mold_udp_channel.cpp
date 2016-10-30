@@ -12,8 +12,8 @@ namespace itch5 {
 
 mold_udp_channel::mold_udp_channel(boost::asio::io_service& io,
                                    buffer_handler handler,
-                                   std::string const& receive_address,
-                                   int port, std::string const& listen_address)
+                                   std::string const& receive_address, int port,
+                                   std::string const& listen_address)
     : handler_(handler)
     , socket_(make_socket_udp_recv<>(io, receive_address, port, listen_address))
     , expected_sequence_number_(0)
@@ -29,8 +29,8 @@ void mold_udp_channel::restart_async_receive_from() {
       });
 }
 
-void mold_udp_channel::handle_received(
-    boost::system::error_code const& ec, size_t bytes_received) {
+void mold_udp_channel::handle_received(boost::system::error_code const& ec,
+                                       size_t bytes_received) {
   if (ec) {
     // If we get an error from the socket simply report it and
     // return.  No more callbacks will be registered in this case ...
@@ -52,11 +52,11 @@ void mold_udp_channel::handle_received(
   auto recv_ts = std::chrono::steady_clock::now();
   // ... parse the sequence number of the first message in the
   // MoldUDP64 packet ...
-  auto sequence_number = jb::itch5::decoder<true,std::uint64_t>::r(
+  auto sequence_number = jb::itch5::decoder<true, std::uint64_t>::r(
       bytes_received, buffer_,
       jb::itch5::mold_udp_protocol::sequence_number_offset);
   // ... and parse the number of blocks in the MoldUDP64 packet ...
-  auto block_count = jb::itch5::decoder<true,std::uint16_t>::r(
+  auto block_count = jb::itch5::decoder<true, std::uint16_t>::r(
       bytes_received, buffer_,
       jb::itch5::mold_udp_protocol::block_count_offset);
 
@@ -66,8 +66,7 @@ void mold_udp_channel::handle_received(
   // things ...
   if (sequence_number != expected_sequence_number_) {
     JB_LOG(info) << "Mismatched sequence number, expected="
-                 << expected_sequence_number_
-                 << ", got=" << sequence_number;
+                 << expected_sequence_number_ << ", got=" << sequence_number;
   }
 
   //  Keep track of where each ITCH-5.0 message starts in the
@@ -76,15 +75,14 @@ void mold_udp_channel::handle_received(
   // ... process each message in the MoldUDP64 packet, in order ...
   for (std::size_t block = 0; block != block_count; ++block) {
     // ... parse the block size ...
-    auto message_size = jb::itch5::decoder<true,std::uint16_t>::r(
+    auto message_size = jb::itch5::decoder<true, std::uint16_t>::r(
         bytes_received, buffer_, offset);
     // ... increment the offset into the MoldUDP64 packet, this is
     // the start of the ITCH-5.x message ...
     offset += 2;
     // ... process the buffer ...
-    handler_(
-        recv_ts, expected_sequence_number_, message_offset_,
-        buffer_ + offset, message_size);
+    handler_(recv_ts, expected_sequence_number_, message_offset_,
+             buffer_ + offset, message_size);
 
     // ... increment counters to reflect that this message was
     // proceesed ...

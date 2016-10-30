@@ -189,7 +189,7 @@ private:
     // ... append the message as a new block in the MoldUDP packet,
     // first update the block header ...
     boost::asio::mutable_buffer block_header = packet_ + packet_size_;
-    encoder<true,std::uint16_t>::w(
+    encoder<true, std::uint16_t>::w(
         buffer_size(block_header),
         boost::asio::buffer_cast<void*>(block_header), 0, msg.len());
     // ... the copy the message into the block payload ...

@@ -12,15 +12,15 @@
 namespace {
 std::vector<char> create_mold_udp_packet(std::uint64_t sequence_number,
                                          int message_count) {
-  std::size_t const max_packet_size = 1<<16;
+  std::size_t const max_packet_size = 1 << 16;
   char packet[max_packet_size];
 
   jb::itch5::encoder<true, std::uint64_t>::w(
       max_packet_size, packet,
       jb::itch5::mold_udp_protocol::sequence_number_offset, sequence_number);
   jb::itch5::encoder<true, std::uint16_t>::w(
-      max_packet_size, packet,
-      jb::itch5::mold_udp_protocol::block_count_offset, message_count);
+      max_packet_size, packet, jb::itch5::mold_udp_protocol::block_count_offset,
+      message_count);
 
   std::size_t packet_size = jb::itch5::mold_udp_protocol::header_size;
   boost::asio::mutable_buffer dst(packet, packet_size);
@@ -32,28 +32,26 @@ std::vector<char> create_mold_udp_packet(std::uint64_t sequence_number,
         msg_type, jb::itch5::timestamp{std::chrono::microseconds(ts)}, 64);
     ts += 5;
     msg_type++;
-    jb::itch5::encoder<true, std::uint16_t>::w(
-        max_packet_size, packet, packet_size, message.size());
+    jb::itch5::encoder<true, std::uint16_t>::w(max_packet_size, packet,
+                                               packet_size, message.size());
     packet_size += 2;
     boost::asio::buffer_copy(dst + packet_size, boost::asio::buffer(message));
     packet_size += message.size();
   }
   return std::vector<char>(packet, packet + packet_size);
 }
-                                         
+
 } // anonymous namespace
 
 /**
  * @test Verify that jb::itch5::mold_udp_channel works.
  */
 BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
-  skye::mock_function<void(std::chrono::steady_clock::time_point,
-                           std::uint64_t, std::size_t, std::string,
-                           std::size_t)> handler;
-  auto adapter = [&handler](
-      std::chrono::steady_clock::time_point ts,
-      std::uint64_t seqno, std::size_t offset,
-      char const* msg, std::size_t msgsize) {
+  skye::mock_function<void(std::chrono::steady_clock::time_point, std::uint64_t,
+                           std::size_t, std::string, std::size_t)> handler;
+  auto adapter = [&handler](std::chrono::steady_clock::time_point ts,
+                            std::uint64_t seqno, std::size_t offset,
+                            char const* msg, std::size_t msgsize) {
     handler(ts, seqno, offset, std::string(msg, msgsize), msgsize);
   };
 

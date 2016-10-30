@@ -44,15 +44,13 @@ public:
            jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
-      , pacer_(cfg, jb::itch5::mold_udp_pacer<>::session_id_type("ITCH/RPLY"))
-  {}
+      , pacer_(cfg, jb::itch5::mold_udp_pacer<>::session_id_type("ITCH/RPLY")) {
+  }
 
   /// Handle all messages as blobs
   void handle_unknown(time_point const& recv_ts,
                       jb::itch5::unknown_message const& msg) {
-    auto sink = [this](auto buffers) {
-      socket_.send_to(buffers, endpoint_);
-    };
+    auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_); };
     auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
       if (d > std::chrono::seconds(10)) {
         JB_LOG(info) << "Sleep request for " << jb::as_hh_mm_ss_u(d);
@@ -88,7 +86,7 @@ int main(int argc, char* argv[]) try {
   JB_LOG(info) << "Sending to endpoint=" << endpoint;
   boost::asio::ip::udp::socket s(io_service, endpoint.protocol());
   s.set_option(boost::asio::ip::multicast::enable_loopback(true));
-  
+
   boost::iostreams::filtering_istream in;
   jb::open_input_file(in, cfg.input_file());
 
@@ -118,15 +116,16 @@ std::string default_multicast_group() {
 }
 
 config::config()
-    : input_file(desc("input-file").help(
-        "An input file with ITCH-5.0 messages."), this)
-    , destination(desc("destination").help(
-        "The destination for the UDP messages. "
-        "The destination can be a unicast or multicast address."), this,
-                  default_multicast_group())
-    , port(desc("port").help(
-        "The destination port for the UDP messages. "), this,
-           default_multicast_port())
+    : input_file(
+          desc("input-file").help("An input file with ITCH-5.0 messages."),
+          this)
+    , destination(
+          desc("destination")
+              .help("The destination for the UDP messages. "
+                    "The destination can be a unicast or multicast address."),
+          this, default_multicast_group())
+    , port(desc("port").help("The destination port for the UDP messages. "),
+           this, default_multicast_port())
     , log(desc("log", "logging"), this)
     , pacer(desc("pacer", "mold-udp-pacer"), this) {
 }

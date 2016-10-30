@@ -13,14 +13,14 @@ namespace itch5 {
 /**
  * Create and manage a socket to receive MoldUDP64 packets.
  *
- * This class creates a socket to receive MoldUDP64 packets, 
+ * This class creates a socket to receive MoldUDP64 packets,
  * registers with the Boost.ASIO IO service to be notified of new
  * packets in the socket, and when new packets are received it breaks
  * down the packet into ITCH-5.0 messages and invokes a handler for
  * each one.
  */
 class mold_udp_channel {
- public:
+public:
   /**
    * A callback function type to process any received ITCH-5.0
    * messages
@@ -34,9 +34,9 @@ class mold_udp_channel {
    * MoldUDP64 headers.
    * - The size of the message, in bytes.
    */
-  typedef std::function<void(
-      std::chrono::steady_clock::time_point, std::uint64_t, std::size_t,
-      char const*, std::size_t)> buffer_handler;
+  typedef std::function<void(std::chrono::steady_clock::time_point,
+                             std::uint64_t, std::size_t, char const*,
+                             std::size_t)> buffer_handler;
 
   /**
    * Constructor, create a socket and register for IO notifications
@@ -58,7 +58,7 @@ class mold_udp_channel {
                    std::string const& receive_address, int port,
                    std::string const& listen_address);
 
- private:
+private:
   /**
    * Refactor code to register (and reregister) for Boost.ASIO
    * notifications
@@ -70,10 +70,10 @@ class mold_udp_channel {
   void restart_async_receive_from();
 
   /// The Boost.ASIO callback for I/O events
-  void handle_received(
-      boost::system::error_code const& ec, size_t bytes_received);
+  void handle_received(boost::system::error_code const& ec,
+                       size_t bytes_received);
 
- private:
+private:
   // The callback handler
   buffer_handler handler_;
 
@@ -88,7 +88,7 @@ class mold_udp_channel {
   std::size_t message_offset_;
 
   // The maximum packet length expected (UDP is limited to 2^16 bytes)
-  static std::size_t const buflen = 1<<16;
+  static std::size_t const buflen = 1 << 16;
 
   // A buffer to read the data into, when handle_received() is called
   // the data should already be in this location.
