@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
 }
 
 /**
- * @test Verity that the buy side of jb::itch5::order_book works as expected.
+ * @test Verify that the buy side of jb::itch5::order_book works as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   using jb::itch5::price4_t;
@@ -210,3 +210,66 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
   // .. and the book_depth should be decremented
   BOOST_CHECK_EQUAL(tested.get_book_depth(), 0);
 }
+
+/**
+ * @test Verify that the buy side of jb::itch5::order_book handles
+ * errors as expected.
+ */
+BOOST_AUTO_TEST_CASE(order_book_buy_errors) {
+  using jb::itch5::price4_t;
+  jb::itch5::order_book tested;
+
+  jb::itch5::buy_sell_indicator_t const BUY(u'B');
+
+  // Add two orders to the book ...
+  (void) tested.handle_add_order(BUY, price4_t(100000), 100);
+  (void) tested.handle_add_order(BUY, price4_t(110000), 200);
+
+  // ... check the best bid ...
+  auto actual = tested.best_bid();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(110000));
+  BOOST_CHECK_EQUAL(actual.second, 200);
+
+  // ... remove the first order, once should work, the second time
+  // should fail ...
+  tested.handle_order_reduced(BUY, price4_t(100000), 100);
+  BOOST_CHECK_THROW(tested.handle_order_reduced(BUY, price4_t(100000), 100),
+                    std::exception);
+
+  // ... check the best bid ...
+  actual = tested.best_bid();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(110000));
+  BOOST_CHECK_EQUAL(actual.second, 200);
+}
+
+/**
+ * @test Verify that the sell side of jb::itch5::order_book handles
+ * errors as expected.
+ */
+BOOST_AUTO_TEST_CASE(order_book_sell_errors) {
+  using jb::itch5::price4_t;
+  jb::itch5::order_book tested;
+
+  jb::itch5::buy_sell_indicator_t const SELL(u'S');
+
+  // Add two orders to the book ...
+  (void) tested.handle_add_order(SELL, price4_t(120000), 100);
+  (void) tested.handle_add_order(SELL, price4_t(110000), 200);
+
+  // ... check the best offer ...
+  auto actual = tested.best_offer();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(110000));
+  BOOST_CHECK_EQUAL(actual.second, 200);
+
+  // ... remove the first order, once should work, the second time
+  // should fail ...
+  tested.handle_order_reduced(SELL, price4_t(120000), 100);
+  BOOST_CHECK_THROW(tested.handle_order_reduced(SELL, price4_t(120000), 100),
+                    std::exception);
+
+  // ... check the best offer ...
+  actual = tested.best_offer();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(110000));
+  BOOST_CHECK_EQUAL(actual.second, 200);
+}
+

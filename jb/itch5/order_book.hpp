@@ -138,7 +138,7 @@ private:
   bool handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
     auto price_it = side.find(px);
     if (price_it == side.end()) {
-      throw(jb::feed_error("trying to reduce a non-existing price level"));
+      throw jb::feed_error("trying to reduce a non-existing price level");
     }
     // ... reduce the quantity ...
     price_it->second -= reduced_qty;
