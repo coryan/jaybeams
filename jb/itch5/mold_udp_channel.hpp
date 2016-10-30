@@ -73,6 +73,9 @@ private:
   void handle_received(boost::system::error_code const& ec,
                        size_t bytes_received);
 
+  /// Allow testing class access to the code ...
+  friend struct mold_udp_channel_tester;
+
 private:
   // The callback handler
   buffer_handler handler_;

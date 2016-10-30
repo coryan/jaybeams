@@ -35,7 +35,7 @@ void mold_udp_channel::handle_received(boost::system::error_code const& ec,
     // If we get an error from the socket simply report it and
     // return.  No more callbacks will be registered in this case ...
     JB_LOG(info) << "error received in mold_udp_channel::handle_received: "
-                 << ec;
+                 << ec.message() << " (" << ec << ")";
     return;
   }
 

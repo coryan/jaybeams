@@ -40,8 +40,21 @@ std::vector<char> create_mold_udp_packet(std::uint64_t sequence_number,
   }
   return std::vector<char>(packet, packet + packet_size);
 }
-
 } // anonymous namespace
+
+namespace jb {
+namespace itch5 {
+struct mold_udp_channel_tester {
+  static void call_with_empty_packet(mold_udp_channel& tested) {
+    tested.handle_received(boost::system::error_code(), 0);
+  }
+  static void call_with_error_code(mold_udp_channel& tested) {
+    tested.handle_received(boost::asio::error::make_error_code(
+        boost::asio::error::network_down), 16);
+  }
+};
+} // namespace itch5
+} // namespace jb
 
 /**
  * @test Verify that jb::itch5::mold_udp_channel works.
@@ -88,4 +101,22 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   socket.send_to(boost::asio::buffer(packet), endpoint);
   io.run_one();
   handler.check_called().exactly(9);
+}
+
+/**
+ * @test Comlete code coverage for jb::itch5::mold_udp_channel.
+ */
+BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_coverage) {
+  auto adapter = [](std::chrono::steady_clock::time_point ts,
+                    std::uint64_t seqno, std::size_t offset,
+                    char const* msg, std::size_t msgsize) {
+  };
+
+  using boost::asio::ip::udp;
+
+  boost::asio::io_service io;
+  jb::itch5::mold_udp_channel channel(io, adapter, "::1", 50000, "");
+
+  jb::itch5::mold_udp_channel_tester::call_with_empty_packet(channel);
+  jb::itch5::mold_udp_channel_tester::call_with_error_code(channel);
 }
