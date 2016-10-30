@@ -15,23 +15,23 @@ BOOST_AUTO_TEST_CASE(decode_seconds_field) {
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "\x00\x00\x64\x59", 4); // 07:08:09
 
-  auto expected = duration_cast<seconds>(
-      hours(7) + minutes(8) + seconds(9)).count();
+  auto expected =
+      duration_cast<seconds>(hours(7) + minutes(8) + seconds(9)).count();
 
-  auto actual = decoder<true,seconds_field>::r(16, buffer, 0);
+  auto actual = decoder<true, seconds_field>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual.int_seconds(), expected);
 
-  actual = decoder<false,seconds_field>::r(16, buffer, 0);
+  actual = decoder<false, seconds_field>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual.int_seconds(), expected);
 
   // In the following tests we are simply checking the range, so zero
   // out the buffer to avoid range errors due to uninitialized memory.
   std::memset(buffer, 0, sizeof(buffer));
-  BOOST_CHECK_NO_THROW((decoder<true,seconds_field>::r(16, buffer, 2)));
-  BOOST_CHECK_NO_THROW((decoder<true,seconds_field>::r(16, buffer, 12)));
-  BOOST_CHECK_THROW(
-      (decoder<true,seconds_field>::r(16, buffer, 13)), std::runtime_error);
-  BOOST_CHECK_NO_THROW((decoder<false,seconds_field>::r(16, buffer, 13)));
+  BOOST_CHECK_NO_THROW((decoder<true, seconds_field>::r(16, buffer, 2)));
+  BOOST_CHECK_NO_THROW((decoder<true, seconds_field>::r(16, buffer, 12)));
+  BOOST_CHECK_THROW((decoder<true, seconds_field>::r(16, buffer, 13)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, seconds_field>::r(16, buffer, 13)));
 }
 
 /**
@@ -46,10 +46,9 @@ BOOST_AUTO_TEST_CASE(decode_seconds_field_range) {
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "\x00\x01\x51\x80", 4); // 24:00:00
 
-  BOOST_CHECK_THROW(
-      (decoder<true,seconds_field>::r(16, buffer, 0)), std::runtime_error);
-  BOOST_CHECK_NO_THROW(
-      (decoder<false,seconds_field>::r(16, buffer, 0)));
+  BOOST_CHECK_THROW((decoder<true, seconds_field>::r(16, buffer, 0)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, seconds_field>::r(16, buffer, 0)));
 }
 
 /**
@@ -60,7 +59,7 @@ BOOST_AUTO_TEST_CASE(stream_seconds_field) {
   using namespace std::chrono;
   using jb::itch5::seconds_field;
 
-  {  
+  {
     auto nn = duration_cast<seconds>(hours(7) + minutes(8) + seconds(9));
     std::ostringstream os;
     os << seconds_field(nn);

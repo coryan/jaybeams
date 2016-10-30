@@ -18,7 +18,7 @@ struct as_hhmmssu {
    * @tparam time_duration_t an instance of std::chrono::duration, or
    * any type compatible with std::chrono::duration_cast<>
    */
-  template<typename time_duration_t>
+  template <typename time_duration_t>
   explicit as_hhmmssu(time_duration_t const& x)
       : t(std::chrono::duration_cast<std::chrono::microseconds>(x)) {
   }
@@ -41,7 +41,7 @@ struct as_hhmmss {
    * @tparam time_duration_t an instance of std::chrono::duration, or
    * any type compatible with std::chrono::duration_cast<>
    */
-  template<typename time_duration_t>
+  template <typename time_duration_t>
   explicit as_hhmmss(time_duration_t const& x)
       : t(std::chrono::duration_cast<std::chrono::microseconds>(x)) {
   }
@@ -64,7 +64,7 @@ struct as_hh_mm_ss_u {
    * @tparam time_duration_t an instance of std::chrono::duration, or
    * any type compatible with std::chrono::duration_cast<>
    */
-  template<typename time_duration_t>
+  template <typename time_duration_t>
   explicit as_hh_mm_ss_u(time_duration_t const& x)
       : t(std::chrono::duration_cast<std::chrono::microseconds>(x)) {
   }
@@ -78,4 +78,3 @@ std::ostream& operator<<(std::ostream& os, as_hh_mm_ss_u const& x);
 } // namespace jb
 
 #endif // jb_as_hhmmss_hpp
-

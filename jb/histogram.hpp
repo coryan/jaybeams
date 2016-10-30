@@ -42,10 +42,11 @@ namespace jb {
  *   really large numbers you might consider using std::uint64_t, or
  *   if you are memory constrained consider using std::int16_t.
  */
-template<typename binning_strategy_t, typename counter_type_t = unsigned int>
+template <typename binning_strategy_t, typename counter_type_t = unsigned int>
 class histogram {
   struct check_constraints;
- public:
+
+public:
   //@{
   /**
    * @name type traits
@@ -54,7 +55,7 @@ class histogram {
   typedef typename binning_strategy::sample_type sample_type;
   typedef counter_type_t counter_type;
   //@}
-  
+
   /**
    * Construct a histogram given a mapping strategy.
    *
@@ -96,25 +97,24 @@ class histogram {
    */
   sample_type estimated_mean() const {
     if (nsamples_ == 0) {
-      throw std::invalid_argument(
-          "Cannot estimate mean on an empty histogram");
+      throw std::invalid_argument("Cannot estimate mean on an empty histogram");
     }
     sample_type acc = sample_type();
     // ... use the midpoint of the underflow bin to estimate the
     // contribution of those samples ...
     if (underflow_count()) {
-      acc += (midpoint(observed_min(), binning_.histogram_min())
-              * underflow_count());
+      acc += (midpoint(observed_min(), binning_.histogram_min()) *
+              underflow_count());
     }
     sample_type a = binning_.histogram_min();
-    for(std::size_t i = 0; i != bins_.size(); ++i) {
+    for (std::size_t i = 0; i != bins_.size(); ++i) {
       sample_type b = binning_.bin2sample(i + 1);
       acc += midpoint(a, b) * bins_[i];
       a = b;
     }
     if (overflow_count()) {
-      acc += (midpoint(binning_.histogram_max(), observed_max())
-              * overflow_count());
+      acc += (midpoint(binning_.histogram_max(), observed_max()) *
+              overflow_count());
     }
     return acc / nsamples_;
   }
@@ -137,25 +137,24 @@ class histogram {
           "Cannot estimate quantile for empty histogram");
     }
     if (q < 0 or q > 1.0) {
-      throw std::invalid_argument(
-          "Quantile value outside 0 <= q <= 1 range");
+      throw std::invalid_argument("Quantile value outside 0 <= q <= 1 range");
     }
     std::uint64_t cum_samples = 0;
     std::uint64_t bin_samples = underflow_count();
     if (bin_samples and q <= double(cum_samples + bin_samples) / nsamples()) {
       double s = double(bin_samples) / nsamples();
       double y_a = double(cum_samples) / nsamples();
-      return binning_.interpolate(
-          observed_min(), binning_.histogram_min(), y_a, s, q);
+      return binning_.interpolate(observed_min(), binning_.histogram_min(), y_a,
+                                  s, q);
     }
-    for(std::size_t i = 0; i != bins_.size(); ++i) {
+    for (std::size_t i = 0; i != bins_.size(); ++i) {
       cum_samples += bin_samples;
       bin_samples = bins_[i];
       if (bin_samples and q <= double(cum_samples + bin_samples) / nsamples()) {
         double s = double(bin_samples) / nsamples();
         double y_a = double(cum_samples) / nsamples();
-        return binning_.interpolate(
-            binning_.bin2sample(i), binning_.bin2sample(i + 1), y_a, s, q);
+        return binning_.interpolate(binning_.bin2sample(i),
+                                    binning_.bin2sample(i + 1), y_a, s, q);
       }
     }
     cum_samples += bin_samples;
@@ -163,8 +162,8 @@ class histogram {
     if (bin_samples and q < double(cum_samples + bin_samples) / nsamples()) {
       double s = double(bin_samples) / nsamples();
       double y_a = double(cum_samples) / nsamples();
-      return binning_.interpolate(
-          binning_.histogram_max(), observed_max(), y_a, s, q);
+      return binning_.interpolate(binning_.histogram_max(), observed_max(), y_a,
+                                  s, q);
     }
 
     return observed_max();
@@ -186,15 +185,10 @@ class histogram {
       return histogram_summary{0, 0, 0, 0, 0, 0, 0, 0};
     }
     return histogram_summary{
-      double(observed_min())
-          , double(estimated_quantile(0.25))
-          , double(estimated_quantile(0.50))
-          , double(estimated_quantile(0.75))
-          , double(estimated_quantile(0.90))
-          , double(estimated_quantile(0.99))
-          , double(observed_max())
-          , nsamples()
-          };
+        double(observed_min()),           double(estimated_quantile(0.25)),
+        double(estimated_quantile(0.50)), double(estimated_quantile(0.75)),
+        double(estimated_quantile(0.90)), double(estimated_quantile(0.99)),
+        double(observed_max()),           nsamples()};
   }
 
   /// Record a new sample.
@@ -233,7 +227,7 @@ class histogram {
   /// The type used to store the bins.
   typedef std::vector<counter_type> counters;
 
- private:
+private:
   /// Compute the maximum number of bins that might be needed.
   std::size_t nbins() const {
     std::size_t max = binning_.sample2bin(binning_.histogram_max());
@@ -243,10 +237,10 @@ class histogram {
 
   /// Estimate a midpoint
   sample_type midpoint(sample_type const& a, sample_type const& b) const {
-    return (a + b)/2;
+    return (a + b) / 2;
   }
 
- private:
+private:
   binning_strategy binning_;
   std::uint64_t underflow_count_;
   std::uint64_t overflow_count_;
@@ -261,62 +255,55 @@ class histogram {
  * parameters, and generate better error messages when they are not
  * met.
  */
-template<typename binning_strategy, typename counter_type>
-struct histogram<binning_strategy,counter_type>::check_constraints {
+template <typename binning_strategy, typename counter_type>
+struct histogram<binning_strategy, counter_type>::check_constraints {
   typedef histogram<binning_strategy> histo;
   typedef typename histo::sample_type sample_type;
 
   check_constraints() {
-    static_assert(
-        std::is_integral<counter_type>::value,
-        "The counter_type must be an integral type");
+    static_assert(std::is_integral<counter_type>::value,
+                  "The counter_type must be an integral type");
+
+    static_assert(std::is_convertible<decltype(histogram_min_return_type()),
+                                      sample_type>::value,
+                  "The binning_strategy must provide a min() function, "
+                  "and it must return a type compatible with sample_type.");
+    static_assert(std::is_convertible<decltype(histogram_max_return_type()),
+                                      sample_type>::value,
+                  "The binning_strategy must provide a max() function, "
+                  "and it must return a type compatible with sample_type.");
 
     static_assert(
-        std::is_convertible<decltype(
-            histogram_min_return_type()), sample_type>::value,
-        "The binning_strategy must provide a min() function, "
-        "and it must return a type compatible with sample_type.");
-    static_assert(
-        std::is_convertible<decltype(
-            histogram_max_return_type()), sample_type>::value,
-        "The binning_strategy must provide a max() function, "
-        "and it must return a type compatible with sample_type.");
-
-    static_assert(
-        std::is_convertible<decltype(
-            theoretical_min_return_type()), sample_type>::value,
+        std::is_convertible<decltype(theoretical_min_return_type()),
+                            sample_type>::value,
         "The binning_strategy must provide a theoretical_min() function, "
         "and it must return a type compatible with sample_type.");
     static_assert(
-        std::is_convertible<decltype(
-            theoretical_max_return_type()), sample_type>::value,
+        std::is_convertible<decltype(theoretical_max_return_type()),
+                            sample_type>::value,
         "The binning_strategy must provide a theoretical_max() function, "
         "and it must return a type compatible with sample_type.");
 
-    static_assert(
-        std::is_convertible<decltype(
-            interpolate_return_type()), sample_type>::value,
-        "The binning_strategy must provide a interpolate() function, "
-        "and it must return a type compatible with sample_type.");
+    static_assert(std::is_convertible<decltype(interpolate_return_type()),
+                                      sample_type>::value,
+                  "The binning_strategy must provide a interpolate() function, "
+                  "and it must return a type compatible with sample_type.");
 
-    static_assert(
-        std::is_convertible<
-            decltype(sample2bin_return_type()), std::size_t>::value,
-        "The binning_strategy must provide a sample2bin() function, "
-        "and it must return a type compatible with std::size_t.");
-    static_assert(
-        std::is_convertible<
-            decltype(bin2sample_return_type()), sample_type>::value,
-        "The binning_strategy must provide a bin2sample() function, "
-        "and it must return a type compatible with sample_type.");
+    static_assert(std::is_convertible<decltype(sample2bin_return_type()),
+                                      std::size_t>::value,
+                  "The binning_strategy must provide a sample2bin() function, "
+                  "and it must return a type compatible with std::size_t.");
+    static_assert(std::is_convertible<decltype(bin2sample_return_type()),
+                                      sample_type>::value,
+                  "The binning_strategy must provide a bin2sample() function, "
+                  "and it must return a type compatible with sample_type.");
 
     static_assert(
         1 == sizeof(decltype(has_less_than(std::declval<sample_type>()))),
         "The sample_type must have a < operator.");
-    static_assert(
-        1 == sizeof(decltype(has_less_than_or_equal(
-            std::declval<sample_type>()))),
-        "The sample_type must have a <= operator.");
+    static_assert(1 == sizeof(decltype(has_less_than_or_equal(
+                           std::declval<sample_type>()))),
+                  "The sample_type must have a <= operator.");
   }
 
   auto histogram_min_return_type()
@@ -328,13 +315,12 @@ struct histogram<binning_strategy,counter_type>::check_constraints {
       -> decltype(std::declval<const binning_strategy>().theoretical_min());
   auto theoretical_max_return_type()
       -> decltype(std::declval<const binning_strategy>().theoretical_max());
-  
+
   auto sample2bin_return_type()
       -> decltype(std::declval<const binning_strategy>().sample2bin(
           std::declval<const sample_type>()));
-  auto bin2sample_return_type()
-      -> decltype(std::declval<const binning_strategy>().bin2sample(
-          std::size_t(0)));
+  auto bin2sample_return_type() -> decltype(
+      std::declval<const binning_strategy>().bin2sample(std::size_t(0)));
 
   auto interpolate_return_type()
       -> decltype(std::declval<const binning_strategy>().interpolate(
@@ -342,7 +328,9 @@ struct histogram<binning_strategy,counter_type>::check_constraints {
           double(1.0), double(1.0), double(0.5)));
 
   /// An object to create a SFINAE condition.
-  struct error { char fill[2]; };
+  struct error {
+    char fill[2];
+  };
 
   // Use SFINAE to discover if the variable type can be compared as we
   // need to.
@@ -357,4 +345,3 @@ struct histogram<binning_strategy,counter_type>::check_constraints {
 } // namespace jb
 
 #endif // jb_histogram_hpp
-

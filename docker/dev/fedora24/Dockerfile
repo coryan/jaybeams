@@ -11,6 +11,7 @@ RUN dnf update -y && dnf install -y \
     compiler-rt \
     doxygen \
     fftw-devel \
+    findutils \
     gcc-c++ \
     git \
     make \

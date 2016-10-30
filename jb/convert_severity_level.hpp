@@ -11,8 +11,7 @@ namespace YAML {
  * Arguably this might belong in the header defining jb::severity_level,
  * but this is specific to using a jb::severity_level in configuration objects.
  */
-template<>
-struct convert<jb::severity_level> {
+template <> struct convert<jb::severity_level> {
   static bool decode(YAML::Node node, jb::severity_level& rhs) {
     jb::parse(rhs, node.as<std::string>());
     return true;

@@ -17,26 +17,24 @@ BOOST_AUTO_TEST_CASE(decode_char_list_field) {
 
   char buffer[32] = {u'Y', u'N', u' ', u'A', u'B'};
 
-  auto actual = decoder<true,tested>::r(16, buffer, 0);
+  auto actual = decoder<true, tested>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, u'Y');
 
-  actual = decoder<false,tested>::r(16, buffer, 0);
+  actual = decoder<false, tested>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual, u'Y');
 
-  actual = decoder<true,tested>::r(16, buffer, 1);
+  actual = decoder<true, tested>::r(16, buffer, 1);
   BOOST_CHECK_EQUAL(actual, u'N');
-  actual = decoder<false,tested>::r(16, buffer, 1);
+  actual = decoder<false, tested>::r(16, buffer, 1);
   BOOST_CHECK_EQUAL(actual, u'N');
 
-  BOOST_CHECK_THROW(
-      (decoder<true,tested>::r(16, buffer, 3)), std::runtime_error);
-  BOOST_CHECK_NO_THROW(
-      (decoder<false,tested>::r(16, buffer, 3)));
+  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 3)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 3)));
 
-  BOOST_CHECK_THROW(
-      (decoder<true,tested>::r(16, buffer, 16)), std::runtime_error);
-  BOOST_CHECK_NO_THROW(
-      (decoder<false,tested>::r(16, buffer, 16)));
+  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 16)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 16)));
 }
 
 /**
@@ -54,7 +52,7 @@ BOOST_AUTO_TEST_CASE(stream_char_list_field) {
 
   {
     char buffer[32] = {u'\0'};
-    auto actual = decoder<false,tested>::r(16, buffer, 0);
+    auto actual = decoder<false, tested>::r(16, buffer, 0);
 
     std::ostringstream os;
     os << actual;
@@ -63,7 +61,7 @@ BOOST_AUTO_TEST_CASE(stream_char_list_field) {
 
   {
     char buffer[32] = {u'\n'};
-    auto actual = decoder<false,tested>::r(16, buffer, 0);
+    auto actual = decoder<false, tested>::r(16, buffer, 0);
 
     std::ostringstream os;
     os << actual;

@@ -65,9 +65,8 @@ namespace testing {
  * };
  * @endcode
  */
-template<typename Fixture>
-class microbenchmark : public microbenchmark_base {
- public:
+template <typename Fixture> class microbenchmark : public microbenchmark_base {
+public:
   typedef jb::testing::microbenchmark_config config;
 
   /**
@@ -93,15 +92,14 @@ class microbenchmark : public microbenchmark_base {
    *
    * @tparam Args the types for the additional arguments.
    */
-  template<typename... Args>
-  results run(Args&&... args) {
+  template <typename... Args> results run(Args&&... args) {
     if (config_.size() != 0) {
       return run_fixed_size(std::forward<Args>(args)...);
     }
     return run_unsized(std::forward<Args>(args)...);
   }
 
- private:
+private:
   /**
    * Run a test without specifying the size and some additional
    * arguments for the Fixture constructor.
@@ -109,8 +107,7 @@ class microbenchmark : public microbenchmark_base {
    * @param args additional arguments for the Fixture
    * @tparam Args the types for the additional arguments
    */
-  template<typename... Args>
-  results run_unsized(Args&&... args) {
+  template <typename... Args> results run_unsized(Args&&... args) {
     Fixture fixture(std::forward<Args>(args)...);
     results r;
     run_base(fixture, r, 0);
@@ -135,8 +132,7 @@ class microbenchmark : public microbenchmark_base {
    * @param args additional arguments for the Fixture
    * @tparam Args the types for the additional arguments
    */
-  template<typename...Args>
-  results run_fixed_size(Args&&... args) {
+  template <typename... Args> results run_fixed_size(Args&&... args) {
     results r;
     run_sized(config_.size(), r, std::forward<Args>(args)...);
     return r;
@@ -150,7 +146,7 @@ class microbenchmark : public microbenchmark_base {
    * @param args additional arguments for the constructor, if any.
    * @tparam Args the types of the additional arguments, if any.
    */
-  template<typename... Args>
+  template <typename... Args>
   void run_sized(int size, results& r, Args&&... args) {
     Fixture fixture(size, std::forward<Args>(args)...);
     run_base(fixture, r, size);
@@ -169,7 +165,7 @@ class microbenchmark : public microbenchmark_base {
    */
   void run_base(Fixture& fixture, results& r, int size) {
     for (int i = 0; i != config_.warmup_iterations(); ++i) {
-      (void) clock::now();
+      (void)clock::now();
       fixture.run();
     }
     r.reserve(r.size() + config_.iterations());
@@ -190,7 +186,7 @@ class microbenchmark : public microbenchmark_base {
     fixture.run();
     auto stop = clock::now();
 
-    r.emplace_back(std::make_pair(size, stop-start));
+    r.emplace_back(std::make_pair(size, stop - start));
   }
 };
 

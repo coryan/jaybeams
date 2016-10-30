@@ -15,10 +15,10 @@ namespace testing {
  * Refactor non-template parts of the microbenchmark template class.
  */
 class microbenchmark_base {
- public:
+public:
   typedef std::chrono::steady_clock clock;
   typedef typename clock::duration duration;
-  typedef typename std::pair<int,duration> result;
+  typedef typename std::pair<int, duration> result;
   typedef typename std::vector<result> results;
 
   /**
@@ -30,7 +30,8 @@ class microbenchmark_base {
 
   /// Summary of the microbenchmark results.
   struct summary {
-    summary() {}
+    summary() {
+    }
     summary(results const& arg);
 
     duration min;
@@ -46,12 +47,12 @@ class microbenchmark_base {
 
   void write_results(std::ostream& os, results const& r) const;
 
- protected:
+protected:
   microbenchmark_config config_;
 };
 
-std::ostream& operator<<(
-    std::ostream& os, microbenchmark_base::summary const& x);
+std::ostream& operator<<(std::ostream& os,
+                         microbenchmark_base::summary const& x);
 
 } // namespace testing
 } // namespace jb

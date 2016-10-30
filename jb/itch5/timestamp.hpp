@@ -31,25 +31,22 @@ struct timestamp {
  * @throws std::runtime_error if @a tparam is true and the timestamp
  * is out of the expected range.
  */
-template<bool validate>
-void check_timestamp_range(timestamp const& t) {
+template <bool validate> void check_timestamp_range(timestamp const& t) {
 }
 
 /**
  * Provide an active implementation of
  * jb::itch5::check_timestamp_range<>
  */
-template<>
-void check_timestamp_range<true>(timestamp const& t);
+template <> void check_timestamp_range<true>(timestamp const& t);
 
 /// Specialize jb::itch5::decoder<> for a timestamp
-template<bool validate>
-struct decoder<validate,timestamp> {
+template <bool validate> struct decoder<validate, timestamp> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static timestamp r(std::size_t size, void const* buf, std::size_t offset) {
     check_offset<validate>("timestamp", size, offset, 6);
-    std::uint64_t hi = decoder<false,std::uint16_t>::r(size, buf, offset);
-    std::uint64_t lo = decoder<false,std::uint32_t>::r(size, buf, offset + 2);
+    std::uint64_t hi = decoder<false, std::uint16_t>::r(size, buf, offset);
+    std::uint64_t lo = decoder<false, std::uint32_t>::r(size, buf, offset + 2);
     timestamp tmp{std::chrono::nanoseconds(hi << 32 | lo)};
     check_timestamp_range<validate>(tmp);
 
@@ -58,8 +55,7 @@ struct decoder<validate,timestamp> {
 };
 
 /// Specialize jb::itch5::encoder<> for a timestamp
-template<bool validate>
-struct encoder<validate,timestamp> {
+template <bool validate> struct encoder<validate, timestamp> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static void w(std::size_t size, void* buf, std::size_t offset, timestamp x) {
     check_offset<validate>("encoder<timestamp>", size, offset, 6);
@@ -68,8 +64,8 @@ struct encoder<validate,timestamp> {
     std::uint64_t nanos = duration_cast<nanoseconds>(x.ts).count();
     std::uint16_t hi = nanos >> 32;
     std::uint32_t lo = nanos & 0xFFFFFFFF;
-    encoder<false,std::uint16_t>::w(size, buf, offset, hi);
-    encoder<false,std::uint32_t>::w(size, buf, offset + 2, lo);
+    encoder<false, std::uint16_t>::w(size, buf, offset, hi);
+    encoder<false, std::uint32_t>::w(size, buf, offset + 2, lo);
   }
 };
 

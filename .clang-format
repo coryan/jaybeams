@@ -1,0 +1,14 @@
+---
+# Start from the LLVM style
+BasedOnStyle: LLVM
+IndentWidth: 2
+---
+Language: Cpp
+UseTab: Never
+ColumnLimit: 80
+Standard: Cpp11
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: false
+PointerAlignment: Left
+BreakConstructorInitializersBeforeComma: true
+# SpaceAfterTemplateKeyword: false

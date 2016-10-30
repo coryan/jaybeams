@@ -39,9 +39,9 @@ namespace itch5 {
  * References:
  *   http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/moldudp64.pdf
  */
-template<typename clock_type = std::chrono::steady_clock>
+template <typename clock_type = std::chrono::steady_clock>
 class mold_udp_pacer {
- public:
+public:
   //@{
   /**
    * @name Type traits
@@ -62,16 +62,15 @@ class mold_udp_pacer {
    * session id, different streams can be distinguished using this
    * field in the protocol.
    */
-  typedef jb::itch5::short_string_field<
-    mold_udp_protocol::session_id_size> session_id_type;
+  typedef jb::itch5::short_string_field<mold_udp_protocol::session_id_size>
+      session_id_type;
   //@}
 
   /**
    * Initialize a MoldUDP pacer object.
    */
-  mold_udp_pacer(
-      config const& cfg = config(),
-      session_id_type const& session_id = session_id_type())
+  mold_udp_pacer(config const& cfg = config(),
+                 session_id_type const& session_id = session_id_type())
       : last_send_{std::chrono::microseconds(0)}
       , max_delay_(std::chrono::microseconds(cfg.maximum_delay_microseconds()))
       , mtu_(cfg.maximum_transmission_unit())
@@ -79,8 +78,7 @@ class mold_udp_pacer {
       , packet_size_(mold_udp_protocol::header_size)
       , first_block_(0)
       , first_block_ts_{std::chrono::microseconds(0)}
-      , block_count_(0)
-  {
+      , block_count_(0) {
     boost::asio::buffer_copy(
         packet_, boost::asio::buffer(session_id.c_str(), session_id.wire_size));
   }
@@ -102,12 +100,11 @@ class mold_udp_pacer {
    * @tparam sleep_functor_type the type of the sleeper function, the
    * signature must be compatible with void(clock_type::duration const&)
    */
-  template<typename message_sink_type, typename sleep_functor_type>
-  void handle_message(
-      time_point ts, unknown_message const& msg,
-      message_sink_type& sink, sleep_functor_type& sleeper) {
+  template <typename message_sink_type, typename sleep_functor_type>
+  void handle_message(time_point ts, unknown_message const& msg,
+                      message_sink_type& sink, sleep_functor_type& sleeper) {
     message_header msghdr = msg.decode_header<false>();
-    
+
     // how long since the last send() call...
     if (msg.count() == 0) {
       // ... on the first message initialize the timestamp, otherwise
@@ -137,7 +134,7 @@ class mold_udp_pacer {
    *
    * @tparam message_sink_type please see handle_message() for details
    */
-  template<typename message_sink_type>
+  template <typename message_sink_type>
   void flush(timestamp ts, message_sink_type& sink) {
     if (block_count_ == 0) {
       return;
@@ -155,12 +152,12 @@ class mold_udp_pacer {
    *
    * @tparam message_sink_type please see handle_message() for details
    */
-  template<typename message_sink_type>
+  template <typename message_sink_type>
   void heartbeat(message_sink_type& sink) {
     flush_impl(first_block_ts_, sink);
   }
 
- private:
+private:
   /**
    * Add another message to the current queue, flushing first if
    * necessary.
@@ -170,13 +167,12 @@ class mold_udp_pacer {
    * @param ts the timestamp when the last message was sent
    * @param sink the destination for the MoldUDP64 packets
    */
-  template<typename message_sink_type>
-  void coalesce(
-      time_point recv_ts, unknown_message const& msg,
-      timestamp ts, message_sink_type& sink) {
+  template <typename message_sink_type>
+  void coalesce(time_point recv_ts, unknown_message const& msg, timestamp ts,
+                message_sink_type& sink) {
     // Make sure the message is small enough to be represented in a
     // single MoldUDP64 block ...
-    JB_ASSERT_THROW(msg.len() < (1<<16));
+    JB_ASSERT_THROW(msg.len() < (1 << 16));
     // ... make sure the message is small enough to fit in a single
     // MoldUDP64 packet given the current MTU ...
     JB_ASSERT_THROW(msg.len() + 2 < mtu_ - mold_udp_protocol::header_size);
@@ -189,7 +185,7 @@ class mold_udp_pacer {
     if (block_count_ == 0) {
       first_block_ = msg.count();
       first_block_ts_ = ts;
-    }      
+    }
     // ... append the message as a new block in the MoldUDP packet,
     // first update the block header ...
     boost::asio::mutable_buffer block_header = packet_ + packet_size_;
@@ -198,8 +194,8 @@ class mold_udp_pacer {
         boost::asio::buffer_cast<void*>(block_header), 0, msg.len());
     // ... the copy the message into the block payload ...
     boost::asio::mutable_buffer block_payload = packet_ + packet_size_ + 2;
-    boost::asio::buffer_copy(
-        block_payload, boost::asio::buffer(msg.buf(), msg.len()));
+    boost::asio::buffer_copy(block_payload,
+                             boost::asio::buffer(msg.buf(), msg.len()));
     packet_size_ += msg.len() + 2;
 
     // ... and update the number of blocks ...
@@ -214,20 +210,20 @@ class mold_udp_pacer {
     // ... write down the sequence number field of the packet header,
     // this is the number of the first block ...
     auto seqno = packet_ + mold_udp_protocol::sequence_number_offset;
-    encoder<true,std::uint64_t>::w(
-        boost::asio::buffer_size(seqno),
-        boost::asio::buffer_cast<void*>(seqno), 0, first_block_);
+    encoder<true, std::uint64_t>::w(boost::asio::buffer_size(seqno),
+                                    boost::asio::buffer_cast<void*>(seqno), 0,
+                                    first_block_);
     // ... then write down the block field ...
     auto blkcnt = packet_ + mold_udp_protocol::block_count_offset;
-    encoder<true,std::uint16_t>::w(
-        boost::asio::buffer_size(blkcnt),
-        boost::asio::buffer_cast<void*>(blkcnt), 0, block_count_);
+    encoder<true, std::uint16_t>::w(boost::asio::buffer_size(blkcnt),
+                                    boost::asio::buffer_cast<void*>(blkcnt), 0,
+                                    block_count_);
   }
 
   /**
    * Implement the flush() and hearbeat() member functions.
    */
-  template<typename message_sink_type>
+  template <typename message_sink_type>
   void flush_impl(timestamp ts, message_sink_type& sink) {
     fillup_header_fields();
     sink(boost::asio::buffer(packet_, packet_size_));
@@ -250,8 +246,8 @@ class mold_udp_pacer {
     }
     return block_count_ == std::numeric_limits<std::uint16_t>::max();
   }
-  
- private:
+
+private:
   jb::itch5::timestamp last_send_;
   duration max_delay_;
   int mtu_;

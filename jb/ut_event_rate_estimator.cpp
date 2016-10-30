@@ -15,7 +15,10 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_base) {
   std::uint64_t last = 0;
   std::uint64_t repeats = 0;
   auto f = [&](std::uint64_t c, std::uint64_t r) {
-    ++calls; nsamples += r; last = c; repeats = r;
+    ++calls;
+    nsamples += r;
+    last = c;
+    repeats = r;
   };
 
   stats.sample(c, f);
@@ -57,7 +60,10 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_jump) {
   std::uint64_t last = 0;
   std::uint64_t repeats = 0;
   auto f = [&](std::uint64_t c, std::uint64_t r) {
-    ++calls; nsamples += r; last = c; repeats = r;
+    ++calls;
+    nsamples += r;
+    last = c;
+    repeats = r;
   };
 
   // Record one sample ...
@@ -118,7 +124,10 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_milliseconds) {
   std::uint64_t last = 0;
   std::uint64_t repeats = 0;
   auto f = [&](std::uint64_t c, std::uint64_t r) {
-    ++calls; nsamples += r; last = c; repeats = r;
+    ++calls;
+    nsamples += r;
+    last = c;
+    repeats = r;
   };
 
   stats.sample(c, f);
@@ -160,6 +169,5 @@ BOOST_AUTO_TEST_CASE(event_rate_estimator_errors) {
   typedef std::chrono::duration<std::size_t> ticks;
   typedef jb::event_rate_estimator<ticks> testbig;
   auto big = std::numeric_limits<std::size_t>::max();
-  BOOST_CHECK_THROW(
-      testbig(ticks(big), ticks(1)), std::invalid_argument);
+  BOOST_CHECK_THROW(testbig(ticks(big), ticks(1)), std::invalid_argument);
 }

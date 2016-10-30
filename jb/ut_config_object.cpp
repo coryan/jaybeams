@@ -13,7 +13,7 @@
  */
 namespace {
 class simple : public jb::config_object {
- public:
+public:
   simple()
       : foo(this)
       , bar(this, "default value")
@@ -21,31 +21,31 @@ class simple : public jb::config_object {
   }
   config_object_constructors(simple);
 
-  jb::config_attribute<simple,std::string> foo;
-  jb::config_attribute<simple,std::string> bar;
-  jb::config_attribute<simple,int> baz;
+  jb::config_attribute<simple, std::string> foo;
+  jb::config_attribute<simple, std::string> bar;
+  jb::config_attribute<simple, int> baz;
 };
 
 class complex : public jb::config_object {
- public:
+public:
   complex()
       : base(this)
       , names(this, {"one", "two", "3"}) {
   }
   config_object_constructors(complex);
 
-  jb::config_attribute<complex,simple> base;
-  jb::config_attribute<complex,std::vector<std::string>> names;
+  jb::config_attribute<complex, simple> base;
+  jb::config_attribute<complex, std::vector<std::string>> names;
 };
 
 class test_variadic : public jb::config_object {
- public:
+public:
   test_variadic()
       : foo(this, 1, 2) {
   }
   config_object_constructors(test_variadic);
 
-  jb::config_attribute<test_variadic,std::pair<int,int>> foo;
+  jb::config_attribute<test_variadic, std::pair<int, int>> foo;
 };
 }
 
@@ -114,10 +114,9 @@ BOOST_AUTO_TEST_CASE(config_attribute_complex_copy) {
   BOOST_CHECK_EQUAL(tested.names().size(), 0);
 }
 
-
 /**
  * @test Verify we can create jb::config_attribute objects with
- * complex constructors 
+ * complex constructors
  */
 BOOST_AUTO_TEST_CASE(config_attribute_variadic_constructor) {
   test_variadic tested;
@@ -129,7 +128,7 @@ BOOST_AUTO_TEST_CASE(config_attribute_variadic_constructor) {
 namespace {
 
 class config0 : public jb::config_object {
- public:
+public:
   config0()
       : x(desc("x"), this)
       , y(desc("y"), this)
@@ -138,9 +137,9 @@ class config0 : public jb::config_object {
 
   config_object_constructors(config0);
 
-  jb::config_attribute<config0,int> x;
-  jb::config_attribute<config0,int> y;
-  jb::config_attribute<config0,int> z;
+  jb::config_attribute<config0, int> x;
+  jb::config_attribute<config0, int> y;
+  jb::config_attribute<config0, int> z;
 };
 
 // Convenience functions for the unit tests.
@@ -157,7 +156,7 @@ config0 make_config0(int x, int y, int z) {
 }
 
 class config1 : public jb::config_object {
- public:
+public:
   config1()
       : list(desc("list"), this, {"ini", "mini", "myni", "mo"})
       , pos(desc("pos", "config0"), this) {
@@ -165,8 +164,8 @@ class config1 : public jb::config_object {
 
   config_object_constructors(config1);
 
-  jb::config_attribute<config1,std::vector<std::string>> list;
-  jb::config_attribute<config1,config0> pos;
+  jb::config_attribute<config1, std::vector<std::string>> list;
+  jb::config_attribute<config1, config0> pos;
 };
 
 } // namespace anonymous
@@ -191,35 +190,32 @@ pos:
   BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config1 tested;
   std::vector<std::string> expected({"ini", "mini", "myni", "mo"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.list().begin(), tested.list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
+                                expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(0, 0, 0));
 
   std::istringstream is(contents);
   int argc = 0;
   tested.load_overrides(argc, nullptr, is);
-  
+
   expected.assign({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.list().begin(), tested.list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
+                                expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(2, 4, -3));
 }
 
 namespace {
 class config2 : public jb::config_object {
- public:
+public:
   config2()
       : vars(desc("vars"), this) {
   }
 
   config_object_constructors(config2);
 
-  jb::config_attribute<config2,std::vector<config1>> vars;
+  jb::config_attribute<config2, std::vector<config1>> vars;
 };
 } // namespace anonymous
-
 
 /**
  * @test Verify the framework supports vectors of config objects.
@@ -254,26 +250,23 @@ vars:
   std::vector<std::string> expected;
 
   expected.assign({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.vars()[0].list().begin(),
-      tested.vars()[0].list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[0].list().begin(),
+                                tested.vars()[0].list().end(), expected.begin(),
+                                expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[0].pos().x(), 2);
   BOOST_CHECK_EQUAL(tested.vars()[0].pos().y(), 4);
 
   expected.assign({"2", "4", "6", "8"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.vars()[1].list().begin(),
-      tested.vars()[1].list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[1].list().begin(),
+                                tested.vars()[1].list().end(), expected.begin(),
+                                expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[1].pos().y(), 1);
   BOOST_CHECK_EQUAL(tested.vars()[1].pos().z(), 3);
 
   expected.assign({"11"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.vars()[2].list().begin(),
-      tested.vars()[2].list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[2].list().begin(),
+                                tested.vars()[2].list().end(), expected.begin(),
+                                expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[2].pos(), make_config0(1, 2, 3));
 }
 
@@ -286,7 +279,7 @@ BOOST_AUTO_TEST_CASE(config_object_vector_empty) {
   std::istringstream is("");
   char argv0[] = "not_a_path";
   char argv1[] = "--vars.0.pos.x=2";
-  char* argv[] = { argv0, argv1 };
+  char* argv[] = {argv0, argv1};
   int argc = sizeof(argv) / sizeof(argv[0]);
   tested.load_overrides(argc, argv, is);
 
@@ -301,7 +294,7 @@ BOOST_AUTO_TEST_CASE(config_object_vector_empty) {
 
 namespace {
 class config3 : public jb::config_object {
- public:
+public:
   config3()
       : foo(desc("foo", "config0"), this)
       , bar(desc("bar", "config0"), this)
@@ -310,13 +303,13 @@ class config3 : public jb::config_object {
 
   config_object_constructors(config3);
 
-  jb::config_attribute<config3,config0> foo;
-  jb::config_attribute<config3,config0> bar;
-  jb::config_attribute<config3,config0> baz;
+  jb::config_attribute<config3, config0> foo;
+  jb::config_attribute<config3, config0> bar;
+  jb::config_attribute<config3, config0> baz;
 };
 
 class config4 : public jb::config_object {
- public:
+public:
   config4()
       : ini(desc("ini"), this)
       , mini(desc("mini"), this)
@@ -325,9 +318,9 @@ class config4 : public jb::config_object {
 
   config_object_constructors(config4);
 
-  jb::config_attribute<config4,config3> ini;
-  jb::config_attribute<config4,config3> mini;
-  jb::config_attribute<config4,config3> myni;
+  jb::config_attribute<config4, config3> ini;
+  jb::config_attribute<config4, config3> mini;
+  jb::config_attribute<config4, config3> myni;
 };
 
 } // namespace anonymous
@@ -406,15 +399,14 @@ pos:
 
   config1 tested;
   char argv0[] = "not_a_path";
-  char* argv[] = { argv0 };
+  char* argv[] = {argv0};
   int argc = sizeof(argv) / sizeof(argv[0]);
 
   tested.load_overrides(argc, argv, is);
-  
+
   std::vector<std::string> expected({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.list().begin(), tested.list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
+                                expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(2, 4, -3));
 }
 
@@ -441,15 +433,14 @@ pos:
   char argv3[] = "--list=3";
   char argv4[] = "--list=5";
   char argv5[] = "--list=7";
-  char* argv[] = { argv0, argv1, argv2, argv3, argv4, argv5 };
+  char* argv[] = {argv0, argv1, argv2, argv3, argv4, argv5};
   int argc = sizeof(argv) / sizeof(argv[0]);
 
   tested.load_overrides(argc, argv, is);
-  
+
   std::vector<std::string> expected({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      tested.list().begin(), tested.list().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
+                                expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(3, 4, -3));
 }
 
@@ -463,7 +454,7 @@ BOOST_AUTO_TEST_CASE(config_object_usage) {
   char* argv[] = {argv0, argv1};
   int argc = sizeof(argv) / sizeof(argv[0]);
   std::istringstream is("");
-  
+
   BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), jb::usage);
 }
 
@@ -478,25 +469,25 @@ BOOST_AUTO_TEST_CASE(config_object_invalid_option) {
   char* argv[] = {argv0, argv1};
   int argc = sizeof(argv) / sizeof(argv[0]);
   std::istringstream is("");
-  
+
   BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), std::exception);
 }
 
 namespace {
 class config5 : public jb::config_object {
- public:
+public:
   config5()
-      : foo(desc("foo"), this)
-  {}
+      : foo(desc("foo"), this) {
+  }
 
   config_object_constructors(config5);
 
-  jb::config_attribute<config5,std::pair<int,int>> foo;
+  jb::config_attribute<config5, std::pair<int, int>> foo;
 };
 } // anonymous namespace
 
 /**
- * @test Verify config_objects can handle std::pair<> 
+ * @test Verify config_objects can handle std::pair<>
  */
 BOOST_AUTO_TEST_CASE(config_object_pair_yaml) {
   char const contents[] = R"""(# YAML overrides
@@ -515,7 +506,7 @@ foo:
 }
 
 /**
- * @test Verify config_objects can handle std::pair<> 
+ * @test Verify config_objects can handle std::pair<>
  */
 BOOST_AUTO_TEST_CASE(config_object_pair_options) {
   char const contents[] = R"""(# YAML overrides
@@ -542,18 +533,18 @@ foo:
 
 namespace {
 class config6 : public jb::config_object {
- public:
+public:
   config6()
       : foo(desc("foo"), this)
       , bar(desc("bar", "config0").help("not much help"), this)
-      , baz(desc("baz", "config0").help("not much help"), this)
-  {}
+      , baz(desc("baz", "config0").help("not much help"), this) {
+  }
 
   config_object_constructors(config6);
 
-  jb::config_attribute<config6,std::string> foo;
-  jb::config_attribute<config6,config0> bar;
-  jb::config_attribute<config6,config0> baz;
+  jb::config_attribute<config6, std::string> foo;
+  jb::config_attribute<config6, config0> bar;
+  jb::config_attribute<config6, config0> baz;
 };
 } // anonymous namespace
 
@@ -575,8 +566,10 @@ baz:
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
   BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
-  std::shared_ptr<int> delete_dir(
-      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::shared_ptr<int> delete_dir(new int(5), [tmpdir](int* x) {
+    delete x;
+    fs::remove_all(tmpdir);
+  });
   std::string filename = "test.yml";
   // ... create a file in the temporary directory with these
   {
@@ -589,7 +582,7 @@ baz:
   }
 
   // ... setup the environment variable to the test directory ...
-  (void) setenv("TEST_ROOT", tmpdir.string().c_str(), true);
+  (void)setenv("TEST_ROOT", tmpdir.string().c_str(), true);
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
@@ -611,12 +604,14 @@ BOOST_AUTO_TEST_CASE(config_object_config_file_missing_with_env) {
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
   BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
-  std::shared_ptr<int> delete_dir(
-      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::shared_ptr<int> delete_dir(new int(5), [tmpdir](int* x) {
+    delete x;
+    fs::remove_all(tmpdir);
+  });
   std::string filename = "test.yml";
 
   // ... setup the environment variable to the test directory ...
-  (void) setenv("TEST_ROOT", tmpdir.string().c_str(), true);
+  (void)setenv("TEST_ROOT", tmpdir.string().c_str(), true);
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
@@ -647,8 +642,10 @@ baz:
   fs::path tmpdir = fs::temp_directory_path() / fs::unique_path();
   BOOST_TEST_MESSAGE("creating unique tempdir at " << tmpdir);
   BOOST_REQUIRE(fs::create_directories(tmpdir));
-  std::shared_ptr<int> delete_dir(
-      new int(5), [tmpdir](int* x) { delete x; fs::remove_all(tmpdir); });
+  std::shared_ptr<int> delete_dir(new int(5), [tmpdir](int* x) {
+    delete x;
+    fs::remove_all(tmpdir);
+  });
   std::string filename = "test.yml";
   // ... create a file in the temporary directory with these
   {
@@ -661,7 +658,7 @@ baz:
   }
 
   // ... setup the environment variable to the test directory ...
-  (void) setenv("JAYBEAMS_ROOT", tmpdir.string().c_str(), true);
+  (void)setenv("JAYBEAMS_ROOT", tmpdir.string().c_str(), true);
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
@@ -695,18 +692,18 @@ BOOST_AUTO_TEST_CASE(config_object_config_file_missing) {
 
 namespace {
 class config7 : public jb::config_object {
- public:
+public:
   config7()
       : foo(desc("foo"), this)
       , bar(desc("bar").help("not much help").positional(), this)
-      , baz(desc("baz").help("not much help").positional(), this)
-  {}
+      , baz(desc("baz").help("not much help").positional(), this) {
+  }
 
   config_object_constructors(config7);
 
-  jb::config_attribute<config7,std::string> foo;
-  jb::config_attribute<config7,std::string> bar;
-  jb::config_attribute<config7,std::string> baz;
+  jb::config_attribute<config7, std::string> foo;
+  jb::config_attribute<config7, std::string> bar;
+  jb::config_attribute<config7, std::string> baz;
 };
 } // anonymous namespace
 
@@ -739,4 +736,3 @@ BOOST_AUTO_TEST_CASE(usage_coverage) {
   BOOST_CHECK_EQUAL(a.exit_status(), b.exit_status());
   BOOST_CHECK_EQUAL(a.what(), b.what());
 }
-

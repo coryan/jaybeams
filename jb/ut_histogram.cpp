@@ -17,8 +17,7 @@ int t_interpolate(int x_a, int x_b, double y_a, double s, double q) {
   return int(std::floor(x_a + (q - y_a) * (x_b - x_a) / s));
 }
 
-template<typename T>
-struct test_binning {
+template <typename T> struct test_binning {
   typedef T sample_type;
 
   static sample_type const min;
@@ -45,19 +44,18 @@ struct test_binning {
   sample_type bin2sample(std::size_t i) const {
     return min + i;
   }
-  sample_type interpolate(
-      sample_type x_a, sample_type x_b, double y_a, double s, double q) const {
+  sample_type interpolate(sample_type x_a, sample_type x_b, double y_a,
+                          double s, double q) const {
     return t_interpolate(x_a, x_b, y_a, s, q);
   }
 };
 
-template<typename T> T const test_binning<T>::min = 20;
-template<typename T> T const test_binning<T>::max = 30;
+template <typename T> T const test_binning<T>::min = 20;
+template <typename T> T const test_binning<T>::max = 30;
 
 typedef jb::histogram<test_binning<int>> tested_histogram;
 
 } // anonymous namespace
-
 
 /**
  * @test Verify that a simple histogram can be initialized.
@@ -186,7 +184,6 @@ BOOST_AUTO_TEST_CASE(histogram_mean_complex) {
   BOOST_CHECK_EQUAL(h.estimated_mean(), 20);
 }
 
-
 /**
  * @test Verify that the quantile estimator works as expected.
  */
@@ -312,4 +309,3 @@ BOOST_AUTO_TEST_CASE(histogram_quantile_complex) {
   BOOST_CHECK_CLOSE(h.estimated_quantile(0.95), 35.0, eps);
   BOOST_CHECK_CLOSE(h.estimated_quantile(1.00), 40.0, eps);
 }
-

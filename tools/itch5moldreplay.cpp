@@ -16,21 +16,21 @@
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
   void validate() const override;
 
-  jb::config_attribute<config,std::string> input_file;
-  jb::config_attribute<config,std::string> destination;
-  jb::config_attribute<config,int> port;
-  jb::config_attribute<config,jb::log::config> log;
-  jb::config_attribute<config,jb::itch5::mold_udp_pacer_config> pacer;
+  jb::config_attribute<config, std::string> input_file;
+  jb::config_attribute<config, std::string> destination;
+  jb::config_attribute<config, int> port;
+  jb::config_attribute<config, jb::log::config> log;
+  jb::config_attribute<config, jb::itch5::mold_udp_pacer_config> pacer;
 };
 
 class replayer {
- public:
+public:
   //@{
   /**
    * @name Type traits
@@ -48,8 +48,8 @@ class replayer {
   {}
 
   /// Handle all messages as blobs
-  void handle_unknown(
-      time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
+  void handle_unknown(time_point const& recv_ts,
+                      jb::itch5::unknown_message const& msg) {
     auto sink = [this](auto buffers) {
       socket_.send_to(buffers, endpoint_);
     };
@@ -68,7 +68,7 @@ class replayer {
     return std::chrono::steady_clock::now();
   }
 
- private:
+private:
   boost::asio::ip::udp::socket socket_;
   boost::asio::ip::udp::endpoint endpoint_;
   jb::itch5::mold_udp_pacer<> pacer_;
@@ -78,8 +78,8 @@ class replayer {
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.load_overrides(
-      argc, argv, std::string("itch5moldreplay.yaml"), "JB_ROOT");
+  cfg.load_overrides(argc, argv, std::string("itch5moldreplay.yaml"),
+                     "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::asio::io_service io_service;
@@ -96,13 +96,13 @@ int main(int argc, char* argv[]) try {
   jb::itch5::process_iostream_mlist<replayer>(in, rep);
 
   return 0;
-} catch(jb::usage const& u) {
+} catch (jb::usage const& u) {
   std::cout << u.what() << std::endl;
   return u.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "Standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "Unknown exception raised" << std::endl;
   return 1;
 }
@@ -128,14 +128,14 @@ config::config()
         "The destination port for the UDP messages. "), this,
            default_multicast_port())
     , log(desc("log", "logging"), this)
-    , pacer(desc("pacer", "mold-udp-pacer"), this)
-{}
+    , pacer(desc("pacer", "mold-udp-pacer"), this) {
+}
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage(
-        "Missing input-file setting."
-        "  You must specify an input file.", 1);
+    throw jb::usage("Missing input-file setting."
+                    "  You must specify an input file.",
+                    1);
   }
   log().validate();
   pacer().validate();

@@ -13,41 +13,37 @@ namespace fftw {
 /**
  * Determine if a timeseries tye guarantees alignment.
  */
-template<typename T>
-struct always_aligned : public std::false_type {};
+template <typename T> struct always_aligned : public std::false_type {};
 
-template<typename T>
+template <typename T>
 struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 
 /**
  * A simple time delay estimator based on cross-correlation
  */
-template<
-  typename timeseries_t,
-  template<typename T> class vector = jb::fftw::aligned_vector
-  >
+template <typename timeseries_t,
+          template <typename T> class vector = jb::fftw::aligned_vector>
 class time_delay_estimator {
- public:
+public:
   typedef timeseries_t timeseries_type;
   typedef typename timeseries_type::value_type value_type;
   typedef typename jb::extract_value_type<value_type>::precision precision_type;
   typedef jb::fftw::plan<precision_type> plan;
-  
+
   time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
       : tmpa_(a.size())
       , tmpb_(b.size())
       , a2tmpa_(plan::create_forward(a, tmpa_, planning_flags()))
       , b2tmpb_(plan::create_forward(b, tmpb_, planning_flags()))
       , out_(a.size())
-      , tmpa2out_(plan::create_backward(tmpa_, out_, planning_flags()))
-  {
+      , tmpa2out_(plan::create_backward(tmpa_, out_, planning_flags())) {
     if (a.size() != b.size()) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
     }
   }
 
-  std::pair<bool, precision_type> estimate_delay(
-      timeseries_type const& a, timeseries_type const& b) {
+  std::pair<bool, precision_type> estimate_delay(timeseries_type const& a,
+                                                 timeseries_type const& b) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
@@ -82,7 +78,7 @@ class time_delay_estimator {
     return std::make_pair(true, precision_type(argmax));
   }
 
- private:
+private:
   /**
    * Determine the correct FFTW planning flags given the inputs.
    */
@@ -93,7 +89,7 @@ class time_delay_estimator {
     return FFTW_MEASURE | FFTW_UNALIGNED;
   }
 
- private:
+private:
   vector<std::complex<precision_type>> tmpa_;
   vector<std::complex<precision_type>> tmpb_;
   plan a2tmpa_;

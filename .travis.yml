@@ -3,11 +3,6 @@ language: cpp
 dist: trusty
 sudo: false
 
-env:
-  global:
-   # TODO(#1) change this to a robot account
-   - secure: "n9xlk1SpwtyBBB/U3B+o7EQomk4wPS+lj+9pYQCJwLkmR4Yh6hoz/bsl5vlYYK1V6xFhAaXqPWBnQmhrsIf8lOWqqrKCOPFsJ1AxDgPY3zFt+G91BqOuaTSG2eCbnyEVPidBchaUTeg2NiOpCAHyzA17h65c1Hl4l6IBUWGpYft5MWZhkeYz5r0bP2KAIb2NWRhuAW3PYxmFArWhBpnTICMx7rXzYWYCPUiXYra2JNebS1JAp+4JPly0efvNNjtjv4dyxq8qMdTDgz5Kj9wGo8ByPpseyWgx5Il0SSHmeUN5/NhJj4Wx2lVjOSv/EfoFmDN86V+P2zCwkl0tKV8sYONNvAIDqPDadRfQhbUAAFidSYiS2O6ttbInxegs3jStus/jxD0Myn8BgvOgddPbe1p0WFhCtcPDPA5J9/ic8M1NclYlMp04QNED+PnxxVt94tTmU7zCsNGXX4rxa7B1Q4EjTvEmjtvPA99kBla8JGOOxws8Xo5+WkfWVfbinveqs6G3kqg2bKTcurvgCeT7gqc/uVymdti7xdn+xALfzSohH91qN/T0Md1NVBJOlIN+J6oQ+qmZMcTQ6RrPOKDKPqcFTgpp5Np/lvq0yMUL7s+rS544hXZvtZ96E25wCorbJv6DVl0m5D1crBsJGmMzYfcGtRc8smTpF4+YcRkUIfc="
-
 matrix:
   include:
     - os: linux
@@ -20,11 +15,15 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes CHECK_STYLE=yes
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-O3
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=g++ CXXFLAGS=-g
+
+    - os: linux
+      compiler: gcc
+      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3
 
 services:
   - docker
@@ -32,9 +31,6 @@ services:
 script:
   - uname -a
   - docker build --help
-  - echo IMAGE=${IMAGE} CXX=${CXX} CXXFLAGS=${CXXFLAGS}
-  - echo GENDOCS=${GENDOCS} CONFIGUREFLAGS=${CONFIGUREFLAGS}
-  - echo HOME=$HOME USER=$USER UID=$UID
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
   - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
@@ -47,7 +43,7 @@ after_success:
   # We take some additional action on successful builds ...
   - cd ${TRAVIS_BUILD_DIR?}
   # ... if this is a code coverage build we upload the coverage results ...
-  - if [ "x${COVERAGE}" = "xyes" ]; then
+  - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${COVERAGE}" = "xyes" ]; then
     docker run --rm -it -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ci/coverage.sh" ;
     coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
     fi
@@ -55,9 +51,12 @@ after_success:
   - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
   # ... create the Doxygen documentation inside the docker container,
   # and then push it using the host ...
-  - if [ "x${GENDOCS}" == "xyes" ]; then
+  - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${GENDOCS}" = "xyes" ]; then
     docker run --rm -it --env GIT_NAME=${GIT_NAME?} --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
     (cd doc/html ; git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages) ;
+    fi
+  - if [ "x${CHECK_STYLE}" = "xyes" ]; then
+    docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && make check-style" ;
     fi
 
 notifications:

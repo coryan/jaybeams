@@ -33,21 +33,18 @@ namespace itch5 {
  * @tparam value_validator a functor to validate the value for those
  *   fields that are only supposed to assume a known set of values.
  */
-template<
-  std::size_t wire_size_value,
-  typename value_validator = noop_validator<char const*>>
+template <std::size_t wire_size_value,
+          typename value_validator = noop_validator<char const*>>
 class short_string_field
-    : public boost::less_than_comparable<short_string_field<
-                                           wire_size_value,value_validator>>
-    , public boost::less_than_comparable<short_string_field<
-                                           wire_size_value,value_validator>,
-                                         char const*>
-    , public boost::equality_comparable<short_string_field<
-                                          wire_size_value,value_validator>>
-    , public boost::equality_comparable<short_string_field<
-                                          wire_size_value,value_validator>,
-                                        char const*> {
- public:
+    : public boost::less_than_comparable<
+          short_string_field<wire_size_value, value_validator>>,
+      public boost::less_than_comparable<
+          short_string_field<wire_size_value, value_validator>, char const*>,
+      public boost::equality_comparable<
+          short_string_field<wire_size_value, value_validator>>,
+      public boost::equality_comparable<
+          short_string_field<wire_size_value, value_validator>, char const*> {
+public:
   /// The size of the field on the wire
   constexpr static std::size_t wire_size = wire_size_value;
 
@@ -56,7 +53,7 @@ class short_string_field
 
   /// The type of validator
   typedef value_validator value_validator_t;
-  
+
   /// Constructor
   explicit short_string_field(
       value_validator_t const& validator = value_validator_t())
@@ -78,7 +75,6 @@ class short_string_field
   char const* c_str() const {
     return buffer_;
   }
-
 
   //@{
   /**
@@ -113,9 +109,9 @@ class short_string_field
   short_string_field& operator=(short_string_field&& rhs) = default;
   //@}
 
- private:
-  friend struct jb::itch5::decoder<true,short_string_field>;
-  friend struct jb::itch5::decoder<false,short_string_field>;
+private:
+  friend struct jb::itch5::decoder<true, short_string_field>;
+  friend struct jb::itch5::decoder<false, short_string_field>;
   /// Assignment from a character buffer
   void assign(char const* buf) {
     std::memcpy(buffer_, buf, wire_size);
@@ -150,7 +146,7 @@ class short_string_field
     }
   }
 
- private:
+private:
   /// The in-memory representation
   char buffer_[buffer_size];
 
@@ -159,32 +155,33 @@ class short_string_field
 };
 
 /// Specialize decoder<bool,T> for short_string_field.
-template<bool validate, std::size_t wsize, typename F>
-struct decoder<validate, short_string_field<wsize,F>> {
+template <bool validate, std::size_t wsize, typename F>
+struct decoder<validate, short_string_field<wsize, F>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static short_string_field<wsize,F> r(
-      std::size_t size, void const* buffer, std::size_t offset) {
-    jb::itch5::check_offset<validate>(
-        "short_string_field<>", size, offset, wsize);
+  static short_string_field<wsize, F> r(std::size_t size, void const* buffer,
+                                        std::size_t offset) {
+    jb::itch5::check_offset<validate>("short_string_field<>", size, offset,
+                                      wsize);
 
-    short_string_field<wsize,F> tmp;
+    short_string_field<wsize, F> tmp;
     tmp.assign(static_cast<char const*>(buffer) + offset);
-    if (validate) { tmp.validate(); }
+    if (validate) {
+      tmp.validate();
+    }
     return tmp;
   }
 };
 
-
 /// Streaming operator for jb::itch5::short_string_field<>
-template<std::size_t size, typename F>
-std::ostream& operator<<(
-    std::ostream& os, short_string_field<size,F> const& x) {
+template <std::size_t size, typename F>
+std::ostream& operator<<(std::ostream& os,
+                         short_string_field<size, F> const& x) {
   return os << x.c_str();
 }
 
 /// Implement a hash function and integrate with boost::hash
-template<std::size_t size, typename F>
-std::size_t hash_value(short_string_field<size,F> const& x) {
+template <std::size_t size, typename F>
+std::size_t hash_value(short_string_field<size, F> const& x) {
   return boost::hash_range(x.c_str(), x.c_str() + size);
 }
 
