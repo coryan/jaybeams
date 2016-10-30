@@ -358,7 +358,12 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
       compute_inside::time_point(now), stock_t("CRAZY"),
       half_quote(price4_t(150000), 500), order_book::empty_offer());
 
+  // ... remember the previous timestamp because we will use it in a
+  // further check ...
+  auto previous = now;
+
   // ... a duplicate order id should result in no changes ...
+  now = tested.now();
   tested.handle_message(now, ++msgcnt, 0,
                         add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
@@ -367,7 +372,9 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
                                           700,
                                           stock_t("CRAZY"),
                                           price4_t(160000)});
+  // ... no *new* callback is expected, verify that the previous one
+  // is the only order there ...
   callback.check_called().with(
-      compute_inside::time_point(now), stock_t("CRAZY"),
+      compute_inside::time_point(previous), stock_t("CRAZY"),
       half_quote(price4_t(150000), 500), order_book::empty_offer());
 }
