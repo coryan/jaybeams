@@ -326,7 +326,6 @@ inline std::ostream& operator<<(std::ostream& os, config_object const& x) {
   NAME& operator=(NAME const& rhs) = default;                                  \
   NAME& operator=(NAME&& rhs) = default
 
-#include <jb/config_recurse.hpp>
 #include <jb/config_attribute.hpp>
 
 #endif // jb_config_object_hpp
