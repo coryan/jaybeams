@@ -269,7 +269,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
-	$(CXX) -Wl,--version >>$@; \
+	$(CXX) -Wl,--version >>$@ 2>&1; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
 
