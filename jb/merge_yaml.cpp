@@ -1,36 +1,32 @@
 #include <jb/merge_yaml.hpp>
 #include <jb/assert_throw.hpp>
 
-void jb::yaml::merge_node(
-    YAML::Node target, YAML::Node const& source) {
-  switch(source.Type()) {
-    case YAML::NodeType::Scalar:
-      target = source.Scalar();
-      break;
-    case YAML::NodeType::Map:
-      merge_map(target, source);
-      break;
-    case YAML::NodeType::Sequence:
-      merge_sequences(target, source);
-      break;
-    case YAML::NodeType::Null:
-      throw std::runtime_error(
-          "merge_node: Null source nodes not supported");
-    case YAML::NodeType::Undefined:
-      throw std::runtime_error(
-          "merge_node: Undefined source nodes not supported");
+void jb::yaml::merge_node(YAML::Node target, YAML::Node const& source) {
+  switch (source.Type()) {
+  case YAML::NodeType::Scalar:
+    target = source.Scalar();
+    break;
+  case YAML::NodeType::Map:
+    merge_map(target, source);
+    break;
+  case YAML::NodeType::Sequence:
+    merge_sequences(target, source);
+    break;
+  case YAML::NodeType::Null:
+    throw std::runtime_error("merge_node: Null source nodes not supported");
+  case YAML::NodeType::Undefined:
+    throw std::runtime_error(
+        "merge_node: Undefined source nodes not supported");
   }
 }
 
-void jb::yaml::merge_map(
-    YAML::Node target, YAML::Node const& source) {
+void jb::yaml::merge_map(YAML::Node target, YAML::Node const& source) {
   for (auto const& j : source) {
     merge_node(target[j.first.Scalar()], j.second);
   }
 }
 
-void jb::yaml::merge_sequences(
-    YAML::Node target, YAML::Node const& source) {
+void jb::yaml::merge_sequences(YAML::Node target, YAML::Node const& source) {
   for (std::size_t i = 0; i != source.size(); ++i) {
     if (i < target.size()) {
       merge_node(target[i], source[i]);
@@ -40,8 +36,7 @@ void jb::yaml::merge_sequences(
   }
 }
 
-void jb::yaml::merge(
-    class_overrides& by_class, YAML::Node node) {
+void jb::yaml::merge(class_overrides& by_class, YAML::Node node) {
   // Only Map nodes can override by-class values ...
   if (not node.IsMap()) {
     return;
@@ -75,4 +70,3 @@ jb::class_overrides jb::yaml::clone(class_overrides const& by_class) {
   }
   return tmp;
 }
-

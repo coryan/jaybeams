@@ -14,12 +14,12 @@ namespace jb {
  */
 template <typename T> struct stn_traits;
 
-#define STN_TRAITS(T,F) \
-template<> struct stn_traits<T> { \
-  static T stot(std::string const &s, std::size_t &end) { \
-    return (F)(s, &end); \
-  } \
-}
+#define STN_TRAITS(T, F)                                                       \
+  template <> struct stn_traits<T> {                                           \
+    static T stot(std::string const& s, std::size_t& end) {                    \
+      return (F)(s, &end);                                                     \
+    }                                                                          \
+  }
 
 STN_TRAITS(int, std::stoi);
 STN_TRAITS(unsigned long long, std::stoull);
@@ -34,8 +34,7 @@ STN_TRAITS(double, std::stod);
 /**
  * Generic string to number conversion with validation.
  */
-template<typename T>
-bool strtonum(std::string const& s, T& r) {
+template <typename T> bool strtonum(std::string const& s, T& r) {
   if (s.empty()) {
     return false;
   }
@@ -46,7 +45,7 @@ bool strtonum(std::string const& s, T& r) {
       return false;
     }
     r = tmp;
-  } catch(std::exception const&) {
+  } catch (std::exception const&) {
     return false;
   }
   return true;

@@ -8,15 +8,15 @@ namespace jb {
 
 /// Severity levels for JayBeams, based on syslog
 enum class severity_level {
-    trace,
-    debug,
-    info,
-    notice,
-    warning,
-    error,
-    critical,
-    alert,
-    fatal,
+  trace,
+  debug,
+  info,
+  notice,
+  warning,
+  error,
+  critical,
+  alert,
+  fatal,
 };
 
 /// Streaming for severity levels

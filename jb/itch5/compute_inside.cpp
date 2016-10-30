@@ -4,8 +4,8 @@
 jb::itch5::compute_inside::compute_inside(callback_type const& cb)
     : callback_(cb)
     , orders_()
-    , books_()
-{}
+    , books_() {
+}
 
 void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
@@ -17,18 +17,17 @@ void jb::itch5::compute_inside::handle_message(
   books_.emplace(msg.stock, order_book());
 }
 
-void jb::itch5::compute_inside::handle_message(
-    time_point recv_ts, long msgcnt, std::size_t msgoffset,
-    add_order_message const& msg) {
+void jb::itch5::compute_inside::handle_message(time_point recv_ts, long msgcnt,
+                                               std::size_t msgoffset,
+                                               add_order_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   auto r = handle_add_order(recv_ts, msgcnt, msgoffset, msg);
   if (std::get<0>(r)) {
     auto i = std::get<2>(r);
     // ... if there is a change at the inside send that to the
     // callback ...
-    callback_(
-        recv_ts, msg.header, msg.stock,
-        i->second.best_bid(), i->second.best_offer());
+    callback_(recv_ts, msg.header, msg.stock, i->second.best_bid(),
+              i->second.best_offer());
   }
 }
 
@@ -36,27 +35,24 @@ void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_executed_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(
-      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
-      msg.executed_shares, false);
+  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
+                msg.order_reference_number, msg.executed_shares, false);
 }
 
 void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_cancel_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(
-      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
-      msg.canceled_shares, false);
+  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
+                msg.order_reference_number, msg.canceled_shares, false);
 }
 
 void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_delete_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(
-      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
-      0, true);
+  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
+                msg.order_reference_number, 0, true);
 }
 
 void jb::itch5::compute_inside::handle_message(
@@ -66,9 +62,9 @@ void jb::itch5::compute_inside::handle_message(
   // First we treat the replace as a full cancel, but we do not want
   // to send an update because the operation is supposed to be atomic
   // ...
-  auto r = handle_reduce_no_update(
-      recv_ts, msgcnt, msgoffset, msg.header,
-      msg.original_order_reference_number, 0, true);
+  auto r =
+      handle_reduce_no_update(recv_ts, msgcnt, msgoffset, msg.header,
+                              msg.original_order_reference_number, 0, true);
   // ... the result contains a copy of the state of the order before
   // it was removed, use it to create the missing attributes of the
   // new order ...
@@ -76,37 +72,37 @@ void jb::itch5::compute_inside::handle_message(
   // ... handle the replacing order as a new order, but delay the
   // decision to update the callback ...
   auto a = handle_add_order(
-      recv_ts, msgcnt, msgoffset, add_order_message{
-        msg.header, msg.new_order_reference_number,
-        copy.buy_sell_indicator, msg.shares, copy.stock, msg.price} );
+      recv_ts, msgcnt, msgoffset,
+      add_order_message{msg.header, msg.new_order_reference_number,
+                        copy.buy_sell_indicator, msg.shares, copy.stock,
+                        msg.price});
 
   // ... finally we can decide if an update is needed ...
   if (std::get<0>(a) or std::get<0>(r)) {
     // ... if there is a change at the inside send that to the
     // callback ...
     auto i = std::get<2>(r);
-    callback_(
-        recv_ts, msg.header, copy.stock,
-        i->second.best_bid(), i->second.best_offer());
+    callback_(recv_ts, msg.header, copy.stock, i->second.best_bid(),
+              i->second.best_offer());
   }
 }
 
-void jb::itch5::compute_inside::handle_unknown(
-    time_point recv_ts, unknown_message const& msg) {
+void jb::itch5::compute_inside::handle_unknown(time_point recv_ts,
+                                               unknown_message const& msg) {
   char msgtype = *static_cast<char const*>(msg.buf());
-  JB_LOG(error) << "Unknown message type '" << msgtype << "'("
-                << int(msgtype) << ") in msgcnt=" << msg.count()
+  JB_LOG(error) << "Unknown message type '" << msgtype << "'(" << int(msgtype)
+                << ") in msgcnt=" << msg.count()
                 << ", msgoffset=" << msg.offset();
 }
 
 jb::itch5::compute_inside::update_result
-jb::itch5::compute_inside::handle_add_order(
-    time_point recv_ts, long msgcnt, std::size_t msgoffset,
-    add_order_message const& msg) {
+jb::itch5::compute_inside::handle_add_order(time_point recv_ts, long msgcnt,
+                                            std::size_t msgoffset,
+                                            add_order_message const& msg) {
   // First we need to insert the order into the list of active orders ...
   auto position = orders_.emplace(
-      msg.order_reference_number, order_data{
-        msg.stock, msg.buy_sell_indicator, msg.price, msg.shares});
+      msg.order_reference_number,
+      order_data{msg.stock, msg.buy_sell_indicator, msg.price, msg.shares});
   if (position.second == false) {
     // ... ooops, this should not happen, there is a problem with the
     // feed, log the problem and skip the message ...
@@ -114,10 +110,8 @@ jb::itch5::compute_inside::handle_add_order(
     JB_LOG(warning) << "duplicate order id=" << msg.order_reference_number
                     << " existing.symbol=" << data.stock
                     << ", existing.buy_sell_indicator="
-                    << data.buy_sell_indicator
-                    << ", existing.px=" << data.px
-                    << ", existing.qty=" << data.qty
-                    << ", msg=" << msg;
+                    << data.buy_sell_indicator << ", existing.px=" << data.px
+                    << ", existing.qty=" << data.qty << ", msg=" << msg;
     return std::make_tuple(false, order_data(), books_.end());
   }
   // ... okay, now that the order is inserted, let's make sure there
@@ -130,8 +124,8 @@ jb::itch5::compute_inside::handle_add_order(
   }
   // ... add the order to the book and determine if the inside changed
   // ...
-  bool changed_inside = i->second.handle_add_order(
-      msg.buy_sell_indicator, msg.price, msg.shares);
+  bool changed_inside =
+      i->second.handle_add_order(msg.buy_sell_indicator, msg.price, msg.shares);
   return std::make_tuple(changed_inside, position.first->second, i);
 }
 
@@ -139,17 +133,15 @@ void jb::itch5::compute_inside::handle_reduce(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     message_header const& header, std::uint64_t order_reference_number,
     std::uint32_t shares, bool all_shares) {
-  auto r = handle_reduce_no_update(
-      recv_ts, msgcnt, msgoffset, header, order_reference_number,
-      shares, all_shares);
+  auto r = handle_reduce_no_update(recv_ts, msgcnt, msgoffset, header,
+                                   order_reference_number, shares, all_shares);
   if (std::get<0>(r)) {
     auto const& copy = std::get<1>(r);
     auto i = std::get<2>(r);
     // ... if there is a change at the inside send that to the
     // callback ...
-    callback_(
-        recv_ts, header, copy.stock,
-        i->second.best_bid(), i->second.best_offer());
+    callback_(recv_ts, header, copy.stock, i->second.best_bid(),
+              i->second.best_offer());
   }
 }
 
@@ -192,7 +184,7 @@ jb::itch5::compute_inside::handle_reduce_no_update(
   }
 
   // ... finally we can handle the update ...
-  bool changed_inside = i->second.handle_order_reduced(
-      copy.buy_sell_indicator, copy.px, shares);
+  bool changed_inside =
+      i->second.handle_order_reduced(copy.buy_sell_indicator, copy.px, shares);
   return std::make_tuple(changed_inside, copy, i);
 }

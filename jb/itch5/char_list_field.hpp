@@ -18,13 +18,13 @@ namespace itch5 {
  * Many ITCH-5.0 fields are represented by a single byte on the wire,
  * and are only supposed to take a limited set of values.
  */
-template<int...V>
+template <int... V>
 class char_list_field
-    : public boost::less_than_comparable<char_list_field<V...>>
-    , public boost::less_than_comparable<char_list_field<V...>, int>
-    , public boost::equality_comparable<char_list_field<V...>>
-    , public boost::equality_comparable<char_list_field<V...>, int> {
- public:
+    : public boost::less_than_comparable<char_list_field<V...>>,
+      public boost::less_than_comparable<char_list_field<V...>, int>,
+      public boost::equality_comparable<char_list_field<V...>>,
+      public boost::equality_comparable<char_list_field<V...>, int> {
+public:
   /// Default constructor
   char_list_field()
       : value_() {
@@ -38,7 +38,7 @@ class char_list_field
    */
   explicit char_list_field(int x)
       : value_(x) {
-    char_list_validator<true,V...> validator;
+    char_list_validator<true, V...> validator;
     validator(value_);
   }
 
@@ -65,9 +65,9 @@ class char_list_field
   }
   //@}
 
- private:
-  friend struct decoder<true,char_list_field>;
-  friend struct decoder<false,char_list_field>;
+private:
+  friend struct decoder<true, char_list_field>;
+  friend struct decoder<false, char_list_field>;
 
   /// In-memory representation of the field (int).  Typically ints are
   /// more efficient (in CPU time) than 8-bits octet.
@@ -75,22 +75,22 @@ class char_list_field
 };
 
 /// Specialize decoder<bool,T> for char_list_field.
-template<bool validate, int...V>
-struct decoder<validate,char_list_field<V...>> {
+template <bool validate, int... V>
+struct decoder<validate, char_list_field<V...>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static char_list_field<V...> r(
-      std::size_t size, void const* buf, std::size_t offset) {
+  static char_list_field<V...> r(std::size_t size, void const* buf,
+                                 std::size_t offset) {
     char_list_field<V...> tmp;
-    tmp.value_ = decoder<false,std::uint8_t>::r(size, buf, offset);
+    tmp.value_ = decoder<false, std::uint8_t>::r(size, buf, offset);
 
-    char_list_validator<validate,V...> validator;
+    char_list_validator<validate, V...> validator;
     validator(tmp.as_int());
     return tmp;
   }
 };
 
 /// Streaming operator for jb::itch5::char_list_field<>
-template<int...V>
+template <int... V>
 std::ostream& operator<<(std::ostream& os, char_list_field<V...> const& x) {
   if (std::isprint(x.as_int())) {
     return os << static_cast<char>(x.as_int());

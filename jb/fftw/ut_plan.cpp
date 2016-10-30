@@ -7,9 +7,8 @@
 
 namespace {
 
-template<typename precision_t>
-void test_plan_complex2complex() {
-  int nsamples = 1<<15;
+template <typename precision_t> void test_plan_complex2complex() {
+  int nsamples = 1 << 15;
   int tol = nsamples;
 
   typedef jb::fftw::plan<precision_t> tested;
@@ -19,13 +18,13 @@ void test_plan_complex2complex() {
   std::vector<complex> in(nsamples);
   std::vector<complex> tmp(nsamples);
   std::vector<complex> out(nsamples);
-  
+
   std::size_t h = nsamples / 2;
   for (std::size_t i = 0; i != h; ++i) {
-    in[i] = complex(i - h/4.0, 0);
-    in[i + h] = complex(h/4.0 - i, 0);
+    in[i] = complex(i - h / 4.0, 0);
+    in[i + h] = complex(h / 4.0 - i, 0);
   }
-  
+
   tested dir = tested::create_forward(in, tmp);
   tested inv = tested::create_backward(tmp, out);
 
@@ -37,9 +36,8 @@ void test_plan_complex2complex() {
   jb::testing::check_vector_close_enough(out, in, tol);
 }
 
-template<typename precision_t>
-void test_plan_real2complex() {
-  int nsamples = 1<<15;
+template <typename precision_t> void test_plan_real2complex() {
+  int nsamples = 1 << 15;
   int tol = nsamples;
 
   typedef jb::fftw::plan<precision_t> tested;
@@ -49,13 +47,13 @@ void test_plan_real2complex() {
   std::vector<precision_t> in(nsamples);
   std::vector<complex> tmp(nsamples);
   std::vector<precision_t> out(nsamples);
-  
+
   std::size_t h = nsamples / 2;
   for (std::size_t i = 0; i != h; ++i) {
-    in[i] = i - h/4.0;
-    in[i + h] = h/4.0 - i;
+    in[i] = i - h / 4.0;
+    in[i + h] = h / 4.0 - i;
   }
-  
+
   tested dir = tested::create_forward(in, tmp);
   tested inv = tested::create_backward(tmp, out);
 
@@ -67,9 +65,8 @@ void test_plan_real2complex() {
   jb::testing::check_vector_close_enough(out, in, tol);
 }
 
-template<typename precision_t>
-void test_plan_errors() {
-  int nsamples = 1<<15;
+template <typename precision_t> void test_plan_errors() {
+  int nsamples = 1 << 15;
 
   typedef jb::fftw::plan<precision_t> tested;
   typedef typename tested::precision_type precision_type;
@@ -81,7 +78,7 @@ void test_plan_errors() {
 
   BOOST_CHECK_THROW(tested::create_forward(in, err), std::exception);
   BOOST_CHECK_THROW(tested::create_backward(in, err), std::exception);
-  
+
   tested dir = tested::create_forward(in, tmp);
   BOOST_CHECK_THROW(dir.execute(in, err), std::exception);
 }

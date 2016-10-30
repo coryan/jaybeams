@@ -22,4 +22,3 @@ typedef jb::itch5::short_string_field<4> mpid_t;
 } // namespace jb
 
 #endif // jb_itch5_mpid_field_hpp
-

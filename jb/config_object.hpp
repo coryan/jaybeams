@@ -28,7 +28,7 @@ struct config_recurse;
  * examples.
  */
 class config_object {
- public:
+public:
   // Forward declare the type
   struct attribute_descriptor;
 
@@ -93,9 +93,8 @@ class config_object {
    * @param environment_variable_name the name of the *_ROOT to use
    *   when searching for the configuration file.
    */
-  void load_overrides(
-      int& argc, char* argv[], std::string const & filename,
-      char const* environment_variable_name);
+  void load_overrides(int& argc, char* argv[], std::string const& filename,
+                      char const* environment_variable_name);
 
   /**
    * Read the configuration file and load the overrides defined
@@ -109,8 +108,7 @@ class config_object {
    * @param argv the command-line arguments
    * @param filename the basename of the file to load
    */
-  void load_overrides(
-      int& argc, char* argv[], std::string const & filename);
+  void load_overrides(int& argc, char* argv[], std::string const& filename);
 
   /**
    * Read the configuration file and load the overrides defined
@@ -124,8 +122,7 @@ class config_object {
    * @param argv the command-line arguments
    * @param is the stream to load the configuration from.
    */
-  void load_overrides(
-      int& argc, char* argv[], std::istream& is);
+  void load_overrides(int& argc, char* argv[], std::istream& is);
 
   /**
    * Process the command line.
@@ -182,32 +179,33 @@ class config_object {
    * attributes embedded in a config_object.
    */
   class attribute_base {
-   protected:
+  protected:
     /// Constructor
     attribute_base(attribute_descriptor const& d, config_object* container);
 
-    template<typename container_type>
+    template <typename container_type>
     attribute_base(container_type*)
         : descriptor_() {
     }
 
-   public:
+  public:
     /// Destructor
     virtual ~attribute_base() = 0;
 
     /// Apply any overrides set in the YAML document
-    virtual void apply_overrides(
-        YAML::Node const& by_name, class_overrides const& by_class) = 0;
+    virtual void apply_overrides(YAML::Node const& by_name,
+                                 class_overrides const& by_class) = 0;
 
     /// Apply the necessary command-line options to the descriptors.
-    virtual void add_options(
-        boost::program_options::options_description& options,
-        std::string const& prefix, attribute_descriptor const& d) const = 0;
+    virtual void
+    add_options(boost::program_options::options_description& options,
+                std::string const& prefix,
+                attribute_descriptor const& d) const = 0;
 
     /// Apply any overrides set in the command-line flags
-    virtual void apply_cmdline_values(
-        boost::program_options::variables_map const& vm,
-        std::string const& name) = 0;
+    virtual void
+    apply_cmdline_values(boost::program_options::variables_map const& vm,
+                         std::string const& name) = 0;
 
     /// Validate the attribute, mostly a no-op except for embedded
     /// config_objects
@@ -233,23 +231,23 @@ class config_object {
       return descriptor_.is_positional;
     }
 
-   private:
+  private:
     attribute_descriptor const descriptor_;
   };
 
- protected:
+protected:
   /// Convenience function to create attribute descriptors with less typing.
   static attribute_descriptor desc(std::string const& name) {
     return attribute_descriptor(name);
   }
 
   /// Convenience function to create attribute descriptors with less typing.
-  static attribute_descriptor desc(
-      std::string const& name, std::string const& class_name) {
+  static attribute_descriptor desc(std::string const& name,
+                                   std::string const& class_name) {
     return attribute_descriptor(name, class_name);
   }
 
- private:
+private:
   /**
    * Apply the overrides contained in the YAML document, compute the
    * initial by_class overrides.
@@ -266,8 +264,8 @@ class config_object {
    *   classes) to override.
    * @param by_class the set of per-class overrides to apply
    */
-  void apply_overrides(
-      YAML::Node const& by_name, class_overrides const& by_class);
+  void apply_overrides(YAML::Node const& by_name,
+                       class_overrides const& by_class);
 
   /**
    * Compute the full name of a command-line argument, given its
@@ -276,8 +274,8 @@ class config_object {
    * @param prefix the prefix for the argument
    * @param name the name of the argument
    */
-  static std::string cmdline_arg_name(
-      std::string const& prefix, std::string const& name);
+  static std::string cmdline_arg_name(std::string const& prefix,
+                                      std::string const& name);
 
   friend class generic_config_attribute;
   void auto_register(attribute_base* a);
@@ -292,21 +290,20 @@ class config_object {
   /**
    * Add the attributes of this config_object as command-line options.
    */
-  void add_options(
-      boost::program_options::options_description& options,
-      std::string const& prefix, attribute_descriptor const& d) const;
+  void add_options(boost::program_options::options_description& options,
+                   std::string const& prefix,
+                   attribute_descriptor const& d) const;
 
   /**
    * Apply the values from the cmdline to this configuration object.
    */
-  void apply_cmdline_values(
-      boost::program_options::variables_map const& vm,
-      std::string const& prefix);
+  void apply_cmdline_values(boost::program_options::variables_map const& vm,
+                            std::string const& prefix);
 
   /// Print out the configuration settings in YAML format
   YAML::Node to_yaml() const;
 
- private:
+private:
   /// The list of attributes.
   std::vector<attribute_base*> attributes_;
 };
@@ -317,10 +314,16 @@ inline std::ostream& operator<<(std::ostream& os, config_object const& x) {
 
 } // namespace jb
 
-#define config_object_constructors(NAME)                   \
-  NAME(NAME&& rhs) : NAME() { operator=(std::move(rhs)); } \
-  NAME(NAME const& rhs) : NAME() { operator=(rhs); }       \
-  NAME& operator=(NAME const& rhs) = default;              \
+#define config_object_constructors(NAME)                                       \
+  NAME(NAME&& rhs)                                                             \
+      : NAME() {                                                               \
+    operator=(std::move(rhs));                                                 \
+  }                                                                            \
+  NAME(NAME const& rhs)                                                        \
+      : NAME() {                                                               \
+    operator=(rhs);                                                            \
+  }                                                                            \
+  NAME& operator=(NAME const& rhs) = default;                                  \
   NAME& operator=(NAME&& rhs) = default
 
 #include <jb/config_recurse.hpp>

@@ -38,7 +38,7 @@ namespace jb {
  * std::chono::duration<>.
  */
 class offline_feed_statistics {
- public:
+public:
   class config;
 
   /// Constructor
@@ -57,12 +57,11 @@ class offline_feed_statistics {
    * for timestamps vs. time points.
    * @param processing_latency the time it took to process the event.
    */
-  template<typename event_timestamp_t, typename duration_t>
+  template <typename event_timestamp_t, typename duration_t>
   void sample(event_timestamp_t ts, duration_t processing_latency) {
     using namespace std::chrono;
-    record_sample(
-        duration_cast<nanoseconds>(ts),
-        duration_cast<nanoseconds>(processing_latency));
+    record_sample(duration_cast<nanoseconds>(ts),
+                  duration_cast<nanoseconds>(processing_latency));
   }
 
   /**
@@ -112,13 +111,13 @@ class offline_feed_statistics {
    */
   void print_csv(std::string const& name, std::ostream& os) const;
 
- private:
-  void record_sample(
-      std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
+private:
+  void record_sample(std::chrono::nanoseconds ts,
+                     std::chrono::nanoseconds processing_latency);
 
- private:
-  typedef event_rate_histogram<
-   std::chrono::nanoseconds, std::int64_t> rate_histogram;
+private:
+  typedef event_rate_histogram<std::chrono::nanoseconds, std::int64_t>
+      rate_histogram;
   rate_histogram per_sec_rate_;
   rate_histogram per_msec_rate_;
   rate_histogram per_usec_rate_;
@@ -139,19 +138,19 @@ class offline_feed_statistics {
  * Configure an offline_feed_statistics object
  */
 class offline_feed_statistics::config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
   /// Validate the configuration
   void validate() const override;
 
-  jb::config_attribute<config,int> max_messages_per_second;
-  jb::config_attribute<config,int> max_messages_per_millisecond;
-  jb::config_attribute<config,int> max_messages_per_microsecond;
-  jb::config_attribute<config,std::int64_t> max_interarrival_time_nanoseconds;
-  jb::config_attribute<config,int> max_processing_latency_nanoseconds;
-  jb::config_attribute<config,int> reporting_interval_seconds;
+  jb::config_attribute<config, int> max_messages_per_second;
+  jb::config_attribute<config, int> max_messages_per_millisecond;
+  jb::config_attribute<config, int> max_messages_per_microsecond;
+  jb::config_attribute<config, std::int64_t> max_interarrival_time_nanoseconds;
+  jb::config_attribute<config, int> max_processing_latency_nanoseconds;
+  jb::config_attribute<config, int> reporting_interval_seconds;
 };
 
 } // namespace jb

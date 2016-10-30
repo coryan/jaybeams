@@ -6,8 +6,7 @@
 
 namespace {
 
-template<typename value_type>
-void check_create_square() {
+template <typename value_type> void check_create_square() {
   std::vector<value_type> ts;
   jb::testing::create_square_timeseries(1024, ts);
   value_type sum = 0;

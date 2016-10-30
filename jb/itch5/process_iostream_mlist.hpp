@@ -24,13 +24,13 @@ namespace itch5 {
  * Please see @ref jb::itch5::message_handler_concept for a detailed
  * description of the message_handler requirements.
  */
-template<typename message_handler, typename... message_types>
+template <typename message_handler, typename... message_types>
 void process_iostream_mlist(std::istream& is, message_handler& handler) {
   std::size_t msgoffset = 0;
   for (std::uint64_t msgcnt = 0; is.good(); ++msgcnt) {
     // We only use the side-effects of this call, particularly during
     // testing.
-    (void) handler.now();
+    (void)handler.now();
     char blen[2];
     is.read(blen, 2);
     if (not is) {
@@ -42,13 +42,12 @@ void process_iostream_mlist(std::istream& is, message_handler& handler) {
     }
     msgoffset += 2;
 
-    constexpr std::size_t maxmsglen = 1L<<16;
-    std::size_t msglen = jb::itch5::decoder<true,std::uint16_t>::r(
-        2, blen, 0);
+    constexpr std::size_t maxmsglen = 1L << 16;
+    std::size_t msglen = jb::itch5::decoder<true, std::uint16_t>::r(2, blen, 0);
     char msgbuf[maxmsglen];
     is.read(msgbuf, msglen);
     auto recv_ts = handler.now();
-    process_buffer_mlist<message_handler,message_types...>::process(
+    process_buffer_mlist<message_handler, message_types...>::process(
         handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
     msgoffset += msglen;
   }

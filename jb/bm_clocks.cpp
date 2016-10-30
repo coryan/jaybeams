@@ -14,8 +14,9 @@ namespace {
  * Base class for the std::chrono clock wrapper.
  */
 class wrapped_clock_base {
- public:
-  virtual ~wrapped_clock_base() {}
+public:
+  virtual ~wrapped_clock_base() {
+  }
 
   virtual void run() const = 0;
 };
@@ -24,13 +25,13 @@ class wrapped_clock_base {
  * The fixture tested by the microbenchmark.
  */
 class fixture {
- public:
+public:
   fixture(std::string const& clock_name);
   fixture(int size, std::string const& clock_name);
 
   void run();
 
- private:
+private:
   std::unique_ptr<wrapped_clock_base> wrapped_clock_;
 };
 
@@ -40,8 +41,7 @@ typedef jb::testing::microbenchmark<fixture> benchmark;
 
 int main(int argc, char* argv[]) try {
   jb::testing::microbenchmark_config cfg;
-  cfg.test_case("std::chrono::steady_clock")
-      .process_cmdline(argc, argv);
+  cfg.test_case("std::chrono::steady_clock").process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
 
@@ -55,17 +55,16 @@ int main(int argc, char* argv[]) try {
   }
 
   return 0;
-} catch(jb::usage const& ex) {
+} catch (jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
   return 1;
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-
 
 namespace {
 /**
@@ -85,12 +84,11 @@ int clock_repetitions = JB_DEFAULTS_clock_repetitions;
 /**
  * Wrap a std::chrono class in a polymorphic class.
  */
-template<typename clock>
-class wrapped_clock : public wrapped_clock_base {
- public:
+template <typename clock> class wrapped_clock : public wrapped_clock_base {
+public:
   wrapped_clock(int calls_per_iteration)
-      : calls_per_iteration_(calls_per_iteration)
-  {}
+      : calls_per_iteration_(calls_per_iteration) {
+  }
 
   virtual void run() const override {
     for (int i = 0; i != calls_per_iteration_; ++i) {
@@ -98,36 +96,36 @@ class wrapped_clock : public wrapped_clock_base {
     }
   }
 
- private:
+private:
   int calls_per_iteration_;
 };
 
 static std::uint64_t read_rdtscp() {
   std::uint64_t hi, lo;
   std::uint32_t aux;
-  __asm__ __volatile__("rdtscp\n" : "=a"(lo), "=d"(hi), "=c" (aux) : : );
+  __asm__ __volatile__("rdtscp\n" : "=a"(lo), "=d"(hi), "=c"(aux) : :);
   return (hi << 32) + lo;
 }
 
 class wrapped_rdtscp : public wrapped_clock_base {
- public:
+public:
   wrapped_rdtscp(int calls_per_iteration)
-      : calls_per_iteration_(calls_per_iteration)
-  {}
+      : calls_per_iteration_(calls_per_iteration) {
+  }
 
   virtual void run() const override {
     for (int i = 0; i != calls_per_iteration_; ++i) {
-      (void) read_rdtscp();
+      (void)read_rdtscp();
     }
   }
 
- private:
+private:
   int calls_per_iteration_;
 };
 
 fixture::fixture(std::string const& clock_name)
-    : fixture(defaults::clock_repetitions, clock_name)
-{}
+    : fixture(defaults::clock_repetitions, clock_name) {
+}
 
 fixture::fixture(int size, std::string const& clock_name) {
   using namespace std::chrono;

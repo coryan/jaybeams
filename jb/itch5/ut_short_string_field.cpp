@@ -14,26 +14,25 @@ BOOST_AUTO_TEST_CASE(decode_short_string_field) {
   {
     std::memset(buffer, 0, sizeof(buffer));
     std::memcpy(buffer, "AB  ", 4);
-    auto actual = decoder<true,tested>::r(16, buffer, 0);
+    auto actual = decoder<true, tested>::r(16, buffer, 0);
     BOOST_CHECK_EQUAL(actual.c_str(), "AB");
 
-    actual = decoder<false,tested>::r(16, buffer, 0);
+    actual = decoder<false, tested>::r(16, buffer, 0);
     BOOST_CHECK_EQUAL(actual.c_str(), "AB");
 
-    BOOST_CHECK_NO_THROW((decoder<true,tested>::r(16, buffer, 2)));
-    BOOST_CHECK_THROW(
-        (decoder<true,tested>::r(16, buffer, 13)), std::runtime_error);
-    BOOST_CHECK_NO_THROW(
-        (decoder<false,tested>::r(16, buffer, 13)));
+    BOOST_CHECK_NO_THROW((decoder<true, tested>::r(16, buffer, 2)));
+    BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 13)),
+                      std::runtime_error);
+    BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 13)));
   }
 
   {
     std::memset(buffer, 0, sizeof(buffer));
     std::memcpy(buffer, "ABCD", 4);
-    auto actual = decoder<true,tested>::r(16, buffer, 0);
+    auto actual = decoder<true, tested>::r(16, buffer, 0);
     BOOST_CHECK_EQUAL(actual.c_str(), "ABCD");
 
-    actual = decoder<false,tested>::r(16, buffer, 0);
+    actual = decoder<false, tested>::r(16, buffer, 0);
     BOOST_CHECK_EQUAL(actual.c_str(), "ABCD");
   }
 }
@@ -50,22 +49,20 @@ BOOST_AUTO_TEST_CASE(validate_short_string_field) {
   };
 
   using namespace jb::itch5;
-  typedef short_string_field<4,simple_validator> tested;
+  typedef short_string_field<4, simple_validator> tested;
 
   char buffer[32];
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "ABCD", 4);
-  auto actual = decoder<true,tested>::r(16, buffer, 0);
+  auto actual = decoder<true, tested>::r(16, buffer, 0);
   BOOST_CHECK_EQUAL(actual.c_str(), "ABCD");
 
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "ABC", 4);
-  BOOST_CHECK_THROW(
-      (decoder<true,tested>::r(16, buffer, 0)), std::runtime_error);
-  BOOST_CHECK_NO_THROW(
-      (decoder<false,tested>::r(16, buffer, 0)));
+  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 0)),
+                    std::runtime_error);
+  BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 0)));
 }
-
 
 /**
  * @test Verify that jb::itch5::short_string_field iostream operator
@@ -79,7 +76,7 @@ BOOST_AUTO_TEST_CASE(stream_short_string_field) {
   {
     std::memset(buffer, 0, sizeof(buffer));
     std::memcpy(buffer, "AB  ", 4);
-    auto actual = decoder<true,tested>::r(16, buffer, 0);
+    auto actual = decoder<true, tested>::r(16, buffer, 0);
 
     std::ostringstream os;
     os << actual;
@@ -89,7 +86,7 @@ BOOST_AUTO_TEST_CASE(stream_short_string_field) {
   {
     std::memset(buffer, 0, sizeof(buffer));
     std::memcpy(buffer, "ABCD", 4);
-    auto actual = decoder<true,tested>::r(16, buffer, 0);
+    auto actual = decoder<true, tested>::r(16, buffer, 0);
 
     std::ostringstream os;
     os << actual;

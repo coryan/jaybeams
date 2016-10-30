@@ -12,6 +12,8 @@ else
     exit 0
 fi
 
+echo "This script may prompt you for your sudo password to connect to the docker daemon"
+
 dockerfile=$1
 if [ -d $dockerfile -a -f $dockerfile/Dockerfile ]; then
     dockerfile=$dockerfile/Dockerfile
@@ -22,8 +24,20 @@ if [ ! -r $dockerfile -o ! -f $dockerfile ]; then
     exit 1
 fi
 
+if [ "x$USER" = "x" ]; then
+    USER=$(whoami)
+fi
 
-image=$((cat $dockerfile; cat <<__EOF__
+if [ "x$UID" = "x" ]; then
+    UID=$(id -u)
+fi
+
+if [ "x$USER" = "x" -o "x$UID" = "x" ]; then
+    echo "USER or UID not set, script needs fixing for your platform"
+    exit 1
+fi
+
+image=$( (cat $dockerfile; cat <<__EOF__
 ARG user
 ARG uid
 
@@ -34,10 +48,10 @@ VOLUME /home/\$user/jaybeams
 USER \$user
 WORKDIR /home/\$user/jaybeams
 __EOF__
-) | docker build -q --build-arg user=$USER --build-arg uid=$UID -)
+) | sudo docker build -q --build-arg user=$USER --build-arg uid=$UID -)
 
 echo "Created image $image, running it"
 
-docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
+sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
 
 

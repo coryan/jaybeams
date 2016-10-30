@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) try {
 
   // ... and then create a delayed version of the same step function ...
   for (int i = 0; i < delay; ++i) {
-    b[i] = a.at(size - size/8 + i);
+    b[i] = a.at(size - size / 8 + i);
   }
   for (int i = delay; i < size; ++i) {
     b[i] = a[i - delay];
@@ -49,10 +49,10 @@ int main(int argc, char* argv[]) try {
   // ... create a vector to stored FFT^1(prod) ...
   std::vector<std::complex<double>> correlation(a.size());
   // ... plan the inverse FFT ...
-  fftw_plan inv = fftw_plan_dft_1d(
-      a.size(), reinterpret_cast<fftw_complex*>(&prod[0]),
-      reinterpret_cast<fftw_complex*>(&correlation[0]), FFTW_BACKWARD,
-      FFTW_ESTIMATE);
+  fftw_plan inv =
+      fftw_plan_dft_1d(a.size(), reinterpret_cast<fftw_complex*>(&prod[0]),
+                       reinterpret_cast<fftw_complex*>(&correlation[0]),
+                       FFTW_BACKWARD, FFTW_ESTIMATE);
 
   auto start = std::chrono::steady_clock::now();
   // Compute FFT(a) and FFT(b) ...
@@ -82,17 +82,17 @@ int main(int argc, char* argv[]) try {
 
   // ... produce some output, the timing should not be taken too
   // seriously ...
-  auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
-      end - start);
-  std::cout << "delay=" << delay << ", argmax=" << argmax
-            << ", max=" << max << std::endl
+  auto elapsed =
+      std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+  std::cout << "delay=" << delay << ", argmax=" << argmax << ", max=" << max
+            << std::endl
             << "elapsed=" << elapsed.count() << std::endl;
 
   return 0;
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }

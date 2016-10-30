@@ -11,14 +11,15 @@
 namespace {
 
 class mock_message_handler {
- public:
-  mock_message_handler() {}
+public:
+  mock_message_handler() {
+  }
 
   typedef int time_point;
 
   skye::mock_function<int()> now;
-  skye::mock_function<
-    void(int const&, jb::itch5::unknown_message const&)> handle_unknown;
+  skye::mock_function<void(int const&, jb::itch5::unknown_message const&)>
+      handle_unknown;
 
   skye::mock_template_function<void> handle_message;
 };
@@ -34,10 +35,8 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_empty) {
   auto p = jb::itch5::testing::system_event();
   jb::itch5::process_buffer_mlist<mock_message_handler>::process(
       handler, 42, 2, 100, p.first, p.second);
-  handler.handle_unknown.require_called()
-      .once();
-  BOOST_CHECK_EQUAL(
-      std::get<0>(handler.handle_unknown.at(0)), 42);
+  handler.handle_unknown.require_called().once();
+  BOOST_CHECK_EQUAL(std::get<0>(handler.handle_unknown.at(0)), 42);
 }
 
 /**
@@ -50,24 +49,22 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_single) {
   {
     auto p = jb::itch5::testing::system_event();
     jb::itch5::process_buffer_mlist<
-      mock_message_handler, jb::itch5::system_event_message>::process(
-          handler, 42, 2, 100, p.first, p.second);
+        mock_message_handler,
+        jb::itch5::system_event_message>::process(handler, 42, 2, 100, p.first,
+                                                  p.second);
   }
-  handler.handle_message.require_called()
-      .once();
+  handler.handle_message.require_called().once();
 
   {
     auto p = jb::itch5::testing::stock_directory();
     jb::itch5::process_buffer_mlist<
-      mock_message_handler, jb::itch5::system_event_message>::process(
-          handler, 4242, 3, 200, p.first, p.second);
+        mock_message_handler,
+        jb::itch5::system_event_message>::process(handler, 4242, 3, 200,
+                                                  p.first, p.second);
   }
-  handler.handle_message.check_called()
-      .once();
-  handler.handle_unknown.require_called()
-      .once();
-  BOOST_CHECK_EQUAL(
-      std::get<0>(handler.handle_unknown.at(0)), 4242);
+  handler.handle_message.check_called().once();
+  handler.handle_unknown.require_called().once();
+  BOOST_CHECK_EQUAL(std::get<0>(handler.handle_unknown.at(0)), 4242);
 }
 
 /**
@@ -78,25 +75,20 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_3) {
   mock_message_handler handler;
 
   typedef jb::itch5::process_buffer_mlist<
-    mock_message_handler, jb::itch5::system_event_message,
-    jb::itch5::stock_directory_message, jb::itch5::add_order_message
-    > tested;
+      mock_message_handler, jb::itch5::system_event_message,
+      jb::itch5::stock_directory_message, jb::itch5::add_order_message> tested;
 
   {
     auto p = jb::itch5::testing::system_event();
-    tested::process(
-          handler, 42, 2, 100, p.first, p.second);
+    tested::process(handler, 42, 2, 100, p.first, p.second);
   }
   {
     auto p = jb::itch5::testing::stock_directory();
-    tested::process(
-          handler, 43, 3, 120, p.first, p.second);
+    tested::process(handler, 43, 3, 120, p.first, p.second);
   }
   {
     auto p = jb::itch5::testing::add_order();
-    tested::process(
-          handler, 44, 4, 140, p.first, p.second);
+    tested::process(handler, 44, 4, 140, p.first, p.second);
   }
-  handler.handle_message.require_called()
-      .exactly( 3 );
+  handler.handle_message.require_called().exactly(3);
 }

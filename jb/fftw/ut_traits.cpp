@@ -6,8 +6,7 @@
 
 namespace {
 
-template<typename precision_t>
-void test_fftw_traits() {
+template <typename precision_t> void test_fftw_traits() {
   int nsamples = 32768;
   int tol = nsamples;
   typedef jb::fftw::traits<precision_t> tested;
@@ -22,9 +21,9 @@ void test_fftw_traits() {
 
   std::size_t h = nsamples / 2;
   for (std::size_t i = 0; i != h; ++i) {
-    in[i][0] = i - h/4.0;
+    in[i][0] = i - h / 4.0;
     in[i][1] = 0;
-    in[i + h][0] = h/4.0 - i;
+    in[i + h][0] = h / 4.0 - i;
     in[i + h][1] = 0;
   }
 

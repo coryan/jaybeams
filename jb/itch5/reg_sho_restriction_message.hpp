@@ -26,25 +26,21 @@ struct reg_sho_restriction_message {
 };
 
 /// Specialize decoder for a jb::itch5::reg_sho_restriction_message
-template<bool V>
-struct decoder<V,reg_sho_restriction_message> {
+template <bool V> struct decoder<V, reg_sho_restriction_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static reg_sho_restriction_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static reg_sho_restriction_message r(std::size_t size, void const* buf,
+                                       std::size_t off) {
     reg_sho_restriction_message x;
-    x.header =
-        decoder<V,message_header>   ::r(size, buf, off + 0);
-    x.stock =
-        decoder<V,stock_t>          ::r(size, buf, off + 11);
-    x.reg_sho_action =
-        decoder<V,reg_sho_action_t> ::r(size, buf, off + 19);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
+    x.stock = decoder<V, stock_t>::r(size, buf, off + 11);
+    x.reg_sho_action = decoder<V, reg_sho_action_t>::r(size, buf, off + 19);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::reg_sho_restriction_message.
-std::ostream& operator<<(
-    std::ostream& os, reg_sho_restriction_message const& x);
+std::ostream& operator<<(std::ostream& os,
+                         reg_sho_restriction_message const& x);
 
 } // namespace itch5
 } // namespace jb

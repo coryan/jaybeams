@@ -6,8 +6,7 @@
 
 namespace {
 
-template<typename value_type>
-void check_create_triangle() {
+template <typename value_type> void check_create_triangle() {
   std::vector<value_type> ts;
   jb::testing::create_triangle_timeseries(1024, ts);
   value_type sum = 0;

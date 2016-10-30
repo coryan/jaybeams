@@ -11,8 +11,7 @@ namespace fs = boost::filesystem;
  * Mocks and helper types used in the jb::config_files_location tests.
  */
 namespace {
-template<typename Functor>
-struct shared_functor {
+template <typename Functor> struct shared_functor {
   shared_functor()
       : functor_(new Functor) {
   }
@@ -21,7 +20,7 @@ struct shared_functor {
     return functor_.get();
   }
 
-  template<typename... T>
+  template <typename... T>
   auto operator()(T&&... a) -> decltype(Functor()(std::forward<T>(a)...)) {
     return (*functor_)(std::forward<T>(a)...);
   }
@@ -30,26 +29,25 @@ struct shared_functor {
 };
 
 /// Mock implementation for getenv()
-typedef shared_functor<
-  skye::mock_function<char const*(char const*)>> mock_getenv;
+typedef shared_functor<skye::mock_function<char const*(char const*)>>
+    mock_getenv;
 
 /// Mock implementation for the validator()
-typedef shared_functor<
-  skye::mock_function<bool(fs::path const&)>> mock_validator;
-
+typedef shared_functor<skye::mock_function<bool(fs::path const&)>>
+    mock_validator;
 
 /// A convenience predicate to feed into whenp()
 struct s_eq {
-  s_eq(char const * s)
-      : match(s)
-  {}
-  bool operator()(char const * t) const {
+  s_eq(char const* s)
+      : match(s) {
+  }
+  bool operator()(char const* t) const {
     return match == t;
   }
   std::string match;
 };
 
-typedef jb::config_files_locations<mock_getenv,mock_validator> mocked;
+typedef jb::config_files_locations<mock_getenv, mock_validator> mocked;
 
 struct trivial_getenv {
   char const* operator()(char const*) {
@@ -63,7 +61,7 @@ struct trivial_validator {
   }
 };
 
-typedef jb::config_files_locations<trivial_getenv,trivial_validator> trivial;
+typedef jb::config_files_locations<trivial_getenv, trivial_validator> trivial;
 } // anonymous namespace
 
 /**
@@ -105,22 +103,19 @@ BOOST_AUTO_TEST_CASE(config_files_location_program_root) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns("/test/path");
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
+  validator->returns(true);
 
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({
-      "/test/path" / etc, "/install/path" / etc,
-      jb::sysconfdir(), programdir });
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
+  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
+                                  jb::sysconfdir(), programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -132,20 +127,18 @@ BOOST_AUTO_TEST_CASE(config_files_location_no_program_root) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns("/test/path");
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
+  validator->returns(true);
 
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", getenv);
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({
-      "/install/path" / etc, jb::sysconfdir(), programdir });
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
+  std::vector<fs::path> expected(
+      {"/install/path" / etc, jb::sysconfdir(), programdir});
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -157,21 +150,19 @@ BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_test_root) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns( nullptr );
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns(nullptr);
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
+  validator->returns(true);
 
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({
-      "/install/path" / etc, jb::sysconfdir(), programdir });
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
+  std::vector<fs::path> expected(
+      {"/install/path" / etc, jb::sysconfdir(), programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -183,21 +174,19 @@ BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_system_root) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns( "/test/path" );
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( nullptr );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns(nullptr);
+  validator->returns(true);
 
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({
-      "/test/path" / etc, jb::sysconfdir(), programdir });
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
+  std::vector<fs::path> expected(
+      {"/test/path" / etc, jb::sysconfdir(), programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -208,9 +197,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_installed_binary) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns( "/test/path" );
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
+  validator->returns(true);
 
   fs::path etc = fs::path(jb::sysconfdir()).filename();
 
@@ -219,13 +208,12 @@ BOOST_AUTO_TEST_CASE(config_files_location_installed_binary) {
 
   mocked t(program, "TEST_ROOT", getenv);
 
-  std::vector<fs::path> expected({
-      "/test/path" / etc, "/install/path" / etc, jb::sysconfdir(), 
-      program.parent_path().parent_path() / etc });
+  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
+                                  jb::sysconfdir(),
+                                  program.parent_path().parent_path() / etc});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -237,19 +225,16 @@ BOOST_AUTO_TEST_CASE(config_files_location_no_program_path) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns("/test/path");
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
-  validator->returns( true );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
+  validator->returns(true);
 
   mocked t("program", getenv);
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({
-      "/install/path" / etc, jb::sysconfdir() });
-  BOOST_CHECK_EQUAL_COLLECTIONS(
-      t.search_path().begin(), t.search_path().end(),
-      expected.begin(), expected.end());
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
+  std::vector<fs::path> expected({"/install/path" / etc, jb::sysconfdir()});
+  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
+                                expected.begin(), expected.end());
 }
 
 /**
@@ -259,11 +244,10 @@ BOOST_AUTO_TEST_CASE(config_files_location_find) {
   mock_getenv getenv;
 
   getenv->clear();
-  getenv->whenp( s_eq("TEST_ROOT") ).returns( "/test/path" );
-  getenv->whenp( s_eq("JAYBEAMS_ROOT") ).returns( "/install/path" );
+  getenv->whenp(s_eq("TEST_ROOT")).returns("/test/path");
+  getenv->whenp(s_eq("JAYBEAMS_ROOT")).returns("/install/path");
 
-  fs::path etc =
-      fs::path(jb::sysconfdir()).filename();
+  fs::path etc = fs::path(jb::sysconfdir()).filename();
 
   fs::path install_path = fs::path("/install") / jb::bindir();
   fs::path program = install_path / "program";
@@ -274,16 +258,16 @@ BOOST_AUTO_TEST_CASE(config_files_location_find) {
   std::string filename = "test.yaml";
   mock_validator validator;
   validator->clear();
-  validator->returns( false );
+  validator->returns(false);
 
-  BOOST_CHECK_THROW(
-      t.find_configuration_file(filename, validator), std::runtime_error);
+  BOOST_CHECK_THROW(t.find_configuration_file(filename, validator),
+                    std::runtime_error);
 
   // ... then check that each path is checked in order ...
   int n = 0;
   for (auto path : t.search_path()) {
     int cnt = 0;
-    validator->action( [&cnt,n]() { return cnt++ >= n; } );
+    validator->action([&cnt, n]() { return cnt++ >= n; });
     auto full = path / filename;
     BOOST_CHECK_EQUAL(full, t.find_configuration_file(filename, validator));
     n++;

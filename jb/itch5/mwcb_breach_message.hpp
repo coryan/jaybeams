@@ -28,23 +28,19 @@ struct mwcb_breach_message {
 };
 
 /// Specialize decoder for a jb::itch5::mwcb_breach_message
-template<bool V>
-struct decoder<V,mwcb_breach_message> {
+template <bool V> struct decoder<V, mwcb_breach_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static mwcb_breach_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static mwcb_breach_message r(std::size_t size, void const* buf,
+                               std::size_t off) {
     mwcb_breach_message x;
-    x.header =
-        decoder<V,message_header>   ::r(size, buf, off + 0);
-    x.breached_level =
-        decoder<V,breached_level_t> ::r(size, buf, off + 11);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
+    x.breached_level = decoder<V, breached_level_t>::r(size, buf, off + 11);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::mwcb_breach_message.
-std::ostream& operator<<(
-    std::ostream& os, mwcb_breach_message const& x);
+std::ostream& operator<<(std::ostream& os, mwcb_breach_message const& x);
 
 } // namespace itch5
 } // namespace jb

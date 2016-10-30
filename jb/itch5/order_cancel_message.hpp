@@ -18,25 +18,21 @@ struct order_cancel_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_cancel_message
-template<bool V>
-struct decoder<V,order_cancel_message> {
+template <bool V> struct decoder<V, order_cancel_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_cancel_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static order_cancel_message r(std::size_t size, void const* buf,
+                                std::size_t off) {
     order_cancel_message x;
-    x.header =
-        decoder<V,message_header>       ::r(size, buf, off + 0);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.order_reference_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
-    x.canceled_shares =
-        decoder<V,std::uint32_t>        ::r(size, buf, off + 19);
+        decoder<V, std::uint64_t>::r(size, buf, off + 11);
+    x.canceled_shares = decoder<V, std::uint32_t>::r(size, buf, off + 19);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::order_cancel_message.
-std::ostream& operator<<(
-    std::ostream& os, order_cancel_message const& x);
+std::ostream& operator<<(std::ostream& os, order_cancel_message const& x);
 
 } // namespace itch5
 } // namespace jb

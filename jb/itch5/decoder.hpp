@@ -20,8 +20,7 @@ namespace itch5 {
  *
  * TODO(#19) all this code should be replaced with Boost.Endian.
  */
-template<bool validate, typename T>
-struct decoder {
+template <bool validate, typename T> struct decoder {
   /**
    * Read a single message or field.
    *

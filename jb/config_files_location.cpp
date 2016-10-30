@@ -57,7 +57,7 @@ char const* jb::default_getenv::operator()(char const* name) {
   return std::getenv(name);
 }
 
-bool jb::default_validator::operator()(fs::path const & dir) {
+bool jb::default_validator::operator()(fs::path const& dir) {
   return fs::exists(dir);
 }
 
@@ -65,10 +65,10 @@ bool jb::default_validator::operator()(fs::path const & dir) {
 // around in the code.
 
 #if !defined(JB_DEFAULT_SYSCONFDIR)
-#  define JB_DEFAULT_SYSCONFDIR "/etc"
+#define JB_DEFAULT_SYSCONFDIR "/etc"
 #endif // JB_DEFAULT_SYSCONFDIR
 #if !defined(JB_DEFAULT_BINDIR)
-#  define JB_DEFAULT_BINDIR "/usr/bin"
+#define JB_DEFAULT_BINDIR "/usr/bin"
 #endif // JB_DEFAULT_BINDIR
 
 char const* jb::sysconfdir() {

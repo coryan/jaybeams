@@ -25,14 +25,13 @@ struct system_event_message {
 };
 
 /// Specialize decoder for a jb::itch5::system_event_message
-template<bool validate>
-struct decoder<validate,system_event_message> {
+template <bool validate> struct decoder<validate, system_event_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static system_event_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static system_event_message r(std::size_t size, void const* buf,
+                                std::size_t off) {
     system_event_message x;
-    x.header     = decoder<validate,message_header>::r(size, buf, off + 0);
-    x.event_code = decoder<validate,event_code_t>  ::r(size, buf, off + 11);
+    x.header = decoder<validate, message_header>::r(size, buf, off + 0);
+    x.event_code = decoder<validate, event_code_t>::r(size, buf, off + 11);
     return x;
   }
 };

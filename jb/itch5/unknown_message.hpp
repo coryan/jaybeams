@@ -7,21 +7,18 @@ namespace jb {
 namespace itch5 {
 
 /**
- * A simple 
+ * A simple
  */
 class unknown_message {
- public:
+public:
   /// Constructor from message details
-  unknown_message(
-      std::uint32_t count,
-      std::size_t offset,
-      std::size_t len,
-      void const* buf)
+  unknown_message(std::uint32_t count, std::size_t offset, std::size_t len,
+                  void const* buf)
       : count_(count)
       , offset_(offset)
       , len_(len)
-      , buf_(buf)
-  {}
+      , buf_(buf) {
+  }
   unknown_message(unknown_message&&) = default;
 
   //@{
@@ -43,18 +40,17 @@ class unknown_message {
   //@}
 
   /// Extract the message header
-  template<bool validate>
-  message_header decode_header() const {
-    return decoder<validate,message_header>::r(
+  template <bool validate> message_header decode_header() const {
+    return decoder<validate, message_header>::r(
         len(), static_cast<char const*>(buf()), 0);
   }
 
- private:
+private:
   // Prohibit copy and assignment
   unknown_message(unknown_message const&) = delete;
   unknown_message& operator=(unknown_message const&) = delete;
 
- private:
+private:
   std::uint32_t count_;
   std::size_t offset_;
   std::size_t len_;

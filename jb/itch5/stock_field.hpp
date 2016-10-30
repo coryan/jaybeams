@@ -12,7 +12,7 @@ namespace itch5 {
  *
  * All the ITCH-5.0 messages that carry stock-specific information use
  * an 8-byte alpha field to represent the stock symbol.  Please see
- * @ref securities-vs-symbols for some commentary on NASDAQ's naming 
+ * @ref securities-vs-symbols for some commentary on NASDAQ's naming
  * conventions.
  */
 typedef jb::itch5::short_string_field<8> stock_t;
@@ -21,4 +21,3 @@ typedef jb::itch5::short_string_field<8> stock_t;
 } // namespace jb
 
 #endif // jb_itch5_stock_field_hpp
-

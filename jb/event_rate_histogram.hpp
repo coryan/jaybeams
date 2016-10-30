@@ -62,13 +62,11 @@ namespace jb {
  * @tparam rate_counter_type The type used in the event rate
  *   counters.  Similar tradeofss as @a counter_type.
  */
-template<
-  typename duration_type = std::chrono::microseconds,
-  typename counter_type = int,
-  typename rate_counter_type = int>
+template <typename duration_type = std::chrono::microseconds,
+          typename counter_type = int, typename rate_counter_type = int>
 class event_rate_histogram
     : private histogram<integer_range_binning<std::uint64_t>, counter_type> {
- public:
+public:
   //@{
   /**
    * @name Type traits.
@@ -87,10 +85,9 @@ class event_rate_histogram
    * @param measurement_period over what period we measure event rates.
    * @param sampling_period how often do we measure event rates.
    */
-  event_rate_histogram(
-      std::uint64_t max_expected_rate,
-      duration_type measurement_period,
-      duration_type sampling_period = duration_type(1))
+  event_rate_histogram(std::uint64_t max_expected_rate,
+                       duration_type measurement_period,
+                       duration_type sampling_period = duration_type(1))
       : rate_histogram(binning_strategy(0, max_expected_rate))
       , rate_(measurement_period, sampling_period) {
   }
@@ -98,8 +95,9 @@ class event_rate_histogram
   /// Record a new sample.
   void sample(duration_type ts) {
     rate_.sample(ts, [this](std::uint64_t rate, std::uint64_t repeats) {
-        this->last_rate_ = rate;
-        this->rate_histogram::weighted_sample(rate, repeats); });
+      this->last_rate_ = rate;
+      this->rate_histogram::weighted_sample(rate, repeats);
+    });
   }
 
   /// Get the last sample, if any.
@@ -123,7 +121,7 @@ class event_rate_histogram
   using rate_histogram::underflow_count;
   //@}
 
- private:
+private:
   event_rate_estimator<duration_type, rate_counter_type> rate_;
   std::uint64_t last_rate_;
 };

@@ -14,7 +14,7 @@ namespace itch5 {
  * ITCH-5.0 uses seconds since midnight for some of its fields.
  */
 class seconds_field {
- public:
+public:
   /// Constructor
   explicit seconds_field(int c = 0)
       : count_(c) {
@@ -38,7 +38,7 @@ class seconds_field {
   }
   //@}
 
- private:
+private:
   int count_;
 };
 
@@ -55,7 +55,7 @@ class seconds_field {
  * @throws std::runtime_error if @a tparam is true and the seconds_field
  * is out of the expected range.
  */
-template<bool validate>
+template <bool validate>
 void check_seconds_field_range(seconds_field const& t) {
 }
 
@@ -63,16 +63,14 @@ void check_seconds_field_range(seconds_field const& t) {
  * Provide an active implementation of
  * jb::itch5::check_seconds_field_range<>
  */
-template<>
-void check_seconds_field_range<true>(seconds_field const& t);
+template <> void check_seconds_field_range<true>(seconds_field const& t);
 
 /// Specialize jb::itch5::decoder<> for a seconds_field
-template<bool validate>
-struct decoder<validate,seconds_field> {
+template <bool validate> struct decoder<validate, seconds_field> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static seconds_field r(
-      std::size_t size, void const* buf, std::size_t offset) {
-    std::uint64_t ts = decoder<validate,std::uint32_t>::r(size, buf, offset);
+  static seconds_field r(std::size_t size, void const* buf,
+                         std::size_t offset) {
+    std::uint64_t ts = decoder<validate, std::uint32_t>::r(size, buf, offset);
     seconds_field tmp(ts);
     check_seconds_field_range<validate>(tmp);
 

@@ -29,11 +29,11 @@ namespace itch5 {
  * @tparam denom the denominator for this field, for example Price(4)
  *   would use denom==10000, while Price(8) would use 100000000.
  */
-template<typename wire_type_t, std::intmax_t denom_v>
+template <typename wire_type_t, std::intmax_t denom_v>
 class price_field
-    : public boost::equality_comparable<price_field<wire_type_t,denom_v>>
-    , public boost::less_than_comparable<price_field<wire_type_t,denom_v>> {
- public:
+    : public boost::equality_comparable<price_field<wire_type_t, denom_v>>,
+      public boost::less_than_comparable<price_field<wire_type_t, denom_v>> {
+public:
   /// The wire type
   typedef wire_type_t wire_type;
 
@@ -44,17 +44,19 @@ class price_field
   constexpr static int denom_digits = static_digits(denom);
 
   /// The minimum quotation tick for this price
-  typedef std::ratio<1,denom> tick;
+  typedef std::ratio<1, denom> tick;
 
   /// Default constructor
   price_field()
-      : value_() {}
+      : value_() {
+  }
 
   /// Constructor from a price
   explicit price_field(wire_type rhs)
-      : value_(rhs) {}
+      : value_(rhs) {
+  }
 
-  /// Assignment from 
+  /// Assignment from
   price_field& operator=(wire_type rhs) {
     value_ = rhs;
     return *this;
@@ -86,47 +88,45 @@ class price_field
   }
   //@}
 
- private:
+private:
   /// The value as an integer
   wire_type value_;
 };
 
 /// Specialize jb::itch5::decoder for jb::itch5::price_field
-template<bool validate, typename wire_type_t, std::intmax_t denom_v>
-struct decoder<validate,price_field<wire_type_t,denom_v>> {
+template <bool validate, typename wire_type_t, std::intmax_t denom_v>
+struct decoder<validate, price_field<wire_type_t, denom_v>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static price_field<wire_type_t,denom_v> r(
-      std::size_t size, void const* buf, std::size_t offset) {
-    price_field<wire_type_t,denom_v> tmp(
-        decoder<validate,wire_type_t>::r(size, buf, offset));
+  static price_field<wire_type_t, denom_v> r(std::size_t size, void const* buf,
+                                             std::size_t offset) {
+    price_field<wire_type_t, denom_v> tmp(
+        decoder<validate, wire_type_t>::r(size, buf, offset));
     return tmp;
   }
 };
 
 /// Streaming operator for jb::itch5::price_field<>
-template<typename wire_type_t, std::intmax_t denom_v>
-std::ostream& operator<<(
-    std::ostream& os, price_field<wire_type_t,denom_v> const& x) {
+template <typename wire_type_t, std::intmax_t denom_v>
+std::ostream& operator<<(std::ostream& os,
+                         price_field<wire_type_t, denom_v> const& x) {
   auto d = std::div(x.as_integer(), x.denom);
-  return os << d.quot << "."
-            << std::setw(x.denom_digits - 1) << std::setfill('0') << d.rem;
+  return os << d.quot << "." << std::setw(x.denom_digits - 1)
+            << std::setfill('0') << d.rem;
 }
 
 /// Convenience definition for Price(4) fields.
-typedef price_field<std::uint32_t,10000> price4_t;
+typedef price_field<std::uint32_t, 10000> price4_t;
 
 /// Convenience definition for Price(8) fields.
-typedef price_field<std::uint64_t,100000000> price8_t;
+typedef price_field<std::uint64_t, 100000000> price8_t;
 
-template<typename price_field>
-inline price_field max_price_field_value() {
+template <typename price_field> inline price_field max_price_field_value() {
   auto v = std::numeric_limits<typename price_field::wire_type>::max();
   v /= price_field::denom;
   return price_field(v * price_field::denom);
 }
 
-template<>
-inline price4_t max_price_field_value() {
+template <> inline price4_t max_price_field_value() {
   // Per the ITCH-5.0 spec, the maximum value is 200,000.0000
   return price4_t(std::uint32_t(200000) * std::uint32_t(price4_t::denom));
 }

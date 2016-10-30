@@ -25,33 +25,25 @@ struct trade_message {
 };
 
 /// Specialize decoder for a jb::itch5::trade_message
-template<bool V>
-struct decoder<V,trade_message> {
+template <bool V> struct decoder<V, trade_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static trade_message r(
-      std::size_t size, void const* buf, std::size_t off) {
+  static trade_message r(std::size_t size, void const* buf, std::size_t off) {
     trade_message x;
-    x.header =
-        decoder<V,message_header>       ::r(size, buf, off + 0);
+    x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.order_reference_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 11);
+        decoder<V, std::uint64_t>::r(size, buf, off + 11);
     x.buy_sell_indicator =
-        decoder<V,buy_sell_indicator_t> ::r(size, buf, off + 19);
-    x.shares =
-        decoder<V,std::uint32_t>        ::r(size, buf, off + 20);
-    x.stock =
-        decoder<V,stock_t>              ::r(size, buf, off + 24);
-    x.price =
-        decoder<V,price4_t>             ::r(size, buf, off + 32);
-    x.match_number =
-        decoder<V,std::uint64_t>        ::r(size, buf, off + 36);
+        decoder<V, buy_sell_indicator_t>::r(size, buf, off + 19);
+    x.shares = decoder<V, std::uint32_t>::r(size, buf, off + 20);
+    x.stock = decoder<V, stock_t>::r(size, buf, off + 24);
+    x.price = decoder<V, price4_t>::r(size, buf, off + 32);
+    x.match_number = decoder<V, std::uint64_t>::r(size, buf, off + 36);
     return x;
   }
 };
 
 /// Streaming operator for jb::itch5::trade_message.
-std::ostream& operator<<(
-    std::ostream& os, trade_message const& x);
+std::ostream& operator<<(std::ostream& os, trade_message const& x);
 
 } // namespace itch5
 } // namespace jb

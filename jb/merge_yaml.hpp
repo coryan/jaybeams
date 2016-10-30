@@ -14,7 +14,7 @@ namespace jb {
  * This type is used to (temporarily) store the by-class overrides in
  * a given context.
  */
-typedef std::map<std::string,YAML::Node> class_overrides;
+typedef std::map<std::string, YAML::Node> class_overrides;
 
 namespace yaml {
 
@@ -42,7 +42,7 @@ void merge_map(YAML::Node target, YAML::Node const& source);
  * extra values in @a target are unmodified.
  */
 void merge_sequences(YAML::Node target, YAML::Node const& source);
-  
+
 /**
  * Merge the class-overrides from @a source into @a by_class.
  *

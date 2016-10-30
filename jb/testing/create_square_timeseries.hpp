@@ -9,7 +9,7 @@ namespace testing {
 /**
  * Create a simple timeseries where the values look like a square.
  */
-template<typename timeseries>
+template <typename timeseries>
 void create_square_timeseries(int nsamples, timeseries& ts) {
   typedef typename timeseries::value_type value_type;
   ts.resize(nsamples);

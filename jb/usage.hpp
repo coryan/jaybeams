@@ -9,7 +9,7 @@ namespace jb {
  * A simple class to communicate the result of parsing the options.
  */
 class usage : public std::runtime_error {
- public:
+public:
   usage(std::string const& msg, int e)
       : std::runtime_error(msg)
       , exit_(e) {
@@ -22,7 +22,7 @@ class usage : public std::runtime_error {
     return exit_;
   }
 
- private:
+private:
   // The exit status for the program.
   int exit_;
 };
