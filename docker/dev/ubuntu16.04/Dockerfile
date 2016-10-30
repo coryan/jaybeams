@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y \
     xz-utils
 
 WORKDIR /var/tmp/install-autoconf-archive
-RUN wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.20.tar.xz		
-RUN tar -xf autoconf-archive-2016.03.20.tar.xz		
-RUN cd autoconf-archive-2016.03.20 && ./configure --prefix=/usr && make && make install
+RUN wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.09.16.tar.xz
+RUN tar -xf autoconf-archive-2016.09.16.tar.xz
+RUN cd autoconf-archive-2016.09.16 && ./configure --prefix=/usr && make && make install
 
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
