@@ -7,6 +7,10 @@
 #include <skye/mock_function.hpp>
 
 /**
+ * Helper types and functions to test jb::itch5::mold_udp_pacer
+ */
+namespace {
+/**
  * A simple class to mock a suitable sink for jb::itch5::mold_udp_pacer.
  */
 struct mock_sink {
@@ -25,6 +29,7 @@ struct mock_clock : public std::chrono::steady_clock {
 };
 
 skye::mock_function<mock_clock::time_point()> mock_clock::now;
+} // anonymous namespace
 
 /**
  * @test Verify that jb::itch5::mold_udp_pacer works as expected for a

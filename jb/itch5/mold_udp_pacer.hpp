@@ -79,6 +79,8 @@ public:
       , first_block_(0)
       , first_block_ts_{std::chrono::microseconds(0)}
       , block_count_(0) {
+    boost::asio::buffer_copy(
+        packet_, boost::asio::buffer(session_id.c_str(), session_id.wire_size));
   }
 
   /**
@@ -173,7 +175,7 @@ private:
     JB_ASSERT_THROW(msg.len() < (1 << 16));
     // ... make sure the message is small enough to fit in a single
     // MoldUDP64 packet given the current MTU ...
-    JB_ASSERT_THROW(msg.len() < mtu_ - mold_udp_protocol::header_size - 2);
+    JB_ASSERT_THROW(msg.len() + 2 < mtu_ - mold_udp_protocol::header_size);
 
     // ... if the packet is too full to accept the current message,
     // flush first ...
@@ -187,9 +189,9 @@ private:
     // ... append the message as a new block in the MoldUDP packet,
     // first update the block header ...
     boost::asio::mutable_buffer block_header = packet_ + packet_size_;
-    std::uint8_t* raw = boost::asio::buffer_cast<std::uint8_t*>(block_header);
-    raw[0] = msg.len() & 0xff;
-    raw[1] = (msg.len() & 0xff00) >> 8;
+    encoder<true, std::uint16_t>::w(
+        buffer_size(block_header),
+        boost::asio::buffer_cast<void*>(block_header), 0, msg.len());
     // ... the copy the message into the block payload ...
     boost::asio::mutable_buffer block_payload = packet_ + packet_size_ + 2;
     boost::asio::buffer_copy(block_payload,
