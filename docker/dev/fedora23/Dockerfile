@@ -10,13 +10,14 @@ RUN dnf update -y && dnf install -y \
     clang \
     doxygen \
     fftw-devel \
+    findutils \
     gcc-c++ \
     git \
     make \
     patch \
+    tar \
     wget \
     yaml-cpp-devel
-RUN dnf install -y tar
 
 WORKDIR /var/tmp
 RUN git clone --depth 2 https://github.com/coryan/jaybeams.git
@@ -30,4 +31,3 @@ RUN cd skye-0.3 && \
     CXX=g++ CC=gcc ./configure && \
     make check && \
     make install
-
