@@ -1,9 +1,24 @@
 #ifndef jb_config_recurse_hpp
 #define jb_config_recurse_hpp
+/**
+ * @file
+ *
+ * Breakout some of the helper classes from jb/config_object.hpp
+ *
+ * The definition of jb::config_object requires a number of helper
+ * classes and functions to recurse over compound configs
+ * (i.e. structs, vectors, pairs, etc.).  The code in
+ * jb/config_object.hpp was getting too long to keep in a single file,
+ * but these classes and the code in jb/config_attribute.hpp are also
+ * deeply inter-related so they could not be simply refactored out.
+ * This is a signal of poor design, and I welcome suggestions on how
+ * to improve it.  However, it works, and the user interface is really
+ * clean.
+ */
 
-#ifndef jb_config_object_hpp
-#error "This file should only be included from jb/config_object.hpp"
-#endif // !jb_config_object_hpp
+#ifndef jb_config_attribute_hpp
+#error "This file should only be included from jb/config_attribute.hpp"
+#endif // !jb_config_attribute_hpp
 
 #include <sstream>
 #include <type_traits>

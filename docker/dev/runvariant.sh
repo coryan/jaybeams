@@ -45,8 +45,6 @@ WORKDIR /root
 RUN useradd -m -u \$uid \$user
 VOLUME /home/\$user/jaybeams
 
-RUN (echo "\$user ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers.d/\$user) && chmod 440 /etc/sudoers.d/\$user
-
 USER \$user
 WORKDIR /home/\$user/jaybeams
 __EOF__

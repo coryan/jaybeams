@@ -1,10 +1,25 @@
 #ifndef jb_config_attribute_hpp
 #define jb_config_attribute_hpp
+/**
+ * @file
+ *
+ * Breakout some of the helper classes from jb/config_object.hpp
+ *
+ * The definition of jb::config_object requires a number of helper
+ * classes to define a configuration attribute (i.e. a member of a
+ * config object).  The code in jb/config_object.hpp was getting too
+ * long to keep in a single file, but these classes and the code in
+ * jb/config_recurse.hpp are also deeply inter-related so they could
+ * not be simply refactored out.  This is a signal of poor design, and
+ * I welcome suggestions on how to improve it.  However, it works, and
+ * the user interface is really clean.
+ */
 
 #ifndef jb_config_object_hpp
 #error "This file should only be included from jb/config_object.hpp"
 #endif // !jb_config_object_hpp
 
+#include <jb/config_recurse.hpp>
 #include <utility>
 
 namespace jb {
