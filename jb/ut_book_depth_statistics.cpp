@@ -2,10 +2,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-constexpr bool eqTypes() {
-  return std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value;
-}
-
 /**
  * @test Verify that jb::book_depth_statistics works as expected.
  */
@@ -19,8 +15,10 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_simple) {
   stats.sample(4);
   stats.sample(5);
 
-  BOOST_STATIC_ASSERT_MSG(
-      eqTypes(), "inconsistent types jb:: and jb::itch5:: book_depth_t");
+  static_assert(
+    std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value,
+    "Mismatched definition of "
+    "jb::itch5::book_depth_t and jb::book_depth_t");
 }
 
 /**
