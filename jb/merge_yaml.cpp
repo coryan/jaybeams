@@ -1,4 +1,5 @@
-#include <jb/merge_yaml.hpp>
+#include "jb/merge_yaml.hpp"
+
 #include <jb/assert_throw.hpp>
 
 void jb::yaml::merge_node(YAML::Node target, YAML::Node const& source) {

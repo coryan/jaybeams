@@ -1,4 +1,5 @@
-#include <jb/config_object.hpp>
+#include "jb/config_object.hpp"
+
 #include <jb/config_files_location.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>

@@ -1,4 +1,4 @@
-#include <jb/assert_throw.hpp>
+#include "jb/assert_throw.hpp"
 
 #include <sstream>
 #include <stdexcept>

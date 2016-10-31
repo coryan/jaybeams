@@ -1,4 +1,4 @@
-#include <jb/itch5/stock_directory_message.hpp>
+#include "jb/itch5/stock_directory_message.hpp"
 
 #include <iostream>
 #include <mutex>
