@@ -29,8 +29,8 @@ BOOST_AUTO_TEST_CASE(decode_seconds_field) {
   std::memset(buffer, 0, sizeof(buffer));
   BOOST_CHECK_NO_THROW((decoder<true, seconds_field>::r(16, buffer, 2)));
   BOOST_CHECK_NO_THROW((decoder<true, seconds_field>::r(16, buffer, 12)));
-  BOOST_CHECK_THROW((decoder<true, seconds_field>::r(16, buffer, 13)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, seconds_field>::r(16, buffer, 13)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, seconds_field>::r(16, buffer, 13)));
 }
 
@@ -46,8 +46,8 @@ BOOST_AUTO_TEST_CASE(decode_seconds_field_range) {
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "\x00\x01\x51\x80", 4); // 24:00:00
 
-  BOOST_CHECK_THROW((decoder<true, seconds_field>::r(16, buffer, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, seconds_field>::r(16, buffer, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, seconds_field>::r(16, buffer, 0)));
 }
 

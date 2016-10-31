@@ -31,17 +31,20 @@ struct timestamp {
  * @throws std::runtime_error if @a tparam is true and the timestamp
  * is out of the expected range.
  */
-template <bool validate> void check_timestamp_range(timestamp const& t) {
+template <bool validate>
+void check_timestamp_range(timestamp const& t) {
 }
 
 /**
  * Provide an active implementation of
  * jb::itch5::check_timestamp_range<>
  */
-template <> void check_timestamp_range<true>(timestamp const& t);
+template <>
+void check_timestamp_range<true>(timestamp const& t);
 
 /// Specialize jb::itch5::decoder<> for a timestamp
-template <bool validate> struct decoder<validate, timestamp> {
+template <bool validate>
+struct decoder<validate, timestamp> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static timestamp r(std::size_t size, void const* buf, std::size_t offset) {
     check_offset<validate>("timestamp", size, offset, 6);
@@ -55,7 +58,8 @@ template <bool validate> struct decoder<validate, timestamp> {
 };
 
 /// Specialize jb::itch5::encoder<> for a timestamp
-template <bool validate> struct encoder<validate, timestamp> {
+template <bool validate>
+struct encoder<validate, timestamp> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static void w(std::size_t size, void* buf, std::size_t offset, timestamp x) {
     check_offset<validate>("encoder<timestamp>", size, offset, 6);

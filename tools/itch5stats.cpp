@@ -1,7 +1,7 @@
 #include <jb/itch5/process_iostream.hpp>
-#include <jb/offline_feed_statistics.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
+#include <jb/offline_feed_statistics.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -36,15 +36,16 @@ public:
   }
 
   template <typename message_type>
-  void handle_message(time_point recv_ts, long msgcnt, std::size_t msgoffset,
-                      message_type const& msg) {
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      message_type const& msg) {
     JB_LOG(trace) << msgcnt << ":" << msgoffset << " " << msg;
     auto pl = now() - recv_ts;
     stats_.sample(msg.header.timestamp.ts, pl);
   }
 
-  void handle_unknown(time_point recv_ts,
-                      jb::itch5::unknown_message const& msg) {
+  void
+  handle_unknown(time_point recv_ts, jb::itch5::unknown_message const& msg) {
     char msgtype = *static_cast<char const*>(msg.buf());
     JB_LOG(error) << "Unknown message type '" << msgtype << "'(" << int(msgtype)
                   << ") in msgcnt=" << msg.count()
@@ -90,9 +91,10 @@ config::config()
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage("Missing input-file setting."
-                    "  You must specify an input file.",
-                    1);
+    throw jb::usage(
+        "Missing input-file setting."
+        "  You must specify an input file.",
+        1);
   }
   stats().validate();
 }

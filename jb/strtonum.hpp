@@ -12,10 +12,12 @@ namespace jb {
  * For most types this refactors repetitive code, but also allows
  * specialization for specific types.
  */
-template <typename T> struct stn_traits;
+template <typename T>
+struct stn_traits;
 
 #define STN_TRAITS(T, F)                                                       \
-  template <> struct stn_traits<T> {                                           \
+  template <>                                                                  \
+  struct stn_traits<T> {                                                       \
     static T stot(std::string const& s, std::size_t& end) {                    \
       return (F)(s, &end);                                                     \
     }                                                                          \
@@ -34,7 +36,8 @@ STN_TRAITS(double, std::stod);
 /**
  * Generic string to number conversion with validation.
  */
-template <typename T> bool strtonum(std::string const& s, T& r) {
+template <typename T>
+bool strtonum(std::string const& s, T& r) {
   if (s.empty()) {
     return false;
   }

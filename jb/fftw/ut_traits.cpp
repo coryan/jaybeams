@@ -6,7 +6,8 @@
 
 namespace {
 
-template <typename precision_t> void test_fftw_traits() {
+template <typename precision_t>
+void test_fftw_traits() {
   int nsamples = 32768;
   int tol = nsamples;
   typedef jb::fftw::traits<precision_t> tested;

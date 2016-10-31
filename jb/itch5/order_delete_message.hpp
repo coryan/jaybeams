@@ -17,10 +17,11 @@ struct order_delete_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_delete_message
-template <bool V> struct decoder<V, order_delete_message> {
+template <bool V>
+struct decoder<V, order_delete_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_delete_message r(std::size_t size, void const* buf,
-                                std::size_t off) {
+  static order_delete_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     order_delete_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.order_reference_number =

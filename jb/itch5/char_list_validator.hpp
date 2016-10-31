@@ -22,7 +22,8 @@ namespace itch5 {
  * value to be 'false'.  The remaining template parameters define the
  * list of possible values to be accepted.
  */
-template <bool validate, int... V> struct char_list_validator {
+template <bool validate, int... V>
+struct char_list_validator {
   void operator()(int x) const {
   }
 };
@@ -35,7 +36,8 @@ template <bool validate, int... V> struct char_list_validator {
  *
  * All values are rejected in this case.
  */
-template <> struct char_list_validator<true> {
+template <>
+struct char_list_validator<true> {
   void operator()(int x) const {
     char_list_validation_failed(x);
   }
@@ -44,7 +46,8 @@ template <> struct char_list_validator<true> {
 /**
  * Recursively define the validator for the enabled case.
  */
-template <int a, int... V> struct char_list_validator<true, a, V...> {
+template <int a, int... V>
+struct char_list_validator<true, a, V...> {
   void operator()(int x) const {
     if (a == x) {
       return;

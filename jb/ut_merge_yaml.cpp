@@ -26,16 +26,16 @@ BOOST_AUTO_TEST_CASE(merge_yaml_sequences) {
 
   auto actual = ss.as<std::vector<int>>();
   std::vector<int> expected({11, 22, 33, 44});
-  BOOST_CHECK_EQUAL_COLLECTIONS(actual.begin(), actual.end(), expected.begin(),
-                                expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      actual.begin(), actual.end(), expected.begin(), expected.end());
 
   YAML::Node ls = YAML::Load("[0, 1, 2, 3, 4, 5]");
   jb::yaml::merge_node(ls, source);
 
   actual = ls.as<std::vector<int>>();
   expected.assign({11, 22, 33, 44, 4, 5});
-  BOOST_CHECK_EQUAL_COLLECTIONS(actual.begin(), actual.end(), expected.begin(),
-                                expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      actual.begin(), actual.end(), expected.begin(), expected.end());
 }
 
 /**
@@ -83,9 +83,10 @@ BOOST_AUTO_TEST_CASE(merge_yaml_nested) {
 BOOST_AUTO_TEST_CASE(merge_yaml_invalid_source) {
   YAML::Node target = YAML::Load("{a: 3, c: 4}");
 
-  BOOST_CHECK_THROW(jb::yaml::merge_node(target, YAML::Node()),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      jb::yaml::merge_node(target, YAML::Node()), std::runtime_error);
 
-  BOOST_CHECK_THROW(jb::yaml::merge_node(target, YAML::Load("{a: 1}")["b"]),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      jb::yaml::merge_node(target, YAML::Load("{a: 1}")["b"]),
+      std::runtime_error);
 }

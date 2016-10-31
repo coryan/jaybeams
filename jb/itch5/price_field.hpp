@@ -97,8 +97,8 @@ private:
 template <bool validate, typename wire_type_t, std::intmax_t denom_v>
 struct decoder<validate, price_field<wire_type_t, denom_v>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static price_field<wire_type_t, denom_v> r(std::size_t size, void const* buf,
-                                             std::size_t offset) {
+  static price_field<wire_type_t, denom_v>
+  r(std::size_t size, void const* buf, std::size_t offset) {
     price_field<wire_type_t, denom_v> tmp(
         decoder<validate, wire_type_t>::r(size, buf, offset));
     return tmp;
@@ -107,8 +107,8 @@ struct decoder<validate, price_field<wire_type_t, denom_v>> {
 
 /// Streaming operator for jb::itch5::price_field<>
 template <typename wire_type_t, std::intmax_t denom_v>
-std::ostream& operator<<(std::ostream& os,
-                         price_field<wire_type_t, denom_v> const& x) {
+std::ostream&
+operator<<(std::ostream& os, price_field<wire_type_t, denom_v> const& x) {
   auto d = std::div(x.as_integer(), x.denom);
   return os << d.quot << "." << std::setw(x.denom_digits - 1)
             << std::setfill('0') << d.rem;
@@ -120,13 +120,15 @@ typedef price_field<std::uint32_t, 10000> price4_t;
 /// Convenience definition for Price(8) fields.
 typedef price_field<std::uint64_t, 100000000> price8_t;
 
-template <typename price_field> inline price_field max_price_field_value() {
+template <typename price_field>
+inline price_field max_price_field_value() {
   auto v = std::numeric_limits<typename price_field::wire_type>::max();
   v /= price_field::denom;
   return price_field(v * price_field::denom);
 }
 
-template <> inline price4_t max_price_field_value() {
+template <>
+inline price4_t max_price_field_value() {
   // Per the ITCH-5.0 spec, the maximum value is 200,000.0000
   return price4_t(std::uint32_t(200000) * std::uint32_t(price4_t::denom));
 }

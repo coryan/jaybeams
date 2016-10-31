@@ -54,8 +54,8 @@ std::pair<char const*, std::size_t> trade();
  * message type and a known length.  This is a simple function to
  * generate such messages.
  */
-std::vector<char> create_message(int message_type, jb::itch5::timestamp ts,
-                                 std::size_t total_size);
+std::vector<char> create_message(
+    int message_type, jb::itch5::timestamp ts, std::size_t total_size);
 
 } // namespace testing
 } // namespace itch5

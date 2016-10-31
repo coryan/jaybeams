@@ -1,6 +1,7 @@
-#include <jb/itch5/testing_data.hpp>
-#include <jb/itch5/timestamp.hpp>
+#include "jb/itch5/testing_data.hpp"
+
 #include <jb/itch5/protocol_constants.hpp>
+#include <jb/itch5/timestamp.hpp>
 
 #include <sstream>
 #include <stdexcept>
@@ -17,8 +18,8 @@ namespace testing {
 
 std::chrono::nanoseconds expected_ts() {
   using namespace std::chrono;
-  return duration_cast<nanoseconds>(hours(11) + minutes(32) + seconds(31) +
-                                    nanoseconds(123456789L));
+  return duration_cast<nanoseconds>(
+      hours(11) + minutes(32) + seconds(31) + nanoseconds(123456789L));
 }
 
 std::pair<char const*, std::size_t> message_header() {
@@ -283,8 +284,8 @@ std::pair<char const*, std::size_t> trade() {
   return std::make_pair(buf, bufsize);
 }
 
-std::vector<char> create_message(int message_type, jb::itch5::timestamp ts,
-                                 std::size_t total_size) {
+std::vector<char> create_message(
+    int message_type, jb::itch5::timestamp ts, std::size_t total_size) {
   if (total_size < protocol::header_size or
       total_size > protocol::max_message_size) {
     std::ostringstream os;

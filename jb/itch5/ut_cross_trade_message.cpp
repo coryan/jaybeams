@@ -49,11 +49,12 @@ BOOST_AUTO_TEST_CASE(stream_cross_trade_message) {
   auto tmp = decoder<false, cross_trade_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=Q,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",shares=424200"
-                              ",stock=HSART"
-                              ",cross_price=123.0500"
-                              ",match_number=2340600"
-                              ",cross_type=H");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=Q,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",shares=424200"
+                ",stock=HSART"
+                ",cross_price=123.0500"
+                ",match_number=2340600"
+                ",cross_type=H");
 }

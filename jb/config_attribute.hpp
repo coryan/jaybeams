@@ -91,8 +91,8 @@ private:
       , container_(container)
       , value_() {
   }
-  config_attribute(config_object::attribute_descriptor const& d,
-                   container_type* container)
+  config_attribute(
+      config_object::attribute_descriptor const& d, container_type* container)
       : config_object::attribute_base(d, container)
       , container_(container)
       , value_() {
@@ -104,8 +104,9 @@ private:
       , value_(t) {
   }
 
-  config_attribute(config_object::attribute_descriptor const& d,
-                   container_type* container, value_type const& t)
+  config_attribute(
+      config_object::attribute_descriptor const& d, container_type* container,
+      value_type const& t)
       : config_object::attribute_base(d, container)
       , container_(container)
       , value_(t) {
@@ -117,8 +118,9 @@ private:
       , value_(std::move(t)) {
   }
 
-  config_attribute(config_object::attribute_descriptor const& d,
-                   container_type* container, value_type&& t)
+  config_attribute(
+      config_object::attribute_descriptor const& d, container_type* container,
+      value_type&& t)
       : config_object::attribute_base(d, container)
       , container_(container)
       , value_(std::move(t)) {
@@ -132,22 +134,25 @@ private:
   }
 
   template <typename... Args>
-  config_attribute(config_object::attribute_descriptor const& d,
-                   container_type* container, Args&&... args)
+  config_attribute(
+      config_object::attribute_descriptor const& d, container_type* container,
+      Args&&... args)
       : config_object::attribute_base(d, container)
       , container_(container)
       , value_(std::forward<Args>(args)...) {
   }
 
-  config_attribute(container_type* container,
-                   config_attribute<container_type, value_type>&& rhs)
+  config_attribute(
+      container_type* container,
+      config_attribute<container_type, value_type>&& rhs)
       : config_object::attribute_base(container)
       , container_(container)
       , value_(std::move(rhs.value_)) {
   }
 
-  config_attribute(container_type* container,
-                   config_attribute<container_type, value_type> const& rhs)
+  config_attribute(
+      container_type* container,
+      config_attribute<container_type, value_type> const& rhs)
       : config_object::attribute_base(container)
       , container_(container)
       , value_(rhs.value_) {
@@ -175,22 +180,23 @@ private:
    * @name Configuration object recursion functions.
    */
   /// Call the right version of jb::apply_overrides for the contained value.
-  void apply_overrides(YAML::Node const& by_name,
-                       class_overrides const& by_class) override {
+  void apply_overrides(
+      YAML::Node const& by_name, class_overrides const& by_class) override {
     jb::config_recurse::apply_overrides(value_, by_name, by_class);
   }
 
   /// Call the right version of jb::add_options for the contained value.
-  void
-  add_options(boost::program_options::options_description& options,
-              std::string const& prefix,
-              config_object::attribute_descriptor const& d) const override {
+  void add_options(
+      boost::program_options::options_description& options,
+      std::string const& prefix,
+      config_object::attribute_descriptor const& d) const override {
     jb::config_recurse::add_options(options, value_, prefix, d);
   }
 
   /// Call the right version of jb::apply_cmdline_values.
-  void apply_cmdline_values(boost::program_options::variables_map const& vm,
-                            std::string const& name) override {
+  void apply_cmdline_values(
+      boost::program_options::variables_map const& vm,
+      std::string const& name) override {
     jb::config_recurse::apply_cmdline_values(value_, vm, name);
   }
 
@@ -211,9 +217,9 @@ private:
 };
 
 template <typename C, typename T>
-void config_recurse::apply_overrides(config_attribute<C, T>& lhs,
-                                     YAML::Node const& by_name,
-                                     class_overrides const& by_class) {
+void config_recurse::apply_overrides(
+    config_attribute<C, T>& lhs, YAML::Node const& by_name,
+    class_overrides const& by_class) {
   lhs.apply_overrides(by_name, by_class);
 }
 

@@ -24,10 +24,14 @@ namespace jb {
  * Such code would work whether sample_t is a std::complex<T> or a
  * primitive floating point value.
  */
-template <typename T> struct extract_value_type { typedef T precision; };
+template <typename T>
+struct extract_value_type {
+  typedef T precision;
+};
 
 /// Partial specialization of jb::extract_value_type for std::complex.
-template <typename T> struct extract_value_type<std::complex<T>> {
+template <typename T>
+struct extract_value_type<std::complex<T>> {
   typedef T precision;
 };
 

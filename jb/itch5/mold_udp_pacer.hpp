@@ -69,8 +69,9 @@ public:
   /**
    * Initialize a MoldUDP pacer object.
    */
-  mold_udp_pacer(config const& cfg = config(),
-                 session_id_type const& session_id = session_id_type())
+  mold_udp_pacer(
+      config const& cfg = config(),
+      session_id_type const& session_id = session_id_type())
       : last_send_{std::chrono::microseconds(0)}
       , max_delay_(std::chrono::microseconds(cfg.maximum_delay_microseconds()))
       , mtu_(cfg.maximum_transmission_unit())
@@ -101,8 +102,9 @@ public:
    * signature must be compatible with void(clock_type::duration const&)
    */
   template <typename message_sink_type, typename sleep_functor_type>
-  void handle_message(time_point ts, unknown_message const& msg,
-                      message_sink_type& sink, sleep_functor_type& sleeper) {
+  void handle_message(
+      time_point ts, unknown_message const& msg, message_sink_type& sink,
+      sleep_functor_type& sleeper) {
     message_header msghdr = msg.decode_header<false>();
 
     // how long since the last send() call...
@@ -168,8 +170,9 @@ private:
    * @param sink the destination for the MoldUDP64 packets
    */
   template <typename message_sink_type>
-  void coalesce(time_point recv_ts, unknown_message const& msg, timestamp ts,
-                message_sink_type& sink) {
+  void coalesce(
+      time_point recv_ts, unknown_message const& msg, timestamp ts,
+      message_sink_type& sink) {
     // Make sure the message is small enough to be represented in a
     // single MoldUDP64 block ...
     JB_ASSERT_THROW(msg.len() < (1 << 16));
@@ -194,8 +197,8 @@ private:
         boost::asio::buffer_cast<void*>(block_header), 0, msg.len());
     // ... the copy the message into the block payload ...
     boost::asio::mutable_buffer block_payload = packet_ + packet_size_ + 2;
-    boost::asio::buffer_copy(block_payload,
-                             boost::asio::buffer(msg.buf(), msg.len()));
+    boost::asio::buffer_copy(
+        block_payload, boost::asio::buffer(msg.buf(), msg.len()));
     packet_size_ += msg.len() + 2;
 
     // ... and update the number of blocks ...
@@ -210,14 +213,14 @@ private:
     // ... write down the sequence number field of the packet header,
     // this is the number of the first block ...
     auto seqno = packet_ + mold_udp_protocol::sequence_number_offset;
-    encoder<true, std::uint64_t>::w(boost::asio::buffer_size(seqno),
-                                    boost::asio::buffer_cast<void*>(seqno), 0,
-                                    first_block_);
+    encoder<true, std::uint64_t>::w(
+        boost::asio::buffer_size(seqno), boost::asio::buffer_cast<void*>(seqno),
+        0, first_block_);
     // ... then write down the block field ...
     auto blkcnt = packet_ + mold_udp_protocol::block_count_offset;
-    encoder<true, std::uint16_t>::w(boost::asio::buffer_size(blkcnt),
-                                    boost::asio::buffer_cast<void*>(blkcnt), 0,
-                                    block_count_);
+    encoder<true, std::uint16_t>::w(
+        boost::asio::buffer_size(blkcnt),
+        boost::asio::buffer_cast<void*>(blkcnt), 0, block_count_);
   }
 
   /**

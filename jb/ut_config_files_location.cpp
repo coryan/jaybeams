@@ -2,8 +2,8 @@
 
 #include <skye/mock_function.hpp>
 
-#include <boost/test/unit_test.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/test/unit_test.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -11,7 +11,8 @@ namespace fs = boost::filesystem;
  * Mocks and helper types used in the jb::config_files_location tests.
  */
 namespace {
-template <typename Functor> struct shared_functor {
+template <typename Functor>
+struct shared_functor {
   shared_functor()
       : functor_(new Functor) {
   }
@@ -111,11 +112,13 @@ BOOST_AUTO_TEST_CASE(config_files_location_program_root) {
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
   fs::path etc = fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
-                                  jb::sysconfdir(), programdir});
+  std::vector<fs::path> expected(
+      {"/test/path" / etc, "/install/path" / etc, jb::sysconfdir(),
+       programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -137,8 +140,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_no_program_root) {
   fs::path etc = fs::path(jb::sysconfdir()).filename();
   std::vector<fs::path> expected(
       {"/install/path" / etc, jb::sysconfdir(), programdir});
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -161,8 +165,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_test_root) {
   std::vector<fs::path> expected(
       {"/install/path" / etc, jb::sysconfdir(), programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -185,8 +190,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_system_root) {
   std::vector<fs::path> expected(
       {"/test/path" / etc, jb::sysconfdir(), programdir});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -208,12 +214,13 @@ BOOST_AUTO_TEST_CASE(config_files_location_installed_binary) {
 
   mocked t(program, "TEST_ROOT", getenv);
 
-  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
-                                  jb::sysconfdir(),
-                                  program.parent_path().parent_path() / etc});
+  std::vector<fs::path> expected(
+      {"/test/path" / etc, "/install/path" / etc, jb::sysconfdir(),
+       program.parent_path().parent_path() / etc});
 
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -233,8 +240,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_no_program_path) {
 
   fs::path etc = fs::path(jb::sysconfdir()).filename();
   std::vector<fs::path> expected({"/install/path" / etc, jb::sysconfdir()});
-  BOOST_CHECK_EQUAL_COLLECTIONS(t.search_path().begin(), t.search_path().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      t.search_path().begin(), t.search_path().end(), expected.begin(),
+      expected.end());
 }
 
 /**
@@ -260,8 +268,8 @@ BOOST_AUTO_TEST_CASE(config_files_location_find) {
   validator->clear();
   validator->returns(false);
 
-  BOOST_CHECK_THROW(t.find_configuration_file(filename, validator),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      t.find_configuration_file(filename, validator), std::runtime_error);
 
   // ... then check that each path is checked in order ...
   int n = 0;

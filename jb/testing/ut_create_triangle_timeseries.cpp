@@ -1,12 +1,13 @@
-#include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/check_complex_close_enough.hpp>
+#include <jb/testing/create_triangle_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <complex>
 
 namespace {
 
-template <typename value_type> void check_create_triangle() {
+template <typename value_type>
+void check_create_triangle() {
   std::vector<value_type> ts;
   jb::testing::create_triangle_timeseries(1024, ts);
   value_type sum = 0;

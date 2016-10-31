@@ -24,10 +24,11 @@ struct cross_trade_message {
 };
 
 /// Specialize decoder for a jb::itch5::cross_trade_message
-template <bool V> struct decoder<V, cross_trade_message> {
+template <bool V>
+struct decoder<V, cross_trade_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static cross_trade_message r(std::size_t size, void const* buf,
-                               std::size_t off) {
+  static cross_trade_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     cross_trade_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.shares = decoder<V, std::uint64_t>::r(size, buf, off + 11);

@@ -222,8 +222,8 @@ BOOST_AUTO_TEST_CASE(order_book_buy_errors) {
   jb::itch5::buy_sell_indicator_t const BUY(u'B');
 
   // Add two orders to the book ...
-  (void) tested.handle_add_order(BUY, price4_t(100000), 100);
-  (void) tested.handle_add_order(BUY, price4_t(110000), 200);
+  (void)tested.handle_add_order(BUY, price4_t(100000), 100);
+  (void)tested.handle_add_order(BUY, price4_t(110000), 200);
 
   // ... check the best bid ...
   auto actual = tested.best_bid();
@@ -233,8 +233,8 @@ BOOST_AUTO_TEST_CASE(order_book_buy_errors) {
   // ... remove the first order, once should work, the second time
   // should fail ...
   tested.handle_order_reduced(BUY, price4_t(100000), 100);
-  BOOST_CHECK_THROW(tested.handle_order_reduced(BUY, price4_t(100000), 100),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      tested.handle_order_reduced(BUY, price4_t(100000), 100), std::exception);
 
   // ... check the best bid ...
   actual = tested.best_bid();
@@ -253,8 +253,8 @@ BOOST_AUTO_TEST_CASE(order_book_sell_errors) {
   jb::itch5::buy_sell_indicator_t const SELL(u'S');
 
   // Add two orders to the book ...
-  (void) tested.handle_add_order(SELL, price4_t(120000), 100);
-  (void) tested.handle_add_order(SELL, price4_t(110000), 200);
+  (void)tested.handle_add_order(SELL, price4_t(120000), 100);
+  (void)tested.handle_add_order(SELL, price4_t(110000), 200);
 
   // ... check the best offer ...
   auto actual = tested.best_offer();
@@ -264,12 +264,11 @@ BOOST_AUTO_TEST_CASE(order_book_sell_errors) {
   // ... remove the first order, once should work, the second time
   // should fail ...
   tested.handle_order_reduced(SELL, price4_t(120000), 100);
-  BOOST_CHECK_THROW(tested.handle_order_reduced(SELL, price4_t(120000), 100),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      tested.handle_order_reduced(SELL, price4_t(120000), 100), std::exception);
 
   // ... check the best offer ...
   actual = tested.best_offer();
   BOOST_CHECK_EQUAL(actual.first, price4_t(110000));
   BOOST_CHECK_EQUAL(actual.second, 200);
 }
-

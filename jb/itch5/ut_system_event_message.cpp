@@ -43,9 +43,10 @@ BOOST_AUTO_TEST_CASE(stream_system_event_message) {
   system_event_message tmp{message_header{u' ', 0, 1, ts}, event_code_t(u'O')};
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type= ,stock_locate=0,"
-                              "tracking_number=1,timestamp=113231.123456789"
-                              ",event_code=O");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type= ,stock_locate=0,"
+                "tracking_number=1,timestamp=113231.123456789"
+                ",event_code=O");
 }
 
 /**

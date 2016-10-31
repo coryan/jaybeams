@@ -65,7 +65,8 @@ namespace testing {
  * };
  * @endcode
  */
-template <typename Fixture> class microbenchmark : public microbenchmark_base {
+template <typename Fixture>
+class microbenchmark : public microbenchmark_base {
 public:
   typedef jb::testing::microbenchmark_config config;
 
@@ -92,7 +93,8 @@ public:
    *
    * @tparam Args the types for the additional arguments.
    */
-  template <typename... Args> results run(Args&&... args) {
+  template <typename... Args>
+  results run(Args&&... args) {
     if (config_.size() != 0) {
       return run_fixed_size(std::forward<Args>(args)...);
     }
@@ -107,7 +109,8 @@ private:
    * @param args additional arguments for the Fixture
    * @tparam Args the types for the additional arguments
    */
-  template <typename... Args> results run_unsized(Args&&... args) {
+  template <typename... Args>
+  results run_unsized(Args&&... args) {
     Fixture fixture(std::forward<Args>(args)...);
     results r;
     run_base(fixture, r, 0);
@@ -132,7 +135,8 @@ private:
    * @param args additional arguments for the Fixture
    * @tparam Args the types for the additional arguments
    */
-  template <typename... Args> results run_fixed_size(Args&&... args) {
+  template <typename... Args>
+  results run_fixed_size(Args&&... args) {
     results r;
     run_sized(config_.size(), r, std::forward<Args>(args)...);
     return r;

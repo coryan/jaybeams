@@ -42,15 +42,17 @@ BOOST_AUTO_TEST_CASE(stream_message_header) {
     message_header tmp{u' ', 0, 1, ts};
     std::ostringstream os;
     os << tmp;
-    BOOST_CHECK_EQUAL(os.str(), "message_type= ,stock_locate=0,"
-                                "tracking_number=1,timestamp=113231.123456789");
+    BOOST_CHECK_EQUAL(
+        os.str(), "message_type= ,stock_locate=0,"
+                  "tracking_number=1,timestamp=113231.123456789");
   }
 
   {
     message_header tmp{255, 0, 1, ts};
     std::ostringstream os;
     os << tmp;
-    BOOST_CHECK_EQUAL(os.str(), "message_type=.(255),stock_locate=0,"
-                                "tracking_number=1,timestamp=113231.123456789");
+    BOOST_CHECK_EQUAL(
+        os.str(), "message_type=.(255),stock_locate=0,"
+                  "tracking_number=1,timestamp=113231.123456789");
   }
 }

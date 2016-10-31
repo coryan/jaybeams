@@ -34,9 +34,10 @@ public:
    * MoldUDP64 headers.
    * - The size of the message, in bytes.
    */
-  typedef std::function<void(std::chrono::steady_clock::time_point,
-                             std::uint64_t, std::size_t, char const*,
-                             std::size_t)> buffer_handler;
+  typedef std::function<void(
+      std::chrono::steady_clock::time_point, std::uint64_t, std::size_t,
+      char const*, std::size_t)>
+      buffer_handler;
 
   /**
    * Constructor, create a socket and register for IO notifications
@@ -54,9 +55,10 @@ public:
    * where the packets are received, for servers that have multiple
    * NICs.
    */
-  mold_udp_channel(boost::asio::io_service& io, buffer_handler handler,
-                   std::string const& receive_address, int port,
-                   std::string const& listen_address);
+  mold_udp_channel(
+      boost::asio::io_service& io, buffer_handler handler,
+      std::string const& receive_address, int port,
+      std::string const& listen_address);
 
 private:
   /**
@@ -77,8 +79,8 @@ private:
    * @param bytes_received the number of bytes received, the actual
    * bytes are in the buffer_ class member.
    */
-  void handle_received(boost::system::error_code const& ec,
-                       size_t bytes_received);
+  void
+  handle_received(boost::system::error_code const& ec, size_t bytes_received);
 
   /// Allow testing class access to the code ...
   friend struct mold_udp_channel_tester;

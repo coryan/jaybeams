@@ -25,7 +25,8 @@ struct trade_message {
 };
 
 /// Specialize decoder for a jb::itch5::trade_message
-template <bool V> struct decoder<V, trade_message> {
+template <bool V>
+struct decoder<V, trade_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static trade_message r(std::size_t size, void const* buf, std::size_t off) {
     trade_message x;

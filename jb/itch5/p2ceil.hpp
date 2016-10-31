@@ -15,9 +15,10 @@ namespace itch5 {
  *
  * @tparam T the type of the input, must be an integer type.
  */
-template <typename T> constexpr T p2ceil_kernel(int shift, T n) {
-  static_assert(std::is_integral<T>::value,
-                "p2ceil_kernel input type must be integral");
+template <typename T>
+constexpr T p2ceil_kernel(int shift, T n) {
+  static_assert(
+      std::is_integral<T>::value, "p2ceil_kernel input type must be integral");
   return n | (n >> shift);
 }
 

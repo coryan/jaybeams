@@ -1,10 +1,10 @@
 #include <jb/itch5/mold_udp_pacer.hpp>
 #include <jb/itch5/testing_data.hpp>
 
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/test/unit_test.hpp>
 #include <skye/mock_function.hpp>
+#include <boost/array.hpp>
+#include <boost/asio.hpp>
+#include <boost/test/unit_test.hpp>
 
 /**
  * Helper types and functions to test jb::itch5::mold_udp_pacer
@@ -49,21 +49,21 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_basic) {
   /// Send 3 messages every 10 usecs, of different sizes and types
   auto m1 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(0, 0, m1.size(), &m1[0]), sink,
-                   mock_sleep);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(0, 0, m1.size(), &m1[0]),
+      sink, mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(1, 0, m2.size(), &m2[0]), sink,
-                   mock_sleep);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(1, 0, m2.size(), &m2[0]),
+      sink, mock_sleep);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(2, 0, m3.size(), &m3[0]), sink,
-                   mock_sleep);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(2, 0, m3.size(), &m3[0]),
+      sink, mock_sleep);
 
   p.heartbeat(sink);
 
@@ -99,21 +99,24 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_coalesce) {
   int msgcnt = 0;
   auto m1 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]), sink,
+      mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]), sink,
+      mock_sleep);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]), sink,
+      mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
   BOOST_CHECK_EQUAL(sink.packets.size(), 0);
@@ -124,8 +127,8 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_coalesce) {
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... we should receive a single packet with all 3 messages ...
   BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
-  BOOST_CHECK_EQUAL(hdrsize + 100 + 2 + 90 + 2 + 80 + 2,
-                    sink.packets.at(0).size());
+  BOOST_CHECK_EQUAL(
+      hdrsize + 100 + 2 + 90 + 2 + 80 + 2, sink.packets.at(0).size());
 }
 
 /**
@@ -153,24 +156,27 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_full) {
   int msgcnt = 0;
   auto m1 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]), sink,
+      mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]), sink,
+      mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
   BOOST_CHECK_EQUAL(sink.packets.size(), 0);
 
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(25)}, 80);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]), sink,
+      mock_sleep);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... we should receive a single packet with the first 2 messages ...
@@ -197,24 +203,27 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
-  jb::itch5::mold_udp_pacer<mock_clock> p(jb::itch5::mold_udp_pacer_config()
-                                              .maximum_delay_microseconds(1000)
-                                              .maximum_transmission_unit(1024));
+  jb::itch5::mold_udp_pacer<mock_clock> p(
+      jb::itch5::mold_udp_pacer_config()
+          .maximum_delay_microseconds(1000)
+          .maximum_transmission_unit(1024));
 
   using namespace std::chrono;
   // simulate 2 messages every 10 usecs, of different sizes and types ...
   int msgcnt = 0;
   auto m1 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(5)}, 100);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m1.size(), &m1[0]), sink,
+      mock_sleep);
 
   auto m2 = jb::itch5::testing::create_message(
       'B', jb::itch5::timestamp{std::chrono::microseconds(15)}, 90);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m2.size(), &m2[0]), sink,
+      mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
   BOOST_CHECK_EQUAL(sink.packets.size(), 0);
@@ -222,9 +231,10 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
   // ... the next message is much later ...
   auto m3 = jb::itch5::testing::create_message(
       'A', jb::itch5::timestamp{std::chrono::microseconds(2025)}, 80);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]),
-                   sink, mock_sleep);
+  p.handle_message(
+      mock_clock::now(),
+      jb::itch5::unknown_message(msgcnt++, 0, m3.size(), &m3[0]), sink,
+      mock_sleep);
 
   auto hdrsize = jb::itch5::mold_udp_protocol::header_size;
   // ... that should immediately flush the first two messages ...
@@ -253,16 +263,17 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
-  jb::itch5::mold_udp_pacer<mock_clock> p(jb::itch5::mold_udp_pacer_config()
-                                              .maximum_delay_microseconds(1000)
-                                              .maximum_transmission_unit(1024));
+  jb::itch5::mold_udp_pacer<mock_clock> p(
+      jb::itch5::mold_udp_pacer_config()
+          .maximum_delay_microseconds(1000)
+          .maximum_transmission_unit(1024));
 
   using namespace std::chrono;
   jb::itch5::timestamp ts{std::chrono::microseconds(5)};
   auto m = jb::itch5::testing::create_message('A', ts, 100);
-  p.handle_message(mock_clock::now(),
-                   jb::itch5::unknown_message(0, 0, m.size(), &m[0]), sink,
-                   mock_sleep);
+  p.handle_message(
+      mock_clock::now(), jb::itch5::unknown_message(0, 0, m.size(), &m[0]),
+      sink, mock_sleep);
 
   // ... we expect that no messages have been sent so far ...
   BOOST_CHECK_EQUAL(sink.packets.size(), 0);
@@ -293,16 +304,16 @@ BOOST_AUTO_TEST_CASE(itch5_testing_create_message_errors) {
   jb::itch5::timestamp ts{std::chrono::microseconds(1000)};
 
   // message too small ...
-  BOOST_CHECK_THROW(jb::itch5::testing::create_message('A', ts, 2),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      jb::itch5::testing::create_message('A', ts, 2), std::exception);
 
   // ... message too big ...
-  BOOST_CHECK_THROW(jb::itch5::testing::create_message('A', ts, 100000),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      jb::itch5::testing::create_message('A', ts, 100000), std::exception);
 
   // ... message type out of range ...
-  BOOST_CHECK_THROW(jb::itch5::testing::create_message(-1, ts, 100),
-                    std::exception);
-  BOOST_CHECK_THROW(jb::itch5::testing::create_message(256, ts, 100),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      jb::itch5::testing::create_message(-1, ts, 100), std::exception);
+  BOOST_CHECK_THROW(
+      jb::itch5::testing::create_message(256, ts, 100), std::exception);
 }
