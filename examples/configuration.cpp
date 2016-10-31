@@ -69,8 +69,8 @@ public:
 class program_config : public jb::config_object {
 public:
   program_config()
-      : securities(desc("securities").help("The list of securities to process"),
-                   this)
+      : securities(
+            desc("securities").help("The list of securities to process"), this)
       , workers(desc("workers", "worker_config"), this) {
   }
 

@@ -5,8 +5,8 @@
 #include <jb/convert_severity_level.hpp>
 
 #include <boost/log/sources/global_logger_storage.hpp>
-#include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/utility/manipulators/add_value.hpp>
 
 #ifndef JB_MIN_LOG_LEVEL
@@ -68,11 +68,13 @@ void next_tid();
       << boost::log::add_value("Lineno", static_cast<int>(__LINE__))
 
 #define JB_LOG(lvl)                                                            \
-  JB_LOG_I(::jb::log::logger::get(), jb::severity_level::lvl,                  \
-           BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))
+  JB_LOG_I(                                                                    \
+      ::jb::log::logger::get(), jb::severity_level::lvl,                       \
+      BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))
 
 #define JB_LOG_VAR(lvl)                                                        \
-  JB_LOG_I(::jb::log::logger::get(), lvl,                                      \
-           BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))
+  JB_LOG_I(                                                                    \
+      ::jb::log::logger::get(), lvl,                                           \
+      BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))
 
 #endif // jb_log_hpp

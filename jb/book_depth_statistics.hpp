@@ -1,11 +1,11 @@
 #ifndef jb_book_depth_stats_hpp
 #define jb_book_depth_stats_hpp
 
+#include <jb/itch5/order_book_def.hpp>
 #include <jb/config_object.hpp>
 #include <jb/event_rate_histogram.hpp>
 #include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
-#include <jb/itch5/order_book_def.hpp>
 
 #include <iosfwd>
 
@@ -30,7 +30,8 @@ public:
    * @param book_depth : the book depth (after processing the event)
    * to be recorded.
    */
-  template <typename book_depth_t> void sample(book_depth_t book_depth) {
+  template <typename book_depth_t>
+  void sample(book_depth_t book_depth) {
     book_depth_.sample(book_depth);
   }
 

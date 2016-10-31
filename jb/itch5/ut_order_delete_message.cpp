@@ -42,7 +42,8 @@ BOOST_AUTO_TEST_CASE(stream_order_delete_message) {
   auto tmp = decoder<false, order_delete_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=D,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",order_reference_number=42");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=D,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",order_reference_number=42");
 }

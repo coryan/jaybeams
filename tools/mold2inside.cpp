@@ -1,9 +1,9 @@
 #include <jb/itch5/compute_inside.hpp>
-#include <jb/itch5/process_iostream.hpp>
 #include <jb/itch5/mold_udp_channel.hpp>
-#include <jb/offline_feed_statistics.hpp>
+#include <jb/itch5/process_iostream.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
+#include <jb/offline_feed_statistics.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -87,12 +87,8 @@ int main(int argc, char* argv[]) try {
       std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
       std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
     jb::itch5::process_buffer_mlist<jb::itch5::compute_inside,
-                                    KNOWN_ITCH5_MESSAGES>::process(handler,
-                                                                   recv_ts,
-                                                                   msgcnt,
-                                                                   msgoffset,
-                                                                   msgbuf,
-                                                                   msglen);
+                                    KNOWN_ITCH5_MESSAGES>::
+        process(handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
   };
 
   jb::itch5::mold_udp_channel channel(
@@ -149,23 +145,28 @@ config::config()
     : multicast_port(
           desc("multicast-port").help("The multicast port to listen in."), this,
           default_multicast_port())
-    , listen_address(desc("listen-address")
-                         .help("The address to listen in, typically 0.0.0.0, "
-                               "::, or a specific "
-                               "NIC address."),
-                     this, default_listen_address())
-    , multicast_group(desc("multicast-group")
-                          .help("The multicast group carrying the MOLD data."),
-                      this, default_multicast_group())
+    , listen_address(
+          desc("listen-address")
+              .help(
+                  "The address to listen in, typically 0.0.0.0, "
+                  "::, or a specific "
+                  "NIC address."),
+          this, default_listen_address())
+    , multicast_group(
+          desc("multicast-group")
+              .help("The multicast group carrying the MOLD data."),
+          this, default_multicast_group())
     , output_file(
           desc("output-file")
-              .help("The name of the file where to store the inside data."
-                    "  Files ending in .gz are automatically compressed."),
+              .help(
+                  "The name of the file where to store the inside data."
+                  "  Files ending in .gz are automatically compressed."),
           this)
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "offline-feed-statistics"), this)
-    , symbol_stats(desc("symbol-stats", "offline-feed-statistics"), this,
-                   default_per_symbol_stats())
+    , symbol_stats(
+          desc("symbol-stats", "offline-feed-statistics"), this,
+          default_per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")
               .help(
@@ -177,9 +178,10 @@ config::config()
 
 void config::validate() const {
   if (output_file() == "") {
-    throw jb::usage("Missing output-file setting."
-                    "  You must specify an output file.",
-                    1);
+    throw jb::usage(
+        "Missing output-file setting."
+        "  You must specify an output file.",
+        1);
   }
   log().validate();
   stats().validate();

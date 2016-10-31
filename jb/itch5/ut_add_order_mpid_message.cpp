@@ -17,8 +17,8 @@ BOOST_AUTO_TEST_CASE(decode_add_order_mpid_message) {
   auto expected_ts = jb::itch5::testing::expected_ts();
 
   auto x = decoder<true, add_order_mpid_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    add_order_mpid_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, add_order_mpid_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -29,8 +29,8 @@ BOOST_AUTO_TEST_CASE(decode_add_order_mpid_message) {
   BOOST_CHECK_EQUAL(x.attribution, "LOOF");
 
   x = decoder<false, add_order_mpid_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    add_order_mpid_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, add_order_mpid_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -54,12 +54,13 @@ BOOST_AUTO_TEST_CASE(stream_add_order_mpid_message) {
       decoder<false, add_order_mpid_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=F,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",order_reference_number=42"
-                              ",buy_sell_indicator=B"
-                              ",shares=100"
-                              ",stock=HSART"
-                              ",price=123.0500"
-                              ",attribution=LOOF");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=F,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",order_reference_number=42"
+                ",buy_sell_indicator=B"
+                ",shares=100"
+                ",stock=HSART"
+                ",price=123.0500"
+                ",attribution=LOOF");
 }

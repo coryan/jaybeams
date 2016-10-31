@@ -5,8 +5,8 @@
 
 #include <chrono>
 #include <iostream>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace jb {
 namespace testing {
@@ -51,8 +51,8 @@ protected:
   microbenchmark_config config_;
 };
 
-std::ostream& operator<<(std::ostream& os,
-                         microbenchmark_base::summary const& x);
+std::ostream&
+operator<<(std::ostream& os, microbenchmark_base::summary const& x);
 
 } // namespace testing
 } // namespace jb

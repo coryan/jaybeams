@@ -23,10 +23,11 @@ struct order_replace_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_replace_message
-template <bool V> struct decoder<V, order_replace_message> {
+template <bool V>
+struct decoder<V, order_replace_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_replace_message r(std::size_t size, void const* buf,
-                                 std::size_t off) {
+  static order_replace_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     order_replace_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.original_order_reference_number =

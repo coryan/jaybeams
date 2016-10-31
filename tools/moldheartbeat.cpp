@@ -1,10 +1,10 @@
 #include <jb/itch5/mold_udp_pacer.hpp>
-#include <jb/log.hpp>
 #include <jb/as_hhmmss.hpp>
+#include <jb/log.hpp>
 
 #include <boost/asio/io_service.hpp>
-#include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/multicast.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -90,11 +90,13 @@ std::string default_destination() {
 config::config()
     : destination(
           desc("destination")
-              .help("The destination for the UDP messages. "
-                    "The destination can be a unicast or multicast address."),
+              .help(
+                  "The destination for the UDP messages. "
+                  "The destination can be a unicast or multicast address."),
           this, default_destination())
-    , port(desc("port").help("The destination port for the UDP messages. "),
-           this, default_udp_port())
+    , port(
+          desc("port").help("The destination port for the UDP messages. "),
+          this, default_udp_port())
     , log(desc("log", "logging"), this)
     , pacer(desc("pacer", "mold-udp-pacer"), this) {
 }

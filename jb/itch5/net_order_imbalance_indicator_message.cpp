@@ -1,4 +1,4 @@
-#include <jb/itch5/net_order_imbalance_indicator_message.hpp>
+#include "jb/itch5/net_order_imbalance_indicator_message.hpp"
 
 #include <iostream>
 

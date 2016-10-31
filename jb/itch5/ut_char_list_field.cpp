@@ -28,12 +28,12 @@ BOOST_AUTO_TEST_CASE(decode_char_list_field) {
   actual = decoder<false, tested>::r(16, buffer, 1);
   BOOST_CHECK_EQUAL(actual, u'N');
 
-  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 3)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, tested>::r(16, buffer, 3)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 3)));
 
-  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 16)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, tested>::r(16, buffer, 16)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 16)));
 }
 

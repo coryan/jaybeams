@@ -63,13 +63,15 @@ void check_seconds_field_range(seconds_field const& t) {
  * Provide an active implementation of
  * jb::itch5::check_seconds_field_range<>
  */
-template <> void check_seconds_field_range<true>(seconds_field const& t);
+template <>
+void check_seconds_field_range<true>(seconds_field const& t);
 
 /// Specialize jb::itch5::decoder<> for a seconds_field
-template <bool validate> struct decoder<validate, seconds_field> {
+template <bool validate>
+struct decoder<validate, seconds_field> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static seconds_field r(std::size_t size, void const* buf,
-                         std::size_t offset) {
+  static seconds_field
+  r(std::size_t size, void const* buf, std::size_t offset) {
     std::uint64_t ts = decoder<validate, std::uint32_t>::r(size, buf, offset);
     seconds_field tmp(ts);
     check_seconds_field_range<validate>(tmp);

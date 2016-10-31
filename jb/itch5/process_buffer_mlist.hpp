@@ -51,10 +51,10 @@ public:
    * @param msgbuf the raw message buffer
    * @param msglen the raw message length
    */
-  static void process(message_handler& handler,
-                      typename message_handler::time_point const& recv_ts,
-                      std::uint64_t msgcnt, std::size_t msgoffset,
-                      char const* msgbuf, std::size_t msglen) {
+  static void process(
+      message_handler& handler,
+      typename message_handler::time_point const& recv_ts, std::uint64_t msgcnt,
+      std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
     handler.handle_unknown(
         recv_ts, jb::itch5::unknown_message(msgcnt, msgoffset, msglen, msgbuf));
   }
@@ -87,10 +87,10 @@ public:
    * @param msgbuf the raw message buffer
    * @param msglen the raw message length
    */
-  static void process(message_handler& handler,
-                      typename message_handler::time_point const& recv_ts,
-                      std::uint64_t msgcnt, std::size_t msgoffset,
-                      char const* msgbuf, std::size_t msglen) {
+  static void process(
+      message_handler& handler,
+      typename message_handler::time_point const& recv_ts, std::uint64_t msgcnt,
+      std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
     // if the message received matches the head then ...
     if (msgbuf[0] == head_t::message_type) {
       // ... parse the message ...

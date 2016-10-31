@@ -17,11 +17,13 @@ fftw_cast_array(std::complex<F> const* ptr) {
   return reinterpret_cast<typename traits<F>::fftw_complex_type const*>(ptr);
 }
 
-template <typename F> F* fftw_cast_array(F* ptr) {
+template <typename F>
+F* fftw_cast_array(F* ptr) {
   return ptr;
 }
 
-template <typename F> F const* fftw_cast_array(F const* ptr) {
+template <typename F>
+F const* fftw_cast_array(F const* ptr) {
   return ptr;
 }
 

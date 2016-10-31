@@ -16,8 +16,8 @@ BOOST_AUTO_TEST_CASE(decode_mwcb_decline_level_message) {
 
   auto x =
       decoder<true, mwcb_decline_level_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    mwcb_decline_level_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, mwcb_decline_level_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -26,8 +26,8 @@ BOOST_AUTO_TEST_CASE(decode_mwcb_decline_level_message) {
   BOOST_CHECK_EQUAL(x.level_3, price8_t(300001020300LL));
 
   x = decoder<false, mwcb_decline_level_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    mwcb_decline_level_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, mwcb_decline_level_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -49,9 +49,10 @@ BOOST_AUTO_TEST_CASE(stream_mwcb_decline_level_message) {
       decoder<false, mwcb_decline_level_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=V,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",level_1=5000.01000000"
-                              ",level_2=4000.01020000"
-                              ",level_3=3000.01020300");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=V,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",level_1=5000.01000000"
+                ",level_2=4000.01020000"
+                ",level_3=3000.01020300");
 }

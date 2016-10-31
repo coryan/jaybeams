@@ -1,5 +1,5 @@
-#include <jb/testing/delay_timeseries.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
+#include <jb/testing/delay_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <chrono>
@@ -7,8 +7,8 @@
 namespace std {
 
 // Horrible hack to make Boost.Test happy
-std::ostream& operator<<(std::ostream& os,
-                         std::pair<std::ptrdiff_t, float> const& x) {
+std::ostream&
+operator<<(std::ostream& os, std::pair<std::ptrdiff_t, float> const& x) {
   return os << "{" << x.first << "," << x.second << "}";
 }
 
@@ -44,12 +44,12 @@ BOOST_AUTO_TEST_CASE(delay_timeseries_periodic_default) {
 BOOST_AUTO_TEST_CASE(extrapolate_periodic) {
   jb::testing::extrapolate_periodic<float> tested;
   BOOST_CHECK_EQUAL(tested(0, 0), std::make_pair(std::ptrdiff_t(0), float(0)));
-  BOOST_CHECK_EQUAL(tested(1, 100),
-                    std::make_pair(std::ptrdiff_t(1), float(0)));
-  BOOST_CHECK_EQUAL(tested(120, 100),
-                    std::make_pair(std::ptrdiff_t(20), float(0)));
-  BOOST_CHECK_EQUAL(tested(-20, 100),
-                    std::make_pair(std::ptrdiff_t(80), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(1, 100), std::make_pair(std::ptrdiff_t(1), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(120, 100), std::make_pair(std::ptrdiff_t(20), float(0)));
+  BOOST_CHECK_EQUAL(
+      tested(-20, 100), std::make_pair(std::ptrdiff_t(80), float(0)));
 }
 
 /**

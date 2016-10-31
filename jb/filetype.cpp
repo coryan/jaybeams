@@ -1,4 +1,4 @@
-#include <jb/filetype.hpp>
+#include "jb/filetype.hpp"
 
 bool jb::is_gz(std::string const& filename) {
   char const ext[] = ".gz";

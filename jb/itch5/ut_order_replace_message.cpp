@@ -47,10 +47,11 @@ BOOST_AUTO_TEST_CASE(stream_order_replace_message) {
   auto tmp = decoder<false, order_replace_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=U,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",original_order_reference_number=42"
-                              ",new_order_reference_number=4242"
-                              ",shares=100"
-                              ",price=234.0600");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=U,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",original_order_reference_number=42"
+                ",new_order_reference_number=4242"
+                ",shares=100"
+                ",price=234.0600");
 }

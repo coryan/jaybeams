@@ -8,8 +8,8 @@ namespace jb {
 /**
  * Raise std::exception to indicate an assertion failure
  */
-[[noreturn]] void raise_assertion_failure(char const* filename, int lineno,
-                                          char const* predicate);
+[[noreturn]] void raise_assertion_failure(
+    char const* filename, int lineno, char const* predicate);
 
 #define JB_ASSERT_THROW(PRED)                                                  \
   do {                                                                         \

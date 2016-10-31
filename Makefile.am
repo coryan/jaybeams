@@ -146,12 +146,17 @@ jb_ut_itch5_libs = \
   $(jb_ut_libs)
 
 ################################################################
-# 
+# If CLANG_FORMAT was found, 
 ################################################################
+if FOUND_CLANG_FORMAT
 check-style:
 	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' | \
-	  xargs clang-format -i
-	$(AM_V_at)git diff --exit-code
+	  xargs $(CLANG_FORMAT) -i
+	$(AM_V_at)git diff --exit-code && echo "clang-format checks passed"
+else
+check-style:
+	$(AM_V_at)echo "clang-format not found, cannot check style" && exit 1
+endif !FOUND_CLANG_FORMAT
 .PHONY: check-style
 
 ################################################################

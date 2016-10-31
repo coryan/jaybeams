@@ -15,8 +15,8 @@ BOOST_AUTO_TEST_CASE(decode_stock_directory_message) {
   auto expected_ts = jb::itch5::testing::expected_ts();
 
   auto x = decoder<true, stock_directory_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    stock_directory_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, stock_directory_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -36,8 +36,8 @@ BOOST_AUTO_TEST_CASE(decode_stock_directory_message) {
   BOOST_CHECK_EQUAL(x.inverse_indicator, u'N');
 
   x = decoder<false, stock_directory_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    stock_directory_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, stock_directory_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -70,22 +70,23 @@ BOOST_AUTO_TEST_CASE(stream_stock_directory_message) {
       decoder<false, stock_directory_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=R,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",stock=HSART"
-                              ",market_category=G"
-                              ",financial_status_indicator=N"
-                              ",round_lot_size=100"
-                              ",roundlots_only=N"
-                              ",issue_classification=O"
-                              ",issue_subtype=C"
-                              ",authenticity=P"
-                              ",short_sale_threshold_indicator=N"
-                              ",ipo_flag=N"
-                              ",luld_reference_price_tier=1"
-                              ",etp_flag=N"
-                              ",etp_leverage_factor=0"
-                              ",inverse_indicator=N");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=R,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",stock=HSART"
+                ",market_category=G"
+                ",financial_status_indicator=N"
+                ",round_lot_size=100"
+                ",roundlots_only=N"
+                ",issue_classification=O"
+                ",issue_subtype=C"
+                ",authenticity=P"
+                ",short_sale_threshold_indicator=N"
+                ",ipo_flag=N"
+                ",luld_reference_price_tier=1"
+                ",etp_flag=N"
+                ",etp_leverage_factor=0"
+                ",inverse_indicator=N");
 }
 
 /**

@@ -93,8 +93,9 @@ public:
    * @param environment_variable_name the name of the *_ROOT to use
    *   when searching for the configuration file.
    */
-  void load_overrides(int& argc, char* argv[], std::string const& filename,
-                      char const* environment_variable_name);
+  void load_overrides(
+      int& argc, char* argv[], std::string const& filename,
+      char const* environment_variable_name);
 
   /**
    * Read the configuration file and load the overrides defined
@@ -193,19 +194,18 @@ public:
     virtual ~attribute_base() = 0;
 
     /// Apply any overrides set in the YAML document
-    virtual void apply_overrides(YAML::Node const& by_name,
-                                 class_overrides const& by_class) = 0;
+    virtual void apply_overrides(
+        YAML::Node const& by_name, class_overrides const& by_class) = 0;
 
     /// Apply the necessary command-line options to the descriptors.
-    virtual void
-    add_options(boost::program_options::options_description& options,
-                std::string const& prefix,
-                attribute_descriptor const& d) const = 0;
+    virtual void add_options(
+        boost::program_options::options_description& options,
+        std::string const& prefix, attribute_descriptor const& d) const = 0;
 
     /// Apply any overrides set in the command-line flags
-    virtual void
-    apply_cmdline_values(boost::program_options::variables_map const& vm,
-                         std::string const& name) = 0;
+    virtual void apply_cmdline_values(
+        boost::program_options::variables_map const& vm,
+        std::string const& name) = 0;
 
     /// Validate the attribute, mostly a no-op except for embedded
     /// config_objects
@@ -242,8 +242,8 @@ protected:
   }
 
   /// Convenience function to create attribute descriptors with less typing.
-  static attribute_descriptor desc(std::string const& name,
-                                   std::string const& class_name) {
+  static attribute_descriptor
+  desc(std::string const& name, std::string const& class_name) {
     return attribute_descriptor(name, class_name);
   }
 
@@ -264,8 +264,8 @@ private:
    *   classes) to override.
    * @param by_class the set of per-class overrides to apply
    */
-  void apply_overrides(YAML::Node const& by_name,
-                       class_overrides const& by_class);
+  void
+  apply_overrides(YAML::Node const& by_name, class_overrides const& by_class);
 
   /**
    * Compute the full name of a command-line argument, given its
@@ -274,8 +274,8 @@ private:
    * @param prefix the prefix for the argument
    * @param name the name of the argument
    */
-  static std::string cmdline_arg_name(std::string const& prefix,
-                                      std::string const& name);
+  static std::string
+  cmdline_arg_name(std::string const& prefix, std::string const& name);
 
   friend class generic_config_attribute;
   void auto_register(attribute_base* a);
@@ -290,15 +290,16 @@ private:
   /**
    * Add the attributes of this config_object as command-line options.
    */
-  void add_options(boost::program_options::options_description& options,
-                   std::string const& prefix,
-                   attribute_descriptor const& d) const;
+  void add_options(
+      boost::program_options::options_description& options,
+      std::string const& prefix, attribute_descriptor const& d) const;
 
   /**
    * Apply the values from the cmdline to this configuration object.
    */
-  void apply_cmdline_values(boost::program_options::variables_map const& vm,
-                            std::string const& prefix);
+  void apply_cmdline_values(
+      boost::program_options::variables_map const& vm,
+      std::string const& prefix);
 
   /// Print out the configuration settings in YAML format
   YAML::Node to_yaml() const;

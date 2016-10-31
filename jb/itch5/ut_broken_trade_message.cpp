@@ -41,7 +41,8 @@ BOOST_AUTO_TEST_CASE(stream_broken_trade_message) {
   auto tmp = decoder<false, broken_trade_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=B,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",match_number=2340600");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=B,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",match_number=2340600");
 }

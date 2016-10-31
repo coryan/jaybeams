@@ -9,7 +9,8 @@ namespace itch5 {
  *
  * @tparam T the type of object to validate.
  */
-template <typename T> struct noop_validator {
+template <typename T>
+struct noop_validator {
   /**
    * Validate the object.
    *

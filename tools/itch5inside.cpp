@@ -1,8 +1,8 @@
 #include <jb/itch5/compute_inside.hpp>
 #include <jb/itch5/process_iostream.hpp>
-#include <jb/offline_feed_statistics.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
+#include <jb/offline_feed_statistics.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -105,13 +105,15 @@ config::config()
           this)
     , output_file(
           desc("output-file")
-              .help("The name of the file where to store the inside data."
-                    "  Files ending in .gz are automatically compressed."),
+              .help(
+                  "The name of the file where to store the inside data."
+                  "  Files ending in .gz are automatically compressed."),
           this)
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "offline-feed-statistics"), this)
-    , symbol_stats(desc("symbol-stats", "offline-feed-statistics"), this,
-                   default_per_symbol_stats())
+    , symbol_stats(
+          desc("symbol-stats", "offline-feed-statistics"), this,
+          default_per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")
               .help(
@@ -123,14 +125,16 @@ config::config()
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage("Missing input-file setting."
-                    "  You must specify an input file.",
-                    1);
+    throw jb::usage(
+        "Missing input-file setting."
+        "  You must specify an input file.",
+        1);
   }
   if (output_file() == "") {
-    throw jb::usage("Missing output-file setting."
-                    "  You must specify an output file.",
-                    1);
+    throw jb::usage(
+        "Missing output-file setting."
+        "  You must specify an output file.",
+        1);
   }
   log().validate();
   stats().validate();

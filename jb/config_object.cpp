@@ -1,6 +1,7 @@
-#include <jb/config_object.hpp>
-#include <jb/config_files_location.hpp>
+#include "jb/config_object.hpp"
+
 #include <jb/assert_throw.hpp>
+#include <jb/config_files_location.hpp>
 #include <jb/log.hpp>
 
 #include <boost/program_options.hpp>
@@ -13,12 +14,12 @@ jb::config_object::config_object()
     : attributes_() {
 }
 
-void jb::config_object::load_overrides(int& argc, char* argv[],
-                                       std::string const& filename,
-                                       char const* environment_variable_name) {
+void jb::config_object::load_overrides(
+    int& argc, char* argv[], std::string const& filename,
+    char const* environment_variable_name) {
   char argv0[] = "undefined";
-  jb::config_files_locations<> search(argc > 1 ? argv[0] : argv0,
-                                      environment_variable_name);
+  jb::config_files_locations<> search(
+      argc > 1 ? argv[0] : argv0, environment_variable_name);
   try {
     auto full = search.find_configuration_file(filename);
     JB_LOG(debug) << "loading overrides from " << full;
@@ -31,8 +32,8 @@ void jb::config_object::load_overrides(int& argc, char* argv[],
   process_cmdline(argc, argv);
 }
 
-void jb::config_object::load_overrides(int& argc, char* argv[],
-                                       std::string const& filename) {
+void jb::config_object::load_overrides(
+    int& argc, char* argv[], std::string const& filename) {
 
   char argv0[] = "undefined";
   jb::config_files_locations<> search(argc > 1 ? argv[0] : argv0);
@@ -48,8 +49,8 @@ void jb::config_object::load_overrides(int& argc, char* argv[],
   process_cmdline(argc, argv);
 }
 
-void jb::config_object::load_overrides(int& argc, char* argv[],
-                                       std::istream& is) {
+void jb::config_object::load_overrides(
+    int& argc, char* argv[], std::istream& is) {
   YAML::Node doc = YAML::Load(is);
   apply_overrides(doc);
   process_cmdline(argc, argv);
@@ -61,8 +62,8 @@ void jb::config_object::apply_overrides(YAML::Node const& doc) {
   apply_overrides(doc, by_class);
 }
 
-void jb::config_object::apply_overrides(YAML::Node const& by_name,
-                                        class_overrides const& by_class) {
+void jb::config_object::apply_overrides(
+    YAML::Node const& by_name, class_overrides const& by_class) {
   for (auto i : attributes_) {
     if (i->class_name() != "") {
       std::string key = std::string(":") + i->class_name();
@@ -86,8 +87,8 @@ void jb::config_object::process_cmdline(int& argc, char* argv[]) {
   options.add_options()("help", "produce help message")(
       "help-in-test", "produce help message (Boost.Test captures --help)");
 
-  add_options(options, std::string(""),
-              config_object::attribute_descriptor(""));
+  add_options(
+      options, std::string(""), config_object::attribute_descriptor(""));
 
   // ... only top-level arguments get to be positional ...
   po::positional_options_description positional;
@@ -98,11 +99,12 @@ void jb::config_object::process_cmdline(int& argc, char* argv[]) {
   }
 
   po::variables_map vm;
-  po::store(po::command_line_parser(argc, argv)
-                .options(options)
-                .positional(positional)
-                .run(),
-            vm);
+  po::store(
+      po::command_line_parser(argc, argv)
+          .options(options)
+          .positional(positional)
+          .run(),
+      vm);
   po::notify(vm);
 
   if (vm.count("help") or vm.count("help-in-test")) {
@@ -123,9 +125,9 @@ std::ostream& jb::config_object::to_stream(std::ostream& os) const {
   return os << doc;
 }
 
-void jb::config_object::add_options(po::options_description& options,
-                                    std::string const& prefix,
-                                    attribute_descriptor const& d) const {
+void jb::config_object::add_options(
+    po::options_description& options, std::string const& prefix,
+    attribute_descriptor const& d) const {
   po::options_description group(d.helpmsg);
 
   for (auto i : attributes_) {
@@ -134,8 +136,8 @@ void jb::config_object::add_options(po::options_description& options,
   options.add(group);
 }
 
-void jb::config_object::apply_cmdline_values(po::variables_map const& vm,
-                                             std::string const& prefix) {
+void jb::config_object::apply_cmdline_values(
+    po::variables_map const& vm, std::string const& prefix) {
   for (auto i : attributes_) {
     i->apply_cmdline_values(vm, cmdline_arg_name(prefix, i->name()));
   }
@@ -156,8 +158,8 @@ void jb::config_object::validate_attributes() const {
   }
 }
 
-std::string jb::config_object::cmdline_arg_name(std::string const& prefix,
-                                                std::string const& name) {
+std::string jb::config_object::cmdline_arg_name(
+    std::string const& prefix, std::string const& name) {
   if (prefix == "") {
     return name;
   }
@@ -175,8 +177,8 @@ YAML::Node jb::config_object::to_yaml() const {
   return doc;
 }
 
-jb::config_object::attribute_base::attribute_base(attribute_descriptor const& d,
-                                                  config_object* container)
+jb::config_object::attribute_base::attribute_base(
+    attribute_descriptor const& d, config_object* container)
     : descriptor_(d) {
   container->auto_register(this);
 }
