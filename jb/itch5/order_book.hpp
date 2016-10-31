@@ -1,10 +1,10 @@
 #ifndef jb_itch5_order_book_hpp
 #define jb_itch5_order_book_hpp
 
-#include <jb/feed_error.hpp>
 #include <jb/itch5/buy_sell_indicator.hpp>
 #include <jb/itch5/order_book_def.hpp>
 #include <jb/itch5/price_field.hpp>
+#include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
 #include <functional>

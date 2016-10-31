@@ -1,9 +1,9 @@
 #ifndef jb_fftw_time_delay_estimator_hpp
 #define jb_fftw_time_delay_estimator_hpp
 
-#include <jb/complex_traits.hpp>
 #include <jb/fftw/aligned_vector.hpp>
 #include <jb/fftw/plan.hpp>
+#include <jb/complex_traits.hpp>
 
 #include <type_traits>
 

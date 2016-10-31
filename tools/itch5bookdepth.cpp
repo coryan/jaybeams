@@ -1,7 +1,7 @@
-#include <jb/book_depth_statistics.hpp>
-#include <jb/fileio.hpp>
 #include <jb/itch5/compute_book_depth.hpp>
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/book_depth_statistics.hpp>
+#include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
 #include <iostream>

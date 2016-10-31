@@ -1,13 +1,13 @@
 #ifndef jb_itch5_mold_udp_pacer_hpp
 #define jb_itch5_mold_udp_pacer_hpp
 
-#include <jb/assert_throw.hpp>
 #include <jb/itch5/encoder.hpp>
 #include <jb/itch5/message_header.hpp>
 #include <jb/itch5/mold_udp_pacer_config.hpp>
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/itch5/short_string_field.hpp>
 #include <jb/itch5/unknown_message.hpp>
+#include <jb/assert_throw.hpp>
 
 #include <boost/asio/buffer.hpp>
 

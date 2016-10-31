@@ -1,5 +1,5 @@
-#include <jb/as_hhmmss.hpp>
 #include <jb/itch5/compute_inside.hpp>
+#include <jb/as_hhmmss.hpp>
 
 #include <skye/mock_function.hpp>
 #include <boost/test/unit_test.hpp>
