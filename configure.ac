@@ -27,6 +27,21 @@ AC_PROG_CXX
 # ... make sure we know how to create static libraries ...
 AC_PROG_RANLIB
 
+# ... check if there is a clang-format installed, allow the user to
+# override the default by setting the CLANG_FORMAT environment
+# variable ...
+AC_CHECK_PROGS(CLANG_FORMAT, $CLANG_FORMAT clang-format, "")
+AS_IF([test "x$CLANG_FORMAT" != "x"], [
+  ac_clang_format_version=`$CLANG_FORMAT --version | $AWK '{print $3}'`
+  AC_MSG_CHECKING([checking clang-format version >= 3.8.0])
+  AX_COMPARE_VERSION([$ac_clang_format_version], [ge], [3.8.0],
+    [AM_CONDITIONAL([FOUND_CLANG_FORMAT], [true])
+     AC_MSG_RESULT([yes])],
+    [AM_CONDITIONAL([FOUND_CLANG_FORMAT], [false])
+     AC_MSG_RESULT([no])]
+  )
+])
+
 # ... the code is going to be C++11, make sure the compiler supports it ...
 AX_CXX_COMPILE_STDCXX_14(noext, mandatory)
 
