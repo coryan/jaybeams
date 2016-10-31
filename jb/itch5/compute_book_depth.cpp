@@ -38,24 +38,27 @@ void jb::itch5::compute_book_depth::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_executed_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, msg.executed_shares, false);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.executed_shares, false);
 }
 
 void jb::itch5::compute_book_depth::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_cancel_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, msg.canceled_shares, false);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.canceled_shares, false);
 }
 
 void jb::itch5::compute_book_depth::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_delete_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, 0, true);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number, 0,
+      true);
 }
 
 void jb::itch5::compute_book_depth::handle_message(
@@ -65,9 +68,9 @@ void jb::itch5::compute_book_depth::handle_message(
   // First we treat the replace as a full cancel, but we do not want
   // to send an update because the operation is supposed to be atomic...
   try {
-    auto result_reduce =
-        handle_reduce_no_update(recv_ts, msgcnt, msgoffset, msg.header,
-                                msg.original_order_reference_number, 0, true);
+    auto result_reduce = handle_reduce_no_update(
+        recv_ts, msgcnt, msgoffset, msg.header,
+        msg.original_order_reference_number, 0, true);
     // ... result_reduce contains a copy of the state of the order before
     // it was removed, use it to create the missing attributes of the
     // new order ...
@@ -82,16 +85,16 @@ void jb::itch5::compute_book_depth::handle_message(
 
     // ... there is an event, send that to the callback
     auto book_it = std::get<2>(result_add);
-    callback_(recv_ts, msg.header, copy.stock,
-              book_it->second.get_book_depth());
+    callback_(
+        recv_ts, msg.header, copy.stock, book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
     JB_LOG(warning) << "order_replace_message skipping the message: "
                     << fe.what();
   }
 }
 
-void jb::itch5::compute_book_depth::handle_unknown(time_point recv_ts,
-                                                   unknown_message const& msg) {
+void jb::itch5::compute_book_depth::handle_unknown(
+    time_point recv_ts, unknown_message const& msg) {
   char msgtype = *static_cast<char const*>(msg.buf());
   JB_LOG(error) << "Unknown message type '" << msgtype << "'(" << int(msgtype)
                 << ") in msgcnt=" << msg.count()
@@ -129,8 +132,8 @@ jb::itch5::compute_book_depth::handle_add_no_update(
     stock_book_it = book_pair.first; // iterator to the new order book
   }
   // ... add the order to the book, ignore the bool return
-  stock_book_it->second.handle_add_order(msg.buy_sell_indicator, msg.price,
-                                         msg.shares);
+  stock_book_it->second.handle_add_order(
+      msg.buy_sell_indicator, msg.price, msg.shares);
   return std::make_tuple(true, position.first->second, stock_book_it);
 }
 
@@ -139,13 +142,13 @@ void jb::itch5::compute_book_depth::handle_reduce(
     message_header const& header, std::uint64_t order_reference_number,
     std::uint32_t shares, bool all_shares) {
   try {
-    auto result =
-        handle_reduce_no_update(recv_ts, msgcnt, msgoffset, header,
-                                order_reference_number, shares, all_shares);
+    auto result = handle_reduce_no_update(
+        recv_ts, msgcnt, msgoffset, header, order_reference_number, shares,
+        all_shares);
     auto const& copy = std::get<1>(result);
     auto stock_book_it = std::get<2>(result);
-    callback_(recv_ts, header, copy.stock,
-              stock_book_it->second.get_book_depth());
+    callback_(
+        recv_ts, header, copy.stock, stock_book_it->second.get_book_depth());
   } catch (const jb::feed_error& fe) {
     JB_LOG(warning) << "handle_reduce skipping the message: " << fe.what();
   }
@@ -187,7 +190,7 @@ jb::itch5::compute_book_depth::handle_reduce_no_update(
     orders_.erase(position);
   }
   // ... reduce the quantity at the price...
-  stock_book_it->second.handle_order_reduced(copy.buy_sell_indicator, copy.px,
-                                             shares);
+  stock_book_it->second.handle_order_reduced(
+      copy.buy_sell_indicator, copy.px, shares);
   return std::make_tuple(true, copy, stock_book_it);
 }

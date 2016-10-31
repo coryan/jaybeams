@@ -4,8 +4,8 @@
 #include <stdexcept>
 
 template <>
-void jb::itch5::check_offset<true>(char const* msg, std::size_t size,
-                                   std::size_t offset, std::size_t n) {
+void jb::itch5::check_offset<true>(
+    char const* msg, std::size_t size, std::size_t offset, std::size_t n) {
   if (0 < n and offset < size and offset + n <= size) {
     return;
   }

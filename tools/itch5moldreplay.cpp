@@ -1,12 +1,12 @@
-#include <jb/itch5/process_iostream_mlist.hpp>
-#include <jb/itch5/mold_udp_pacer.hpp>
-#include <jb/fileio.hpp>
-#include <jb/log.hpp>
 #include <jb/as_hhmmss.hpp>
+#include <jb/fileio.hpp>
+#include <jb/itch5/mold_udp_pacer.hpp>
+#include <jb/itch5/process_iostream_mlist.hpp>
+#include <jb/log.hpp>
 
 #include <boost/asio/io_service.hpp>
-#include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/multicast.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -39,17 +39,18 @@ public:
   //@}
 
   /// Initialize an empty handler
-  replayer(boost::asio::ip::udp::socket&& s,
-           boost::asio::ip::udp::endpoint const& ep,
-           jb::itch5::mold_udp_pacer_config const& cfg)
+  replayer(
+      boost::asio::ip::udp::socket&& s,
+      boost::asio::ip::udp::endpoint const& ep,
+      jb::itch5::mold_udp_pacer_config const& cfg)
       : socket_(std::move(s))
       , endpoint_(ep)
       , pacer_(cfg, jb::itch5::mold_udp_pacer<>::session_id_type("ITCH/RPLY")) {
   }
 
   /// Handle all messages as blobs
-  void handle_unknown(time_point const& recv_ts,
-                      jb::itch5::unknown_message const& msg) {
+  void handle_unknown(
+      time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
     auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_); };
     auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
       if (d > std::chrono::seconds(10)) {
@@ -76,8 +77,8 @@ private:
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.load_overrides(argc, argv, std::string("itch5moldreplay.yaml"),
-                     "JB_ROOT");
+  cfg.load_overrides(
+      argc, argv, std::string("itch5moldreplay.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::asio::io_service io_service;
@@ -121,20 +122,23 @@ config::config()
           this)
     , destination(
           desc("destination")
-              .help("The destination for the UDP messages. "
-                    "The destination can be a unicast or multicast address."),
+              .help(
+                  "The destination for the UDP messages. "
+                  "The destination can be a unicast or multicast address."),
           this, default_multicast_group())
-    , port(desc("port").help("The destination port for the UDP messages. "),
-           this, default_multicast_port())
+    , port(
+          desc("port").help("The destination port for the UDP messages. "),
+          this, default_multicast_port())
     , log(desc("log", "logging"), this)
     , pacer(desc("pacer", "mold-udp-pacer"), this) {
 }
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage("Missing input-file setting."
-                    "  You must specify an input file.",
-                    1);
+    throw jb::usage(
+        "Missing input-file setting."
+        "  You must specify an input file.",
+        1);
   }
   log().validate();
   pacer().validate();

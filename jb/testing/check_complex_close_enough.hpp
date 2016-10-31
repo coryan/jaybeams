@@ -2,8 +2,8 @@
 #define jb_testing_check_complex_close_enough_hpp
 
 #include <boost/test/unit_test.hpp>
-#include <complex>
 #include <cmath>
+#include <complex>
 #include <limits>
 
 namespace jb {
@@ -42,10 +42,12 @@ bool close_enough(real actual, real expected, int tol) {
  * @tparam real the type of floating point number (float, double, long double)
  */
 template <typename real>
-bool close_enough(std::complex<real> const& actual,
-                  std::complex<real> const& expected, int tol = 1) {
-  return (close_enough(actual.real(), expected.real(), tol) and
-          close_enough(actual.imag(), expected.imag(), tol));
+bool close_enough(
+    std::complex<real> const& actual, std::complex<real> const& expected,
+    int tol = 1) {
+  return (
+      close_enough(actual.real(), expected.real(), tol) and
+      close_enough(actual.imag(), expected.imag(), tol));
 }
 
 /**
@@ -63,21 +65,24 @@ bool close_enough(std::complex<real> const& actual,
  */
 template <typename real>
 bool close_enough(real actual[2], real expected[2], int tol = 1) {
-  return (close_enough(actual[0], expected[0], tol) and
-          close_enough(actual[0], expected[0], tol));
+  return (
+      close_enough(actual[0], expected[0], tol) and
+      close_enough(actual[0], expected[0], tol));
 }
 
 /**
  * Verify that a floating point value is "close enough" to 0.
  */
-template <typename floating> void check_small(floating t, double small) {
+template <typename floating>
+void check_small(floating t, double small) {
   BOOST_CHECK_SMALL(t, floating(small));
 }
 
 /**
  * Verify that a complex number is "close enough" to 0.
  */
-template <typename real> void check_small(std::complex<real> t, double small) {
+template <typename real>
+void check_small(std::complex<real> t, double small) {
   BOOST_CHECK_SMALL(t.real(), real(small));
   BOOST_CHECK_SMALL(t.imag(), real(small));
 }
@@ -89,7 +94,8 @@ std::complex<precision_t> format(precision_t v[2]) {
 }
 
 /// Allow generic treatment of FFTW-style complex numbers and other types.
-template <typename value_type> value_type format(value_type t) {
+template <typename value_type>
+value_type format(value_type t) {
   return t;
 }
 

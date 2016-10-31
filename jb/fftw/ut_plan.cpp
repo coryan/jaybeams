@@ -7,7 +7,8 @@
 
 namespace {
 
-template <typename precision_t> void test_plan_complex2complex() {
+template <typename precision_t>
+void test_plan_complex2complex() {
   int nsamples = 1 << 15;
   int tol = nsamples;
 
@@ -36,7 +37,8 @@ template <typename precision_t> void test_plan_complex2complex() {
   jb::testing::check_vector_close_enough(out, in, tol);
 }
 
-template <typename precision_t> void test_plan_real2complex() {
+template <typename precision_t>
+void test_plan_real2complex() {
   int nsamples = 1 << 15;
   int tol = nsamples;
 
@@ -65,7 +67,8 @@ template <typename precision_t> void test_plan_real2complex() {
   jb::testing::check_vector_close_enough(out, in, tol);
 }
 
-template <typename precision_t> void test_plan_errors() {
+template <typename precision_t>
+void test_plan_errors() {
   int nsamples = 1 << 15;
 
   typedef jb::fftw::plan<precision_t> tested;

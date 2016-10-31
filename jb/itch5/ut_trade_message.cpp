@@ -1,5 +1,5 @@
-#include <jb/itch5/trade_message.hpp>
 #include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/trade_message.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -51,12 +51,13 @@ BOOST_AUTO_TEST_CASE(stream_trade_message) {
   auto tmp = decoder<false, trade_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=P,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",order_reference_number=4242"
-                              ",buy_sell_indicator=B"
-                              ",shares=100"
-                              ",stock=HSART"
-                              ",price=123.0500"
-                              ",match_number=2340600");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=P,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",order_reference_number=4242"
+                ",buy_sell_indicator=B"
+                ",shares=100"
+                ",stock=HSART"
+                ",price=123.0500"
+                ",match_number=2340600");
 }

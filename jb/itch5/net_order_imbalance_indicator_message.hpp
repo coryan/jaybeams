@@ -20,8 +20,8 @@ typedef char_list_field<u'B', u'S', u'N', u'O'> imbalance_direction_t;
  * Imbalance Indicator' message.
  */
 typedef char_list_field<u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8',
-                        u'9', u'A', u'B', u'C',
-                        u' '> price_variation_indicator_t;
+                        u'9', u'A', u'B', u'C', u' '>
+    price_variation_indicator_t;
 
 /**
  * Represent an 'Net Order Imbalance Indicator' message in the
@@ -43,7 +43,8 @@ struct net_order_imbalance_indicator_message {
 };
 
 /// Specialize decoder for a jb::itch5::net_order_imbalance_indicator_message
-template <bool V> struct decoder<V, net_order_imbalance_indicator_message> {
+template <bool V>
+struct decoder<V, net_order_imbalance_indicator_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static net_order_imbalance_indicator_message
   r(std::size_t size, void const* buf, std::size_t off) {
@@ -65,8 +66,8 @@ template <bool V> struct decoder<V, net_order_imbalance_indicator_message> {
 };
 
 /// Streaming operator for jb::itch5::net_order_imbalance_indicator_message.
-std::ostream& operator<<(std::ostream& os,
-                         net_order_imbalance_indicator_message const& x);
+std::ostream&
+operator<<(std::ostream& os, net_order_imbalance_indicator_message const& x);
 
 } // namespace itch5
 } // namespace jb

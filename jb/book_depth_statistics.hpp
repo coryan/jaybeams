@@ -30,7 +30,8 @@ public:
    * @param book_depth : the book depth (after processing the event)
    * to be recorded.
    */
-  template <typename book_depth_t> void sample(book_depth_t book_depth) {
+  template <typename book_depth_t>
+  void sample(book_depth_t book_depth) {
     book_depth_.sample(book_depth);
   }
 

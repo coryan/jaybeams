@@ -22,14 +22,14 @@ namespace itch5 {
  * @throws std::runtime_error if the validation fails.
  */
 template <bool validate>
-void check_offset(char const* msg, std::size_t size, std::size_t offset,
-                  std::size_t n) {
+void check_offset(
+    char const* msg, std::size_t size, std::size_t offset, std::size_t n) {
 }
 
 /// A version of jb::itch5::check_offset<> that actually validates.
 template <>
-void check_offset<true>(char const* msg, std::size_t size, std::size_t offset,
-                        std::size_t n);
+void check_offset<true>(
+    char const* msg, std::size_t size, std::size_t offset, std::size_t n);
 
 /**
  * Convenience function to raise an exception upon a validation error.

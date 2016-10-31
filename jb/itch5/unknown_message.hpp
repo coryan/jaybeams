@@ -12,8 +12,8 @@ namespace itch5 {
 class unknown_message {
 public:
   /// Constructor from message details
-  unknown_message(std::uint32_t count, std::size_t offset, std::size_t len,
-                  void const* buf)
+  unknown_message(
+      std::uint32_t count, std::size_t offset, std::size_t len, void const* buf)
       : count_(count)
       , offset_(offset)
       , len_(len)
@@ -40,7 +40,8 @@ public:
   //@}
 
   /// Extract the message header
-  template <bool validate> message_header decode_header() const {
+  template <bool validate>
+  message_header decode_header() const {
     return decoder<validate, message_header>::r(
         len(), static_cast<char const*>(buf()), 0);
   }

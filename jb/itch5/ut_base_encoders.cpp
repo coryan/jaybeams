@@ -1,5 +1,5 @@
-#include <jb/itch5/base_encoders.hpp>
 #include <jb/itch5/base_decoders.hpp>
+#include <jb/itch5/base_encoders.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_CASE(encode_uint8) {
   BOOST_CHECK_NO_THROW((encoder<true, std::uint8_t>::w(16, buffer, 0, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint8_t>::w(16, buffer, 8, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint8_t>::w(16, buffer, 15, 0)));
-  BOOST_CHECK_THROW((encoder<true, std::uint8_t>::w(16, buffer, 16, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, std::uint8_t>::w(16, buffer, 16, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, std::uint8_t>::w(16, buffer, 16, 0)));
 }
 
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(encode_uint16) {
   BOOST_CHECK_NO_THROW((encoder<true, std::uint16_t>::w(16, buffer, 0, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint16_t>::w(16, buffer, 8, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint16_t>::w(16, buffer, 14, 0)));
-  BOOST_CHECK_THROW((encoder<true, std::uint16_t>::w(16, buffer, 15, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, std::uint16_t>::w(16, buffer, 15, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, std::uint16_t>::w(16, buffer, 15, 0)));
 }
 
@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE(encode_uint32) {
   BOOST_CHECK_NO_THROW((encoder<true, std::uint32_t>::w(16, buffer, 0, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint32_t>::w(16, buffer, 8, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint32_t>::w(16, buffer, 12, 0)));
-  BOOST_CHECK_THROW((encoder<true, std::uint32_t>::w(16, buffer, 13, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, std::uint32_t>::w(16, buffer, 13, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, std::uint32_t>::w(16, buffer, 13, 0)));
 }
 
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(encode_uint64) {
 
   BOOST_CHECK_NO_THROW((encoder<true, std::uint64_t>::w(16, buffer, 2, 0)));
   BOOST_CHECK_NO_THROW((encoder<true, std::uint64_t>::w(16, buffer, 7, 0)));
-  BOOST_CHECK_THROW((encoder<true, std::uint64_t>::w(16, buffer, 9, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, std::uint64_t>::w(16, buffer, 9, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, std::uint64_t>::w(16, buffer, 9, 0)));
 }

@@ -1,7 +1,7 @@
 #include "jb/itch5/message_header.hpp"
 
-#include <iostream>
 #include <cctype>
+#include <iostream>
 
 std::ostream& jb::itch5::operator<<(std::ostream& os, message_header const& x) {
   if (std::isprint(x.message_type)) {

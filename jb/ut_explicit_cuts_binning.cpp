@@ -14,15 +14,15 @@ typedef jb::histogram<jb::explicit_cuts_binning<int>> tested_histogram;
  */
 BOOST_AUTO_TEST_CASE(explicit_cuts_binning_constructor) {
   std::vector<int> cuts;
-  BOOST_CHECK_THROW(jb::explicit_cuts_binning<int>(cuts.begin(), cuts.end()),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      jb::explicit_cuts_binning<int>(cuts.begin(), cuts.end()), std::exception);
   BOOST_CHECK_THROW(jb::explicit_cuts_binning<int>({10}), std::exception);
   BOOST_CHECK_NO_THROW(jb::explicit_cuts_binning<int>({1, 2}));
   BOOST_CHECK_NO_THROW(jb::explicit_cuts_binning<int>({1, 2, 3, 4}));
-  BOOST_CHECK_THROW(jb::explicit_cuts_binning<int>({1, 2, 5, 4}),
-                    std::exception);
-  BOOST_CHECK_THROW(jb::explicit_cuts_binning<int>({1, 2, 2, 4}),
-                    std::exception);
+  BOOST_CHECK_THROW(
+      jb::explicit_cuts_binning<int>({1, 2, 5, 4}), std::exception);
+  BOOST_CHECK_THROW(
+      jb::explicit_cuts_binning<int>({1, 2, 2, 4}), std::exception);
 }
 
 /**

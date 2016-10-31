@@ -21,8 +21,8 @@ BOOST_AUTO_TEST_CASE(decode_short_string_field) {
     BOOST_CHECK_EQUAL(actual.c_str(), "AB");
 
     BOOST_CHECK_NO_THROW((decoder<true, tested>::r(16, buffer, 2)));
-    BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 13)),
-                      std::runtime_error);
+    BOOST_CHECK_THROW(
+        (decoder<true, tested>::r(16, buffer, 13)), std::runtime_error);
     BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 13)));
   }
 
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(validate_short_string_field) {
 
   std::memset(buffer, 0, sizeof(buffer));
   std::memcpy(buffer, "ABC", 4);
-  BOOST_CHECK_THROW((decoder<true, tested>::r(16, buffer, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, tested>::r(16, buffer, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, tested>::r(16, buffer, 0)));
 }
 

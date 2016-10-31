@@ -19,7 +19,8 @@ typedef char_list_field<u'Q', // NASDAQ Global Select Market
                         u'P', // NYSE ARCA
                         u'Z', // BATS Z Exchange
                         u' '  // Not available
-                        > market_category_t;
+                        >
+    market_category_t;
 
 /**
  * Represent the 'Financial Status Indicator' field on a 'Stock
@@ -38,7 +39,8 @@ typedef char_list_field<
           // Product
     u'N', // Nomal (Default): Issuer is not Deficient, Delinquent or Bankrupt
     u' '  // Not available
-    > financial_status_indicator_t;
+    >
+    financial_status_indicator_t;
 
 /**
  * Represent the 'Round Lots Only' field on a 'Stock
@@ -66,7 +68,8 @@ typedef char_list_field<u'A', // American Depositary Share
                         u'U', // Unit
                         u'V', // Units/Benif Int
                         u'W'  // Warrant
-                        > issue_classification_t;
+                        >
+    issue_classification_t;
 
 /// A functor to validate the 'Issue Sub-Type' field.
 struct validate_issue_subtype {
@@ -85,7 +88,8 @@ typedef short_string_field<2, validate_issue_subtype> issue_subtype_t;
  */
 typedef char_list_field<u'P', // Production
                         u'T'  // Test
-                        > authenticity_t;
+                        >
+    authenticity_t;
 
 /**
  * Represent the 'Short Sale Threshold Indicator' field on a 'Stock
@@ -144,10 +148,11 @@ struct stock_directory_message {
 };
 
 /// Specialize decoder for a jb::itch5::stock_directory_message
-template <bool V> struct decoder<V, stock_directory_message> {
+template <bool V>
+struct decoder<V, stock_directory_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static stock_directory_message r(std::size_t size, void const* buf,
-                                   std::size_t off) {
+  static stock_directory_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     stock_directory_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.stock = decoder<V, stock_t>::r(size, buf, off + 11);

@@ -25,10 +25,11 @@ struct mwcb_decline_level_message {
 };
 
 /// Specialize decoder for a jb::itch5::mwcb_decline_level_message
-template <bool V> struct decoder<V, mwcb_decline_level_message> {
+template <bool V>
+struct decoder<V, mwcb_decline_level_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static mwcb_decline_level_message r(std::size_t size, void const* buf,
-                                      std::size_t off) {
+  static mwcb_decline_level_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     mwcb_decline_level_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.level_1 = decoder<V, price8_t>::r(size, buf, off + 11);

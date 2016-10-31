@@ -14,10 +14,10 @@ BOOST_AUTO_TEST_CASE(decode_market_participant_position_message) {
   auto buf = jb::itch5::testing::market_participant_position();
   auto expected_ts = jb::itch5::testing::expected_ts();
 
-  auto x = decoder<true, market_participant_position_message>::r(buf.second,
-                                                                 buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    market_participant_position_message::message_type);
+  auto x = decoder<true, market_participant_position_message>::r(
+      buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, market_participant_position_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -27,10 +27,10 @@ BOOST_AUTO_TEST_CASE(decode_market_participant_position_message) {
   BOOST_CHECK_EQUAL(x.market_maker_mode, u'N');
   BOOST_CHECK_EQUAL(x.market_participant_state, u'A');
 
-  x = decoder<false, market_participant_position_message>::r(buf.second,
-                                                             buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    market_participant_position_message::message_type);
+  x = decoder<false, market_participant_position_message>::r(
+      buf.second, buf.first, 0);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, market_participant_position_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -54,13 +54,14 @@ BOOST_AUTO_TEST_CASE(stream_market_participant_position_message) {
       buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=L,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",mpid=LOOF"
-                              ",stock=HSART"
-                              ",primary_market_maker=N"
-                              ",market_maker_mode=N"
-                              ",market_participant_state=A");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=L,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",mpid=LOOF"
+                ",stock=HSART"
+                ",primary_market_maker=N"
+                ",market_maker_mode=N"
+                ",market_participant_state=A");
 }
 
 /**

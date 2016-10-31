@@ -15,8 +15,8 @@ BOOST_AUTO_TEST_CASE(decode_order_executed_message) {
   auto expected_ts = jb::itch5::testing::expected_ts();
 
   auto x = decoder<true, order_executed_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    order_executed_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, order_executed_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_CASE(decode_order_executed_message) {
   BOOST_CHECK_EQUAL(x.match_number, 317ULL);
 
   x = decoder<false, order_executed_message>::r(buf.second, buf.first, 0);
-  BOOST_CHECK_EQUAL(x.header.message_type,
-                    order_executed_message::message_type);
+  BOOST_CHECK_EQUAL(
+      x.header.message_type, order_executed_message::message_type);
   BOOST_CHECK_EQUAL(x.header.stock_locate, 0);
   BOOST_CHECK_EQUAL(x.header.tracking_number, 1);
   BOOST_CHECK_EQUAL(x.header.timestamp.ts.count(), expected_ts.count());
@@ -49,9 +49,10 @@ BOOST_AUTO_TEST_CASE(stream_order_executed_message) {
       decoder<false, order_executed_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=E,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",order_reference_number=42"
-                              ",executed_shares=300"
-                              ",match_number=317");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=E,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",order_reference_number=42"
+                ",executed_shares=300"
+                ",match_number=317");
 }

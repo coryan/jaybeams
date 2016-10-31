@@ -1,5 +1,5 @@
-#include <jb/itch5/compute_inside.hpp>
 #include <jb/as_hhmmss.hpp>
+#include <jb/itch5/compute_inside.hpp>
 
 #include <skye/mock_function.hpp>
 #include <boost/test/unit_test.hpp>
@@ -8,8 +8,8 @@ using namespace jb::itch5;
 
 namespace std { // oh the horror
 
-bool operator==(jb::itch5::half_quote const& lhs,
-                jb::itch5::half_quote const& rhs) {
+bool operator==(
+    jb::itch5::half_quote const& lhs, jb::itch5::half_quote const& rhs) {
   return lhs.first == rhs.first and lhs.second == rhs.second;
 }
 
@@ -57,17 +57,18 @@ stock_directory_message create_stock_directory(char const* symbol) {
 BOOST_AUTO_TEST_CASE(compute_inside_simple) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(compute_inside::time_point, stock_t,
-                           half_quote const&, half_quote const&)> callback;
+  skye::mock_function<void(
+      compute_inside::time_point, stock_t, half_quote const&,
+      half_quote const&)>
+      callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](compute_inside::time_point recv_ts,
-                        message_header const&, stock_t const& stock,
-                        half_quote const& bid, half_quote const& offer) {
-    callback(recv_ts, stock, bid, offer);
-  };
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) { callback(recv_ts, stock, bid, offer); };
   // ... create the object under testing ...
   compute_inside tested(cb);
 
@@ -87,8 +88,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
 
   // ... handle a new order ...
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           2,
                                           BUY,
@@ -101,8 +102,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
 
   // ... handle a new order on the opposite side of the book ...
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           3,
                                           SELL,
@@ -176,8 +177,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
 
   // ... create yet another order ...
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           5,
                                           BUY,
@@ -221,25 +222,26 @@ BOOST_AUTO_TEST_CASE(compute_inside_simple) {
 BOOST_AUTO_TEST_CASE(compute_inside_replace) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(compute_inside::time_point, stock_t,
-                           half_quote const&, half_quote const&)> callback;
+  skye::mock_function<void(
+      compute_inside::time_point, stock_t, half_quote const&,
+      half_quote const&)>
+      callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](compute_inside::time_point recv_ts,
-                        message_header const&, stock_t const& stock,
-                        half_quote const& bid, half_quote const& offer) {
-    callback(recv_ts, stock, bid, offer);
-  };
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) { callback(recv_ts, stock, bid, offer); };
   // ... create the object under testing ...
   compute_inside tested(cb);
 
   // ... setup the book with orders on both sides ...
   auto now = tested.now();
   int msgcnt = 0;
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           1,
                                           BUY,
@@ -250,8 +252,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_replace) {
       compute_inside::time_point(now), stock_t("HSART"),
       half_quote(price4_t(100000), 500), order_book::empty_offer());
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           2,
                                           SELL,
@@ -311,17 +313,18 @@ BOOST_AUTO_TEST_CASE(compute_inside_replace) {
 BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(compute_inside::time_point, stock_t,
-                           half_quote const&, half_quote const&)> callback;
+  skye::mock_function<void(
+      compute_inside::time_point, stock_t, half_quote const&,
+      half_quote const&)>
+      callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](compute_inside::time_point recv_ts,
-                        message_header const&, stock_t const& stock,
-                        half_quote const& bid, half_quote const& offer) {
-    callback(recv_ts, stock, bid, offer);
-  };
+  auto cb = [&callback](
+      compute_inside::time_point recv_ts, message_header const&,
+      stock_t const& stock, half_quote const& bid,
+      half_quote const& offer) { callback(recv_ts, stock, bid, offer); };
   // ... create the object under testing ...
   compute_inside tested(cb);
 
@@ -340,14 +343,14 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
   // ... improve code coverage for unknown messages ...
   now = tested.now();
   char const unknownbuf[] = "foobarbaz";
-  tested.handle_unknown(now, jb::itch5::unknown_message(++msgcnt, 0,
-                                                        sizeof(unknownbuf) - 1,
-                                                        unknownbuf));
+  tested.handle_unknown(
+      now, jb::itch5::unknown_message(
+               ++msgcnt, 0, sizeof(unknownbuf) - 1, unknownbuf));
 
   // ... a completely new symbol might be slow, but should work ...
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           1,
                                           BUY,
@@ -364,8 +367,8 @@ BOOST_AUTO_TEST_CASE(compute_inside_edge_cases) {
 
   // ... a duplicate order id should result in no changes ...
   now = tested.now();
-  tested.handle_message(now, ++msgcnt, 0,
-                        add_order_message{{add_order_message::message_type, 0,
+  tested.handle_message(
+      now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
                                            0, create_timestamp()},
                                           1,
                                           SELL,

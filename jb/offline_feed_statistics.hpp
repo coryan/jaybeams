@@ -60,8 +60,9 @@ public:
   template <typename event_timestamp_t, typename duration_t>
   void sample(event_timestamp_t ts, duration_t processing_latency) {
     using namespace std::chrono;
-    record_sample(duration_cast<nanoseconds>(ts),
-                  duration_cast<nanoseconds>(processing_latency));
+    record_sample(
+        duration_cast<nanoseconds>(ts),
+        duration_cast<nanoseconds>(processing_latency));
   }
 
   /**
@@ -112,8 +113,8 @@ public:
   void print_csv(std::string const& name, std::ostream& os) const;
 
 private:
-  void record_sample(std::chrono::nanoseconds ts,
-                     std::chrono::nanoseconds processing_latency);
+  void record_sample(
+      std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
 
 private:
   typedef event_rate_histogram<std::chrono::nanoseconds, std::int64_t>

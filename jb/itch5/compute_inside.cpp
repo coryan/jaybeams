@@ -18,17 +18,18 @@ void jb::itch5::compute_inside::handle_message(
   books_.emplace(msg.stock, order_book());
 }
 
-void jb::itch5::compute_inside::handle_message(time_point recv_ts, long msgcnt,
-                                               std::size_t msgoffset,
-                                               add_order_message const& msg) {
+void jb::itch5::compute_inside::handle_message(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    add_order_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   auto r = handle_add_order(recv_ts, msgcnt, msgoffset, msg);
   if (std::get<0>(r)) {
     auto i = std::get<2>(r);
     // ... if there is a change at the inside send that to the
     // callback ...
-    callback_(recv_ts, msg.header, msg.stock, i->second.best_bid(),
-              i->second.best_offer());
+    callback_(
+        recv_ts, msg.header, msg.stock, i->second.best_bid(),
+        i->second.best_offer());
   }
 }
 
@@ -36,24 +37,27 @@ void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_executed_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, msg.executed_shares, false);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.executed_shares, false);
 }
 
 void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_cancel_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, msg.canceled_shares, false);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
+      msg.canceled_shares, false);
 }
 
 void jb::itch5::compute_inside::handle_message(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     order_delete_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
-  handle_reduce(recv_ts, msgcnt, msgoffset, msg.header,
-                msg.order_reference_number, 0, true);
+  handle_reduce(
+      recv_ts, msgcnt, msgoffset, msg.header, msg.order_reference_number, 0,
+      true);
 }
 
 void jb::itch5::compute_inside::handle_message(
@@ -63,9 +67,9 @@ void jb::itch5::compute_inside::handle_message(
   // First we treat the replace as a full cancel, but we do not want
   // to send an update because the operation is supposed to be atomic
   // ...
-  auto r =
-      handle_reduce_no_update(recv_ts, msgcnt, msgoffset, msg.header,
-                              msg.original_order_reference_number, 0, true);
+  auto r = handle_reduce_no_update(
+      recv_ts, msgcnt, msgoffset, msg.header,
+      msg.original_order_reference_number, 0, true);
   // ... the result contains a copy of the state of the order before
   // it was removed, use it to create the missing attributes of the
   // new order ...
@@ -83,13 +87,14 @@ void jb::itch5::compute_inside::handle_message(
     // ... if there is a change at the inside send that to the
     // callback ...
     auto i = std::get<2>(r);
-    callback_(recv_ts, msg.header, copy.stock, i->second.best_bid(),
-              i->second.best_offer());
+    callback_(
+        recv_ts, msg.header, copy.stock, i->second.best_bid(),
+        i->second.best_offer());
   }
 }
 
-void jb::itch5::compute_inside::handle_unknown(time_point recv_ts,
-                                               unknown_message const& msg) {
+void jb::itch5::compute_inside::handle_unknown(
+    time_point recv_ts, unknown_message const& msg) {
   char msgtype = *static_cast<char const*>(msg.buf());
   JB_LOG(error) << "Unknown message type '" << msgtype << "'(" << int(msgtype)
                 << ") in msgcnt=" << msg.count()
@@ -97,9 +102,9 @@ void jb::itch5::compute_inside::handle_unknown(time_point recv_ts,
 }
 
 jb::itch5::compute_inside::update_result
-jb::itch5::compute_inside::handle_add_order(time_point recv_ts, long msgcnt,
-                                            std::size_t msgoffset,
-                                            add_order_message const& msg) {
+jb::itch5::compute_inside::handle_add_order(
+    time_point recv_ts, long msgcnt, std::size_t msgoffset,
+    add_order_message const& msg) {
   // First we need to insert the order into the list of active orders ...
   auto position = orders_.emplace(
       msg.order_reference_number,
@@ -134,15 +139,17 @@ void jb::itch5::compute_inside::handle_reduce(
     time_point recv_ts, long msgcnt, std::size_t msgoffset,
     message_header const& header, std::uint64_t order_reference_number,
     std::uint32_t shares, bool all_shares) {
-  auto r = handle_reduce_no_update(recv_ts, msgcnt, msgoffset, header,
-                                   order_reference_number, shares, all_shares);
+  auto r = handle_reduce_no_update(
+      recv_ts, msgcnt, msgoffset, header, order_reference_number, shares,
+      all_shares);
   if (std::get<0>(r)) {
     auto const& copy = std::get<1>(r);
     auto i = std::get<2>(r);
     // ... if there is a change at the inside send that to the
     // callback ...
-    callback_(recv_ts, header, copy.stock, i->second.best_bid(),
-              i->second.best_offer());
+    callback_(
+        recv_ts, header, copy.stock, i->second.best_bid(),
+        i->second.best_offer());
   }
 }
 

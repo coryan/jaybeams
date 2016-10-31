@@ -1,9 +1,9 @@
 #ifndef jb_fftw_time_delay_estimator_hpp
 #define jb_fftw_time_delay_estimator_hpp
 
+#include <jb/complex_traits.hpp>
 #include <jb/fftw/aligned_vector.hpp>
 #include <jb/fftw/plan.hpp>
-#include <jb/complex_traits.hpp>
 
 #include <type_traits>
 
@@ -13,7 +13,8 @@ namespace fftw {
 /**
  * Determine if a timeseries tye guarantees alignment.
  */
-template <typename T> struct always_aligned : public std::false_type {};
+template <typename T>
+struct always_aligned : public std::false_type {};
 
 template <typename T>
 struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
@@ -42,8 +43,8 @@ public:
     }
   }
 
-  std::pair<bool, precision_type> estimate_delay(timeseries_type const& a,
-                                                 timeseries_type const& b) {
+  std::pair<bool, precision_type>
+  estimate_delay(timeseries_type const& a, timeseries_type const& b) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.

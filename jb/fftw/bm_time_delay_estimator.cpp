@@ -5,8 +5,8 @@
 
 #include <chrono>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 /**
  * Convenience types and functions for benchmarking std::chrono clocks.
@@ -21,7 +21,8 @@ std::chrono::microseconds const expected_delay(1250);
 std::chrono::microseconds const sampling_period(16);
 int nsamples = 32768 / 16;
 
-template <typename timeseries_type> class fixture {
+template <typename timeseries_type>
+class fixture {
 public:
   fixture()
       : fixture(nsamples) {
@@ -31,8 +32,8 @@ public:
       , b(size)
       , estimator(a, b) {
     jb::testing::create_square_timeseries(size, a);
-    b = jb::testing::delay_timeseries_periodic(a, expected_delay,
-                                               sampling_period);
+    b = jb::testing::delay_timeseries_periodic(
+        a, expected_delay, sampling_period);
   }
 
   void run() {

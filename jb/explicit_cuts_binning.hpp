@@ -5,8 +5,8 @@
 
 #include <algorithm>
 #include <limits>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 namespace jb {
 
@@ -29,7 +29,8 @@ namespace jb {
  *
  * @tparam sample_type_t the type of samples, should be an integer type.
  */
-template <typename sample_type_t> class explicit_cuts_binning {
+template <typename sample_type_t>
+class explicit_cuts_binning {
 public:
   /// type traits as required by @ref binning_strategy_concept
   typedef sample_type_t sample_type;
@@ -87,8 +88,8 @@ public:
   sample_type bin2sample(std::size_t i) const {
     return cuts_[i];
   }
-  sample_type interpolate(sample_type x_a, sample_type x_b, double y_a,
-                          double s, double q) const {
+  sample_type interpolate(
+      sample_type x_a, sample_type x_b, double y_a, double s, double q) const {
     return histogram_binning_linear_interpolation(x_a, x_b, y_a, s, q);
   }
   //@}

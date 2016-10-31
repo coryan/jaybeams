@@ -8,8 +8,9 @@
 namespace {
 
 template <typename event_rate_histogram_t>
-void report_rate(std::chrono::nanoseconds ts, char const* period_name,
-                 event_rate_histogram_t const& histo) {
+void report_rate(
+    std::chrono::nanoseconds ts, char const* period_name,
+    event_rate_histogram_t const& histo) {
   JB_LOG(info) << "events/" << period_name << ": " << jb::as_hhmmss(ts)
                << ", min=" << histo.observed_min()
                << ", p25=" << histo.estimated_quantile(0.25)
@@ -34,8 +35,9 @@ void csv_rate(std::ostream& os, event_rate_histogram_t const& histo) {
 }
 
 template <typename latency_histogram_t>
-void report_arrival(std::chrono::nanoseconds ts, char const* name,
-                    latency_histogram_t const& histo) {
+void report_arrival(
+    std::chrono::nanoseconds ts, char const* name,
+    latency_histogram_t const& histo) {
   JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
                << ", min=" << histo.observed_min()
                << "ns, p0.01=" << histo.estimated_quantile(0.0001)
@@ -65,8 +67,9 @@ void csv_arrival(std::ostream& os, latency_histogram_t const& histo) {
 }
 
 template <typename latency_histogram_t>
-void report_latency(std::chrono::nanoseconds ts, char const* name,
-                    latency_histogram_t const& histo) {
+void report_latency(
+    std::chrono::nanoseconds ts, char const* name,
+    latency_histogram_t const& histo) {
   JB_LOG(info) << name << ": " << jb::as_hhmmss(ts)
                << ", min=" << histo.observed_min()
                << "ns, p10=" << histo.estimated_quantile(0.10)
@@ -94,16 +97,21 @@ void csv_latency(std::ostream& os, latency_histogram_t const& histo) {
 } // anonymous namespace
 
 jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
-    : per_sec_rate_(cfg.max_messages_per_second(), std::chrono::seconds(1),
-                    std::chrono::milliseconds(1))
-    , per_msec_rate_(cfg.max_messages_per_millisecond(),
-                     std::chrono::milliseconds(1), std::chrono::microseconds(1))
-    , per_usec_rate_(cfg.max_messages_per_microsecond(),
-                     std::chrono::microseconds(1), std::chrono::nanoseconds(1))
-    , interarrival_(interarrival_histogram_t::binning_strategy(
-          0, cfg.max_interarrival_time_nanoseconds()))
-    , processing_latency_(processing_latency_histogram_t::binning_strategy(
-          0, cfg.max_processing_latency_nanoseconds()))
+    : per_sec_rate_(
+          cfg.max_messages_per_second(), std::chrono::seconds(1),
+          std::chrono::milliseconds(1))
+    , per_msec_rate_(
+          cfg.max_messages_per_millisecond(), std::chrono::milliseconds(1),
+          std::chrono::microseconds(1))
+    , per_usec_rate_(
+          cfg.max_messages_per_microsecond(), std::chrono::microseconds(1),
+          std::chrono::nanoseconds(1))
+    , interarrival_(
+          interarrival_histogram_t::binning_strategy(
+              0, cfg.max_interarrival_time_nanoseconds()))
+    , processing_latency_(
+          processing_latency_histogram_t::binning_strategy(
+              0, cfg.max_processing_latency_nanoseconds()))
     , reporting_interval_(
           std::chrono::seconds(cfg.reporting_interval_seconds()))
     , last_ts_(0) {
@@ -128,8 +136,8 @@ void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
   os << "\n";
 }
 
-void jb::offline_feed_statistics::record_sample(std::chrono::nanoseconds ts,
-                                                std::chrono::nanoseconds pl) {
+void jb::offline_feed_statistics::record_sample(
+    std::chrono::nanoseconds ts, std::chrono::nanoseconds pl) {
   using namespace std::chrono;
   per_sec_rate_.sample(ts);
   per_msec_rate_.sample(ts);
@@ -155,8 +163,8 @@ void jb::offline_feed_statistics::record_sample(std::chrono::nanoseconds ts,
   }
 }
 
-void jb::offline_feed_statistics::print_csv(std::string const& name,
-                                            std::ostream& os) const {
+void jb::offline_feed_statistics::print_csv(
+    std::string const& name, std::ostream& os) const {
   if (per_sec_rate_.nsamples() == 0 or per_msec_rate_.nsamples() == 0 or
       per_usec_rate_.nsamples() == 0 or interarrival_.nsamples() == 0 or
       processing_latency_.nsamples() == 0) {
@@ -257,11 +265,12 @@ jb::offline_feed_statistics::config::config()
           this, defaults::max_processing_latency_nanoseconds)
     , reporting_interval_seconds(
           desc("reporting-interval-seconds")
-              .help("Configure how often the statistics are logged."
-                    "  Use 0 to suppress all logging."
-                    "  The time is measured using the even timestamps,"
-                    " for feeds using recorded or simulated timestamps the"
-                    " reporting interval will not match the wall time."),
+              .help(
+                  "Configure how often the statistics are logged."
+                  "  Use 0 to suppress all logging."
+                  "  The time is measured using the even timestamps,"
+                  " for feeds using recorded or simulated timestamps the"
+                  " reporting interval will not match the wall time."),
           this, defaults::reporting_interval_seconds) {
 }
 

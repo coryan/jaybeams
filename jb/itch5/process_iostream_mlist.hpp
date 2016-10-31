@@ -1,8 +1,8 @@
 #ifndef jb_itch5_process_iostream_mlist_hpp
 #define jb_itch5_process_iostream_mlist_hpp
 
-#include <jb/itch5/process_buffer_mlist.hpp>
 #include <jb/itch5/base_decoders.hpp>
+#include <jb/itch5/process_buffer_mlist.hpp>
 #include <jb/log.hpp>
 
 namespace jb {

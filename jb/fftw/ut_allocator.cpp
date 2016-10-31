@@ -10,7 +10,8 @@ namespace {
 template <typename T>
 using aligned_vector = std::vector<T, jb::fftw::allocator<T>>;
 
-template <typename precision_t> void test_plan_real2complex() {
+template <typename precision_t>
+void test_plan_real2complex() {
   int nsamples = 1 << 15;
   int tol = nsamples;
 
