@@ -7,7 +7,7 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes
 
     - os: linux
       compiler: gcc
@@ -15,7 +15,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes CHECK_STYLE=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes
 
     - os: linux
       compiler: gcc
