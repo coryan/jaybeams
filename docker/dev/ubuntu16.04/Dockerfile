@@ -3,7 +3,10 @@ MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN apt-get update && apt-get install -y \
     automake \
+    clang \
+    clang-format \
     doxygen \
+    findutils \
     g++ \
     gcc \
     git \
