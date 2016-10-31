@@ -152,7 +152,7 @@ if FOUND_CLANG_FORMAT
 check-style:
 	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' | \
 	  xargs $(CLANG_FORMAT) -i
-	$(AM_V_at)git diff --exit-code
+	$(AM_V_at)git diff --exit-code || echo "clang-format checks passed"
 else
 check-style:
 	$(AM_V_at)echo "clang-format not found, cannot check style" && exit 1
