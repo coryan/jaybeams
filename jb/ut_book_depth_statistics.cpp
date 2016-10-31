@@ -16,9 +16,9 @@ BOOST_AUTO_TEST_CASE(book_depth_statistics_simple) {
   stats.sample(5);
 
   static_assert(
-    std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value,
-    "Mismatched definition of "
-    "jb::itch5::book_depth_t and jb::book_depth_t");
+      std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value,
+      "Mismatched definition of "
+      "jb::itch5::book_depth_t and jb::book_depth_t");
 }
 
 /**
