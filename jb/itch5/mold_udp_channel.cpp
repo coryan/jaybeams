@@ -1,8 +1,8 @@
-#include <jb/itch5/mold_udp_channel.hpp>
+#include "jb/itch5/mold_udp_channel.hpp"
 
 #include <jb/itch5/base_decoders.hpp>
-#include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/itch5/make_socket_udp_recv.hpp>
+#include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/log.hpp>
 
 #include <boost/asio/ip/multicast.hpp>
@@ -10,10 +10,10 @@
 namespace jb {
 namespace itch5 {
 
-mold_udp_channel::mold_udp_channel(boost::asio::io_service& io,
-                                   buffer_handler handler,
-                                   std::string const& receive_address, int port,
-                                   std::string const& listen_address)
+mold_udp_channel::mold_udp_channel(
+    boost::asio::io_service& io, buffer_handler handler,
+    std::string const& receive_address, int port,
+    std::string const& listen_address)
     : handler_(handler)
     , socket_(make_socket_udp_recv<>(io, receive_address, port, listen_address))
     , expected_sequence_number_(0)
@@ -29,8 +29,8 @@ void mold_udp_channel::restart_async_receive_from() {
       });
 }
 
-void mold_udp_channel::handle_received(boost::system::error_code const& ec,
-                                       size_t bytes_received) {
+void mold_udp_channel::handle_received(
+    boost::system::error_code const& ec, size_t bytes_received) {
   if (ec) {
     // If we get an error from the socket simply report it and
     // return.  No more callbacks will be registered in this case ...
@@ -81,8 +81,9 @@ void mold_udp_channel::handle_received(boost::system::error_code const& ec,
     // the start of the ITCH-5.x message ...
     offset += 2;
     // ... process the buffer ...
-    handler_(recv_ts, expected_sequence_number_, message_offset_,
-             buffer_ + offset, message_size);
+    handler_(
+        recv_ts, expected_sequence_number_, message_offset_, buffer_ + offset,
+        message_size);
 
     // ... increment counters to reflect that this message was
     // proceesed ...

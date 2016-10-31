@@ -1,9 +1,9 @@
-#include <jb/itch5/stock_directory_message.hpp>
+#include "jb/itch5/stock_directory_message.hpp"
 
 #include <iostream>
 #include <mutex>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 namespace {
 typedef std::unordered_map<std::string, std::string> valid_subtype_t;
@@ -22,8 +22,8 @@ bool jb::itch5::validate_issue_subtype::operator()(char const* value) const {
   return valid_subtypes.find(value) != valid_subtypes.end();
 }
 
-std::ostream& jb::itch5::operator<<(std::ostream& os,
-                                    stock_directory_message const& x) {
+std::ostream& jb::itch5::
+operator<<(std::ostream& os, stock_directory_message const& x) {
   return os << x.header << ",stock=" << x.stock
             << ",market_category=" << x.market_category
             << ",financial_status_indicator=" << x.financial_status_indicator
@@ -71,9 +71,9 @@ void initialize_valid_subtypes() {
   valid_subtypes.emplace("IX", "Index-Linked Exchangeable Notes");
   valid_subtypes.emplace("J", "Corporate Backed Trust Security");
   valid_subtypes.emplace("L", "Contingent Litigation Right");
-  valid_subtypes.emplace("LL",
-                         "Identifies securities of companies that are set up "
-                         "as a Limited Liability Company (LLC)");
+  valid_subtypes.emplace(
+      "LL", "Identifies securities of companies that are set up "
+            "as a Limited Liability Company (LLC)");
   valid_subtypes.emplace("M", "Equity-Based Derivative");
   valid_subtypes.emplace("MF", "Managed Fund Shares");
   valid_subtypes.emplace("ML", "ETN-Multi-Factor Index-Linked Securities");
@@ -85,12 +85,12 @@ void initialize_valid_subtypes() {
   valid_subtypes.emplace("PU", "Partnership Units");
   valid_subtypes.emplace("Q", "Closed-End Funds");
   valid_subtypes.emplace("R", "Reg-S");
-  valid_subtypes.emplace("RC",
-                         "Commodity-Redeemable Commodity-Linked Securities");
+  valid_subtypes.emplace(
+      "RC", "Commodity-Redeemable Commodity-Linked Securities");
   valid_subtypes.emplace("RF", "ETN-Redeemable Futures-Linked Securities");
   valid_subtypes.emplace("RT", "REIT");
-  valid_subtypes.emplace("RU",
-                         "Commodity-Redeemable Currency-Linked Securities");
+  valid_subtypes.emplace(
+      "RU", "Commodity-Redeemable Currency-Linked Securities");
   valid_subtypes.emplace("S", "SEED");
   valid_subtypes.emplace("SC", "Spot Rate Closing");
   valid_subtypes.emplace("SI", "Spot Rate Intraday");

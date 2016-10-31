@@ -1,9 +1,9 @@
-#include <jb/testing/microbenchmark_base.hpp>
+#include "jb/testing/microbenchmark_base.hpp"
 
 #include <algorithm>
 
-void jb::testing::microbenchmark_base::write_results(std::ostream& os,
-                                                     results const& r) const {
+void jb::testing::microbenchmark_base::write_results(
+    std::ostream& os, results const& r) const {
   using namespace std::chrono;
   for (auto const& v : r) {
     os << duration_cast<nanoseconds>(v.second).count() << "\n";
@@ -30,9 +30,8 @@ jb::testing::microbenchmark_base::summary::summary(results const& arg) {
   }
 }
 
-std::ostream& jb::testing::
-operator<<(std::ostream& os,
-           jb::testing::microbenchmark_base::summary const& x) {
+std::ostream& jb::testing::operator<<(
+    std::ostream& os, jb::testing::microbenchmark_base::summary const& x) {
   using namespace std::chrono;
   return os << "min=" << duration_cast<microseconds>(x.min).count()
             << ", p25=" << duration_cast<microseconds>(x.p25).count()

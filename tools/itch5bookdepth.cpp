@@ -54,24 +54,24 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
   jb::book_depth_statistics stats(cfg.stats());
 
-  auto cb = [&](jb::itch5::compute_book_depth::time_point recv_ts,
-                jb::itch5::message_header const& header,
-                jb::itch5::stock_t const& stock,
-                jb::itch5::book_depth_t book_depth) {
-    stats.sample(book_depth);
+  auto cb =
+      [&](jb::itch5::compute_book_depth::time_point recv_ts,
+          jb::itch5::message_header const& header,
+          jb::itch5::stock_t const& stock, jb::itch5::book_depth_t book_depth) {
+        stats.sample(book_depth);
 
-    if (cfg.enable_symbol_stats()) {
-      auto i = per_symbol.find(stock);
-      if (i == per_symbol.end()) {
-        auto p = per_symbol.emplace(
-            stock, jb::book_depth_statistics(cfg.symbol_stats()));
-        i = p.first;
-      }
-      i->second.sample(book_depth);
-    }
-    out << header.timestamp.ts.count() << " " << header.stock_locate << " "
-        << stock << " " << book_depth << "\n";
-  };
+        if (cfg.enable_symbol_stats()) {
+          auto i = per_symbol.find(stock);
+          if (i == per_symbol.end()) {
+            auto p = per_symbol.emplace(
+                stock, jb::book_depth_statistics(cfg.symbol_stats()));
+            i = p.first;
+          }
+          i->second.sample(book_depth);
+        }
+        out << header.timestamp.ts.count() << " " << header.stock_locate << " "
+            << stock << " " << book_depth << "\n";
+      };
 
   jb::itch5::compute_book_depth handler(cb);
   jb::itch5::process_iostream(in, handler);
@@ -109,32 +109,37 @@ config::config()
           this)
     , output_file(
           desc("output-file")
-              .help("The name of the file where to store the inside data."
-                    "  Files ending in .gz are automatically compressed."),
+              .help(
+                  "The name of the file where to store the inside data."
+                  "  Files ending in .gz are automatically compressed."),
           this)
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "book-depth-statistics"), this)
-    , symbol_stats(desc("symbol-stats", "book-depth-statistics-per-symbol"),
-                   this, default_per_symbol_stats())
+    , symbol_stats(
+          desc("symbol-stats", "book-depth-statistics-per-symbol"), this,
+          default_per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")
-              .help("If set, enable per-symbol statistics."
-                    "  Collecting per-symbol statistics is expensive in both"
-                    " memory and execution time"),
+              .help(
+                  "If set, enable per-symbol statistics."
+                  "  Collecting per-symbol statistics is expensive in both"
+                  " memory and execution time"),
           this, true) // changes default to true
 {
 }
 
 void config::validate() const {
   if (input_file() == "") {
-    throw jb::usage("Missing input-file setting."
-                    "  You must specify an input file.",
-                    1);
+    throw jb::usage(
+        "Missing input-file setting."
+        "  You must specify an input file.",
+        1);
   }
   if (output_file() == "") {
-    throw jb::usage("Missing output-file setting."
-                    "  You must specify an output file.",
-                    1);
+    throw jb::usage(
+        "Missing output-file setting."
+        "  You must specify an output file.",
+        1);
   }
   log().validate();
   stats().validate();

@@ -58,7 +58,8 @@ struct message_header {
 };
 
 /// Specialize decoder for a jb::itch5::message_header
-template <bool validate> struct decoder<validate, message_header> {
+template <bool validate>
+struct decoder<validate, message_header> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static message_header r(std::size_t size, void const* buf, std::size_t off) {
     message_header x;

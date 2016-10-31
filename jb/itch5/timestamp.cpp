@@ -1,10 +1,11 @@
-#include <jb/itch5/timestamp.hpp>
+#include "jb/itch5/timestamp.hpp"
 
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 
-template <> void jb::itch5::check_timestamp_range<true>(timestamp const& t) {
+template <>
+void jb::itch5::check_timestamp_range<true>(timestamp const& t) {
   auto full_day = std::chrono::duration_cast<std::chrono::nanoseconds>(
       std::chrono::seconds(24 * 3600));
 

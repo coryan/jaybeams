@@ -2,11 +2,11 @@
 #define jb_itch5_short_string_field_hpp
 
 #include <jb/itch5/decoder.hpp>
-#include <jb/itch5/p2ceil.hpp>
 #include <jb/itch5/noop_validator.hpp>
+#include <jb/itch5/p2ceil.hpp>
 
-#include <boost/operators.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/operators.hpp>
 
 #include <cstring>
 #include <iostream>
@@ -158,10 +158,10 @@ private:
 template <bool validate, std::size_t wsize, typename F>
 struct decoder<validate, short_string_field<wsize, F>> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static short_string_field<wsize, F> r(std::size_t size, void const* buffer,
-                                        std::size_t offset) {
-    jb::itch5::check_offset<validate>("short_string_field<>", size, offset,
-                                      wsize);
+  static short_string_field<wsize, F>
+  r(std::size_t size, void const* buffer, std::size_t offset) {
+    jb::itch5::check_offset<validate>(
+        "short_string_field<>", size, offset, wsize);
 
     short_string_field<wsize, F> tmp;
     tmp.assign(static_cast<char const*>(buffer) + offset);
@@ -174,8 +174,8 @@ struct decoder<validate, short_string_field<wsize, F>> {
 
 /// Streaming operator for jb::itch5::short_string_field<>
 template <std::size_t size, typename F>
-std::ostream& operator<<(std::ostream& os,
-                         short_string_field<size, F> const& x) {
+std::ostream&
+operator<<(std::ostream& os, short_string_field<size, F> const& x) {
   return os << x.c_str();
 }
 

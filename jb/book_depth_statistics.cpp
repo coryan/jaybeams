@@ -1,4 +1,5 @@
-#include <jb/book_depth_statistics.hpp>
+#include "jb/book_depth_statistics.hpp"
+
 #include <jb/as_hhmmss.hpp>
 #include <jb/log.hpp>
 
@@ -17,8 +18,8 @@ void csv_rate(std::ostream& os, book_depth_histogram_t const& histo) {
 }
 
 template <typename book_depth_histogram_t>
-void report_rate(std::chrono::nanoseconds ts,
-                 book_depth_histogram_t const& histo) {
+void report_rate(
+    std::chrono::nanoseconds ts, book_depth_histogram_t const& histo) {
   JB_LOG(info) << ": " << jb::as_hhmmss(ts)
                << ", NSamples =" << histo.nsamples()
                << ", min=" << histo.observed_min()
@@ -47,8 +48,8 @@ void jb::book_depth_statistics::print_csv_header(std::ostream& os) {
      << "\n";
 }
 
-void jb::book_depth_statistics::print_csv(std::string const& name,
-                                          std::ostream& os) const {
+void jb::book_depth_statistics::print_csv(
+    std::string const& name, std::ostream& os) const {
   if (book_depth_.nsamples() == 0) {
     os << name << ",0";
     os << ",,,,,,,,,"; // book depth

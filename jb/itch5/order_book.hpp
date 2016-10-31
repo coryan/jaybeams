@@ -1,11 +1,11 @@
 #ifndef jb_itch5_order_book_hpp
 #define jb_itch5_order_book_hpp
 
-#include <jb/itch5/price_field.hpp>
 #include <jb/itch5/buy_sell_indicator.hpp>
 #include <jb/itch5/order_book_def.hpp>
-#include <jb/log.hpp>
+#include <jb/itch5/price_field.hpp>
 #include <jb/feed_error.hpp>
+#include <jb/log.hpp>
 
 #include <functional>
 #include <map>
@@ -98,8 +98,8 @@ public:
    * @param reduced_qty the executed quantity of the order
    * @returns true if the inside changed
    */
-  bool handle_order_reduced(buy_sell_indicator_t side, price4_t px,
-                            int reduced_qty) {
+  bool handle_order_reduced(
+      buy_sell_indicator_t side, price4_t px, int reduced_qty) {
     if (side == buy_sell_indicator_t('B')) {
       return handle_order_reduced(buy_, px, reduced_qty);
     }

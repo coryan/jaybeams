@@ -1,8 +1,8 @@
-#include <jb/config_object.hpp>
 #include <jb/config_files_location.hpp>
+#include <jb/config_object.hpp>
 
-#include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/test/unit_test.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <string>
@@ -190,8 +190,9 @@ pos:
   BOOST_TEST_MESSAGE("Applying overrides from\n" << contents << "\n");
   config1 tested;
   std::vector<std::string> expected({"ini", "mini", "myni", "mo"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.list().begin(), tested.list().end(), expected.begin(),
+      expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(0, 0, 0));
 
   std::istringstream is(contents);
@@ -199,8 +200,9 @@ pos:
   tested.load_overrides(argc, nullptr, is);
 
   expected.assign({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.list().begin(), tested.list().end(), expected.begin(),
+      expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(2, 4, -3));
 }
 
@@ -250,23 +252,23 @@ vars:
   std::vector<std::string> expected;
 
   expected.assign({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[0].list().begin(),
-                                tested.vars()[0].list().end(), expected.begin(),
-                                expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.vars()[0].list().begin(), tested.vars()[0].list().end(),
+      expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[0].pos().x(), 2);
   BOOST_CHECK_EQUAL(tested.vars()[0].pos().y(), 4);
 
   expected.assign({"2", "4", "6", "8"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[1].list().begin(),
-                                tested.vars()[1].list().end(), expected.begin(),
-                                expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.vars()[1].list().begin(), tested.vars()[1].list().end(),
+      expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[1].pos().y(), 1);
   BOOST_CHECK_EQUAL(tested.vars()[1].pos().z(), 3);
 
   expected.assign({"11"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.vars()[2].list().begin(),
-                                tested.vars()[2].list().end(), expected.begin(),
-                                expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.vars()[2].list().begin(), tested.vars()[2].list().end(),
+      expected.begin(), expected.end());
   BOOST_CHECK_EQUAL(tested.vars()[2].pos(), make_config0(1, 2, 3));
 }
 
@@ -405,8 +407,9 @@ pos:
   tested.load_overrides(argc, argv, is);
 
   std::vector<std::string> expected({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.list().begin(), tested.list().end(), expected.begin(),
+      expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(2, 4, -3));
 }
 
@@ -439,8 +442,9 @@ pos:
   tested.load_overrides(argc, argv, is);
 
   std::vector<std::string> expected({"1", "3", "5", "7"});
-  BOOST_CHECK_EQUAL_COLLECTIONS(tested.list().begin(), tested.list().end(),
-                                expected.begin(), expected.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      tested.list().begin(), tested.list().end(), expected.begin(),
+      expected.end());
   BOOST_CHECK_EQUAL(tested.pos(), make_config0(3, 4, -3));
 }
 

@@ -20,7 +20,8 @@ namespace jb {
  *
  * @tparam sample_type_t the type of samples, should be an integer type.
  */
-template <typename sample_type_t> class integer_range_binning {
+template <typename sample_type_t>
+class integer_range_binning {
 public:
   /// type traits as required by @ref jb::binning_strategy_concept
   typedef sample_type_t sample_type;
@@ -34,8 +35,9 @@ public:
   integer_range_binning(sample_type h_min, sample_type h_max)
       : h_min_(h_min)
       , h_max_(h_max) {
-    static_assert(std::is_integral<sample_type>::value,
-                  "The sample_type must be an integral type");
+    static_assert(
+        std::is_integral<sample_type>::value,
+        "The sample_type must be an integral type");
     if (h_min_ >= h_max_) {
       std::ostringstream os;
       os << "jb::integer_range_binning requires h_min (" << h_min
@@ -69,8 +71,8 @@ public:
   sample_type bin2sample(std::size_t i) const {
     return histogram_min() + i;
   }
-  sample_type interpolate(sample_type x_a, sample_type x_b, double y_a,
-                          double s, double q) const {
+  sample_type interpolate(
+      sample_type x_a, sample_type x_b, double y_a, double s, double q) const {
     return histogram_binning_linear_interpolation(x_a, x_b, y_a, s, q);
   }
   //@}

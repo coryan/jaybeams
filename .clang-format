@@ -4,11 +4,27 @@ BasedOnStyle: LLVM
 IndentWidth: 2
 ---
 Language: Cpp
-UseTab: Never
-ColumnLimit: 80
-Standard: Cpp11
+AlignAfterOpenBracket: AlwaysBreak
 AllowShortFunctionsOnASingleLine: None
 AllowShortBlocksOnASingleLine: false
-PointerAlignment: Left
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: true
+BinPackParameters: true
 BreakConstructorInitializersBeforeComma: true
-# SpaceAfterTemplateKeyword: false
+ColumnLimit: 80
+IncludeCategories:
+  - Regex:    '^<jb/[^/]*/'
+    Priority: 1
+  - Regex:    '^<jb/'
+    Priority: 2
+  - Regex:    '^<skye/'
+    Priority: 3
+  - Regex:    '^<boost/'
+    Priority: 4
+  - Regex:    '^<yaml-cpp/'
+    Priority: 5
+  - Regex:    '^<fftw3'
+    Priority: 5
+UseTab: Never
+PointerAlignment: Left
+Standard: Cpp11

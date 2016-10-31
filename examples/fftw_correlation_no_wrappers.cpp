@@ -49,10 +49,10 @@ int main(int argc, char* argv[]) try {
   // ... create a vector to stored FFT^1(prod) ...
   std::vector<std::complex<double>> correlation(a.size());
   // ... plan the inverse FFT ...
-  fftw_plan inv =
-      fftw_plan_dft_1d(a.size(), reinterpret_cast<fftw_complex*>(&prod[0]),
-                       reinterpret_cast<fftw_complex*>(&correlation[0]),
-                       FFTW_BACKWARD, FFTW_ESTIMATE);
+  fftw_plan inv = fftw_plan_dft_1d(
+      a.size(), reinterpret_cast<fftw_complex*>(&prod[0]),
+      reinterpret_cast<fftw_complex*>(&correlation[0]), FFTW_BACKWARD,
+      FFTW_ESTIMATE);
 
   auto start = std::chrono::steady_clock::now();
   // Compute FFT(a) and FFT(b) ...

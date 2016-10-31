@@ -2,8 +2,8 @@
 
 #include <chrono>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 /**
  * Convenience types and functions for benchmarking std::chrono clocks.
@@ -84,7 +84,8 @@ int clock_repetitions = JB_DEFAULTS_clock_repetitions;
 /**
  * Wrap a std::chrono class in a polymorphic class.
  */
-template <typename clock> class wrapped_clock : public wrapped_clock_base {
+template <typename clock>
+class wrapped_clock : public wrapped_clock_base {
 public:
   wrapped_clock(int calls_per_iteration)
       : calls_per_iteration_(calls_per_iteration) {

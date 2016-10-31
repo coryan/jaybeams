@@ -1,8 +1,8 @@
 #ifndef jb_itch5_make_socket_udp_recv_hpp
 #define jb_itch5_make_socket_udp_recv_hpp
 
-#include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/multicast.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 #include <string>
 
@@ -35,9 +35,9 @@ namespace itch5 {
  *
  */
 template <class socket_t = boost::asio::ip::udp::socket>
-socket_t make_socket_udp_recv(boost::asio::io_service& io,
-                              std::string const& receive_address, int port,
-                              std::string const& listen_address) {
+socket_t make_socket_udp_recv(
+    boost::asio::io_service& io, std::string const& receive_address, int port,
+    std::string const& listen_address) {
   auto r_address = boost::asio::ip::address::from_string(receive_address);
 
   boost::asio::ip::address local_address;

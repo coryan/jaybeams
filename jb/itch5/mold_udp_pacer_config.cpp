@@ -1,4 +1,5 @@
-#include <jb/itch5/mold_udp_pacer_config.hpp>
+#include "jb/itch5/mold_udp_pacer_config.hpp"
+
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
 
 #include <chrono>
@@ -46,10 +47,12 @@ int maximum_transmission_unit = JB_ITCH5_DEFAULTS_maximum_transmission_unit;
 } // namespace defaults
 
 mold_udp_pacer_config::mold_udp_pacer_config()
-    : maximum_delay_microseconds(desc("maximum-delay-microseconds")
-                                     .help("Maximum time a MoldUDP packet is "
-                                           "delayed before sending it."),
-                                 this, defaults::maximum_delay_microseconds)
+    : maximum_delay_microseconds(
+          desc("maximum-delay-microseconds")
+              .help(
+                  "Maximum time a MoldUDP packet is "
+                  "delayed before sending it."),
+          this, defaults::maximum_delay_microseconds)
     , maximum_transmission_unit(
           desc("maximum-transmission-unit")
               .help(

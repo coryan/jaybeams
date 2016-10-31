@@ -26,8 +26,8 @@ BOOST_AUTO_TEST_CASE(decode_uint8) {
   BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 0)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 8)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint8_t>::r(16, buffer, 15)));
-  BOOST_CHECK_THROW((decoder<true, std::uint8_t>::r(16, buffer, 16)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, std::uint8_t>::r(16, buffer, 16)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, std::uint8_t>::r(16, buffer, 16)));
 }
 
@@ -49,8 +49,8 @@ BOOST_AUTO_TEST_CASE(decode_uint16) {
   BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 0)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 8)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint16_t>::r(16, buffer, 14)));
-  BOOST_CHECK_THROW((decoder<true, std::uint16_t>::r(16, buffer, 15)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, std::uint16_t>::r(16, buffer, 15)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, std::uint16_t>::r(16, buffer, 15)));
 }
 
@@ -74,8 +74,8 @@ BOOST_AUTO_TEST_CASE(decode_uint32) {
   BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 0)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 8)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint32_t>::r(16, buffer, 12)));
-  BOOST_CHECK_THROW((decoder<true, std::uint32_t>::r(16, buffer, 13)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, std::uint32_t>::r(16, buffer, 13)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, std::uint32_t>::r(16, buffer, 13)));
 }
 
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(decode_uint64) {
 
   BOOST_CHECK_NO_THROW((decoder<true, std::uint64_t>::r(16, buffer, 2)));
   BOOST_CHECK_NO_THROW((decoder<true, std::uint64_t>::r(16, buffer, 7)));
-  BOOST_CHECK_THROW((decoder<true, std::uint64_t>::r(16, buffer, 9)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, std::uint64_t>::r(16, buffer, 9)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, std::uint64_t>::r(16, buffer, 9)));
 }

@@ -41,9 +41,10 @@ BOOST_AUTO_TEST_CASE(stream_mwcb_breach_message) {
   auto tmp = decoder<false, mwcb_breach_message>::r(buf.second, buf.first, 0);
   std::ostringstream os;
   os << tmp;
-  BOOST_CHECK_EQUAL(os.str(), "message_type=W,stock_locate=0"
-                              ",tracking_number=1,timestamp=113231.123456789"
-                              ",breached_level=2");
+  BOOST_CHECK_EQUAL(
+      os.str(), "message_type=W,stock_locate=0"
+                ",tracking_number=1,timestamp=113231.123456789"
+                ",breached_level=2");
 }
 
 /**

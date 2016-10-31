@@ -18,10 +18,11 @@ struct broken_trade_message {
 };
 
 /// Specialize decoder for a jb::itch5::broken_trade_message
-template <bool V> struct decoder<V, broken_trade_message> {
+template <bool V>
+struct decoder<V, broken_trade_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static broken_trade_message r(std::size_t size, void const* buf,
-                                std::size_t off) {
+  static broken_trade_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     broken_trade_message x;
     x.header = decoder<V, message_header>::r(size, buf, off + 0);
     x.match_number = decoder<V, std::uint64_t>::r(size, buf, off + 11);

@@ -1,8 +1,8 @@
 #ifndef jb_event_rate_histogram_hpp
 #define jb_event_rate_histogram_hpp
 
-#include <jb/histogram.hpp>
 #include <jb/event_rate_estimator.hpp>
+#include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
 
 namespace jb {
@@ -85,9 +85,9 @@ public:
    * @param measurement_period over what period we measure event rates.
    * @param sampling_period how often do we measure event rates.
    */
-  event_rate_histogram(std::uint64_t max_expected_rate,
-                       duration_type measurement_period,
-                       duration_type sampling_period = duration_type(1))
+  event_rate_histogram(
+      std::uint64_t max_expected_rate, duration_type measurement_period,
+      duration_type sampling_period = duration_type(1))
       : rate_histogram(binning_strategy(0, max_expected_rate))
       , rate_(measurement_period, sampling_period) {
   }

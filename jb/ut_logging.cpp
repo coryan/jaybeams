@@ -1,8 +1,8 @@
-#include <jb/log.hpp>
 #include <jb/as_hhmmss.hpp>
+#include <jb/log.hpp>
 
-#include <boost/log/sinks/text_ostream_backend.hpp>
 #include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 #include <boost/test/unit_test.hpp>
 #include <sstream>
 
@@ -10,10 +10,11 @@
  * @test Verify that basic logging functions work as expected.
  */
 BOOST_AUTO_TEST_CASE(logging_basic) {
-  jb::log::init(jb::log::config()
-                    .minimum_severity(jb::severity_level::debug)
-                    .enable_file_logging(true)
-                    .logfile_basename("ut_logging"));
+  jb::log::init(
+      jb::log::config()
+          .minimum_severity(jb::severity_level::debug)
+          .enable_file_logging(true)
+          .logfile_basename("ut_logging"));
 
   JB_LOG(trace) << "tracing tracing tracing";
   for (int i = 0; i != 30000; ++i) {
@@ -54,7 +55,8 @@ BOOST_AUTO_TEST_CASE(logging_basic) {
   backend->add_stream(boost::shared_ptr<std::ostream>(&os, [](void const*) {}));
   backend->auto_flush(true);
   typedef boost::log::sinks::synchronous_sink<
-      boost::log::sinks::text_ostream_backend> sink_t;
+      boost::log::sinks::text_ostream_backend>
+      sink_t;
   auto sink = boost::make_shared<sink_t>(backend);
   core->add_sink(sink);
 
@@ -82,8 +84,8 @@ minimum-console-severity: NOTICE
   tested.load_overrides(argc, nullptr, is);
 
   BOOST_CHECK_EQUAL(tested.minimum_severity(), jb::severity_level::error);
-  BOOST_CHECK_EQUAL(tested.minimum_console_severity(),
-                    jb::severity_level::notice);
+  BOOST_CHECK_EQUAL(
+      tested.minimum_console_severity(), jb::severity_level::notice);
 
   std::ostringstream os;
   BOOST_CHECK_NO_THROW(os << tested);

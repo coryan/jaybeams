@@ -28,8 +28,8 @@ BOOST_AUTO_TEST_CASE(decode_timestamp) {
   std::memset(buffer, 0, sizeof(buffer));
   BOOST_CHECK_NO_THROW((decoder<true, timestamp>::r(16, buffer, 2)));
   BOOST_CHECK_NO_THROW((decoder<true, timestamp>::r(16, buffer, 10)));
-  BOOST_CHECK_THROW((decoder<true, timestamp>::r(16, buffer, 11)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, timestamp>::r(16, buffer, 11)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, timestamp>::r(16, buffer, 11)));
 }
 
@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_CASE(decode_timestamp_range) {
     expected = expected * 256 + values[i];
   }
 
-  BOOST_CHECK_THROW((decoder<true, timestamp>::r(16, buffer, 0)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (decoder<true, timestamp>::r(16, buffer, 0)), std::runtime_error);
   BOOST_CHECK_NO_THROW((decoder<false, timestamp>::r(16, buffer, 0)));
 }
 
@@ -61,18 +61,20 @@ BOOST_AUTO_TEST_CASE(stream_timestamp) {
   using jb::itch5::timestamp;
 
   {
-    auto nn = (duration_cast<nanoseconds>(hours(7)) +
-               duration_cast<nanoseconds>(minutes(8)) +
-               duration_cast<nanoseconds>(seconds(9)) + nanoseconds(20));
+    auto nn =
+        (duration_cast<nanoseconds>(hours(7)) +
+         duration_cast<nanoseconds>(minutes(8)) +
+         duration_cast<nanoseconds>(seconds(9)) + nanoseconds(20));
     std::ostringstream os;
     os << timestamp{nn};
     BOOST_CHECK_EQUAL(os.str(), "070809.000000020");
   }
 
   {
-    auto nn = (duration_cast<nanoseconds>(hours(9)) +
-               duration_cast<nanoseconds>(minutes(30)) +
-               duration_cast<nanoseconds>(seconds(0)) + nanoseconds(0));
+    auto nn =
+        (duration_cast<nanoseconds>(hours(9)) +
+         duration_cast<nanoseconds>(minutes(30)) +
+         duration_cast<nanoseconds>(seconds(0)) + nanoseconds(0));
     std::ostringstream os;
     os << timestamp{nn};
     BOOST_CHECK_EQUAL(os.str(), "093000.000000000");
@@ -89,9 +91,10 @@ BOOST_AUTO_TEST_CASE(stream_timestamp) {
   }
 
   {
-    auto nn = (duration_cast<nanoseconds>(hours(16)) +
-               duration_cast<nanoseconds>(minutes(0)) +
-               duration_cast<nanoseconds>(seconds(0)) + nanoseconds(0));
+    auto nn =
+        (duration_cast<nanoseconds>(hours(16)) +
+         duration_cast<nanoseconds>(minutes(0)) +
+         duration_cast<nanoseconds>(seconds(0)) + nanoseconds(0));
     std::ostringstream os;
     os << timestamp{nn};
     BOOST_CHECK_EQUAL(os.str(), "160000.000000000");
@@ -122,8 +125,8 @@ BOOST_AUTO_TEST_CASE(encode_timestamp) {
   timestamp ts{seconds(100)};
   BOOST_CHECK_NO_THROW((encoder<true, timestamp>::w(16, buffer, 2, ts)));
   BOOST_CHECK_NO_THROW((encoder<true, timestamp>::w(16, buffer, 10, ts)));
-  BOOST_CHECK_THROW((encoder<true, timestamp>::w(16, buffer, 11, ts)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, timestamp>::w(16, buffer, 11, ts)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, timestamp>::w(16, buffer, 11, ts)));
 }
 
@@ -137,7 +140,7 @@ BOOST_AUTO_TEST_CASE(encode_timestamp_range) {
   char buffer[32];
 
   timestamp ts{std::chrono::hours(48)};
-  BOOST_CHECK_THROW((encoder<true, timestamp>::w(16, buffer, 0, ts)),
-                    std::runtime_error);
+  BOOST_CHECK_THROW(
+      (encoder<true, timestamp>::w(16, buffer, 0, ts)), std::runtime_error);
   BOOST_CHECK_NO_THROW((encoder<false, timestamp>::w(16, buffer, 0, ts)));
 }

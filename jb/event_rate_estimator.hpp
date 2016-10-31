@@ -75,8 +75,9 @@ public:
    * @throw std::invalid_argument if the measurement period is not a
    *   multiple of the sampling period.
    */
-  event_rate_estimator(duration_type measurement_period,
-                       duration_type sampling_period = duration_type(1))
+  event_rate_estimator(
+      duration_type measurement_period,
+      duration_type sampling_period = duration_type(1))
       : buckets_(bucket_count(measurement_period, sampling_period))
       , sampling_period_(sampling_period)
       , running_total_()
@@ -96,7 +97,8 @@ public:
    * @param ts the timestamp of the sample.
    * @param update a functor to update when an event rate is estimated.
    */
-  template <typename functor> void sample(duration_type ts, functor update) {
+  template <typename functor>
+  void sample(duration_type ts, functor update) {
     if (end_pos_ >= buckets_.size()) {
       // ... this is the first event sample, initialize the circular
       // buffer and just return, there is no rate with a single sample
@@ -164,8 +166,8 @@ private:
   }
 
   /// Estimate the necessary number of buckets
-  std::size_t bucket_count(duration_type measurement_period,
-                           duration_type sampling_period) {
+  std::size_t bucket_count(
+      duration_type measurement_period, duration_type sampling_period) {
     if (sampling_period <= duration_type(0)) {
       std::ostringstream os;
       os << "jb::event_rate_estimate - sampling period ("

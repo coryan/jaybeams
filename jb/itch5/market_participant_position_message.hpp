@@ -24,7 +24,8 @@ typedef char_list_field<u'N', // Normal
                         u'S', // Syndicate
                         u'R', // Pre-syndicate
                         u'L'  // Penalty
-                        > market_maker_mode_t;
+                        >
+    market_maker_mode_t;
 
 /**
  * Represent the 'Market Participant State' field in a 'Market Participant
@@ -35,7 +36,8 @@ typedef char_list_field<u'A', // Active
                         u'W', // Withdrawn
                         u'S', // Suspended
                         u'D'  // Deleted
-                        > market_participant_state_t;
+                        >
+    market_participant_state_t;
 
 /**
  * Represent a 'Market Participant Position' message in the ITCH-5.0 protocol.
@@ -52,7 +54,8 @@ struct market_participant_position_message {
 };
 
 /// Specialize decoder for a jb::itch5::market_participant_position_message
-template <bool V> struct decoder<V, market_participant_position_message> {
+template <bool V>
+struct decoder<V, market_participant_position_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
   static market_participant_position_message
   r(std::size_t size, void const* buf, std::size_t off) {
@@ -71,8 +74,8 @@ template <bool V> struct decoder<V, market_participant_position_message> {
 };
 
 /// Streaming operator for jb::itch5::market_participant_position_message.
-std::ostream& operator<<(std::ostream& os,
-                         market_participant_position_message const& x);
+std::ostream&
+operator<<(std::ostream& os, market_participant_position_message const& x);
 
 } // namespace itch5
 } // namespace jb

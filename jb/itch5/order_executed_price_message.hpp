@@ -25,8 +25,9 @@ struct order_executed_price_message : public order_executed_message {
   printable_t printable;
   price4_t execution_price;
 
-  order_executed_price_message(order_executed_message const& base,
-                               printable_t const& p, price4_t const& px)
+  order_executed_price_message(
+      order_executed_message const& base, printable_t const& p,
+      price4_t const& px)
       : order_executed_message(base)
       , printable(p)
       , execution_price(px) {
@@ -51,10 +52,11 @@ struct order_executed_price_message : public order_executed_message {
 };
 
 /// Specialize decoder for a jb::itch5::order_executed_price_message
-template <bool V> struct decoder<V, order_executed_price_message> {
+template <bool V>
+struct decoder<V, order_executed_price_message> {
   /// Please see the generic documentation for jb::itch5::decoder<>::r()
-  static order_executed_price_message r(std::size_t size, void const* buf,
-                                        std::size_t off) {
+  static order_executed_price_message
+  r(std::size_t size, void const* buf, std::size_t off) {
     order_executed_price_message x;
     x = decoder<V, order_executed_message>::r(size, buf, off + 0);
     x.printable = decoder<V, printable_t>::r(size, buf, off + 31);
@@ -64,8 +66,8 @@ template <bool V> struct decoder<V, order_executed_price_message> {
 };
 
 /// Streaming operator for jb::itch5::order_executed_price_message.
-std::ostream& operator<<(std::ostream& os,
-                         order_executed_price_message const& x);
+std::ostream&
+operator<<(std::ostream& os, order_executed_price_message const& x);
 
 } // namespace itch5
 } // namespace jb
