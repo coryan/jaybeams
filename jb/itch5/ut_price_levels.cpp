@@ -6,7 +6,7 @@
  * Helper functions to test jb::itch5::price_levels()
  */
 namespace {
-template<typename price_field_t>
+template <typename price_field_t>
 void check_price_levels() {
   auto d = price_field_t::denom;
   price_field_t p0_9995 = price_field_t(int(0.9995 * d));

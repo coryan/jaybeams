@@ -105,11 +105,9 @@ private:
 
 inline bool operator==(
     compute_book::book_update const& a, compute_book::book_update const& b) {
-  return a.recv_ts == b.recv_ts
-      and a.stock == b.stock
-      and a.buy_sell_indicator == b.buy_sell_indicator
-      and a.px == b.px
-      and a.qty == b.qty;
+  return a.recv_ts == b.recv_ts and a.stock == b.stock and
+         a.buy_sell_indicator == b.buy_sell_indicator and a.px == b.px and
+         a.qty == b.qty;
 }
 
 inline bool operator!=(

@@ -13,7 +13,7 @@ namespace itch5 {
  *
  * @throws std::bad_range if hi < lo
  */
-template<typename price_field_t>
+template <typename price_field_t>
 int price_levels(price_field_t lo, price_field_t hi) {
   price_field_t const unit = price_field_t(price_field_t::denom);
   price_field_t const penny = price_field_t(unit.as_integer() / 100);
@@ -39,7 +39,7 @@ int price_levels(price_field_t lo, price_field_t hi) {
   // ... split the analysis ...
   return price_levels(lo, unit) + price_levels(unit, hi);
 }
-    
+
 } // namespace itch5
 } // namespace jb
 
