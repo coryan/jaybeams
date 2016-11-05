@@ -1,8 +1,10 @@
+#include <jb/itch5/compute_book.hpp>
+#include <jb/itch5/testing/messages.hpp>
 #include <jb/as_hhmmss.hpp>
-#include "jb/itch5/compute_book.hpp"
 
 #include <skye/mock_function.hpp>
 #include <boost/test/unit_test.hpp>
+#include <algorithm>
 #include <thread>
 
 using namespace jb::itch5;
@@ -14,6 +16,45 @@ namespace {
 buy_sell_indicator_t const BUY(u'B');
 buy_sell_indicator_t const SELL(u'S');
 } // anonymous namespace
+
+/**
+ * @test Verify that jb::itch5::compute_book::handle_message works as
+ * expected for stock_directory_message.
+ */
+BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
+  skye::mock_function<void()> callback;
+  auto cb = [&callback](
+      message_header const&, compute_book::book_update const& update,
+      order_book const& updated_book) { callback(); };
+
+  compute_book tested(cb);
+
+  using namespace jb::itch5::testing;
+
+  compute_book::time_point now = tested.now();
+  long msgcnt = 0;
+  tested.handle_message(now, ++msgcnt, 0, create_stock_directory("HSART"));
+  tested.handle_message(now, ++msgcnt, 0, create_stock_directory("FOO"));
+  tested.handle_message(now, ++msgcnt, 0, create_stock_directory("B"));
+
+  std::vector<stock_t> expected{stock_t("HSART"), stock_t("FOO"), stock_t("B")};
+  auto actual = tested.symbols();
+  // ... the symbols are not guaranteed to return in any particular
+  // order, so sort them to make testing easier ...
+  std::sort(expected.begin(), expected.end());
+  std::sort(actual.begin(), actual.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      expected.begin(), expected.end(), actual.begin(), actual.end());
+
+  // ... a repeated symbol should have no effect ...
+  tested.handle_message(now, ++msgcnt, 0, create_stock_directory("B"));
+  actual = tested.symbols();
+  std::sort(expected.begin(), expected.end());
+  std::sort(actual.begin(), actual.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(
+      expected.begin(), expected.end(), actual.begin(), actual.end());
+}
+
 
 /**
  * @test Verify that jb::itch5::compute_book::book_update operators

@@ -94,13 +94,58 @@ public:
   explicit compute_book(callback_type const& cb);
   explicit compute_book(callback_type&& cb);
 
+  /**
+   * Handle a new order message.
+   *
+   * New orders are added to the list of known orders and their qty is
+   * added to the right book at the order's price level.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing a new order
+   */
+  void handle_message(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      add_order_message const& msg);
+
+  /**
+   * Pre-populate the books based on the symbol directory.
+   *
+   * ITCH-5.0 sends the list of expected securities to be traded on a
+   * given day as a sequence of messages.  We use these messages to
+   * pre-populate the map of books and avoid hash map updates during
+   * the critical path.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing a known symbol for the feed
+   */
+  void handle_message(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      stock_directory_message const& msg);
+
+  /// Return the symbols known in the order book
+  std::vector<stock_t> symbols() const;
+
   /// Return the current timestamp for delay measurements
   time_point now() const {
     return std::chrono::steady_clock::now();
   }
 
 private:
+  /// Represent the collection of order books
+  typedef std::unordered_map<stock_t, order_book, boost::hash<stock_t>>
+      books_by_security;
+
+private:
+  /// Store the callback function, this is invoked on each event that
+  /// changes a book.
   callback_type callback_;
+
+  /// The order books indexed by security.
+  books_by_security books_;
 };
 
 inline bool operator==(
