@@ -1,5 +1,5 @@
 #include <jb/itch5/stock_trading_action_message.hpp>
-#include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/testing/data.hpp>
 
 #include <boost/test/unit_test.hpp>
 

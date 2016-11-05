@@ -286,9 +286,11 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
 
 jb_libitch5_testing_adir = $(includedir)
 jb_libitch5_testing_a_SOURCES = \
-  jb/itch5/testing_data.cpp
+  jb/itch5/testing/data.cpp \
+  jb/itch5/testing/messages.cpp
 jb_libitch5_testing_a_HEADERS = \
-  jb/itch5/testing_data.hpp
+  jb/itch5/testing/data.hpp \
+  jb/itch5/testing/messages.hpp
 
 ################################################################
 # jb/libitch5.a

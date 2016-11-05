@@ -1,4 +1,5 @@
 #include <jb/itch5/compute_book_depth.hpp>
+#include <jb/itch5/testing/messages.hpp>
 #include <jb/as_hhmmss.hpp>
 
 #include <skye/mock_function.hpp>
@@ -14,26 +15,6 @@ buy_sell_indicator_t const SELL(u'S');
 /// Create a simple timestamp
 timestamp create_timestamp() {
   return timestamp{std::chrono::nanoseconds(0)};
-}
-
-/// Create a stock_directory_message for testing
-stock_directory_message create_stock_directory(char const* symbol) {
-  return stock_directory_message{
-      {stock_directory_message::message_type, 0, 0, create_timestamp()},
-      stock_t(symbol),
-      market_category_t(u'Q'),
-      financial_status_indicator_t(u'N'),
-      100,
-      roundlots_only_t('N'),
-      issue_classification_t(u'C'),
-      issue_subtype_t("C"),
-      authenticity_t(u'P'),
-      short_sale_threshold_indicator_t(u' '),
-      ipo_flag_t(u'N'),
-      luld_reference_price_tier_t(u' '),
-      etp_flag_t(u'N'),
-      0,
-      inverse_indicator_t(u'N')};
 }
 
 } // anonymous namespace
@@ -66,6 +47,7 @@ BOOST_AUTO_TEST_CASE(compute_book_depth_simple) {
   // about their contents other than the symbol ...
   compute_book_depth::time_point now = tested.now();
   long msgcnt = 0;
+  using namespace jb::itch5::testing;
   tested.handle_message(now, ++msgcnt, 0, create_stock_directory("HSART"));
   tested.handle_message(now, ++msgcnt, 0, create_stock_directory("FOO"));
   tested.handle_message(now, ++msgcnt, 0, create_stock_directory("BAR"));
