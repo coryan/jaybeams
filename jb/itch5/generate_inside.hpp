@@ -27,8 +27,8 @@ namespace itch5 {
  */
 template <typename duration_t>
 bool record_latency_stats(
-    jb::offline_feed_statistics& stats,
-    jb::itch5::message_header const& header, jb::itch5::order_book const& book,
+    jb::offline_feed_statistics& stats, jb::itch5::message_header const& header,
+    jb::itch5::order_book const& book,
     jb::itch5::compute_book::book_update const& update,
     duration_t processing_latency) {
   // ... we need to treat each side differently ...
