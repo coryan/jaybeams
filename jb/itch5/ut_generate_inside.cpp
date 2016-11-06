@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
   // ... create the preconditions to run a test, first some place to
   // collect the statistics ...
   jb::offline_feed_statistics stats{jb::offline_feed_statistics::config()};
-  // ... then a book with 3 orders on each side, widely spaced 
+  // ... then a book with 3 orders on each side, widely spaced
   jb::itch5::order_book book;
   book.handle_add_order(BUY, price4_t(10 * 10000), 300);
   book.handle_add_order(BUY, price4_t(11 * 10000), 200);
@@ -83,10 +83,11 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
   out.str("");
   now = jb::itch5::compute_book::clock_type::now();
   BOOST_CHECK_EQUAL(
-      true, generate_inside(
-                stats, out, create_header(std::chrono::nanoseconds(0)), book,
-                compute_book::book_update{now, stock, BUY, price4_t(12 * 10000),
-                      100}, pl));
+      true,
+      generate_inside(
+          stats, out, create_header(std::chrono::nanoseconds(0)), book,
+          compute_book::book_update{now, stock, BUY, price4_t(12 * 10000), 100},
+          pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
   out.str("");
