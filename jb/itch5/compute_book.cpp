@@ -124,6 +124,14 @@ void compute_book::handle_message(
   books_.emplace(msg.stock, order_book());
 }
 
+void compute_book::handle_unknown(
+    time_point recvts, unknown_message const& msg) {
+  char msgtype = *static_cast<char const*>(msg.buf());
+  JB_LOG(error) << "Unknown message type '" << msgtype << "'(" << int(msgtype)
+                << ") in msgcnt=" << msg.count()
+                << ", msgoffset=" << msg.offset();
+}
+
 std::vector<stock_t> compute_book::symbols() const {
   std::vector<stock_t> result(books_.size());
   std::transform(

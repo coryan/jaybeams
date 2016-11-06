@@ -1,5 +1,7 @@
 #include <jb/itch5/compute_book.hpp>
+#include <jb/itch5/testing/data.hpp>
 #include <jb/itch5/testing/messages.hpp>
+#include <jb/itch5/trade_message.hpp>
 #include <jb/as_hhmmss.hpp>
 
 #include <skye/mock_function.hpp>
@@ -208,6 +210,31 @@ BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
   compute_book tested(tmp);
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(0));
+
+  // ... verify compute_book can ignore unknown messages ...
+  compute_book::time_point now = tested.now();
+  auto buf = jb::itch5::testing::create_message(
+      u'a', timestamp{std::chrono::nanoseconds(10)}, 128);
+  tested.handle_unknown(
+      now, unknown_message{
+        std::uint32_t(123), std::size_t(1000000), buf.size(), &buf[0]});
+
+  stock_t const stock("HSART");
+  price4_t const p10(100000);
+  long msgcnt = 100;
+  std::uint64_t id = 2;
+
+  // ... verify compute_book can ignore messages irrelevant for book
+  // building ...
+  tested.handle_message(
+      now, ++msgcnt, 0, trade_message{{trade_message::message_type, 0, 0,
+                                       timestamp{std::chrono::nanoseconds(0)}},
+                                      ++id,
+                                      BUY,
+                                      100,
+                                      stock,
+                                      p10,
+                                      ++id});
 }
 
 /**
@@ -219,7 +246,7 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
 
   skye::mock_function<void()> callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) { callback(); };
   // ... create the unit under test ...
   compute_book tested(cb);
@@ -267,7 +294,7 @@ BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
 
   skye::mock_function<void()> callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) { callback(); };
   // ... create the unit under test ...
   compute_book tested(cb);
@@ -333,7 +360,7 @@ BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
 
   skye::mock_function<void()> callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) { callback(); };
   // ... create the unit under test ...
   compute_book tested(cb);
@@ -414,7 +441,7 @@ BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
       half_quote best_offer, int buy_count, int offer_count)>
       callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) {
     callback(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
@@ -573,7 +600,7 @@ BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
       half_quote best_offer, int buy_count, int offer_count)>
       callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) {
     callback(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
@@ -675,7 +702,7 @@ BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
       half_quote best_offer, int buy_count, int offer_count)>
       callback;
   auto cb = [&callback](
-      message_header const&, order_book const& b,
+      jb::itch5::message_header const&, order_book const& b,
       compute_book::book_update const& update) {
     callback(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());

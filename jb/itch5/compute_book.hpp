@@ -240,6 +240,24 @@ public:
       time_point recvts, long msgcnt, std::size_t msgoffset,
       stock_directory_message const& msg);
 
+  /**
+   * Ignore all other message types.
+   *
+   * We are only interested in a handful of message types, anything
+   * else is captured by this template function and ignored.
+   */
+  template <typename message_type>
+  void handle_message(time_point, long, std::size_t, message_type const&) {
+  }
+
+  /**
+   * Log any unknown message types.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msg the unknown message location and contents
+   */
+  void handle_unknown(time_point recvts, unknown_message const& msg);
+
   /// Return the symbols known in the order book
   std::vector<stock_t> symbols() const;
 
