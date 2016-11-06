@@ -396,7 +396,7 @@ BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
   for (auto const& capture : callback) {
     std::ostringstream os;
     decltype(callback)::capture_strategy::stream(os, capture);
-    BOOST_MESSAGE("    " << os.str());
+    BOOST_TEST_MESSAGE("    " << os.str());
   }
 }
 
@@ -519,7 +519,7 @@ BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
   for (auto const& capture : callback) {
     std::ostringstream os;
     decltype(callback)::capture_strategy::stream(os, capture);
-    BOOST_MESSAGE("    " << os.str());
+    BOOST_TEST_MESSAGE("    " << os.str());
   }
 }
 
