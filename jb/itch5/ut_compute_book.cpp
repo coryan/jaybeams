@@ -216,8 +216,8 @@ BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
   auto buf = jb::itch5::testing::create_message(
       u'a', timestamp{std::chrono::nanoseconds(10)}, 128);
   tested.handle_unknown(
-      now, unknown_message{
-        std::uint32_t(123), std::size_t(1000000), buf.size(), &buf[0]});
+      now, unknown_message{std::uint32_t(123), std::size_t(1000000), buf.size(),
+                           &buf[0]});
 
   stock_t const stock("HSART");
   price4_t const p10(100000);

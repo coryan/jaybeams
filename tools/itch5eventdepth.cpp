@@ -45,8 +45,7 @@ public:
 /// Calculate the depth of an event, taking care with events that
 /// moved the BBO.
 void record_event_depth(
-    jb::book_depth_statistics& stats,
-    jb::itch5::message_header const&,
+    jb::book_depth_statistics& stats, jb::itch5::message_header const&,
     jb::itch5::order_book const& book,
     jb::itch5::compute_book::book_update const& update) {
   // ... we need to treat each side differently ...
@@ -95,14 +94,14 @@ int main(int argc, char* argv[]) try {
 
   if (cfg.enable_symbol_stats()) {
     jb::itch5::compute_book::callback_type chain = [&per_symbol, &cfg, cb](
-      jb::itch5::message_header const& header,
+        jb::itch5::message_header const& header,
         jb::itch5::order_book const& book,
         jb::itch5::compute_book::book_update const& update) {
       cb(header, book, update);
       auto location = per_symbol.find(update.stock);
       if (location == per_symbol.end()) {
-        auto p = per_symbol.emplace(update.stock, jb::book_depth_statistics(
-            cfg.symbol_stats()));
+        auto p = per_symbol.emplace(
+            update.stock, jb::book_depth_statistics(cfg.symbol_stats()));
         location = p.first;
       }
       record_event_depth(location->second, header, book, update);
