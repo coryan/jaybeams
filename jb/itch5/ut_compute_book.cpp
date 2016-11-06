@@ -394,7 +394,6 @@ BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
   }
 }
 
-
 /**
  * @test Increase code coverage for order_replace_message
  */
