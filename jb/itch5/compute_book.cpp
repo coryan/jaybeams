@@ -169,7 +169,7 @@ compute_book::book_update compute_book::do_reduce(
     long msgcnt, std::size_t msgoffset, message_header const& header,
     std::uint64_t order_reference_number, std::uint32_t shares) {
   auto& data = position->second;
-  auto qty = shares == 0 ? data.qty : shares;
+  int qty = shares == 0 ? data.qty : static_cast<int>(shares);
   // ... now we need to update the data for the order ...
   if (data.qty < qty) {
     JB_LOG(warning) << "trying to execute more shares than are available"
