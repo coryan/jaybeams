@@ -77,7 +77,8 @@ public:
    *
    * Most market data feeds resend the security identifier and side
    * with each order update, but ITCH-5.0 does not.  One needs to
-   * lookup the symbol, side, original price,  information based on the order id.  This literal type
+   * lookup the symbol, side, original price,  information based on the order
+   * id.  This literal type
    * is used to keep that information around.
    */
   struct order_data {
@@ -93,7 +94,7 @@ public:
     /// The remaining quantity in the order
     int qty;
   };
-  
+
   /**
    * Define the callback type
    *

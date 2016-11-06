@@ -63,8 +63,7 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_buy) {
   // the book when the update is called ...
   callback.check_called().once().with(
       compute_book::book_update{now, stock, BUY, p10, 100},
-      half_quote{p10, 100},
-      order_book::empty_offer(), 1, 0);
+      half_quote{p10, 100}, order_book::empty_offer(), 1, 0);
 
   // ... add an order at a better price ...
   now = tested.now();
@@ -82,8 +81,7 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_buy) {
   // the book when the update is called ...
   callback.check_called().once().with(
       compute_book::book_update{now, stock, BUY, p11, 200},
-      half_quote{p11, 200},
-      order_book::empty_offer(), 2, 0);
+      half_quote{p11, 200}, order_book::empty_offer(), 2, 0);
 
   // ... add an order at a worse price ...
   now = tested.now();
@@ -101,8 +99,7 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_buy) {
   // the book when the update is called ...
   callback.check_called().once().with(
       compute_book::book_update{now, stock, BUY, p09, 300},
-      half_quote{p11, 200},
-      order_book::empty_offer(), 3, 0);
+      half_quote{p11, 200}, order_book::empty_offer(), 3, 0);
 
   // ... those should be all the updates, regardless of their contents
   // ...
@@ -244,10 +241,10 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
   callback.check_called().once();
 }
 
-  /**
- * @test Verify that jb::itch5::compute_book::handle_message works as
- * expected for stock_directory_message.
- */
+/**
+*@test Verify that jb::itch5::compute_book::handle_message works as
+*expected for stock_directory_message.
+*/
 BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
   skye::mock_function<void()> callback;
   auto cb = [&callback](

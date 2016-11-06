@@ -30,8 +30,7 @@ void compute_book::handle_message(
     // exception and let the caller decide what to do ...
     order_data const& data = insert.first->second;
     JB_LOG(warning) << "duplicate order id=" << msg.order_reference_number
-                    << " existing data=" << data
-                    << ", msg=" << msg;
+                    << " existing data=" << data << ", msg=" << msg;
     return;
   }
   // ... find the right book for this order, create one if necessary ...
@@ -41,11 +40,13 @@ void compute_book::handle_message(
     iterator = p.first;
     JB_LOG(info) << "inserted book for unknown security, stock=" << msg.stock;
   }
-  (void) iterator->second.handle_add_order(
+  (void)iterator->second.handle_add_order(
       msg.buy_sell_indicator, msg.price, msg.shares);
-  
-  callback_(msg.header, iterator->second, book_update{
-      recvts, msg.stock, msg.buy_sell_indicator, msg.price, msg.shares});
+
+  callback_(
+      msg.header, iterator->second,
+      book_update{recvts, msg.stock, msg.buy_sell_indicator, msg.price,
+                  msg.shares});
 }
 
 void compute_book::handle_message(
@@ -57,8 +58,8 @@ void compute_book::handle_message(
 }
 
 void compute_book::handle_message(
-      time_point recvts, long msgcnt, std::size_t msgoffset,
-      stock_directory_message const& msg) {
+    time_point recvts, long msgcnt, std::size_t msgoffset,
+    stock_directory_message const& msg) {
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   // ... create the book and update the map ...
   books_.emplace(msg.stock, order_book());
