@@ -52,7 +52,7 @@ public:
     /**
      * When was the message that triggered this update received
      */
-    time_point recv_ts;
+    time_point recvts;
 
     /**
      * The security updated by this order.  This is redundant for
@@ -73,6 +73,28 @@ public:
   };
 
   /**
+   * A convenient container for per-order data.
+   *
+   * Most market data feeds resend the security identifier and side
+   * with each order update, but ITCH-5.0 does not.  One needs to
+   * lookup the symbol, side, original price,  information based on the order id.  This literal type
+   * is used to keep that information around.
+   */
+  struct order_data {
+    /// The symbol for this particular order
+    stock_t stock;
+
+    /// Whether the order is a BUY or SELL
+    buy_sell_indicator_t buy_sell_indicator;
+
+    /// The price of the order
+    price4_t px;
+
+    /// The remaining quantity in the order
+    int qty;
+  };
+  
+  /**
    * Define the callback type
    *
    * A callback of this type is required in the constructor of this
@@ -85,8 +107,8 @@ public:
    * @param updated_book the order_book after the update was applied
    */
   typedef std::function<void(
-      message_header const& header, book_update const& update,
-      order_book const& updated_book)>
+      message_header const& header, order_book const& updated_book,
+      book_update const& update)>
       callback_type;
   //@}
 
@@ -108,6 +130,85 @@ public:
   void handle_message(
       time_point recvts, long msgcnt, std::size_t msgoffset,
       add_order_message const& msg);
+
+  /**
+   * Handle a new order with MPID.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing a new order
+   */
+  void handle_message(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      add_order_mpid_message const& msg);
+
+#if 0
+  /**
+   * Handle an order execution.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing the execution
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_executed_message const& msg);
+
+  /**
+   * Handle an order execution with a different price than the order's
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing the execution
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_executed_price_message const& msg) {
+    // Delegate on the handler for add_order_message
+    handle_message(
+        recv_ts, msgcnt, msgoffset,
+        static_cast<order_executed_message const&>(msg));
+  }
+
+  /**
+   * Handle a partial cancel.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing the cancelation
+   */
+  void handle_message(
+      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      order_cancel_message const& msg);
+
+  /**
+   * Handle a full cancel.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing the cancelation
+   */
+  void handle_message(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      order_delete_message const& msg);
+
+  /**
+   * Handle an order replace.
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param msg the message describing the cancel/replace
+   */
+  void handle_message(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      order_replace_message const& msg);
+#endif /* 0 */
 
   /**
    * Pre-populate the books based on the symbol directory.
@@ -139,6 +240,9 @@ private:
   typedef std::unordered_map<stock_t, order_book, boost::hash<stock_t>>
       books_by_security;
 
+  /// Represent the collection of all orders
+  typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
+
 private:
   /// Store the callback function, this is invoked on each event that
   /// changes a book.
@@ -146,11 +250,14 @@ private:
 
   /// The order books indexed by security.
   books_by_security books_;
+
+  /// The live orders indexed by the "order reference number"
+  orders_by_id orders_;
 };
 
 inline bool operator==(
     compute_book::book_update const& a, compute_book::book_update const& b) {
-  return a.recv_ts == b.recv_ts and a.stock == b.stock and
+  return a.recvts == b.recvts and a.stock == b.stock and
          a.buy_sell_indicator == b.buy_sell_indicator and a.px == b.px and
          a.qty == b.qty;
 }
@@ -160,7 +267,11 @@ inline bool operator!=(
   return !(a == b);
 }
 
+/// ostream operator for order updates, mostly used for testing and debugging
 std::ostream& operator<<(std::ostream& os, compute_book::book_update const& x);
+
+/// ostream operator for the order data, mostly used for testing and debugging
+std::ostream& operator<<(std::ostream& os, compute_book::order_data const& x);
 
 } // namespace itch5
 } // namespace jb
