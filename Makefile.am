@@ -42,6 +42,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_compute_book \
   jb/itch5/ut_cross_trade_message \
   jb/itch5/ut_cross_type \
+  jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
   jb/itch5/ut_make_socket_udp_recv \
   jb/itch5/ut_market_participant_position_message \
@@ -593,6 +594,10 @@ jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_cross_type_SOURCES = jb/itch5/ut_cross_type.cpp
 jb_itch5_ut_cross_type_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_type
 jb_itch5_ut_cross_type_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_generate_inside_SOURCES = jb/itch5/ut_generate_inside.cpp
+jb_itch5_ut_generate_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_generate_inside
+jb_itch5_ut_generate_inside_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_period_update_message.cpp
 jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
