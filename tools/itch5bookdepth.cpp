@@ -1,16 +1,6 @@
-#include <jb/itch5/compute_book_depth.hpp>
-#include <jb/itch5/process_iostream.hpp>
-#include <jb/book_depth_statistics.hpp>
-#include <jb/fileio.hpp>
-#include <jb/log.hpp>
-
-#include <iostream>
-#include <stdexcept>
-#include <unordered_map>
-
-#include <chrono>
-
 /**
+ * @file
+ *
  * Compute ITCH5 Depth of Book statistics.
  *
  * Generate statistics per symbol and aggregated.
@@ -18,8 +8,23 @@
  * https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
  * for design and implementation details.
  */
+#include <jb/itch5/compute_book.hpp>
+#include <jb/itch5/process_iostream.hpp>
+#include <jb/book_depth_statistics.hpp>
+#include <jb/fileio.hpp>
+#include <jb/log.hpp>
+
+#include <chrono>
+#include <iostream>
+#include <stdexcept>
+#include <unordered_map>
+
+/**
+ * Define types and functions used in this program.
+ */
 namespace {
 
+/// Configuration parameters for itch5bookdepth
 class config : public jb::config_object {
 public:
   config();
@@ -35,10 +40,15 @@ public:
   jb::config_attribute<config, bool> enable_symbol_stats;
 };
 
-} // anonymous namespace
+/// Record the book depth
+void record_book_depth(
+    jb::book_depth_statistics& stats, jb::itch5::message_header const&,
+    jb::itch5::order_book const& book,
+    jb::itch5::compute_book::book_update const& update) {
+  stats.sample(book.get_book_depth());
+}
 
-typedef std::chrono::high_resolution_clock high_resolution_t;
-typedef std::chrono::microseconds microseconds_t;
+} // anonymous namespace
 
 int main(int argc, char* argv[]) try {
   config cfg;
@@ -54,26 +64,32 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
   jb::book_depth_statistics stats(cfg.stats());
 
-  auto cb =
-      [&](jb::itch5::compute_book_depth::time_point recv_ts,
-          jb::itch5::message_header const& header,
-          jb::itch5::stock_t const& stock, jb::itch5::book_depth_t book_depth) {
-        stats.sample(book_depth);
+  jb::itch5::compute_book::callback_type cb = [&stats](
+      jb::itch5::message_header const& header,
+      jb::itch5::order_book const& updated_book,
+      jb::itch5::compute_book::book_update const& update) {
+    record_book_depth(stats, header, updated_book, update);
+  };
 
-        if (cfg.enable_symbol_stats()) {
-          auto i = per_symbol.find(stock);
-          if (i == per_symbol.end()) {
-            auto p = per_symbol.emplace(
-                stock, jb::book_depth_statistics(cfg.symbol_stats()));
-            i = p.first;
-          }
-          i->second.sample(book_depth);
-        }
-        out << header.timestamp.ts.count() << " " << header.stock_locate << " "
-            << stock << " " << book_depth << "\n";
-      };
+  if (cfg.enable_symbol_stats()) {
+    jb::book_depth_statistics::config symcfg(cfg.symbol_stats());
+    jb::itch5::compute_book::callback_type chain = [&per_symbol, symcfg, cb](
+        jb::itch5::message_header const& header,
+        jb::itch5::order_book const& book,
+        jb::itch5::compute_book::book_update const& update) {
+      cb(header, book, update);
+      auto location = per_symbol.find(update.stock);
+      if (location == per_symbol.end()) {
+        auto p =
+            per_symbol.emplace(update.stock, jb::book_depth_statistics(symcfg));
+        location = p.first;
+      }
+      record_book_depth(location->second, header, book, update);
+    };
+    cb = std::move(chain);
+  }
 
-  jb::itch5::compute_book_depth handler(cb);
+  jb::itch5::compute_book handler(std::move(cb));
   jb::itch5::process_iostream(in, handler);
 
   jb::book_depth_statistics::print_csv_header(out);
@@ -96,11 +112,15 @@ int main(int argc, char* argv[]) try {
 
 namespace {
 
-// Define the default per-symbol stats
+/// Limit the amount of memory used on each per-symbol statistics
+#ifndef JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth
+#define JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth 5000
+#endif // JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth
+
+/// Create a different default configuration for the per-symbol stats
 jb::book_depth_statistics::config default_per_symbol_stats() {
   return jb::book_depth_statistics::config().max_book_depth(
-      10000) // limit memory usage
-      ;
+      JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth);
 }
 
 config::config()
@@ -110,9 +130,10 @@ config::config()
     , output_file(
           desc("output-file")
               .help(
-                  "The name of the file where to store the inside data."
+                  "The name of the file where to store the statistics."
+                  "  By default output to stdout."
                   "  Files ending in .gz are automatically compressed."),
-          this)
+          this, "stdout")
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "book-depth-statistics"), this)
     , symbol_stats(
@@ -123,22 +144,21 @@ config::config()
               .help(
                   "If set, enable per-symbol statistics."
                   "  Collecting per-symbol statistics is expensive in both"
-                  " memory and execution time"),
-          this, true) // changes default to true
-{
+                  " memory and execution time, enable only if needed."),
+          this, true) {
 }
 
 void config::validate() const {
   if (input_file() == "") {
     throw jb::usage(
         "Missing input-file setting."
-        "  You must specify an input file.",
+        "  The program needs an input file to read ITCH-5.0 data from.",
         1);
   }
   if (output_file() == "") {
     throw jb::usage(
         "Missing output-file setting."
-        "  You must specify an output file.",
+        "  Use 'stdout' if you want to print to the standard output.",
         1);
   }
   log().validate();

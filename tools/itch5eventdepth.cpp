@@ -26,7 +26,7 @@
  */
 namespace {
 
-/// Configuration parameters
+/// Configuration parameters for itch5eventdepth
 class config : public jb::config_object {
 public:
   config();
@@ -93,15 +93,16 @@ int main(int argc, char* argv[]) try {
   };
 
   if (cfg.enable_symbol_stats()) {
-    jb::itch5::compute_book::callback_type chain = [&per_symbol, &cfg, cb](
+    jb::book_depth_statistics::config symcfg(cfg.symbol_stats());
+    jb::itch5::compute_book::callback_type chain = [&per_symbol, symcfg, cb](
         jb::itch5::message_header const& header,
         jb::itch5::order_book const& book,
         jb::itch5::compute_book::book_update const& update) {
       cb(header, book, update);
       auto location = per_symbol.find(update.stock);
       if (location == per_symbol.end()) {
-        auto p = per_symbol.emplace(
-            update.stock, jb::book_depth_statistics(cfg.symbol_stats()));
+        auto p =
+            per_symbol.emplace(update.stock, jb::book_depth_statistics(symcfg));
         location = p.first;
       }
       record_event_depth(location->second, header, book, update);
