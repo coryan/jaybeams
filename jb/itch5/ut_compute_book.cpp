@@ -196,25 +196,42 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_sell) {
 }
 
 /**
- * @test Increase code coverage in
- * jb::itch5::compute_book::handle_message for add_order_message.
+ * @test Increase code coverage in jb::itch5::compute_book
  */
-BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
+BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
   skye::mock_function<void()> callback;
   auto cb = [&callback](
       message_header const&, order_book const& b,
       compute_book::book_update const& update) { callback(); };
+  compute_book::callback_type tmp(cb);
 
-  compute_book tested(cb);
+  compute_book tested(std::move(cb));
+  auto symbols = tested.symbols();
+  BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(0));
+}
 
+/**
+ * @test Increase code coverage in
+ * jb::itch5::compute_book::handle_message for add_order_message.
+ */
+BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
   using namespace jb::itch5::testing;
 
+  skye::mock_function<void()> callback;
+  auto cb = [&callback](
+      message_header const&, order_book const& b,
+      compute_book::book_update const& update) { callback(); };
+  // ... create the unit under test ...
+  compute_book tested(cb);
+  // ... and a number of helper constants and variables to drive the
+  // test ...
   stock_t const stock("HSART");
   price4_t const p10(100000);
   long msgcnt = 0;
   std::uint64_t id = 2;
-  compute_book::time_point now = tested.now();
+
   // ... add an initial order to the book ...
+  compute_book::time_point now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -239,6 +256,150 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
                         p10});
   // ... we expect no additional callbacks in this case ...
   callback.check_called().once();
+}
+
+/**
+ * @test Increase code coverage in
+ * jb::itch5::compute_book::handle_order_reduction
+ */
+BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
+  using namespace jb::itch5::testing;
+
+  skye::mock_function<void()> callback;
+  auto cb = [&callback](
+      message_header const&, order_book const& b,
+      compute_book::book_update const& update) { callback(); };
+  // ... create the unit under test ...
+  compute_book tested(cb);
+  // ... and a number of helper constants and variables to drive the
+  // test ...
+  stock_t const stock("HSART");
+  price4_t const p10(100000);
+  long msgcnt = 0;
+  std::uint64_t id = 2;
+  auto const id_buy = ++id;
+
+  // ... add an initial order to the book ...
+  compute_book::time_point now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_message{{add_order_message::message_type, 0, 0,
+                         timestamp{std::chrono::nanoseconds(0)}},
+                        id_buy,
+                        BUY,
+                        100,
+                        stock,
+                        p10});
+  // ... we expect a callback from that event ...
+  callback.check_called().once();
+
+  // ... try to cancel a different order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_cancel_message{{order_cancel_message::message_type, 0, 0,
+                            timestamp{std::chrono::nanoseconds(0)}},
+                           std::uint64_t(1),
+                           100});
+  // ... we expect that no further callbacks are created ...
+  callback.check_called().once();
+
+  // ... fully cancel the order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_delete_message{{order_delete_message::message_type, 0, 0,
+                            timestamp{std::chrono::nanoseconds(0)}},
+                           id_buy});
+  // ... we expect a new callback ...
+  callback.check_called().exactly(2);
+
+  // ... fully cancel the order a second time should produce no action ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_delete_message{{order_delete_message::message_type, 0, 0,
+                            timestamp{std::chrono::nanoseconds(0)}},
+                           id_buy});
+  // ... we expect a new callback ...
+  callback.check_called().exactly(2);
+}
+
+/**
+ * @test Increase code coverage for order_replace_message
+ */
+BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
+  using namespace jb::itch5::testing;
+
+  skye::mock_function<void()> callback;
+  auto cb = [&callback](
+      message_header const&, order_book const& b,
+      compute_book::book_update const& update) { callback(); };
+  // ... create the unit under test ...
+  compute_book tested(cb);
+  // ... and a number of helper constants and variables to drive the
+  // test ...
+  stock_t const stock("HSART");
+  price4_t const p10(100000);
+  price4_t const p11(110000);
+  long msgcnt = 0;
+  std::uint64_t id = 2;
+  auto const id_buy_1 = ++id;
+  auto const id_buy_2 = ++id;
+  auto const id_buy_3 = ++id;
+
+  // ... add an orders to the book ...
+  compute_book::time_point now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_message{{add_order_message::message_type, 0, 0,
+                         timestamp{std::chrono::nanoseconds(0)}},
+                        id_buy_1,
+                        BUY,
+                        100,
+                        stock,
+                        p10});
+  callback.check_called().once();
+
+  // ... replacing a non-existing order should have no effect ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_replace_message{{order_replace_message::message_type, 0, 0,
+                             timestamp{std::chrono::nanoseconds(0)}},
+                            id_buy_2,
+                            id_buy_3,
+                            400,
+                            p11});
+  // ... we expect that no further callbacks are created ...
+  callback.check_called().once();
+
+  // ... add a second order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_message{{add_order_message::message_type, 0, 0,
+                         timestamp{std::chrono::nanoseconds(0)}},
+                        id_buy_2,
+                        BUY,
+                        300,
+                        stock,
+                        p11});
+  // ... we expect a callback from that event ...
+  callback.check_called().exactly(2);
+
+  // ... replacing with a duplicate id should have no effect ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_replace_message{{order_replace_message::message_type, 0, 0,
+                             timestamp{std::chrono::nanoseconds(0)}},
+                            id_buy_1,
+                            id_buy_2,
+                            400,
+                            p11});
+  // ... we expect that no further callbacks are created ...
+  callback.check_called().exactly(2);
 }
 
 /**
@@ -626,9 +787,9 @@ BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
 }
 
 /**
-*@test Verify that jb::itch5::compute_book::handle_message works as
-*expected for stock_directory_message.
-*/
+ * @test Verify that jb::itch5::compute_book::handle_message works as
+ *expected for stock_directory_message.
+ */
 BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
   skye::mock_function<void()> callback;
   auto cb = [&callback](
