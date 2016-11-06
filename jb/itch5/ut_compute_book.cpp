@@ -203,9 +203,9 @@ BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
   auto cb = [&callback](
       message_header const&, order_book const& b,
       compute_book::book_update const& update) { callback(); };
-  compute_book::callback_type tmp(cb);
+  compute_book::callback_type const tmp(cb);
 
-  compute_book tested(std::move(cb));
+  compute_book tested(tmp);
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(0));
 }
