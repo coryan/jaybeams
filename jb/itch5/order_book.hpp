@@ -49,11 +49,6 @@ public:
   order_book() {
   }
 
-  /// Return the best bid price and quantity
-  half_quote best_bid() const;
-  /// Return the best offer price and quantity
-  half_quote best_offer() const;
-
   /// The value used to represent an empty bid
   static half_quote empty_bid() {
     return half_quote(price4_t(0), 0);
@@ -63,13 +58,32 @@ public:
     return half_quote(max_price_field_value<price4_t>(), 0);
   }
 
+  //@{
   /**
-   * Return the book depth.
-   * This is the number of price levels on this order book.
+   * @name Accessors
    */
+
+  /// @returns the best bid price and quantity
+  half_quote best_bid() const;
+  /// @returns the best offer price and quantity
+  half_quote best_offer() const;
+
+  /// @returns the number of levels with non-zero quantity for the BUY side.
+  std::size_t buy_count() const {
+    return buy_.size();
+  }
+
+  /// @returns the number of levels with non-zero quantity for the SELL side.
+  std::size_t sell_count() const {
+    return sell_.size();
+  }
+
+  /// @returns the book depth, this is the number of price levels on
+  /// this order book.
   book_depth_t get_book_depth() const {
-    return buy_.size() + sell_.size();
+    return buy_count() + sell_count();
   };
+  //@}
 
   /**
    * Handle a new order.
