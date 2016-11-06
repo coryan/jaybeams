@@ -292,10 +292,16 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
 BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
   using namespace jb::itch5::testing;
 
-  skye::mock_function<void()> callback;
+  skye::mock_function<void(
+      compute_book::book_update update, half_quote best_bid,
+      half_quote best_offer, int buy_count, int offer_count)>
+      callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, order_book const& b,
-      compute_book::book_update const& update) { callback(); };
+      compute_book::book_update const& update) {
+    callback(
+        update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
+  };
   // ... create the unit under test ...
   compute_book tested(cb);
   // ... and a number of helper constants and variables to drive the
@@ -350,7 +356,44 @@ BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
                            id_buy});
   // ... we expect a new callback ...
   callback.check_called().exactly(2);
+
+  // ... add another order to the book ...
+  auto const id_sell = ++id;
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_message{{add_order_message::message_type, 0, 0,
+                         timestamp{std::chrono::nanoseconds(0)}},
+                        id_sell,
+                        SELL,
+                        300,
+                        stock,
+                        p10});
+  // ... we expect a callback from that event ...
+  callback.check_called().exactly(3);
+
+  // ... try to cancel more shares than are available in the order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_cancel_message{{order_cancel_message::message_type, 0, 0,
+                            timestamp{std::chrono::nanoseconds(0)}},
+                           id_sell,
+                           600});
+  // ... that should create a callback ...
+  callback.check_called().exactly(4);
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p10, -300},
+      order_book::empty_bid(), order_book::empty_offer(), 0, 0);
+
+  // ... at the end log all the calls to ease debugging ...
+  for (auto const& capture : callback) {
+    std::ostringstream os;
+    decltype(callback)::capture_strategy::stream(os, capture);
+    BOOST_TEST_MESSAGE("    " << os.str());
+  }
 }
+
 
 /**
  * @test Increase code coverage for order_replace_message
