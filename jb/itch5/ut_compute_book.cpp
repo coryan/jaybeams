@@ -242,6 +242,164 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
 }
 
 /**
+ * @test Verify that jb::itch5::compute_book::handle_message works as
+ * expected for order_executed_message BUY & SELL.
+ */
+BOOST_AUTO_TEST_CASE(compute_book_order_executed_message_buy) {
+  skye::mock_function<void(
+      compute_book::book_update update, half_quote best_bid,
+      half_quote best_offer, int buy_count, int offer_count)>
+      callback;
+  auto cb = [&callback](
+      message_header const&, order_book const& b,
+      compute_book::book_update const& update) {
+    callback(
+        update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
+  };
+
+  compute_book tested(cb);
+
+  using namespace jb::itch5::testing;
+
+  stock_t const stock("HSART");
+  price4_t const p10(100000);
+  price4_t const p11(110000);
+  long msgcnt = 0;
+  std::uint64_t id = 2;
+  auto const id_buy = ++id;
+  compute_book::time_point now = tested.now();
+  // ... add an initial order to the book ...
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
+                               timestamp{std::chrono::nanoseconds(0)}},
+                              id_buy,
+                              BUY,
+                              500,
+                              stock,
+                              p10},
+                             mpid_t("LOOF")});
+  // ... we expect the new order to implicitly add the symbol ...
+  auto symbols = tested.symbols();
+  BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
+  BOOST_CHECK_EQUAL(symbols[0], stock);
+
+  // ... we also expect a single update, and the order should be in
+  // the book when the update is called ...
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p10, 500},
+      half_quote{p10, 500}, order_book::empty_offer(), 1, 0);
+
+  // ... add an order to the opposite side of the book ...
+  now = tested.now();
+  auto const id_sell = ++id;
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
+                               timestamp{std::chrono::nanoseconds(0)}},
+                              id_sell,
+                              SELL,
+                              500,
+                              stock,
+                              p11},
+                             mpid_t("LOOF")});
+
+  // ... we also expect a single update, and the order should be in
+  // the book when the update is called ...
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p11, 500},
+      half_quote{p10, 500}, half_quote{p11, 500}, 1, 1);
+
+  // ... execute the BUY order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_executed_message{{order_executed_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_buy,
+                             100,
+                             ++id});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p10, -100},
+      half_quote{p10, 400}, half_quote{p11, 500}, 1, 1);
+
+  // ... execute the SELL order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_executed_message{{order_executed_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_sell,
+                             100,
+                             ++id});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p11, -100},
+      half_quote{p10, 400}, half_quote{p11, 400}, 1, 1);
+
+  // ... execute the BUY order with a price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_price_message{
+                            {{order_executed_price_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_buy,
+                             100,
+                             ++id},
+                            printable_t('N'),
+                            price4_t(99901)});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p10, -100},
+      half_quote{p10, 300}, half_quote{p11, 400}, 1, 1);
+
+  // ... execute the SELL order with a price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0, order_executed_price_message{
+                            {{order_executed_price_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_sell,
+                             100,
+                             ++id},
+                            printable_t('N'),
+                            price4_t(110001)});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p11, -100},
+      half_quote{p10, 300}, half_quote{p11, 300}, 1, 1);
+
+  // ... complete the execution of the BUY order ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_executed_message{{order_executed_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_buy,
+                             300,
+                             ++id});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p10, -300},
+      order_book::empty_bid(), half_quote{p11, 300}, 0, 1);
+
+  // ... execute the SELL order with a price ...
+  now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_executed_message{{order_executed_message::message_type, 0, 0,
+                              timestamp{std::chrono::nanoseconds(0)}},
+                             id_sell,
+                             300,
+                             ++id});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p11, -300},
+      order_book::empty_bid(), order_book::empty_offer(), 0, 0);
+
+  for (auto const& capture : callback) {
+    std::ostringstream os;
+    decltype(callback)::capture_strategy::stream(os, capture);
+    BOOST_MESSAGE("    " << os.str());
+  }
+}
+
+/**
 *@test Verify that jb::itch5::compute_book::handle_message works as
 *expected for stock_directory_message.
 */

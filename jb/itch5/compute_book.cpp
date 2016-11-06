@@ -30,7 +30,8 @@ void compute_book::handle_message(
     // exception and let the caller decide what to do ...
     order_data const& data = insert.first->second;
     JB_LOG(warning) << "duplicate order id=" << msg.order_reference_number
-                    << " existing data=" << data << ", msg=" << msg;
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", existing data=" << data << ", msg=" << msg;
     return;
   }
   // ... find the right book for this order, create one if necessary ...
@@ -51,10 +52,40 @@ void compute_book::handle_message(
 
 void compute_book::handle_message(
     time_point recvts, long msgcnt, std::size_t msgoffset,
-    add_order_mpid_message const& msg) {
-  // ... delegate to the handler for add_order_message ...
-  handle_message(
-      recvts, msgcnt, msgoffset, static_cast<add_order_message const&>(msg));
+    order_executed_message const& msg) {
+  // First we need to find the order ...
+  auto position = orders_.find(msg.order_reference_number);
+  if (position == orders_.end()) {
+    // ... ooops, this should not happen, there is a problem with the
+    // feed, log the problem and skip the message ...
+    JB_LOG(warning) << "duplicate order id=" << msg.order_reference_number
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", msg=" << msg;
+    return;
+  }
+  auto& data = position->second;
+  auto qty = msg.executed_shares;
+  // ... now we need to update the data for the order ...
+  if (data.qty < msg.executed_shares) {
+    JB_LOG(warning) << "trying to execute more shares than are available"
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", data=" << data << ", msg=" << msg;
+    qty = data.qty;
+  }
+  data.qty -= qty;
+  // ... if the order is finished we need to remove it, otherwise the
+  // number of live orders grows without bound (almost), this might
+  // remove the data, so we make a copy ...
+  book_update u{recvts, data.stock, data.buy_sell_indicator, data.px,
+                -static_cast<int>(qty)};
+  // ... after the copy is safely stored, go and remove the order if
+  // needed ...
+  if (data.qty == 0) {
+    orders_.erase(position);
+  }
+  auto& book = books_[u.stock];
+  (void)book.handle_order_reduced(u.buy_sell_indicator, u.px, qty);
+  callback_(msg.header, book, u);
 }
 
 void compute_book::handle_message(

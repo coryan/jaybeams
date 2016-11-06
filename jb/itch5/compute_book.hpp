@@ -142,9 +142,12 @@ public:
    */
   void handle_message(
       time_point recvts, long msgcnt, std::size_t msgoffset,
-      add_order_mpid_message const& msg);
+      add_order_mpid_message const& msg) {
+    // ... delegate to the handler for add_order_message (without mpid) ...
+    handle_message(
+        recvts, msgcnt, msgoffset, static_cast<add_order_message const&>(msg));
+  }
 
-#if 0
   /**
    * Handle an order execution.
    *
@@ -154,7 +157,7 @@ public:
    * @param msg the message describing the execution
    */
   void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point recvts, long msgcnt, std::size_t msgoffset,
       order_executed_message const& msg);
 
   /**
@@ -166,14 +169,15 @@ public:
    * @param msg the message describing the execution
    */
   void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point recvts, long msgcnt, std::size_t msgoffset,
       order_executed_price_message const& msg) {
-    // Delegate on the handler for add_order_message
+    // ... delegate on the handler for add_order_message (without price) ...
     handle_message(
-        recv_ts, msgcnt, msgoffset,
+        recvts, msgcnt, msgoffset,
         static_cast<order_executed_message const&>(msg));
   }
 
+#if 0
   /**
    * Handle a partial cancel.
    *
@@ -183,7 +187,7 @@ public:
    * @param msg the message describing the cancelation
    */
   void handle_message(
-      time_point recv_ts, long msgcnt, std::size_t msgoffset,
+      time_point recvts, long msgcnt, std::size_t msgoffset,
       order_cancel_message const& msg);
 
   /**
