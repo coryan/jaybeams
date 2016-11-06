@@ -1,14 +1,16 @@
 /**
  * @file
  *
- * Compute ITCH5 Depth of Book statistics.
+ * This program tries to answer the question:
+ * - How many changes happen at the top of book?
+ * - How many changes happen 2 levels down the book?
+ * - What about 10 levels?
  *
- * Generate statistics per symbol and aggregated.
- * See:
- * https://github.com/GFariasR/jaybeams/wiki/ITCH5-Depth-of-Book-StatisticsProject
- * for design and implementation details.
+ * It reports the percentiles of "for each event, record the depth of
+ * the change".
  */
 #include <jb/itch5/compute_book.hpp>
+#include <jb/itch5/price_levels.hpp>
 #include <jb/itch5/process_iostream.hpp>
 #include <jb/book_depth_statistics.hpp>
 #include <jb/fileio.hpp>
@@ -24,7 +26,7 @@
  */
 namespace {
 
-/// Configuration parameters for itch5bookdepth
+/// Configuration parameters for itch5eventdepth
 class config : public jb::config_object {
 public:
   config();
@@ -40,19 +42,38 @@ public:
   jb::config_attribute<config, bool> enable_symbol_stats;
 };
 
-/// Record the book depth
-void record_book_depth(
+/// Calculate the depth of an event, taking care with events that
+/// moved the BBO.
+void record_event_depth(
     jb::book_depth_statistics& stats, jb::itch5::message_header const&,
     jb::itch5::order_book const& book,
     jb::itch5::compute_book::book_update const& update) {
-  stats.sample(book.get_book_depth());
+  // ... we need to treat each side differently ...
+  int depth = 0;
+  if (update.buy_sell_indicator == u'B') {
+    // ... if the update price is higher than the current best bid
+    // that means the update moved the best_bid down, we are going to
+    // treat that as a change at depth 0.  Notice that this works even
+    // when there is no best bid, because the book returns "0" as a
+    // best bid in that case ...
+    if (update.px < book.best_bid().first) {
+      depth = jb::itch5::price_levels(update.px, book.best_bid().first);
+    }
+  } else {
+    // ... do the analogous thing for the sell side ...
+    if (update.px > book.best_offer().first) {
+      depth = jb::itch5::price_levels(book.best_offer().first, update.px);
+    }
+  }
+  stats.sample(depth);
 }
 
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.load_overrides(argc, argv, std::string("itch5bookdepth.yaml"), "JB_ROOT");
+  cfg.load_overrides(
+      argc, argv, std::string("itch5eventdepth.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
   boost::iostreams::filtering_istream in;
@@ -62,13 +83,13 @@ int main(int argc, char* argv[]) try {
   jb::open_output_file(out, cfg.output_file());
 
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
-  jb::book_depth_statistics stats(cfg.stats());
+  jb::book_depth_statistics aggregate_stats(cfg.stats());
 
-  jb::itch5::compute_book::callback_type cb = [&stats](
+  jb::itch5::compute_book::callback_type cb = [&aggregate_stats](
       jb::itch5::message_header const& header,
       jb::itch5::order_book const& updated_book,
       jb::itch5::compute_book::book_update const& update) {
-    record_book_depth(stats, header, updated_book, update);
+    record_event_depth(aggregate_stats, header, updated_book, update);
   };
 
   if (cfg.enable_symbol_stats()) {
@@ -84,7 +105,7 @@ int main(int argc, char* argv[]) try {
             per_symbol.emplace(update.stock, jb::book_depth_statistics(symcfg));
         location = p.first;
       }
-      record_book_depth(location->second, header, book, update);
+      record_event_depth(location->second, header, book, update);
     };
     cb = std::move(chain);
   }
@@ -96,7 +117,7 @@ int main(int argc, char* argv[]) try {
   for (auto const& i : per_symbol) {
     i.second.print_csv(i.first.c_str(), out);
   }
-  stats.print_csv("__aggregate__", out);
+  aggregate_stats.print_csv("__aggregate__", out);
   return 0;
 
 } catch (jb::usage const& u) {
@@ -113,14 +134,14 @@ int main(int argc, char* argv[]) try {
 namespace {
 
 /// Limit the amount of memory used on each per-symbol statistics
-#ifndef JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth
-#define JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth 5000
-#endif // JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth
+#ifndef JB_ITCH5EVENTDEPTH_DEFAULT_per_symbol_max_book_depth
+#define JB_ITCH5EVENTDEPTH_DEFAULT_per_symbol_max_book_depth 5000
+#endif // JB_ITCH5EVENTDEPTH_DEFAULT_per_symbol_max_book_depth
 
 /// Create a different default configuration for the per-symbol stats
 jb::book_depth_statistics::config default_per_symbol_stats() {
   return jb::book_depth_statistics::config().max_book_depth(
-      JB_ITCH5BOOKDEPTH_DEFAULT_per_symbol_max_book_depth);
+      JB_ITCH5EVENTDEPTH_DEFAULT_per_symbol_max_book_depth);
 }
 
 config::config()
@@ -135,9 +156,9 @@ config::config()
                   "  Files ending in .gz are automatically compressed."),
           this, "stdout")
     , log(desc("log", "logging"), this)
-    , stats(desc("stats", "book-depth-statistics"), this)
+    , stats(desc("stats", "event-depth-statistics"), this)
     , symbol_stats(
-          desc("symbol-stats", "book-depth-statistics-per-symbol"), this,
+          desc("symbol-stats", "event-depth-statistics-per-symbol"), this,
           default_per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")

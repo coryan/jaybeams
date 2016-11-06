@@ -1,5 +1,5 @@
 #include <jb/itch5/broken_trade_message.hpp>
-#include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/testing/data.hpp>
 
 #include <boost/test/unit_test.hpp>
 

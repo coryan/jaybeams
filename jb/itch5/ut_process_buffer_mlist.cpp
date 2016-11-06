@@ -3,7 +3,7 @@
 #include <jb/itch5/stock_directory_message.hpp>
 #include <jb/itch5/system_event_message.hpp>
 
-#include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/testing/data.hpp>
 
 #include <skye/mock_function.hpp>
 #include <skye/mock_template_function.hpp>

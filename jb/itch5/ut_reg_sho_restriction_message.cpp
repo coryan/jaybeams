@@ -1,5 +1,5 @@
 #include <jb/itch5/reg_sho_restriction_message.hpp>
-#include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/testing/data.hpp>
 
 #include <boost/test/unit_test.hpp>
 
