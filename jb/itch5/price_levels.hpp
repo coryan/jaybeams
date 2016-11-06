@@ -11,7 +11,10 @@ namespace itch5 {
 /**
  * Compute the number of price levels between two prices.
  *
- * @throws std::bad_range if hi < lo
+ * @param lo the low end of the range of price levels
+ * @param hi the hi end of the range of price levels
+ * @returns the number of price levels between @a lo and @a hi
+ * @throws std::bad_range if @a hi < @a lo
  */
 template <typename price_field_t>
 int price_levels(price_field_t lo, price_field_t hi) {

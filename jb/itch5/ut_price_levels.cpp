@@ -22,6 +22,8 @@ void check_price_levels() {
   BOOST_CHECK_EQUAL(jb::itch5::price_levels(p0_9995, p1_00), 5);
   BOOST_CHECK_EQUAL(jb::itch5::price_levels(p0_9995, p0_9999), 4);
   BOOST_CHECK_EQUAL(jb::itch5::price_levels(p0_9995, p11_01), 1006);
+
+  BOOST_CHECK_THROW(jb::itch5::price_levels(p10_01, p10_00), std::range_error);
 }
 } // anonymous namespace
 
