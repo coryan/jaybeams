@@ -177,7 +177,6 @@ public:
         static_cast<order_executed_message const&>(msg));
   }
 
-#if 0
   /**
    * Handle a partial cancel.
    *
@@ -202,6 +201,7 @@ public:
       time_point recvts, long msgcnt, std::size_t msgoffset,
       order_delete_message const& msg);
 
+#if 0
   /**
    * Handle an order replace.
    *
@@ -247,6 +247,22 @@ private:
 
   /// Represent the collection of all orders
   typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
+
+  /**
+   * Refactor code to handle order reductions, i.e., cancels and
+   * executions
+   *
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param header the header of the message that triggered this event
+   * @param order_reference_number the id of the order being reduced
+   * @param shares the number of shares to reduce, if 0 reduce all shares
+   */
+  void handle_order_reduction(
+      time_point recvts, long msgcnt, std::size_t msgoffset,
+      message_header const& header, std::uint64_t order_reference_number,
+      std::uint32_t shares);
 
 private:
   /// Store the callback function, this is invoked on each event that
