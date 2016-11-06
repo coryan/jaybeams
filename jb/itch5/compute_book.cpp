@@ -29,30 +29,24 @@ void compute_book::handle_message(
     // error, in a more complex system we would want to raise an
     // exception and let the caller decide what to do ...
     order_data const& data = insert.first->second;
-    JB_LOG(warning) << "duplicate order id=" << msg.order_reference_number
+    JB_LOG(warning) << "duplicate order in handle_message(add_order_message)"
+                    << ", id=" << msg.order_reference_number
                     << ", location=" << msgcnt << ":" << msgoffset
                     << ", existing data=" << data << ", msg=" << msg;
     return;
   }
   // ... find the right book for this order, create one if necessary ...
-  auto iterator = books_.find(msg.stock);
-  if (iterator == books_.end()) {
-    auto p = books_.emplace(msg.stock, order_book());
-    iterator = p.first;
-    JB_LOG(info) << "inserted book for unknown security, stock=" << msg.stock;
-  }
-  (void)iterator->second.handle_add_order(
-      msg.buy_sell_indicator, msg.price, msg.shares);
-
+  auto& book = books_[msg.stock];
+  (void)book.handle_add_order(msg.buy_sell_indicator, msg.price, msg.shares);
   callback_(
-      msg.header, iterator->second,
-      book_update{recvts, msg.stock, msg.buy_sell_indicator, msg.price,
-                  msg.shares});
+      msg.header, book, book_update{recvts, msg.stock, msg.buy_sell_indicator,
+                                    msg.price, msg.shares});
 }
 
 void compute_book::handle_message(
     time_point recvts, long msgcnt, std::size_t msgoffset,
     order_executed_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   handle_order_reduction(
       recvts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
       msg.executed_shares);
@@ -61,6 +55,7 @@ void compute_book::handle_message(
 void compute_book::handle_message(
     time_point recvts, long msgcnt, std::size_t msgoffset,
     order_cancel_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   handle_order_reduction(
       recvts, msgcnt, msgoffset, msg.header, msg.order_reference_number,
       msg.canceled_shares);
@@ -69,8 +64,56 @@ void compute_book::handle_message(
 void compute_book::handle_message(
     time_point recvts, long msgcnt, std::size_t msgoffset,
     order_delete_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   handle_order_reduction(
       recvts, msgcnt, msgoffset, msg.header, msg.order_reference_number, 0);
+}
+
+void compute_book::handle_message(
+    time_point recvts, long msgcnt, std::size_t msgoffset,
+    order_replace_message const& msg) {
+  JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
+  // First we need to find the original order ...
+  auto position = orders_.find(msg.original_order_reference_number);
+  if (position == orders_.end()) {
+    // ... ooops, this should not happen, there is a problem with the
+    // feed, log the problem and skip the message ...
+    JB_LOG(warning) << "unknown order in handle_message(order_replace_message)"
+                    << ", id=" << msg.original_order_reference_number
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", msg=" << msg;
+    return;
+  }
+  // ... then we need to make sure the new order is not a duplicate
+  // ...
+  auto newpos = orders_.find(msg.new_order_reference_number);
+  if (newpos != orders_.end()) {
+    JB_LOG(warning) << "duplicate order in "
+                    << "handle_message(order_replace_message)"
+                    << ", id=" << msg.new_order_reference_number
+                    << ", location=" << msgcnt << ":" << msgoffset
+                    << ", msg=" << msg;
+    return;
+  }
+  auto& book = books_[position->second.stock];
+  // ... update the order list and book, but do not make a callback ...
+  auto update = do_reduce(
+      position, book, recvts, msgcnt, msgoffset, msg.header,
+      msg.original_order_reference_number, 0);
+  // ... now we need to insert the new order ...
+  orders_.emplace(
+      msg.new_order_reference_number,
+      order_data{update.stock, update.buy_sell_indicator, msg.price,
+                 msg.shares});
+  (void)book.handle_add_order(update.buy_sell_indicator, msg.price, msg.shares);
+  // ... adjust the update data structure ...
+  update.cxlreplx = true;
+  update.oldpx = update.px;
+  update.oldqty = -update.qty;
+  update.px = msg.price;
+  update.qty = msg.shares;
+  // ... and invoke the callback ...
+  callback_(msg.header, book, update);
 }
 
 void compute_book::handle_message(
@@ -98,17 +141,29 @@ void compute_book::handle_order_reduction(
   if (position == orders_.end()) {
     // ... ooops, this should not happen, there is a problem with the
     // feed, log the problem and skip the message ...
-    JB_LOG(warning) << "duplicate order id=" << order_reference_number
+    JB_LOG(warning) << "unknown order in handle_order_reduction"
+                    << ", id=" << order_reference_number
                     << ", location=" << msgcnt << ":" << msgoffset
                     << ", header=" << header
                     << ", order_reference_number=" << order_reference_number
                     << ", shares=" << shares;
     return;
   }
+  auto& book = books_[position->second.stock];
+  auto u = do_reduce(
+      position, book, recvts, msgcnt, msgoffset, header, order_reference_number,
+      shares);
+  callback_(header, book, u);
+}
+
+compute_book::book_update compute_book::do_reduce(
+    orders_by_id::iterator position, order_book& book, time_point recvts,
+    long msgcnt, std::size_t msgoffset, message_header const& header,
+    std::uint64_t order_reference_number, std::uint32_t shares) {
   auto& data = position->second;
-  auto qty = shares;
+  auto qty = shares == 0 ? data.qty : shares;
   // ... now we need to update the data for the order ...
-  if (qty == 0 or data.qty < qty) {
+  if (data.qty < qty) {
     JB_LOG(warning) << "trying to execute more shares than are available"
                     << ", location=" << msgcnt << ":" << msgoffset
                     << ", data=" << data << ", header=" << header
@@ -127,9 +182,8 @@ void compute_book::handle_order_reduction(
   if (data.qty == 0) {
     orders_.erase(position);
   }
-  auto& book = books_[u.stock];
   (void)book.handle_order_reduced(u.buy_sell_indicator, u.px, qty);
-  callback_(header, book, u);
+  return u;
 }
 
 std::ostream& operator<<(std::ostream& os, compute_book::book_update const& x) {

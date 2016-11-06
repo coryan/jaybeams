@@ -402,6 +402,108 @@ BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
 
 /**
  * @test Verify that jb::itch5::compute_book::handle_message works as
+ * expected for order_replace_message BUY & SELL.
+ */
+BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
+  using namespace jb::itch5::testing;
+
+  skye::mock_function<void(
+      compute_book::book_update update, half_quote best_bid,
+      half_quote best_offer, int buy_count, int offer_count)>
+      callback;
+  auto cb = [&callback](
+      message_header const&, order_book const& b,
+      compute_book::book_update const& update) {
+    callback(
+        update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
+  };
+  // ... create the object under test ...
+  compute_book tested(cb);
+  // ... and a number of helper constants and variables to drive the
+  // test ...
+  stock_t const stock("HSART");
+  price4_t const p10(100000);
+  price4_t const p11(110000);
+  price4_t const p12(120000);
+  long msgcnt = 0;
+  std::uint64_t id = 2;
+  auto const id_buy = ++id;
+
+  // ... add an initial order to the book ...
+  compute_book::time_point now = tested.now();
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
+                               timestamp{std::chrono::nanoseconds(0)}},
+                              id_buy,
+                              BUY,
+                              500,
+                              stock,
+                              p10},
+                             mpid_t("LOOF")});
+  // ... we expect the new order to implicitly add the symbol ...
+  auto symbols = tested.symbols();
+  BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
+  BOOST_CHECK_EQUAL(symbols[0], stock);
+
+  // ... we also expect a single update, and the order should be in
+  // the book when the update is called ...
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p10, 500},
+      half_quote{p10, 500}, order_book::empty_offer(), 1, 0);
+
+  // ... add an order to the opposite side of the book ...
+  now = tested.now();
+  auto const id_sell = ++id;
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
+                               timestamp{std::chrono::nanoseconds(0)}},
+                              id_sell,
+                              SELL,
+                              500,
+                              stock,
+                              p11},
+                             mpid_t("LOOF")});
+  // ... we also expect a single update, and the order should be in
+  // the book when the update is called ...
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p11, 500},
+      half_quote{p10, 500}, half_quote{p11, 500}, 1, 1);
+
+  // ... replace the SELL order ...
+  now = tested.now();
+  auto id_sell_replx = ++id;
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_replace_message{{order_replace_message::message_type, 0, 0,
+                             timestamp{std::chrono::nanoseconds(0)}},
+                            id_sell,
+                            id_sell_replx,
+                            600,
+                            p12});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, SELL, p12, 600, true, p11, 500},
+      half_quote{p10, 500}, half_quote{p12, 600}, 1, 1);
+
+  // ... replace the BUY order ...
+  now = tested.now();
+  auto id_buy_replx = ++id;
+  tested.handle_message(
+      now, ++msgcnt, 0,
+      order_replace_message{{order_replace_message::message_type, 0, 0,
+                             timestamp{std::chrono::nanoseconds(0)}},
+                            id_buy,
+                            id_buy_replx,
+                            600,
+                            p11});
+  callback.check_called().once().with(
+      compute_book::book_update{now, stock, BUY, p11, 600, true, p12, 500},
+      half_quote{p11, 600}, half_quote{p12, 600}, 1, 1);
+}
+
+/**
+ * @test Verify that jb::itch5::compute_book::handle_message works as
  * expected for order_cancel_message and order_delete_message, both sides.
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {

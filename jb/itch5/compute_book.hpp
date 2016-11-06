@@ -70,6 +70,16 @@ public:
     /// How many shares are being added (if positive) or removed (if
     /// negative) from the book.
     int qty;
+
+    /// If true, this was a cancel replace and and old order was
+    /// modified too...
+    bool cxlreplx;
+
+    /// Old price for the order
+    price4_t oldpx;
+
+    /// How many shares were removed in the old order
+    int oldqty;
   };
 
   /**
@@ -201,7 +211,6 @@ public:
       time_point recvts, long msgcnt, std::size_t msgoffset,
       order_delete_message const& msg);
 
-#if 0
   /**
    * Handle an order replace.
    *
@@ -213,7 +222,6 @@ public:
   void handle_message(
       time_point recvts, long msgcnt, std::size_t msgoffset,
       order_replace_message const& msg);
-#endif /* 0 */
 
   /**
    * Pre-populate the books based on the symbol directory.
@@ -263,6 +271,24 @@ private:
       time_point recvts, long msgcnt, std::size_t msgoffset,
       message_header const& header, std::uint64_t order_reference_number,
       std::uint32_t shares);
+
+  /**
+   * Refactor code common to handle_order_reduction() and
+   * handle_message(order_replace_message).
+   *
+   * @param position the location of the order matching order_reference_number
+   * @param book the order_book matching the symbol for the given order
+   * @param recvts the timestamp when the message was received
+   * @param msgcnt the number of messages received before this message
+   * @param msgoffset the number of bytes received before this message
+   * @param header the header of the message that triggered this event
+   * @param order_reference_number the id of the order being reduced
+   * @param shares the number of shares to reduce, if 0 reduce all shares
+   */
+  book_update do_reduce(
+      orders_by_id::iterator position, order_book& book, time_point recvts,
+      long msgcnt, std::size_t msgoffset, message_header const& header,
+      std::uint64_t order_reference_number, std::uint32_t shares);
 
 private:
   /// Store the callback function, this is invoked on each event that
