@@ -111,7 +111,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;iosfwd&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;<a class="el" href="config__recurse_8hpp_source.html">jb/config_recurse.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="config__attribute_8hpp_source.html">jb/config_attribute.hpp</a>&gt;</code><br />
 </div>
 <p><a href="config__object_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -131,13 +130,13 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
-<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br /></td></tr>
+<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keep the book depth type. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a25c2eb14203b00c57d76c576a4ec6ad5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__object_8hpp.html#a25c2eb14203b00c57d76c576a4ec6ad5">config_object_constructors</a>(NAME)                                  </td></tr>
-<tr class="separator:a25c2eb14203b00c57d76c576a4ec6ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ee67c9f41be3b11fe990abce6d5b3ce"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__object_8hpp.html#a6ee67c9f41be3b11fe990abce6d5b3ce">config_object_constructors</a>(NAME)                                                                          </td></tr>
+<tr class="separator:a6ee67c9f41be3b11fe990abce6d5b3ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -145,7 +144,7 @@ Functions</h2></td></tr>
 <tr class="separator:a280de3a17265b3d10f84177a53f6c967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a25c2eb14203b00c57d76c576a4ec6ad5"></a>
+<a class="anchor" id="a6ee67c9f41be3b11fe990abce6d5b3ce"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -158,10 +157,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">NAME(NAME&amp;&amp; rhs) : NAME() { operator=(std::move(rhs)); } \</div><div class="line">  NAME(NAME <span class="keyword">const</span>&amp; rhs) : NAME() { operator=(rhs); }       \</div><div class="line">  NAME&amp; operator=(NAME <span class="keyword">const</span>&amp; rhs) = <span class="keywordflow">default</span>;              \</div><div class="line">  NAME&amp; operator=(NAME&amp;&amp; rhs) = <span class="keywordflow">default</span></div></div><!-- fragment -->
-<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00320">320</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
+<b>Value:</b><div class="fragment"><div class="line">NAME(NAME&amp;&amp; rhs)                                                             \</div><div class="line">      : NAME() {                                                               \</div><div class="line">    operator=(std::move(rhs));                                                 \</div><div class="line">  }                                                                            \</div><div class="line">  NAME(NAME <span class="keyword">const</span>&amp; rhs)                                                        \</div><div class="line">      : NAME() {                                                               \</div><div class="line">    operator=(rhs);                                                            \</div><div class="line">  }                                                                            \</div><div class="line">  NAME&amp; operator=(NAME <span class="keyword">const</span>&amp; rhs) = <span class="keywordflow">default</span>;                                  \</div><div class="line">  NAME&amp; operator=(NAME&amp;&amp; rhs) = <span class="keywordflow">default</span></div></div><!-- fragment -->
+<p>Definition at line <a class="el" href="config__object_8hpp_source.html#l00318">318</a> of file <a class="el" href="config__object_8hpp_source.html">config_object.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__config__object_8cpp_source.html#l00122">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__config__object_8cpp_source.html#l00121">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>

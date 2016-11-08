@@ -1,25 +1,5 @@
 var searchData=
 [
-  ['mainpage_2edox',['mainpage.dox',['../mainpage_8dox.html',1,'']]],
-  ['market_5fparticipant_5fposition_5fmessage_2ecpp',['market_participant_position_message.cpp',['../market__participant__position__message_8cpp.html',1,'']]],
-  ['market_5fparticipant_5fposition_5fmessage_2ehpp',['market_participant_position_message.hpp',['../market__participant__position__message_8hpp.html',1,'']]],
-  ['merge_5fyaml_2ecpp',['merge_yaml.cpp',['../merge__yaml_8cpp.html',1,'']]],
-  ['merge_5fyaml_2ehpp',['merge_yaml.hpp',['../merge__yaml_8hpp.html',1,'']]],
-  ['message_5fhandler_5fconcept_2edox',['message_handler_concept.dox',['../message__handler__concept_8dox.html',1,'']]],
-  ['message_5fheader_2ecpp',['message_header.cpp',['../message__header_8cpp.html',1,'']]],
-  ['message_5fheader_2ehpp',['message_header.hpp',['../message__header_8hpp.html',1,'']]],
-  ['microbenchmark_2ehpp',['microbenchmark.hpp',['../microbenchmark_8hpp.html',1,'']]],
-  ['microbenchmark_5fbase_2ecpp',['microbenchmark_base.cpp',['../microbenchmark__base_8cpp.html',1,'']]],
-  ['microbenchmark_5fbase_2ehpp',['microbenchmark_base.hpp',['../microbenchmark__base_8hpp.html',1,'']]],
-  ['microbenchmark_5fconfig_2ecpp',['microbenchmark_config.cpp',['../microbenchmark__config_8cpp.html',1,'']]],
-  ['microbenchmark_5fconfig_2ehpp',['microbenchmark_config.hpp',['../microbenchmark__config_8hpp.html',1,'']]],
-  ['mold_5fudp_5fpacer_2ehpp',['mold_udp_pacer.hpp',['../mold__udp__pacer_8hpp.html',1,'']]],
-  ['mold_5fudp_5fpacer_5fconfig_2ecpp',['mold_udp_pacer_config.cpp',['../mold__udp__pacer__config_8cpp.html',1,'']]],
-  ['mold_5fudp_5fpacer_5fconfig_2ehpp',['mold_udp_pacer_config.hpp',['../mold__udp__pacer__config_8hpp.html',1,'']]],
-  ['mold_5fudp_5fprotocol_5fconstants_2ehpp',['mold_udp_protocol_constants.hpp',['../mold__udp__protocol__constants_8hpp.html',1,'']]],
-  ['mpid_5ffield_2ehpp',['mpid_field.hpp',['../mpid__field_8hpp.html',1,'']]],
-  ['mwcb_5fbreach_5fmessage_2ecpp',['mwcb_breach_message.cpp',['../mwcb__breach__message_8cpp.html',1,'']]],
-  ['mwcb_5fbreach_5fmessage_2ehpp',['mwcb_breach_message.hpp',['../mwcb__breach__message_8hpp.html',1,'']]],
-  ['mwcb_5fdecline_5flevel_5fmessage_2ecpp',['mwcb_decline_level_message.cpp',['../mwcb__decline__level__message_8cpp.html',1,'']]],
-  ['mwcb_5fdecline_5flevel_5fmessage_2ehpp',['mwcb_decline_level_message.hpp',['../mwcb__decline__level__message_8hpp.html',1,'']]]
+  ['log_2ecpp',['log.cpp',['../log_8cpp.html',1,'']]],
+  ['log_2ehpp',['log.hpp',['../log_8hpp.html',1,'']]]
 ];

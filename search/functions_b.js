@@ -6,7 +6,7 @@ var searchData=
   ['nbins',['nbins',['../classjb_1_1histogram.html#a2b64d077321ffa69b6632fda4e28160e',1,'jb::histogram']]],
   ['net_5forder_5fimbalance_5findicator',['net_order_imbalance_indicator',['../namespacejb_1_1itch5_1_1testing.html#a40ef0ca7e16f86283e2e8ef9879bd98d',1,'jb::itch5::testing']]],
   ['next_5ftid',['next_tid',['../namespacejb_1_1log.html#a9d7f70d39a186df0fbfecc208a347f85',1,'jb::log']]],
-  ['now',['now',['../classjb_1_1itch5_1_1compute__inside.html#ad213e3978c2001d2742421aa0933bcec',1,'jb::itch5::compute_inside::now()'],['../classjb_1_1itch5_1_1message__handler__concept.html#a3cdef0c7a716679fdfe391fa32f01e24',1,'jb::itch5::message_handler_concept::now()']]],
+  ['now',['now',['../classjb_1_1itch5_1_1compute__book.html#afa20c9c8e6ac97ffa326c0112156e292',1,'jb::itch5::compute_book::now()'],['../classjb_1_1itch5_1_1message__handler__concept.html#a3cdef0c7a716679fdfe391fa32f01e24',1,'jb::itch5::message_handler_concept::now()']]],
   ['nsamples',['nsamples',['../classjb_1_1histogram.html#af6b2645c8cee5fc7835508fa1d4f0723',1,'jb::histogram']]],
   ['nul_5fterminate',['nul_terminate',['../classjb_1_1itch5_1_1short__string__field.html#a9259c25875e5873f8a81532d989a036f',1,'jb::itch5::short_string_field']]]
 ];

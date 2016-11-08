@@ -95,29 +95,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ut_mold_udp_pacer.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="mold__udp__pacer_8hpp_source.html">jb/itch5/mold_udp_pacer.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="testing__data_8hpp_source.html">jb/itch5/testing_data.hpp</a>&gt;</code><br />
-<code>#include &lt;boost/asio.hpp&gt;</code><br />
-<code>#include &lt;boost/array.hpp&gt;</code><br />
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="data_8hpp_source.html">jb/itch5/testing/data.hpp</a>&gt;</code><br />
 <code>#include &lt;skye/mock_function.hpp&gt;</code><br />
+<code>#include &lt;boost/array.hpp&gt;</code><br />
+<code>#include &lt;boost/asio.hpp&gt;</code><br />
+<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
 </div>
 <p><a href="ut__mold__udp__pacer_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmock__sink.html">mock_sink</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple class to mock a suitable sink for <a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer.html" title="Send a sequence of raw ITCH-5.x messages as MoldUDP64 packets, trying to match the original time inte...">jb::itch5::mold_udp_pacer</a>.  <a href="structmock__sink.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmock__clock.html">mock_clock</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a78c590bfb4ec180f1715604ab3c42dac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__mold__udp__pacer_8cpp.html#a78c590bfb4ec180f1715604ab3c42dac">BOOST_AUTO_TEST_CASE</a> (itch5_mold_udp_pacer_basic)</td></tr>
@@ -147,12 +138,12 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000056">Test:</a></b></dt><dd>Verify that <a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer.html" title="Send a sequence of raw ITCH-5.x messages as MoldUDP64 packets, trying to match the original time inte...">jb::itch5::mold_udp_pacer</a> works as expected for a simple stream of messages.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000068">Test:</a></b></dt><dd>Verify that <a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer.html" title="Send a sequence of raw ITCH-5.x messages as MoldUDP64 packets, trying to match the original time inte...">jb::itch5::mold_udp_pacer</a> works as expected for a simple stream of messages.</dd></dl>
 <p>Send 3 messages every 10 usecs, of different sizes and types </p>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00033">33</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00038">38</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00103">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00156">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00043">jb::itch5::defaults::maximum_delay_microseconds</a>, <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00024">mock_clock::now</a>, and <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00013">mock_sink::packets</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00105">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00158">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, and <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_delay_microseconds</a>.</p>
 
 </div>
 </div>
@@ -169,11 +160,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000057">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are grouped into a single packet.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000069">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are grouped into a single packet.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00076">76</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00081">81</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00103">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00156">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00043">jb::itch5::defaults::maximum_delay_microseconds</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_transmission_unit</a>, <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00024">mock_clock::now</a>, and <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00013">mock_sink::packets</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00105">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00158">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_delay_microseconds</a>, and <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00045">jb::itch5::defaults::maximum_transmission_unit</a>.</p>
 
 </div>
 </div>
@@ -190,11 +181,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000058">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are flushed if the packet is about to get full...</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000070">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are flushed if the packet is about to get full...</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00130">130</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00138">138</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00103">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00156">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00043">jb::itch5::defaults::maximum_delay_microseconds</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_transmission_unit</a>, <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00024">mock_clock::now</a>, and <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00013">mock_sink::packets</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00105">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00158">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_delay_microseconds</a>, and <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00045">jb::itch5::defaults::maximum_transmission_unit</a>.</p>
 
 </div>
 </div>
@@ -211,11 +202,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000059">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are flushed if the packet is about to get full...</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000071">Test:</a></b></dt><dd>Verify that multiple back-to-back messages are flushed if the packet is about to get full...</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00187">187</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00196">196</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00103">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00043">jb::itch5::defaults::maximum_delay_microseconds</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_transmission_unit</a>, <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00024">mock_clock::now</a>, and <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00013">mock_sink::packets</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00105">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_delay_microseconds</a>, and <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00045">jb::itch5::defaults::maximum_transmission_unit</a>.</p>
 
 </div>
 </div>
@@ -232,11 +223,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000060">Test:</a></b></dt><dd>Verify that flush() on an empty packet does not produce a send() request.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000072">Test:</a></b></dt><dd>Verify that flush() on an empty packet does not produce a send() request.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00245">245</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00256">256</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00138">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::flush()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00103">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00156">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00043">jb::itch5::defaults::maximum_delay_microseconds</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_transmission_unit</a>, <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00024">mock_clock::now</a>, and <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00013">mock_sink::packets</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00140">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::flush()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00105">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::handle_message()</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00158">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::heartbeat()</a>, <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00044">jb::itch5::defaults::maximum_delay_microseconds</a>, and <a class="el" href="mold__udp__pacer__config_8cpp_source.html#l00045">jb::itch5::defaults::maximum_transmission_unit</a>.</p>
 
 </div>
 </div>
@@ -253,11 +244,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000061">Test:</a></b></dt><dd>Increase code coverage in <a class="el" href="namespacejb_1_1itch5_1_1testing.html#a8a7198f1c9340222344af0cf16e46728" title="Generate test messages with a more-or-less valid header. ">jb::itch5::testing::create_message()</a> </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000073">Test:</a></b></dt><dd>Increase code coverage in <a class="el" href="namespacejb_1_1itch5_1_1testing.html#a8a7198f1c9340222344af0cf16e46728" title="Generate test messages with a more-or-less valid header. ">jb::itch5::testing::create_message()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00293">293</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__mold__udp__pacer_8cpp_source.html#l00303">303</a> of file <a class="el" href="ut__mold__udp__pacer_8cpp_source.html">ut_mold_udp_pacer.cpp</a>.</p>
 
-<p>References <a class="el" href="testing__data_8cpp_source.html#l00302">jb::itch5::testing::create_message()</a>.</p>
+<p>References <a class="el" href="data_8cpp_source.html#l00287">jb::itch5::testing::create_message()</a>.</p>
 
 </div>
 </div>

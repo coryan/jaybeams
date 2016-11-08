@@ -100,10 +100,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">ut_config_object.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="config__object_8hpp_source.html">jb/config_object.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="config__files__location_8hpp_source.html">jb/config_files_location.hpp</a>&gt;</code><br />
-<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="config__files__location_8hpp_source.html">jb/config_files_location.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="config__object_8hpp_source.html">jb/config_object.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/filesystem.hpp&gt;</code><br />
+<code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
 <code>#include &lt;cstdlib&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -168,7 +168,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000152">Test:</a></b></dt><dd>Verify we can create simple <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000169">Test:</a></b></dt><dd>Verify we can create simple <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects </dd></dl>
 
 <p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00055">55</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
@@ -187,7 +187,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000153">Test:</a></b></dt><dd>Verify we can create more complex <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000170">Test:</a></b></dt><dd>Verify we can create more complex <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects </dd></dl>
 
 <p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00070">70</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
@@ -206,7 +206,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000154">Test:</a></b></dt><dd>Verify we can copy and assign complex config objects.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000171">Test:</a></b></dt><dd>Verify we can copy and assign complex config objects.</dd></dl>
 
 <p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00093">93</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
@@ -225,11 +225,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000155">Test:</a></b></dt><dd>Verify we can create <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects with complex constructors </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000172">Test:</a></b></dt><dd>Verify we can create <a class="el" href="classjb_1_1config__attribute.html" title="Helper class to easily define configuration attributes. ">jb::config_attribute</a> objects with complex constructors </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00122">122</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00121">121</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>, and <a class="el" href="as__hhmmss_8cpp_source.html#l00006">jb::operator&lt;&lt;()</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>, <a class="el" href="as__hhmmss_8cpp_source.html#l00006">jb::operator&lt;&lt;()</a>, and <a class="el" href="compute__book_8hpp_source.html#l00323">jb::itch5::operator==()</a>.</p>
 
 </div>
 </div>
@@ -246,11 +246,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000156">Test:</a></b></dt><dd>Verify the framework support deeply nested configs with by_class overrides.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000173">Test:</a></b></dt><dd>Verify the framework support deeply nested configs with by_class overrides.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00178">178</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00177">177</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>.</p>
 
 </div>
 </div>
@@ -267,9 +267,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000157">Test:</a></b></dt><dd>Verify the framework supports vectors of config objects.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000174">Test:</a></b></dt><dd>Verify the framework supports vectors of config objects.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00227">227</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00225">225</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -286,11 +286,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000158">Test:</a></b></dt><dd>Verify the framework supports vectors of config objects that are empty.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000175">Test:</a></b></dt><dd>Verify the framework supports vectors of config objects that are empty.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00284">284</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00279">279</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>.</p>
 
 </div>
 </div>
@@ -307,9 +307,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000159">Test:</a></b></dt><dd>Verify the framework supports configuring by class in nested structs.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000176">Test:</a></b></dt><dd>Verify the framework supports configuring by class in nested structs.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00338">338</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00333">333</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -326,9 +326,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000160">Test:</a></b></dt><dd>Verify that we can load configurations from an iostream.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000177">Test:</a></b></dt><dd>Verify that we can load configurations from an iostream.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00393">393</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00388">388</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -345,9 +345,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000161">Test:</a></b></dt><dd>Verify that we apply command-line arguments after the overrides.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000178">Test:</a></b></dt><dd>Verify that we apply command-line arguments after the overrides.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00424">424</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00419">419</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -364,9 +364,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000162">Test:</a></b></dt><dd>Verify that config objects raise usage exceptions.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000179">Test:</a></b></dt><dd>Verify that config objects raise usage exceptions.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00459">459</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00454">454</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -383,11 +383,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000163">Test:</a></b></dt><dd>Verify that config objects raise exceptions when presented with invalid options.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000180">Test:</a></b></dt><dd>Verify that config objects raise exceptions when presented with invalid options.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00474">474</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00469">469</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>.</p>
 
 </div>
 </div>
@@ -404,9 +404,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000164">Test:</a></b></dt><dd>Verify config_objects can handle std::pair&lt;&gt; </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000181">Test:</a></b></dt><dd>Verify config_objects can handle std::pair&lt;&gt; </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00501">501</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00496">496</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -423,11 +423,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000165">Test:</a></b></dt><dd>Verify config_objects can handle std::pair&lt;&gt; </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000182">Test:</a></b></dt><dd>Verify config_objects can handle std::pair&lt;&gt; </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00520">520</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00515">515</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>.</p>
 
 </div>
 </div>
@@ -444,9 +444,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000166">Test:</a></b></dt><dd>Verify that config object works correctly with real files and an environment variable.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000183">Test:</a></b></dt><dd>Verify that config object works correctly with real files and an environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00564">564</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00559">559</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 <p>References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -465,9 +465,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000167">Test:</a></b></dt><dd>Verify that config object works correctly with a missing file and the environment variable.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000184">Test:</a></b></dt><dd>Verify that config object works correctly with a missing file and the environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00609">609</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00606">606</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -484,9 +484,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000168">Test:</a></b></dt><dd>Verify that config object works correctly with real files and the default environment variable.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000185">Test:</a></b></dt><dd>Verify that config object works correctly with real files and the default environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00636">636</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00635">635</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 <p>References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -505,11 +505,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000169">Test:</a></b></dt><dd>Verify that config object works correctly when the real file is not found using the default environment variable.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000186">Test:</a></b></dt><dd>Verify that config object works correctly when the real file is not found using the default environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00681">681</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00682">682</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00320">config_object_constructors</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00318">config_object_constructors</a>.</p>
 
 </div>
 </div>
@@ -526,9 +526,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000170">Test:</a></b></dt><dd>Verify that config object works correctly with real files and an environment variable.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000187">Test:</a></b></dt><dd>Verify that config object works correctly with real files and an environment variable.</dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00717">717</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00718">718</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 </div>
 </div>
@@ -545,9 +545,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000171">Test:</a></b></dt><dd>Complete coverage for <a class="el" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options. ">jb::usage</a> </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000188">Test:</a></b></dt><dd>Complete coverage for <a class="el" href="classjb_1_1usage.html" title="A simple class to communicate the result of parsing the options. ">jb::usage</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00735">735</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ut__config__object_8cpp_source.html#l00736">736</a> of file <a class="el" href="ut__config__object_8cpp_source.html">ut_config_object.cpp</a>.</p>
 
 <p>References <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>.</p>
 

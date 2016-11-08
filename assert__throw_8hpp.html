@@ -109,13 +109,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
-<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br /></td></tr>
+<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keep the book depth type. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a3c5ff317866876ef0871ba32b5d2b9af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert__throw_8hpp.html#a3c5ff317866876ef0871ba32b5d2b9af">JB_ASSERT_THROW</a>(PRED)</td></tr>
-<tr class="separator:a3c5ff317866876ef0871ba32b5d2b9af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a503f533c0ce1b5a57594f16306ae677a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert__throw_8hpp.html#a503f533c0ce1b5a57594f16306ae677a">JB_ASSERT_THROW</a>(PRED)                                                                                                </td></tr>
+<tr class="separator:a503f533c0ce1b5a57594f16306ae677a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -124,7 +124,7 @@ Functions</h2></td></tr>
 <tr class="separator:acb3fe116bc252b26920a20b9911d820e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a3c5ff317866876ef0871ba32b5d2b9af"></a>
+<a class="anchor" id="a503f533c0ce1b5a57594f16306ae677a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -137,11 +137,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { <span class="keywordflow">if</span>(not (PRED)) { <a class="code" href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">\</a></div><div class="line"><a class="code" href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">      ::jb::raise_assertion_failure</a>(__FILE__, __LINE__, #PRED); \</div><div class="line">  } } <span class="keywordflow">while</span>(<span class="keyword">false</span>)</div><div class="ttc" id="namespacejb_html_acb3fe116bc252b26920a20b9911d820e"><div class="ttname"><a href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">jb::raise_assertion_failure</a></div><div class="ttdeci">void raise_assertion_failure(char const *filename, int lineno, char const *predicate)</div><div class="ttdoc">Raise std::exception to indicate an assertion failure. </div><div class="ttdef"><b>Definition:</b> <a href="assert__throw_8cpp_source.html#l00006">assert_throw.cpp:6</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {                                                                         \</div><div class="line">    if (not(PRED)) {                                                           <a class="code" href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">\</a></div><div class="line"><a class="code" href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">      ::jb::raise_assertion_failure</a>(__FILE__, __LINE__, #PRED);                \</div><div class="line">    }                                                                          \</div><div class="line">  } <span class="keywordflow">while</span> (<span class="keyword">false</span>)</div><div class="ttc" id="namespacejb_html_acb3fe116bc252b26920a20b9911d820e"><div class="ttname"><a href="namespacejb.html#acb3fe116bc252b26920a20b9911d820e">jb::raise_assertion_failure</a></div><div class="ttdeci">void raise_assertion_failure(char const *filename, int lineno, char const *predicate)</div><div class="ttdoc">Raise std::exception to indicate an assertion failure. </div><div class="ttdef"><b>Definition:</b> <a href="assert__throw_8cpp_source.html#l00006">assert_throw.cpp:6</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="assert__throw_8hpp_source.html#l00014">14</a> of file <a class="el" href="assert__throw_8hpp_source.html">assert_throw.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__assert__throw_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00171">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::coalesce()</a>, <a class="el" href="log_8cpp_source.html#l00125">jb::log::filter_predicate()</a>, <a class="el" href="compute__inside_8cpp_source.html#l00157">jb::itch5::compute_inside::handle_reduce_no_update()</a>, and <a class="el" href="merge__yaml_8cpp_source.html#l00043">jb::yaml::merge()</a>.</p>
+<p>Referenced by <a class="el" href="ut__assert__throw_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="mold__udp__pacer_8hpp_source.html#l00173">jb::itch5::mold_udp_pacer&lt; clock_type &gt;::coalesce()</a>, <a class="el" href="log_8cpp_source.html#l00143">jb::log::filter_predicate()</a>, and <a class="el" href="merge__yaml_8cpp_source.html#l00040">jb::yaml::merge()</a>.</p>
 
 </div>
 </div>

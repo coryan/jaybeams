@@ -1,15 +1,8 @@
 var searchData=
 [
-  ['market_5fparticipant_5fposition_5fmessage',['market_participant_position_message',['../structjb_1_1itch5_1_1market__participant__position__message.html',1,'jb::itch5']]],
-  ['message_5fhandler_5fconcept',['message_handler_concept',['../classjb_1_1itch5_1_1message__handler__concept.html',1,'jb::itch5']]],
-  ['message_5fheader',['message_header',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header',1,'jb::itch5']]],
-  ['microbenchmark',['microbenchmark',['../classjb_1_1testing_1_1microbenchmark.html',1,'jb::testing']]],
-  ['microbenchmark_5fbase',['microbenchmark_base',['../classjb_1_1testing_1_1microbenchmark__base.html',1,'jb::testing']]],
-  ['microbenchmark_5fconfig',['microbenchmark_config',['../classjb_1_1testing_1_1microbenchmark__config.html',1,'jb::testing']]],
-  ['mock_5fclock',['mock_clock',['../structmock__clock.html',1,'']]],
-  ['mock_5fsink',['mock_sink',['../structmock__sink.html',1,'']]],
-  ['mold_5fudp_5fpacer',['mold_udp_pacer',['../classjb_1_1itch5_1_1mold__udp__pacer.html',1,'jb::itch5']]],
-  ['mold_5fudp_5fpacer_5fconfig',['mold_udp_pacer_config',['../classjb_1_1itch5_1_1mold__udp__pacer__config.html',1,'jb::itch5']]],
-  ['mwcb_5fbreach_5fmessage',['mwcb_breach_message',['../structjb_1_1itch5_1_1mwcb__breach__message.html',1,'jb::itch5']]],
-  ['mwcb_5fdecline_5flevel_5fmessage',['mwcb_decline_level_message',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html',1,'jb::itch5']]]
+  ['integer_5frange_5fbinning',['integer_range_binning',['../classjb_1_1integer__range__binning.html',1,'jb']]],
+  ['integer_5frange_5fbinning_3c_20book_5fdepth_5ft_20_3e',['integer_range_binning&lt; book_depth_t &gt;',['../classjb_1_1integer__range__binning.html',1,'jb']]],
+  ['integer_5frange_5fbinning_3c_20std_3a_3aint64_5ft_20_3e',['integer_range_binning&lt; std::int64_t &gt;',['../classjb_1_1integer__range__binning.html',1,'jb']]],
+  ['integer_5frange_5fbinning_3c_20std_3a_3auint64_5ft_20_3e',['integer_range_binning&lt; std::uint64_t &gt;',['../classjb_1_1integer__range__binning.html',1,'jb']]],
+  ['ipo_5fquoting_5fperiod_5fupdate_5fmessage',['ipo_quoting_period_update_message',['../structjb_1_1itch5_1_1ipo__quoting__period__update__message.html',1,'jb::itch5']]]
 ];

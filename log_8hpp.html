@@ -106,8 +106,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;<a class="el" href="config__object_8hpp_source.html">jb/config_object.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="convert__severity__level_8hpp_source.html">jb/convert_severity_level.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/log/sources/global_logger_storage.hpp&gt;</code><br />
-<code>#include &lt;boost/log/sources/severity_logger.hpp&gt;</code><br />
 <code>#include &lt;boost/log/sources/record_ostream.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sources/severity_logger.hpp&gt;</code><br />
 <code>#include &lt;boost/log/utility/manipulators/add_value.hpp&gt;</code><br />
 </div>
 <p><a href="log_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -121,7 +121,7 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
-<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br /></td></tr>
+<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keep the book depth type. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacejb_1_1log"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1log.html">jb::log</a></td></tr>
 <tr class="memdesc:namespacejb_1_1log"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging functions and objects for JayBeams. <br /></td></tr>
@@ -131,12 +131,12 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:a7a4c15ea19e3fe9d0bce542bd4f0d0fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#a7a4c15ea19e3fe9d0bce542bd4f0d0fa">JB_MIN_LOG_LEVEL</a>&#160;&#160;&#160;debug</td></tr>
 <tr class="separator:a7a4c15ea19e3fe9d0bce542bd4f0d0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae059bb6f0b759fb3d26d7a1ccb597e4f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#ae059bb6f0b759fb3d26d7a1ccb597e4f">JB_LOG_I</a>(logger,  lvl,  rec_var)                                                                </td></tr>
-<tr class="separator:ae059bb6f0b759fb3d26d7a1ccb597e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69e7901a14a27585e998359dd544818e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#a69e7901a14a27585e998359dd544818e">JB_LOG</a>(lvl)</td></tr>
-<tr class="separator:a69e7901a14a27585e998359dd544818e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8441cdb22ea1062153c23b682723d53c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#a8441cdb22ea1062153c23b682723d53c">JB_LOG_VAR</a>(lvl)</td></tr>
-<tr class="separator:a8441cdb22ea1062153c23b682723d53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacb3e5ec9dc91fe1ab7287843543e04c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#aacb3e5ec9dc91fe1ab7287843543e04c">JB_LOG_I</a>(logger,  lvl,  rec_var)                                                                              </td></tr>
+<tr class="separator:aacb3e5ec9dc91fe1ab7287843543e04c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a980ec627806310b1c93a5764c5cb8adf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#a980ec627806310b1c93a5764c5cb8adf">JB_LOG</a>(lvl)                                                                                                                    </td></tr>
+<tr class="separator:a980ec627806310b1c93a5764c5cb8adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04e49dceb72395b372177315538cc084"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="log_8hpp.html#a04e49dceb72395b372177315538cc084">JB_LOG_VAR</a>(lvl)                                                                                                            </td></tr>
+<tr class="separator:a04e49dceb72395b372177315538cc084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -151,7 +151,7 @@ Functions</h2></td></tr>
 <tr class="separator:abc0e87ef60d528f131a0f89a667f3206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a69e7901a14a27585e998359dd544818e"></a>
+<a class="anchor" id="a980ec627806310b1c93a5764c5cb8adf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -164,15 +164,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="log_8hpp.html#ae059bb6f0b759fb3d26d7a1ccb597e4f">JB_LOG_I</a>(                           \</div><div class="line">    ::jb::log::logger::get(), jb::severity_level::lvl,  \</div><div class="line">    BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))</div><div class="ttc" id="log_8hpp_html_ae059bb6f0b759fb3d26d7a1ccb597e4f"><div class="ttname"><a href="log_8hpp.html#ae059bb6f0b759fb3d26d7a1ccb597e4f">JB_LOG_I</a></div><div class="ttdeci">#define JB_LOG_I(logger, lvl, rec_var)                                                                </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00060">log.hpp:60</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="log_8hpp.html#aacb3e5ec9dc91fe1ab7287843543e04c">JB_LOG_I</a>(                                                                    \</div><div class="line">      ::jb::log::logger::get(), jb::severity_level::lvl,                       \</div><div class="line">      BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))</div><div class="ttc" id="log_8hpp_html_aacb3e5ec9dc91fe1ab7287843543e04c"><div class="ttname"><a href="log_8hpp.html#aacb3e5ec9dc91fe1ab7287843543e04c">JB_LOG_I</a></div><div class="ttdeci">#define JB_LOG_I(logger, lvl, rec_var)                                                                              </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00060">log.hpp:60</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="log_8hpp_source.html#l00070">70</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__logging_8cpp_source.html#l00012">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="compute__inside_8cpp_source.html#l00103">jb::itch5::compute_inside::handle_add_order()</a>, <a class="el" href="compute__inside_8cpp_source.html#l00010">jb::itch5::compute_inside::handle_message()</a>, <a class="el" href="order__book_8hpp_source.html#l00128">jb::itch5::order_book::handle_order_reduced()</a>, <a class="el" href="compute__inside_8cpp_source.html#l00157">jb::itch5::compute_inside::handle_reduce_no_update()</a>, <a class="el" href="compute__inside_8cpp_source.html#l00094">jb::itch5::compute_inside::handle_unknown()</a>, <a class="el" href="config__object_8cpp_source.html#l00016">jb::config_object::load_overrides()</a>, and <a class="el" href="process__iostream__mlist_8hpp_source.html#l00028">jb::itch5::process_iostream_mlist()</a>.</p>
+<p>Referenced by <a class="el" href="ut__logging_8cpp_source.html#l00012">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="compute__book_8cpp_source.html#l00167">jb::itch5::compute_book::do_reduce()</a>, <a class="el" href="compute__book_8cpp_source.html#l00018">jb::itch5::compute_book::handle_message()</a>, <a class="el" href="order__book_8hpp_source.html#l00152">jb::itch5::order_book::handle_order_reduced()</a>, <a class="el" href="compute__book_8cpp_source.html#l00143">jb::itch5::compute_book::handle_order_reduction()</a>, <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">jb::itch5::mold_udp_channel::handle_received()</a>, <a class="el" href="compute__book_8cpp_source.html#l00127">jb::itch5::compute_book::handle_unknown()</a>, <a class="el" href="config__object_8cpp_source.html#l00017">jb::config_object::load_overrides()</a>, <a class="el" href="itch5moldreplay_8cpp_source.html#l00078">main()</a>, and <a class="el" href="process__iostream__mlist_8hpp_source.html#l00028">jb::itch5::process_iostream_mlist()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae059bb6f0b759fb3d26d7a1ccb597e4f"></a>
+<a class="anchor" id="aacb3e5ec9dc91fe1ab7287843543e04c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -201,13 +201,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>(<a class="code" href="namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9">not ::jb::severity_static_predicate</a>(lvl)) {}                       \</div><div class="line">  else                                                                  \</div><div class="line">    for(::boost::log::record rec_var = (logger).open_record(            \</div><div class="line">            boost::log::keywords::severity = lvl);                      \</div><div class="line">        !!rec_var;)                                                     \</div><div class="line">      ::boost::log::aux::make_record_pump((logger), rec_var).stream()   \</div><div class="line">            &lt;&lt; boost::log::add_value(<span class="stringliteral">&quot;Filename&quot;</span>, __FILE__)              \</div><div class="line">            &lt;&lt; boost::log::add_value(<span class="stringliteral">&quot;Lineno&quot;</span>, static_cast&lt;int&gt;(__LINE__))</div><div class="ttc" id="namespacejb_html_abfc933e88c6a00c98531ffbcc80b6ea9"><div class="ttname"><a href="namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9">jb::severity_static_predicate</a></div><div class="ttdeci">constexpr bool severity_static_predicate(jb::severity_level lvl)</div><div class="ttdoc">Statically check if the severity level should even be compiled in. </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00019">log.hpp:19</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code" href="namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9">not::jb::severity_static_predicate</a>(lvl)) {                               \</div><div class="line">  } else                                                                       \</div><div class="line">    for (::boost::log::record rec_var =                                        \</div><div class="line">             (logger).open_record(boost::log::keywords::severity = lvl);       \</div><div class="line">         !!rec_var;)                                                           \</div><div class="line">  ::boost::log::aux::make_record_pump((logger), rec_var).stream()              \</div><div class="line">      &lt;&lt; boost::log::add_value(<span class="stringliteral">&quot;Filename&quot;</span>, __FILE__)                           \</div><div class="line">      &lt;&lt; boost::log::add_value(<span class="stringliteral">&quot;Lineno&quot;</span>, static_cast&lt;int&gt;(__LINE__))</div><div class="ttc" id="namespacejb_html_abfc933e88c6a00c98531ffbcc80b6ea9"><div class="ttname"><a href="namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9">jb::severity_static_predicate</a></div><div class="ttdeci">constexpr bool severity_static_predicate(jb::severity_level lvl)</div><div class="ttdoc">Statically check if the severity level should even be compiled in. </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00019">log.hpp:19</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="log_8hpp_source.html#l00060">60</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8441cdb22ea1062153c23b682723d53c"></a>
+<a class="anchor" id="a04e49dceb72395b372177315538cc084"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -220,9 +220,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="log_8hpp.html#ae059bb6f0b759fb3d26d7a1ccb597e4f">JB_LOG_I</a>(                       \</div><div class="line">    ::jb::log::logger::get(), lvl,                      \</div><div class="line">    BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))</div><div class="ttc" id="log_8hpp_html_ae059bb6f0b759fb3d26d7a1ccb597e4f"><div class="ttname"><a href="log_8hpp.html#ae059bb6f0b759fb3d26d7a1ccb597e4f">JB_LOG_I</a></div><div class="ttdeci">#define JB_LOG_I(logger, lvl, rec_var)                                                                </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00060">log.hpp:60</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="log_8hpp.html#aacb3e5ec9dc91fe1ab7287843543e04c">JB_LOG_I</a>(                                                                    \</div><div class="line">      ::jb::log::logger::get(), lvl,                                           \</div><div class="line">      BOOST_LOG_UNIQUE_IDENTIFIER_NAME(jb_log_record_))</div><div class="ttc" id="log_8hpp_html_aacb3e5ec9dc91fe1ab7287843543e04c"><div class="ttname"><a href="log_8hpp.html#aacb3e5ec9dc91fe1ab7287843543e04c">JB_LOG_I</a></div><div class="ttdeci">#define JB_LOG_I(logger, lvl, rec_var)                                                                              </div><div class="ttdef"><b>Definition:</b> <a href="log_8hpp_source.html#l00060">log.hpp:60</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="log_8hpp_source.html#l00074">74</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
+<p>Definition at line <a class="el" href="log_8hpp_source.html#l00075">75</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
 </div>
 </div>

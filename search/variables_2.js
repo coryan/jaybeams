@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__inside.html#a53f4f566d3318ecebfbfeb5572fa45ae',1,'jb::itch5::compute_inside']]],
+  ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__book.html#a2b9ce68d6f826cc18f59a62ae70ee557',1,'jb::itch5::compute_book']]],
   ['canceled_5fshares',['canceled_shares',['../structjb_1_1itch5_1_1order__cancel__message.html#a2bbae989935989bfc3dd89c939f99bef',1,'jb::itch5::order_cancel_message']]],
-  ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a3fa935cc03df91b9690a9651cee58c54',1,'worker_config']]],
+  ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a4fa3c9a8935c25792311593565abbcf1',1,'worker_config']]],
   ['class_5fname',['class_name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a206024a1c4f2d90ee68e2e340048dac9',1,'jb::config_object::attribute_descriptor']]],
   ['compiler',['compiler',['../namespacejb_1_1testing.html#a8d69926f9843b51aae44f6e61ece2c52',1,'jb::testing']]],
   ['compiler_5fflags',['compiler_flags',['../namespacejb_1_1testing.html#a23ad5227f139678875d0071fcb2fdc09',1,'jb::testing']]],
@@ -13,5 +13,6 @@ var searchData=
   ['cross_5fprice',['cross_price',['../structjb_1_1itch5_1_1cross__trade__message.html#ae2c1a7db468bd912d72f60764158399f',1,'jb::itch5::cross_trade_message']]],
   ['cross_5ftype',['cross_type',['../structjb_1_1itch5_1_1cross__trade__message.html#a3d89e6eec80416504891a572a859e03c',1,'jb::itch5::cross_trade_message::cross_type()'],['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ac853ff1be3a320bf148e55b2381e7ce1',1,'jb::itch5::net_order_imbalance_indicator_message::cross_type()']]],
   ['current_5freference_5fprice',['current_reference_price',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a5d4e7a016ce301991f56c127510a7e72',1,'jb::itch5::net_order_imbalance_indicator_message']]],
-  ['cuts_5f',['cuts_',['../classjb_1_1explicit__cuts__binning.html#a746b0937e1d9045a03d54bad02804fc0',1,'jb::explicit_cuts_binning']]]
+  ['cuts_5f',['cuts_',['../classjb_1_1explicit__cuts__binning.html#a746b0937e1d9045a03d54bad02804fc0',1,'jb::explicit_cuts_binning']]],
+  ['cxlreplx',['cxlreplx',['../classjb_1_1itch5_1_1compute__book.html#aed197b15cbb07c65d7b5f6ea6c5f1f1e',1,'jb::itch5::compute_book::book_update']]]
 ];

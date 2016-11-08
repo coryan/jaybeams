@@ -145,8 +145,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1itch5_1_1char__list__validator_3_01true_00_01a_00_01V_8_8_8_01_4.html">char_list_validator&lt; true, a, V... &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively define the validator for the enabled case.  <a href="structjb_1_1itch5_1_1char__list__validator_3_01true_00_01a_00_01V_8_8_8_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__inside.html">compute_inside</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An implementation of jb::message_handler_concept to compute the inside.  <a href="classjb_1_1itch5_1_1compute__inside.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html">compute_book</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the book and call a user-defined callback on each change.  <a href="classjb_1_1itch5_1_1compute__book.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html">cross_trade_message</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent an 'Add Order' message in the ITCH-5.0 protocol.  <a href="structjb_1_1itch5_1_1cross__trade__message.html#details">More...</a><br /></td></tr>
@@ -271,6 +271,12 @@ Classes</h2></td></tr>
 <tr class="memitem:structjb_1_1itch5_1_1message__header"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">message_header</a></td></tr>
 <tr class="memdesc:structjb_1_1itch5_1_1message__header"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the header common to all ITCH 5.0 messages.  <a href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">More...</a><br /></td></tr>
 <tr class="separator:structjb_1_1itch5_1_1message__header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html">mold_udp_channel</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and manage a socket to receive MoldUDP64 packets.  <a href="classjb_1_1itch5_1_1mold__udp__channel.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1itch5_1_1mold__udp__channel__tester.html">mold_udp_channel_tester</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Break encapsulation in <a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html" title="Create and manage a socket to receive MoldUDP64 packets. ">jb::itch5::mold_udp_channel</a> for testing purposes.  <a href="structjb_1_1itch5_1_1mold__udp__channel__tester.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer.html">mold_udp_pacer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a sequence of raw ITCH-5.x messages as MoldUDP64 packets, trying to match the original time interval between messages.  <a href="classjb_1_1itch5_1_1mold__udp__pacer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -364,12 +370,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a6fb352a92bc4255baa95f21950c557cd"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Y', u'N'&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a6fb352a92bc4255baa95f21950c557cd">primary_market_maker_t</a></td></tr>
 <tr class="memdesc:a6fb352a92bc4255baa95f21950c557cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Primary Market Maker' field on a 'Market Participant Position' message.  <a href="#a6fb352a92bc4255baa95f21950c557cd">More...</a><br /></td></tr>
 <tr class="separator:a6fb352a92bc4255baa95f21950c557cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0f7f24481605d9c3090e290b3e5c1bb"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'N', u'P', u'S', u'R', u'L' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#af0f7f24481605d9c3090e290b3e5c1bb">market_maker_mode_t</a></td></tr>
-<tr class="memdesc:af0f7f24481605d9c3090e290b3e5c1bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Maker Mode' field in a 'Market Participant Position' message.  <a href="#af0f7f24481605d9c3090e290b3e5c1bb">More...</a><br /></td></tr>
-<tr class="separator:af0f7f24481605d9c3090e290b3e5c1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09aaa1c549e96fa51fc38a8f5cf5ba9c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'E', u'W', u'S', u'D' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a09aaa1c549e96fa51fc38a8f5cf5ba9c">market_participant_state_t</a></td></tr>
-<tr class="memdesc:a09aaa1c549e96fa51fc38a8f5cf5ba9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Participant State' field in a 'Market Participant Position' message.  <a href="#a09aaa1c549e96fa51fc38a8f5cf5ba9c">More...</a><br /></td></tr>
-<tr class="separator:a09aaa1c549e96fa51fc38a8f5cf5ba9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1896e72054435ace2e4fe788c0c6490"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'N', u'P', u'S', u'R', u'L' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#aa1896e72054435ace2e4fe788c0c6490">market_maker_mode_t</a></td></tr>
+<tr class="memdesc:aa1896e72054435ace2e4fe788c0c6490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Maker Mode' field in a 'Market Participant Position' message.  <a href="#aa1896e72054435ace2e4fe788c0c6490">More...</a><br /></td></tr>
+<tr class="separator:aa1896e72054435ace2e4fe788c0c6490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac25976015bd00b6896f64c547fb84e89"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'E', u'W', u'S', u'D' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ac25976015bd00b6896f64c547fb84e89">market_participant_state_t</a></td></tr>
+<tr class="memdesc:ac25976015bd00b6896f64c547fb84e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Participant State' field in a 'Market Participant Position' message.  <a href="#ac25976015bd00b6896f64c547fb84e89">More...</a><br /></td></tr>
+<tr class="separator:ac25976015bd00b6896f64c547fb84e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bcb820c7703a32ae40266aae8c18d34"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">jb::itch5::short_string_field</a>&lt; 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a2bcb820c7703a32ae40266aae8c18d34">mpid_t</a></td></tr>
 <tr class="memdesc:a2bcb820c7703a32ae40266aae8c18d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the type used to represent the 'MPID' field in many messages.  <a href="#a2bcb820c7703a32ae40266aae8c18d34">More...</a><br /></td></tr>
 <tr class="separator:a2bcb820c7703a32ae40266aae8c18d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -379,42 +385,44 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a21b9b3380ceb5f904362fe9ddb82dc3a"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'B', u'S', u'N', u'O'&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a21b9b3380ceb5f904362fe9ddb82dc3a">imbalance_direction_t</a></td></tr>
 <tr class="memdesc:a21b9b3380ceb5f904362fe9ddb82dc3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Imbalance Direction' field in the 'Net order Imbalance Indicator' message.  <a href="#a21b9b3380ceb5f904362fe9ddb82dc3a">More...</a><br /></td></tr>
 <tr class="separator:a21b9b3380ceb5f904362fe9ddb82dc3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a834323e2cf69c0623fb6a68b3ae7169b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'A', u'B', u'C', u' '&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a834323e2cf69c0623fb6a68b3ae7169b">price_variation_indicator_t</a></td></tr>
-<tr class="memdesc:a834323e2cf69c0623fb6a68b3ae7169b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Price Variation Indicator' field in the 'Net Order Imbalance Indicator' message.  <a href="#a834323e2cf69c0623fb6a68b3ae7169b">More...</a><br /></td></tr>
-<tr class="separator:a834323e2cf69c0623fb6a68b3ae7169b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad59d0d73a239df5cc4717e97aac4b89f"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">price4_t</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ad59d0d73a239df5cc4717e97aac4b89f">half_quote</a></td></tr>
-<tr class="memdesc:ad59d0d73a239df5cc4717e97aac4b89f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple represetation for price + quantity.  <a href="#ad59d0d73a239df5cc4717e97aac4b89f">More...</a><br /></td></tr>
+<tr class="memitem:a7aeec6a74adbcb9180d4569fcefbb1af"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'A', u'B', u'C', u' '&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a7aeec6a74adbcb9180d4569fcefbb1af">price_variation_indicator_t</a></td></tr>
+<tr class="memdesc:a7aeec6a74adbcb9180d4569fcefbb1af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Price Variation Indicator' field in the 'Net Order Imbalance Indicator' message.  <a href="#a7aeec6a74adbcb9180d4569fcefbb1af">More...</a><br /></td></tr>
+<tr class="separator:a7aeec6a74adbcb9180d4569fcefbb1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad59d0d73a239df5cc4717e97aac4b89f"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ad59d0d73a239df5cc4717e97aac4b89f">half_quote</a></td></tr>
+<tr class="memdesc:ad59d0d73a239df5cc4717e97aac4b89f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple representation for price + quantity.  <a href="#ad59d0d73a239df5cc4717e97aac4b89f">More...</a><br /></td></tr>
 <tr class="separator:ad59d0d73a239df5cc4717e97aac4b89f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d9da9f891122514f71d3a38358b6197"><td class="memItemLeft" align="right" valign="top">typedef unsigned long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a0d9da9f891122514f71d3a38358b6197">book_depth_t</a></td></tr>
+<tr class="separator:a0d9da9f891122514f71d3a38358b6197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36e96ca3a9e1c08f628d37235e8d5942"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Y', u'N'&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a36e96ca3a9e1c08f628d37235e8d5942">printable_t</a></td></tr>
 <tr class="memdesc:a36e96ca3a9e1c08f628d37235e8d5942"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Printable' field on a 'Order Executed with Price' message.  <a href="#a36e96ca3a9e1c08f628d37235e8d5942">More...</a><br /></td></tr>
 <tr class="separator:a36e96ca3a9e1c08f628d37235e8d5942"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dbe7071f1609d6e3ed1a54aa8538b4c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt; std::uint32_t, 10000 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">price4_t</a></td></tr>
-<tr class="memdesc:a3dbe7071f1609d6e3ed1a54aa8538b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience definition for Price(4) fields.  <a href="#a3dbe7071f1609d6e3ed1a54aa8538b4c">More...</a><br /></td></tr>
-<tr class="separator:a3dbe7071f1609d6e3ed1a54aa8538b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30ea5e85be69710fa958000e3d3dfba5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt; std::uint64_t, 100000000 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a30ea5e85be69710fa958000e3d3dfba5">price8_t</a></td></tr>
-<tr class="memdesc:a30ea5e85be69710fa958000e3d3dfba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience definition for Price(8) fields.  <a href="#a30ea5e85be69710fa958000e3d3dfba5">More...</a><br /></td></tr>
-<tr class="separator:a30ea5e85be69710fa958000e3d3dfba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbe422fcea46cc63c32e32644576d188"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt; std::uint32_t, 10000 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a></td></tr>
+<tr class="memdesc:afbe422fcea46cc63c32e32644576d188"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience definition for Price(4) fields.  <a href="#afbe422fcea46cc63c32e32644576d188">More...</a><br /></td></tr>
+<tr class="separator:afbe422fcea46cc63c32e32644576d188"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad33add5d7c887b71b2fcbe159c53b99f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt; std::uint64_t, 100000000 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ad33add5d7c887b71b2fcbe159c53b99f">price8_t</a></td></tr>
+<tr class="memdesc:ad33add5d7c887b71b2fcbe159c53b99f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience definition for Price(8) fields.  <a href="#ad33add5d7c887b71b2fcbe159c53b99f">More...</a><br /></td></tr>
+<tr class="separator:ad33add5d7c887b71b2fcbe159c53b99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e19588b34b5f37a9261b58ec3c9f4f9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'0', u'1', u'2'&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a7e19588b34b5f37a9261b58ec3c9f4f9">reg_sho_action_t</a></td></tr>
 <tr class="memdesc:a7e19588b34b5f37a9261b58ec3c9f4f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Reg SHO Action' field of the 'Reg SHO Restriction' message.  <a href="#a7e19588b34b5f37a9261b58ec3c9f4f9">More...</a><br /></td></tr>
 <tr class="separator:a7e19588b34b5f37a9261b58ec3c9f4f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf88e0322dcbd820728ad4d9c9287fd"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Q', u'G', u'S', u'N', u'A', u'P', u'Z', u' ' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#acbf88e0322dcbd820728ad4d9c9287fd">market_category_t</a></td></tr>
-<tr class="memdesc:acbf88e0322dcbd820728ad4d9c9287fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Category' field on a 'Stock Directory' message.  <a href="#acbf88e0322dcbd820728ad4d9c9287fd">More...</a><br /></td></tr>
-<tr class="separator:acbf88e0322dcbd820728ad4d9c9287fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167fda03afe6757327bc2ca222a0e06d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Q', u'G', u'S', u'N', u'A', u'P', u'Z', u' ' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a167fda03afe6757327bc2ca222a0e06d">market_category_t</a></td></tr>
+<tr class="memdesc:a167fda03afe6757327bc2ca222a0e06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Market Category' field on a 'Stock Directory' message.  <a href="#a167fda03afe6757327bc2ca222a0e06d">More...</a><br /></td></tr>
+<tr class="separator:a167fda03afe6757327bc2ca222a0e06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f016bea482e687f6c28a72cb79946b5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'D', u'E', u'Q', u'S', u'G', u'H', u'J', u'K', u'C', u'N', u' ' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a8f016bea482e687f6c28a72cb79946b5">financial_status_indicator_t</a></td></tr>
 <tr class="memdesc:a8f016bea482e687f6c28a72cb79946b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Financial Status Indicator' field on a 'Stock Directory' message.  <a href="#a8f016bea482e687f6c28a72cb79946b5">More...</a><br /></td></tr>
 <tr class="separator:a8f016bea482e687f6c28a72cb79946b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91172a3c8009c61af339f4df0454a15f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Y', u'N'&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a91172a3c8009c61af339f4df0454a15f">roundlots_only_t</a></td></tr>
 <tr class="memdesc:a91172a3c8009c61af339f4df0454a15f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Round Lots Only' field on a 'Stock Directory' message.  <a href="#a91172a3c8009c61af339f4df0454a15f">More...</a><br /></td></tr>
 <tr class="separator:a91172a3c8009c61af339f4df0454a15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fa533b9e9085fa7870ce2d0e03a0ce9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'B', u'C', u'F', u'I', u'L', u'N', u'O', u'P', u'Q', u'R', u'S', u'T', u'U', u'V', u'W' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a6fa533b9e9085fa7870ce2d0e03a0ce9">issue_classification_t</a></td></tr>
-<tr class="memdesc:a6fa533b9e9085fa7870ce2d0e03a0ce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Issue Classification' field on a 'Stock Directory' message.  <a href="#a6fa533b9e9085fa7870ce2d0e03a0ce9">More...</a><br /></td></tr>
-<tr class="separator:a6fa533b9e9085fa7870ce2d0e03a0ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98c2aa87761872b9ff58a34af2227ac1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">short_string_field</a>&lt; 2, <a class="el" href="structjb_1_1itch5_1_1validate__issue__subtype.html">validate_issue_subtype</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a98c2aa87761872b9ff58a34af2227ac1">issue_subtype_t</a></td></tr>
-<tr class="memdesc:a98c2aa87761872b9ff58a34af2227ac1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Issue Sub-Type' field on a 'Stock Directory' message.  <a href="#a98c2aa87761872b9ff58a34af2227ac1">More...</a><br /></td></tr>
-<tr class="separator:a98c2aa87761872b9ff58a34af2227ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a32d8d4d6e4999b521b6ec02a795ea5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'P', u'T' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a9a32d8d4d6e4999b521b6ec02a795ea5">authenticity_t</a></td></tr>
-<tr class="memdesc:a9a32d8d4d6e4999b521b6ec02a795ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Authenticity' field on a 'Stock Directory' message.  <a href="#a9a32d8d4d6e4999b521b6ec02a795ea5">More...</a><br /></td></tr>
-<tr class="separator:a9a32d8d4d6e4999b521b6ec02a795ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4484b94743fd4909d78988fe8a6e6e4b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'B', u'C', u'F', u'I', u'L', u'N', u'O', u'P', u'Q', u'R', u'S', u'T', u'U', u'V', u'W' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a4484b94743fd4909d78988fe8a6e6e4b">issue_classification_t</a></td></tr>
+<tr class="memdesc:a4484b94743fd4909d78988fe8a6e6e4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Issue Classification' field on a 'Stock Directory' message.  <a href="#a4484b94743fd4909d78988fe8a6e6e4b">More...</a><br /></td></tr>
+<tr class="separator:a4484b94743fd4909d78988fe8a6e6e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bce15829f64dd58442032f45004e91f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">short_string_field</a>&lt; 2, <a class="el" href="structjb_1_1itch5_1_1validate__issue__subtype.html">validate_issue_subtype</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a5bce15829f64dd58442032f45004e91f">issue_subtype_t</a></td></tr>
+<tr class="memdesc:a5bce15829f64dd58442032f45004e91f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Issue Sub-Type' field on a 'Stock Directory' message.  <a href="#a5bce15829f64dd58442032f45004e91f">More...</a><br /></td></tr>
+<tr class="separator:a5bce15829f64dd58442032f45004e91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab97c9e013e5900f4a35e27fed86114c8"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'P', u'T' &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab97c9e013e5900f4a35e27fed86114c8">authenticity_t</a></td></tr>
+<tr class="memdesc:ab97c9e013e5900f4a35e27fed86114c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Authenticity' field on a 'Stock Directory' message.  <a href="#ab97c9e013e5900f4a35e27fed86114c8">More...</a><br /></td></tr>
+<tr class="separator:ab97c9e013e5900f4a35e27fed86114c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4044baa30718d071663c7bbe1fae5102"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Y', u'N', u' '&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a4044baa30718d071663c7bbe1fae5102">short_sale_threshold_indicator_t</a></td></tr>
 <tr class="memdesc:a4044baa30718d071663c7bbe1fae5102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent the 'Short Sale Threshold Indicator' field on a 'Stock Directory' message.  <a href="#a4044baa30718d071663c7bbe1fae5102">More...</a><br /></td></tr>
 <tr class="separator:a4044baa30718d071663c7bbe1fae5102"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -472,12 +480,34 @@ Functions</h2></td></tr>
 <tr class="memitem:a5adafcf9d4e1e7d24a7caa1bd39bb577"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a5adafcf9d4e1e7d24a7caa1bd39bb577">raise_validation_failed</a> (char const *where, char const *what)</td></tr>
 <tr class="memdesc:a5adafcf9d4e1e7d24a7caa1bd39bb577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience function to raise an exception upon a validation error.  <a href="#a5adafcf9d4e1e7d24a7caa1bd39bb577">More...</a><br /></td></tr>
 <tr class="separator:a5adafcf9d4e1e7d24a7caa1bd39bb577"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab8edc1c8ef585dea72a67aafab39868"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#aab8edc1c8ef585dea72a67aafab39868">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;x)</td></tr>
+<tr class="memdesc:aab8edc1c8ef585dea72a67aafab39868"><td class="mdescLeft">&#160;</td><td class="mdescRight">ostream operator for order updates, mostly used for testing and debugging  <a href="#aab8edc1c8ef585dea72a67aafab39868">More...</a><br /></td></tr>
+<tr class="separator:aab8edc1c8ef585dea72a67aafab39868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade52e8a91b53c7567140add13ab35b89"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ade52e8a91b53c7567140add13ab35b89">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1order__data">compute_book::order_data</a> const &amp;x)</td></tr>
+<tr class="memdesc:ade52e8a91b53c7567140add13ab35b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">ostream operator for the order data, mostly used for testing and debugging  <a href="#ade52e8a91b53c7567140add13ab35b89">More...</a><br /></td></tr>
+<tr class="separator:ade52e8a91b53c7567140add13ab35b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b0d29c7a9e437d8ef7d41bde789d9be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a8b0d29c7a9e437d8ef7d41bde789d9be">operator==</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;a, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;b)</td></tr>
+<tr class="separator:a8b0d29c7a9e437d8ef7d41bde789d9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae144f0292776bbc8030be9f735a46ab3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ae144f0292776bbc8030be9f735a46ab3">operator!=</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;a, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;b)</td></tr>
+<tr class="separator:ae144f0292776bbc8030be9f735a46ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0882949cf0e0a47d45aa9bf6378634b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ae0882949cf0e0a47d45aa9bf6378634b">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html">cross_trade_message</a> const &amp;x)</td></tr>
 <tr class="memdesc:ae0882949cf0e0a47d45aa9bf6378634b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming operator for <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html" title="Represent an &#39;Add Order&#39; message in the ITCH-5.0 protocol. ">jb::itch5::cross_trade_message</a>.  <a href="#ae0882949cf0e0a47d45aa9bf6378634b">More...</a><br /></td></tr>
 <tr class="separator:ae0882949cf0e0a47d45aa9bf6378634b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55489450a3f4cb929c284e3c2276d625"><td class="memTemplParams" colspan="2">template&lt;typename duration_t &gt; </td></tr>
+<tr class="memitem:a55489450a3f4cb929c284e3c2276d625"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a55489450a3f4cb929c284e3c2276d625">record_latency_stats</a> (<a class="el" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> &amp;stats, <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">jb::itch5::message_header</a> const &amp;header, <a class="el" href="classjb_1_1itch5_1_1order__book.html">jb::itch5::order_book</a> const &amp;book, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">jb::itch5::compute_book::book_update</a> const &amp;update, duration_t processing_latency)</td></tr>
+<tr class="memdesc:a55489450a3f4cb929c284e3c2276d625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if this event changes the inside, if so, record the statistics.  <a href="#a55489450a3f4cb929c284e3c2276d625">More...</a><br /></td></tr>
+<tr class="separator:a55489450a3f4cb929c284e3c2276d625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa97ee3d00ad488c6adcb9b5773f634"><td class="memTemplParams" colspan="2">template&lt;typename duration_t &gt; </td></tr>
+<tr class="memitem:a1fa97ee3d00ad488c6adcb9b5773f634"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a1fa97ee3d00ad488c6adcb9b5773f634">generate_inside</a> (<a class="el" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> &amp;stats, std::ostream &amp;out, <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">jb::itch5::message_header</a> const &amp;header, <a class="el" href="classjb_1_1itch5_1_1order__book.html">jb::itch5::order_book</a> const &amp;book, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">jb::itch5::compute_book::book_update</a> const &amp;update, duration_t processing_latency)</td></tr>
+<tr class="memdesc:a1fa97ee3d00ad488c6adcb9b5773f634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if this event changes the inside, if so, record the statistics and output the result.  <a href="#a1fa97ee3d00ad488c6adcb9b5773f634">More...</a><br /></td></tr>
+<tr class="separator:a1fa97ee3d00ad488c6adcb9b5773f634"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1551a3485ebf526a35de3c9ef0c95432"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a1551a3485ebf526a35de3c9ef0c95432">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html">ipo_quoting_period_update_message</a> const &amp;x)</td></tr>
 <tr class="memdesc:a1551a3485ebf526a35de3c9ef0c95432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming operator for <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html" title="Represent a &#39;IPO Quotation Release Update&#39; message in the ITCH-5.0 protocol. ">jb::itch5::ipo_quoting_period_update_message</a>.  <a href="#a1551a3485ebf526a35de3c9ef0c95432">More...</a><br /></td></tr>
 <tr class="separator:a1551a3485ebf526a35de3c9ef0c95432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a223b933edfb9e14e14cba1eb24842c39"><td class="memTemplParams" colspan="2">template&lt;class socket_t  = boost::asio::ip::udp::socket&gt; </td></tr>
+<tr class="memitem:a223b933edfb9e14e14cba1eb24842c39"><td class="memTemplItemLeft" align="right" valign="top">socket_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a223b933edfb9e14e14cba1eb24842c39">make_socket_udp_recv</a> (boost::asio::io_service &amp;io, std::string const &amp;receive_address, int port, std::string const &amp;listen_address)</td></tr>
+<tr class="memdesc:a223b933edfb9e14e14cba1eb24842c39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a socket given the configuration parameters.  <a href="#a223b933edfb9e14e14cba1eb24842c39">More...</a><br /></td></tr>
+<tr class="separator:a223b933edfb9e14e14cba1eb24842c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e4d3727fda8e99dfc6ed425b26f48a8"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a3e4d3727fda8e99dfc6ed425b26f48a8">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html">market_participant_position_message</a> const &amp;x)</td></tr>
 <tr class="memdesc:a3e4d3727fda8e99dfc6ed425b26f48a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming operator for <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html" title="Represent a &#39;Market Participant Position&#39; message in the ITCH-5.0 protocol. ">jb::itch5::market_participant_position_message</a>.  <a href="#a3e4d3727fda8e99dfc6ed425b26f48a8">More...</a><br /></td></tr>
 <tr class="separator:a3e4d3727fda8e99dfc6ed425b26f48a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -532,8 +562,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a9e823fc358e6de2852731e1499f09c94"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a9e823fc358e6de2852731e1499f09c94">max_price_field_value</a> ()</td></tr>
 <tr class="separator:a9e823fc358e6de2852731e1499f09c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c39129f2e2643cbafb9f087f7ef4772"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
-<tr class="memitem:a0c39129f2e2643cbafb9f087f7ef4772"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">price4_t</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a0c39129f2e2643cbafb9f087f7ef4772">max_price_field_value</a> ()</td></tr>
+<tr class="memitem:a0c39129f2e2643cbafb9f087f7ef4772"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a0c39129f2e2643cbafb9f087f7ef4772">max_price_field_value</a> ()</td></tr>
 <tr class="separator:a0c39129f2e2643cbafb9f087f7ef4772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3dc22bff0f55bd576dfe0eafe9c79e5"><td class="memTemplParams" colspan="2">template&lt;typename price_field_t &gt; </td></tr>
+<tr class="memitem:ac3dc22bff0f55bd576dfe0eafe9c79e5"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ac3dc22bff0f55bd576dfe0eafe9c79e5">price_levels</a> (price_field_t lo, price_field_t hi)</td></tr>
+<tr class="memdesc:ac3dc22bff0f55bd576dfe0eafe9c79e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the number of price levels between two prices.  <a href="#ac3dc22bff0f55bd576dfe0eafe9c79e5">More...</a><br /></td></tr>
+<tr class="separator:ac3dc22bff0f55bd576dfe0eafe9c79e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc62372a33f6aeac5ec64d35ac3e70e2"><td class="memTemplParams" colspan="2">template&lt;typename message_handler &gt; </td></tr>
 <tr class="memitem:acc62372a33f6aeac5ec64d35ac3e70e2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#acc62372a33f6aeac5ec64d35ac3e70e2">process_iostream</a> (std::istream &amp;in, message_handler &amp;handler)</td></tr>
 <tr class="memdesc:acc62372a33f6aeac5ec64d35ac3e70e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process an iostream of ITCH-5.0 messages.  <a href="#acc62372a33f6aeac5ec64d35ac3e70e2">More...</a><br /></td></tr>
@@ -690,19 +724,33 @@ ts</td>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="a9a32d8d4d6e4999b521b6ec02a795ea5"></a>
+<a class="anchor" id="ab97c9e013e5900f4a35e27fed86114c8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'P', u'T' &gt; <a class="el" href="namespacejb_1_1itch5.html#a9a32d8d4d6e4999b521b6ec02a795ea5">jb::itch5::authenticity_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'P', u'T' &gt; <a class="el" href="namespacejb_1_1itch5.html#ab97c9e013e5900f4a35e27fed86114c8">jb::itch5::authenticity_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Represent the 'Authenticity' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00091">91</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00092">92</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0d9da9f891122514f71d3a38358b6197"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef unsigned long int <a class="el" href="namespacejb_1_1itch5.html#a0d9da9f891122514f71d3a38358b6197">jb::itch5::book_depth_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="order__book__def_8hpp_source.html#l00007">7</a> of file <a class="el" href="order__book__def_8hpp_source.html">order_book_def.hpp</a>.</p>
 
 </div>
 </div>
@@ -766,7 +814,7 @@ ts</td>
 
 <p>Represent the 'ETP Flag' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00118">118</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00119">119</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -798,7 +846,7 @@ ts</td>
 
 <p>Represent the 'Financial Status Indicator' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00042">42</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00043">43</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -807,14 +855,14 @@ ts</td>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::pair&lt;<a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">price4_t</a>, int&gt; <a class="el" href="namespacejb_1_1itch5.html#ad59d0d73a239df5cc4717e97aac4b89f">jb::itch5::half_quote</a></td>
+          <td class="memname">typedef std::pair&lt;<a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>, int&gt; <a class="el" href="namespacejb_1_1itch5.html#ad59d0d73a239df5cc4717e97aac4b89f">jb::itch5::half_quote</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>A simple represetation for price + quantity. </p>
+<p>A simple representation for price + quantity. </p>
 
-<p>Definition at line <a class="el" href="order__book_8hpp_source.html#l00016">16</a> of file <a class="el" href="order__book_8hpp_source.html">order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="order__book_8hpp_source.html#l00018">18</a> of file <a class="el" href="order__book_8hpp_source.html">order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -846,7 +894,7 @@ ts</td>
 
 <p>Represent the 'Inverse Indicator' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00124">124</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00125">125</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -862,7 +910,7 @@ ts</td>
 
 <p>Represent the 'IPO Flag' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00103">103</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00104">104</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -882,35 +930,35 @@ ts</td>
 
 </div>
 </div>
-<a class="anchor" id="a6fa533b9e9085fa7870ce2d0e03a0ce9"></a>
+<a class="anchor" id="a4484b94743fd4909d78988fe8a6e6e4b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'B', u'C', u'F', u'I', u'L', u'N', u'O', u'P', u'Q', u'R', u'S', u'T', u'U', u'V', u'W' &gt; <a class="el" href="namespacejb_1_1itch5.html#a6fa533b9e9085fa7870ce2d0e03a0ce9">jb::itch5::issue_classification_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'A', u'B', u'C', u'F', u'I', u'L', u'N', u'O', u'P', u'Q', u'R', u'S', u'T', u'U', u'V', u'W' &gt; <a class="el" href="namespacejb_1_1itch5.html#a4484b94743fd4909d78988fe8a6e6e4b">jb::itch5::issue_classification_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Represent the 'Issue Classification' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00071">71</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00072">72</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a98c2aa87761872b9ff58a34af2227ac1"></a>
+<a class="anchor" id="a5bce15829f64dd58442032f45004e91f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">short_string_field</a>&lt;2,<a class="el" href="structjb_1_1itch5_1_1validate__issue__subtype.html">validate_issue_subtype</a>&gt; <a class="el" href="namespacejb_1_1itch5.html#a98c2aa87761872b9ff58a34af2227ac1">jb::itch5::issue_subtype_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1short__string__field.html">short_string_field</a>&lt;2, <a class="el" href="structjb_1_1itch5_1_1validate__issue__subtype.html">validate_issue_subtype</a>&gt; <a class="el" href="namespacejb_1_1itch5.html#a5bce15829f64dd58442032f45004e91f">jb::itch5::issue_subtype_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Represent the 'Issue Sub-Type' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00082">82</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00083">83</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -927,16 +975,16 @@ ts</td>
 <p>Represent the 'LULD Reference Price Tier' field on a 'Stock Directory' message. </p>
 <p>LULD stands for 'Limit Up, Limit Down', a restriction on pricing to avoid sudden drops or increases in price. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00112">112</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00113">113</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="acbf88e0322dcbd820728ad4d9c9287fd"></a>
+<a class="anchor" id="a167fda03afe6757327bc2ca222a0e06d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'Q', u'G', u'S', u'N', u'A', u'P', u'Z', u' ' &gt; <a class="el" href="namespacejb_1_1itch5.html#acbf88e0322dcbd820728ad4d9c9287fd">jb::itch5::market_category_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'Q', u'G', u'S', u'N', u'A', u'P', u'Z', u' ' &gt; <a class="el" href="namespacejb_1_1itch5.html#a167fda03afe6757327bc2ca222a0e06d">jb::itch5::market_category_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -947,12 +995,12 @@ ts</td>
 
 </div>
 </div>
-<a class="anchor" id="af0f7f24481605d9c3090e290b3e5c1bb"></a>
+<a class="anchor" id="aa1896e72054435ace2e4fe788c0c6490"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'N', u'P', u'S', u'R', u'L' &gt; <a class="el" href="namespacejb_1_1itch5.html#af0f7f24481605d9c3090e290b3e5c1bb">jb::itch5::market_maker_mode_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'N', u'P', u'S', u'R', u'L' &gt; <a class="el" href="namespacejb_1_1itch5.html#aa1896e72054435ace2e4fe788c0c6490">jb::itch5::market_maker_mode_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -963,12 +1011,12 @@ ts</td>
 
 </div>
 </div>
-<a class="anchor" id="a09aaa1c549e96fa51fc38a8f5cf5ba9c"></a>
+<a class="anchor" id="ac25976015bd00b6896f64c547fb84e89"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'A', u'E', u'W', u'S', u'D' &gt; <a class="el" href="namespacejb_1_1itch5.html#a09aaa1c549e96fa51fc38a8f5cf5ba9c">jb::itch5::market_participant_state_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'A', u'E', u'W', u'S', u'D' &gt; <a class="el" href="namespacejb_1_1itch5.html#ac25976015bd00b6896f64c547fb84e89">jb::itch5::market_participant_state_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -996,44 +1044,44 @@ ts</td>
 
 </div>
 </div>
-<a class="anchor" id="a3dbe7071f1609d6e3ed1a54aa8538b4c"></a>
+<a class="anchor" id="afbe422fcea46cc63c32e32644576d188"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt;std::uint32_t,10000&gt; <a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">jb::itch5::price4_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt;std::uint32_t, 10000&gt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">jb::itch5::price4_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Convenience definition for Price(4) fields. </p>
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00116">116</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00118">118</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a30ea5e85be69710fa958000e3d3dfba5"></a>
+<a class="anchor" id="ad33add5d7c887b71b2fcbe159c53b99f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt;std::uint64_t,100000000&gt; <a class="el" href="namespacejb_1_1itch5.html#a30ea5e85be69710fa958000e3d3dfba5">jb::itch5::price8_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt;std::uint64_t, 100000000&gt; <a class="el" href="namespacejb_1_1itch5.html#ad33add5d7c887b71b2fcbe159c53b99f">jb::itch5::price8_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Convenience definition for Price(8) fields. </p>
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00119">119</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00121">121</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a834323e2cf69c0623fb6a68b3ae7169b"></a>
+<a class="anchor" id="a7aeec6a74adbcb9180d4569fcefbb1af"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt; u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'A', u'B', u'C', u' '&gt; <a class="el" href="namespacejb_1_1itch5.html#a834323e2cf69c0623fb6a68b3ae7169b">jb::itch5::price_variation_indicator_t</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1itch5_1_1char__list__field.html">char_list_field</a>&lt;u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'A', u'B', u'C', u' '&gt; <a class="el" href="namespacejb_1_1itch5.html#a7aeec6a74adbcb9180d4569fcefbb1af">jb::itch5::price_variation_indicator_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1120,7 +1168,7 @@ ts</td>
 
 <p>Represent the 'Round Lots Only' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00048">48</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00049">49</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -1136,7 +1184,7 @@ ts</td>
 
 <p>Represent the 'Short Sale Threshold Indicator' field on a 'Stock Directory' message. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00097">97</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8hpp_source.html#l00098">98</a> of file <a class="el" href="stock__directory__message_8hpp_source.html">stock_directory_message.hpp</a>.</p>
 
 </div>
 </div>
@@ -1257,9 +1305,9 @@ template&lt;bool validate&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="check__offset_8hpp_source.html#l00026">26</a> of file <a class="el" href="check__offset_8hpp_source.html">check_offset.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__offset_8hpp_source.html#l00025">25</a> of file <a class="el" href="check__offset_8hpp_source.html">check_offset.hpp</a>.</p>
 
-<p>References <a class="el" href="check__offset_8cpp_source.html#l00007">check_offset&lt; true &gt;()</a>, <a class="el" href="check__offset_8cpp_source.html#l00018">raise_validation_failed()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00049">jb::testing::defaults::size</a>.</p>
+<p>References <a class="el" href="check__offset_8cpp_source.html#l00007">check_offset&lt; true &gt;()</a>, <a class="el" href="check__offset_8cpp_source.html#l00018">raise_validation_failed()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__check__offset_8cpp_source.html#l00008">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -1307,9 +1355,9 @@ template&lt;&gt; </div>
 
 <p>Definition at line <a class="el" href="check__offset_8cpp_source.html#l00007">7</a> of file <a class="el" href="check__offset_8cpp_source.html">check_offset.cpp</a>.</p>
 
-<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00049">jb::testing::defaults::size</a>.</p>
+<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__check__offset_8cpp_source.html#l00022">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="check__offset_8hpp_source.html#l00026">check_offset()</a>.</p>
+<p>Referenced by <a class="el" href="ut__check__offset_8cpp_source.html#l00022">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="check__offset_8hpp_source.html#l00025">check_offset()</a>.</p>
 
 </div>
 </div>
@@ -1435,6 +1483,84 @@ template&lt;&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a1fa97ee3d00ad488c6adcb9b5773f634"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::itch5::generate_inside </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> &amp;&#160;</td>
+          <td class="paramname"><em>stats</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">jb::itch5::message_header</a> const &amp;&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1order__book.html">jb::itch5::order_book</a> const &amp;&#160;</td>
+          <td class="paramname"><em>book</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">jb::itch5::compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>update</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">duration_t&#160;</td>
+          <td class="paramname"><em>processing_latency</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determine if this event changes the inside, if so, record the statistics and output the result. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">duration_t</td><td>the type used to record the processing latency, must be compatible with a duration in the std::chrono sense.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stats</td><td>where to record the statistics </td></tr>
+    <tr><td class="paramname">out</td><td>where to send the new inside quote if needed </td></tr>
+    <tr><td class="paramname">header</td><td>(unused) the header for the message that generated this book update </td></tr>
+    <tr><td class="paramname">book</td><td>the book updated </td></tr>
+    <tr><td class="paramname">update</td><td>a report of the changes to the book </td></tr>
+    <tr><td class="paramname">processing_latency</td><td>the time it took to process the event (before the any output is generated). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the inside is affected by the change, false otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="generate__inside_8hpp_source.html#l00075">75</a> of file <a class="el" href="generate__inside_8hpp_source.html">generate_inside.hpp</a>.</p>
+
+<p>References <a class="el" href="order__book_8cpp_source.html#l00003">jb::itch5::order_book::best_bid()</a>, <a class="el" href="order__book_8cpp_source.html#l00011">jb::itch5::order_book::best_offer()</a>, <a class="el" href="generate__inside_8hpp_source.html#l00029">record_latency_stats()</a>, <a class="el" href="compute__book_8hpp_source.html#l00062">jb::itch5::compute_book::book_update::stock</a>, <a class="el" href="message__header_8hpp_source.html#l00034">jb::itch5::message_header::stock_locate</a>, <a class="el" href="message__header_8hpp_source.html#l00057">jb::itch5::message_header::timestamp</a>, and <a class="el" href="timestamp_8hpp_source.html#l00018">jb::itch5::timestamp::ts</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__generate__inside_8cpp_source.html#l00026">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="itch5inside_8cpp_source.html#l00045">main()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a074a53435fdba8aad9bd185d0a82c537"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1453,9 +1579,71 @@ template&lt;std::size_t size, typename F &gt; </div>
 
 <p>Implement a hash function and integrate with boost::hash. </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00187">187</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00184">184</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
-<p>References <a class="el" href="short__string__field_8hpp_source.html#l00078">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;::c_str()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00049">jb::testing::defaults::size</a>.</p>
+<p>References <a class="el" href="short__string__field_8hpp_source.html#l00075">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;::c_str()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a223b933edfb9e14e14cba1eb24842c39"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class socket_t  = boost::asio::ip::udp::socket&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">socket_t jb::itch5::make_socket_udp_recv </td>
+          <td>(</td>
+          <td class="paramtype">boost::asio::io_service &amp;&#160;</td>
+          <td class="paramname"><em>io</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>receive_address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>listen_address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a socket given the configuration parameters. </p>
+<p>This is a function to create (open) sockets to receive UDP messages, either unicast or multicast and either IPv4 or IPv6.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">socket_t</td><td>the type of socket to create. The main reason to change this type is for dependency injection during testing.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">io</td><td>the Boost.ASIO io_service object that the socket is managed by.</td></tr>
+    <tr><td class="paramname">receive_address</td><td>the address to listen for messages on. Can be a unicast or multicast address.</td></tr>
+    <tr><td class="paramname">port</td><td>the port for the socket</td></tr>
+    <tr><td class="paramname">listen_address</td><td>the local address for the socket. If this is the empty string, the local address is guessed based on the receive_address: (a) for IPv4 multicast groups simply use 0.0.0.0, (b) for IPv6 multicast groups simply use ::1, (c) otherwise assume the receive_address is a unicast address and try to use it as the local address. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="make__socket__udp__recv_8hpp_source.html#l00038">38</a> of file <a class="el" href="make__socket__udp__recv_8hpp_source.html">make_socket_udp_recv.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__make__socket__udp__recv_8cpp_source.html#l00009">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -1482,7 +1670,7 @@ template&lt;typename price_field &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00122">122</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00124">124</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 <p>References <a class="el" href="price__field_8hpp_source.html#l00041">jb::itch5::price_field&lt; wire_type_t, denom_v &gt;::denom</a>, and <a class="el" href="price__field_8hpp_source.html#l00050">jb::itch5::price_field&lt; wire_type_t, denom_v &gt;::price_field()</a>.</p>
 
@@ -1498,7 +1686,7 @@ template&lt;&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacejb_1_1itch5.html#a3dbe7071f1609d6e3ed1a54aa8538b4c">price4_t</a> jb::itch5::max_price_field_value </td>
+          <td class="memname"><a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> jb::itch5::max_price_field_value </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1511,27 +1699,30 @@ template&lt;&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00129">129</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00131">131</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 <p>References <a class="el" href="price__field_8hpp_source.html#l00041">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::denom</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0a4e89472b7e3c9e10a2cb04448ba729"></a>
+<a class="anchor" id="ae144f0292776bbc8030be9f735a46ab3"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td class="memname">bool jb::itch5::operator!= </td>
           <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__delete__message.html">order_delete_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1539,13 +1730,16 @@ template&lt;&gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html" title="Represent an &#39;Order Delete&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_delete_message</a>. </p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00330">330</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
-<p>Definition at line <a class="el" href="order__delete__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="order__delete__message_8cpp_source.html">order_delete_message.cpp</a>.</p>
-
-<p>References <a class="el" href="order__delete__message_8hpp_source.html#l00015">jb::itch5::order_delete_message::header</a>, and <a class="el" href="order__delete__message_8hpp_source.html#l00016">jb::itch5::order_delete_message::order_reference_number</a>.</p>
+<p>References <a class="el" href="add__order__message_8cpp_source.html#l00008">operator&lt;&lt;()</a>.</p>
 
 </div>
 </div>
@@ -1575,9 +1769,41 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1broken__trade__message.html" title="Represent an &#39;Broken Trade / Order Execution&#39; message in the ITCH-5.0 protocol. ">jb::itch5::broken_trade_message</a>. </p>
 
-<p>Definition at line <a class="el" href="broken__trade__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="broken__trade__message_8cpp_source.html">broken_trade_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="broken__trade__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="broken__trade__message_8cpp_source.html">broken_trade_message.cpp</a>.</p>
 
 <p>References <a class="el" href="broken__trade__message_8hpp_source.html#l00016">jb::itch5::broken_trade_message::header</a>, and <a class="el" href="broken__trade__message_8hpp_source.html#l00017">jb::itch5::broken_trade_message::match_number</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0a4e89472b7e3c9e10a2cb04448ba729"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__delete__message.html">order_delete_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html" title="Represent an &#39;Order Delete&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_delete_message</a>. </p>
+
+<p>Definition at line <a class="el" href="order__delete__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__delete__message_8cpp_source.html">order_delete_message.cpp</a>.</p>
+
+<p>References <a class="el" href="order__delete__message_8hpp_source.html#l00015">jb::itch5::order_delete_message::header</a>, and <a class="el" href="order__delete__message_8hpp_source.html#l00016">jb::itch5::order_delete_message::order_reference_number</a>.</p>
 
 </div>
 </div>
@@ -1607,7 +1833,7 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__cancel__message.html" title="Represent an &#39;Order Cancel&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_cancel_message</a>. </p>
 
-<p>Definition at line <a class="el" href="order__cancel__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="order__cancel__message_8cpp_source.html">order_cancel_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="order__cancel__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__cancel__message_8cpp_source.html">order_cancel_message.cpp</a>.</p>
 
 <p>References <a class="el" href="order__cancel__message_8hpp_source.html#l00017">jb::itch5::order_cancel_message::canceled_shares</a>, <a class="el" href="order__cancel__message_8hpp_source.html#l00015">jb::itch5::order_cancel_message::header</a>, and <a class="el" href="order__cancel__message_8hpp_source.html#l00016">jb::itch5::order_cancel_message::order_reference_number</a>.</p>
 
@@ -1639,7 +1865,7 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__executed__message.html" title="Represent an &#39;Order Executed&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_executed_message</a>. </p>
 
-<p>Definition at line <a class="el" href="order__executed__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="order__executed__message_8cpp_source.html">order_executed_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="order__executed__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__executed__message_8cpp_source.html">order_executed_message.cpp</a>.</p>
 
 <p>References <a class="el" href="order__executed__message_8hpp_source.html#l00017">jb::itch5::order_executed_message::executed_shares</a>, <a class="el" href="order__executed__message_8hpp_source.html#l00015">jb::itch5::order_executed_message::header</a>, <a class="el" href="order__executed__message_8hpp_source.html#l00018">jb::itch5::order_executed_message::match_number</a>, and <a class="el" href="order__executed__message_8hpp_source.html#l00016">jb::itch5::order_executed_message::order_reference_number</a>.</p>
 
@@ -1671,41 +1897,9 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1system__event__message.html" title="Represent a &#39;System Event Message&#39; in the ITCH-5.0 protocol. ">jb::itch5::system_event_message</a>. </p>
 
-<p>Definition at line <a class="el" href="system__event__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="system__event__message_8cpp_source.html">system_event_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="system__event__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="system__event__message_8cpp_source.html">system_event_message.cpp</a>.</p>
 
 <p>References <a class="el" href="system__event__message_8hpp_source.html#l00024">jb::itch5::system_event_message::event_code</a>, and <a class="el" href="system__event__message_8hpp_source.html#l00023">jb::itch5::system_event_message::header</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a367727e6ec13bf59484d27ebcf180765"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html">mwcb_breach_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html" title="Represent a &#39;MWCB Breach&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_breach_message</a>. </p>
-
-<p>Definition at line <a class="el" href="mwcb__breach__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="mwcb__breach__message_8cpp_source.html">mwcb_breach_message.cpp</a>.</p>
-
-<p>References <a class="el" href="mwcb__breach__message_8hpp_source.html#l00027">jb::itch5::mwcb_breach_message::breached_level</a>, and <a class="el" href="mwcb__breach__message_8hpp_source.html#l00026">jb::itch5::mwcb_breach_message::header</a>.</p>
 
 </div>
 </div>
@@ -1735,41 +1929,9 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1reg__sho__restriction__message.html" title="Represent a &#39;Reg SHO Restriction&#39; message in the ITCH-5.0 protocol. ">jb::itch5::reg_sho_restriction_message</a>. </p>
 
-<p>Definition at line <a class="el" href="reg__sho__restriction__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="reg__sho__restriction__message_8cpp_source.html">reg_sho_restriction_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="reg__sho__restriction__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="reg__sho__restriction__message_8cpp_source.html">reg_sho_restriction_message.cpp</a>.</p>
 
 <p>References <a class="el" href="reg__sho__restriction__message_8hpp_source.html#l00023">jb::itch5::reg_sho_restriction_message::header</a>, <a class="el" href="reg__sho__restriction__message_8hpp_source.html#l00025">jb::itch5::reg_sho_restriction_message::reg_sho_action</a>, and <a class="el" href="reg__sho__restriction__message_8hpp_source.html#l00024">jb::itch5::reg_sho_restriction_message::stock</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a9b00fd9199e917440dcd40715e54ae6f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__replace__message.html">order_replace_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html" title="Represent an &#39;Order Replace&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_replace_message</a>. </p>
-
-<p>Definition at line <a class="el" href="order__replace__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="order__replace__message_8cpp_source.html">order_replace_message.cpp</a>.</p>
-
-<p>References <a class="el" href="order__replace__message_8hpp_source.html#l00018">jb::itch5::order_replace_message::header</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00020">jb::itch5::order_replace_message::new_order_reference_number</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00019">jb::itch5::order_replace_message::original_order_reference_number</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00022">jb::itch5::order_replace_message::price</a>, and <a class="el" href="order__replace__message_8hpp_source.html#l00021">jb::itch5::order_replace_message::shares</a>.</p>
 
 </div>
 </div>
@@ -1799,9 +1961,41 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html" title="Represent a &#39;MWCB Decline Level&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_decline_level_message</a>. </p>
 
-<p>Definition at line <a class="el" href="mwcb__decline__level__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="mwcb__decline__level__message_8cpp_source.html">mwcb_decline_level_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="mwcb__decline__level__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__decline__level__message_8cpp_source.html">mwcb_decline_level_message.cpp</a>.</p>
 
 <p>References <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00021">jb::itch5::mwcb_decline_level_message::header</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00022">jb::itch5::mwcb_decline_level_message::level_1</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00023">jb::itch5::mwcb_decline_level_message::level_2</a>, and <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00024">jb::itch5::mwcb_decline_level_message::level_3</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a367727e6ec13bf59484d27ebcf180765"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html">mwcb_breach_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html" title="Represent a &#39;MWCB Breach&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_breach_message</a>. </p>
+
+<p>Definition at line <a class="el" href="mwcb__breach__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__breach__message_8cpp_source.html">mwcb_breach_message.cpp</a>.</p>
+
+<p>References <a class="el" href="mwcb__breach__message_8hpp_source.html#l00027">jb::itch5::mwcb_breach_message::breached_level</a>, and <a class="el" href="mwcb__breach__message_8hpp_source.html#l00026">jb::itch5::mwcb_breach_message::header</a>.</p>
 
 </div>
 </div>
@@ -1831,9 +2025,41 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1cross__trade__message.html" title="Represent an &#39;Add Order&#39; message in the ITCH-5.0 protocol. ">jb::itch5::cross_trade_message</a>. </p>
 
-<p>Definition at line <a class="el" href="cross__trade__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="cross__trade__message_8cpp_source.html">cross_trade_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="cross__trade__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="cross__trade__message_8cpp_source.html">cross_trade_message.cpp</a>.</p>
 
 <p>References <a class="el" href="cross__trade__message_8hpp_source.html#l00021">jb::itch5::cross_trade_message::cross_price</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00023">jb::itch5::cross_trade_message::cross_type</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00018">jb::itch5::cross_trade_message::header</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00022">jb::itch5::cross_trade_message::match_number</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00019">jb::itch5::cross_trade_message::shares</a>, and <a class="el" href="cross__trade__message_8hpp_source.html#l00020">jb::itch5::cross_trade_message::stock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b00fd9199e917440dcd40715e54ae6f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__replace__message.html">order_replace_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__replace__message.html" title="Represent an &#39;Order Replace&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_replace_message</a>. </p>
+
+<p>Definition at line <a class="el" href="order__replace__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__replace__message_8cpp_source.html">order_replace_message.cpp</a>.</p>
+
+<p>References <a class="el" href="order__replace__message_8hpp_source.html#l00018">jb::itch5::order_replace_message::header</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00020">jb::itch5::order_replace_message::new_order_reference_number</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00019">jb::itch5::order_replace_message::original_order_reference_number</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00022">jb::itch5::order_replace_message::price</a>, and <a class="el" href="order__replace__message_8hpp_source.html#l00021">jb::itch5::order_replace_message::shares</a>.</p>
 
 </div>
 </div>
@@ -1863,11 +2089,11 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1add__order__message.html" title="Represent an &#39;Add Order&#39; message in the ITCH-5.0 protocol. ">jb::itch5::add_order_message</a>. </p>
 
-<p>Definition at line <a class="el" href="add__order__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="add__order__message_8cpp_source.html">add_order_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="add__order__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="add__order__message_8cpp_source.html">add_order_message.cpp</a>.</p>
 
 <p>References <a class="el" href="add__order__message_8hpp_source.html#l00020">jb::itch5::add_order_message::buy_sell_indicator</a>, <a class="el" href="add__order__message_8hpp_source.html#l00018">jb::itch5::add_order_message::header</a>, <a class="el" href="add__order__message_8hpp_source.html#l00019">jb::itch5::add_order_message::order_reference_number</a>, <a class="el" href="add__order__message_8hpp_source.html#l00023">jb::itch5::add_order_message::price</a>, <a class="el" href="add__order__message_8hpp_source.html#l00021">jb::itch5::add_order_message::shares</a>, and <a class="el" href="add__order__message_8hpp_source.html#l00022">jb::itch5::add_order_message::stock</a>.</p>
 
-<p>Referenced by <a class="el" href="order__delete__message_8hpp_source.html#l00023">jb::itch5::decoder&lt; V, order_delete_message &gt;::r()</a>, <a class="el" href="order__cancel__message_8hpp_source.html#l00024">jb::itch5::decoder&lt; V, order_cancel_message &gt;::r()</a>, <a class="el" href="broken__trade__message_8hpp_source.html#l00024">jb::itch5::decoder&lt; V, broken_trade_message &gt;::r()</a>, <a class="el" href="order__executed__message_8hpp_source.html#l00025">jb::itch5::decoder&lt; V, order_executed_message &gt;::r()</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00029">jb::itch5::decoder&lt; V, order_replace_message &gt;::r()</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00030">jb::itch5::decoder&lt; V, cross_trade_message &gt;::r()</a>, <a class="el" href="add__order__message_8hpp_source.html#l00030">jb::itch5::decoder&lt; V, add_order_message &gt;::r()</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; V, mwcb_decline_level_message &gt;::r()</a>, <a class="el" href="system__event__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; validate, system_event_message &gt;::r()</a>, <a class="el" href="trade__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; V, trade_message &gt;::r()</a>, <a class="el" href="reg__sho__restriction__message_8hpp_source.html#l00032">jb::itch5::decoder&lt; V, reg_sho_restriction_message &gt;::r()</a>, <a class="el" href="mwcb__breach__message_8hpp_source.html#l00034">jb::itch5::decoder&lt; V, mwcb_breach_message &gt;::r()</a>, <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00037">jb::itch5::decoder&lt; V, ipo_quoting_period_update_message &gt;::r()</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00038">jb::itch5::decoder&lt; V, stock_trading_action_message &gt;::r()</a>, <a class="el" href="add__order__mpid__message_8hpp_source.html#l00044">jb::itch5::decoder&lt; V, add_order_mpid_message &gt;::r()</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00049">jb::itch5::decoder&lt; V, net_order_imbalance_indicator_message &gt;::r()</a>, <a class="el" href="order__executed__price__message_8hpp_source.html#l00058">jb::itch5::decoder&lt; V, order_executed_price_message &gt;::r()</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00060">jb::itch5::decoder&lt; V, market_participant_position_message &gt;::r()</a>, <a class="el" href="message__header_8hpp_source.html#l00064">jb::itch5::decoder&lt; validate, message_header &gt;::r()</a>, <a class="el" href="seconds__field_8hpp_source.html#l00073">jb::itch5::decoder&lt; validate, seconds_field &gt;::r()</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00153">jb::itch5::decoder&lt; V, stock_directory_message &gt;::r()</a>, and <a class="el" href="timestamp_8hpp_source.html#l00064">jb::itch5::encoder&lt; validate, timestamp &gt;::w()</a>.</p>
+<p>Referenced by <a class="el" href="compute__book_8hpp_source.html#l00330">operator!=()</a>, <a class="el" href="stock__directory__message_8cpp_source.html#l00019">jb::itch5::validate_issue_subtype::operator()()</a>, <a class="el" href="order__delete__message_8hpp_source.html#l00024">jb::itch5::decoder&lt; V, order_delete_message &gt;::r()</a>, <a class="el" href="broken__trade__message_8hpp_source.html#l00025">jb::itch5::decoder&lt; V, broken_trade_message &gt;::r()</a>, <a class="el" href="order__cancel__message_8hpp_source.html#l00025">jb::itch5::decoder&lt; V, order_cancel_message &gt;::r()</a>, <a class="el" href="order__executed__message_8hpp_source.html#l00026">jb::itch5::decoder&lt; V, order_executed_message &gt;::r()</a>, <a class="el" href="order__replace__message_8hpp_source.html#l00030">jb::itch5::decoder&lt; V, order_replace_message &gt;::r()</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; V, cross_trade_message &gt;::r()</a>, <a class="el" href="trade__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; V, trade_message &gt;::r()</a>, <a class="el" href="add__order__message_8hpp_source.html#l00031">jb::itch5::decoder&lt; V, add_order_message &gt;::r()</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00032">jb::itch5::decoder&lt; V, mwcb_decline_level_message &gt;::r()</a>, <a class="el" href="system__event__message_8hpp_source.html#l00032">jb::itch5::decoder&lt; validate, system_event_message &gt;::r()</a>, <a class="el" href="reg__sho__restriction__message_8hpp_source.html#l00033">jb::itch5::decoder&lt; V, reg_sho_restriction_message &gt;::r()</a>, <a class="el" href="mwcb__breach__message_8hpp_source.html#l00035">jb::itch5::decoder&lt; V, mwcb_breach_message &gt;::r()</a>, <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00038">jb::itch5::decoder&lt; V, ipo_quoting_period_update_message &gt;::r()</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00039">jb::itch5::decoder&lt; V, stock_trading_action_message &gt;::r()</a>, <a class="el" href="add__order__mpid__message_8hpp_source.html#l00044">jb::itch5::decoder&lt; V, add_order_mpid_message &gt;::r()</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00050">jb::itch5::decoder&lt; V, net_order_imbalance_indicator_message &gt;::r()</a>, <a class="el" href="order__executed__price__message_8hpp_source.html#l00059">jb::itch5::decoder&lt; V, order_executed_price_message &gt;::r()</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00061">jb::itch5::decoder&lt; V, market_participant_position_message &gt;::r()</a>, <a class="el" href="message__header_8hpp_source.html#l00064">jb::itch5::decoder&lt; validate, message_header &gt;::r()</a>, <a class="el" href="seconds__field_8hpp_source.html#l00074">jb::itch5::decoder&lt; validate, seconds_field &gt;::r()</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00155">jb::itch5::decoder&lt; V, stock_directory_message &gt;::r()</a>, and <a class="el" href="timestamp_8hpp_source.html#l00064">jb::itch5::encoder&lt; validate, timestamp &gt;::w()</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +2129,7 @@ template&lt;&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5d0fefb366943e7771618f304e9c5558"></a>
+<a class="anchor" id="ad66564bc56290cb4b4be74cb4f42c83e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1916,7 +2142,7 @@ template&lt;&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1add__order__mpid__message.html">add_order_mpid_message</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html">stock_trading_action_message</a> const &amp;&#160;</td>
           <td class="paramname"><em>x</em>&#160;</td>
         </tr>
         <tr>
@@ -1927,11 +2153,11 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1add__order__mpid__message.html" title="Represent an &#39;Add Order with MPID&#39; message in the ITCH-5.0 protocol. ">jb::itch5::add_order_mpid_message</a>. </p>
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html" title="Represent a &#39;Stock Trading Action&#39; message in the ITCH-5.0 protocol. ">jb::itch5::stock_trading_action_message</a>. </p>
 
-<p>Definition at line <a class="el" href="add__order__mpid__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="add__order__mpid__message_8cpp_source.html">add_order_mpid_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__trading__action__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="stock__trading__action__message_8cpp_source.html">stock_trading_action_message.cpp</a>.</p>
 
-<p>References <a class="el" href="add__order__mpid__message_8hpp_source.html#l00016">jb::itch5::add_order_mpid_message::attribution</a>.</p>
+<p>References <a class="el" href="stock__trading__action__message_8hpp_source.html#l00027">jb::itch5::stock_trading_action_message::header</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00031">jb::itch5::stock_trading_action_message::reason</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00030">jb::itch5::stock_trading_action_message::reserved</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00028">jb::itch5::stock_trading_action_message::stock</a>, and <a class="el" href="stock__trading__action__message_8hpp_source.html#l00029">jb::itch5::stock_trading_action_message::trading_state</a>.</p>
 
 </div>
 </div>
@@ -1961,13 +2187,13 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1ipo__quoting__period__update__message.html" title="Represent a &#39;IPO Quotation Release Update&#39; message in the ITCH-5.0 protocol. ">jb::itch5::ipo_quoting_period_update_message</a>. </p>
 
-<p>Definition at line <a class="el" href="ipo__quoting__period__update__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="ipo__quoting__period__update__message_8cpp_source.html">ipo_quoting_period_update_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ipo__quoting__period__update__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="ipo__quoting__period__update__message_8cpp_source.html">ipo_quoting_period_update_message.cpp</a>.</p>
 
 <p>References <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00026">jb::itch5::ipo_quoting_period_update_message::header</a>, <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00030">jb::itch5::ipo_quoting_period_update_message::ipo_price</a>, <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00029">jb::itch5::ipo_quoting_period_update_message::ipo_quotation_release_qualifier</a>, <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00028">jb::itch5::ipo_quoting_period_update_message::ipo_quotation_release_time</a>, and <a class="el" href="ipo__quoting__period__update__message_8hpp_source.html#l00027">jb::itch5::ipo_quoting_period_update_message::stock</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad66564bc56290cb4b4be74cb4f42c83e"></a>
+<a class="anchor" id="a5d0fefb366943e7771618f304e9c5558"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1980,7 +2206,7 @@ template&lt;&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html">stock_trading_action_message</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1add__order__mpid__message.html">add_order_mpid_message</a> const &amp;&#160;</td>
           <td class="paramname"><em>x</em>&#160;</td>
         </tr>
         <tr>
@@ -1991,11 +2217,43 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1stock__trading__action__message.html" title="Represent a &#39;Stock Trading Action&#39; message in the ITCH-5.0 protocol. ">jb::itch5::stock_trading_action_message</a>. </p>
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1add__order__mpid__message.html" title="Represent an &#39;Add Order with MPID&#39; message in the ITCH-5.0 protocol. ">jb::itch5::add_order_mpid_message</a>. </p>
 
-<p>Definition at line <a class="el" href="stock__trading__action__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="stock__trading__action__message_8cpp_source.html">stock_trading_action_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="add__order__mpid__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="add__order__mpid__message_8cpp_source.html">add_order_mpid_message.cpp</a>.</p>
 
-<p>References <a class="el" href="stock__trading__action__message_8hpp_source.html#l00027">jb::itch5::stock_trading_action_message::header</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00031">jb::itch5::stock_trading_action_message::reason</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00030">jb::itch5::stock_trading_action_message::reserved</a>, <a class="el" href="stock__trading__action__message_8hpp_source.html#l00028">jb::itch5::stock_trading_action_message::stock</a>, and <a class="el" href="stock__trading__action__message_8hpp_source.html#l00029">jb::itch5::stock_trading_action_message::trading_state</a>.</p>
+<p>References <a class="el" href="add__order__mpid__message_8hpp_source.html#l00016">jb::itch5::add_order_mpid_message::attribution</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adfb6688b75e5e1afae90f1a1c2b11a9d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html">net_order_imbalance_indicator_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html" title="Represent an &#39;Net Order Imbalance Indicator&#39; message in the ITCH-5.0 protocol. ">jb::itch5::net_order_imbalance_indicator_message</a>. </p>
+
+<p>Definition at line <a class="el" href="net__order__imbalance__indicator__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="net__order__imbalance__indicator__message_8cpp_source.html">net_order_imbalance_indicator_message.cpp</a>.</p>
+
+<p>References <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00041">jb::itch5::net_order_imbalance_indicator_message::cross_type</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00040">jb::itch5::net_order_imbalance_indicator_message::current_reference_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00038">jb::itch5::net_order_imbalance_indicator_message::far_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00033">jb::itch5::net_order_imbalance_indicator_message::header</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00036">jb::itch5::net_order_imbalance_indicator_message::imbalance_direction</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00035">jb::itch5::net_order_imbalance_indicator_message::imbalance_shares</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00039">jb::itch5::net_order_imbalance_indicator_message::near_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00034">jb::itch5::net_order_imbalance_indicator_message::paired_shares</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00042">jb::itch5::net_order_imbalance_indicator_message::price_variation_indicator</a>, and <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00037">jb::itch5::net_order_imbalance_indicator_message::stock</a>.</p>
 
 </div>
 </div>
@@ -2025,7 +2283,7 @@ template&lt;&gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__executed__price__message.html" title="Represent an &#39;Order Executed with Price&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_executed_price_message</a>. </p>
 
-<p>Definition at line <a class="el" href="order__executed__price__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="order__executed__price__message_8cpp_source.html">order_executed_price_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="order__executed__price__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__executed__price__message_8cpp_source.html">order_executed_price_message.cpp</a>.</p>
 
 <p>References <a class="el" href="order__executed__price__message_8hpp_source.html#l00026">jb::itch5::order_executed_price_message::execution_price</a>, and <a class="el" href="order__executed__price__message_8hpp_source.html#l00025">jb::itch5::order_executed_price_message::printable</a>.</p>
 
@@ -2063,6 +2321,38 @@ template&lt;&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a3e4d3727fda8e99dfc6ed425b26f48a8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html">market_participant_position_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html" title="Represent a &#39;Market Participant Position&#39; message in the ITCH-5.0 protocol. ">jb::itch5::market_participant_position_message</a>. </p>
+
+<p>Definition at line <a class="el" href="market__participant__position__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="market__participant__position__message_8cpp_source.html">market_participant_position_message.cpp</a>.</p>
+
+<p>References <a class="el" href="market__participant__position__message_8hpp_source.html#l00048">jb::itch5::market_participant_position_message::header</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00052">jb::itch5::market_participant_position_message::market_maker_mode</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00053">jb::itch5::market_participant_position_message::market_participant_state</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00049">jb::itch5::market_participant_position_message::mpid</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00051">jb::itch5::market_participant_position_message::primary_market_maker</a>, and <a class="el" href="market__participant__position__message_8hpp_source.html#l00050">jb::itch5::market_participant_position_message::stock</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a36ff66699677166b9921b33c93e9d02e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2092,70 +2382,6 @@ template&lt;&gt; </div>
 <p>Definition at line <a class="el" href="timestamp_8cpp_source.html#l00021">21</a> of file <a class="el" href="timestamp_8cpp_source.html">timestamp.cpp</a>.</p>
 
 <p>References <a class="el" href="timestamp_8hpp_source.html#l00018">jb::itch5::timestamp::ts</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="adfb6688b75e5e1afae90f1a1c2b11a9d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html">net_order_imbalance_indicator_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html" title="Represent an &#39;Net Order Imbalance Indicator&#39; message in the ITCH-5.0 protocol. ">jb::itch5::net_order_imbalance_indicator_message</a>. </p>
-
-<p>Definition at line <a class="el" href="net__order__imbalance__indicator__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="net__order__imbalance__indicator__message_8cpp_source.html">net_order_imbalance_indicator_message.cpp</a>.</p>
-
-<p>References <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00041">jb::itch5::net_order_imbalance_indicator_message::cross_type</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00040">jb::itch5::net_order_imbalance_indicator_message::current_reference_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00038">jb::itch5::net_order_imbalance_indicator_message::far_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00033">jb::itch5::net_order_imbalance_indicator_message::header</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00036">jb::itch5::net_order_imbalance_indicator_message::imbalance_direction</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00035">jb::itch5::net_order_imbalance_indicator_message::imbalance_shares</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00039">jb::itch5::net_order_imbalance_indicator_message::near_price</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00034">jb::itch5::net_order_imbalance_indicator_message::paired_shares</a>, <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00042">jb::itch5::net_order_imbalance_indicator_message::price_variation_indicator</a>, and <a class="el" href="net__order__imbalance__indicator__message_8hpp_source.html#l00037">jb::itch5::net_order_imbalance_indicator_message::stock</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3e4d3727fda8e99dfc6ed425b26f48a8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html">market_participant_position_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1market__participant__position__message.html" title="Represent a &#39;Market Participant Position&#39; message in the ITCH-5.0 protocol. ">jb::itch5::market_participant_position_message</a>. </p>
-
-<p>Definition at line <a class="el" href="market__participant__position__message_8cpp_source.html#l00007">7</a> of file <a class="el" href="market__participant__position__message_8cpp_source.html">market_participant_position_message.cpp</a>.</p>
-
-<p>References <a class="el" href="market__participant__position__message_8hpp_source.html#l00048">jb::itch5::market_participant_position_message::header</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00052">jb::itch5::market_participant_position_message::market_maker_mode</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00053">jb::itch5::market_participant_position_message::market_participant_state</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00049">jb::itch5::market_participant_position_message::mpid</a>, <a class="el" href="market__participant__position__message_8hpp_source.html#l00051">jb::itch5::market_participant_position_message::primary_market_maker</a>, and <a class="el" href="market__participant__position__message_8hpp_source.html#l00050">jb::itch5::market_participant_position_message::stock</a>.</p>
 
 </div>
 </div>
@@ -2253,9 +2479,7 @@ template&lt;typename wire_type_t , std::intmax_t denom_v&gt; </div>
 
 <p>Streaming operator for jb::itch5::price_field&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00108">108</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
-
-<p>References <a class="el" href="price__field_8hpp_source.html#l00071">jb::itch5::price_field&lt; wire_type_t, denom_v &gt;::as_integer()</a>, <a class="el" href="price__field_8hpp_source.html#l00041">jb::itch5::price_field&lt; wire_type_t, denom_v &gt;::denom</a>, and <a class="el" href="price__field_8hpp_source.html#l00044">jb::itch5::price_field&lt; wire_type_t, denom_v &gt;::denom_digits</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00111">111</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -2287,9 +2511,7 @@ template&lt;std::size_t size, typename F &gt; </div>
 
 <p>Streaming operator for jb::itch5::short_string_field&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00180">180</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
-
-<p>References <a class="el" href="short__string__field_8hpp_source.html#l00078">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;::c_str()</a>.</p>
+<p>Definition at line <a class="el" href="short__string__field_8hpp_source.html#l00178">178</a> of file <a class="el" href="short__string__field_8hpp_source.html">short_string_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -2319,9 +2541,113 @@ template&lt;std::size_t size, typename F &gt; </div>
 
 <p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1stock__directory__message.html" title="Represent a &#39;Stock Directory&#39; message in the ITCH-5.0 protocol. ">jb::itch5::stock_directory_message</a>. </p>
 
-<p>Definition at line <a class="el" href="stock__directory__message_8cpp_source.html#l00025">25</a> of file <a class="el" href="stock__directory__message_8cpp_source.html">stock_directory_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="stock__directory__message_8cpp_source.html#l00026">26</a> of file <a class="el" href="stock__directory__message_8cpp_source.html">stock_directory_message.cpp</a>.</p>
 
-<p>References <a class="el" href="stock__directory__message_8hpp_source.html#l00140">jb::itch5::stock_directory_message::authenticity</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00144">jb::itch5::stock_directory_message::etp_flag</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00145">jb::itch5::stock_directory_message::etp_leverage_factor</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00135">jb::itch5::stock_directory_message::financial_status_indicator</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00132">jb::itch5::stock_directory_message::header</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00146">jb::itch5::stock_directory_message::inverse_indicator</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00142">jb::itch5::stock_directory_message::ipo_flag</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00138">jb::itch5::stock_directory_message::issue_classification</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00139">jb::itch5::stock_directory_message::issue_subtype</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00143">jb::itch5::stock_directory_message::luld_reference_price_tier</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00134">jb::itch5::stock_directory_message::market_category</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00136">jb::itch5::stock_directory_message::round_lot_size</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00137">jb::itch5::stock_directory_message::roundlots_only</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00141">jb::itch5::stock_directory_message::short_sale_threshold_indicator</a>, and <a class="el" href="stock__directory__message_8hpp_source.html#l00133">jb::itch5::stock_directory_message::stock</a>.</p>
+<p>References <a class="el" href="stock__directory__message_8hpp_source.html#l00141">jb::itch5::stock_directory_message::authenticity</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00145">jb::itch5::stock_directory_message::etp_flag</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00146">jb::itch5::stock_directory_message::etp_leverage_factor</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00136">jb::itch5::stock_directory_message::financial_status_indicator</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00133">jb::itch5::stock_directory_message::header</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00147">jb::itch5::stock_directory_message::inverse_indicator</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00143">jb::itch5::stock_directory_message::ipo_flag</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00139">jb::itch5::stock_directory_message::issue_classification</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00140">jb::itch5::stock_directory_message::issue_subtype</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00144">jb::itch5::stock_directory_message::luld_reference_price_tier</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00135">jb::itch5::stock_directory_message::market_category</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00137">jb::itch5::stock_directory_message::round_lot_size</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00138">jb::itch5::stock_directory_message::roundlots_only</a>, <a class="el" href="stock__directory__message_8hpp_source.html#l00142">jb::itch5::stock_directory_message::short_sale_threshold_indicator</a>, and <a class="el" href="stock__directory__message_8hpp_source.html#l00134">jb::itch5::stock_directory_message::stock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aab8edc1c8ef585dea72a67aafab39868"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ostream operator for order updates, mostly used for testing and debugging </p>
+
+<p>Definition at line <a class="el" href="compute__book_8cpp_source.html#l00197">197</a> of file <a class="el" href="compute__book_8cpp_source.html">compute_book.cpp</a>.</p>
+
+<p>References <a class="el" href="compute__book_8hpp_source.html#l00065">jb::itch5::compute_book::book_update::buy_sell_indicator</a>, <a class="el" href="compute__book_8hpp_source.html#l00068">jb::itch5::compute_book::book_update::px</a>, <a class="el" href="compute__book_8hpp_source.html#l00072">jb::itch5::compute_book::book_update::qty</a>, and <a class="el" href="compute__book_8hpp_source.html#l00062">jb::itch5::compute_book::book_update::stock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade52e8a91b53c7567140add13ab35b89"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1order__data">compute_book::order_data</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ostream operator for the order data, mostly used for testing and debugging </p>
+
+<p>Definition at line <a class="el" href="compute__book_8cpp_source.html#l00202">202</a> of file <a class="el" href="compute__book_8cpp_source.html">compute_book.cpp</a>.</p>
+
+<p>References <a class="el" href="compute__book_8hpp_source.html#l00099">jb::itch5::compute_book::order_data::buy_sell_indicator</a>, <a class="el" href="compute__book_8hpp_source.html#l00102">jb::itch5::compute_book::order_data::px</a>, <a class="el" href="compute__book_8hpp_source.html#l00105">jb::itch5::compute_book::order_data::qty</a>, and <a class="el" href="compute__book_8hpp_source.html#l00096">jb::itch5::compute_book::order_data::stock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8b0d29c7a9e437d8ef7d41bde789d9be"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::itch5::operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00323">323</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+
+<p>References <a class="el" href="compute__book_8hpp_source.html#l00065">jb::itch5::compute_book::book_update::buy_sell_indicator</a>, <a class="el" href="compute__book_8hpp_source.html#l00068">jb::itch5::compute_book::book_update::px</a>, <a class="el" href="compute__book_8hpp_source.html#l00072">jb::itch5::compute_book::book_update::qty</a>, <a class="el" href="compute__book_8hpp_source.html#l00055">jb::itch5::compute_book::book_update::recvts</a>, and <a class="el" href="compute__book_8hpp_source.html#l00062">jb::itch5::compute_book::book_update::stock</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__config__object_8cpp_source.html#l00121">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -2380,7 +2706,7 @@ template&lt;std::size_t size, typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the smallest power of two larger than <em>n</em>. </dd></dl>
 
-<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00066">66</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
+<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00067">67</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
 
 <p>References <a class="el" href="p2ceil_8hpp_source.html#l00019">p2ceil_kernel()</a>.</p>
 
@@ -2409,7 +2735,7 @@ template&lt;std::size_t size, typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the smallest power of two larger than <em>n</em>. </dd></dl>
 
-<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00080">80</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
+<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00081">81</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
 
 <p>References <a class="el" href="p2ceil_8hpp_source.html#l00019">p2ceil_kernel()</a>.</p>
 
@@ -2438,7 +2764,7 @@ template&lt;std::size_t size, typename F &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the smallest power of two larger than <em>n</em>. </dd></dl>
 
-<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00093">93</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
+<p>Definition at line <a class="el" href="p2ceil_8hpp_source.html#l00092">92</a> of file <a class="el" href="p2ceil_8hpp_source.html">p2ceil.hpp</a>.</p>
 
 <p>References <a class="el" href="p2ceil_8hpp_source.html#l00019">p2ceil_kernel()</a>.</p>
 
@@ -2485,6 +2811,52 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ac3dc22bff0f55bd576dfe0eafe9c79e5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename price_field_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int jb::itch5::price_levels </td>
+          <td>(</td>
+          <td class="paramtype">price_field_t&#160;</td>
+          <td class="paramname"><em>lo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">price_field_t&#160;</td>
+          <td class="paramname"><em>hi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute the number of price levels between two prices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lo</td><td>the low end of the range of price levels </td></tr>
+    <tr><td class="paramname">hi</td><td>the hi end of the range of price levels </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of price levels between <em>lo</em> and <em>hi</em> </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::bad_range</td><td>if <em>hi</em> &lt; <em>lo</em> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="price__levels_8hpp_source.html#l00020">20</a> of file <a class="el" href="price__levels_8hpp_source.html">price_levels.hpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="acc62372a33f6aeac5ec64d35ac3e70e2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2515,9 +2887,9 @@ template&lt;typename message_handler &gt; </div>
 <p>This is just a wrapper around <a class="el" href="namespacejb_1_1itch5.html#a0b2b99f7c339621cba6ab6dfd58906f6">jb::itch5::process_iostream_mlist()</a> using all the messages in ITCH-5.0 as the allowed message list.</p>
 <p>Please see <a class="el" href="classjb_1_1itch5_1_1message__handler__concept.html">jb::itch5::message_handler_concept</a> for a detailed description of the message_handler requirements. </p>
 
-<p>Definition at line <a class="el" href="process__iostream_8hpp_source.html#l00061">61</a> of file <a class="el" href="process__iostream_8hpp_source.html">process_iostream.hpp</a>.</p>
+<p>Definition at line <a class="el" href="process__iostream_8hpp_source.html#l00056">56</a> of file <a class="el" href="process__iostream_8hpp_source.html">process_iostream.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="itch5inside_8cpp_source.html#l00030">main()</a>.</p>
+<p>Referenced by <a class="el" href="itch5bookdepth_8cpp_source.html#l00053">main()</a>.</p>
 
 </div>
 </div>
@@ -2596,7 +2968,78 @@ template&lt;typename message_handler , typename... message_types&gt; </div>
 
 <p>Definition at line <a class="el" href="check__offset_8cpp_source.html#l00018">18</a> of file <a class="el" href="check__offset_8cpp_source.html">check_offset.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="check__offset_8hpp_source.html#l00026">check_offset()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00147">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
+<p>Referenced by <a class="el" href="check__offset_8hpp_source.html#l00025">check_offset()</a>, and <a class="el" href="short__string__field_8hpp_source.html#l00143">jb::itch5::short_string_field&lt; 8 &gt;::validate()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a55489450a3f4cb929c284e3c2276d625"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename duration_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::itch5::record_latency_stats </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1offline__feed__statistics.html">jb::offline_feed_statistics</a> &amp;&#160;</td>
+          <td class="paramname"><em>stats</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">jb::itch5::message_header</a> const &amp;&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1order__book.html">jb::itch5::order_book</a> const &amp;&#160;</td>
+          <td class="paramname"><em>book</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#structjb_1_1itch5_1_1compute__book_1_1book__update">jb::itch5::compute_book::book_update</a> const &amp;&#160;</td>
+          <td class="paramname"><em>update</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">duration_t&#160;</td>
+          <td class="paramname"><em>processing_latency</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determine if this event changes the inside, if so, record the statistics. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">duration_t</td><td>the type used to record the processing latency, must be compatible with a duration in the std::chrono sense.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stats</td><td>where to record the statistics </td></tr>
+    <tr><td class="paramname">header</td><td>(unused) the header for the message that generated this book update </td></tr>
+    <tr><td class="paramname">book</td><td>the book updated </td></tr>
+    <tr><td class="paramname">update</td><td>a report of the changes to the book </td></tr>
+    <tr><td class="paramname">processing_latency</td><td>the time it took to process the event (before the any output is generated). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the inside is affected by the change, false otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="generate__inside_8hpp_source.html#l00029">29</a> of file <a class="el" href="generate__inside_8hpp_source.html">generate_inside.hpp</a>.</p>
+
+<p>References <a class="el" href="order__book_8cpp_source.html#l00003">jb::itch5::order_book::best_bid()</a>, <a class="el" href="order__book_8cpp_source.html#l00011">jb::itch5::order_book::best_offer()</a>, <a class="el" href="compute__book_8hpp_source.html#l00065">jb::itch5::compute_book::book_update::buy_sell_indicator</a>, <a class="el" href="compute__book_8hpp_source.html#l00076">jb::itch5::compute_book::book_update::cxlreplx</a>, <a class="el" href="compute__book_8hpp_source.html#l00079">jb::itch5::compute_book::book_update::oldpx</a>, <a class="el" href="compute__book_8hpp_source.html#l00068">jb::itch5::compute_book::book_update::px</a>, <a class="el" href="offline__feed__statistics_8hpp_source.html#l00061">jb::offline_feed_statistics::sample()</a>, <a class="el" href="message__header_8hpp_source.html#l00057">jb::itch5::message_header::timestamp</a>, and <a class="el" href="timestamp_8hpp_source.html#l00018">jb::itch5::timestamp::ts</a>.</p>
+
+<p>Referenced by <a class="el" href="generate__inside_8hpp_source.html#l00075">generate_inside()</a>.</p>
 
 </div>
 </div>

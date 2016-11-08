@@ -100,12 +100,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">itch5inside.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="compute__inside_8hpp_source.html">jb/itch5/compute_inside.hpp</a>&gt;</code><br />
+
+<p>This program reads a raw ITCH-5.0 file and generates the inside quotes in an ASCII (though potentially compressed) file.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &lt;<a class="el" href="generate__inside_8hpp_source.html">jb/itch5/generate_inside.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="process__iostream_8hpp_source.html">jb/itch5/process_iostream.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="offline__feed__statistics_8hpp_source.html">jb/offline_feed_statistics.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="fileio_8hpp_source.html">jb/fileio.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="log_8hpp_source.html">jb/log.hpp</a>&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 </div>
@@ -116,7 +117,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="itch5inside_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
 <tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This program reads a raw ITCH-5.0 file and generates the inside quotes in an ASCII (though potentially compressed) file. </p>
+<p>The program also generates statistics about the feed and the book build, using <a class="el" href="classjb_1_1offline__feed__statistics.html" title="Keep statistics about a feed and its offline processor. ">jb::offline_feed_statistics</a>.</p>
+<p>It reports the percentiles of "for each change in the inside, how long did it take to process the event, and what was the elapsed time since the last change to the inside". </p>
+
+<p>Definition in file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a0ddf1224851353fc92bfbff6f499fa97"></a>
 <div class="memitem">
 <div class="memproto">
@@ -141,9 +148,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="itch5inside_8cpp_source.html#l00030">30</a> of file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
+<p>Definition at line <a class="el" href="itch5inside_8cpp_source.html#l00045">45</a> of file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00242">jb::config_object::desc()</a>, <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>, <a class="el" href="log_8cpp_source.html#l00184">jb::log::init()</a>, <a class="el" href="fileio_8cpp_source.html#l00028">jb::open_input_file()</a>, <a class="el" href="fileio_8cpp_source.html#l00011">jb::open_output_file()</a>, <a class="el" href="offline__feed__statistics_8cpp_source.html#l00129">jb::offline_feed_statistics::print_csv_header()</a>, <a class="el" href="process__iostream_8hpp_source.html#l00061">jb::itch5::process_iostream()</a>, <a class="el" href="offline__feed__statistics_8hpp_source.html#l00154">jb::offline_feed_statistics::config::reporting_interval_seconds</a>, and <a class="el" href="offline__feed__statistics_8hpp_source.html#l00061">jb::offline_feed_statistics::sample()</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00240">jb::config_object::desc()</a>, <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>, <a class="el" href="generate__inside_8hpp_source.html#l00075">jb::itch5::generate_inside()</a>, <a class="el" href="log_8cpp_source.html#l00198">jb::log::init()</a>, <a class="el" href="fileio_8cpp_source.html#l00027">jb::open_input_file()</a>, <a class="el" href="fileio_8cpp_source.html#l00012">jb::open_output_file()</a>, <a class="el" href="offline__feed__statistics_8cpp_source.html#l00120">jb::offline_feed_statistics::print_csv_header()</a>, <a class="el" href="process__iostream_8hpp_source.html#l00056">jb::itch5::process_iostream()</a>, and <a class="el" href="offline__feed__statistics_8hpp_source.html#l00154">jb::offline_feed_statistics::config::reporting_interval_seconds</a>.</p>
 
 </div>
 </div>

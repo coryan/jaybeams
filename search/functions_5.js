@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['feed_5ferror',['feed_error',['../classjb_1_1feed__error.html#a0b1aa0fa909f2cc1a0c57e3a73afd75a',1,'jb::feed_error']]],
   ['fftw_5fcast',['fftw_cast',['../namespacejb_1_1fftw.html#a08db0c4e0eedc65b61a4e3a38bb44187',1,'jb::fftw::fftw_cast(vector &amp;in) -&gt; decltype(fftw_cast_array(&amp;in[0]))'],['../namespacejb_1_1fftw.html#a8d629f067398c772553c9ae598afb1e2',1,'jb::fftw::fftw_cast(vector const &amp;in) -&gt; decltype(fftw_cast_array(&amp;in[0]))']]],
   ['fftw_5fcast_5farray',['fftw_cast_array',['../namespacejb_1_1fftw.html#a384ec2ebb7c26834a165159cc6eda41a',1,'jb::fftw::fftw_cast_array(std::complex&lt; F &gt; *ptr)'],['../namespacejb_1_1fftw.html#af6c84e9907c078a2b0ed99039331a6b0',1,'jb::fftw::fftw_cast_array(std::complex&lt; F &gt; const *ptr)'],['../namespacejb_1_1fftw.html#a1e852b770cbea7a928b62626488d137a',1,'jb::fftw::fftw_cast_array(F *ptr)'],['../namespacejb_1_1fftw.html#ac214feab526bd273d99cd4d582488d23',1,'jb::fftw::fftw_cast_array(F const *ptr)']]],
   ['fillup_5fheader_5ffields',['fillup_header_fields',['../classjb_1_1itch5_1_1mold__udp__pacer.html#abfbbdbf2893f03ec94b4cc7ed75cbe8c',1,'jb::itch5::mold_udp_pacer']]],

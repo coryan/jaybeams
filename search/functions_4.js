@@ -3,6 +3,7 @@ var searchData=
   ['empty_5fbid',['empty_bid',['../classjb_1_1itch5_1_1order__book.html#a17d38ac37b798806214e11243559088c',1,'jb::itch5::order_book']]],
   ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#af3c05711a7d972b75a6f9a1b5892a0d8',1,'jb::itch5::order_book']]],
   ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;']]],
+  ['eqtypes',['eqTypes',['../ut__book__depth__statistics_8cpp.html#a614d3ef8a003aa6e3b91fcdc10726708',1,'ut_book_depth_statistics.cpp']]],
   ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818',1,'jb::fftw::time_delay_estimator']]],
   ['estimated_5fmean',['estimated_mean',['../classjb_1_1histogram.html#aa73371973ff3b372acfd5d3fbe8b9238',1,'jb::histogram']]],
   ['estimated_5fquantile',['estimated_quantile',['../classjb_1_1histogram.html#a6c02b97a76ebee1a0bfbf2953130f213',1,'jb::histogram']]],

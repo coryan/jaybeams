@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['worker_5fconfig',['worker_config',['../classworker__config.html',1,'']]]
+  ['validate_5fissue_5fsubtype',['validate_issue_subtype',['../structjb_1_1itch5_1_1validate__issue__subtype.html',1,'jb::itch5']]]
 ];
