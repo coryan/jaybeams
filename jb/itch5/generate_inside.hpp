@@ -33,21 +33,25 @@ bool record_latency_stats(
     duration_t processing_latency) {
   // ... we need to treat each side differently ...
   if (update.buy_sell_indicator == u'B') {
-    // ... if the update price is strictly less than the current best
-    // bid, that means it did not change the inside.  Notice that this
-    // works even when there is no best bid, because the book returns
-    // "0" as a best bid in that case ...
-    if (update.px < book.best_bid().first) {
-      return false;
+    // ... if the update price (or the old price for a cancel/replace
+    // is equal or better than the current best bid, that means the
+    // best bid changed.  Notice that this works even when there is no
+    // best bid, because the book returns "0" as a best bid in that
+    // case ...
+    if ((not update.cxlreplx and update.px >= book.best_bid().first) or
+        (update.cxlreplx and update.oldpx >= book.best_bid().first)) {
+      stats.sample(header.timestamp.ts, processing_latency);
+      return true;
     }
-  } else {
-    // ... do the analogous thing for the sell side ...
-    if (update.px > book.best_offer().first) {
-      return false;
-    }
+    return false;
   }
-  stats.sample(header.timestamp.ts, processing_latency);
-  return true;
+  // ... do the analogous thing for the sell side ...
+  if ((not update.cxlreplx and update.px <= book.best_offer().first) or
+      (update.cxlreplx and update.oldpx <= book.best_offer().first)) {
+    stats.sample(header.timestamp.ts, processing_latency);
+    return true;
+  }
+  return false;
 }
 
 /**
