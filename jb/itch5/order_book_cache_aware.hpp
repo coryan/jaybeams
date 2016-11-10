@@ -14,24 +14,26 @@
 namespace jb {
 namespace itch5 {
 
-  /// A simple representation for price + quantity
-  typedef std::pair<price4_t, int> half_quote;
+/// A simple representation for price + quantity
+typedef std::pair<price4_t, int> half_quote;
 
-  /// A simple representation for price range {lower_price .. higher_price}
-  typedef std::pair<price4_t, price4_t> price_range_t;
+/// A simple representation for price range {lower_price .. higher_price}
+typedef std::pair<price4_t, price4_t> price_range_t;
 
-  /// define the offset en ticks
-  typedef int tick_t;
+/// define the offset en ticks
+typedef int tick_t;
 
-  /// result when adding or updating orders
-  /// (number of tick of the inside change, price levels moved to/from tail) 
-  typedef std::pair<tick_t, int> order_book_change_t;
+/// result when adding or updating orders
+/// (number of tick of the inside change, price levels moved to/from tail)
+typedef std::pair<tick_t, int> order_book_change_t;
 
-  /// tail shift
-  typedef int tail_t;
-  const tail_t TAIL_IN = 0;
-  const tail_t TAIL_OUT = 1;
-  
+/// tail shift
+typedef int tail_t;
+const tail_t TAIL_IN = 0;
+const tail_t TAIL_OUT = 1;
+
+const int PX_DOLLAR_TICK = 10000;
+
 /**
  * Maintain the ITCH-5.0 order book for a single security.
  *
@@ -60,7 +62,6 @@ namespace itch5 {
  */
 class order_book_cache_aware {
 public:
-  
   /// Initialize an empty order book.
   order_book_cache_aware() {
   }
@@ -69,7 +70,7 @@ public:
   static tick_t tick_offset();
   /// Set the tick offset
   static void tick_offset(tick_t tick);
-  
+
   /// Return the best bid price and quantity
   half_quote best_bid() const;
   /// Return the best offer price and quantity
@@ -93,12 +94,12 @@ public:
   }
 
   /// The value used to represent a default bid price range
-  static price_range_t default_bid_price_range() {
-    return price_range_t(price4_t(0), price4_t(200*tick_off_));
+  price_range_t default_bid_price_range() {
+    return price_range(buy_sell_indicator_t('B'), price4_t(100 * tick_off_));
   }
   /// The value used to represent a default offer price range
-  static price_range_t default_offer_price_range() {
-    return price_range_t(price4_t(200*tick_off_), price4_t(0));
+  price_range_t default_offer_price_range() {
+    return price_range(buy_sell_indicator_t('S'), price4_t(100 * tick_off_));
   }
 
   /**
@@ -128,8 +129,8 @@ public:
       buy_sell_indicator_t side, tail_t tail, price4_t pmin, price4_t pmax) {
     if (side == buy_sell_indicator_t('B')) {
       if (tail == TAIL_IN) {
-	auto tail_min = buy_.upper_bound(pmin);
-	auto tail_max = buy_.upper_bound(pmax);
+        auto tail_min = buy_.upper_bound(pmin);
+        auto tail_max = buy_.upper_bound(pmax);
         return std::distance(tail_min, tail_max);
       }
       auto tail_min = buy_.lower_bound(pmin);
@@ -146,10 +147,9 @@ public:
     return std::distance(tail_min, tail_max);
   }
 
-  int side_price_levels(
-      buy_sell_indicator_t side) {
+  int side_price_levels(buy_sell_indicator_t side) {
     price4_t p_inside;
-    price_range_t *ptr_range;
+    price_range_t* ptr_range;
     int num_price_to_tail = 0;
     if (side == buy_sell_indicator_t('B')) {
       p_inside = buy_.begin()->first;
@@ -173,17 +173,17 @@ public:
       *ptr_range = price_range(side, p_inside);
       auto new_p_min = std::get<0>(*ptr_range);
       // get the price levels between new and old p_max
-      return price_levels(side, TAIL_OUT, old_p_min, new_p_min); 
+      return price_levels(side, TAIL_OUT, old_p_min, new_p_min);
     }
     return num_price_to_tail;
   }
-  
+
   /**
    * Handle a new order.
    *
    * Update the quantity at the right price level in the correct
    * side of the book.
-   * 
+   *
    * if the inside price changes the number of ticks of change is reported:
    * 0: no change on the inside price
    * n > 0: new inside price is n ticks better than the last one
@@ -193,21 +193,21 @@ public:
    * @param px the price of the order
    * @param qty the quantity of the order
    * @return <number of ticks the inside price changed, price levels moved
-   * to or from the tail> 
+   * to or from the tail>
    */
-  order_book_change_t handle_add_order(
-      buy_sell_indicator_t side, price4_t px, int qty) {
+  order_book_change_t
+  handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
       if (buy_.size() == 0) { // first order on the book
         (void)buy_.emplace(px, qty);
-	// set the new price_range around the new px
-	buy_price_range_ = price_range(side, px);
-	return std::make_pair(0,0);
+        // set the new price_range around the new px
+        buy_price_range_ = price_range(side, px);
+        return std::make_pair(0, 0);
       }
       auto tick_change = handle_add_order(buy_, px, qty);
       int num_price_to_tail = 0;
-      if (tick_change != 0) { 
-	  num_price_to_tail = side_price_levels(side);
+      if (tick_change != 0) {
+        num_price_to_tail = side_price_levels(side);
       }
       return std::make_pair(tick_change, num_price_to_tail);
     }
@@ -215,11 +215,11 @@ public:
       (void)sell_.emplace(px, qty);
       // set the new price_range around the new px
       sell_price_range_ = price_range(side, px);
-      return std::make_pair(0,0);
+      return std::make_pair(0, 0);
     }
     auto tick_change = handle_add_order(sell_, px, qty);
     int num_price_to_tail = 0;
-    if (tick_change != 0) { 
+    if (tick_change != 0) {
       num_price_to_tail = side_price_levels(side);
     }
     return std::make_pair(tick_change, num_price_to_tail);
@@ -234,19 +234,19 @@ public:
    * @param reduced_qty the executed quantity of the order
    * @return int number of ticks the inside price changed
    */
-  order_book_change_t handle_order_reduced(
-      buy_sell_indicator_t side, price4_t px, int qty) {
+  order_book_change_t
+  handle_order_reduced(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
       auto tick_change = handle_order_reduced(buy_, px, qty);
       int num_price_from_tail = 0;
-      if (tick_change != 0) { 
-	num_price_from_tail = side_price_levels(side);
+      if (tick_change != 0) {
+        num_price_from_tail = side_price_levels(side);
       }
       return std::make_pair(tick_change, num_price_from_tail);
     }
     auto tick_change = handle_order_reduced(sell_, px, qty);
     int num_price_from_tail = 0;
-    if (tick_change != 0) { 
+    if (tick_change != 0) {
       num_price_from_tail = side_price_levels(side);
     }
     return std::make_pair(tick_change, num_price_from_tail);
@@ -256,7 +256,7 @@ public:
   price_range_t price_range(buy_sell_indicator_t) const;
   /// Set the side price range
   price_range_t price_range(buy_sell_indicator_t, price4_t);
-  
+
 private:
   /**
    * Refactor handle_add_order()
@@ -275,18 +275,33 @@ private:
     emp_tup.first->second += qty;
     // it is just a qty update, not a new price...
     if (side_size == side.size()) {
-      return 0;    
+      return 0;
     }
     // ... it is a new price
     // check if it is a new inside...
     // ... get the tick shift is so
     if (emp_tup.first == side.begin()) {
-      int factor = (px > price4_t(10000)) ? 100 : 1;
-      int old_p_tick = ((++side.begin())->first).as_integer();
       int px_tick = px.as_integer();
-      return std::abs(px_tick - old_p_tick) / factor;
+      int old_p_tick = ((++side.begin())->first).as_integer();
+      if (px_tick > old_p_tick) {
+        if (old_p_tick >= PX_DOLLAR_TICK) {
+          return (px_tick - old_p_tick) / 100;
+        }
+        if (px_tick <= PX_DOLLAR_TICK) {
+          return (px_tick - old_p_tick);
+        }
+        return (PX_DOLLAR_TICK - old_p_tick + (px_tick - PX_DOLLAR_TICK) / 100);
+      } else {
+        if (old_p_tick <= PX_DOLLAR_TICK) {
+          return (old_p_tick - px_tick);
+        }
+        if (px_tick >= PX_DOLLAR_TICK) {
+          return (old_p_tick - px_tick) / 100;
+        }
+        return ((old_p_tick - PX_DOLLAR_TICK) / 100 + PX_DOLLAR_TICK - px_tick);
+      }
     }
-    return 0;    // no price change at the inside
+    return 0; // no price change at the inside
   }
 
   /**
@@ -318,12 +333,12 @@ private:
       auto is_inside = (price_it == side.begin());
       side.erase(price_it);
       if (side.empty()) {
-	return 2*tick_off_;    // max tick change
+        return 2 * tick_off_; // max tick change
       }
       // ... now if it was the inside removed ...
       if (is_inside) {
- 	int factor = (px > price4_t(10000)) ? 100 : 1;
-	int new_p_tick = ((side.begin())->first).as_integer();
+        int factor = (px > price4_t(PX_DOLLAR_TICK)) ? 100 : 1;
+        int new_p_tick = ((side.begin())->first).as_integer();
         int px_tick = px.as_integer();
         return std::abs(new_p_tick - px_tick) / factor;
       }
