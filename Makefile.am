@@ -91,6 +91,7 @@ benchmarks = \
 examples = \
   examples/configuration \
   tools/itch5bookdepth \
+  tools/itch5cacheaware \
   tools/itch5inside \
   tools/itch5moldreplay \
   tools/itch5stats \
@@ -415,6 +416,9 @@ examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
 tools_itch5bookdepth_LDADD = jb/libitch5.a jb/libjb.a
+
+tools_itch5cacheaware_SOURCES = tools/itch5cacheaware.cpp
+tools_itch5cacheaware_LDADD = jb/libitch5.a jb/libjb.a
 
 tools_itch5inside_SOURCES = tools/itch5inside.cpp
 tools_itch5inside_LDADD = jb/libitch5.a jb/libjb.a
