@@ -29,7 +29,6 @@ jb::itch5::price_range_t
 jb::itch5::order_book_cache_aware::price_range(price4_t p_base) {
   int p_base_tick = p_base.as_integer();
   price4_t p_min, p_max;
-  int rem_tick;
   if (p_base_tick <= PX_DOLLAR_TICK) {
     // p_base < $1.00
     if (p_base_tick <= tick_off_) {
@@ -38,12 +37,12 @@ jb::itch5::order_book_cache_aware::price_range(price4_t p_base) {
     } else {
       p_min = price4_t(p_base_tick - tick_off_);
     }
-    rem_tick = tick_off_ + p_base_tick - PX_DOLLAR_TICK;
+    int rem_tick = tick_off_ + p_base_tick - PX_DOLLAR_TICK;
     p_max = (rem_tick > 0) ? price4_t(PX_DOLLAR_TICK + 100 * rem_tick)
                            : price4_t(p_base_tick + tick_off_);
     return price_range_t(p_min, p_max);
   }
-  rem_tick = p_base_tick - 100 * tick_off_;
+  auto rem_tick = p_base_tick - 100 * tick_off_;
   if (rem_tick > PX_DOLLAR_TICK) {
     p_min = price4_t(rem_tick);
   } else {
