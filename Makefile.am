@@ -12,6 +12,7 @@ noinst_LIBRARIES = \
 jb_unit_tests = \
   jb/ut_as_hhmmss \
   jb/ut_assert_throw \
+  jb/ut_book_cache_aware_stats \
   jb/ut_book_depth_statistics \
   jb/ut_config_files_location \
   jb/ut_config_object \
@@ -200,6 +201,7 @@ jb_libjb_adir = $(includedir)
 nobase_jb_libjb_a_HEADERS = \
   jb/as_hhmmss.hpp \
   jb/assert_throw.hpp \
+  jb/book_cache_aware_stats.hpp \
   jb/book_depth_statistics.hpp \
   jb/complex_traits.hpp \
   jb/config_attribute.hpp \
@@ -226,6 +228,7 @@ nobase_jb_libjb_a_HEADERS = \
 jb_libjb_a_SOURCES = \
   jb/as_hhmmss.cpp \
   jb/assert_throw.cpp \
+  jb/book_cache_aware_stats.cpp \
   jb/book_depth_statistics.cpp \
   jb/config_files_location.cpp \
   jb/config_object.cpp \
@@ -443,6 +446,10 @@ jb_ut_as_hhmmss_LDADD = $(jb_ut_libs)
 jb_ut_assert_throw_SOURCES = jb/ut_assert_throw.cpp
 jb_ut_assert_throw_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_assert_throw
 jb_ut_assert_throw_LDADD = $(jb_ut_libs)
+
+jb_ut_book_cache_aware_stats_SOURCES = jb/ut_book_cache_aware_stats.cpp
+jb_ut_book_cache_aware_stats_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_book_cache_aware_stats
+jb_ut_book_cache_aware_stats_LDADD = $(jb_ut_libs)
 
 jb_ut_book_depth_statistics_SOURCES = jb/ut_book_depth_statistics.cpp
 jb_ut_book_depth_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_book_depth_statistics
