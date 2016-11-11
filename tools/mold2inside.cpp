@@ -1,16 +1,30 @@
-#include <jb/itch5/compute_inside.hpp>
+/**
+ * @file
+ *
+ * This program receives MoldUDP64 packets containing ITCH-5.0 messges
+ * and generates the inside quotes in an ASCII (though potentially
+ * compressed) file.  The program also generates statistics about the
+ * feed and the book build, using jb::offline_feed_statistics.
+ *
+ * It reports the percentiles of "for each change in the inside, how
+ * long did it take to process the event, and what was the elapsed
+ * time since the last change to the inside".
+ */
+#include <jb/itch5/generate_inside.hpp>
 #include <jb/itch5/mold_udp_channel.hpp>
 #include <jb/itch5/process_iostream.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
-#include <jb/offline_feed_statistics.hpp>
 
-#include <iostream>
 #include <stdexcept>
 #include <unordered_map>
 
+/**
+ * Define types and functions used in this program.
+ */
 namespace {
 
+/// Configuration parameters for itch5inside
 class config : public jb::config_object {
 public:
   config();
@@ -60,33 +74,42 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  auto cb = [&stats, &cfg, &out, &per_symbol](
-      jb::itch5::compute_inside::time_point recv_ts,
-      jb::itch5::message_header const& header, jb::itch5::stock_t const& stock,
-      jb::itch5::half_quote const& bid, jb::itch5::half_quote const& offer) {
-    auto pl = std::chrono::steady_clock::now() - recv_ts;
-    stats.sample(header.timestamp.ts, pl);
-
-    if (cfg.enable_symbol_stats()) {
-      auto i = per_symbol.find(stock);
-      if (i == per_symbol.end()) {
-        auto p = per_symbol.emplace(
-            stock, jb::offline_feed_statistics(cfg.symbol_stats()));
-        i = p.first;
-      }
-      i->second.sample(header.timestamp.ts, pl);
-    }
-
-    out << header.timestamp.ts.count() << " " << header.stock_locate << " "
-        << stock << " " << bid.first.as_integer() << " " << bid.second << " "
-        << offer.first.as_integer() << " " << offer.second << "\n";
+  jb::itch5::compute_book::callback_type cb = [&stats, &out](
+      jb::itch5::message_header const& header,
+      jb::itch5::order_book const& updated_book,
+      jb::itch5::compute_book::book_update const& update) {
+    auto pl = std::chrono::steady_clock::now() - update.recvts;
+    (void)jb::itch5::generate_inside(
+        stats, out, header, updated_book, update, pl);
   };
+  if (cfg.enable_symbol_stats()) {
+    // ... replace the calback with one that also records the stats
+    // for each symbol ...
+    jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
+    cb = [&stats, &out, &per_symbol, symcfg](
+        jb::itch5::message_header const& header,
+        jb::itch5::order_book const& updated_book,
+        jb::itch5::compute_book::book_update const& update) {
+      auto pl = std::chrono::steady_clock::now() - update.recvts;
+      if (not jb::itch5::generate_inside(
+              stats, out, header, updated_book, update, pl)) {
+        return;
+      }
+      auto location = per_symbol.find(update.stock);
+      if (location == per_symbol.end()) {
+        auto p = per_symbol.emplace(
+            update.stock, jb::offline_feed_statistics(symcfg));
+        location = p.first;
+      }
+      location->second.sample(header.timestamp.ts, pl);
+    };
+  }
 
-  jb::itch5::compute_inside handler(cb);
+  jb::itch5::compute_book handler(cb);
   auto process_buffer = [&handler](
       std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
       std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
-    jb::itch5::process_buffer_mlist<jb::itch5::compute_inside,
+    jb::itch5::process_buffer_mlist<jb::itch5::compute_book,
                                     KNOWN_ITCH5_MESSAGES>::
         process(handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
   };

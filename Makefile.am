@@ -39,10 +39,10 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_char_list_field \
   jb/itch5/ut_char_list_validator \
   jb/itch5/ut_check_offset \
-  jb/itch5/ut_compute_book_depth \
-  jb/itch5/ut_compute_inside \
+  jb/itch5/ut_compute_book \
   jb/itch5/ut_cross_trade_message \
   jb/itch5/ut_cross_type \
+  jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
   jb/itch5/ut_make_socket_udp_recv \
   jb/itch5/ut_market_participant_position_message \
@@ -61,6 +61,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_order_replace_message \
   jb/itch5/ut_p2ceil \
   jb/itch5/ut_price_field \
+  jb/itch5/ut_price_levels \
   jb/itch5/ut_process_buffer_mlist \
   jb/itch5/ut_process_iostream_mlist \
   jb/itch5/ut_reg_sho_restriction_message \
@@ -88,6 +89,7 @@ benchmarks = \
 examples = \
   examples/configuration \
   tools/itch5bookdepth \
+  tools/itch5eventdepth \
   tools/itch5inside \
   tools/itch5moldreplay \
   tools/itch5stats \
@@ -284,9 +286,11 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
 
 jb_libitch5_testing_adir = $(includedir)
 jb_libitch5_testing_a_SOURCES = \
-  jb/itch5/testing_data.cpp
+  jb/itch5/testing/data.cpp \
+  jb/itch5/testing/messages.cpp
 jb_libitch5_testing_a_HEADERS = \
-  jb/itch5/testing_data.hpp
+  jb/itch5/testing/data.hpp \
+  jb/itch5/testing/messages.hpp
 
 ################################################################
 # jb/libitch5.a
@@ -302,8 +306,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/broken_trade_message.cpp \
   jb/itch5/char_list_validator.cpp \
   jb/itch5/check_offset.cpp \
-  jb/itch5/compute_book_depth.cpp \
-  jb/itch5/compute_inside.cpp \
+  jb/itch5/compute_book.cpp \
   jb/itch5/cross_trade_message.cpp \
   jb/itch5/ipo_quoting_period_update_message.cpp \
   jb/itch5/market_participant_position_message.cpp \
@@ -336,11 +339,11 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/char_list_field.hpp \
   jb/itch5/char_list_validator.hpp \
   jb/itch5/check_offset.hpp \
-  jb/itch5/compute_book_depth.hpp \
-  jb/itch5/compute_inside.hpp \
+  jb/itch5/compute_book.hpp \
   jb/itch5/cross_trade_message.hpp \
   jb/itch5/cross_type.hpp \
   jb/itch5/decoder.hpp \
+  jb/itch5/generate_inside.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
   jb/itch5/market_participant_position_message.hpp \
@@ -362,6 +365,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/order_replace_message.hpp \
   jb/itch5/p2ceil.hpp \
   jb/itch5/price_field.hpp \
+  jb/itch5/price_levels.hpp \
   jb/itch5/process_buffer_mlist.hpp \
   jb/itch5/process_iostream_mlist.hpp \
   jb/itch5/process_iostream.hpp \
@@ -406,6 +410,9 @@ examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
 tools_itch5bookdepth_LDADD = jb/libitch5.a jb/libjb.a
+
+tools_itch5eventdepth_SOURCES = tools/itch5eventdepth.cpp
+tools_itch5eventdepth_LDADD = jb/libitch5.a jb/libjb.a
 
 tools_itch5inside_SOURCES = tools/itch5inside.cpp
 tools_itch5inside_LDADD = jb/libitch5.a jb/libjb.a
@@ -576,13 +583,9 @@ jb_itch5_ut_check_offset_SOURCES = jb/itch5/ut_check_offset.cpp
 jb_itch5_ut_check_offset_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_check_offset
 jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_libs)
 
-jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
-jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
-jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_compute_inside_SOURCES = jb/itch5/ut_compute_inside.cpp
-jb_itch5_ut_compute_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_inside
-jb_itch5_ut_compute_inside_LDADD = $(jb_ut_itch5_libs)
+jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
+jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
+jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
@@ -591,6 +594,10 @@ jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_cross_type_SOURCES = jb/itch5/ut_cross_type.cpp
 jb_itch5_ut_cross_type_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_type
 jb_itch5_ut_cross_type_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_generate_inside_SOURCES = jb/itch5/ut_generate_inside.cpp
+jb_itch5_ut_generate_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_generate_inside
+jb_itch5_ut_generate_inside_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_period_update_message.cpp
 jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
@@ -663,6 +670,10 @@ jb_itch5_ut_p2ceil_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
 jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
 jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_price_levels_SOURCES = jb/itch5/ut_price_levels.cpp
+jb_itch5_ut_price_levels_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_levels
+jb_itch5_ut_price_levels_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
 jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist

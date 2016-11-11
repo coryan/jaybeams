@@ -1,4 +1,4 @@
-#include <jb/itch5/testing_data.hpp>
+#include <jb/itch5/testing/data.hpp>
 #include <jb/itch5/trade_message.hpp>
 
 #include <boost/test/unit_test.hpp>
