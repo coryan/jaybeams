@@ -255,11 +255,8 @@ private:
     return 0;
   }
 
-  /// check if the price is better than the range max price
-  bool check_off_max_limit(buy_sell_indicator_t const, price4_t const) const;
-
-  /// check if the price is worse than the range min price
-  bool check_off_min_limit(buy_sell_indicator_t const, price4_t const) const;
+  /// check if the price is outside the range
+  bool check_off_limits(buy_sell_indicator_t const, price4_t const) const;
 
   /// return the price levels between two prices
   int price_levels(
