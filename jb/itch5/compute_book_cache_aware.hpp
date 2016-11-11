@@ -38,8 +38,7 @@ public:
   typedef std::chrono::steady_clock::time_point time_point;
 
   /// Callbacks
-  typedef std::function<void(
-      time_point, stock_t const&, tick_t const, int const)>
+  typedef std::function<void(stock_t const&, tick_t const, level_t const)>
       callback_type;
   //@}
 
@@ -177,7 +176,7 @@ private:
    * @arg int : # price levels moved to/from the tail
    * @arg order_data : order book data udpated
    */
-  typedef std::tuple<tick_t, int, order_data> update_result;
+  typedef std::tuple<tick_t, level_t, order_data> update_result;
 
   /// Refactor handling of add_order_message for both add_order and
   /// replace, but do not update the callback

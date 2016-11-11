@@ -1,5 +1,8 @@
 #include "jb/itch5/order_book_cache_aware.hpp"
 
+// definition of tick_off_
+jb::itch5::tick_t jb::itch5::order_book_cache_aware::tick_off_ = 5000;
+
 jb::itch5::half_quote jb::itch5::order_book_cache_aware::best_bid() const {
   if (buy_.empty()) {
     return empty_bid();
@@ -27,7 +30,7 @@ jb::itch5::price_range_t jb::itch5::order_book_cache_aware::price_range(
 
 jb::itch5::price_range_t
 jb::itch5::order_book_cache_aware::price_range(price4_t p_base) {
-  int p_base_tick = p_base.as_integer();
+  tick_t p_base_tick = p_base.as_integer();
   price4_t p_min, p_max;
   if (p_base_tick <= PX_DOLLAR_TICK) {
     // p_base < $1.00
@@ -37,7 +40,7 @@ jb::itch5::order_book_cache_aware::price_range(price4_t p_base) {
     } else {
       p_min = price4_t(p_base_tick - tick_off_);
     }
-    int rem_tick = tick_off_ + p_base_tick - PX_DOLLAR_TICK;
+    tick_t rem_tick = tick_off_ + p_base_tick - PX_DOLLAR_TICK;
     p_max = (rem_tick > 0) ? price4_t(PX_DOLLAR_TICK + 100 * rem_tick)
                            : price4_t(p_base_tick + tick_off_);
     return price_range_t(p_min, p_max);
@@ -64,9 +67,6 @@ jb::itch5::price_range_t jb::itch5::order_book_cache_aware::price_range(
   return sell_price_range_;
 }
 
-// definition of tick_off_
-jb::itch5::tick_t jb::itch5::order_book_cache_aware::tick_off_ = 5000;
-
 jb::itch5::tick_t jb::itch5::order_book_cache_aware::tick_offset() {
   return tick_off_;
 }
@@ -90,7 +90,7 @@ bool jb::itch5::order_book_cache_aware::check_off_limits(
       (std::get<1>(sell_price_range_) >= px));
 }
 
-int jb::itch5::order_book_cache_aware::price_levels(
+jb::itch5::level_t jb::itch5::order_book_cache_aware::price_levels(
     buy_sell_indicator_t const side, price4_t const pold,
     price4_t const pnew) const {
   if (side == buy_sell_indicator_t('B')) {
@@ -113,7 +113,7 @@ int jb::itch5::order_book_cache_aware::price_levels(
   return std::distance(tail_min, tail_max);
 }
 
-int jb::itch5::order_book_cache_aware::side_price_levels(
+jb::itch5::level_t jb::itch5::order_book_cache_aware::side_price_levels(
     buy_sell_indicator_t const side) {
   price4_t p_inside;
   price_range_t* ptr_range;
@@ -135,10 +135,10 @@ int jb::itch5::order_book_cache_aware::side_price_levels(
   return 0;
 }
 
-int jb::itch5::order_book_cache_aware::num_ticks(
+jb::itch5::tick_t jb::itch5::order_book_cache_aware::num_ticks(
     price4_t const oldp, price4_t const newp) const {
-  int newp_tick = newp.as_integer();
-  int oldp_tick = oldp.as_integer();
+  tick_t newp_tick = newp.as_integer();
+  tick_t oldp_tick = oldp.as_integer();
   if ((newp_tick <= PX_DOLLAR_TICK) and (oldp_tick <= PX_DOLLAR_TICK)) {
     return std::abs(newp_tick - oldp_tick);
   }

@@ -22,10 +22,10 @@ typedef std::pair<price4_t, price4_t> price_range_t;
 
 /// result when adding or updating orders
 /// (number of tick of the inside change, price levels moved to/from tail)
-typedef std::pair<tick_t, int> order_book_change_t;
+typedef std::pair<tick_t, level_t> order_book_change_t;
 
 /// $1.00 in ticks
-const int PX_DOLLAR_TICK = 10000;
+const tick_t PX_DOLLAR_TICK = 10000;
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
@@ -130,7 +130,7 @@ public:
         return std::make_pair(0, 0);
       }
       auto tick_change = handle_add_order(buy_, px, qty);
-      int num_price_to_tail = 0;
+      level_t num_price_to_tail = 0;
       if (tick_change != 0) {
         num_price_to_tail = side_price_levels(side);
       }
@@ -143,7 +143,7 @@ public:
       return std::make_pair(0, 0);
     }
     auto tick_change = handle_add_order(sell_, px, qty);
-    int num_price_to_tail = 0;
+    level_t num_price_to_tail = 0;
     if (tick_change != 0) {
       num_price_to_tail = side_price_levels(side);
     }
@@ -157,24 +157,25 @@ public:
    * @param side whether the order is a buy or a sell
    * @param px the price of the order
    * @param reduced_qty the executed quantity of the order
-   * @return int number of ticks the inside price changed
+   * @return tick_t number of ticks the inside price changed
+   * @return level_t number of price level move to and from the tail
    */
   order_book_change_t
   handle_order_reduced(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
       auto tick_change = handle_order_reduced(buy_, px, qty);
-      int num_price_from_tail = 0;
       if (tick_change != 0) {
-        num_price_from_tail = side_price_levels(side);
+        auto num_price_from_tail = side_price_levels(side);
+        return std::make_pair(tick_change, num_price_from_tail);
       }
-      return std::make_pair(tick_change, num_price_from_tail);
+      return std::make_pair(0, 0);
     }
     auto tick_change = handle_order_reduced(sell_, px, qty);
-    int num_price_from_tail = 0;
     if (tick_change != 0) {
-      num_price_from_tail = side_price_levels(side);
+      auto num_price_from_tail = side_price_levels(side);
+      return std::make_pair(tick_change, num_price_from_tail);
     }
-    return std::make_pair(tick_change, num_price_from_tail);
+    return std::make_pair(0, 0);
   }
 
   /// Get the side price range
@@ -194,7 +195,7 @@ private:
    * @return int number of ticks the inside price changed
    */
   template <typename book_side>
-  int handle_add_order(book_side& side, price4_t px, int qty) {
+  tick_t handle_add_order(book_side& side, price4_t px, int qty) {
     auto side_size = side.size();
     auto emp_tup = side.emplace(px, 0);
     emp_tup.first->second += qty;
@@ -223,7 +224,7 @@ private:
    * @return int number of ticks the inside price changed
    */
   template <typename book_side>
-  int handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
+  tick_t handle_order_reduced(book_side& side, price4_t px, int reduced_qty) {
     auto price_it = side.find(px);
     if (price_it == side.end()) {
       throw jb::feed_error("trying to reduce a non-existing price level");
@@ -256,14 +257,14 @@ private:
   bool check_off_limits(buy_sell_indicator_t const, price4_t const) const;
 
   /// return the price levels between two prices
-  int price_levels(
+  level_t price_levels(
       buy_sell_indicator_t const, price4_t const, price4_t const) const;
 
   /// return the price levels the inside moved
-  int side_price_levels(buy_sell_indicator_t const);
+  level_t side_price_levels(buy_sell_indicator_t const);
 
   /// return the num ticks between two prices
-  int num_ticks(price4_t const, price4_t const) const;
+  tick_t num_ticks(price4_t const, price4_t const) const;
 
   /// get a the price range around a price
   price_range_t price_range(price4_t);

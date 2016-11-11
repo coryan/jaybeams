@@ -12,6 +12,7 @@
 namespace jb {
 
 typedef jb::itch5::tick_t tick_t;
+typedef jb::itch5::level_t level_t;
 
 /**
  * Keep statistics about changes on the inside
@@ -32,7 +33,7 @@ public:
    * @param book_depth : the book depth (after processing the event)
    * to be recorded.
    */
-  void sample(tick_t ticks, int levels) {
+  void sample(tick_t ticks, level_t levels) {
     ticks_.sample(ticks);
     levels_.sample(levels);
   }
@@ -73,7 +74,7 @@ public:
 
 private:
   typedef histogram<integer_range_binning<tick_t>> tick_histogram_t;
-  typedef histogram<integer_range_binning<int>> level_histogram_t;
+  typedef histogram<integer_range_binning<level_t>> level_histogram_t;
   tick_histogram_t ticks_;
   level_histogram_t levels_;
 };
@@ -91,7 +92,7 @@ public:
 
   /// No more than this value is recorded
   jb::config_attribute<config, tick_t> max_ticks;
-  jb::config_attribute<config, int> max_levels;
+  jb::config_attribute<config, level_t> max_levels;
 };
 
 } // namespace jb

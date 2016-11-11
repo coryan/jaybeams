@@ -44,17 +44,15 @@ stock_directory_message create_stock_directory(char const* symbol) {
 BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(
-      compute_book_cache_aware::time_point, stock_t, tick_t, int)>
-      callback;
+  skye::mock_function<void(stock_t, tick_t, int)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](
-      compute_book_cache_aware::time_point recv_ts, stock_t const& stock,
-      tick_t tick,
-      int price_levels) { callback(recv_ts, stock, tick, price_levels); };
+  auto cb =
+      [&callback](stock_t const& stock, tick_t tick, level_t price_levels) {
+        callback(stock, tick, price_levels);
+      };
 
   // ... create the object under testing ...
   compute_book_cache_aware tested(cb);
@@ -84,8 +82,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                           stock_t("HSART"),
                                           price4_t(100000)});
   callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price on the book
+      stock_t("HSART"), 0, 0); // new price on the book
 
   // ... handle a new order on the opposite side of the book ...
   now = tested.now();
@@ -97,9 +94,8 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                           100,
                                           stock_t("HSART"),
                                           price4_t(100100)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price on the book
+  callback.check_called().at_least(2).with(
+      stock_t("HSART"), 0, 0); // new price on the book
 
   // ... handle a new order with an mpid ...
   now = tested.now();
@@ -115,8 +111,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
               price4_t(100000)},
           mpid_t("LOOF")});
   // ... updates the book just like a regular order ...
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 1, 0);
+  callback.check_called().once().with(stock_t("HSART"), 1, 0);
 
   // ... handle a partial execution ...
   now = tested.now();
@@ -127,9 +122,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
           4,
           100,
           123456});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // still 400 remaining on that price
+  callback.check_called().at_least(3).with(stock_t("HSART"), 0, 0);
 
   // ... handle a full execution ...
   now = tested.now();
@@ -140,8 +133,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
           3,
           100,
           123457});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0, 0);
+  callback.check_called().at_least(4).with(stock_t("HSART"), 0, 0);
   BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... handle a partial execution with price ...
@@ -155,9 +147,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                  100,
                                  123456},
           printable_t{u'Y'}, price4_t(100150)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // still 300 remaining on that price
+  callback.check_called().at_least(5).with(stock_t("HSART"), 0, 0);
   BOOST_CHECK_EQUAL(tested.live_order_count(), 2);
 
   // ... create yet another order ...
@@ -170,8 +160,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                           1000,
                                           stock_t("HSART"),
                                           price4_t(100100)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 1, 0);
+  callback.check_called().at_least(2).with(stock_t("HSART"), 1, 0);
   BOOST_CHECK_EQUAL(tested.live_order_count(), 3);
 
   // ... partially cancel the order ...
@@ -182,9 +171,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
           {order_cancel_message::message_type, 0, 0, create_timestamp()},
           5,
           200});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // still 800 remaining on that price
+  callback.check_called().at_least(6).with(stock_t("HSART"), 0, 0);
 
   // ... fully cancel the order ...
   now = tested.now();
@@ -192,8 +179,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
       now, ++msgcnt, 0,
       order_delete_message{
           {order_delete_message::message_type, 0, 0, create_timestamp()}, 5});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 1, 0);
+  callback.check_called().at_least(3).with(stock_t("HSART"), 1, 0);
 
   // test the tail now
   now = tested.now();
@@ -205,9 +191,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                           300,
                                           stock_t("HSART"),
                                           price4_t(900000)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price on the book
+  callback.check_called().at_least(7).with(stock_t("HSART"), 0, 0);
 
   // ... handle a full execution ...
   now = tested.now();
@@ -218,8 +202,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
           4,
           300,
           123457});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 8000, 1);
+  callback.check_called().once().with(stock_t("HSART"), 8000, 1);
 
   // ... handle a new order, new price ... buy side now
   now = tested.now();
@@ -231,9 +214,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
                                           100,
                                           stock_t("HSART"),
                                           price4_t(1000000)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 9000,
-      1); // new price on the book
+  callback.check_called().once().with(stock_t("HSART"), 9000, 1);
 }
 
 /**
@@ -246,17 +227,16 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_simple) {
 BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(
-      compute_book_cache_aware::time_point, stock_t, tick_t, int)>
-      callback;
+  skye::mock_function<void(stock_t, tick_t, int)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](
-      compute_book_cache_aware::time_point recv_ts, stock_t const& stock,
-      tick_t tick,
-      int price_levels) { callback(recv_ts, stock, tick, price_levels); };
+  auto cb =
+      [&callback](stock_t const& stock, tick_t tick, level_t price_levels) {
+        callback(stock, tick, price_levels);
+      };
+
   // ... create the object under testing ...
   compute_book_cache_aware tested(cb);
 
@@ -271,9 +251,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
                                           500,
                                           stock_t("HSART"),
                                           price4_t(100000)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price
+  callback.check_called().once().with(stock_t("HSART"), 0, 0);
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
@@ -283,9 +261,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
                                           500,
                                           stock_t("HSART"),
                                           price4_t(100500)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price
+  callback.check_called().at_least(2).with(stock_t("HSART"), 0, 0);
 
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
@@ -295,9 +271,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
                                           500,
                                           stock_t("HSART"),
                                           price4_t(99900)});
-  callback.check_called().at_least(2).with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price
+  callback.check_called().at_least(2).with(stock_t("HSART"), 0, 0);
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
@@ -307,9 +281,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
                                           500,
                                           stock_t("HSART"),
                                           price4_t(100600)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 0,
-      0); // new price
+  callback.check_called().at_least(4).with(stock_t("HSART"), 0, 0);
 
   // ... handle a replace message that improves the price ...
   now = tested.now();
@@ -321,9 +293,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
           3,
           600,
           price4_t(100100)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 3,
-      0); // 1 down + 2 up
+  callback.check_called().once().with(stock_t("HSART"), 3, 0);
 
   // ... handle a replace message that improves the price ...
   now = tested.now();
@@ -335,9 +305,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
           30,
           600,
           price4_t(100400)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 3,
-      0); // 1 down + 2 up
+  callback.check_called().at_least(2).with(stock_t("HSART"), 3, 0);
 
   // ... handle a replace that changes the qty ...
   now = tested.now();
@@ -349,9 +317,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
           40,
           300,
           price4_t(100400)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 4,
-      0); // 2 down to 100600 and back
+  callback.check_called().once().with(stock_t("HSART"), 4, 0);
 
   // ... handle a replace that changes lowers the best price ...
   now = tested.now();
@@ -363,9 +329,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
           9,
           400,
           price4_t(99800)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("HSART"), 2,
-      0); // new price (99900)
+  callback.check_called().once().with(stock_t("HSART"), 2, 0);
 }
 
 /**
@@ -374,17 +338,16 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_replace) {
 BOOST_AUTO_TEST_CASE(compute_book_cache_aware_edge_cases) {
   // We are going to use a mock function to handle the callback
   // because it is easy to test what values they got ...
-  skye::mock_function<void(
-      compute_book_cache_aware::time_point, stock_t, tick_t, int)>
-      callback;
+  skye::mock_function<void(stock_t, tick_t, int)> callback;
 
   // ... create a callback that holds a reference to the mock
   // function, because the handler keeps the callback by value.  Also,
   // ignore the header, because it is tedious to test for it ...
-  auto cb = [&callback](
-      compute_book_cache_aware::time_point recv_ts, stock_t const& stock,
-      tick_t tick,
-      int price_levels) { callback(recv_ts, stock, tick, price_levels); };
+  auto cb =
+      [&callback](stock_t const& stock, tick_t tick, level_t price_levels) {
+        callback(stock, tick, price_levels);
+      };
+
   // ... create the object under testing ...
   compute_book_cache_aware tested(cb);
 
@@ -418,9 +381,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_edge_cases) {
                                           500,
                                           stock_t("CRAZY"),
                                           price4_t(150000)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("CRAZY"), 0,
-      0); // new symbol, new price
+  callback.check_called().once().with(stock_t("CRAZY"), 0, 0);
   // sell side now with different symbol....
   tested.handle_message(
       now, ++msgcnt, 0, add_order_message{{add_order_message::message_type, 0,
@@ -430,9 +391,7 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_edge_cases) {
                                           1000,
                                           stock_t("DIFFSYM"),
                                           price4_t(180000)});
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("DIFFSYM"), 0,
-      0); // new symbol, new price
+  callback.check_called().once().with(stock_t("DIFFSYM"), 0, 0);
 
   // ... a duplicate order id should result in no changes ...
   // add_order_mesage with same id=1, DIFFSYM this time
@@ -447,7 +406,5 @@ BOOST_AUTO_TEST_CASE(compute_book_cache_aware_edge_cases) {
   // no *new* callback is expected ....
   // ... therefore verifies it gets the first add_order_message
   // value still on the (memory) logs of calls (CRAZY)
-  callback.check_called().once().with(
-      compute_book_cache_aware::time_point(now), stock_t("CRAZY"), 0,
-      0); // previous logged callback
+  callback.check_called().once().with(stock_t("CRAZY"), 0, 0);
 }

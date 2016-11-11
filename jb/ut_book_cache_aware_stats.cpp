@@ -19,6 +19,10 @@ BOOST_AUTO_TEST_CASE(book_cache_aware_stats_simple) {
       std::is_same<jb::itch5::tick_t, jb::tick_t>::value,
       "Mismatched definition of "
       "jb::itch5::tick_t and jb::tick_t");
+  static_assert(
+      std::is_same<jb::itch5::level_t, jb::level_t>::value,
+      "Mismatched definition of "
+      "jb::itch5::level_t and jb::level_t");
 }
 
 /**

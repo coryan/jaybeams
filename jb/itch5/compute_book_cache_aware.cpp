@@ -28,7 +28,7 @@ void jb::itch5::compute_book_cache_aware::handle_message(
   JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
   try {
     auto result = handle_add_no_update(recv_ts, msgcnt, msgoffset, msg);
-    callback_(recv_ts, msg.stock, std::get<0>(result), std::get<1>(result));
+    callback_(msg.stock, std::get<0>(result), std::get<1>(result));
   } catch (const jb::feed_error& fe) {
     JB_LOG(warning) << "add_order_message skipping the message: " << fe.what();
   }
@@ -87,7 +87,7 @@ void jb::itch5::compute_book_cache_aware::handle_message(
     // sum of two effects are reported
     auto ticks = std::get<0>(result_reduce) + std::get<0>(result_add);
     auto levels = std::get<1>(result_reduce) + std::get<1>(result_add);
-    callback_(recv_ts, copy.stock, ticks, levels);
+    callback_(copy.stock, ticks, levels);
   } catch (const jb::feed_error& fe) {
     JB_LOG(warning) << "order_replace_message skipping the message: "
                     << fe.what();
@@ -148,7 +148,7 @@ void jb::itch5::compute_book_cache_aware::handle_reduce(
         recv_ts, msgcnt, msgoffset, header, order_reference_number, shares,
         all_shares);
     auto const& copy = std::get<2>(result);
-    callback_(recv_ts, copy.stock, std::get<0>(result), std::get<1>(result));
+    callback_(copy.stock, std::get<0>(result), std::get<1>(result));
   } catch (const jb::feed_error& fe) {
     JB_LOG(warning) << "handle_reduce skipping the message: " << fe.what();
   }

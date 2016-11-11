@@ -77,7 +77,7 @@ namespace defaults {
 #endif
 
 tick_t max_ticks = JB_BOOK_CACHE_AWARE_STATS_DEFAULTS_max_ticks;
-int max_levels = JB_BOOK_CACHE_AWARE_STATS_DEFAULTS_max_levels;
+level_t max_levels = JB_BOOK_CACHE_AWARE_STATS_DEFAULTS_max_levels;
 
 } // namespace defaults
 } // namespace jb
