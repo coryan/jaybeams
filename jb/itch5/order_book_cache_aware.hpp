@@ -20,9 +20,6 @@ typedef std::pair<price4_t, int> half_quote;
 /// A simple representation for price range {lower_price .. higher_price}
 typedef std::pair<price4_t, price4_t> price_range_t;
 
-/// define the offset en ticks
-typedef int tick_t;
-
 /// result when adding or updating orders
 /// (number of tick of the inside change, price levels moved to/from tail)
 typedef std::pair<tick_t, int> order_book_change_t;

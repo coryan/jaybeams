@@ -5,6 +5,7 @@
 namespace jb {
 namespace itch5 {
 typedef unsigned long int book_depth_t;
+typedef int tick_t;
 } // namespace itch5
 } // namesapce jb
 

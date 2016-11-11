@@ -9,16 +9,16 @@ BOOST_AUTO_TEST_CASE(book_cache_aware_stats_simple) {
   jb::book_cache_aware_stats::config cfg;
   jb::book_cache_aware_stats stats(cfg);
 
-  stats.sample(1);
-  stats.sample(2);
-  stats.sample(3);
-  stats.sample(4);
-  stats.sample(5);
+  stats.sample(1, 10);
+  stats.sample(2, 20);
+  stats.sample(3, 30);
+  stats.sample(4, 40);
+  stats.sample(5, 50);
 
   static_assert(
-      std::is_same<jb::itch5::book_depth_t, jb::book_depth_t>::value,
+      std::is_same<jb::itch5::tick_t, jb::tick_t>::value,
       "Mismatched definition of "
-      "jb::itch5::book_depth_t and jb::book_depth_t");
+      "jb::itch5::tick_t and jb::tick_t");
 }
 
 /**
@@ -45,10 +45,10 @@ BOOST_AUTO_TEST_CASE(book_cache_aware_stats_print_csv) {
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
   // 4 samples, book_depth {2..5}
-  stats.sample(5);
-  stats.sample(2);
-  stats.sample(3);
-  stats.sample(4);
+  stats.sample(5, 50);
+  stats.sample(2, 20);
+  stats.sample(3, 30);
+  stats.sample(4, 40);
 
   // check 4 samples...
   body.str("");
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(book_cache_aware_stats_print_csv) {
   BOOST_CHECK_EQUAL(nfields, nheaders);
 
   // add one more sample (# 5), book_depth now {1..5}
-  stats.sample(1);
+  stats.sample(1, 10);
   body.str("");
   stats.print_csv("testing", body);
   BOOST_CHECK_EQUAL(body.str().substr(0, 10), std::string("testing,5,"));
@@ -74,9 +74,10 @@ BOOST_AUTO_TEST_CASE(book_cache_aware_stats_print_csv) {
 /**
  * @test Verify that jb::book_cache_aware_stats::config works as expected.
  */
-BOOST_AUTO_TEST_CASE(book_depth_statististics_config_simple) {
+BOOST_AUTO_TEST_CASE(book_cache_aware_stats_config_simple) {
   typedef jb::book_cache_aware_stats::config config;
 
   BOOST_CHECK_NO_THROW(config().validate());
-  BOOST_CHECK_THROW(config().max_book_depth(0).validate(), jb::usage);
+  BOOST_CHECK_THROW(config().max_ticks(0).validate(), jb::usage);
+  BOOST_CHECK_THROW(config().max_levels(0).validate(), jb::usage);
 }
