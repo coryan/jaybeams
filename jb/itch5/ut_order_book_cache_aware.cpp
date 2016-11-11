@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.first, price4_t(0));
   BOOST_CHECK_EQUAL(actual.second, 0);
   BOOST_CHECK_EQUAL(tested.best_bid_price(), price4_t(0));
-  BOOST_CHECK_EQUAL(std::get<0>(r), 2 * ticks);
+  BOOST_CHECK_EQUAL(std::get<0>(r), 0);
   BOOST_CHECK_EQUAL(std::get<1>(r), 0);
   // .. and the book_depth should be decremented
   BOOST_CHECK_EQUAL(tested.get_book_depth(), 0);
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
   BOOST_CHECK_EQUAL(actual.second, 0);
   BOOST_CHECK_EQUAL(tested.best_offer_price(), price4_t(200000UL * 10000));
   // handler should return true
-  BOOST_CHECK_EQUAL(std::get<0>(r), 2 * ticks);
+  BOOST_CHECK_EQUAL(std::get<0>(r), 0);
   BOOST_CHECK_EQUAL(std::get<1>(r), 0);
   // .. and the book_depth should be decremented
   BOOST_CHECK_EQUAL(tested.get_book_depth(), 0);
@@ -456,7 +456,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rs = tested.handle_order_reduced(BUY, price4_t(100 * ticks - 300), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 2 * ticks); // max change
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   // Check same range (min, max) ...
   rg = tested.price_range(BUY);
@@ -627,7 +627,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rs = tested.handle_order_reduced(SELL, price4_t(1000 * ticks + 300), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 2 * ticks); // max change
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(900 * ticks - 100));
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1100 * ticks - 100));
@@ -799,7 +799,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rs = tested.handle_order_reduced(BUY, price4_t(1498), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 2 * ticks);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rg = tested.price_range(BUY);
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(0));
@@ -921,9 +921,9 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rs = tested.handle_order_reduced(SELL, price4_t(7502), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 2 * ticks);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(3000));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(5999));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8999));
 }

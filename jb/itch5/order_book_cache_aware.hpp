@@ -244,7 +244,7 @@ private:
       auto is_inside = (price_it == side.begin());
       side.erase(price_it);
       if (side.empty()) {
-        return 2 * tick_off_; // max tick change
+        return 0; // no need to look for a new price
       }
       // ... now if it was the inside removed ...
       if (is_inside) {
