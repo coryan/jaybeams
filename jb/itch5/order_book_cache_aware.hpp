@@ -27,11 +27,7 @@ typedef int tick_t;
 /// (number of tick of the inside change, price levels moved to/from tail)
 typedef std::pair<tick_t, int> order_book_change_t;
 
-/// tail shift
-typedef int tail_t;
-const tail_t TAIL_IN = 0;
-const tail_t TAIL_OUT = 1;
-
+/// $1.00 in ticks
 const int PX_DOLLAR_TICK = 10000;
 
 /**
@@ -69,7 +65,7 @@ public:
   /// Return the tick offset
   static tick_t tick_offset();
   /// Set the tick offset
-  static void tick_offset(tick_t tick);
+  static void tick_offset(tick_t const tick);
 
   /// Return the best bid price and quantity
   half_quote best_bid() const;
@@ -110,91 +106,23 @@ public:
     return buy_.size() + sell_.size();
   }
 
-  /// check if the price is better than the range max price
-  bool check_off_max_limit(buy_sell_indicator_t side, price4_t px) {
-    if (side == buy_sell_indicator_t('B')) {
-      return (std::get<1>(buy_price_range_) <= px);
-    }
-    return (std::get<1>(sell_price_range_) > px);
-  }
-  /// check if the price is worse than the range min price
-  bool check_off_min_limit(buy_sell_indicator_t side, price4_t px) {
-    if (side == buy_sell_indicator_t('B')) {
-      return (std::get<0>(buy_price_range_) > px);
-    }
-    return (std::get<0>(sell_price_range_) <= px);
-  }
-
-  int price_levels(
-      buy_sell_indicator_t side, tail_t tail, price4_t pmin, price4_t pmax) {
-    if (side == buy_sell_indicator_t('B')) {
-      if (tail == TAIL_IN) {
-        auto tail_min = buy_.upper_bound(pmin);
-        auto tail_max = buy_.upper_bound(pmax);
-        return std::distance(tail_min, tail_max);
-      }
-      auto tail_min = buy_.lower_bound(pmin);
-      auto tail_max = buy_.lower_bound(pmax);
-      return std::distance(tail_min, tail_max);
-    }
-    if (tail == TAIL_IN) {
-      auto tail_min = sell_.lower_bound(pmin);
-      auto tail_max = sell_.lower_bound(pmax);
-      return std::distance(tail_min, tail_max);
-    }
-    auto tail_min = sell_.upper_bound(pmin);
-    auto tail_max = sell_.upper_bound(pmax);
-    return std::distance(tail_min, tail_max);
-  }
-
-  int side_price_levels(buy_sell_indicator_t side) {
-    price4_t p_inside;
-    price_range_t* ptr_range;
-    int num_price_to_tail = 0;
-    if (side == buy_sell_indicator_t('B')) {
-      p_inside = buy_.begin()->first;
-      ptr_range = &buy_price_range_;
-    } else {
-      p_inside = sell_.begin()->first;
-      ptr_range = &sell_price_range_;
-    }
-    // check if the new inside is out of max range
-    if (check_off_max_limit(side, p_inside)) {
-      auto old_p_max = std::get<0>(*ptr_range);
-      // set the new price_range around the new p_inside
-      *ptr_range = price_range(side, p_inside);
-      auto new_p_max = std::get<0>(*ptr_range);
-      // get the price levels between new and old p_max
-      return price_levels(side, TAIL_IN, new_p_max, old_p_max);
-    }
-    if (check_off_min_limit(side, p_inside)) {
-      auto old_p_min = std::get<0>(*ptr_range);
-      // set the new price_range around the new p_inside
-      *ptr_range = price_range(side, p_inside);
-      auto new_p_min = std::get<0>(*ptr_range);
-      // get the price levels between new and old p_max
-      return price_levels(side, TAIL_OUT, old_p_min, new_p_min);
-    }
-    return num_price_to_tail;
-  }
-
   /**
-   * Handle a new order.
-   *
-   * Update the quantity at the right price level in the correct
-   * side of the book.
-   *
-   * if the inside price changes the number of ticks of change is reported:
-   * 0: no change on the inside price
-   * n > 0: new inside price is n ticks better than the last one
-   * n < 0: new inside price is n ticks worse than the last one
-   *
-   * @param side whether the order is a buy or a sell
-   * @param px the price of the order
-   * @param qty the quantity of the order
-   * @return <number of ticks the inside price changed, price levels moved
-   * to or from the tail>
-   */
+ * Handle a new order.
+ *
+ * Update the quantity at the right price level in the correct
+ * side of the book.
+ *
+ * if the inside price changes the number of ticks of change is reported:
+ * 0: no change on the inside price
+ * n > 0: new inside price is n ticks better than the last one
+ * n < 0: new inside price is n ticks worse than the last one
+ *
+ * @param side whether the order is a buy or a sell
+ * @param px the price of the order
+ * @param qty the quantity of the order
+ * @return <number of ticks the inside price changed, price levels moved
+ * to or from the tail>
+ */
   order_book_change_t
   handle_add_order(buy_sell_indicator_t side, price4_t px, int qty) {
     if (side == buy_sell_indicator_t('B')) {
@@ -281,25 +209,8 @@ private:
     // check if it is a new inside...
     // ... get the tick shift is so
     if (emp_tup.first == side.begin()) {
-      int px_tick = px.as_integer();
-      int old_p_tick = ((++side.begin())->first).as_integer();
-      if (px_tick > old_p_tick) {
-        if (old_p_tick >= PX_DOLLAR_TICK) {
-          return (px_tick - old_p_tick) / 100;
-        }
-        if (px_tick <= PX_DOLLAR_TICK) {
-          return (px_tick - old_p_tick);
-        }
-        return (PX_DOLLAR_TICK - old_p_tick + (px_tick - PX_DOLLAR_TICK) / 100);
-      } else {
-        if (old_p_tick <= PX_DOLLAR_TICK) {
-          return (old_p_tick - px_tick);
-        }
-        if (px_tick >= PX_DOLLAR_TICK) {
-          return (old_p_tick - px_tick) / 100;
-        }
-        return ((old_p_tick - PX_DOLLAR_TICK) / 100 + PX_DOLLAR_TICK - px_tick);
-      }
+      auto old_p = ((++side.begin())->first);
+      return num_ticks(old_p, px);
     }
     return 0; // no price change at the inside
   }
@@ -337,14 +248,28 @@ private:
       }
       // ... now if it was the inside removed ...
       if (is_inside) {
-        int factor = (px > price4_t(PX_DOLLAR_TICK)) ? 100 : 1;
-        int new_p_tick = ((side.begin())->first).as_integer();
-        int px_tick = px.as_integer();
-        return std::abs(new_p_tick - px_tick) / factor;
+        auto new_p = side.begin()->first;
+        return num_ticks(px, new_p);
       }
     }
     return 0;
   }
+
+  /// check if the price is better than the range max price
+  bool check_off_max_limit(buy_sell_indicator_t const, price4_t const) const;
+
+  /// check if the price is worse than the range min price
+  bool check_off_min_limit(buy_sell_indicator_t const, price4_t const) const;
+
+  /// return the price levels between two prices
+  int price_levels(
+      buy_sell_indicator_t const, price4_t const, price4_t const) const;
+
+  /// return the price levels the inside moved
+  int side_price_levels(buy_sell_indicator_t const);
+
+  /// return the num ticks between two prices
+  int num_ticks(price4_t const, price4_t const) const;
 
   /// get a the price range around a price
   price_range_t price_range(price4_t);

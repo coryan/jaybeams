@@ -332,7 +332,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(0));
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(200 * ticks));
 
-  // build a book around ticks
+  // build a book around $50.00
   auto rs = tested.handle_add_order(BUY, price4_t(100 * ticks), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1500 * ticks));
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(1700 * ticks));
 
-  // add new price far below the limit
+  // add new price
   rs = tested.handle_add_order(BUY, price4_t(200 * ticks + 100), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
@@ -393,7 +393,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   // remove that far above new price
   rs = tested.handle_order_reduced(BUY, price4_t(1600 * ticks), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 14 * ticks - 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 4);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 5);
   // Check new range (min, max) ...
   rg = tested.price_range(BUY);
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(100 * ticks + 100));
@@ -505,7 +505,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
   BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
 
-  // change the inside 1 tick above the limit
+  // change the inside right below the limit
   rs = tested.handle_add_order(SELL, price4_t(900 * ticks + 100), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), ticks - 2);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
@@ -514,28 +514,28 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(900 * ticks));
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1100 * ticks));
 
-  // change the inside right at the limit
+  // change the inside right at the limit (P_MAX is excluded)
   rs = tested.handle_add_order(SELL, price4_t(900 * ticks), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 3);
   // Check current range (min, max) ...
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(900 * ticks));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1100 * ticks));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(800 * ticks));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1000 * ticks));
 
-  // change the inside right below the limit
+  // change the inside
   rs = tested.handle_add_order(SELL, price4_t(900 * ticks - 100), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 5);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   // Check new range (min, max) ...
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(800 * ticks - 100));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1000 * ticks - 100));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(800 * ticks));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(1000 * ticks));
 
   // change the inside far above the limit
   rs = tested.handle_add_order(SELL, price4_t(100 * ticks), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 8 * ticks - 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 3);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 5);
   // Check new range (min, max) ...
   rg = tested.price_range(SELL);
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
@@ -733,9 +733,27 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8500));
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(160000));
 
+  // change the inside far above the limit
+  rs = tested.handle_add_order(BUY, price4_t(10200), 100);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 2);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
+  // Check new range (min, max) ...
+  rg = tested.price_range(BUY);
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8500));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(160000));
+
   // remove the far above inside
   rs = tested.handle_order_reduced(BUY, price4_t(10000), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 6999);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
+  // Check new range (min, max) ...
+  rg = tested.price_range(BUY);
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8500));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(160000));
+
+  // remove the far above inside
+  rs = tested.handle_order_reduced(BUY, price4_t(10200), 100);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 7001);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 6);
   // Check new range (min, max) ...
   rg = tested.price_range(BUY);
@@ -834,21 +852,21 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   // change the inside right at the limit
   rs = tested.handle_add_order(SELL, price4_t(6000), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1498);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 2);
 
   // change the inside above the limit
   rs = tested.handle_add_order(SELL, price4_t(5999), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 4);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   // Check current range (min, max) ...
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(4499));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(7499));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(4500));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(7500));
 
   // change the inside far above the limit
-  rs = tested.handle_add_order(SELL, price4_t(999), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 5000);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 3);
+  rs = tested.handle_add_order(SELL, price4_t(989), 100);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 5010);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 5);
   // Check new range (min, max) ...
   rg = tested.price_range(SELL);
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
@@ -860,8 +878,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
 
   // remove the far above inside
-  rs = tested.handle_order_reduced(SELL, price4_t(999), 100);
-  BOOST_CHECK_EQUAL(std::get<0>(rs), 4999);
+  rs = tested.handle_order_reduced(SELL, price4_t(989), 100);
+  BOOST_CHECK_EQUAL(std::get<0>(rs), 5009);
   BOOST_CHECK_EQUAL(std::get<1>(rs), 4);
   // Check new range (min, max) ...
   rg = tested.price_range(SELL);
@@ -879,18 +897,18 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   // remove the inside
   rs = tested.handle_order_reduced(SELL, price4_t(5998), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1500);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 4);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(5998));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8998));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(4498));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(7498));
 
   rs = tested.handle_order_reduced(SELL, price4_t(7498), 100);
   BOOST_CHECK_EQUAL(std::get<0>(rs), 1);
-  BOOST_CHECK_EQUAL(std::get<1>(rs), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rs), 4);
   // new inside new range
   rg = tested.price_range(SELL);
-  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(5998));
-  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8998));
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(5999));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(8999));
 
   // remove last 4 prices
   rs = tested.handle_order_reduced(SELL, price4_t(7499), 100);
