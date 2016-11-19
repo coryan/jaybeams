@@ -65,8 +65,12 @@ public:
 
   /// @returns the best bid price and quantity
   half_quote best_bid() const;
+  /// @returns the worst bid price and quantity
+  half_quote worst_bid() const;
   /// @returns the best offer price and quantity
   half_quote best_offer() const;
+  /// @returns the worst offer price and quantity
+  half_quote worst_offer() const;
 
   /// @returns the number of levels with non-zero quantity for the BUY side.
   std::size_t buy_count() const {

@@ -9,6 +9,7 @@
  * for design and implementation details.
  */
 #include <jb/itch5/compute_book.hpp>
+#include <jb/itch5/price_levels.hpp>
 #include <jb/itch5/process_iostream.hpp>
 #include <jb/book_depth_statistics.hpp>
 #include <jb/fileio.hpp>
@@ -45,7 +46,11 @@ void record_book_depth(
     jb::book_depth_statistics& stats, jb::itch5::message_header const&,
     jb::itch5::order_book const& book,
     jb::itch5::compute_book::book_update const& update) {
-  stats.sample(book.get_book_depth());
+  auto buy_price_levels =
+      jb::itch5::price_levels(book.worst_bid().first, book.best_bid().first);
+  auto sell_price_levels = jb::itch5::price_levels(
+      book.best_offer().first, book.worst_offer().first);
+  stats.sample(buy_price_levels + sell_price_levels);
 }
 
 } // anonymous namespace
