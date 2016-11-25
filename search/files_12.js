@@ -4,6 +4,7 @@ var searchData=
   ['usage_2ehpp',['usage.hpp',['../usage_8hpp.html',1,'']]],
   ['ut_5fadd_5forder_5fmessage_2ecpp',['ut_add_order_message.cpp',['../ut__add__order__message_8cpp.html',1,'']]],
   ['ut_5fadd_5forder_5fmpid_5fmessage_2ecpp',['ut_add_order_mpid_message.cpp',['../ut__add__order__mpid__message_8cpp.html',1,'']]],
+  ['ut_5faligned_5fmulti_5farray_2ecpp',['ut_aligned_multi_array.cpp',['../ut__aligned__multi__array_8cpp.html',1,'']]],
   ['ut_5fallocator_2ecpp',['ut_allocator.cpp',['../ut__allocator_8cpp.html',1,'']]],
   ['ut_5fas_5fhhmmss_2ecpp',['ut_as_hhmmss.cpp',['../ut__as__hhmmss_8cpp.html',1,'']]],
   ['ut_5fassert_5fthrow_2ecpp',['ut_assert_throw.cpp',['../ut__assert__throw_8cpp.html',1,'']]],

@@ -138,6 +138,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:af3aa45614a83c3adb50da66876ef985b"><td class="memTemplParams" colspan="2">template&lt;typename value_type , std::size_t num_dims&gt; </td></tr>
+<tr class="memitem:af3aa45614a83c3adb50da66876ef985b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#af3aa45614a83c3adb50da66876ef985b">aligned_multi_array</a> = boost::multi_array&lt; value_type, num_dims, <a class="el" href="classjb_1_1fftw_1_1allocator.html">jb::fftw::allocator</a>&lt; value_type &gt;&gt;</td></tr>
+<tr class="memdesc:af3aa45614a83c3adb50da66876ef985b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias boost::multi_array with properly allocated storage for FFTW3.  <a href="#af3aa45614a83c3adb50da66876ef985b">More...</a><br /></td></tr>
+<tr class="separator:af3aa45614a83c3adb50da66876ef985b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32f735d794a0448c253ae64787118fc6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a32f735d794a0448c253ae64787118fc6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a32f735d794a0448c253ae64787118fc6">aligned_vector</a> = std::vector&lt; T, <a class="el" href="classjb_1_1fftw_1_1allocator.html">jb::fftw::allocator</a>&lt; T &gt;&gt;</td></tr>
 <tr class="memdesc:a32f735d794a0448c253ae64787118fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias std::vector with properly allocated storage for FFTW3.  <a href="#a32f735d794a0448c253ae64787118fc6">More...</a><br /></td></tr>
@@ -193,11 +197,37 @@ struct jb::fftw::traits&lt; precision_t &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00023">23</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00022">22</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 </div>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="af3aa45614a83c3adb50da66876ef985b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type , std::size_t num_dims&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacejb_1_1fftw.html#af3aa45614a83c3adb50da66876ef985b">jb::fftw::aligned_multi_array</a> = typedef boost::multi_array&lt;value_type, num_dims, <a class="el" href="classjb_1_1fftw_1_1allocator.html">jb::fftw::allocator</a>&lt;value_type&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Alias boost::multi_array with properly allocated storage for FFTW3. </p>
+<p>FFTW3 recommends using storage aligned for SIMD operations. <a class="el" href="namespacejb_1_1fftw.html" title="Wrappers for the FFTW3 library. ">jb::fftw</a> defines an STL allocator to take advantage of the FFTW3 memory allocation functions that guarantee this alignment. This type alias makes it easy to create boost::multi_arrays using the allocator.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_type</td><td>the type stored by the multi_array </td></tr>
+    <tr><td class="paramname">num_dims</td><td>the number of dimensions in the multi array </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="aligned__multi__array_8hpp_source.html#l00024">24</a> of file <a class="el" href="aligned__multi__array_8hpp_source.html">aligned_multi_array.hpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a32f735d794a0448c253ae64787118fc6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -211,9 +241,15 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Alias std::vector with properly allocated storage for FFTW3. </p>
-<p>FFTW3 recommends using storage aligned for SIMD operations. <a class="el" href="namespacejb_1_1fftw.html" title="Wrappers for the FFTW3 library. ">jb::fftw</a> defines an STL allocator to take advantage of the FFTW3 memory allocation functions that guarantee this alignment. This type alias makes it easy to create std::vectors using the allocator. </p>
+<p>FFTW3 recommends using storage aligned for SIMD operations. <a class="el" href="namespacejb_1_1fftw.html" title="Wrappers for the FFTW3 library. ">jb::fftw</a> defines an STL allocator to take advantage of the FFTW3 memory allocation functions that guarantee this alignment. This type alias makes it easy to create std::vectors using the allocator.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type stored by the vector </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="aligned__vector_8hpp_source.html#l00020">20</a> of file <a class="el" href="aligned__vector_8hpp_source.html">aligned_vector.hpp</a>.</p>
+<p>Definition at line <a class="el" href="aligned__vector_8hpp_source.html#l00022">22</a> of file <a class="el" href="aligned__vector_8hpp_source.html">aligned_vector.hpp</a>.</p>
 
 </div>
 </div>
