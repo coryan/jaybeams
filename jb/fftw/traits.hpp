@@ -219,11 +219,10 @@ struct traits<long double> {
  * The traits for a std::complex type are the same as the traits for the
  * underlying precision of the complex type instantiation.  The
  * objective is to simplify/normalize the interface into FFTW3, so all
- * uses of FFTW, either via 
+ * uses of FFTW look similar in C++.
  */
-template<typename T>
-struct traits<std::complex<T>> : public traits<T> {
-};
+template <typename T>
+struct traits<std::complex<T>> : public traits<T> {};
 
 } // namespace fftw
 } // namespace jb

@@ -49,7 +49,8 @@ public:
   typedef jb::fftw::plan<timeseries_type, frequency_timeseries_type> dplan;
 
   /// The execution plan to apply the inverse (aka backward) DFT
-  typedef jb::fftw::plan<frequency_timeseries_type, output_timeseries_type> iplan;
+  typedef jb::fftw::plan<frequency_timeseries_type, output_timeseries_type>
+      iplan;
   //@}
 
   /// Constructor

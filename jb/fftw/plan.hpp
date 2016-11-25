@@ -37,7 +37,8 @@ public:
    * type traits
    */
   typedef typename in_timeseries_type::value_type in_value_type;
-  typedef typename jb::extract_value_type<in_value_type>::precision precision_type;
+  typedef
+      typename jb::extract_value_type<in_value_type>::precision precision_type;
   typedef ::jb::fftw::traits<precision_type> traits;
   typedef typename traits::std_complex_type std_complex_type;
   typedef typename traits::fftw_complex_type fftw_complex_type;
@@ -92,11 +93,9 @@ private:
 
   // grant access to create_*_impl functions
   template <typename itype, typename otype>
-  friend plan<itype, otype>
-  create_forward_plan(itype const&, otype&, int);
+  friend plan<itype, otype> create_forward_plan(itype const&, otype&, int);
   template <typename itype, typename otype>
-  friend plan<itype, otype>
-  create_backward_plan(itype const&, otype&, int);
+  friend plan<itype, otype> create_backward_plan(itype const&, otype&, int);
 
 private:
   /// Execute the plan in the c2c case
@@ -211,8 +210,10 @@ struct plan<in_timeseries_type, out_timeseries_type>::check_constraints {
   check_constraints() {
     typedef typename in_timeseries_type::value_type in_value_type;
     typedef typename out_timeseries_type::value_type out_value_type;
-    typedef typename jb::extract_value_type<in_value_type>::precision in_precision_type;
-    typedef typename jb::extract_value_type<out_value_type>::precision out_precision_type;
+    typedef typename jb::extract_value_type<in_value_type>::precision
+        in_precision_type;
+    typedef typename jb::extract_value_type<out_value_type>::precision
+        out_precision_type;
     static_assert(
         std::is_same<in_precision_type, out_precision_type>::value,
         "Mismatched precision_type, both timeseries must have the same"
