@@ -2,6 +2,7 @@
 #define jb_fftw_plan_hpp
 
 #include <jb/fftw/cast.hpp>
+#include <jb/complex_traits.hpp>
 
 #include <memory>
 #include <stdexcept>
@@ -9,7 +10,8 @@
 namespace jb {
 namespace fftw {
 
-int const default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;
+int constexpr default_plan_flags =
+    (FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED);
 
 /**
  * Wrap FFTW3 plan objects to automatically destroy them.
@@ -24,18 +26,20 @@ int const default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;
  * that have single (fftwf_*), double (fftw_*) or quad-precision
  * (fftwl_*).  In C++ we prefer to hide such details in generics.
  *
- * @tparam precision_t the type of floating point value to use, must
- * be either float, double or long double.
+ * @tparam in_timeseries_type the type of the input timeseries
+ * @tparam out_timeseries_type the type of the output timeseries
  */
-template <typename precision_t>
+template <typename in_timeseries_type, typename out_timeseries_type>
 class plan {
 public:
   //@{
   /**
    * type traits
    */
-  typedef ::jb::fftw::traits<precision_t> traits;
-  typedef typename traits::precision_type precision_type;
+  typedef typename in_timeseries_type::value_type in_value_type;
+  typedef
+      typename jb::extract_value_type<in_value_type>::precision precision_type;
+  typedef ::jb::fftw::traits<precision_type> traits;
   typedef typename traits::std_complex_type std_complex_type;
   typedef typename traits::fftw_complex_type fftw_complex_type;
   typedef typename traits::fftw_plan_type fftw_plan_type;
@@ -61,6 +65,7 @@ public:
 
   /// Destructor, cleanup the plan.
   ~plan() {
+    check_constraints checker;
     if (p_ != nullptr) {
       traits::destroy_plan(p_);
     }
@@ -75,34 +80,22 @@ public:
   //@}
 
   /// Execute the plan for vectors
-  template <typename invector, typename outvector>
-  void execute(invector const& in, outvector& out) {
+  void execute(in_timeseries_type const& in, out_timeseries_type& out) {
     if (in.size() != out.size()) {
-      throw std::invalid_argument("mismatched vector size in create_forward()");
+      throw std::invalid_argument("mismatched vector size in execute()");
     }
     execute_impl(fftw_cast(in), fftw_cast(out));
   }
 
-  /// Create the plan for vectors
-  template <typename invector, typename outvector>
-  static plan create_forward(
-      invector const& in, outvector& out, int flags = default_flags) {
-    if (in.size() != out.size()) {
-      throw std::invalid_argument("mismatched vector size in create_forward()");
-    }
-    return create_forward_impl(in.size(), fftw_cast(in), fftw_cast(out), flags);
-  }
+private:
+  // forward declare a helper type to check compile-time constraints.
+  struct check_constraints;
 
-  /// Create the plan for vectors
-  template <typename invector, typename outvector>
-  static plan create_backward(
-      invector const& in, outvector& out, int flags = default_flags) {
-    if (in.size() != out.size()) {
-      throw std::invalid_argument("mismatched vector size in create_forward()");
-    }
-    return create_backward_impl(
-        in.size(), fftw_cast(in), fftw_cast(out), flags);
-  }
+  // grant access to create_*_impl functions
+  template <typename itype, typename otype>
+  friend plan<itype, otype> create_forward_plan(itype const&, otype&, int);
+  template <typename itype, typename otype>
+  friend plan<itype, otype> create_backward_plan(itype const&, otype&, int);
 
 private:
   /// Execute the plan in the c2c case
@@ -155,6 +148,77 @@ private:
 
 private:
   fftw_plan_type p_;
+};
+
+/**
+ * Create a plan to compute the DFT given the input and output
+ * vectors.
+ *
+ * @param in the input timeseries
+ * @param out the output timeseries
+ * @param flags the FFTW flags for the plan
+ * @throws std::invalid_argument if the input and output vectors are
+ * not compatible
+ * @returns a jb::fftw::plan<> of the right type.
+ *
+ * @tparam in_timeseries_type the type of the input timeseries
+ * @tparam out_timeseries_type the type of the output timeseries
+ */
+template <typename in_timeseries_type, typename out_timeseries_type>
+plan<in_timeseries_type, out_timeseries_type> create_forward_plan(
+    in_timeseries_type const& in, out_timeseries_type& out,
+    int flags = default_plan_flags) {
+  if (in.size() != out.size()) {
+    throw std::invalid_argument(
+        "mismatched vector size in create_forward_plan()");
+  }
+  return plan<in_timeseries_type, out_timeseries_type>::create_forward_impl(
+      in.size(), fftw_cast(in), fftw_cast(out), flags);
+}
+
+/**
+ * Create a plan to compute the inverse DFT given the input and output
+ * vectors.
+ *
+ * @param in the input timeseries
+ * @param out the output timeseries
+ * @param flags the FFTW flags for the plan
+ * @throws std::invalid_argument if the input and output vectors are
+ * not compatible
+ * @returns a jb::fftw::plan<> of the right type.
+ *
+ * @tparam in_timeseries_type the type of the input timeseries
+ * @tparam out_timeseries_type the type of the output timeseries
+ */
+template <typename in_timeseries_type, typename out_timeseries_type>
+plan<in_timeseries_type, out_timeseries_type> create_backward_plan(
+    in_timeseries_type const& in, out_timeseries_type& out,
+    int flags = default_plan_flags) {
+  if (in.size() != out.size()) {
+    throw std::invalid_argument(
+        "mismatched vector size in create_backward_plan()");
+  }
+  return plan<in_timeseries_type, out_timeseries_type>::create_backward_impl(
+      in.size(), fftw_cast(in), fftw_cast(out), flags);
+}
+
+/**
+ * Check the compile-time constraints for a jb::fftw::plan<>
+ */
+template <typename in_timeseries_type, typename out_timeseries_type>
+struct plan<in_timeseries_type, out_timeseries_type>::check_constraints {
+  check_constraints() {
+    typedef typename in_timeseries_type::value_type in_value_type;
+    typedef typename out_timeseries_type::value_type out_value_type;
+    typedef typename jb::extract_value_type<in_value_type>::precision
+        in_precision_type;
+    typedef typename jb::extract_value_type<out_value_type>::precision
+        out_precision_type;
+    static_assert(
+        std::is_same<in_precision_type, out_precision_type>::value,
+        "Mismatched precision_type, both timeseries must have the same"
+        " precision");
+  }
 };
 
 } // namespace fftw
