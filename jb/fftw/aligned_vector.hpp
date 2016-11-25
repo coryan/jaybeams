@@ -15,6 +15,8 @@ namespace fftw {
  * memory allocation functions that guarantee this alignment.  This
  * type alias makes it easy to create std::vectors using the
  * allocator.
+ *
+ * @tparam T the type stored by the vector
  */
 template <typename T>
 using aligned_vector = std::vector<T, jb::fftw::allocator<T>>;
