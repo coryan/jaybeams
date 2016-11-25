@@ -7,23 +7,23 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="--enable-fftw3"
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS="--enable-fftw3"
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes CONFIGUREFLAGS="--enable-fftw3"
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=g++ CXXFLAGS=-g
+      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=g++ CXXFLAGS=-g CONFIGUREFLAGS="--enable-fftw3"
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3
+      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS="--enable-fftw3"
 
 services:
   - docker
