@@ -26,23 +26,46 @@ template <typename timeseries_t,
           template <typename T> class vector = jb::fftw::aligned_vector>
 class time_delay_estimator {
 public:
+  //@{
+  /**
+   * @name Type traits
+   */
+  /// The input timeseries type
   typedef timeseries_t timeseries_type;
-  typedef typename timeseries_type::value_type value_type;
-  typedef typename jb::extract_value_type<value_type>::precision precision_type;
-  typedef jb::fftw::plan<precision_type> plan;
 
+  /// The values stored in the input timeseries
+  typedef typename timeseries_type::value_type value_type;
+
+  /// Extract T out of std::complex<T>, otherwise simply T.
+  typedef typename jb::extract_value_type<value_type>::precision precision_type;
+
+  /// The type used to store the DFT of the input timeseries
+  typedef vector<std::complex<precision_type>> frequency_timeseries_type;
+
+  /// The type used to stored the inverse of the DFT
+  typedef vector<precision_type> output_timeseries_type;
+
+  /// The execution plan to apply the (forward) DFT
+  typedef jb::fftw::plan<timeseries_type, frequency_timeseries_type> dplan;
+
+  /// The execution plan to apply the inverse (aka backward) DFT
+  typedef jb::fftw::plan<frequency_timeseries_type, output_timeseries_type> iplan;
+  //@}
+
+  /// Constructor
   time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
       : tmpa_(a.size())
       , tmpb_(b.size())
-      , a2tmpa_(plan::create_forward(a, tmpa_, planning_flags()))
-      , b2tmpb_(plan::create_forward(b, tmpb_, planning_flags()))
+      , a2tmpa_(create_forward_plan(a, tmpa_, planning_flags()))
+      , b2tmpb_(create_forward_plan(b, tmpb_, planning_flags()))
       , out_(a.size())
-      , tmpa2out_(plan::create_backward(tmpa_, out_, planning_flags())) {
+      , tmpa2out_(create_backward_plan(tmpa_, out_, planning_flags())) {
     if (a.size() != b.size()) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
     }
   }
 
+  /// Compute the time-delay estimate between two timeseries
   std::pair<bool, precision_type>
   estimate_delay(timeseries_type const& a, timeseries_type const& b) {
     // Validate the input sizes.  For some types of timeseries the
@@ -91,12 +114,12 @@ private:
   }
 
 private:
-  vector<std::complex<precision_type>> tmpa_;
-  vector<std::complex<precision_type>> tmpb_;
-  plan a2tmpa_;
-  plan b2tmpb_;
-  vector<precision_type> out_;
-  plan tmpa2out_;
+  frequency_timeseries_type tmpa_;
+  frequency_timeseries_type tmpb_;
+  dplan a2tmpa_;
+  dplan b2tmpb_;
+  output_timeseries_type out_;
+  iplan tmpa2out_;
 };
 
 } // namespace fftw
