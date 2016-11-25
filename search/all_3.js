@@ -39,8 +39,8 @@ var searchData=
   ['decoder_3c_20validate_2c_20std_3a_3auint8_5ft_20_3e',['decoder&lt; validate, std::uint8_t &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01std_1_1uint8__t_01_4.html',1,'jb::itch5']]],
   ['decoder_3c_20validate_2c_20system_5fevent_5fmessage_20_3e',['decoder&lt; validate, system_event_message &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01system__event__message_01_4.html',1,'jb::itch5']]],
   ['decoder_3c_20validate_2c_20timestamp_20_3e',['decoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
-  ['default_5fflags',['default_flags',['../namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50',1,'jb::fftw']]],
   ['default_5fgetenv',['default_getenv',['../structjb_1_1default__getenv.html',1,'jb']]],
+  ['default_5fplan_5fflags',['default_plan_flags',['../namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07',1,'jb::fftw']]],
   ['default_5fvalidator',['default_validator',['../structjb_1_1default__validator.html',1,'jb']]],
   ['defaults',['defaults',['../namespacedefaults.html',1,'']]],
   ['delay_5ftimeseries',['delay_timeseries',['../namespacejb_1_1testing.html#a759e9b1da5a78a5269cdce029f78475c',1,'jb::testing']]],
@@ -56,6 +56,7 @@ var searchData=
   ['destroy_5fplan',['destroy_plan',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a898cd3e7b6baf88093d50b0f943da548',1,'jb::fftw::traits&lt; double &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#ae3eccdbe618a250766aeaf9826448225',1,'jb::fftw::traits&lt; float &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff',1,'jb::fftw::traits&lt; long double &gt;::destroy_plan()']]],
   ['difference_5ftype',['difference_type',['../classjb_1_1fftw_1_1allocator.html#a59d26b2b7c8604f8b02eaa40c07ea71d',1,'jb::fftw::allocator']]],
   ['do_5freduce',['do_reduce',['../classjb_1_1itch5_1_1compute__book.html#a3122d2827a75699c0b7dd0d16fbbc1d0',1,'jb::itch5::compute_book']]],
+  ['dplan',['dplan',['../classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e',1,'jb::fftw::time_delay_estimator']]],
   ['duration',['duration',['../classjb_1_1itch5_1_1mold__udp__pacer.html#a0383eb886fcffbf533eaf0049c969f63',1,'jb::itch5::mold_udp_pacer::duration()'],['../classjb_1_1testing_1_1microbenchmark__base.html#a75b1b3af82f33a23b8d6b99894a2c426',1,'jb::testing::microbenchmark_base::duration()']]],
   ['duration_5ftype',['duration_type',['../classjb_1_1event__rate__estimator.html#a0c97464fbf1de7bc974b548b7bc35355',1,'jb::event_rate_estimator']]]
 ];

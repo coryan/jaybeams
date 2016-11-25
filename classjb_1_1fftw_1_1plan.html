@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>JayBeams: jb::fftw::plan&lt; precision_t &gt; Class Template Reference</title>
+<title>JayBeams: jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -97,14 +97,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classjb_1_1fftw_1_1plan-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">jb::fftw::plan&lt; precision_t &gt; Class Template Reference</div>  </div>
+<div class="title">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -113,130 +114,170 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="plan_8hpp_source.html">plan.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1plan_1_1check__constraints.html">check_constraints</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the compile-time constraints for a jb::fftw::plan&lt;&gt;  <a href="structjb_1_1fftw_1_1plan_1_1check__constraints.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a7d1e3a97b68ac77440aaa0c954335fc3"><td class="memItemLeft" align="right" valign="top">typedef ::<a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; precision_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a7d1e3a97b68ac77440aaa0c954335fc3">traits</a></td></tr>
-<tr class="memdesc:a7d1e3a97b68ac77440aaa0c954335fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">type traits  <a href="#a7d1e3a97b68ac77440aaa0c954335fc3">More...</a><br /></td></tr>
-<tr class="separator:a7d1e3a97b68ac77440aaa0c954335fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1d0ca5ab00e63e4548f8854e7551206"><td class="memItemLeft" align="right" valign="top">typedef traits::precision_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a></td></tr>
-<tr class="separator:aa1d0ca5ab00e63e4548f8854e7551206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa190aa968654479ba02477fe9433cc9"><td class="memItemLeft" align="right" valign="top">typedef traits::std_complex_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#aaa190aa968654479ba02477fe9433cc9">std_complex_type</a></td></tr>
-<tr class="separator:aaa190aa968654479ba02477fe9433cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9b02d73405bed5905834b4533eefdd5"><td class="memItemLeft" align="right" valign="top">typedef traits::fftw_complex_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a></td></tr>
-<tr class="separator:ad9b02d73405bed5905834b4533eefdd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac523eaf4d90b5e57c55cb9c00aa90382"><td class="memItemLeft" align="right" valign="top">typedef traits::fftw_plan_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a></td></tr>
-<tr class="separator:ac523eaf4d90b5e57c55cb9c00aa90382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f4e87e09258e22ec53d34278640afb3"><td class="memItemLeft" align="right" valign="top">typedef in_timeseries_type::value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a6f4e87e09258e22ec53d34278640afb3">in_value_type</a></td></tr>
+<tr class="memdesc:a6f4e87e09258e22ec53d34278640afb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">type traits  <a href="#a6f4e87e09258e22ec53d34278640afb3">More...</a><br /></td></tr>
+<tr class="separator:a6f4e87e09258e22ec53d34278640afb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e22542e97b0c6d120f04a1737401715"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacejb.html#structjb_1_1extract__value__type">jb::extract_value_type</a>&lt; <a class="el" href="classjb_1_1fftw_1_1plan.html#a6f4e87e09258e22ec53d34278640afb3">in_value_type</a> &gt;::precision&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a></td></tr>
+<tr class="separator:a2e22542e97b0c6d120f04a1737401715"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7ae9d0f3a921b54bde9a5b98f596c16"><td class="memItemLeft" align="right" valign="top">typedef ::<a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; <a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad7ae9d0f3a921b54bde9a5b98f596c16">traits</a></td></tr>
+<tr class="separator:ad7ae9d0f3a921b54bde9a5b98f596c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d76cfb903f32c5e7c5cc38023836bbb"><td class="memItemLeft" align="right" valign="top">typedef traits::std_complex_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a8d76cfb903f32c5e7c5cc38023836bbb">std_complex_type</a></td></tr>
+<tr class="separator:a8d76cfb903f32c5e7c5cc38023836bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0600c923388743e5b873b980d1892631"><td class="memItemLeft" align="right" valign="top">typedef traits::fftw_complex_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a></td></tr>
+<tr class="separator:a0600c923388743e5b873b980d1892631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33738c43c861cf191f925ef6c08d312b"><td class="memItemLeft" align="right" valign="top">typedef traits::fftw_plan_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a></td></tr>
+<tr class="separator:a33738c43c861cf191f925ef6c08d312b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af16c85cf88c4cc11ee6631da1b8d2283"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#af16c85cf88c4cc11ee6631da1b8d2283">plan</a> ()</td></tr>
-<tr class="memdesc:af16c85cf88c4cc11ee6631da1b8d2283"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create unusable, empty, or null plan.  <a href="#af16c85cf88c4cc11ee6631da1b8d2283">More...</a><br /></td></tr>
-<tr class="separator:af16c85cf88c4cc11ee6631da1b8d2283"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f270477ad7c18cb8191329a83b2237"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a02f270477ad7c18cb8191329a83b2237">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
-<tr class="memdesc:a02f270477ad7c18cb8191329a83b2237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic move constructor.  <a href="#a02f270477ad7c18cb8191329a83b2237">More...</a><br /></td></tr>
-<tr class="separator:a02f270477ad7c18cb8191329a83b2237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fc5af6dabbc20abb3287c959fd0d761"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a4fc5af6dabbc20abb3287c959fd0d761">operator=</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
-<tr class="memdesc:a4fc5af6dabbc20abb3287c959fd0d761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assignment.  <a href="#a4fc5af6dabbc20abb3287c959fd0d761">More...</a><br /></td></tr>
-<tr class="separator:a4fc5af6dabbc20abb3287c959fd0d761"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accde47470912ce2e31a020dcb8658a3f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#accde47470912ce2e31a020dcb8658a3f">~plan</a> ()</td></tr>
-<tr class="memdesc:accde47470912ce2e31a020dcb8658a3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, cleanup the plan.  <a href="#accde47470912ce2e31a020dcb8658a3f">More...</a><br /></td></tr>
-<tr class="separator:accde47470912ce2e31a020dcb8658a3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b1ed5b8078f52d5b1902b49775c5c6e"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:a8b1ed5b8078f52d5b1902b49775c5c6e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a8b1ed5b8078f52d5b1902b49775c5c6e">execute</a> (invector const &amp;in, outvector &amp;out)</td></tr>
-<tr class="memdesc:a8b1ed5b8078f52d5b1902b49775c5c6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for vectors.  <a href="#a8b1ed5b8078f52d5b1902b49775c5c6e">More...</a><br /></td></tr>
-<tr class="separator:a8b1ed5b8078f52d5b1902b49775c5c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf82bc054d8034fce470015ed38c32d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#adf82bc054d8034fce470015ed38c32d6">plan</a> ()</td></tr>
+<tr class="memdesc:adf82bc054d8034fce470015ed38c32d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create unusable, empty, or null plan.  <a href="#adf82bc054d8034fce470015ed38c32d6">More...</a><br /></td></tr>
+<tr class="separator:adf82bc054d8034fce470015ed38c32d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af95df35dd08a675d21ab47a093f6319e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#af95df35dd08a675d21ab47a093f6319e">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
+<tr class="memdesc:af95df35dd08a675d21ab47a093f6319e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic move constructor.  <a href="#af95df35dd08a675d21ab47a093f6319e">More...</a><br /></td></tr>
+<tr class="separator:af95df35dd08a675d21ab47a093f6319e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d6bc5ae021db2b4d6c8b3faf6cc4d06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0d6bc5ae021db2b4d6c8b3faf6cc4d06">operator=</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
+<tr class="memdesc:a0d6bc5ae021db2b4d6c8b3faf6cc4d06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assignment.  <a href="#a0d6bc5ae021db2b4d6c8b3faf6cc4d06">More...</a><br /></td></tr>
+<tr class="separator:a0d6bc5ae021db2b4d6c8b3faf6cc4d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aefeaaade05a3415928d642d4bf27a1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a8aefeaaade05a3415928d642d4bf27a1">~plan</a> ()</td></tr>
+<tr class="memdesc:a8aefeaaade05a3415928d642d4bf27a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, cleanup the plan.  <a href="#a8aefeaaade05a3415928d642d4bf27a1">More...</a><br /></td></tr>
+<tr class="separator:a8aefeaaade05a3415928d642d4bf27a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581770a23a19b9490dc6c0f251b5e135"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a581770a23a19b9490dc6c0f251b5e135">execute</a> (in_timeseries_type const &amp;in, out_timeseries_type &amp;out)</td></tr>
+<tr class="memdesc:a581770a23a19b9490dc6c0f251b5e135"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for vectors.  <a href="#a581770a23a19b9490dc6c0f251b5e135">More...</a><br /></td></tr>
+<tr class="separator:a581770a23a19b9490dc6c0f251b5e135"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Prevent copy construction and assignment</div></td></tr>
-<tr class="memitem:a263b362e32a35ade7508e72254af8793"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a263b362e32a35ade7508e72254af8793">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
-<tr class="separator:a263b362e32a35ade7508e72254af8793"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4854ffb44ce87eeaa9313a69c97a7876"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a4854ffb44ce87eeaa9313a69c97a7876">operator=</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
-<tr class="separator:a4854ffb44ce87eeaa9313a69c97a7876"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3fbd94ac7c93288a8d918630df4005f1"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:a3fbd94ac7c93288a8d918630df4005f1"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a3fbd94ac7c93288a8d918630df4005f1">create_forward</a> (invector const &amp;in, outvector &amp;out, int flags=<a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a>)</td></tr>
-<tr class="memdesc:a3fbd94ac7c93288a8d918630df4005f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for vectors.  <a href="#a3fbd94ac7c93288a8d918630df4005f1">More...</a><br /></td></tr>
-<tr class="separator:a3fbd94ac7c93288a8d918630df4005f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaca06d1a2822cf2e02ddad8e1ade3b27"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:aaca06d1a2822cf2e02ddad8e1ade3b27"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#aaca06d1a2822cf2e02ddad8e1ade3b27">create_backward</a> (invector const &amp;in, outvector &amp;out, int flags=<a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a>)</td></tr>
-<tr class="memdesc:aaca06d1a2822cf2e02ddad8e1ade3b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for vectors.  <a href="#aaca06d1a2822cf2e02ddad8e1ade3b27">More...</a><br /></td></tr>
-<tr class="separator:aaca06d1a2822cf2e02ddad8e1ade3b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a399d93e550ca597bc1f4a849c12a26ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a399d93e550ca597bc1f4a849c12a26ec">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
+<tr class="separator:a399d93e550ca597bc1f4a849c12a26ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e1903771f05b0d32ff13a35153377d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a9e1903771f05b0d32ff13a35153377d4">operator=</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
+<tr class="separator:a9e1903771f05b0d32ff13a35153377d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ac803dd35f0b0e0dd629e2f6dbc24a679"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac803dd35f0b0e0dd629e2f6dbc24a679">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *out)</td></tr>
-<tr class="memdesc:ac803dd35f0b0e0dd629e2f6dbc24a679"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan in the c2c case.  <a href="#ac803dd35f0b0e0dd629e2f6dbc24a679">More...</a><br /></td></tr>
-<tr class="separator:ac803dd35f0b0e0dd629e2f6dbc24a679"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52bec504daed8318bda1897938c80772"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a52bec504daed8318bda1897938c80772">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *out)</td></tr>
-<tr class="memdesc:a52bec504daed8318bda1897938c80772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for arrays of r2c case.  <a href="#a52bec504daed8318bda1897938c80772">More...</a><br /></td></tr>
-<tr class="separator:a52bec504daed8318bda1897938c80772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af53725519021a538417d1a5257f7605d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#af53725519021a538417d1a5257f7605d">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> *out)</td></tr>
-<tr class="memdesc:af53725519021a538417d1a5257f7605d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for arrays of r2c case.  <a href="#af53725519021a538417d1a5257f7605d">More...</a><br /></td></tr>
-<tr class="separator:af53725519021a538417d1a5257f7605d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af33f13a8950469bbd0363ac6495227df"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#af33f13a8950469bbd0363ac6495227df">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a> p)</td></tr>
-<tr class="separator:af33f13a8950469bbd0363ac6495227df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a070fce1551f3ec04b314eee3574566"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0a070fce1551f3ec04b314eee3574566">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *out)</td></tr>
+<tr class="memdesc:a0a070fce1551f3ec04b314eee3574566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan in the c2c case.  <a href="#a0a070fce1551f3ec04b314eee3574566">More...</a><br /></td></tr>
+<tr class="separator:a0a070fce1551f3ec04b314eee3574566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae489b11177e28ead4ae8118cc9905b9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ae489b11177e28ead4ae8118cc9905b9f">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *out)</td></tr>
+<tr class="memdesc:ae489b11177e28ead4ae8118cc9905b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for arrays of r2c case.  <a href="#ae489b11177e28ead4ae8118cc9905b9f">More...</a><br /></td></tr>
+<tr class="separator:ae489b11177e28ead4ae8118cc9905b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ab1b1b9b8701c43af73315ddc4aa928"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a6ab1b1b9b8701c43af73315ddc4aa928">execute_impl</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> *out)</td></tr>
+<tr class="memdesc:a6ab1b1b9b8701c43af73315ddc4aa928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plan for arrays of r2c case.  <a href="#a6ab1b1b9b8701c43af73315ddc4aa928">More...</a><br /></td></tr>
+<tr class="separator:a6ab1b1b9b8701c43af73315ddc4aa928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517857fd6505b4590c2174f9294911c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a517857fd6505b4590c2174f9294911c7">plan</a> (<a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a> p)</td></tr>
+<tr class="separator:a517857fd6505b4590c2174f9294911c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a56142d76b8793cbf03a3d35c33b65a2c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a56142d76b8793cbf03a3d35c33b65a2c">create_forward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *out, int flags)</td></tr>
-<tr class="memdesc:a56142d76b8793cbf03a3d35c33b65a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the direct plan for arrays in the c2c case.  <a href="#a56142d76b8793cbf03a3d35c33b65a2c">More...</a><br /></td></tr>
-<tr class="separator:a56142d76b8793cbf03a3d35c33b65a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6afb1f0a1ad4d0ee60b5d16aff7674c9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a6afb1f0a1ad4d0ee60b5d16aff7674c9">create_backward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *out, int flags)</td></tr>
-<tr class="memdesc:a6afb1f0a1ad4d0ee60b5d16aff7674c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the inverse plan for arrays in the c2c case.  <a href="#a6afb1f0a1ad4d0ee60b5d16aff7674c9">More...</a><br /></td></tr>
-<tr class="separator:a6afb1f0a1ad4d0ee60b5d16aff7674c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab80770003b74164f5ce74efb86d5494e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ab80770003b74164f5ce74efb86d5494e">create_forward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *out, int flags)</td></tr>
-<tr class="memdesc:ab80770003b74164f5ce74efb86d5494e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for arrays for r2c case.  <a href="#ab80770003b74164f5ce74efb86d5494e">More...</a><br /></td></tr>
-<tr class="separator:ab80770003b74164f5ce74efb86d5494e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8cb2459870bf7f1210c30282f4693fe"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ab8cb2459870bf7f1210c30282f4693fe">create_backward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> *out, int flags)</td></tr>
-<tr class="memdesc:ab8cb2459870bf7f1210c30282f4693fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for the c2r case.  <a href="#ab8cb2459870bf7f1210c30282f4693fe">More...</a><br /></td></tr>
-<tr class="separator:ab8cb2459870bf7f1210c30282f4693fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30d5f3ccdee201eca115b8ecf2383330"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a30d5f3ccdee201eca115b8ecf2383330">create_forward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a30d5f3ccdee201eca115b8ecf2383330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the direct plan for arrays in the c2c case.  <a href="#a30d5f3ccdee201eca115b8ecf2383330">More...</a><br /></td></tr>
+<tr class="separator:a30d5f3ccdee201eca115b8ecf2383330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8af3e4df04be46d3101d98b8e0db3ba6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a8af3e4df04be46d3101d98b8e0db3ba6">create_backward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a8af3e4df04be46d3101d98b8e0db3ba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the inverse plan for arrays in the c2c case.  <a href="#a8af3e4df04be46d3101d98b8e0db3ba6">More...</a><br /></td></tr>
+<tr class="separator:a8af3e4df04be46d3101d98b8e0db3ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a645e65af0b9b9b45385f4eeacd6ee9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a4a645e65af0b9b9b45385f4eeacd6ee9">create_forward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a4a645e65af0b9b9b45385f4eeacd6ee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for arrays for r2c case.  <a href="#a4a645e65af0b9b9b45385f4eeacd6ee9">More...</a><br /></td></tr>
+<tr class="separator:a4a645e65af0b9b9b45385f4eeacd6ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad564d27f58ef0771b82b5bc6746c33ea"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad564d27f58ef0771b82b5bc6746c33ea">create_backward_impl</a> (std::size_t nsamples, <a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *in, <a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:ad564d27f58ef0771b82b5bc6746c33ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the plan for the c2r case.  <a href="#ad564d27f58ef0771b82b5bc6746c33ea">More...</a><br /></td></tr>
+<tr class="separator:ad564d27f58ef0771b82b5bc6746c33ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a896f5797e827b457c48d60d35a281883"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a896f5797e827b457c48d60d35a281883">p_</a></td></tr>
-<tr class="separator:a896f5797e827b457c48d60d35a281883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1be21e4036d1fb4a838f7d7cd49abb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad1be21e4036d1fb4a838f7d7cd49abb3">p_</a></td></tr>
+<tr class="separator:ad1be21e4036d1fb4a838f7d7cd49abb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a06ae7367a7093e3c37aba3f80662996a"><td class="memTemplParams" colspan="2">template&lt;typename itype , typename otype &gt; </td></tr>
+<tr class="memitem:a06ae7367a7093e3c37aba3f80662996a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; itype, otype &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#a06ae7367a7093e3c37aba3f80662996a">create_forward_plan</a> (itype const &amp;, otype &amp;, int)</td></tr>
+<tr class="separator:a06ae7367a7093e3c37aba3f80662996a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac497d63eea011cd95e64ef970b7c592c"><td class="memTemplParams" colspan="2">template&lt;typename itype , typename otype &gt; </td></tr>
+<tr class="memitem:ac497d63eea011cd95e64ef970b7c592c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; itype, otype &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac497d63eea011cd95e64ef970b7c592c">create_backward_plan</a> (itype const &amp;, otype &amp;, int)</td></tr>
+<tr class="separator:ac497d63eea011cd95e64ef970b7c592c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename precision_t&gt;<br />
-class jb::fftw::plan&lt; precision_t &gt;</h3>
+<div class="textblock"><h3>template&lt;typename in_timeseries_type, typename out_timeseries_type&gt;<br />
+class jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</h3>
 
 <p>Wrap FFTW3 plan objects to automatically destroy them. </p>
 <p>The FFTW3 optimizes execution by pre-computing coefficients and execution plans for a DFT based on the original types, size and alingment of the data. These plans must be destroyed to release resources. FFTW3, being a C library, requires wrappers to automate the destruction of these objects.</p>
 <p>In addition, the FFTW3 library uses different names for the types that have single (fftwf_*), double (fftw_*) or quad-precision (fftwl_*). In C++ we prefer to hide such details in generics.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">precision_t</td><td>the type of floating point value to use, must be either float, double or long double. </td></tr>
+    <tr><td class="paramname">in_timeseries_type</td><td>the type of the input timeseries </td></tr>
+    <tr><td class="paramname">out_timeseries_type</td><td>the type of the output timeseries </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00031">31</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00033">33</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="ad9b02d73405bed5905834b4533eefdd5"></a>
+<a class="anchor" id="a0600c923388743e5b873b980d1892631"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef traits::fftw_complex_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a></td>
+          <td class="memname">typedef traits::fftw_complex_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00040">40</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00044">44</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac523eaf4d90b5e57c55cb9c00aa90382"></a>
+<a class="anchor" id="a33738c43c861cf191f925ef6c08d312b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef traits::fftw_plan_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a></td>
+          <td class="memname">typedef traits::fftw_plan_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00045">45</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6f4e87e09258e22ec53d34278640afb3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef in_timeseries_type::value_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a6f4e87e09258e22ec53d34278640afb3">in_value_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>type traits </p>
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00039">39</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e22542e97b0c6d120f04a1737401715"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="namespacejb.html#structjb_1_1extract__value__type">jb::extract_value_type</a>&lt;<a class="el" href="classjb_1_1fftw_1_1plan.html#a6f4e87e09258e22ec53d34278640afb3">in_value_type</a>&gt;::precision <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -245,68 +286,50 @@ template&lt;typename precision_t&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa1d0ca5ab00e63e4548f8854e7551206"></a>
+<a class="anchor" id="a8d76cfb903f32c5e7c5cc38023836bbb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef traits::precision_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a></td>
+          <td class="memname">typedef traits::std_complex_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a8d76cfb903f32c5e7c5cc38023836bbb">std_complex_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00038">38</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00043">43</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aaa190aa968654479ba02477fe9433cc9"></a>
+<a class="anchor" id="ad7ae9d0f3a921b54bde9a5b98f596c16"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef traits::std_complex_type <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#aaa190aa968654479ba02477fe9433cc9">std_complex_type</a></td>
+          <td class="memname">typedef ::<a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt;<a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#ad7ae9d0f3a921b54bde9a5b98f596c16">traits</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00039">39</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7d1e3a97b68ac77440aaa0c954335fc3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef ::<a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt;precision_t&gt; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html#a7d1e3a97b68ac77440aaa0c954335fc3">traits</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>type traits </p>
-
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00037">37</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00042">42</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af16c85cf88c4cc11ee6631da1b8d2283"></a>
+<a class="anchor" id="adf82bc054d8034fce470015ed38c32d6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -321,25 +344,25 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Create unusable, empty, or null plan. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00045">45</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00049">49</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00131">jb::fftw::plan&lt; precision_type &gt;::create_backward_impl()</a>, <a class="el" href="plan_8hpp_source.html#l00124">jb::fftw::plan&lt; precision_type &gt;::create_forward_impl()</a>, and <a class="el" href="plan_8hpp_source.html#l00063">jb::fftw::plan&lt; precision_type &gt;::~plan()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00124">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::create_backward_impl()</a>, <a class="el" href="plan_8hpp_source.html#l00117">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::create_forward_impl()</a>, and <a class="el" href="plan_8hpp_source.html#l00067">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a02f270477ad7c18cb8191329a83b2237"></a>
+<a class="anchor" id="af95df35dd08a675d21ab47a093f6319e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; precision_t &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -353,21 +376,21 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Basic move constructor. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00050">50</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00054">54</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="accde47470912ce2e31a020dcb8658a3f"></a>
+<a class="anchor" id="a8aefeaaade05a3415928d642d4bf27a1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::~<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::~<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -382,23 +405,23 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Destructor, cleanup the plan. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00063">63</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00067">67</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a263b362e32a35ade7508e72254af8793"></a>
+<a class="anchor" id="a399d93e550ca597bc1f4a849c12a26ec"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; precision_t &gt; const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -412,19 +435,19 @@ template&lt;typename precision_t&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af33f13a8950469bbd0363ac6495227df"></a>
+<a class="anchor" id="a517857fd6505b4590c2174f9294911c7"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a>&#160;</td>
           <td class="paramname"><em>p</em></td><td>)</td>
           <td></td>
         </tr>
@@ -436,70 +459,22 @@ template&lt;typename precision_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00152">152</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00145">145</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aaca06d1a2822cf2e02ddad8e1ade3b27"></a>
+<a class="anchor" id="a8af3e4df04be46d3101d98b8e0db3ba6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-<div class="memtemplate">
-template&lt;typename invector , typename outvector &gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_backward </td>
-          <td>(</td>
-          <td class="paramtype">invector const &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">outvector &amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create the plan for vectors. </p>
-
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00098">98</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6afb1f0a1ad4d0ee60b5d16aff7674c9"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_backward_impl </td>
+          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::create_backward_impl </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>nsamples</em>, </td>
@@ -507,13 +482,13 @@ template&lt;typename precision_t&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
@@ -537,23 +512,23 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Create the inverse plan for arrays in the c2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00131">131</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00124">124</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00098">jb::fftw::plan&lt; precision_type &gt;::create_backward()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00194">jb::fftw::create_backward_plan()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab8cb2459870bf7f1210c30282f4693fe"></a>
+<a class="anchor" id="ad564d27f58ef0771b82b5bc6746c33ea"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_backward_impl </td>
+          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::create_backward_impl </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>nsamples</em>, </td>
@@ -561,13 +536,13 @@ template&lt;typename precision_t&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
@@ -591,69 +566,21 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Create the plan for the c2r case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00145">145</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00138">138</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a3fbd94ac7c93288a8d918630df4005f1"></a>
+<a class="anchor" id="a30d5f3ccdee201eca115b8ecf2383330"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-<div class="memtemplate">
-template&lt;typename invector , typename outvector &gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_forward </td>
-          <td>(</td>
-          <td class="paramtype">invector const &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">outvector &amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create the plan for vectors. </p>
-
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00088">88</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a56142d76b8793cbf03a3d35c33b65a2c"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_forward_impl </td>
+          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::create_forward_impl </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>nsamples</em>, </td>
@@ -661,13 +588,13 @@ template&lt;typename precision_t&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
@@ -691,23 +618,23 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Create the direct plan for arrays in the c2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00124">124</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00117">117</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00088">jb::fftw::plan&lt; precision_type &gt;::create_forward()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00168">jb::fftw::create_forward_plan()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab80770003b74164f5ce74efb86d5494e"></a>
+<a class="anchor" id="a4a645e65af0b9b9b45385f4eeacd6ee9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::create_forward_impl </td>
+          <td class="memname">static <a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::create_forward_impl </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>nsamples</em>, </td>
@@ -715,13 +642,13 @@ template&lt;typename precision_t&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
@@ -745,31 +672,29 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Create the plan for arrays for r2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00138">138</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00131">131</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8b1ed5b8078f52d5b1902b49775c5c6e"></a>
+<a class="anchor" id="a581770a23a19b9490dc6c0f251b5e135"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
-<div class="memtemplate">
-template&lt;typename invector , typename outvector &gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::execute </td>
+          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::execute </td>
           <td>(</td>
-          <td class="paramtype">invector const &amp;&#160;</td>
+          <td class="paramtype">in_timeseries_type const &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">outvector &amp;&#160;</td>
+          <td class="paramtype">out_timeseries_type &amp;&#160;</td>
           <td class="paramname"><em>out</em>&#160;</td>
         </tr>
         <tr>
@@ -787,29 +712,29 @@ template&lt;typename invector , typename outvector &gt; </div>
 
 <p>Execute the plan for vectors. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00079">79</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00083">83</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac803dd35f0b0e0dd629e2f6dbc24a679"></a>
+<a class="anchor" id="a0a070fce1551f3ec04b314eee3574566"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::execute_impl </td>
+          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::execute_impl </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>&#160;</td>
         </tr>
         <tr>
@@ -827,31 +752,31 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Execute the plan in the c2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00109">109</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00102">102</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00079">jb::fftw::plan&lt; precision_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00083">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a52bec504daed8318bda1897938c80772"></a>
+<a class="anchor" id="ae489b11177e28ead4ae8118cc9905b9f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::execute_impl </td>
+          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::execute_impl </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>&#160;</td>
         </tr>
         <tr>
@@ -869,29 +794,29 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Execute the plan for arrays of r2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00114">114</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00107">107</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af53725519021a538417d1a5257f7605d"></a>
+<a class="anchor" id="a6ab1b1b9b8701c43af73315ddc4aa928"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::execute_impl </td>
+          <td class="memname">void <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::execute_impl </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#ad9b02d73405bed5905834b4533eefdd5">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a0600c923388743e5b873b980d1892631">fftw_complex_type</a> const *&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#aa1d0ca5ab00e63e4548f8854e7551206">precision_type</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html#a2e22542e97b0c6d120f04a1737401715">precision_type</a> *&#160;</td>
           <td class="paramname"><em>out</em>&#160;</td>
         </tr>
         <tr>
@@ -909,23 +834,23 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Execute the plan for arrays of r2c case. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00119">119</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00112">112</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4fc5af6dabbc20abb3287c959fd0d761"></a>
+<a class="anchor" id="a0d6bc5ae021db2b4d6c8b3faf6cc4d06"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; precision_t &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -939,25 +864,25 @@ template&lt;typename precision_t&gt; </div>
 
 <p>Move assignment. </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00056">56</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00060">60</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00063">jb::fftw::plan&lt; precision_type &gt;::~plan()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00067">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4854ffb44ce87eeaa9313a69c97a7876"></a>
+<a class="anchor" id="a9e1903771f05b0d32ff13a35153377d4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; precision_t &gt; const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -971,18 +896,111 @@ template&lt;typename precision_t&gt; </div>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a896f5797e827b457c48d60d35a281883"></a>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="ac497d63eea011cd95e64ef970b7c592c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename precision_t&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+<div class="memtemplate">
+template&lt;typename itype , typename otype &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html#ac523eaf4d90b5e57c55cb9c00aa90382">fftw_plan_type</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; precision_t &gt;::p_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt;itype, otype&gt; create_backward_plan </td>
+          <td>(</td>
+          <td class="paramtype">itype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">otype &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00083">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a06ae7367a7093e3c37aba3f80662996a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+<div class="memtemplate">
+template&lt;typename itype , typename otype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt;itype, otype&gt; create_forward_plan </td>
+          <td>(</td>
+          <td class="paramtype">itype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">otype &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00083">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad1be21e4036d1fb4a838f7d7cd49abb3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html#a33738c43c861cf191f925ef6c08d312b">fftw_plan_type</a> <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::p_</td>
         </tr>
       </table>
   </td>
@@ -992,9 +1010,9 @@ template&lt;typename precision_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00157">157</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00150">150</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00109">jb::fftw::plan&lt; precision_type &gt;::execute_impl()</a>, <a class="el" href="plan_8hpp_source.html#l00056">jb::fftw::plan&lt; precision_type &gt;::operator=()</a>, and <a class="el" href="plan_8hpp_source.html#l00063">jb::fftw::plan&lt; precision_type &gt;::~plan()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00102">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute_impl()</a>, <a class="el" href="plan_8hpp_source.html#l00060">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::operator=()</a>, and <a class="el" href="plan_8hpp_source.html#l00067">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>

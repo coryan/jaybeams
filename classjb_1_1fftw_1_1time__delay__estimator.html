@@ -97,7 +97,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -114,20 +113,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Type traits</div></td></tr>
 <tr class="memitem:a1c2822c0a1484514823c746bb7b71682"><td class="memItemLeft" align="right" valign="top">typedef timeseries_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a></td></tr>
+<tr class="memdesc:a1c2822c0a1484514823c746bb7b71682"><td class="mdescLeft">&#160;</td><td class="mdescRight">The input timeseries type.  <a href="#a1c2822c0a1484514823c746bb7b71682">More...</a><br /></td></tr>
 <tr class="separator:a1c2822c0a1484514823c746bb7b71682"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c96cfb5f2812284e01e74e810557549"><td class="memItemLeft" align="right" valign="top">typedef timeseries_type::value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a6c96cfb5f2812284e01e74e810557549">value_type</a></td></tr>
+<tr class="memdesc:a6c96cfb5f2812284e01e74e810557549"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values stored in the input timeseries.  <a href="#a6c96cfb5f2812284e01e74e810557549">More...</a><br /></td></tr>
 <tr class="separator:a6c96cfb5f2812284e01e74e810557549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab754a1094d742e2dce641ba81da79d92"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacejb.html#structjb_1_1extract__value__type">jb::extract_value_type</a>&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a6c96cfb5f2812284e01e74e810557549">value_type</a> &gt;::precision&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a></td></tr>
+<tr class="memdesc:ab754a1094d742e2dce641ba81da79d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract T out of std::complex&lt;T&gt;, otherwise simply T.  <a href="#ab754a1094d742e2dce641ba81da79d92">More...</a><br /></td></tr>
 <tr class="separator:ab754a1094d742e2dce641ba81da79d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5b722371f22c4915cc847e9fce7132f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a></td></tr>
-<tr class="separator:ae5b722371f22c4915cc847e9fce7132f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afda95d5c74559cff998110d97fe74fdf"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; std::complex&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a></td></tr>
+<tr class="memdesc:afda95d5c74559cff998110d97fe74fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to store the DFT of the input timeseries.  <a href="#afda95d5c74559cff998110d97fe74fdf">More...</a><br /></td></tr>
+<tr class="separator:afda95d5c74559cff998110d97fe74fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0af45135dc112c7c7795bb1143b11598"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a></td></tr>
+<tr class="memdesc:a0af45135dc112c7c7795bb1143b11598"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to stored the inverse of the DFT.  <a href="#a0af45135dc112c7c7795bb1143b11598">More...</a><br /></td></tr>
+<tr class="separator:a0af45135dc112c7c7795bb1143b11598"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea2cf192a47672a11937dd6f4527723e"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a>, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a></td></tr>
+<tr class="memdesc:aea2cf192a47672a11937dd6f4527723e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The execution plan to apply the (forward) DFT.  <a href="#aea2cf192a47672a11937dd6f4527723e">More...</a><br /></td></tr>
+<tr class="separator:aea2cf192a47672a11937dd6f4527723e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b74b0f03257d27dbc02cf3a4fa84cf7"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a>, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a2b74b0f03257d27dbc02cf3a4fa84cf7">iplan</a></td></tr>
+<tr class="memdesc:a2b74b0f03257d27dbc02cf3a4fa84cf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The execution plan to apply the inverse (aka backward) DFT.  <a href="#a2b74b0f03257d27dbc02cf3a4fa84cf7">More...</a><br /></td></tr>
+<tr class="separator:a2b74b0f03257d27dbc02cf3a4fa84cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a095673ce0301fd5f8d10149d69bed2ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a095673ce0301fd5f8d10149d69bed2ae">time_delay_estimator</a> (<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a> const &amp;a, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a> const &amp;b)</td></tr>
+<tr class="memdesc:a095673ce0301fd5f8d10149d69bed2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a095673ce0301fd5f8d10149d69bed2ae">More...</a><br /></td></tr>
 <tr class="separator:a095673ce0301fd5f8d10149d69bed2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b9006c09dde893ac18b7d1bc96dd818"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818">estimate_delay</a> (<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a> const &amp;a, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a> const &amp;b)</td></tr>
+<tr class="memdesc:a8b9006c09dde893ac18b7d1bc96dd818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the time-delay estimate between two timeseries.  <a href="#a8b9006c09dde893ac18b7d1bc96dd818">More...</a><br /></td></tr>
 <tr class="separator:a8b9006c09dde893ac18b7d1bc96dd818"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
@@ -138,18 +153,18 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a22d9c932ed8221f4484e49ca7691c549"><td class="memItemLeft" align="right" valign="top">vector&lt; std::complex&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a22d9c932ed8221f4484e49ca7691c549">tmpa_</a></td></tr>
-<tr class="separator:a22d9c932ed8221f4484e49ca7691c549"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69e5ebc2fbd0b98f77e5dacbe89adcb5"><td class="memItemLeft" align="right" valign="top">vector&lt; std::complex&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a69e5ebc2fbd0b98f77e5dacbe89adcb5">tmpb_</a></td></tr>
-<tr class="separator:a69e5ebc2fbd0b98f77e5dacbe89adcb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04715f6ffa7b5b5544ceee77b104459c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a04715f6ffa7b5b5544ceee77b104459c">a2tmpa_</a></td></tr>
-<tr class="separator:a04715f6ffa7b5b5544ceee77b104459c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac587c2754b371df998538b20004a742e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ac587c2754b371df998538b20004a742e">b2tmpb_</a></td></tr>
-<tr class="separator:ac587c2754b371df998538b20004a742e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fe7aa700abda34009742425400cc149"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a5fe7aa700abda34009742425400cc149">out_</a></td></tr>
-<tr class="separator:a5fe7aa700abda34009742425400cc149"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0be99a0ba156aadb9e4180dfd959afcc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0be99a0ba156aadb9e4180dfd959afcc">tmpa2out_</a></td></tr>
-<tr class="separator:a0be99a0ba156aadb9e4180dfd959afcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0364b61f00bcd79829651abc2245b4f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0364b61f00bcd79829651abc2245b4f8">tmpa_</a></td></tr>
+<tr class="separator:a0364b61f00bcd79829651abc2245b4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af90b9b479651762c3e9b5f7e3e280c3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#af90b9b479651762c3e9b5f7e3e280c3f">tmpb_</a></td></tr>
+<tr class="separator:af90b9b479651762c3e9b5f7e3e280c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83b226637b7cedae9c2065af1e5057be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a83b226637b7cedae9c2065af1e5057be">a2tmpa_</a></td></tr>
+<tr class="separator:a83b226637b7cedae9c2065af1e5057be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae18180229dbeaf8abc3e0adf4adc07c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aae18180229dbeaf8abc3e0adf4adc07c">b2tmpb_</a></td></tr>
+<tr class="separator:aae18180229dbeaf8abc3e0adf4adc07c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb2c797cd76e163fe3b2dd8482e4d396"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#abb2c797cd76e163fe3b2dd8482e4d396">out_</a></td></tr>
+<tr class="separator:abb2c797cd76e163fe3b2dd8482e4d396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75566850495c6fb85c1950506ff80c05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a2b74b0f03257d27dbc02cf3a4fa84cf7">iplan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a75566850495c6fb85c1950506ff80c05">tmpa2out_</a></td></tr>
+<tr class="separator:a75566850495c6fb85c1950506ff80c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename timeseries_t, template&lt; typename T &gt; class vector = jb::fftw::aligned_vector&gt;<br />
@@ -159,19 +174,75 @@ class jb::fftw::time_delay_estimator&lt; timeseries_t, vector &gt;</h3>
 
 <p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00027">27</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="ae5b722371f22c4915cc847e9fce7132f"></a>
+<a class="anchor" id="aea2cf192a47672a11937dd6f4527723e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = jb::fftw::aligned_vector&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a></td>
+          <td class="memname">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682">timeseries_type</a>, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00032">32</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>The execution plan to apply the (forward) DFT. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00049">49</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afda95d5c74559cff998110d97fe74fdf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = jb::fftw::aligned_vector&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef vector&lt;std::complex&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; &gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type used to store the DFT of the input timeseries. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00043">43</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2b74b0f03257d27dbc02cf3a4fa84cf7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = jb::fftw::aligned_vector&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan</a>&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a>, <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a2b74b0f03257d27dbc02cf3a4fa84cf7">iplan</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The execution plan to apply the inverse (aka backward) DFT. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00053">53</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0af45135dc112c7c7795bb1143b11598"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = jb::fftw::aligned_vector&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef vector&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type used to stored the inverse of the DFT. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00046">46</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -187,7 +258,9 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00031">31</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Extract T out of std::complex&lt;T&gt;, otherwise simply T. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00040">40</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -203,7 +276,9 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00029">29</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>The input timeseries type. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00034">34</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -219,7 +294,9 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00030">30</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>The values stored in the input timeseries. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00037">37</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -258,7 +335,9 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00034">34</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Constructor. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00057">57</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -297,7 +376,9 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00047">47</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Compute the time-delay estimate between two timeseries. </p>
+
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00071">71</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
@@ -326,12 +407,12 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 
 <p>Determine the correct FFTW planning flags given the inputs. </p>
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00086">86</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00110">110</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a04715f6ffa7b5b5544ceee77b104459c"></a>
+<a class="anchor" id="a83b226637b7cedae9c2065af1e5057be"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -341,7 +422,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::a2tmpa_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::a2tmpa_</td>
         </tr>
       </table>
   </td>
@@ -351,11 +432,11 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00096">96</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00120">120</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac587c2754b371df998538b20004a742e"></a>
+<a class="anchor" id="aae18180229dbeaf8abc3e0adf4adc07c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -365,7 +446,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::b2tmpb_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#aea2cf192a47672a11937dd6f4527723e">dplan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::b2tmpb_</td>
         </tr>
       </table>
   </td>
@@ -375,11 +456,11 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00097">97</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00121">121</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a5fe7aa700abda34009742425400cc149"></a>
+<a class="anchor" id="abb2c797cd76e163fe3b2dd8482e4d396"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -389,7 +470,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::out_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">output_timeseries_type</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::out_</td>
         </tr>
       </table>
   </td>
@@ -399,11 +480,11 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00098">98</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00122">122</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0be99a0ba156aadb9e4180dfd959afcc"></a>
+<a class="anchor" id="a75566850495c6fb85c1950506ff80c05"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -413,7 +494,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ae5b722371f22c4915cc847e9fce7132f">plan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpa2out_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a2b74b0f03257d27dbc02cf3a4fa84cf7">iplan</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpa2out_</td>
         </tr>
       </table>
   </td>
@@ -423,11 +504,11 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00099">99</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00123">123</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a22d9c932ed8221f4484e49ca7691c549"></a>
+<a class="anchor" id="a0364b61f00bcd79829651abc2245b4f8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -437,7 +518,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;std::complex&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; &gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpa_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpa_</td>
         </tr>
       </table>
   </td>
@@ -447,11 +528,11 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00094">94</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00118">118</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a69e5ebc2fbd0b98f77e5dacbe89adcb5"></a>
+<a class="anchor" id="af90b9b479651762c3e9b5f7e3e280c3f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -461,7 +542,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;std::complex&lt;<a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">precision_type</a>&gt; &gt; <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpb_</td>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">frequency_timeseries_type</a> <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html">jb::fftw::time_delay_estimator</a>&lt; timeseries_t, vector &gt;::tmpb_</td>
         </tr>
       </table>
   </td>
@@ -471,7 +552,7 @@ template&lt;typename timeseries_t , template&lt; typename T &gt; class vector = 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00095">95</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00119">119</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
 
 </div>
 </div>

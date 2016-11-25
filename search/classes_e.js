@@ -7,5 +7,7 @@ var searchData=
   ['traits',['traits',['../namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits',1,'jb::fftw']]],
   ['traits_3c_20double_20_3e',['traits&lt; double &gt;',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html',1,'jb::fftw']]],
   ['traits_3c_20float_20_3e',['traits&lt; float &gt;',['../structjb_1_1fftw_1_1traits_3_01float_01_4.html',1,'jb::fftw']]],
-  ['traits_3c_20long_20double_20_3e',['traits&lt; long double &gt;',['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html',1,'jb::fftw']]]
+  ['traits_3c_20long_20double_20_3e',['traits&lt; long double &gt;',['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html',1,'jb::fftw']]],
+  ['traits_3c_20std_3a_3acomplex_3c_20t_20_3e_20_3e',['traits&lt; std::complex&lt; T &gt; &gt;',['../structjb_1_1fftw_1_1traits_3_01std_1_1complex_3_01T_01_4_01_4.html',1,'jb::fftw']]],
+  ['traits_3c_20t_20_3e',['traits&lt; T &gt;',['../namespacejb_1_1fftw.html',1,'jb::fftw']]]
 ];

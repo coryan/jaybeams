@@ -135,6 +135,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html">traits&lt; long double &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement traits for quad-precision floating point numbers.  <a href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01std_1_1complex_3_01T_01_4_01_4.html">traits&lt; std::complex&lt; T &gt; &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define traits for std::complex&lt;T&gt; in terms of the traits for T.  <a href="structjb_1_1fftw_1_1traits_3_01std_1_1complex_3_01T_01_4_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -167,11 +170,19 @@ Functions</h2></td></tr>
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplParams" colspan="2">template&lt;typename vector &gt; </td></tr>
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a8d629f067398c772553c9ae598afb1e2">fftw_cast</a> (vector const &amp;in) -&gt; decltype(<a class="el" href="namespacejb_1_1fftw.html#a384ec2ebb7c26834a165159cc6eda41a">fftw_cast_array</a>(&amp;in[0]))</td></tr>
 <tr class="separator:a8d629f067398c772553c9ae598afb1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e60e54bc6a62d9c5622457b830354a2"><td class="memTemplParams" colspan="2">template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </td></tr>
+<tr class="memitem:a7e60e54bc6a62d9c5622457b830354a2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a7e60e54bc6a62d9c5622457b830354a2">create_forward_plan</a> (in_timeseries_type const &amp;in, out_timeseries_type &amp;out, int flags=<a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">default_plan_flags</a>)</td></tr>
+<tr class="memdesc:a7e60e54bc6a62d9c5622457b830354a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute the DFT given the input and output vectors.  <a href="#a7e60e54bc6a62d9c5622457b830354a2">More...</a><br /></td></tr>
+<tr class="separator:a7e60e54bc6a62d9c5622457b830354a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace4a8c8484005eb165ac07b349048275"><td class="memTemplParams" colspan="2">template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </td></tr>
+<tr class="memitem:ace4a8c8484005eb165ac07b349048275"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#ace4a8c8484005eb165ac07b349048275">create_backward_plan</a> (in_timeseries_type const &amp;in, out_timeseries_type &amp;out, int flags=<a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">default_plan_flags</a>)</td></tr>
+<tr class="memdesc:ace4a8c8484005eb165ac07b349048275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute the inverse DFT given the input and output vectors.  <a href="#ace4a8c8484005eb165ac07b349048275">More...</a><br /></td></tr>
+<tr class="separator:ace4a8c8484005eb165ac07b349048275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a217eee35ab00a78b34c3e693e6be6f50"><td class="memItemLeft" align="right" valign="top">int const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a217eee35ab00a78b34c3e693e6be6f50">default_flags</a> = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED</td></tr>
-<tr class="separator:a217eee35ab00a78b34c3e693e6be6f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e546fb406cdc986f22324781732fa07"><td class="memItemLeft" align="right" valign="top">int constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">default_plan_flags</a></td></tr>
+<tr class="separator:a5e546fb406cdc986f22324781732fa07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrappers for the FFTW3 library. </p>
@@ -254,6 +265,134 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ace4a8c8484005eb165ac07b349048275"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt;in_timeseries_type, out_timeseries_type&gt; jb::fftw::create_backward_plan </td>
+          <td>(</td>
+          <td class="paramtype">in_timeseries_type const &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out_timeseries_type &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">default_plan_flags</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a plan to compute the inverse DFT given the input and output vectors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>the input timeseries </td></tr>
+    <tr><td class="paramname">out</td><td>the output timeseries </td></tr>
+    <tr><td class="paramname">flags</td><td>the FFTW flags for the plan </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the input and output vectors are not compatible </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a jb::fftw::plan&lt;&gt; of the right type.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">in_timeseries_type</td><td>the type of the input timeseries </td></tr>
+    <tr><td class="paramname">out_timeseries_type</td><td>the type of the output timeseries </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00194">194</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+
+<p>References <a class="el" href="plan_8hpp_source.html#l00124">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_backward_impl()</a>, and <a class="el" href="cast_8hpp_source.html#l00031">fftw_cast()</a>.</p>
+
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00124">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::create_backward_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e60e54bc6a62d9c5622457b830354a2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1fftw_1_1plan.html">plan</a>&lt;in_timeseries_type, out_timeseries_type&gt; jb::fftw::create_forward_plan </td>
+          <td>(</td>
+          <td class="paramtype">in_timeseries_type const &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out_timeseries_type &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">default_plan_flags</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a plan to compute the DFT given the input and output vectors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>the input timeseries </td></tr>
+    <tr><td class="paramname">out</td><td>the output timeseries </td></tr>
+    <tr><td class="paramname">flags</td><td>the FFTW flags for the plan </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the input and output vectors are not compatible </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a jb::fftw::plan&lt;&gt; of the right type.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">in_timeseries_type</td><td>the type of the input timeseries </td></tr>
+    <tr><td class="paramname">out_timeseries_type</td><td>the type of the output timeseries </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00168">168</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+
+<p>References <a class="el" href="plan_8hpp_source.html#l00117">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_forward_impl()</a>, and <a class="el" href="cast_8hpp_source.html#l00031">fftw_cast()</a>.</p>
+
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00117">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::create_forward_impl()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a08db0c4e0eedc65b61a4e3a38bb44187"></a>
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +413,7 @@ template&lt;typename vector &gt; </div>
 
 <p>References <a class="el" href="cast_8hpp_source.html#l00010">fftw_cast_array()</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00098">jb::fftw::plan&lt; precision_type &gt;::create_backward()</a>, <a class="el" href="plan_8hpp_source.html#l00088">jb::fftw::plan&lt; precision_type &gt;::create_forward()</a>, and <a class="el" href="plan_8hpp_source.html#l00079">jb::fftw::plan&lt; precision_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00194">create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00168">create_forward_plan()</a>, and <a class="el" href="plan_8hpp_source.html#l00083">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
@@ -383,17 +522,17 @@ template&lt;typename F &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="a217eee35ab00a78b34c3e693e6be6f50"></a>
+<a class="anchor" id="a5e546fb406cdc986f22324781732fa07"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int const jb::fftw::default_flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED</td>
+          <td class="memname">int constexpr jb::fftw::default_plan_flags</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00012">12</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">    (FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED)</div></div><!-- fragment -->
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00013">13</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
