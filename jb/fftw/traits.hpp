@@ -1,7 +1,6 @@
 #ifndef jb_fftw_traits_hpp
 #define jb_fftw_traits_hpp
 
-#include <jb/fftw/traits.hpp>
 #include <fftw3.h>
 #include <complex>
 #include <vector>
