@@ -102,6 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="traits_8hpp_source.html">jb/fftw/traits.hpp</a>&gt;</code><br />
+<code>#include &lt;boost/multi_array.hpp&gt;</code><br />
 </div>
 <p><a href="cast_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -134,6 +135,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplParams" colspan="2">template&lt;typename vector &gt; </td></tr>
 <tr class="memitem:a8d629f067398c772553c9ae598afb1e2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a8d629f067398c772553c9ae598afb1e2">jb::fftw::fftw_cast</a> (vector const &amp;in) -&gt; decltype(fftw_cast_array(&amp;in[0]))</td></tr>
 <tr class="separator:a8d629f067398c772553c9ae598afb1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb4ba87261b9110ac9015ba38ef75282"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:acb4ba87261b9110ac9015ba38ef75282"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#acb4ba87261b9110ac9015ba38ef75282">jb::fftw::fftw_cast</a> (boost::multi_array&lt; T, K, A &gt; const &amp;a) -&gt; decltype(fftw_cast_array(a.data()))</td></tr>
+<tr class="separator:acb4ba87261b9110ac9015ba38ef75282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afddd26db595092bd14d686b7f0085ccd"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:afddd26db595092bd14d686b7f0085ccd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#afddd26db595092bd14d686b7f0085ccd">jb::fftw::fftw_cast</a> (boost::multi_array&lt; T, K, A &gt; &amp;a) -&gt; decltype(fftw_cast_array(a.data()))</td></tr>
+<tr class="separator:afddd26db595092bd14d686b7f0085ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

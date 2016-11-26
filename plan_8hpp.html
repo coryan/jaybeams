@@ -106,12 +106,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;<a class="el" href="cast_8hpp_source.html">jb/fftw/cast.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="complex__traits_8hpp_source.html">jb/complex_traits.hpp</a>&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;stdexcept&gt;</code><br />
 </div>
 <p><a href="plan_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits">jb::fftw::detail::container_traits&lt; T &gt;</a></td></tr>
+<tr class="memdesc:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define traits for container-like types.  <a href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits">More...</a><br /></td></tr>
+<tr class="separator:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4">jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</a></td></tr>
+<tr class="memdesc:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define traits for boost::multi_array&lt;&gt; containers.  <a href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4">More...</a><br /></td></tr>
+<tr class="separator:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1plan.html">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap FFTW3 plan objects to automatically destroy them.  <a href="classjb_1_1fftw_1_1plan.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,23 +132,100 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb_1_1fftw"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html">jb::fftw</a></td></tr>
 <tr class="memdesc:namespacejb_1_1fftw"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrappers for the FFTW3 library. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacejb_1_1fftw_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html">jb::fftw::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7e60e54bc6a62d9c5622457b830354a2"><td class="memTemplParams" colspan="2">template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </td></tr>
-<tr class="memitem:a7e60e54bc6a62d9c5622457b830354a2"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; in_timeseries_type, out_timeseries_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a7e60e54bc6a62d9c5622457b830354a2">jb::fftw::create_forward_plan</a> (in_timeseries_type const &amp;in, out_timeseries_type &amp;out, int flags=default_plan_flags)</td></tr>
-<tr class="memdesc:a7e60e54bc6a62d9c5622457b830354a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute the DFT given the input and output vectors.  <a href="namespacejb_1_1fftw.html#a7e60e54bc6a62d9c5622457b830354a2">More...</a><br /></td></tr>
-<tr class="separator:a7e60e54bc6a62d9c5622457b830354a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace4a8c8484005eb165ac07b349048275"><td class="memTemplParams" colspan="2">template&lt;typename in_timeseries_type , typename out_timeseries_type &gt; </td></tr>
-<tr class="memitem:ace4a8c8484005eb165ac07b349048275"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; in_timeseries_type, out_timeseries_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#ace4a8c8484005eb165ac07b349048275">jb::fftw::create_backward_plan</a> (in_timeseries_type const &amp;in, out_timeseries_type &amp;out, int flags=default_plan_flags)</td></tr>
-<tr class="memdesc:ace4a8c8484005eb165ac07b349048275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute the inverse DFT given the input and output vectors.  <a href="namespacejb_1_1fftw.html#ace4a8c8484005eb165ac07b349048275">More...</a><br /></td></tr>
-<tr class="separator:ace4a8c8484005eb165ac07b349048275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a75b62fb246a15ac35cb6d1b5daaa4a39">jb::fftw::detail::check_plan_inputs</a> (std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples, std::size_t on_nsamples, char const *function_name)</td></tr>
+<tr class="memdesc:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to check the inputs to a create_*_plan_*()  <a href="namespacejb_1_1fftw_1_1detail.html#a75b62fb246a15ac35cb6d1b5daaa4a39">More...</a><br /></td></tr>
+<tr class="separator:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7edb455830e7fe6f7e3050bddd88640b"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:a7edb455830e7fe6f7e3050bddd88640b"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b">jb::fftw::detail::element_count</a> (boost::multi_array&lt; T, K, A &gt; const &amp;a)</td></tr>
+<tr class="memdesc:a7edb455830e7fe6f7e3050bddd88640b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of elements in boost::multi_array&lt;&gt;  <a href="namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b">More...</a><br /></td></tr>
+<tr class="separator:a7edb455830e7fe6f7e3050bddd88640b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a633792477c42c18ff738276ae9e279"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:a3a633792477c42c18ff738276ae9e279"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a3a633792477c42c18ff738276ae9e279">jb::fftw::detail::nsamples</a> (boost::multi_array&lt; T, K, A &gt; const &amp;a)</td></tr>
+<tr class="memdesc:a3a633792477c42c18ff738276ae9e279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of samples in a boost::multi_array&lt;&gt;  <a href="namespacejb_1_1fftw_1_1detail.html#a3a633792477c42c18ff738276ae9e279">More...</a><br /></td></tr>
+<tr class="separator:a3a633792477c42c18ff738276ae9e279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memTemplParams" colspan="2">template&lt;typename T , typename A &gt; </td></tr>
+<tr class="memitem:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc">jb::fftw::detail::element_count</a> (std::vector&lt; T, A &gt; const &amp;a)</td></tr>
+<tr class="memdesc:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of elements in a std::vector&lt;&gt;  <a href="namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc">More...</a><br /></td></tr>
+<tr class="separator:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename A &gt; </td></tr>
+<tr class="memitem:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a6b3fb3485cd7f759a39c958ec9f8871f">jb::fftw::detail::nsamples</a> (std::vector&lt; T, A &gt; const &amp;a)</td></tr>
+<tr class="memdesc:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of samples in a std::vector&lt;&gt;  <a href="namespacejb_1_1fftw_1_1detail.html#a6b3fb3485cd7f759a39c958ec9f8871f">More...</a><br /></td></tr>
+<tr class="separator:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca2c11d36ea51d1b62a8836c509cb4b5"><td class="memTemplParams" colspan="2">template&lt;typename in_array_type , typename out_array_type &gt; </td></tr>
+<tr class="memitem:aca2c11d36ea51d1b62a8836c509cb4b5"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; in_array_type, out_array_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#aca2c11d36ea51d1b62a8836c509cb4b5">jb::fftw::create_forward_plan</a> (in_array_type const &amp;in, out_array_type &amp;out, int flags=default_plan_flags)</td></tr>
+<tr class="memdesc:aca2c11d36ea51d1b62a8836c509cb4b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute many DFTs given the input and output arrays.  <a href="namespacejb_1_1fftw.html#aca2c11d36ea51d1b62a8836c509cb4b5">More...</a><br /></td></tr>
+<tr class="separator:aca2c11d36ea51d1b62a8836c509cb4b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b473489caafc3447b3f5b23adda09fb"><td class="memTemplParams" colspan="2">template&lt;typename in_array_type , typename out_array_type &gt; </td></tr>
+<tr class="memitem:a4b473489caafc3447b3f5b23adda09fb"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; in_array_type, out_array_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a4b473489caafc3447b3f5b23adda09fb">jb::fftw::create_backward_plan</a> (in_array_type const &amp;in, out_array_type &amp;out, int flags=default_plan_flags)</td></tr>
+<tr class="memdesc:a4b473489caafc3447b3f5b23adda09fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plan to compute many inverse DFT given the input and output arrays.  <a href="namespacejb_1_1fftw.html#a4b473489caafc3447b3f5b23adda09fb">More...</a><br /></td></tr>
+<tr class="separator:a4b473489caafc3447b3f5b23adda09fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a5e546fb406cdc986f22324781732fa07"><td class="memItemLeft" align="right" valign="top">int constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html#a5e546fb406cdc986f22324781732fa07">jb::fftw::default_plan_flags</a></td></tr>
 <tr class="separator:a5e546fb406cdc986f22324781732fa07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<hr/><h2 class="groupheader">Class Documentation</h2>
+<a name="structjb_1_1fftw_1_1detail_1_1container__traits" id="structjb_1_1fftw_1_1detail_1_1container__traits"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct jb::fftw::detail::container_traits</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+struct jb::fftw::detail::container_traits&lt; T &gt;</h3>
+
+<p>Define traits for container-like types. </p>
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00020">20</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+</div><table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a8e7356029c557277823a820d6aa90e60"></a>typedef value_type</td>
+<td class="fieldname">
+element_type</td>
+<td class="fielddoc">
+Define the type of the elements in the container. </td></tr>
+</table>
+
+</div>
+</div>
+<a name="structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4" id="structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><h3>template&lt;typename T, std::size_t K, typename A&gt;<br />
+struct jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</h3>
+
+<p>Define traits for boost::multi_array&lt;&gt; containers. </p>
+
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00029">29</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+</div><table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a0666cef4725023dbee6a4e4ea772f203"></a>typedef multi_array&lt; T, K, A &gt;<br class="typebreak" />
+::element</td>
+<td class="fieldname">
+element_type</td>
+<td class="fielddoc">
+Define the type of the elements in the array. </td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

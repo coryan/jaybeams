@@ -97,7 +97,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -105,52 +104,79 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Implement traits for quad-precision floating point numbers.  
+<p>Wrap the FFTW types and functions for quad precision float point numbers.  
  <a href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">type traits</div></td></tr>
 <tr class="memitem:aa36a0b736862138d398fe294c194a6a7"><td class="memItemLeft" align="right" valign="top">typedef long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a></td></tr>
+<tr class="memdesc:aa36a0b736862138d398fe294c194a6a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to represent floating point numbers.  <a href="#aa36a0b736862138d398fe294c194a6a7">More...</a><br /></td></tr>
 <tr class="separator:aa36a0b736862138d398fe294c194a6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2538820aaf0c2dc15982660a18f4949"><td class="memItemLeft" align="right" valign="top">typedef ::std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa2538820aaf0c2dc15982660a18f4949">std_complex_type</a></td></tr>
+<tr class="memdesc:aa2538820aaf0c2dc15982660a18f4949"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to represent complex numbers in the C++ standard library.  <a href="#aa2538820aaf0c2dc15982660a18f4949">More...</a><br /></td></tr>
 <tr class="separator:aa2538820aaf0c2dc15982660a18f4949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fe7f2061c8461c34f22f2f15a450a4a"><td class="memItemLeft" align="right" valign="top">typedef ::fftwl_complex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a></td></tr>
+<tr class="memdesc:a7fe7f2061c8461c34f22f2f15a450a4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to represent complex numbers in FFTW.  <a href="#a7fe7f2061c8461c34f22f2f15a450a4a">More...</a><br /></td></tr>
 <tr class="separator:a7fe7f2061c8461c34f22f2f15a450a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade31cd65b203e73d0fa58528526d6cfc"><td class="memItemLeft" align="right" valign="top">typedef ::fftwl_plan&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a></td></tr>
+<tr class="memdesc:ade31cd65b203e73d0fa58528526d6cfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type used to represent execution plans in FFTW.  <a href="#ade31cd65b203e73d0fa58528526d6cfc">More...</a><br /></td></tr>
 <tr class="separator:ade31cd65b203e73d0fa58528526d6cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ea13dfe0a5a11d8a84c44768b608bcf"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a1ea13dfe0a5a11d8a84c44768b608bcf">allocate</a> (std::size_t n)</td></tr>
+<tr class="memdesc:a1ea13dfe0a5a11d8a84c44768b608bcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a properly aligned (for SIMD acceleration) block of memory.  <a href="#a1ea13dfe0a5a11d8a84c44768b608bcf">More...</a><br /></td></tr>
 <tr class="separator:a1ea13dfe0a5a11d8a84c44768b608bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64615a9711707adac85bfe45d47f6665"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a64615a9711707adac85bfe45d47f6665">release</a> (void *buffer)</td></tr>
+<tr class="memdesc:a64615a9711707adac85bfe45d47f6665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release a block of memory allocated with <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a1ea13dfe0a5a11d8a84c44768b608bcf" title="Allocate a properly aligned (for SIMD acceleration) block of memory. ">allocate()</a>  <a href="#a64615a9711707adac85bfe45d47f6665">More...</a><br /></td></tr>
 <tr class="separator:a64615a9711707adac85bfe45d47f6665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e94b27106600bbbeb3dce191b9269c5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a3e94b27106600bbbeb3dce191b9269c5">execute_plan</a> (<a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> const p, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out)</td></tr>
+<tr class="memdesc:a3e94b27106600bbbeb3dce191b9269c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute an existing plan for a given input and output.  <a href="#a3e94b27106600bbbeb3dce191b9269c5">More...</a><br /></td></tr>
 <tr class="separator:a3e94b27106600bbbeb3dce191b9269c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf240a42cbe4bf8c72be68ae3e9e45da"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#abf240a42cbe4bf8c72be68ae3e9e45da">execute_plan</a> (<a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> const p, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out)</td></tr>
+<tr class="memdesc:abf240a42cbe4bf8c72be68ae3e9e45da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute an existing plan for a given input and output.  <a href="#abf240a42cbe4bf8c72be68ae3e9e45da">More...</a><br /></td></tr>
 <tr class="separator:abf240a42cbe4bf8c72be68ae3e9e45da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf78b6679c841d4b13672b4c36f626db"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aaf78b6679c841d4b13672b4c36f626db">execute_plan</a> (<a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> const p, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> *out)</td></tr>
+<tr class="memdesc:aaf78b6679c841d4b13672b4c36f626db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute an existing plan for a given input and output.  <a href="#aaf78b6679c841d4b13672b4c36f626db">More...</a><br /></td></tr>
 <tr class="separator:aaf78b6679c841d4b13672b4c36f626db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae9ea2024d6c0b90c050ffbbd347ec47"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aae9ea2024d6c0b90c050ffbbd347ec47">create_forward_plan</a> (std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:aae9ea2024d6c0b90c050ffbbd347ec47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution plan to compute the DFT based on the input and output exemplars.  <a href="#aae9ea2024d6c0b90c050ffbbd347ec47">More...</a><br /></td></tr>
 <tr class="separator:aae9ea2024d6c0b90c050ffbbd347ec47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80dcc7b12537540d42bfdf0c133a81bb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a80dcc7b12537540d42bfdf0c133a81bb">create_backward_plan</a> (std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a80dcc7b12537540d42bfdf0c133a81bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the inverse DFT based on the input and output exemplars.  <a href="#a80dcc7b12537540d42bfdf0c133a81bb">More...</a><br /></td></tr>
 <tr class="separator:a80dcc7b12537540d42bfdf0c133a81bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac56061563697d01956af5b9599d5d75"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aac56061563697d01956af5b9599d5d75">create_plan</a> (std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:aac56061563697d01956af5b9599d5d75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the DFT based on the input and output exemplars.  <a href="#aac56061563697d01956af5b9599d5d75">More...</a><br /></td></tr>
 <tr class="separator:aac56061563697d01956af5b9599d5d75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a902e3301c7150ff0980ed1483789d7ee"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a902e3301c7150ff0980ed1483789d7ee">create_plan</a> (std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a902e3301c7150ff0980ed1483789d7ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the inverse DFT based on the input and output exemplars.  <a href="#a902e3301c7150ff0980ed1483789d7ee">More...</a><br /></td></tr>
 <tr class="separator:a902e3301c7150ff0980ed1483789d7ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa1e8163edd3607ef021f2b3d0b23b23"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#afa1e8163edd3607ef021f2b3d0b23b23">create_forward_plan_many</a> (int howmany, std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:afa1e8163edd3607ef021f2b3d0b23b23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the DFT of many vectors based on the input and output exemplars.  <a href="#afa1e8163edd3607ef021f2b3d0b23b23">More...</a><br /></td></tr>
+<tr class="separator:afa1e8163edd3607ef021f2b3d0b23b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dfc002ee5fd44989f808e09faef1fb3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a3dfc002ee5fd44989f808e09faef1fb3">create_backward_plan_many</a> (int howmany, std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:a3dfc002ee5fd44989f808e09faef1fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the inverse DFT of many vectors based on the input and output exemplars.  <a href="#a3dfc002ee5fd44989f808e09faef1fb3">More...</a><br /></td></tr>
+<tr class="separator:a3dfc002ee5fd44989f808e09faef1fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9413152e411cb2fcbf4ccb01a8728dbf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a9413152e411cb2fcbf4ccb01a8728dbf">create_plan_many</a> (int howmany, std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *out, unsigned flags)</td></tr>
+<tr class="memdesc:a9413152e411cb2fcbf4ccb01a8728dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the DFT of many vectors based on the input and output exemplars.  <a href="#a9413152e411cb2fcbf4ccb01a8728dbf">More...</a><br /></td></tr>
+<tr class="separator:a9413152e411cb2fcbf4ccb01a8728dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb93a719ac7661b3d1ef2eb1cbd37ee"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#adcb93a719ac7661b3d1ef2eb1cbd37ee">create_plan_many</a> (int howmany, std::size_t size, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *in, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> *out, int flags)</td></tr>
+<tr class="memdesc:adcb93a719ac7661b3d1ef2eb1cbd37ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an execution to compute the inverse DFT of many vectors based on the input and output exemplars.  <a href="#adcb93a719ac7661b3d1ef2eb1cbd37ee">More...</a><br /></td></tr>
+<tr class="separator:adcb93a719ac7661b3d1ef2eb1cbd37ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a638f8bb3577aaa6c3d46502abdffeeff"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff">destroy_plan</a> (<a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> p)</td></tr>
+<tr class="memdesc:a638f8bb3577aaa6c3d46502abdffeeff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy an execution plan.  <a href="#a638f8bb3577aaa6c3d46502abdffeeff">More...</a><br /></td></tr>
 <tr class="separator:a638f8bb3577aaa6c3d46502abdffeeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;&gt;<br />
 struct jb::fftw::traits&lt; long double &gt;</h3>
 
-<p>Implement traits for quad-precision floating point numbers. </p>
+<p>Wrap the FFTW types and functions for quad precision float point numbers. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00156">156</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00556">556</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a7fe7f2061c8461c34f22f2f15a450a4a"></a>
 <div class="memitem">
@@ -162,7 +188,9 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00159">159</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>The type used to represent complex numbers in FFTW. </p>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00566">566</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -176,7 +204,9 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00160">160</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>The type used to represent execution plans in FFTW. </p>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00568">568</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -190,7 +220,9 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00157">157</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>The type used to represent floating point numbers. </p>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00562">562</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -204,7 +236,9 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00158">158</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>The type used to represent complex numbers in the C++ standard library. </p>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00564">564</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -231,7 +265,16 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00162">162</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Allocate a properly aligned (for SIMD acceleration) block of memory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>the number of bytes to allocate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a block for at least <em>n</em> bytes </dd></dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00578">578</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +322,86 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00191">191</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Create an execution to compute the inverse DFT based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00664">664</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3dfc002ee5fd44989f808e09faef1fb3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> <a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; long double &gt;::create_backward_plan_many </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>howmany</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an execution to compute the inverse DFT of many vectors based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">howmany</td><td>how many timeseries in the arrays </td></tr>
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00739">739</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
 </div>
 </div>
@@ -327,7 +449,86 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00185">185</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Create an execution plan to compute the DFT based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00648">648</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa1e8163edd3607ef021f2b3d0b23b23"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> <a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; long double &gt;::create_forward_plan_many </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>howmany</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an execution to compute the DFT of many vectors based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">howmany</td><td>how many timeseries in the arrays </td></tr>
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00713">713</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
 </div>
 </div>
@@ -375,7 +576,18 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00198">198</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Create an execution to compute the DFT based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00680">680</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +635,154 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00204">204</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Create an execution to compute the inverse DFT based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00696">696</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9413152e411cb2fcbf4ccb01a8728dbf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> <a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; long double &gt;::create_plan_many </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>howmany</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> const *&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an execution to compute the DFT of many vectors based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">howmany</td><td>how many timeseries in the arrays </td></tr>
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00765">765</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adcb93a719ac7661b3d1ef2eb1cbd37ee"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">fftw_plan_type</a> <a class="el" href="namespacejb_1_1fftw.html#structjb_1_1fftw_1_1traits">jb::fftw::traits</a>&lt; long double &gt;::create_plan_many </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>howmany</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a7fe7f2061c8461c34f22f2f15a450a4a">fftw_complex_type</a> const *&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">precision_type</a> *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an execution to compute the inverse DFT of many vectors based on the input and output exemplars. </p>
+<dl class="section return"><dt>Returns</dt><dd>the execution plan </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">howmany</td><td>how many timeseries in the arrays </td></tr>
+    <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
+    <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00791">791</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
 </div>
 </div>
@@ -449,7 +808,15 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00211">211</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Destroy an execution plan. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the plan to destroy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00812">812</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -491,7 +858,18 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00169">169</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Execute an existing plan for a given input and output. </p>
+<p>FFTW requires, but does not check that the input and output have the same alignment and sizes defined in the original plan.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the execution plan </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector (or array) </td></tr>
+    <tr><td class="paramname">out</td><td>the output data (or array) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00601">601</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -533,7 +911,18 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00174">174</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Execute an existing plan for a given input and output. </p>
+<p>FFTW requires, but does not check that the input and output have the same alignment and sizes defined in the original plan.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the execution plan </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector (or array) </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector (or array) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00617">617</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -575,7 +964,18 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00179">179</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Execute an existing plan for a given input and output. </p>
+<p>FFTW requires, but does not check that the input and output have the same alignment and sizes defined in the original plan.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the execution plan </td></tr>
+    <tr><td class="paramname">in</td><td>the input vector (or array) </td></tr>
+    <tr><td class="paramname">out</td><td>the output vector (or array), can be the same as the input </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00633">633</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -601,7 +1001,15 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00165">165</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Release a block of memory allocated with <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a1ea13dfe0a5a11d8a84c44768b608bcf" title="Allocate a properly aligned (for SIMD acceleration) block of memory. ">allocate()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>the block to release </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00587">587</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
