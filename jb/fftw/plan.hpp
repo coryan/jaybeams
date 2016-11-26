@@ -142,8 +142,8 @@ public:
   void execute(in_timeseries_type const& in, out_timeseries_type& out) const {
     using namespace detail;
     check_plan_inputs(
-      element_count(in), element_count(out), nsamples(in), nsamples(out),
-      __func__);
+        element_count(in), element_count(out), nsamples(in), nsamples(out),
+        __func__);
     execute_impl(fftw_cast(in), fftw_cast(out));
   }
 
@@ -249,7 +249,6 @@ private:
   /// The raw FFTW plan
   fftw_plan_type p_;
 };
-
 
 /**
  * Create a plan to compute many DFTs given the input and output
