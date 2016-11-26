@@ -35,9 +35,11 @@ struct container_traits<boost::multi_array<T, K, A>> {
  * Helper function to check the inputs to a create_*_plan_*()
  *
  * @param in_elements the number of elements in the input vector or array
- * @param out_elements the number of elements in the output vector or array
+ * @param on_elements the number of elements in the output vector or array
  * @param in_nsamples the number of samples per-timeseries in the input array
- * @param out_nsamples the number of samples per timeseries in the output array
+ * @param on_nsamples the number of samples per timeseries in the output array
+ * @param function_name the name of the function to include in the
+ * exception message if a problem is detected
  * @throws std::invalid_argument if the sizes do not match, with a
  * descriptive message.
  */

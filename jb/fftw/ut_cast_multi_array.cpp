@@ -51,8 +51,8 @@ BOOST_AUTO_TEST_CASE(fftw_cast_array_3d_double) {
 }
 
 /**
- * @test Verify that fftw_cast functions work for boost::multi_array<long
- * double>
+ * @test Verify that fftw_cast functions work for
+ * boost::multi_array<long double>
  */
 BOOST_AUTO_TEST_CASE(fftw_cast_array_3d_long_double) {
   check_cast_array_3d<boost::multi_array<long double, 3>, long double*>();
