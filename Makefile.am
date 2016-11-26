@@ -394,7 +394,8 @@ jb_libitch5_a_LIBADD =
 ################################################################
 
 jb_libjb_fftw_adir = $(includedir)
-jb_libjb_fftw_a_SOURCES =
+jb_libjb_fftw_a_SOURCES = \
+  jb/fftw/plan.cpp
 jb_libjb_fftw_a_HEADERS = \
   jb/fftw/aligned_multi_array.hpp \
   jb/fftw/aligned_vector.hpp \

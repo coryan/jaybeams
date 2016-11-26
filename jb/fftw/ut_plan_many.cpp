@@ -51,22 +51,30 @@ void test_plan_complex2complex() {
     }
   }
 
-#if 0
-  auto dir = jb::fftw::create_forward_plan(in, tmp);
-  auto inv = jb::fftw::create_backward_plan(tmp, out);
+  // ... create a plan to apply the DFT (direct, not inverse) from the
+  // in array to the tmp array ...
+  auto dir = jb::fftw::create_forward_plan_1d(in, tmp);
+  // ... create a plan to apply the inverse DFT from the tmp array to
+  // the out array ...
+  auto inv = jb::fftw::create_backward_plan_1d(tmp, out);
 
+  // ... execute the direct transform ...
   dir.execute(in, tmp);
+  // ... execute the inverse transform ...
   inv.execute(tmp, out);
+
+  // ... a well known fact of the FFT implementation in FFTW: it does
+  // not rescale the inverse transform by 1/N, so we must do that
+  // manually, ugh ...
   for (auto subarray : out) {
     for (auto vector : subarray) {
-      for (auto element : vector) {
+      for (auto& element : vector) {
         element /= nsamples;
       }
     }
   }
-#else
-  out = in;
-#endif /* 0 */
+  // ... compare the input to the output, they should be nearly
+  // identical ...
   jb::testing::check_multi_array_close_enough(out, in, tol);
 }
 
