@@ -5,6 +5,9 @@
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
+/**
+ * Helper functions to test jb::fftw::plan
+ */
 namespace {
 
 template <typename precision_t>
