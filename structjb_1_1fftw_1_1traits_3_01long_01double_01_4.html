@@ -176,7 +176,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 
 <p>Wrap the FFTW types and functions for quad precision float point numbers. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00556">556</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00572">572</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a7fe7f2061c8461c34f22f2f15a450a4a"></a>
 <div class="memitem">
@@ -190,7 +190,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 
 <p>The type used to represent complex numbers in FFTW. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00566">566</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00582">582</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +206,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 
 <p>The type used to represent execution plans in FFTW. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00568">568</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00584">584</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -222,7 +222,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 
 <p>The type used to represent floating point numbers. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00562">562</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00578">578</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -238,7 +238,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 
 <p>The type used to represent complex numbers in the C++ standard library. </p>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00564">564</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00580">580</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +274,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a block for at least <em>n</em> bytes </dd></dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00578">578</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00594">594</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -329,11 +329,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input vector </td></tr>
     <tr><td class="paramname">out</td><td>the output vector </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00664">664</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00682">682</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -395,11 +396,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
     <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00739">739</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00761">761</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 <p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
@@ -456,11 +458,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input vector </td></tr>
     <tr><td class="paramname">out</td><td>the output vector </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00648">648</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00665">665</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -522,11 +525,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
     <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00713">713</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00734">734</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 <p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
@@ -583,11 +587,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input vector </td></tr>
     <tr><td class="paramname">out</td><td>the output vector </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00680">680</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00699">699</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -642,11 +647,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input vector </td></tr>
     <tr><td class="paramname">out</td><td>the output vector </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00696">696</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00716">716</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -708,11 +714,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
     <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00765">765</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00788">788</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 <p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
@@ -776,11 +783,12 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
     <tr><td class="paramname">size</td><td>the size of the input and output vectors </td></tr>
     <tr><td class="paramname">in</td><td>the input array must be of size <em>howmany*size</em> </td></tr>
     <tr><td class="paramname">out</td><td>the output array must be of size <em>howmany*size</em> </td></tr>
+    <tr><td class="paramname">flags</td><td>control the algorithm choices in FFTW </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00791">791</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00815">815</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 <p>References <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
@@ -816,7 +824,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00812">812</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00836">836</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -869,7 +877,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00601">601</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00617">617</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -922,7 +930,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00617">617</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00633">633</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -975,7 +983,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00633">633</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00649">649</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -1009,7 +1017,7 @@ struct jb::fftw::traits&lt; long double &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00587">587</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
+<p>Definition at line <a class="el" href="traits_8hpp_source.html#l00603">603</a> of file <a class="el" href="traits_8hpp_source.html">traits.hpp</a>.</p>
 
 </div>
 </div>

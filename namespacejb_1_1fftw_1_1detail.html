@@ -236,9 +236,10 @@ Define the type of the elements in the array. </td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">in_elements</td><td>the number of elements in the input vector or array </td></tr>
-    <tr><td class="paramname">out_elements</td><td>the number of elements in the output vector or array </td></tr>
+    <tr><td class="paramname">on_elements</td><td>the number of elements in the output vector or array </td></tr>
     <tr><td class="paramname">in_nsamples</td><td>the number of samples per-timeseries in the input array </td></tr>
-    <tr><td class="paramname">out_nsamples</td><td>the number of samples per timeseries in the output array </td></tr>
+    <tr><td class="paramname">on_nsamples</td><td>the number of samples per timeseries in the output array </td></tr>
+    <tr><td class="paramname">function_name</td><td>the name of the function to include in the exception message if a problem is detected </td></tr>
   </table>
   </dd>
 </dl>
@@ -251,7 +252,7 @@ Define the type of the elements in the array. </td></tr>
 
 <p>Definition at line <a class="el" href="plan_8cpp_source.html#l00010">10</a> of file <a class="el" href="plan_8cpp_source.html">plan.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00299">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00268">jb::fftw::create_forward_plan()</a>, and <a class="el" href="plan_8hpp_source.html#l00142">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00301">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00270">jb::fftw::create_forward_plan()</a>, and <a class="el" href="plan_8hpp_source.html#l00144">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
@@ -273,9 +274,9 @@ template&lt;typename T , std::size_t K, typename A &gt; </div>
 
 <p>Count the number of elements in boost::multi_array&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00050">50</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00052">52</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00299">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00268">jb::fftw::create_forward_plan()</a>, and <a class="el" href="plan_8hpp_source.html#l00142">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="plan_8hpp_source.html#l00301">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00270">jb::fftw::create_forward_plan()</a>, and <a class="el" href="plan_8hpp_source.html#l00144">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
@@ -297,7 +298,7 @@ template&lt;typename T , typename A &gt; </div>
 
 <p>Count the number of elements in a std::vector&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00062">62</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00064">64</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
@@ -319,9 +320,9 @@ template&lt;typename T , std::size_t K, typename A &gt; </div>
 
 <p>Count the number of samples in a boost::multi_array&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00056">56</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00058">58</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__time__delay__estimator_8cpp_source.html#l00011">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="plan_8hpp_source.html#l00299">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00268">jb::fftw::create_forward_plan()</a>, <a class="el" href="create__square__timeseries_8hpp_source.html#l00013">jb::testing::create_square_timeseries()</a>, and <a class="el" href="plan_8hpp_source.html#l00142">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+<p>Referenced by <a class="el" href="ut__time__delay__estimator_8cpp_source.html#l00011">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="plan_8hpp_source.html#l00301">jb::fftw::create_backward_plan()</a>, <a class="el" href="plan_8hpp_source.html#l00270">jb::fftw::create_forward_plan()</a>, <a class="el" href="create__square__timeseries_8hpp_source.html#l00013">jb::testing::create_square_timeseries()</a>, and <a class="el" href="plan_8hpp_source.html#l00144">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>
@@ -343,7 +344,7 @@ template&lt;typename T , typename A &gt; </div>
 
 <p>Count the number of samples in a std::vector&lt;&gt; </p>
 
-<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00068">68</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Definition at line <a class="el" href="plan_8hpp_source.html#l00070">70</a> of file <a class="el" href="plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
