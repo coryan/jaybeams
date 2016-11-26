@@ -115,6 +115,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -131,6 +132,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -147,6 +149,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, precision_type const* in, fftw_complex_type* out,
@@ -163,6 +166,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, fftw_complex_type const* in, precision_type* out,
@@ -180,6 +184,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -206,6 +211,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -232,6 +238,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, precision_type const* in,
@@ -258,6 +265,7 @@ struct traits<double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -379,6 +387,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -395,6 +404,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -411,6 +421,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, precision_type const* in, fftw_complex_type* out,
@@ -427,6 +438,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, fftw_complex_type const* in, precision_type* out,
@@ -444,6 +456,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -470,6 +483,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -496,6 +510,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, precision_type const* in,
@@ -522,6 +537,7 @@ struct traits<float> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -644,6 +660,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -660,6 +677,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan(
       std::size_t size, fftw_complex_type const* in, fftw_complex_type* out,
@@ -676,6 +694,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, precision_type const* in, fftw_complex_type* out,
@@ -692,6 +711,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input vector
    * @param out the output vector
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan(
       std::size_t size, fftw_complex_type const* in, precision_type* out,
@@ -709,6 +729,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_forward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -735,6 +756,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_backward_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
@@ -761,6 +783,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, precision_type const* in,
@@ -787,6 +810,7 @@ struct traits<long double> {
    * @param size the size of the input and output vectors
    * @param in the input array must be of size @a howmany*size
    * @param out the output array must be of size @a howmany*size
+   * @param flags control the algorithm choices in FFTW
    */
   static fftw_plan_type create_plan_many(
       int howmany, std::size_t size, fftw_complex_type const* in,
