@@ -168,6 +168,7 @@ void test_plan_errors() {
   BOOST_CHECK_THROW(jb::fftw::create_forward_plan(a0, a1), std::exception);
   BOOST_CHECK_THROW(jb::fftw::create_forward_plan(a0, a2), std::exception);
   BOOST_CHECK_THROW(jb::fftw::create_forward_plan(a0, a3), std::exception);
+  BOOST_CHECK_THROW(jb::fftw::create_forward_plan(a3, a3), std::exception);
   BOOST_CHECK_THROW(jb::fftw::create_backward_plan(a1, a0), std::exception);
   BOOST_CHECK_THROW(jb::fftw::create_backward_plan(a2, a0), std::exception);
   BOOST_CHECK_THROW(jb::fftw::create_backward_plan(a3, a0), std::exception);
