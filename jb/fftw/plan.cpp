@@ -5,8 +5,9 @@
 
 namespace jb {
 namespace fftw {
+namespace detail {
 
-void check_create_plan_inputs(
+void check_plan_inputs(
     std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples,
     std::size_t on_nsamples, char const* function_name) {
   if (in_nsamples != on_nsamples) {
@@ -28,16 +29,6 @@ void check_create_plan_inputs(
   }
 }
 
-void check_create_plan_inputs(
-    std::size_t in_elements, std::size_t on_elements,
-    char const* function_name) {
-  if (in_elements != on_elements) {
-    std::ostringstream os;
-    os << "mismatched vector sizes (" << in_elements << " != " << on_elements
-       << ") in " << function_name;
-    throw std::invalid_argument(os.str());
-  }
-}
-
+} // namespace detail
 } // namespace fftw
 } // namespace jb

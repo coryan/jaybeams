@@ -12,6 +12,7 @@ namespace fftw {
 int constexpr default_plan_flags =
     (FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED);
 
+namespace detail {
 /**
  * Define traits for container-like types.
  */
@@ -29,6 +30,46 @@ struct container_traits<boost::multi_array<T, K, A>> {
   /// Define the type of the elements in the array
   typedef typename boost::multi_array<T, K, A>::element element_type;
 };
+
+/**
+ * Helper function to check the inputs to a create_*_plan_*()
+ *
+ * @param in_elements the number of elements in the input vector or array
+ * @param out_elements the number of elements in the output vector or array
+ * @param in_nsamples the number of samples per-timeseries in the input array
+ * @param out_nsamples the number of samples per timeseries in the output array
+ * @throws std::invalid_argument if the sizes do not match, with a
+ * descriptive message.
+ */
+void check_plan_inputs(
+    std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples,
+    std::size_t on_nsamples, char const* function_name);
+
+/// Count the number of elements in boost::multi_array<>
+template <typename T, std::size_t K, typename A>
+std::size_t element_count(boost::multi_array<T, K, A> const& a) {
+  return a.num_elements();
+}
+
+/// Count the number of samples in a boost::multi_array<>
+template <typename T, std::size_t K, typename A>
+std::size_t nsamples(boost::multi_array<T, K, A> const& a) {
+  return a.shape()[a.num_dimensions() - 1];
+}
+
+/// Count the number of elements in a std::vector<>
+template <typename T, typename A>
+std::size_t element_count(std::vector<T, A> const& a) {
+  return a.size();
+}
+
+/// Count the number of samples in a std::vector<>
+template <typename T, typename A>
+std::size_t nsamples(std::vector<T, A> const& a) {
+  return a.size();
+}
+
+} // namespace detail
 
 /**
  * Wrap FFTW3 plan objects to automatically destroy them.
@@ -53,8 +94,8 @@ public:
   /**
    * type traits
    */
-  typedef
-      typename container_traits<in_timeseries_type>::element_type in_value_type;
+  typedef typename detail::container_traits<in_timeseries_type>::element_type
+      in_value_type;
   typedef
       typename jb::extract_value_type<in_value_type>::precision precision_type;
   typedef ::jb::fftw::traits<precision_type> traits;
@@ -98,10 +139,11 @@ public:
   //@}
 
   /// Execute the plan for vectors
-  void execute(in_timeseries_type const& in, out_timeseries_type& out) {
-    if (in.size() != out.size()) {
-      throw std::invalid_argument("mismatched vector size in execute()");
-    }
+  void execute(in_timeseries_type const& in, out_timeseries_type& out) const {
+    using namespace detail;
+    check_plan_inputs(
+      element_count(in), element_count(out), nsamples(in), nsamples(out),
+      __func__);
     execute_impl(fftw_cast(in), fftw_cast(out));
   }
 
@@ -121,17 +163,17 @@ private:
 
 private:
   /// Execute the plan in the c2c case
-  void execute_impl(fftw_complex_type const* in, fftw_complex_type* out) {
+  void execute_impl(fftw_complex_type const* in, fftw_complex_type* out) const {
     traits::execute_plan(p_, in, out);
   }
 
   /// Execute the plan for arrays of r2c case
-  void execute_impl(precision_type const* in, fftw_complex_type* out) {
+  void execute_impl(precision_type const* in, fftw_complex_type* out) const {
     traits::execute_plan(p_, in, out);
   }
 
   /// Execute the plan for arrays of r2c case
-  void execute_impl(fftw_complex_type const* in, precision_type* out) {
+  void execute_impl(fftw_complex_type const* in, precision_type* out) const {
     traits::execute_plan(p_, in, out);
   }
 
@@ -208,89 +250,6 @@ private:
   fftw_plan_type p_;
 };
 
-/**
- * Helper function to check the inputs to a create_*_plan_*()
- *
- * @param in_elements the number of elements in the input vector or array
- * @param out_elements the number of elements in the output vector or array
- * @param in_nsamples the number of samples per-timeseries in the input array
- * @param out_nsamples the number of samples per timeseries in the output array
- * @throws std::invalid_argument if the sizes do not match, with a
- * descriptive message.
- */
-void check_create_plan_inputs(
-    std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples,
-    std::size_t on_nsamples, char const* function_name);
-
-/**
- * Helper function to check the inputs to a create_*_plan_*()
- *
- * @param in_elements the number of elements in the input vector
- * @param out_elements the number of elements in the output vector
- * @throws std::invalid_argument if the sizes do not match, with a
- * descriptive message.
- */
-void check_create_plan_inputs(
-    std::size_t in_elements, std::size_t on_elements,
-    char const* function_name);
-
-/**
- * Create a plan to compute the DFT given the input and output
- * vectors.
- *
- * @param in the input timeseries
- * @param out the output timeseries
- * @param flags the FFTW flags for the plan
- * @throws std::invalid_argument if the input and output vectors are
- * not compatible
- * @returns a jb::fftw::plan<> of the right type.
- *
- * @tparam in_timeseries_type the type of the input timeseries
- * @tparam out_timeseries_type the type of the output timeseries
- */
-template <typename in_timeseries_type, typename out_timeseries_type>
-plan<in_timeseries_type, out_timeseries_type> create_forward_plan(
-    in_timeseries_type const& in, out_timeseries_type& out,
-    int flags = default_plan_flags) {
-  check_create_plan_inputs(in.size(), out.size(), "create_forward_plan()");
-  return plan<in_timeseries_type, out_timeseries_type>::create_forward_impl(
-      in.size(), fftw_cast(in), fftw_cast(out), flags);
-}
-
-/**
- * Create a plan to compute the inverse DFT given the input and output
- * vectors.
- *
- * @param in the input timeseries
- * @param out the output timeseries
- * @param flags the FFTW flags for the plan
- * @throws std::invalid_argument if the input and output vectors are
- * not compatible
- * @returns a jb::fftw::plan<> of the right type.
- *
- * @tparam in_timeseries_type the type of the input timeseries
- * @tparam out_timeseries_type the type of the output timeseries
- */
-template <typename in_timeseries_type, typename out_timeseries_type>
-plan<in_timeseries_type, out_timeseries_type> create_backward_plan(
-    in_timeseries_type const& in, out_timeseries_type& out,
-    int flags = default_plan_flags) {
-  check_create_plan_inputs(in.size(), out.size(), "create_backward_plan()");
-  return plan<in_timeseries_type, out_timeseries_type>::create_backward_impl(
-      in.size(), fftw_cast(in), fftw_cast(out), flags);
-}
-
-/// Count the number of elements in boost::multi_array<>
-template <typename T, std::size_t K, typename A>
-std::size_t array_element_count(boost::multi_array<T, K, A> const& a) {
-  return a.num_elements();
-}
-
-/// Count the number of samples in a boost::multi_array<>
-template <typename T, std::size_t K, typename A>
-std::size_t array_nsamples(boost::multi_array<T, K, A> const& a) {
-  return a.shape()[a.num_dimensions() - 1];
-}
 
 /**
  * Create a plan to compute many DFTs given the input and output
@@ -307,15 +266,20 @@ std::size_t array_nsamples(boost::multi_array<T, K, A> const& a) {
  * @tparam out_array_type the type of the output array of timeseries
  */
 template <typename in_array_type, typename out_array_type>
-plan<in_array_type, out_array_type> create_forward_plan_1d(
+plan<in_array_type, out_array_type> create_forward_plan(
     in_array_type const& in, out_array_type& out,
     int flags = default_plan_flags) {
-  check_create_plan_inputs(
-      array_element_count(in), array_element_count(out), array_nsamples(in),
-      array_nsamples(out), "create_forward_plan_1d()");
-  auto howmany = array_element_count(in) / array_nsamples(in);
+  using namespace detail;
+  check_plan_inputs(
+      element_count(in), element_count(out), nsamples(in), nsamples(out),
+      __func__);
+  auto howmany = element_count(in) / nsamples(in);
+  if (howmany == 1) {
+    return plan<in_array_type, out_array_type>::create_forward_impl(
+        nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+  }
   return plan<in_array_type, out_array_type>::create_forward_many_impl(
-      howmany, array_nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+      howmany, nsamples(in), fftw_cast(in), fftw_cast(out), flags);
 }
 
 /**
@@ -333,15 +297,20 @@ plan<in_array_type, out_array_type> create_forward_plan_1d(
  * @tparam out_array_type the type of the output timeseries
  */
 template <typename in_array_type, typename out_array_type>
-plan<in_array_type, out_array_type> create_backward_plan_1d(
+plan<in_array_type, out_array_type> create_backward_plan(
     in_array_type const& in, out_array_type& out,
     int flags = default_plan_flags) {
-  check_create_plan_inputs(
-      array_element_count(in), array_element_count(out), array_nsamples(in),
-      array_nsamples(out), "create_backward_plan_1d()");
-  auto howmany = array_element_count(in) / array_nsamples(in);
+  using namespace detail;
+  check_plan_inputs(
+      element_count(in), element_count(out), nsamples(in), nsamples(out),
+      __func__);
+  auto howmany = element_count(in) / nsamples(in);
+  if (howmany == 1) {
+    return plan<in_array_type, out_array_type>::create_backward_impl(
+        nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+  }
   return plan<in_array_type, out_array_type>::create_backward_many_impl(
-      howmany, array_nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+      howmany, nsamples(in), fftw_cast(in), fftw_cast(out), flags);
 }
 
 /**
@@ -350,8 +319,10 @@ plan<in_array_type, out_array_type> create_backward_plan_1d(
 template <typename in_timeseries_type, typename out_timeseries_type>
 struct plan<in_timeseries_type, out_timeseries_type>::check_constraints {
   check_constraints() {
-    typedef typename in_timeseries_type::value_type in_value_type;
-    typedef typename out_timeseries_type::value_type out_value_type;
+    typedef typename detail::container_traits<in_timeseries_type>::element_type
+        in_value_type;
+    typedef typename detail::container_traits<out_timeseries_type>::element_type
+        out_value_type;
     typedef typename jb::extract_value_type<in_value_type>::precision
         in_precision_type;
     typedef typename jb::extract_value_type<out_value_type>::precision
