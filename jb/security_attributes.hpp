@@ -94,6 +94,12 @@ public:
     static int const id;
   };
 
+  /// Constructor
+  security_attributes()
+      : attributes_(id_generator.load()) {
+    // size the vector to a good initial value
+  }
+
   /**
    * Set the value of an attribute
    *
@@ -119,7 +125,9 @@ public:
         " to the attribute type");
 
     // ... grow the vector to contain enough attributes ...
-    attributes_.reserve(attribute_type::id + 1);
+    if (attributes_.size() <= attribute_type::id) {
+      attributes_.resize(attribute_type::id + 1);
+    }
     // ... set the attribute, converting the @a t argument first ...
     attributes_[attribute_type::id] = boost::any(static_cast<value_type>(t));
   }
@@ -145,7 +153,9 @@ public:
         "security_attributes::set only works with its own attribute types");
 
     // ... grow the vector to contain enough attributes ...
-    attributes_.reserve(attribute_type::id + 1);
+    if (attributes_.size() <= attribute_type::id) {
+      attributes_.resize(attribute_type::id + 1);
+    }
     // ... return the attribute value ...
     return boost::any_cast<value_type const&>(attributes_[attribute_type::id]);
   }
