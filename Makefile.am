@@ -171,8 +171,12 @@ endif !FOUND_CLANG_FORMAT
 
 if USE_FFTW3
 inst_LIBRARIES += jb/libjb_fftw.a
-unit_tests += jb/fftw/ut_allocator \
+unit_tests += jb/fftw/ut_aligned_multi_array \
+  jb/fftw/ut_allocator \
+  jb/fftw/ut_cast_multi_array \
+  jb/fftw/ut_cast_vector \
   jb/fftw/ut_plan \
+  jb/fftw/ut_plan_many \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
@@ -258,6 +262,7 @@ jb_libjb_testing_a_SOURCES = \
 jb_libjb_testing_a_HEADERS = \
   jb/testing/check_array_close_enough.hpp \
   jb/testing/check_complex_close_enough.hpp \
+  jb/testing/check_multi_array_close_enough.hpp \
   jb/testing/check_vector_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
@@ -399,8 +404,10 @@ jb_libitch5_a_LIBADD =
 ################################################################
 
 jb_libjb_fftw_adir = $(includedir)
-jb_libjb_fftw_a_SOURCES =
+jb_libjb_fftw_a_SOURCES = \
+  jb/fftw/plan.cpp
 jb_libjb_fftw_a_HEADERS = \
+  jb/fftw/aligned_multi_array.hpp \
   jb/fftw/aligned_vector.hpp \
   jb/fftw/allocator.hpp \
   jb/fftw/cast.hpp \
@@ -534,13 +541,29 @@ jb_ut_strtonum_LDADD = $(jb_ut_libs)
 # fftw unit tests
 ################################################################
 
+jb_fftw_ut_aligned_multi_array_SOURCES = jb/fftw/ut_aligned_multi_array.cpp
+jb_fftw_ut_aligned_multi_array_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_aligned_multi_array
+jb_fftw_ut_aligned_multi_array_LDADD = $(jb_ut_fftw_libs)
+
 jb_fftw_ut_allocator_SOURCES = jb/fftw/ut_allocator.cpp
 jb_fftw_ut_allocator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_allocator
 jb_fftw_ut_allocator_LDADD = $(jb_ut_fftw_libs)
 
+jb_fftw_ut_cast_multi_array_SOURCES = jb/fftw/ut_cast_multi_array.cpp
+jb_fftw_ut_cast_multi_array_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_cast_multi_array
+jb_fftw_ut_cast_multi_array_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_cast_vector_SOURCES = jb/fftw/ut_cast_vector.cpp
+jb_fftw_ut_cast_vector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_cast_vector
+jb_fftw_ut_cast_vector_LDADD = $(jb_ut_fftw_libs)
+
 jb_fftw_ut_plan_SOURCES = jb/fftw/ut_plan.cpp
 jb_fftw_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan
 jb_fftw_ut_plan_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_plan_many_SOURCES = jb/fftw/ut_plan_many.cpp
+jb_fftw_ut_plan_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan_many
+jb_fftw_ut_plan_many_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
 jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator

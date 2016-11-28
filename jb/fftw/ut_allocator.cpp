@@ -15,9 +15,7 @@ void test_plan_real2complex() {
   int nsamples = 1 << 15;
   int tol = nsamples;
 
-  typedef jb::fftw::plan<precision_t> tested;
-  typedef typename tested::precision_type precision_type;
-  typedef std::complex<precision_type> complex;
+  typedef std::complex<precision_t> complex;
 
   aligned_vector<precision_t> in(nsamples);
   aligned_vector<complex> tmp(nsamples);
@@ -29,8 +27,8 @@ void test_plan_real2complex() {
     in[i + h] = h / 4.0 - i;
   }
 
-  tested dir = tested::create_forward(in, tmp);
-  tested inv = tested::create_backward(tmp, out);
+  auto dir = jb::fftw::create_forward_plan(in, tmp);
+  auto inv = jb::fftw::create_backward_plan(tmp, out);
 
   dir.execute(in, tmp);
   inv.execute(tmp, out);
