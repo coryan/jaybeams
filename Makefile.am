@@ -388,6 +388,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/reg_sho_restriction_message.hpp \
   jb/itch5/seconds_field.hpp \
   jb/itch5/short_string_field.hpp \
+  jb/itch5/side_prices.hpp \
   jb/itch5/static_digits.hpp \
   jb/itch5/stock_directory_message.hpp \
   jb/itch5/stock_field.hpp \

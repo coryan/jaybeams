@@ -2,13 +2,12 @@
 #define jb_itch5_order_book_hpp
 
 #include <jb/itch5/buy_sell_indicator.hpp>
-#include <jb/itch5/order_book_def.hpp>
 #include <jb/itch5/price_field.hpp>
+#include <jb/itch5/side_prices.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
 #include <functional>
-#include <map>
 #include <utility>
 
 namespace jb {
@@ -16,6 +15,7 @@ namespace itch5 {
 
 /// A simple representation for price + quantity
 typedef std::pair<price4_t, int> half_quote;
+typedef unsigned long int book_depth_t;
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
@@ -43,6 +43,8 @@ typedef std::pair<price4_t, int> half_quote;
  * - What is the best offer (lowest price of SELL orders) and what is
  * the total quantity available at that price?
  */
+
+template <typename book_type>  
 class order_book {
 public:
   /// Initialize an empty order book.
@@ -64,14 +66,41 @@ public:
    */
 
   /// @returns the best bid price and quantity
-  half_quote best_bid() const;
-  /// @returns the worst bid price and quantity
-  half_quote worst_bid() const;
-  /// @returns the best offer price and quantity
-  half_quote best_offer() const;
-  /// @returns the worst offer price and quantity
-  half_quote worst_offer() const;
+  half_quote best_bid() const {
+    if (buy_.empty()) {
+      return empty_bid();
+    }
+    auto i = buy_.begin();
+    return half_quote(i->first, i->second);
+  }
 
+  /// @returns the worst bid price and quantity
+  half_quote worst_bid() const {
+    if (buy_.empty()) {
+      return empty_bid();
+    }
+    auto i = buy_.rbegin();
+    return half_quote(i->first, i->second);
+  }
+
+  /// @returns the best offer price and quantity
+  half_quote best_offer() const {
+    if (sell_.empty()) {
+      return empty_offer();
+    }
+    auto i = sell_.begin();
+    return half_quote(i->first, i->second);
+  }
+
+  /// @returns the worst offer price and quantity
+  half_quote worst_offer() const {
+    if (sell_.empty()) {
+      return empty_offer();
+    }
+    auto i = sell_.rbegin();
+    return half_quote(i->first, i->second);
+  }
+  
   /// @returns the number of levels with non-zero quantity for the BUY side.
   std::size_t buy_count() const {
     return buy_.size();
@@ -123,7 +152,7 @@ public:
     }
     return handle_order_reduced(sell_, px, reduced_qty);
   }
-
+  
 private:
   /**
    * Refactor handle_add_order()
@@ -174,11 +203,8 @@ private:
   }
 
 private:
-  typedef std::map<price4_t, int, std::greater<price4_t>> buys;
-  typedef std::map<price4_t, int, std::less<price4_t>> sells;
-
-  buys buy_;
-  sells sell_;
+  typename book_type::buys_t buy_;
+  typename book_type::sells_t sell_;
 };
 
 } // namespace itch5

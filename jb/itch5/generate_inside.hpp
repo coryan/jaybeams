@@ -25,11 +25,12 @@ namespace itch5 {
  * (before the any output is generated).
  * @returns true if the inside is affected by the change, false otherwise.
  */
-template <typename duration_t>
+template <typename duration_t, typename book_type>
 bool record_latency_stats(
-    jb::offline_feed_statistics& stats, jb::itch5::message_header const& header,
-    jb::itch5::order_book const& book,
-    jb::itch5::compute_book::book_update const& update,
+    jb::offline_feed_statistics& stats,
+    jb::itch5::message_header const& header,
+    jb::itch5::order_book<book_type> const& book,
+    jb::itch5::book_update const& update,
     duration_t processing_latency) {
   // ... we need to treat each side differently ...
   if (update.buy_sell_indicator == u'B') {
@@ -71,11 +72,12 @@ bool record_latency_stats(
  * (before the any output is generated).
  * @returns true if the inside is affected by the change, false otherwise.
  */
-template <typename duration_t>
+template <typename duration_t, typename book_type>
 bool generate_inside(
     jb::offline_feed_statistics& stats, std::ostream& out,
-    jb::itch5::message_header const& header, jb::itch5::order_book const& book,
-    jb::itch5::compute_book::book_update const& update,
+    jb::itch5::message_header const& header,
+    jb::itch5::order_book<book_type> const& book,
+    jb::itch5::book_update const& update,
     duration_t processing_latency) {
   if (not record_latency_stats(
           stats, header, book, update, processing_latency)) {

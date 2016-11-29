@@ -44,10 +44,11 @@ public:
 
 /// Calculate the depth of an event, taking care with events that
 /// moved the BBO.
+template <typename book_type>  
 void record_event_depth(
     jb::book_depth_statistics& stats, jb::itch5::message_header const&,
-    jb::itch5::order_book const& book,
-    jb::itch5::compute_book::book_update const& update) {
+    jb::itch5::order_book<book_type> const& book,
+    jb::itch5::book_update const& update) {
   // ... we need to treat each side differently ...
   int depth = 0;
   if (update.buy_sell_indicator == u'B') {
@@ -85,19 +86,21 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::book_depth_statistics> per_symbol;
   jb::book_depth_statistics aggregate_stats(cfg.stats());
 
-  jb::itch5::compute_book::callback_type cb = [&aggregate_stats](
+  jb::itch5::compute_book<jb::itch5::map_price>::callback_type
+    cb = [&aggregate_stats](
       jb::itch5::message_header const& header,
-      jb::itch5::order_book const& updated_book,
-      jb::itch5::compute_book::book_update const& update) {
+      jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
+      jb::itch5::book_update const& update) {
     record_event_depth(aggregate_stats, header, updated_book, update);
   };
 
   if (cfg.enable_symbol_stats()) {
     jb::book_depth_statistics::config symcfg(cfg.symbol_stats());
-    jb::itch5::compute_book::callback_type chain = [&per_symbol, symcfg, cb](
+    jb::itch5::compute_book<jb::itch5::map_price>::callback_type
+      chain = [&per_symbol, symcfg, cb](
         jb::itch5::message_header const& header,
-        jb::itch5::order_book const& book,
-        jb::itch5::compute_book::book_update const& update) {
+        jb::itch5::order_book<jb::itch5::map_price> const& book,
+        jb::itch5::book_update const& update) {
       cb(header, book, update);
       auto location = per_symbol.find(update.stock);
       if (location == per_symbol.end()) {
@@ -110,7 +113,7 @@ int main(int argc, char* argv[]) try {
     cb = std::move(chain);
   }
 
-  jb::itch5::compute_book handler(std::move(cb));
+  jb::itch5::compute_book<jb::itch5::map_price> handler(std::move(cb));
   jb::itch5::process_iostream(in, handler);
 
   jb::book_depth_statistics::print_csv_header(out);
