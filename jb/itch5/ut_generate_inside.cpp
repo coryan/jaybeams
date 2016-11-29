@@ -51,11 +51,11 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
           pl));
   BOOST_CHECK_EQUAL(std::string(""), out.str());
   BOOST_CHECK_EQUAL(
-      false, generate_inside(
-                 stats, out, create_header(std::chrono::nanoseconds(0)), book,
-                 jb::itch5::book_update{now, stock, SELL,
-                                           price4_t(17 * 10000), 100},
-                 pl));
+      false,
+      generate_inside(
+          stats, out, create_header(std::chrono::nanoseconds(0)), book,
+          jb::itch5::book_update{now, stock, SELL, price4_t(17 * 10000), 100},
+          pl));
   BOOST_CHECK_EQUAL(std::string(""), out.str());
 
   // ... an order better than the BBO produces some output ...
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
       true, generate_inside(
                 stats, out, create_header(std::chrono::nanoseconds(0)), book,
                 jb::itch5::book_update{now, stock, BUY,
-                                          price4_t(12 * 10000 + 5000), 100},
+                                       price4_t(12 * 10000 + 5000), 100},
                 pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
       true, generate_inside(
                 stats, out, create_header(std::chrono::nanoseconds(0)), book,
                 jb::itch5::book_update{now, stock, SELL,
-                                          price4_t(15 * 10000 - 5000), 100},
+                                       price4_t(15 * 10000 - 5000), 100},
                 pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
@@ -92,11 +92,11 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
   out.str("");
   BOOST_CHECK_EQUAL(
-      true, generate_inside(
-                stats, out, create_header(std::chrono::nanoseconds(0)), book,
-                jb::itch5::book_update{now, stock, SELL,
-                                          price4_t(15 * 10000), 100},
-                pl));
+      true,
+      generate_inside(
+          stats, out, create_header(std::chrono::nanoseconds(0)), book,
+          jb::itch5::book_update{now, stock, SELL, price4_t(15 * 10000), 100},
+          pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
 
@@ -105,22 +105,20 @@ BOOST_AUTO_TEST_CASE(generate_inside_basic) {
   out.str("");
   now = jb::itch5::compute_book<map_price>::clock_type::now();
   BOOST_CHECK_EQUAL(
-      true,
-      generate_inside(
-          stats, out, create_header(std::chrono::nanoseconds(0)), book,
-          jb::itch5::book_update{now, stock, BUY, price4_t(11 * 10000), 100,
-                                    true, price4_t(12 * 10000), -100},
-          pl));
+      true, generate_inside(
+                stats, out, create_header(std::chrono::nanoseconds(0)), book,
+                jb::itch5::book_update{now, stock, BUY, price4_t(11 * 10000),
+                                       100, true, price4_t(12 * 10000), -100},
+                pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
   out.str("");
   BOOST_CHECK_EQUAL(
-      true,
-      generate_inside(
-          stats, out, create_header(std::chrono::nanoseconds(0)), book,
-          jb::itch5::book_update{now, stock, SELL, price4_t(16 * 10000), 100,
-                                    true, price4_t(15 * 10000), -100},
-          pl));
+      true, generate_inside(
+                stats, out, create_header(std::chrono::nanoseconds(0)), book,
+                jb::itch5::book_update{now, stock, SELL, price4_t(16 * 10000),
+                                       100, true, price4_t(15 * 10000), -100},
+                pl));
   BOOST_CHECK_EQUAL(
       std::string("0 0 HSART 120000 100 150000 100\n"), out.str());
 }

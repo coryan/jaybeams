@@ -3,7 +3,8 @@
 #include <boost/test/unit_test.hpp>
 
 /**
- * @test Verify that jb::itch5::order_book<jb::itch5::map_price> works as expected.
+ * @test Verify that jb::itch5::order_book<jb::itch5::map_price> works as
+ * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_trivial) {
   using jb::itch5::price4_t;
@@ -26,7 +27,8 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book<jb::itch5::map_price> works as expected.
+ * @test Verify that the buy side of jb::itch5::order_book<jb::itch5::map_price>
+ * works as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   using jb::itch5::price4_t;
@@ -131,7 +133,8 @@ BOOST_AUTO_TEST_CASE(order_book_buy) {
 }
 
 /**
- * @test Verity that the sell side of jb::itch5::order_book<jb::itch5::map_price> works as expected.
+ * @test Verity that the sell side of
+ * jb::itch5::order_book<jb::itch5::map_price> works as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_sell) {
   using jb::itch5::price4_t;
@@ -237,7 +240,8 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book<jb::itch5::map_price> handles
+ * @test Verify that the buy side of jb::itch5::order_book<jb::itch5::map_price>
+ * handles
  * errors as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_buy_errors) {
@@ -268,7 +272,8 @@ BOOST_AUTO_TEST_CASE(order_book_buy_errors) {
 }
 
 /**
- * @test Verify that the sell side of jb::itch5::order_book<jb::itch5::map_price> handles
+ * @test Verify that the sell side of
+ * jb::itch5::order_book<jb::itch5::map_price> handles
  * errors as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_sell_errors) {

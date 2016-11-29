@@ -27,11 +27,9 @@ namespace itch5 {
  */
 template <typename duration_t, typename book_type>
 bool record_latency_stats(
-    jb::offline_feed_statistics& stats,
-    jb::itch5::message_header const& header,
+    jb::offline_feed_statistics& stats, jb::itch5::message_header const& header,
     jb::itch5::order_book<book_type> const& book,
-    jb::itch5::book_update const& update,
-    duration_t processing_latency) {
+    jb::itch5::book_update const& update, duration_t processing_latency) {
   // ... we need to treat each side differently ...
   if (update.buy_sell_indicator == u'B') {
     // ... if the update price (or the old price for a cancel/replace
@@ -77,8 +75,7 @@ bool generate_inside(
     jb::offline_feed_statistics& stats, std::ostream& out,
     jb::itch5::message_header const& header,
     jb::itch5::order_book<book_type> const& book,
-    jb::itch5::book_update const& update,
-    duration_t processing_latency) {
+    jb::itch5::book_update const& update, duration_t processing_latency) {
   if (not record_latency_stats(
           stats, header, book, update, processing_latency)) {
     return false;

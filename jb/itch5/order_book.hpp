@@ -44,7 +44,7 @@ typedef unsigned long int book_depth_t;
  * the total quantity available at that price?
  */
 
-template <typename book_type>  
+template <typename book_type>
 class order_book {
 public:
   /// Initialize an empty order book.
@@ -100,7 +100,7 @@ public:
     auto i = sell_.rbegin();
     return half_quote(i->first, i->second);
   }
-  
+
   /// @returns the number of levels with non-zero quantity for the BUY side.
   std::size_t buy_count() const {
     return buy_.size();
@@ -152,7 +152,7 @@ public:
     }
     return handle_order_reduced(sell_, px, reduced_qty);
   }
-  
+
 private:
   /**
    * Refactor handle_add_order()

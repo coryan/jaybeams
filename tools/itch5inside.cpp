@@ -56,8 +56,8 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  jb::itch5::compute_book<jb::itch5::map_price>::callback_type
-    cb = [&stats, &out](
+  jb::itch5::compute_book<jb::itch5::map_price>::callback_type cb = [&stats,
+                                                                     &out](
       jb::itch5::message_header const& header,
       jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
       jb::itch5::book_update const& update) {
