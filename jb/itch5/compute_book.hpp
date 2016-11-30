@@ -484,12 +484,6 @@ inline bool operator!=(book_update const& a, book_update const& b) {
   return !(a == b);
 }
 
-/// ostream operator for order updates, mostly used for testing and debugging
-std::ostream& operator<<(std::ostream& os, book_update const& x);
-
-/// ostream operator for the order data, mostly used for testing and debugging
-std::ostream& operator<<(std::ostream& os, book_update const& x);
-
 std::ostream& operator<<(std::ostream& os, book_update const& x) {
   return os << "{" << x.stock << "," << x.buy_sell_indicator << "," << x.px
             << "," << x.qty << "}";

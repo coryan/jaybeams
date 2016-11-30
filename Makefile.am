@@ -317,7 +317,6 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/broken_trade_message.cpp \
   jb/itch5/char_list_validator.cpp \
   jb/itch5/check_offset.cpp \
-  jb/itch5/compute_book.cpp \
   jb/itch5/compute_book_cache_aware.cpp \
   jb/itch5/cross_trade_message.cpp \
   jb/itch5/ipo_quoting_period_update_message.cpp \
