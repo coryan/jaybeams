@@ -3,7 +3,6 @@
 
 #include <jb/itch5/buy_sell_indicator.hpp>
 #include <jb/itch5/price_field.hpp>
-#include <jb/itch5/side_prices.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
@@ -12,6 +11,16 @@
 
 namespace jb {
 namespace itch5 {
+
+/**
+ * Define the types of buy and sell sides.
+ * It is used as a the template parameter book_type of the
+ * template class order_book
+ */
+struct map_price {
+  typedef std::map<price4_t, int, std::greater<price4_t>> buys_t;
+  typedef std::map<price4_t, int, std::less<price4_t>> sells_t;
+};
 
 /// A simple representation for price + quantity
 typedef std::pair<price4_t, int> half_quote;
