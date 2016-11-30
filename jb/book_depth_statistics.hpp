@@ -1,7 +1,6 @@
 #ifndef jb_book_depth_stats_hpp
 #define jb_book_depth_stats_hpp
 
-#include <jb/itch5/order_book_def.hpp>
 #include <jb/config_object.hpp>
 #include <jb/event_rate_histogram.hpp>
 #include <jb/histogram.hpp>
@@ -10,7 +9,7 @@
 #include <iosfwd>
 
 namespace jb {
-typedef itch5::book_depth_t book_depth_t;
+typedef unsigned long int book_depth_t;
 
 /**
  * Keep statistics about a feed and its book depth.
