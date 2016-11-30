@@ -14,8 +14,10 @@ namespace itch5 {
 
 /**
  * Define the types of buy and sell sides.
+ *
  * It is used as a the template parameter book_type of the
- * template class order_book
+ * template class order_book:
+ * - jb::itch5::order_book<jb::itch5::map_price>
  */
 struct map_price {
   typedef std::map<price4_t, int, std::greater<price4_t>> buys_t;
