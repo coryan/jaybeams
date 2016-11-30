@@ -18,13 +18,16 @@ namespace itch5 {
  */
 template <typename price_field_t>
 int price_levels(price_field_t lo, price_field_t hi) {
-  price_field_t const unit = price_field_t(price_field_t::denom);
-  price_field_t const penny = price_field_t(unit.as_integer() / 100);
-  price_field_t const mill = price_field_t(penny.as_integer() / 100);
-
   static_assert(
       price_field_t::denom >= 10000,
       "price_levels() does not work with denom < 10000");
+  static_assert(
+      price_field_t::denom % 10000 == 0,
+      "price_levels() does not work with (denom % 10000) != 0");
+
+  price_field_t const unit = price_field_t(price_field_t::denom);
+  auto constexpr penny = price_field_t::denom / 100;
+  auto constexpr mill = penny / 100;
 
   if (hi < lo) {
     throw std::range_error("invalid price range in price_levels()");
@@ -32,12 +35,12 @@ int price_levels(price_field_t lo, price_field_t hi) {
   if (unit <= lo) {
     // ... range is above $1.0, return the number of levels for that
     // case ...
-    return (hi.as_integer() - lo.as_integer()) / penny.as_integer();
+    return (hi.as_integer() - lo.as_integer()) / penny;
   }
   if (hi <= unit) {
     // ... range is below $1.0, return the number of levels for that
     // case ...
-    return (hi.as_integer() - lo.as_integer()) / mill.as_integer();
+    return (hi.as_integer() - lo.as_integer()) / mill;
   }
   // ... split the analysis ...
   return price_levels(lo, unit) + price_levels(unit, hi);

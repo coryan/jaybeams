@@ -3,6 +3,8 @@
 
 #include <jb/fftw/traits.hpp>
 
+#include <boost/multi_array.hpp>
+
 namespace jb {
 namespace fftw {
 
@@ -35,6 +37,18 @@ auto fftw_cast(vector& in) -> decltype(fftw_cast_array(&in[0])) {
 template <typename vector>
 auto fftw_cast(vector const& in) -> decltype(fftw_cast_array(&in[0])) {
   return fftw_cast_array(&in[0]);
+}
+
+template <typename T, std::size_t K, typename A>
+auto fftw_cast(boost::multi_array<T, K, A> const& a)
+    -> decltype(fftw_cast_array(a.data())) {
+  return fftw_cast_array(a.data());
+}
+
+template <typename T, std::size_t K, typename A>
+auto fftw_cast(boost::multi_array<T, K, A>& a)
+    -> decltype(fftw_cast_array(a.data())) {
+  return fftw_cast_array(a.data());
 }
 
 } // namespace fftw
