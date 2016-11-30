@@ -1,7 +1,6 @@
 #ifndef jb_security_attributes_hpp
 #define jb_security_attributes_hpp
 
-#include <jb/assert_throw.hpp>
 #include <boost/any.hpp>
 #include <atomic>
 #include <type_traits>
@@ -125,9 +124,10 @@ public:
         "security_attributes::set the input parameter must be convertible"
         " to the attribute type");
 
-    // ... the vector should always be large enough, because they are
-    // initialized to the maximum known id, which is set before main() ...
-    JB_ASSERT_THROW(attributes_.size() > attribute_type::id);
+    // ... grow the vector to contain enough attributes ...
+    if (attributes_.size() <= attribute_type::id) {
+      attributes_.resize(attribute_type::id + 1);
+    }
     // ... set the attribute, converting the @a t argument first ...
     attributes_[attribute_type::id] = boost::any(static_cast<value_type>(t));
   }
@@ -152,9 +152,10 @@ public:
         std::is_same<attribute_type, attribute<tag_type, value_type>>::value,
         "security_attributes::set only works with its own attribute types");
 
-    // ... the vector should always be large enough, because they are
-    // initialized to the maximum known id, which is set before main() ...
-    JB_ASSERT_THROW(attributes_.size() > attribute_type::id);
+    // ... grow the vector to contain enough attributes ...
+    if (attributes_.size() <= attribute_type::id) {
+      attributes_.resize(attribute_type::id + 1);
+    }
     // ... return the attribute value ...
     return boost::any_cast<value_type const&>(attributes_[attribute_type::id]);
   }
