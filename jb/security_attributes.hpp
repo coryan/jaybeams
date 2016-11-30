@@ -103,7 +103,7 @@ public:
    * @returns the value of the @a attribute_type attribute
    * @throws boost::bad_any_cast if there is a type mismatch
    */
-  template <typename attribute_type, typename U>
+  template<typename attribute_type, typename U>
   void set(U const& t) {
     // ... verify the types match our expectations, generate a
     // compile-time error when they do not ...
@@ -132,7 +132,7 @@ public:
    * @returns the value of the @a attribute_type attribute
    * @throws boost::bad_any_cast if there is a type mismatch
    */
-  template <typename attribute_type>
+  template<typename attribute_type>
   typename attribute_type::value_type const& get() {
     // ... verify the types match our expectations, generate a
     // compile-time error when they do not ...
