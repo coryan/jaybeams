@@ -13,20 +13,20 @@ namespace jb {
 namespace itch5 {
 
 /**
- * Define the types of buy and sell sides.
+ * Define the types of buy and sell sides data structure.
  *
  * It is used as template parameter book_type of the
  * template class order_book:
  * - jb::itch5::order_book<jb::itch5::map_price>
  */
 struct map_price {
-  typedef std::map<price4_t, int, std::greater<price4_t>> buys_t;
-  typedef std::map<price4_t, int, std::less<price4_t>> sells_t;
+  using buys_t = std::map<price4_t, int, std::greater<price4_t>>;
+  using sells_t = std::map<price4_t, int, std::less<price4_t>>;
 };
 
 /// A simple representation for price + quantity
-typedef std::pair<price4_t, int> half_quote;
-typedef unsigned long int book_depth_t;
+using half_quote = std::pair<price4_t, int>;
+using book_depth_t = unsigned long int;
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
@@ -53,6 +53,12 @@ typedef unsigned long int book_depth_t;
  * the total quantity available at that price?
  * - What is the best offer (lowest price of SELL orders) and what is
  * the total quantity available at that price?
+ *
+ * This is a template class.
+ * @param book_type define data structure type of price book,
+ * both sides buy and sell. Allowed values are:
+ * - jb::itch5::map_price
+ * @todo jb::itch5::cache_price
  */
 
 template <typename book_type>
