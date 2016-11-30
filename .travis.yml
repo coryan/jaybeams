@@ -56,7 +56,7 @@ after_success:
   # and then push it using the host ...
   - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${GENDOCS}" = "xyes" ]; then
     docker run --rm -it --env GIT_NAME="${GIT_NAME?}" --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    (cd doc/html ; git push https://${GH_TOKEN?}@github.com/coryan/jaybeams gh-pages) ;
+    (cd doc/html ; git push https://${GH_TOKEN?}@github.com/${GIT_NAME?}/jaybeams gh-pages) ;
     fi
 
 notifications:
