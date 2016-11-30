@@ -13,7 +13,7 @@ namespace jb {
 namespace itch5 {
 
 /**
- * Define the types of buy and sell sides.
+ * Define the types of buy and sell sides data structure.
  *
  * It is used as template parameter book_type of the
  * template class order_book:
@@ -53,6 +53,12 @@ typedef unsigned long int book_depth_t;
  * the total quantity available at that price?
  * - What is the best offer (lowest price of SELL orders) and what is
  * the total quantity available at that price?
+ *
+ * This is a template class.
+ * @param book_type define data structure type of price book,
+ * both sides buy and sell. Allowed values are:
+ * - jb::itch5::map_price
+ * @todo jb::itch5::cache_price
  */
 
 template <typename book_type>
