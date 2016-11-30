@@ -20,13 +20,13 @@ namespace itch5 {
  * - jb::itch5::order_book<jb::itch5::map_price>
  */
 struct map_price {
-  typedef std::map<price4_t, int, std::greater<price4_t>> buys_t;
-  typedef std::map<price4_t, int, std::less<price4_t>> sells_t;
+  using buys_t = std::map<price4_t, int, std::greater<price4_t>>;
+  using sells_t = std::map<price4_t, int, std::less<price4_t>>;
 };
 
 /// A simple representation for price + quantity
-typedef std::pair<price4_t, int> half_quote;
-typedef unsigned long int book_depth_t;
+using half_quote = std::pair<price4_t, int>;
+using book_depth_t = unsigned long int;
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
