@@ -27,7 +27,6 @@ jb_unit_tests = \
   jb/ut_logging \
   jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
-  jb/ut_security_attributes \
   jb/ut_severity_level \
   jb/ut_strtonum
 
@@ -224,7 +223,6 @@ nobase_jb_libjb_a_HEADERS = \
   jb/log.hpp \
   jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
-  jb/security_attributes.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/usage.hpp
@@ -513,10 +511,6 @@ jb_ut_merge_yaml_LDADD = $(jb_ut_libs)
 jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
 jb_ut_offline_feed_statistics_LDADD = $(jb_ut_libs)
-
-jb_ut_security_attributes_SOURCES = jb/ut_security_attributes.cpp
-jb_ut_security_attributes_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_security_attributes
-jb_ut_security_attributes_LDADD = $(jb_ut_libs)
 
 jb_ut_severity_level_SOURCES = jb/ut_severity_level.cpp
 jb_ut_severity_level_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_severity_level
