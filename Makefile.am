@@ -324,7 +324,6 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/mwcb_breach_message.cpp \
   jb/itch5/mwcb_decline_level_message.cpp \
   jb/itch5/net_order_imbalance_indicator_message.cpp \
-  jb/itch5/order_book.cpp \
   jb/itch5/order_book_cache_aware.cpp \
   jb/itch5/order_cancel_message.cpp \
   jb/itch5/order_delete_message.cpp \
