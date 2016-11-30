@@ -21,7 +21,7 @@ namespace jb {
 namespace itch5 {
 using clock_type = std::chrono::steady_clock;
 
-/// A convenience typedef for clock_type::time_point
+/// A convenience alias for clock_type::time_point
 using time_point = clock_type::time_point;
 
 /**
@@ -107,7 +107,7 @@ public:
   /// Define the clock used to measure processing delays
   using clock_type = jb::itch5::clock_type;
 
-  /// A convenience typedef for clock_type::time_point
+  /// A convenience alias for clock_type::time_point
   using time_point = jb::itch5::time_point;
 
   /**
@@ -382,7 +382,6 @@ private:
   /// Represent the collection of all orders
   using orders_by_id = std::unordered_map<std::uint64_t, order_data>;
   using orders_iterator = typename orders_by_id::iterator;
-  //  typedef std::unordered_map<std::uint64_t, order_data> orders_by_id;
 
   /**
    * Refactor code to handle order reductions, i.e., cancels and
