@@ -8,7 +8,7 @@ git config --global user.name "${GIT_NAME?}"
 git config --global user.email "${GIT_EMAIL?}"
 
 # ... notice the target directory ...
-git clone https://github.com/coryan/jaybeams doc/html
+git clone https://github.com/${GIT_NAME?}/jaybeams doc/html
 
 # Kill them all; let Git sort them out.
 # ... basically we remove any existing pages and then add everything
