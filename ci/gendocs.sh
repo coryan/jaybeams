@@ -3,12 +3,21 @@
 # Exit on error
 set -ev
 
+# Get REPO_REF as call paramenter
+if [ "$#" != "1" ]; then
+    echo "usage: gendocs.sh <github-username>"
+    exit 1
+fi
+
+REPO_REF=$1
+
 # Configure git to use my name and email
 git config --global user.name "${GIT_NAME?}"
 git config --global user.email "${GIT_EMAIL?}"
 
 # ... notice the target directory ...
-git clone https://github.com/"${USER?}"/jaybeams doc/html
+git clone https://github.com/"$REPO_REF"/jaybeams doc/html
+
 
 # Kill them all; let Git sort them out.
 # ... basically we remove any existing pages and then add everything
@@ -25,7 +34,7 @@ git add --all .
 
 # ... we always commit the changes locally, and if there is nothing to
 # commit exit successfully ...
-git commit -q -m"Automatically generated documentation" || exit 0
+git commit -q -m "Automatically generated documentation" || exit 0
 
 exit 0
 
