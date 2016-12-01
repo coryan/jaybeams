@@ -10,14 +10,14 @@ if [ "$#" != "1" ]; then
 fi
 
 REPO_REF=$1
+echo "${REPO_REF?}"
 
 # Configure git to use my name and email
 git config --global user.name "${GIT_NAME?}"
 git config --global user.email "${GIT_EMAIL?}"
 
 # ... notice the target directory ...
-git clone https://github.com/"$REPO_REF"/jaybeams doc/html
-
+git clone https://github.com/"${REPO_REF?}"/jaybeams doc/html
 
 # Kill them all; let Git sort them out.
 # ... basically we remove any existing pages and then add everything
