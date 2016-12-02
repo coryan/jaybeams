@@ -19,7 +19,8 @@ template <typename T>
 struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 
 template <typename T, std::size_t K>
-struct always_aligned<jb::fftw::aligned_multi_array<T, K>> : public std::true_type {};
+struct always_aligned<jb::fftw::aligned_multi_array<T, K>>
+    : public std::true_type {};
 
 } // namespace fftw
 } // namespace jb

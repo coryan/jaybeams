@@ -1,5 +1,5 @@
-#include <jb/fftw/plan.hpp>
 #include <jb/fftw/aligned_multi_array.hpp>
+#include <jb/fftw/plan.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
@@ -10,16 +10,13 @@
 /**
  * Helpers to test jb::time_delay_estimator_many
  */
-namespace {
-
-
-} // anonymous namespace
+namespace {} // anonymous namespace
 
 namespace jb {
 namespace fftw {
-  
+
 template <typename array_t, template <typename T, std::size_t K>
-	  class multi_array = jb::fftw::aligned_multi_array>
+                            class multi_array = jb::fftw::aligned_multi_array>
 class time_delay_estimator_many {
 public:
 };
