@@ -1,5 +1,5 @@
-#include <jb/security_directory.hpp>
 #include <jb/security.hpp>
+#include <jb/security_directory.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -11,10 +11,8 @@ namespace {
 struct lot_tag {};
 struct valid_tag {};
 
-using lot =
-    jb::security_directory_attributes::attribute<lot_tag, int>;
-using valid =
-    jb::security_directory_attributes::attribute<valid_tag, bool>;
+using lot = jb::security_directory_attributes::attribute<lot_tag, int>;
+using valid = jb::security_directory_attributes::attribute<valid_tag, bool>;
 
 } // anonymous namespace
 
@@ -45,7 +43,7 @@ BOOST_AUTO_TEST_CASE(security_directory_basic) {
   BOOST_CHECK_EQUAL(goog.get<valid>(), true);
   BOOST_CHECK_EQUAL(msft.get<valid>(), true);
   BOOST_CHECK_EQUAL(trash.get<valid>(), false);
-  
+
   auto tmp = directory->insert("GOOG");
   BOOST_CHECK_EQUAL(tmp.str(), "GOOG");
 }

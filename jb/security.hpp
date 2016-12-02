@@ -33,7 +33,7 @@ public:
       , generation_(rhs.generation_.load())
       , entry_(rhs.entry_) {
   }
-  
+
   /// Return the string representation of the security
   std::string const& str() const {
     check_directory(__func__);
