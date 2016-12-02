@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['best_5fbid',['best_bid',['../classjb_1_1itch5_1_1order__book.html#ae07edf0d65c213d2a589603cbacf2022',1,'jb::itch5::order_book']]],
-  ['best_5foffer',['best_offer',['../classjb_1_1itch5_1_1order__book.html#ae0b2d49eba05763c6bfa887c2d10be7c',1,'jb::itch5::order_book']]],
+  ['best_5fbid',['best_bid',['../classjb_1_1itch5_1_1order__book.html#add288c10b9c315a0ce7e6195f11186e4',1,'jb::itch5::order_book']]],
+  ['best_5foffer',['best_offer',['../classjb_1_1itch5_1_1order__book.html#a18b41e327046d22eeb4b9c888f0f08ce',1,'jb::itch5::order_book']]],
   ['bin2sample',['bin2sample',['../classjb_1_1explicit__cuts__binning.html#af451be0ff04c7e8c6d75a7c09de62283',1,'jb::explicit_cuts_binning::bin2sample()'],['../classjb_1_1integer__range__binning.html#a13c4daefb3cdf7af67163f87a8c0b960',1,'jb::integer_range_binning::bin2sample()'],['../classjb_1_1binning__strategy__concept.html#a118eab7594bd240ce3427a506453b628',1,'jb::binning_strategy_concept::bin2sample()']]],
   ['bin2sample_5freturn_5ftype',['bin2sample_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a1d06775f21273959e5e88be1d8b85baa',1,'jb::histogram::check_constraints']]],
   ['bindir',['bindir',['../namespacejb.html#a13ac12ee0cdd5aa7551c45ec44a36192',1,'jb']]],
@@ -12,5 +12,5 @@ var searchData=
   ['broken_5ftrade',['broken_trade',['../namespacejb_1_1itch5_1_1testing.html#ac1ccf03b4c8839e48a68f301635c0436',1,'jb::itch5::testing']]],
   ['bucket_5fcount',['bucket_count',['../classjb_1_1event__rate__estimator.html#ab4a68f2927b01a23bfa3d1f4429c6fad',1,'jb::event_rate_estimator']]],
   ['buf',['buf',['../classjb_1_1itch5_1_1unknown__message.html#ab37d9112eeb428d1e7b5ab990f240037',1,'jb::itch5::unknown_message']]],
-  ['buy_5fcount',['buy_count',['../classjb_1_1itch5_1_1order__book.html#a88d965eacb7d6bc356693bf283fbb1b4',1,'jb::itch5::order_book']]]
+  ['buy_5fcount',['buy_count',['../classjb_1_1itch5_1_1order__book.html#a09ccf82003b1cbd4c7db33711d9dfafd',1,'jb::itch5::order_book']]]
 ];

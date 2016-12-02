@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__book.html#a2b9ce68d6f826cc18f59a62ae70ee557',1,'jb::itch5::compute_book']]],
+  ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__book.html#a3ffe2d20480ddae255c81be1c6e44536',1,'jb::itch5::compute_book']]],
   ['canceled_5fshares',['canceled_shares',['../structjb_1_1itch5_1_1order__cancel__message.html#a2bbae989935989bfc3dd89c939f99bef',1,'jb::itch5::order_cancel_message']]],
   ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a4fa3c9a8935c25792311593565abbcf1',1,'worker_config']]],
   ['class_5fname',['class_name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a206024a1c4f2d90ee68e2e340048dac9',1,'jb::config_object::attribute_descriptor']]],
@@ -14,5 +14,5 @@ var searchData=
   ['cross_5ftype',['cross_type',['../structjb_1_1itch5_1_1cross__trade__message.html#a3d89e6eec80416504891a572a859e03c',1,'jb::itch5::cross_trade_message::cross_type()'],['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ac853ff1be3a320bf148e55b2381e7ce1',1,'jb::itch5::net_order_imbalance_indicator_message::cross_type()']]],
   ['current_5freference_5fprice',['current_reference_price',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a5d4e7a016ce301991f56c127510a7e72',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['cuts_5f',['cuts_',['../classjb_1_1explicit__cuts__binning.html#a746b0937e1d9045a03d54bad02804fc0',1,'jb::explicit_cuts_binning']]],
-  ['cxlreplx',['cxlreplx',['../classjb_1_1itch5_1_1compute__book.html#aed197b15cbb07c65d7b5f6ea6c5f1f1e',1,'jb::itch5::compute_book::book_update']]]
+  ['cxlreplx',['cxlreplx',['../namespacejb_1_1itch5.html#a0c3a7c8c939c63f609395a4373be7585',1,'jb::itch5::book_update']]]
 ];

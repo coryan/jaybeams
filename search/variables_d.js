@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qty',['qty',['../classjb_1_1itch5_1_1compute__book.html#a9f06457fba8d3cd857926aed7110c3a2',1,'jb::itch5::compute_book::book_update::qty()'],['../classjb_1_1itch5_1_1compute__book.html#ae639c57528e23a9c53ef81400dbb3f53',1,'jb::itch5::compute_book::order_data::qty()']]]
+  ['qty',['qty',['../namespacejb_1_1itch5.html#a1b32d45f5b888db740083635275fa53e',1,'jb::itch5::book_update::qty()'],['../namespacejb_1_1itch5.html#a5744369aa0517ca28499f3742bdbfa42',1,'jb::itch5::order_data::qty()']]]
 ];

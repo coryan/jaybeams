@@ -10,5 +10,5 @@ var searchData=
   ['descriptor',['descriptor',['../classjb_1_1config__object_1_1attribute__base.html#ac54ca052dee6f81b24043e42469bbd2c',1,'jb::config_object::attribute_base']]],
   ['destroy',['destroy',['../classjb_1_1fftw_1_1allocator.html#ab5552f4e219d366cb6c509ef07de6685',1,'jb::fftw::allocator']]],
   ['destroy_5fplan',['destroy_plan',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a898cd3e7b6baf88093d50b0f943da548',1,'jb::fftw::traits&lt; double &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#ae3eccdbe618a250766aeaf9826448225',1,'jb::fftw::traits&lt; float &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff',1,'jb::fftw::traits&lt; long double &gt;::destroy_plan()']]],
-  ['do_5freduce',['do_reduce',['../classjb_1_1itch5_1_1compute__book.html#a3122d2827a75699c0b7dd0d16fbbc1d0',1,'jb::itch5::compute_book']]]
+  ['do_5freduce',['do_reduce',['../classjb_1_1itch5_1_1compute__book.html#a6ce8b28bef65b6bec0b1708270f66d22',1,'jb::itch5::compute_book']]]
 ];

@@ -17,7 +17,7 @@ var searchData=
   ['noop_5fvalidator_2ehpp',['noop_validator.hpp',['../noop__validator_8hpp.html',1,'']]],
   ['noop_5fvalidator_3c_20char_20const_20_2a_20_3e',['noop_validator&lt; char const * &gt;',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]],
   ['notice',['notice',['../namespacejb.html#a8c91d72478d03f9b72486db893bf4603aefd2af60c8501931cb9c736b5ad74f65',1,'jb']]],
-  ['now',['now',['../classjb_1_1itch5_1_1compute__book.html#afa20c9c8e6ac97ffa326c0112156e292',1,'jb::itch5::compute_book::now()'],['../classjb_1_1itch5_1_1message__handler__concept.html#a3cdef0c7a716679fdfe391fa32f01e24',1,'jb::itch5::message_handler_concept::now()']]],
+  ['now',['now',['../classjb_1_1itch5_1_1compute__book.html#a17a0ff850276f5cb52c74f1c3dfd8ee0',1,'jb::itch5::compute_book::now()'],['../classjb_1_1itch5_1_1message__handler__concept.html#a3cdef0c7a716679fdfe391fa32f01e24',1,'jb::itch5::message_handler_concept::now()']]],
   ['nsamples',['nsamples',['../namespacejb.html#a5ae87806966540050b494ebdba370bfc',1,'jb::histogram_summary::nsamples()'],['../classjb_1_1histogram.html#af6b2645c8cee5fc7835508fa1d4f0723',1,'jb::histogram::nsamples()'],['../namespacejb_1_1fftw_1_1detail.html#a3a633792477c42c18ff738276ae9e279',1,'jb::fftw::detail::nsamples(boost::multi_array&lt; T, K, A &gt; const &amp;a)'],['../namespacejb_1_1fftw_1_1detail.html#a6b3fb3485cd7f759a39c958ec9f8871f',1,'jb::fftw::detail::nsamples(std::vector&lt; T, A &gt; const &amp;a)']]],
   ['nsamples_5f',['nsamples_',['../classjb_1_1histogram.html#ad0a520c1b634c874818dcbdb4682c9e8',1,'jb::histogram']]],
   ['nul_5fterminate',['nul_terminate',['../classjb_1_1itch5_1_1short__string__field.html#a9259c25875e5873f8a81532d989a036f',1,'jb::itch5::short_string_field']]]

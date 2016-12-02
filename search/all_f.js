@@ -69,5 +69,5 @@ var searchData=
   ['processing_5flatency_5fhistogram_5ft',['processing_latency_histogram_t',['../classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7',1,'jb::offline_feed_statistics']]],
   ['program_5fconfig',['program_config',['../classprogram__config.html',1,'program_config'],['../classprogram__config.html#a3b0cc7fed51d22c6908a34884a82417e',1,'program_config::program_config()']]],
   ['protocol_5fconstants_2ehpp',['protocol_constants.hpp',['../protocol__constants_8hpp.html',1,'']]],
-  ['px',['px',['../classjb_1_1itch5_1_1compute__book.html#a9d5f56ac2f8c9269a283d90859341338',1,'jb::itch5::compute_book::book_update::px()'],['../classjb_1_1itch5_1_1compute__book.html#ae5ca6ca9de19eb34f3c63e99ad99b963',1,'jb::itch5::compute_book::order_data::px()']]]
+  ['px',['px',['../namespacejb_1_1itch5.html#a6e8132b3fc30ca205c549a80d6c7c2bd',1,'jb::itch5::book_update::px()'],['../namespacejb_1_1itch5.html#a751e5fe67f8854cafd3802a99d085069',1,'jb::itch5::order_data::px()']]]
 ];

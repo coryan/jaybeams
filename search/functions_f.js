@@ -6,7 +6,7 @@ var searchData=
   ['search_5fpath',['search_path',['../classjb_1_1config__files__locations__base.html#a995c646efb282395c7942b8a0f0a8c3b',1,'jb::config_files_locations_base']]],
   ['seconds',['seconds',['../classjb_1_1itch5_1_1seconds__field.html#ab9f5729934a31366f382d62768bd6e32',1,'jb::itch5::seconds_field']]],
   ['seconds_5ffield',['seconds_field',['../classjb_1_1itch5_1_1seconds__field.html#ae8b697299940c8999626e5b10dea87b0',1,'jb::itch5::seconds_field::seconds_field(int c=0)'],['../classjb_1_1itch5_1_1seconds__field.html#a54b7e2050caff397f5b20592c6396223',1,'jb::itch5::seconds_field::seconds_field(std::chrono::seconds const &amp;s)']]],
-  ['sell_5fcount',['sell_count',['../classjb_1_1itch5_1_1order__book.html#a1908ec134cfee11629dbc132d77dfeb6',1,'jb::itch5::order_book']]],
+  ['sell_5fcount',['sell_count',['../classjb_1_1itch5_1_1order__book.html#a92b35bf779b177e7f43c7c1c8e806fb3',1,'jb::itch5::order_book']]],
   ['severity_5flevel_5fwidth',['severity_level_width',['../namespacejb.html#acad72c331a63bfe75ce38b4dc718529b',1,'jb']]],
   ['severity_5fstatic_5fpredicate',['severity_static_predicate',['../namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9',1,'jb']]],
   ['short_5fstring_5ffield',['short_string_field',['../classjb_1_1itch5_1_1short__string__field.html#a5eed0943cd2150446492b7910596a6ab',1,'jb::itch5::short_string_field::short_string_field(value_validator_t const &amp;validator=value_validator_t())'],['../classjb_1_1itch5_1_1short__string__field.html#a4be427adc639f7f908ce40f6e8b09e30',1,'jb::itch5::short_string_field::short_string_field(std::string const &amp;rhs, value_validator_t const &amp;validator=value_validator_t())'],['../classjb_1_1itch5_1_1short__string__field.html#a7fd7610932d573857bf8982f00811fdc',1,'jb::itch5::short_string_field::short_string_field(short_string_field const &amp;rhs)=default'],['../classjb_1_1itch5_1_1short__string__field.html#ae63b32a9bf38b2a1165a5ab6a06f61ac',1,'jb::itch5::short_string_field::short_string_field(short_string_field &amp;&amp;rhs)=default']]],
@@ -17,7 +17,7 @@ var searchData=
   ['strtonum',['strtonum',['../namespacejb.html#a4b84daf04d6ce26f0e29600156117f1d',1,'jb']]],
   ['summary',['summary',['../classjb_1_1histogram.html#abafffad3f8c6a9f5120aa50336adca9b',1,'jb::histogram::summary()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a154e35c0abfd665253f7c47d6de3186e',1,'jb::testing::microbenchmark_base::summary::summary()'],['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#a43f952a834654ed6b6469fb0ebf33eaa',1,'jb::testing::microbenchmark_base::summary::summary(results const &amp;arg)']]],
   ['swap',['swap',['../classjb_1_1config__attribute.html#a5b46e73426cdde61d7e30fcd4ce4e325',1,'jb::config_attribute::swap()'],['../classjb_1_1config__object.html#aa9038a66dd6b5b949c3833ecc16b8ba8',1,'jb::config_object::swap()']]],
-  ['symbols',['symbols',['../classjb_1_1itch5_1_1compute__book.html#abb2fe8ab4c4b6258d8daf8a6b0afe647',1,'jb::itch5::compute_book']]],
+  ['symbols',['symbols',['../classjb_1_1itch5_1_1compute__book.html#a7316730233961d0e0b0ee12ed0b63254',1,'jb::itch5::compute_book']]],
   ['sysconfdir',['sysconfdir',['../namespacejb.html#ad2af85800e929a8f320160708a32041c',1,'jb']]],
   ['system_5fevent',['system_event',['../namespacejb_1_1itch5_1_1testing.html#a0645ccf0d92770baed3baf2d51260bd0',1,'jb::itch5::testing']]]
 ];

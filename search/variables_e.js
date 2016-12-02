@@ -5,7 +5,7 @@ var searchData=
   ['rawbufsize',['rawbufsize',['../classjb_1_1itch5_1_1mold__udp__pacer.html#a72a0cdfc68cd22656e976e5fe4f27f7a',1,'jb::itch5::mold_udp_pacer']]],
   ['reader',['reader',['../classworker__config.html#ac98585011082a360a2545a50a559c9d0',1,'worker_config']]],
   ['reason',['reason',['../structjb_1_1itch5_1_1stock__trading__action__message.html#aa79c18c421554568a5d95edbd18f2abe',1,'jb::itch5::stock_trading_action_message']]],
-  ['recvts',['recvts',['../classjb_1_1itch5_1_1compute__book.html#a0e36c8a88f23336dbbcdbc2db06e9bbd',1,'jb::itch5::compute_book::book_update']]],
+  ['recvts',['recvts',['../namespacejb_1_1itch5.html#af3335121ab7b869a65f26fac20f41a97',1,'jb::itch5::book_update']]],
   ['reg_5fsho_5faction',['reg_sho_action',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html#a871ee476567dbe73e83625452a7d43dd',1,'jb::itch5::reg_sho_restriction_message']]],
   ['reporting_5finterval_5f',['reporting_interval_',['../classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157',1,'jb::offline_feed_statistics']]],
   ['reporting_5finterval_5fseconds',['reporting_interval_seconds',['../classjb_1_1offline__feed__statistics_1_1config.html#a717fd340a18854b7b635b554babea697',1,'jb::offline_feed_statistics::config::reporting_interval_seconds()'],['../namespacejb_1_1defaults.html#a3c33fcc4058e9a0be5263551c1fdd6a6',1,'jb::defaults::reporting_interval_seconds()']]],

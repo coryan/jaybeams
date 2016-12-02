@@ -19,5 +19,5 @@ var searchData=
   ['printable',['printable',['../structjb_1_1itch5_1_1order__executed__price__message.html#a7c18ba4a5fe232f00c18b60d791e0a77',1,'jb::itch5::order_executed_price_message']]],
   ['priority',['priority',['../classthread__config.html#ad49af9ae9eca36db5aca5f97a430b7ec',1,'thread_config']]],
   ['processing_5flatency_5f',['processing_latency_',['../classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c',1,'jb::offline_feed_statistics']]],
-  ['px',['px',['../classjb_1_1itch5_1_1compute__book.html#a9d5f56ac2f8c9269a283d90859341338',1,'jb::itch5::compute_book::book_update::px()'],['../classjb_1_1itch5_1_1compute__book.html#ae5ca6ca9de19eb34f3c63e99ad99b963',1,'jb::itch5::compute_book::order_data::px()']]]
+  ['px',['px',['../namespacejb_1_1itch5.html#a6e8132b3fc30ca205c549a80d6c7c2bd',1,'jb::itch5::book_update::px()'],['../namespacejb_1_1itch5.html#a751e5fe67f8854cafd3802a99d085069',1,'jb::itch5::order_data::px()']]]
 ];

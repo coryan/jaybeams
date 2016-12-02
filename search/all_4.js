@@ -2,8 +2,8 @@ var searchData=
 [
   ['element_5fcount',['element_count',['../namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b',1,'jb::fftw::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)'],['../namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc',1,'jb::fftw::detail::element_count(std::vector&lt; T, A &gt; const &amp;a)']]],
   ['element_5ftype',['element_type',['../namespacejb_1_1fftw_1_1detail.html#a8e7356029c557277823a820d6aa90e60',1,'jb::fftw::detail::container_traits::element_type()'],['../namespacejb_1_1fftw_1_1detail.html#a0666cef4725023dbee6a4e4ea772f203',1,'jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;::element_type()']]],
-  ['empty_5fbid',['empty_bid',['../classjb_1_1itch5_1_1order__book.html#a17d38ac37b798806214e11243559088c',1,'jb::itch5::order_book']]],
-  ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#af3c05711a7d972b75a6f9a1b5892a0d8',1,'jb::itch5::order_book']]],
+  ['empty_5fbid',['empty_bid',['../classjb_1_1itch5_1_1order__book.html#a263044619eddd0811c2920d72ab51f07',1,'jb::itch5::order_book']]],
+  ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#a49fc0bb532133c9d3c8db1f20149c2db',1,'jb::itch5::order_book']]],
   ['enable_5fconsole_5flogging',['enable_console_logging',['../classjb_1_1log_1_1config.html#a47acc5c6c7048e2cc5482e78a78e31e9',1,'jb::log::config::enable_console_logging()'],['../namespacejb_1_1log_1_1defaults.html#a79eaf93d0011866944e62a67437cfcc1',1,'jb::log::defaults::enable_console_logging()']]],
   ['enable_5ffile_5flogging',['enable_file_logging',['../classjb_1_1log_1_1config.html#a23de33a08f412a865cbe0d19177698c6',1,'jb::log::config::enable_file_logging()'],['../namespacejb_1_1log_1_1defaults.html#a5ae3b08c0be6fe1a4e0dc82457e4dd09',1,'jb::log::defaults::enable_file_logging()']]],
   ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;']]],
@@ -15,7 +15,6 @@ var searchData=
   ['encoder_3c_20validate_2c_20std_3a_3auint8_5ft_20_3e',['encoder&lt; validate, std::uint8_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint8__t_01_4.html',1,'jb::itch5']]],
   ['encoder_3c_20validate_2c_20timestamp_20_3e',['encoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
   ['end_5fpos_5f',['end_pos_',['../classjb_1_1event__rate__estimator.html#ae79e32c2474047a2d003d8884207bb8c',1,'jb::event_rate_estimator']]],
-  ['eqtypes',['eqTypes',['../ut__book__depth__statistics_8cpp.html#a614d3ef8a003aa6e3b91fcdc10726708',1,'ut_book_depth_statistics.cpp']]],
   ['error',['error',['../namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282',1,'jb']]],
   ['error',['error',['../structjb_1_1histogram_1_1check__constraints.html#structjb_1_1histogram_1_1check__constraints_1_1error',1,'jb::histogram::check_constraints']]],
   ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818',1,'jb::fftw::time_delay_estimator']]],
