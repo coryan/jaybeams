@@ -19,6 +19,8 @@
 
 namespace jb {
 namespace itch5 {
+
+/// A convenience alias for clock_type
 using clock_type = std::chrono::steady_clock;
 
 /// A convenience alias for clock_type::time_point
@@ -96,6 +98,9 @@ struct order_data {
  * Keep a collection of all the order books, indexed by symbol, and
  * forward the updates to them.  Only process the relevant messages
  * types in ITCH-5.0 that are necessary to keep the book.
+ *
+ * @tparam book_type the type used to define order_book<book_type>,
+ * must be compatible with jb::itch5::map_price
  */
 template <typename book_type>
 class compute_book {
@@ -104,10 +109,12 @@ public:
   /**
    * @name Type traits
    */
-  /// Define the clock used to measure processing delays
+  /// clock_type is used as a compute_book<book_type> type
+  /// in some modules
   using clock_type = jb::itch5::clock_type;
 
-  /// A convenience alias for clock_type::time_point
+  /// time_point is used as a compute_book<book_type> type
+  /// in some modules
   using time_point = jb::itch5::time_point;
 
   /**

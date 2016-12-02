@@ -17,7 +17,7 @@ namespace itch5 {
  *
  * It is used as template parameter book_type of the
  * template class order_book:
- * - jb::itch5::order_book<jb::itch5::map_price>
+ * - usage: jb::itch5::order_book<jb::itch5::map_price>
  */
 struct map_price {
   using buys_t = std::map<price4_t, int, std::greater<price4_t>>;
@@ -55,10 +55,8 @@ using book_depth_t = unsigned long int;
  * the total quantity available at that price?
  *
  * This is a template class.
- * @param book_type define data structure type of price book,
- * both sides buy and sell. Allowed values are:
- * - jb::itch5::map_price
- * @todo jb::itch5::cache_price
+ * @tparam book_type defines data structure type of price book,
+ * both sides buy and sell. Must be compatible with jb::itch5::map_price
  */
 
 template <typename book_type>
