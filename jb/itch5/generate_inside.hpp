@@ -15,6 +15,8 @@ namespace itch5 {
  *
  * @tparam duration_t the type used to record the processing latency,
  * must be compatible with a duration in the std::chrono sense.
+ * @tparam book_type the type used to define the book type,
+ * order_book<book_type>, must be compatible with jb::itch5::map_price.
  *
  * @param stats where to record the statistics
  * @param header (unused) the header for the message that generated
@@ -59,6 +61,8 @@ bool record_latency_stats(
  *
  * @tparam duration_t the type used to record the processing latency,
  * must be compatible with a duration in the std::chrono sense.
+ * @tparam book_type the type used to define order_book<book_type>,
+ * must be compatible with jb::itch5::map_price
  *
  * @param stats where to record the statistics
  * @param out where to send the new inside quote if needed
