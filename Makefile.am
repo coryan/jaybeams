@@ -27,7 +27,9 @@ jb_unit_tests = \
   jb/ut_logging \
   jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
+  jb/ut_security \
   jb/ut_security_attributes \
+  jb/ut_security_directory \
   jb/ut_severity_level \
   jb/ut_strtonum
 
@@ -224,7 +226,9 @@ nobase_jb_libjb_a_HEADERS = \
   jb/log.hpp \
   jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
+  jb/security.hpp \
   jb/security_attributes.hpp \
+  jb/security_directory.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/usage.hpp
@@ -241,6 +245,8 @@ jb_libjb_a_SOURCES = \
   jb/log.cpp \
   jb/merge_yaml.cpp \
   jb/offline_feed_statistics.cpp \
+  jb/security.cpp \
+  jb/security_directory.cpp \
   jb/severity_level.cpp
 
 jb_libjb_a_LIBADD = 
@@ -514,9 +520,17 @@ jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
 jb_ut_offline_feed_statistics_LDADD = $(jb_ut_libs)
 
+jb_ut_security_SOURCES = jb/ut_security.cpp
+jb_ut_security_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_security
+jb_ut_security_LDADD = $(jb_ut_libs)
+
 jb_ut_security_attributes_SOURCES = jb/ut_security_attributes.cpp
 jb_ut_security_attributes_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_security_attributes
 jb_ut_security_attributes_LDADD = $(jb_ut_libs)
+
+jb_ut_security_directory_SOURCES = jb/ut_security_directory.cpp
+jb_ut_security_directory_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_security_directory
+jb_ut_security_directory_LDADD = $(jb_ut_libs)
 
 jb_ut_severity_level_SOURCES = jb/ut_severity_level.cpp
 jb_ut_severity_level_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_severity_level
