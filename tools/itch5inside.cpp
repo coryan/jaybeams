@@ -56,15 +56,16 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  jb::itch5::compute_book<jb::itch5::map_price>::callback_type cb = [&stats,
-                                                                     &out](
-      jb::itch5::message_header const& header,
-      jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
-      jb::itch5::book_update const& update) {
-    auto pl = std::chrono::steady_clock::now() - update.recvts;
-    (void)jb::itch5::generate_inside(
-        stats, out, header, updated_book, update, pl);
-  };
+  jb::itch5::compute_book<jb::itch5::map_based_order_book>::callback_type cb =
+      [&stats, &out](
+          jb::itch5::message_header const& header,
+          jb::itch5::order_book<jb::itch5::map_based_order_book> const&
+              updated_book,
+          jb::itch5::book_update const& update) {
+        auto pl = std::chrono::steady_clock::now() - update.recvts;
+        (void)jb::itch5::generate_inside(
+            stats, out, header, updated_book, update, pl);
+      };
 
   if (cfg.enable_symbol_stats()) {
     // ... replace the calback with one that also records the stats
@@ -72,7 +73,8 @@ int main(int argc, char* argv[]) try {
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
     cb = [&stats, &out, &per_symbol, symcfg](
         jb::itch5::message_header const& header,
-        jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
+        jb::itch5::order_book<jb::itch5::map_based_order_book> const&
+            updated_book,
         jb::itch5::book_update const& update) {
       auto pl = std::chrono::steady_clock::now() - update.recvts;
       if (not jb::itch5::generate_inside(
@@ -89,7 +91,7 @@ int main(int argc, char* argv[]) try {
     };
   }
 
-  jb::itch5::compute_book<jb::itch5::map_price> handler(cb);
+  jb::itch5::compute_book<jb::itch5::map_based_order_book> handler(cb);
   jb::itch5::process_iostream(in, handler);
 
   jb::offline_feed_statistics::print_csv_header(std::cout);
