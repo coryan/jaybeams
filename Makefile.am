@@ -33,6 +33,7 @@ jb_unit_tests = \
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
   jb/itch5/ut_add_order_mpid_message \
+  jb/itch5/ut_array_based_order_book \
   jb/itch5/ut_base_decoders \
   jb/itch5/ut_base_encoders \
   jb/itch5/ut_broken_trade_message \
@@ -337,6 +338,7 @@ jb_libitch5_a_SOURCES = \
 jb_libitch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
   jb/itch5/add_order_mpid_message.hpp \
+  jb/itch5/array_based_order_book.hpp \
   jb/itch5/base_decoders.hpp \
   jb/itch5/base_encoders.hpp \
   jb/itch5/broken_trade_message.hpp \
@@ -580,6 +582,10 @@ jb_itch5_ut_add_order_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_add_order_mpid_message_SOURCES = jb/itch5/ut_add_order_mpid_message.cpp
 jb_itch5_ut_add_order_mpid_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_mpid_messag
 jb_itch5_ut_add_order_mpid_message_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_array_based_order_book_SOURCES = jb/itch5/ut_array_based_order_book.cpp
+jb_itch5_ut_array_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_array_based_order_book
+jb_itch5_ut_array_based_order_book_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_base_decoders_SOURCES = jb/itch5/ut_base_decoders.cpp
 jb_itch5_ut_base_decoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_decoders
