@@ -300,6 +300,9 @@ void test_order_book_errors(book_type& tested) {
 BOOST_AUTO_TEST_CASE(order_book_trivial) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_trivial(map_tested);
+
+  jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
+  jb::itch5::testing::test_order_book_trivial(array_tested);
 }
 
 /**
@@ -309,6 +312,9 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_buy_order_handling(map_tested);
+
+  jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
+  jb::itch5::testing::test_order_book_buy_order_handling(array_tested);
 }
 
 /**
@@ -318,6 +324,9 @@ BOOST_AUTO_TEST_CASE(order_book_buy) {
 BOOST_AUTO_TEST_CASE(order_book_sell) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_sell_order_handling(map_tested);
+
+  jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
+  jb::itch5::testing::test_order_book_sell_order_handling(array_tested);
 }
 
 /**
@@ -326,4 +335,7 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
 BOOST_AUTO_TEST_CASE(order_book_errors) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_errors(map_tested);
+
+  jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
+  jb::itch5::testing::test_order_book_errors(array_tested);
 }
