@@ -20,7 +20,7 @@ buy_sell_indicator_t const SELL(u'S');
  * @tparam based_order_book type used by compute_order and order_book
  */
 template <typename based_order_book>
-void test_compute_book_add_order_message_buy(based_order_book& book) {
+void test_compute_book_add_order_message_buy(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -36,6 +36,7 @@ void test_compute_book_add_order_message_buy(based_order_book& book) {
   };
 
   compute_type tested(cb);
+  book_type book;
 
   stock_t const stock("HSART");
   price4_t const p10(100000);
@@ -63,7 +64,7 @@ void test_compute_book_add_order_message_buy(based_order_book& book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p10, 100}, half_quote{p10, 100},
-      empty_offer(), 1, 0);
+      book.empty_offer(), 1, 0);
 
   // ... add an order at a better price ...
   now = tested.now();
@@ -81,7 +82,7 @@ void test_compute_book_add_order_message_buy(based_order_book& book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p11, 200}, half_quote{p11, 200},
-      empty_offer(), 2, 0);
+      book.empty_offer(), 2, 0);
 
   // ... add an order at a worse price ...
   now = tested.now();
@@ -99,7 +100,7 @@ void test_compute_book_add_order_message_buy(based_order_book& book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p09, 300}, half_quote{p11, 200},
-      empty_offer(), 3, 0);
+      book.empty_offer(), 3, 0);
 
   // ... those should be all the updates, regardless of their contents
   // ...
@@ -111,7 +112,7 @@ void test_compute_book_add_order_message_buy(based_order_book& book) {
  * @tparam based_order_book type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_add_order_message_sell(based_order_book& book) {
+void test_compute_book_add_order_message_sell(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -127,6 +128,7 @@ void test_compute_book_add_order_message_sell(based_order_book& book) {
   };
 
   compute_type tested(cb);
+  book_type book;
 
   stock_t const stock("HSART");
   price4_t const p10(100000);
@@ -153,7 +155,7 @@ void test_compute_book_add_order_message_sell(based_order_book& book) {
   // ... we also expect a single update, and the order should be in
   // the book when the update is called ...
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, 100}, empty_bid(),
+      book_update{now, stock, SELL, p11, 100}, book.empty_bid(),
       half_quote{p11, 100}, 0, 1);
 
   // ... add an order at a better price ...
@@ -171,7 +173,7 @@ void test_compute_book_add_order_message_sell(based_order_book& book) {
   // ... we also expect a single update, and the order should be in
   // the book when the update is called ...
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p10, 200}, empty_bid(),
+      book_update{now, stock, SELL, p10, 200}, book.empty_bid(),
       half_quote{p10, 200}, 0, 2);
 
   // ... add an order at a worse price ...
@@ -189,7 +191,7 @@ void test_compute_book_add_order_message_sell(based_order_book& book) {
   // ... we also expect a single update, and the order should be in
   // the book when the update is called ...
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p12, 300}, empty_bid(),
+      book_update{now, stock, SELL, p12, 300}, book.empty_bid(),
       half_quote{p10, 200}, 0, 3);
 
   // ... those should be all the updates, regardless of their contents
@@ -202,7 +204,7 @@ void test_compute_book_add_order_message_sell(based_order_book& book) {
  * @tparam based_order_book type used by compute book and order book
  */
 template <typename based_order_book>
-void test_compute_book_increase_coverage(based_order_book& book) {
+void test_compute_book_increase_coverage(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
@@ -212,6 +214,7 @@ void test_compute_book_increase_coverage(based_order_book& book) {
       book_update const& update) { callback(); };
   typename compute_type::callback_type const tmp(cb);
   compute_type tested(tmp);
+  book_type book;
 
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(0));
@@ -247,7 +250,7 @@ void test_compute_book_increase_coverage(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_edge_cases(based_order_book& book) {
+void test_compute_book_edge_cases(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -263,6 +266,8 @@ void test_compute_book_edge_cases(based_order_book& book) {
   };
   // ... create the unit under test ...
   compute_type tested(cb);
+  book_type book;
+
   // ... and a number of helper constants and variables to drive the
   // test ...
 
@@ -304,7 +309,7 @@ void test_compute_book_edge_cases(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_reduction_edge_cases(based_order_book& book) {
+void test_compute_book_reduction_edge_cases(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
@@ -320,6 +325,7 @@ void test_compute_book_reduction_edge_cases(based_order_book& book) {
   };
   // ... create the unit under test ...
   compute_type tested(cb);
+  book_type book;
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -400,8 +406,8 @@ void test_compute_book_reduction_edge_cases(based_order_book& book) {
   // ... that should create a callback ...
   callback.check_called().exactly(4);
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p10, -300}, empty_bid(), empty_offer(), 0,
-      0);
+      book_update{now, stock, SELL, p10, -300}, book.empty_bid(),
+      book.empty_offer(), 0, 0);
 
   // ... at the end log all the calls to ease debugging ...
   for (auto const& capture : callback) {
@@ -416,7 +422,7 @@ void test_compute_book_reduction_edge_cases(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_replace_edge_cases(based_order_book& book) {
+void test_compute_book_replace_edge_cases(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -432,6 +438,7 @@ void test_compute_book_replace_edge_cases(based_order_book& book) {
   };
   // ... create the object under test ...
   compute_type tested(cb);
+  book_type book;
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -503,7 +510,7 @@ void test_compute_book_replace_edge_cases(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_order_executed_message(based_order_book& book) {
+void test_compute_book_order_executed_message(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -519,6 +526,7 @@ void test_compute_book_order_executed_message(based_order_book& book) {
   };
   // ... create the object under test ...
   compute_type tested(cb);
+  book_type book;
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -550,7 +558,7 @@ void test_compute_book_order_executed_message(based_order_book& book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
+      book.empty_offer(), 1, 0);
 
   // ... add an order to the opposite side of the book ...
   now = tested.now();
@@ -637,7 +645,7 @@ void test_compute_book_order_executed_message(based_order_book& book) {
                              300,
                              ++id});
   callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -300}, empty_bid(),
+      book_update{now, stock, BUY, p10, -300}, book.empty_bid(),
       half_quote{p11, 300}, 0, 1);
 
   // ... execute the SELL order with a price ...
@@ -650,8 +658,8 @@ void test_compute_book_order_executed_message(based_order_book& book) {
                              300,
                              ++id});
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -300}, empty_bid(), empty_offer(), 0,
-      0);
+      book_update{now, stock, SELL, p11, -300}, book.empty_bid(),
+      book.empty_offer(), 0, 0);
 
   for (auto const& capture : callback) {
     std::ostringstream os;
@@ -665,7 +673,7 @@ void test_compute_book_order_executed_message(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_order_replace_message(based_order_book book) {
+void test_compute_book_order_replace_message(based_order_book bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void(
@@ -681,6 +689,7 @@ void test_compute_book_order_replace_message(based_order_book book) {
   };
   // ... create the object under test ...
   compute_type tested(cb);
+  book_type book;
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -713,7 +722,7 @@ void test_compute_book_order_replace_message(based_order_book book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
+      book.empty_offer(), 1, 0);
 
   // ... add an order to the opposite side of the book ...
   now = tested.now();
@@ -770,7 +779,7 @@ void test_compute_book_order_replace_message(based_order_book book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_order_cancel_message(based_order_book& book) {
+void test_compute_book_order_cancel_message(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
@@ -786,6 +795,7 @@ void test_compute_book_order_cancel_message(based_order_book& book) {
   };
 
   compute_type tested(cb);
+  book_type book;
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -817,7 +827,7 @@ void test_compute_book_order_cancel_message(based_order_book& book) {
   // the book when the update is called ...
   callback.check_called().once().with(
       book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
+      book.empty_offer(), 1, 0);
 
   // ... add an order to the opposite side of the book ...
   now = tested.now();
@@ -870,7 +880,7 @@ void test_compute_book_order_cancel_message(based_order_book& book) {
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_buy});
   callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -400}, empty_bid(),
+      book_update{now, stock, BUY, p10, -400}, book.empty_bid(),
       half_quote{p11, 400}, 0, 1);
 
   // ... fully cancel the SELL order ...
@@ -881,8 +891,8 @@ void test_compute_book_order_cancel_message(based_order_book& book) {
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_sell});
   callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -400}, empty_bid(), empty_offer(), 0,
-      0);
+      book_update{now, stock, SELL, p11, -400}, book.empty_bid(),
+      book.empty_offer(), 0, 0);
 
   for (auto const& capture : callback) {
     std::ostringstream os;
@@ -896,7 +906,7 @@ void test_compute_book_order_cancel_message(based_order_book& book) {
  * @tparam based_order_book Type used by compute_book and order_book
  */
 template <typename based_order_book>
-void test_compute_book_stock_directory_message(based_order_book& book) {
+void test_compute_book_stock_directory_message(based_order_book& bk) {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
   skye::mock_function<void()> callback;
@@ -904,6 +914,8 @@ void test_compute_book_stock_directory_message(based_order_book& book) {
       jb::itch5::message_header const&, book_type const&,
       book_update const& update) { callback(); };
   compute_type tested(cb);
+  book_type book;
+
   time_point now = tested.now();
   long msgcnt = 0;
   tested.handle_message(now, ++msgcnt, 0, create_stock_directory("HSART"));
@@ -937,17 +949,24 @@ void test_compute_book_stock_directory_message(based_order_book& book) {
  * expected for add_order_message.
  */
 BOOST_AUTO_TEST_CASE(compute_book_add_order_message) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_add_order_message_buy(book);
-  jb::itch5::testing::test_compute_book_add_order_message_sell(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_add_order_message_buy(map_bk);
+  jb::itch5::testing::test_compute_book_add_order_message_sell(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_add_order_message_buy(array_bk);
+  jb::itch5::testing::test_compute_book_add_order_message_sell(array_bk);
 }
 
 /**
  * @test Increase code coverage in jb::itch5::compute_book
  */
 BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_increase_coverage(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_increase_coverage(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_increase_coverage(array_bk);
 }
 
 /**
@@ -955,8 +974,11 @@ BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
  * jb::itch5::compute_book::handle_message for add_order_message.
  */
 BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_edge_cases(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_edge_cases(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_edge_cases(array_bk);
 }
 
 /**
@@ -964,16 +986,22 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
  * jb::itch5::compute_book::handle_order_reduction
  */
 BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_reduction_edge_cases(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_reduction_edge_cases(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_reduction_edge_cases(array_bk);
 }
 
 /**
  * @test Increase code coverage for order_replace_message
  */
 BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_replace_edge_cases(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_replace_edge_cases(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_replace_edge_cases(array_bk);
 }
 
 /**
@@ -981,8 +1009,11 @@ BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
  * expected for order_executed_message BUY & SELL.
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_order_executed_message(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_order_executed_message(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_order_executed_message(array_bk);
 }
 
 /**
@@ -990,8 +1021,11 @@ BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
  * expected for order_replace_message BUY & SELL.
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_order_replace_message(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_order_replace_message(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_order_replace_message(array_bk);
 }
 
 /**
@@ -999,8 +1033,11 @@ BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
  * expected for order_cancel_message and order_delete_message, both sides.
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_order_cancel_message(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_order_cancel_message(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_order_cancel_message(array_bk);
 }
 
 /**
@@ -1008,8 +1045,11 @@ BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
  *expected for stock_directory_message.
  */
 BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
-  jb::itch5::map_based_order_book book;
-  jb::itch5::testing::test_compute_book_stock_directory_message(book);
+  jb::itch5::map_based_order_book map_bk;
+  jb::itch5::testing::test_compute_book_stock_directory_message(map_bk);
+
+  jb::itch5::array_based_order_book array_bk;
+  jb::itch5::testing::test_compute_book_stock_directory_message(array_bk);
 }
 
 /**
