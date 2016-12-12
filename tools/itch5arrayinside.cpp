@@ -47,7 +47,7 @@ public:
 
 int main(int argc, char* argv[]) try {
   using order_book_t = jb::itch5::array_based_order_book;
-  
+
   config cfg;
   cfg.load_overrides(
       argc, argv, std::string("itch5arrayinside.yaml"), "JB_ROOT");
@@ -66,16 +66,14 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  jb::itch5::compute_book<order_book_t>::callback_type cb =
-      [&stats, &out](
-          jb::itch5::message_header const& header,
-          jb::itch5::order_book<order_book_t> const&
-              updated_book,
-          jb::itch5::book_update const& update) {
-        auto pl = std::chrono::steady_clock::now() - update.recvts;
-        (void)jb::itch5::generate_inside(
-            stats, out, header, updated_book, update, pl);
-      };
+  jb::itch5::compute_book<order_book_t>::callback_type cb = [&stats, &out](
+      jb::itch5::message_header const& header,
+      jb::itch5::order_book<order_book_t> const& updated_book,
+      jb::itch5::book_update const& update) {
+    auto pl = std::chrono::steady_clock::now() - update.recvts;
+    (void)jb::itch5::generate_inside(
+        stats, out, header, updated_book, update, pl);
+  };
 
   if (cfg.enable_symbol_stats()) {
     // ... replace the calback with one that also records the stats
@@ -83,8 +81,7 @@ int main(int argc, char* argv[]) try {
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
     cb = [&stats, &out, &per_symbol, symcfg](
         jb::itch5::message_header const& header,
-        jb::itch5::order_book<order_book_t> const&
-            updated_book,
+        jb::itch5::order_book<order_book_t> const& updated_book,
         jb::itch5::book_update const& update) {
       auto pl = std::chrono::steady_clock::now() - update.recvts;
       if (not jb::itch5::generate_inside(
@@ -159,8 +156,8 @@ config::config()
                   " memory and execution time, so it is disabled by default."),
           this, false)
     , array_max_size(
-	  desc("array-max-size", "array based order book max size")
-	      , this, 10000){
+          desc("array-max-size", "array based order book max size"), this,
+          10000) {
 }
 
 void config::validate() const {
