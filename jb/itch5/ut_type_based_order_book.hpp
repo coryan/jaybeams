@@ -68,7 +68,7 @@ void test_side_type_errors(side_type& tested) {
   // ... remove the first order, once should work, the second time
   // should fail ...
   tested.reduce_order(price4_t(100000), 100);
-  BOOST_CHECK_THROW(tested.reduce_order(price4_t(100000), 100), std::exception);
+  BOOST_CHECK_THROW(tested.reduce_order(price4_t(100000), 100), jb::feed_error);
 
   // ... check the best quote again ...
   actual = tested.best_quote();
@@ -86,10 +86,11 @@ void test_side_type_add_reduce(side_type& tested) {
   } else {
     diff = 10000;
   }
-  int base_p = 100000;
+  int base_p = 4000000;
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(base_p), 100);
+
   // .. best quote should change ...
   auto actual = tested.best_quote();
   BOOST_CHECK_EQUAL(actual.first, price4_t(base_p));
