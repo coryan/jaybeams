@@ -15,26 +15,26 @@ namespace itch5 {
 /// A simple representation for price + quantity
 using half_quote = std::pair<price4_t, int>;
 
-/// The value used to represent an empty bid
-static half_quote empty_bid() {
-  return half_quote(price4_t(0), 0);
-}
-
-/// The value used to represent an empty offer
-static half_quote empty_offer() {
-  return half_quote(max_price_field_value<price4_t>(), 0);
-}
-
 /**
  *  Represent one side of the book.
  *
- * @tparam compare It sorts the side order book
+ * @tparam compare_t Sorts the side order book
  */
 template <typename compare_t>
 class map_based_book_side {
 public:
   /// Initializes an empty side order book
   map_based_book_side() {
+  }
+
+  /// The value used to represent an empty bid
+  static half_quote empty_bid() {
+    return half_quote(price4_t(0), 0);
+  }
+
+  /// The value used to represent an empty offer
+  static half_quote empty_offer() {
+    return half_quote(max_price_field_value<price4_t>(), 0);
   }
 
   /// @returns an empty bid or offer based on compare function
@@ -46,7 +46,7 @@ public:
     return empty_offer();
   }
 
-  /// @returns the best bid price and quantity
+  /// @returns the best side price and quantity
   half_quote best_quote() const {
     if (levels_.empty()) {
       return empty_quote();
@@ -55,7 +55,7 @@ public:
     return half_quote(i->first, i->second);
   }
 
-  /// @returns the worst bid price and quantity
+  /// @returns the worst side price and quantity
   half_quote worst_quote() const {
     if (levels_.empty()) {
       return empty_quote();
