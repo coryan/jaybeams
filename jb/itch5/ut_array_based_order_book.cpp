@@ -34,10 +34,8 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   using jb::itch5::price4_t;
-  jb::itch5::array_based_order_book::buys_t tested;
 
-  int ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 10000); // default value
+  jb::itch5::array_based_order_book::buys_t tested;
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -127,10 +125,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
   using jb::itch5::price4_t;
-  jb::itch5::array_based_order_book::sells_t tested;
 
-  auto ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 10000); // default value
+  jb::itch5::array_based_order_book::sells_t tested;
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -214,11 +210,9 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   using jb::itch5::price4_t;
-  jb::itch5::array_based_order_book::buys_t tested;
 
-  auto ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 10000); // default value
-  ticks /= 2;
+  std::size_t ticks = jb::defaults::max_size / 2;
+  jb::itch5::array_based_order_book::buys_t tested;
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -389,10 +383,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
   using jb::itch5::price4_t;
   auto px_limit = jb::itch5::HIGHEST_PRICE;
 
+  std::size_t ticks = jb::defaults::max_size / 2;
   jb::itch5::array_based_order_book::sells_t tested;
-  auto ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 10000); // default value
-  ticks /= 2;
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -570,13 +562,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
   using jb::itch5::price4_t;
-  jb::itch5::array_based_order_book::buys_t tested;
 
-  auto default_ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(default_ticks, 10000); // default value
-  tested.max_size(3000);                   // 0 .. 30 cents
-  auto ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 3000);
+  jb::itch5::array_based_order_book::buys_t tested(3000);
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -721,11 +708,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   using jb::itch5::price4_t;
   auto px_limit = jb::itch5::HIGHEST_PRICE;
-  jb::itch5::array_based_order_book::sells_t tested;
 
-  tested.max_size(3000); // 0 .. 30 cents
-  auto ticks = tested.max_size();
-  BOOST_CHECK_EQUAL(ticks, 3000);
+  jb::itch5::array_based_order_book::sells_t tested(3000);
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -812,4 +796,90 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
   rg = tested.get_limits();
   BOOST_CHECK_EQUAL(std::get<1>(rg), px_limit);
   BOOST_CHECK_EQUAL(std::get<0>(rg), px_limit);
+}
+
+/**
+ * @test itch5arrayinside exception generated. Adding test case to fix the
+ * problem.
+ */
+BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick_bug01) {
+  using jb::itch5::price4_t;
+  auto px_limit = jb::itch5::HIGHEST_PRICE;
+
+  jb::itch5::array_based_order_book::sells_t tested;
+  std::size_t ticks = jb::defaults::max_size / 2;
+
+  // Check current range (min, max) default values ...
+  auto rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), px_limit);
+  BOOST_CHECK_EQUAL(std::get<0>(rg), px_limit);
+  auto rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 0);
+
+  // add shares 100 @199999.9900
+  auto rs = tested.add_order(price4_t(1999999900), 100);
+  BOOST_CHECK_EQUAL(rs, true);
+  rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(2000000000 - 200 * ticks));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), px_limit);
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 1);
+
+  // add 100  @0.5850
+  rs = tested.add_order(price4_t(5850), 100);
+  BOOST_CHECK_EQUAL(rs, true);
+  rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(850));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(95000));
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 1);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 1);
+
+  // add +100 (200 now)  @0.5850
+  rs = tested.add_order(price4_t(5850), 100);
+  BOOST_CHECK_EQUAL(rs, true);
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 1);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 1);
+  // remove shares 100 @199999.9900
+  rs = tested.reduce_order(price4_t(1999999900), 100);
+  BOOST_CHECK_EQUAL(rs, false);
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 0);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 1);
+  // add shares 100 @199999.9900
+  rs = tested.add_order(price4_t(1999999900), 100);
+  BOOST_CHECK_EQUAL(rs, false);
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 1);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 1);
+
+  // add 100 @0.0130 (px_inside_ now)
+  rs = tested.add_order(price4_t(130), 100);
+  BOOST_CHECK_EQUAL(rs, true);
+  rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(10000));
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 1);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 2);
+
+  // add 500 @0.0150
+  rs = tested.add_order(price4_t(150), 100);
+  BOOST_CHECK_EQUAL(rs, false);
+  rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(10000));
+  rc = tested.get_counts();
+  BOOST_CHECK_EQUAL(std::get<0>(rc), 1);
+  BOOST_CHECK_EQUAL(std::get<1>(rc), 3);
+  // remove shares 100 @0.5850
+  rs = tested.reduce_order(price4_t(5850), 100);
+  BOOST_CHECK_EQUAL(rs, false);
+
+  rg = tested.get_limits();
+  BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
+  BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(10000));
 }

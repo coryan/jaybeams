@@ -3,24 +3,35 @@
 
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/price_levels.hpp>
+#include <jb/config_object.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <map>
 #include <sstream>
 #include <utility>
+#include <vector>
+
+namespace jb {
+namespace defaults {
+#ifndef JB_DEFAULTS_ARRAY_max_size
+#define JB_DEFAULTS_ARRAY_max_size 10000;
+#endif
+
+/// top_levels_max_size
+const std::size_t max_size = JB_DEFAULTS_ARRAY_max_size;
+
+} // namespace defaults
+} // namespace jb
 
 namespace jb {
 namespace itch5 {
 
 /// A simple representation for price + quantity
 using half_quote = std::pair<price4_t, int>;
-
-/// array max size
-int const DEFAULT_MAX_SIZE = 10000;
-static int max_size_ = DEFAULT_MAX_SIZE;
 
 /// The values used to represent the range of valid prices
 /// LOWEST_PRICE < valid price < HIGHEST_PRICE
@@ -43,7 +54,7 @@ int constexpr TK_DOLLAR = 10000;
  * - tk_X : int type. A price level. First 10000 are mill, then penny.
  *  - tk_1 =  5010, price is c50.10
  *  - tk_2 = 10005, price is $1.05 ($1.00 + 5 penny)
- * - rel_X : int type. A relative position of a price at top_levels_
+ * - rel_X : size_t type. A relative position of a price at top_levels_
  *  - BUY side examples:
  *   - rel_1 = 20 (with px_begin_top_ = $30.00), tk_1 = 12920, px_1 = $30.20
  *   - rel_2 = 40 (with px_begin_top_ = c30.00), tk_2 = 3040, px_2 = c30.40
@@ -56,25 +67,14 @@ int constexpr TK_DOLLAR = 10000;
 template <typename compare_t>
 class array_based_book_side {
 public:
-  /// Initializes an empty array of max_size size
-  array_based_book_side()
-      : compare_()
-      , top_levels_(max_size_, 0)
+  array_based_book_side(std::size_t sz = jb::defaults::max_size)
+      : better_()
+      , max_size_(sz)
+      , top_levels_(sz, 0)
       , bottom_levels_()
       , px_inside_(empty_quote().first.as_integer())
       , px_begin_top_(empty_quote().first.as_integer())
       , px_end_top_(empty_quote().first.as_integer()) {
-  }
-
-  static int max_size() {
-    return max_size_;
-  }
-
-  static void max_size(int const sz) {
-    if (sz <= 0) {
-      throw feed_error("max_size has to be greater than 0");
-    }
-    max_size_ = sz;
   }
 
   /// The value used to represent an empty bid
@@ -90,9 +90,11 @@ public:
   /// @returns an empty bid or offer based on compare function
   /// empty bid for less, empty offer for greater.
   half_quote empty_quote() const {
-    if (compare_(price4_t(1), price4_t(0))) {
+    if (better_(price4_t(1), price4_t(0))) {
+      // buy side
       return empty_bid();
     }
+    // sell side
     return empty_offer();
   }
 
@@ -103,7 +105,7 @@ public:
       return empty_quote();
     }
     int rel_px = price_to_relative(px_inside_);
-    return half_quote(px_inside_, top_levels_[rel_px]);
+    return half_quote(px_inside_, top_levels_.at(rel_px));
   }
 
   /// @returns the worst bid price and quantity.
@@ -122,7 +124,7 @@ public:
     // ... worst price at the top_levels_
     int rel_worst = relative_worst_top_level();
     price4_t px_worst = relative_to_price(rel_worst);
-    return half_quote(px_worst, top_levels_[rel_worst]);
+    return half_quote(px_worst, top_levels_.at(rel_worst));
   }
 
   /// @returns the number of levels with non-zero quantity for the order side.
@@ -147,7 +149,7 @@ public:
    * - throws an exception if this is the case
    * .
    * Then:
-   * - if px is worst than the px_begin_top_ then px goes to bottom_levels
+   * - if px is worse than the px_begin_top_ then px goes to bottom_levels
    * - if px is better than the inside then changes inside, redefines limits
    * if needed (moving the tail to bottom_levels if any)
    * - finally, updates qty at the relative(px)
@@ -160,17 +162,17 @@ public:
          << " px=" << px << " qty=" << qty;
       throw jb::feed_error(os.str());
     }
-    // check if px is worst than the worst top_levels price
-    if (compare_(px_begin_top_, px)) {
+    // check if px is worse than the first price of the top_levels_
+    if (better_(px_begin_top_, px)) {
       // emplace the price at the bottom_levels, and return (false)
       auto emp_tup = bottom_levels_.emplace(px, 0);
       emp_tup.first->second += qty;
       return false;
     }
     // check if px is equal or better than the current inside
-    if (!compare_(px_inside_, px)) {
+    if (not better_(px_inside_, px)) {
       // ... check if limit redefine is needed
-      if (!compare_(px_end_top_, px)) {
+      if (not better_(px_end_top_, px)) {
         // get the new limits based on the new inside px
         auto limits = get_limit_top_prices(px);
         // move the tail [px_begin_top_, new px_begin_top_) to bottom_levels_
@@ -184,14 +186,14 @@ public:
         px_inside_ = px;
       }
       // update top_levels_
-      int rel_px = price_to_relative(px_inside_);
-      top_levels_[rel_px] += qty;
+      auto rel_px = price_to_relative(px_inside_);
+      top_levels_.at(rel_px) += qty;
       return true; // the inside changed
     }
     // is a top_levels change different than the inside
     // udates top_levels_ with new qty
-    int rel_px = price_to_relative(px);
-    top_levels_[rel_px] += qty;
+    auto rel_px = price_to_relative(px);
+    top_levels_.at(rel_px) += qty;
     return false;
   }
 
@@ -217,13 +219,23 @@ public:
     }
 
     // check and handles if it is a bottom_level_ price
-    if (compare_(px_begin_top_, px)) {
+    if (better_(px_begin_top_, px)) {
+      if (bottom_levels_.empty()) {
+        std::ostringstream os;
+        os << "array_based_order_book::reduce_order."
+           << " Trying to reduce a non-existing bottom_levels_ price"
+           << " (empty bottom_levels_)."
+           << " px_begin_top_=" << px_begin_top_ << " px=" << px
+           << " qty=" << qty;
+        throw jb::feed_error(os.str());
+      }
       auto price_it = bottom_levels_.find(px);
       if (price_it == bottom_levels_.end()) {
         std::ostringstream os;
         os << "array_based_order_book::reduce_order."
-           << " Trying to reduce a non-existing price level."
-           << " px=" << px << " qty=" << qty;
+           << " Trying to reduce a non-existing bottom_levels_ price."
+           << " px_begin_top_=" << px_begin_top_ << " px=" << px
+           << " qty=" << qty;
         throw jb::feed_error(os.str());
       }
       // ... reduce the quantity ...
@@ -241,37 +253,42 @@ public:
     }
 
     // handles the top_levels_ price
-    if (compare_(px, px_inside_)) {
+    if (better_(px, px_inside_)) {
       std::ostringstream os;
       os << "array_based_order_book::reduce_order."
-         << " Trying to reduce a non-existing price level."
-         << " px=" << px << " qty=" << qty;
+         << " Trying to reduce a non-existing top_levels_ price"
+         << " (better px_inside)."
+         << " px_begin_top_=" << px_begin_top_ << " px_inside_=" << px_inside_
+         << " px_end_top_=" << px_end_top_ << " px=" << px << " qty=" << qty;
       throw jb::feed_error(os.str());
     }
     // get px relative position
-    int rel_px = price_to_relative(px);
-    if (top_levels_[rel_px] == 0) {
+    auto rel_px = price_to_relative(px);
+    if (top_levels_.at(rel_px) == 0) {
       std::ostringstream os;
       os << "array_based_order_book::reduce_order."
-         << " Trying to reduce a non-existing price level."
+         << " Trying to reduce a non-existing top_levels_ price"
+         << " (top_levels_[rel_px] == 0)."
+         << " px_begin_top_=" << px_begin_top_ << " px_inside_=" << px_inside_
+         << " px_end_top_=" << px_end_top_ << " px relative position=" << rel_px
          << " px=" << px << " qty=" << qty;
       throw jb::feed_error(os.str());
     }
 
     // ... reduce the quantity ...
-    top_levels_[rel_px] -= qty;
-    if (top_levels_[rel_px] < 0) {
+    top_levels_.at(rel_px) -= qty;
+    if (top_levels_.at(rel_px) < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       JB_LOG(warning) << "negative quantity in order book";
-      top_levels_[rel_px] = 0; // cant't be negative
+      top_levels_.at(rel_px) = 0; // cant't be negative
     }
     // ... if it is not the inside we are done
     if (px != px_inside_) {
       return false;
     }
     // Is inside, ... now check if it was removed
-    if (top_levels_[rel_px] == 0) {
+    if (top_levels_.at(rel_px) == 0) {
       // gets the new inside (if any)
       px_inside_ = next_best_price();
       if (px_inside_ == empty_quote().first) {
@@ -298,7 +315,7 @@ public:
    * To test different implementations for buy and sell sides
    */
   bool check_less(price4_t const& px1, price4_t const& px2) const {
-    return compare_(px1, px2);
+    return better_(px1, px2);
   }
 
   /** Testing hook.
@@ -322,9 +339,9 @@ private:
    * @returns the absolute price
    */
   price4_t relative_to_price(int rel) const {
-    int rel_tick = (compare_(price4_t(1), price4_t(0))) ? rel : max_size_ - rel;
+    int rel_tick = (better_(price4_t(1), price4_t(0))) ? rel : max_size_ - rel;
     price4_t px_base =
-        (compare_(price4_t(1), price4_t(0))) ? px_begin_top_ : px_end_top_;
+        (better_(price4_t(1), price4_t(0))) ? px_begin_top_ : px_end_top_;
     return relative_above_base(px_base, rel_tick);
   }
 
@@ -386,23 +403,30 @@ private:
   }
 
   /**
-   * Transforms an absolute price into a top_levels_ relative position
+   * Transforms an absolute price into a top_levels_ relative position.
+   * px has to be better or equal to px_begin_top_
    * @param px an absolute price
    * @returns top_levels_ relative position of px compare with px_begin_top_
    */
-  int price_to_relative(price4_t const& px) const {
+  std::size_t price_to_relative(price4_t const& px) const {
+    if (better_(px_begin_top_, px)) {
+      std::ostringstream os;
+      os << "array_based_order_book::price_to_relative."
+         << " Price out of range"
+         << " px_begin_top_=" << px_begin_top_ << " px=" << px;
+      throw jb::feed_error(os.str());
+    }
     int tk_px = price_levels(price4_t(0), px);
     int tk_begin_top = price_levels(price4_t(0), px_begin_top_);
-    return compare_(price4_t(1), price4_t(0)) ? tk_px - tk_begin_top
-                                              : tk_begin_top - tk_px;
+    return std::abs(tk_px - tk_begin_top);
   }
 
   /**
    * @returns relative position of the worst valid price at top_levels
    */
-  int relative_worst_top_level() const {
-    for (int i = 0; i != max_size_; ++i) {
-      if (top_levels_[i] != 0) {
+  std::size_t relative_worst_top_level() const {
+    for (std::size_t i = 0; i != max_size_; ++i) {
+      if (top_levels_.at(i) != 0) {
         return i; // found it
       }
     }
@@ -423,14 +447,14 @@ private:
     int rel_px = price_to_relative(px_inside_);
     int res = 0;
     for (int i = 0; i != rel_px + 1; ++i) {
-      if (top_levels_[i] != 0) {
+      if (top_levels_.at(i) != 0) {
         res++;
       }
     }
     return res;
   }
 
-  /// @returns pair of absolute prices that are max_size/2 worst
+  /// @returns pair of absolute prices that are max_size/2 worse
   /// and better than px, limited to valid prices
   /// if px is at the limit, return and empty quote values
   auto get_limit_top_prices(price4_t const& px) const {
@@ -444,7 +468,7 @@ private:
     if (px_low_base != px_high_base) {
       px_low = relative_below_base(px_high_base, max_size_ / 2);
     }
-    return (compare_(price4_t(1), price4_t(0)))
+    return (better_(price4_t(1), price4_t(0)))
                ? std::make_pair(px_low, px_high)
                : std::make_pair(px_high, px_low);
   }
@@ -461,7 +485,7 @@ private:
    * Clear (value = 0) former relative position of moved prices
    */
   void move_top_to_bottom(price4_t const px_max) {
-    if (compare_(px_begin_top_, px_max)) {
+    if (better_(px_begin_top_, px_max)) {
       // wow! this is a problem... incorrect value
       std::ostringstream os;
       os << "array_based_order_book::move_top_to_bottom."
@@ -470,35 +494,40 @@ private:
       throw jb::feed_error(os.str());
     }
     // if px_max is better than px_inside_
-    if (compare_(px_max, px_inside_)) {
+    if (better_(px_max, px_inside_)) {
       // ... all top_prices_ have to be moved out
       // valid prices are from 0 .. relative (px_inside_) included
-      int rel_inside = price_to_relative(px_inside_);
-      for (int i = 0; i != rel_inside + 1; ++i) {
+      auto rel_inside = price_to_relative(px_inside_);
+      for (std::size_t i = 0; i != rel_inside + 1; ++i) {
         // move out and clear the price (if valid)
-        if (top_levels_[i] != 0) {
+        if (top_levels_.at(i) != 0) {
           price4_t px_i = relative_to_price(i);
-          bottom_levels_.emplace(px_i, top_levels_[i]);
-          top_levels_[i] = 0;
+          bottom_levels_.emplace(px_i, top_levels_.at(i));
+          top_levels_.at(i) = 0;
         }
       }
       return;
     }
-    // px_max is worst than px_inside
+    // px_max is worse than px_inside
     // prices to move out are from 0.. relative (px_max) excluded
-    int rel_px_max = price_to_relative(px_max);
-    for (int i = 0; i != rel_px_max; ++i) {
+    auto rel_px_max = price_to_relative(px_max);
+    for (std::size_t i = 0; i != rel_px_max; ++i) {
       // ... move out the price i (if valid)
-      if (top_levels_[i] != 0) {
+      if (top_levels_.at(i) != 0) {
         price4_t px_i = relative_to_price(i);
-        bottom_levels_.emplace(px_i, top_levels_[i]);
-        top_levels_[i] = 0;
+        bottom_levels_.emplace(px_i, top_levels_.at(i));
+        top_levels_.at(i) = 0;
       }
-      // copy px_max+i quantity (!=0) to price i
-      // ... (shift prices into top_levels_)
-      if ((i + rel_px_max < max_size_) and (top_levels_[i + rel_px_max] != 0)) {
-        top_levels_[i] = top_levels_[i + rel_px_max];
-        top_levels_[i + rel_px_max] = 0;
+    }
+    // shift price down rel_px_max positions
+    // from px_max to px_inside both included...
+    // ...(the are no better prices than px_inside_)
+    auto rel_px_inside = price_to_relative(px_inside_);
+    std::size_t j = 0;
+    for (std::size_t i = rel_px_max; i <= rel_px_inside; ++i, ++j) {
+      if (top_levels_.at(i) != 0) {
+        top_levels_.at(j) = top_levels_.at(i);
+        top_levels_.at(i) = 0;
       }
     }
   }
@@ -512,13 +541,13 @@ private:
     if (bottom_levels_.empty()) {
       return; // nothing to move in
     }
-    // traverse all bottom_levels_ prices worst than or equal to px_begin_top_
+    // traverse all bottom_levels_ prices worse than or equal to px_begin_top_
     auto le = bottom_levels_.begin();
     for (/* */; le != bottom_levels_.end(); ++le) {
-      if (!compare_(px_begin_top_, le->first)) {
+      if (not better_(px_begin_top_, le->first)) {
         // move price to top_levels_
-        int rel_px = price_to_relative(le->first);
-        top_levels_[rel_px] = le->second;
+        auto rel_px = price_to_relative(le->first);
+        top_levels_.at(rel_px) = le->second;
       } else {
         // no more good prices to move...
         break;
@@ -534,9 +563,9 @@ private:
    */
   price4_t next_best_price() const {
     // begins checking below the current inside
-    int rel_inside = price_to_relative(px_inside_);
+    auto rel_inside = price_to_relative(px_inside_);
     for (int i = rel_inside - 1; i != -1; --i) {
-      if (top_levels_[i] != 0) {
+      if (top_levels_.at(i) != 0) {
         // got the next one...
         return relative_to_price(i);
       }
@@ -545,8 +574,12 @@ private:
   }
 
 private:
-  /// function object for inequality comparison of template parameter type
-  compare_t compare_;
+  /// function object for inequality comparison of template parameter type.
+  /// if better_(p1,p2) is true means p1 is strictly a better price than p2
+  compare_t better_;
+
+  /// top_levels_ max size
+  std::size_t max_size_;
 
   /// the best relative prices and quantity
   std::vector<int> top_levels_;
