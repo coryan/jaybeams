@@ -16,9 +16,9 @@ namespace itch5 {
 using half_quote = std::pair<price4_t, int>;
 
 /**
- *  Represent one side of the book.
- *
- * @tparam compare_t Sorts the side order book
+ * Represent one side of the book. Class implementation of struct
+ * map_based_order_book buy and side types.
+ * @tparam compare_t function object class type to sort the side
  */
 template <typename compare_t>
 class map_based_book_side {
@@ -40,7 +40,7 @@ public:
   /// @returns an empty bid or offer based on compare function
   /// empty bid for less, empty offer for greater.
   half_quote empty_quote() const {
-    if (compare_(price4_t(1), price4_t(0))) {
+    if (better_(price4_t(1), price4_t(0))) {
       return empty_bid();
     }
     return empty_offer();
@@ -111,16 +111,19 @@ public:
 
   /**
    * Testing hook.
-   * @returns true is px1 < px2
-   * To validate different implementations for buy and sell sides
+   * @returns true if px2 is a higher price than px1
+   * To discriminate different implementations for buy and sell sides
+   * during testing.
    */
   bool check_less(price4_t const& px1, price4_t const& px2) const {
-    return compare_(px1, px2);
+    return better_(px1, px2);
   }
 
 private:
   std::map<price4_t, int, compare_t> levels_;
-  compare_t compare_;
+  /// function object for inequality comparison of template parameter type.
+  /// if better_(p1,p2) is true means p1 is strictly a better price than p2
+  compare_t better_;
 };
 
 /**
