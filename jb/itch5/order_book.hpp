@@ -48,7 +48,12 @@ template <typename book_type>
 class order_book {
 public:
   /// Initialize an empty order book.
-  order_book() {
+  order_book() = default;
+
+  /// Initialize an order book with max_size.
+  explicit order_book(std::size_t sz)
+      : buy_(sz)
+      , sell_(sz) {
   }
 
   //@{

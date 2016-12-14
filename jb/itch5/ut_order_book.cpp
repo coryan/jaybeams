@@ -306,15 +306,21 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
 }
 
 /**
- * @test Verify that each side of order_book<book_type>
+ * @test Verify that buy side of order_book<book_type>
  * works as expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_buy_order_handling(map_tested);
 
+  // uses default max_size
   jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
   jb::itch5::testing::test_order_book_buy_order_handling(array_tested);
+
+  // defines max_size
+  jb::itch5::order_book<jb::itch5::array_based_order_book> sh_array_tested(
+      3000);
+  jb::itch5::testing::test_order_book_buy_order_handling(sh_array_tested);
 }
 
 /**
@@ -325,8 +331,14 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
   jb::itch5::order_book<jb::itch5::map_based_order_book> map_tested;
   jb::itch5::testing::test_order_book_sell_order_handling(map_tested);
 
+  // uses default max_size
   jb::itch5::order_book<jb::itch5::array_based_order_book> array_tested;
   jb::itch5::testing::test_order_book_sell_order_handling(array_tested);
+
+  // defines max_size
+  jb::itch5::order_book<jb::itch5::array_based_order_book> sh_array_tested(
+      3000);
+  jb::itch5::testing::test_order_book_sell_order_handling(sh_array_tested);
 }
 
 /**
