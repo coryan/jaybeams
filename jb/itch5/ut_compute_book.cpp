@@ -35,8 +35,9 @@ void test_compute_book_add_order_message_buy(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   stock_t const stock("HSART");
   price4_t const p10(100000);
@@ -127,8 +128,9 @@ void test_compute_book_add_order_message_sell(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   stock_t const stock("HSART");
   price4_t const p10(100000);
@@ -213,8 +215,9 @@ void test_compute_book_increase_coverage(based_order_book& bk) {
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) { callback(); };
   typename compute_type::callback_type const tmp(cb);
-  compute_type tested(tmp);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(tmp, cfg);
 
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(0));
@@ -265,8 +268,9 @@ void test_compute_book_edge_cases(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the unit under test ...
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -324,8 +328,9 @@ void test_compute_book_reduction_edge_cases(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the unit under test ...
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -437,8 +442,9 @@ void test_compute_book_replace_edge_cases(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -525,8 +531,9 @@ void test_compute_book_order_executed_message(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -688,8 +695,9 @@ void test_compute_book_order_replace_message(based_order_book bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -794,8 +802,9 @@ void test_compute_book_order_cancel_message(based_order_book& bk) {
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
-  compute_type tested(cb);
-  book_type book;
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   // ... and a number of helper constants and variables to drive the
   // test ...
@@ -913,8 +922,10 @@ void test_compute_book_stock_directory_message(based_order_book& bk) {
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const&,
       book_update const& update) { callback(); };
-  compute_type tested(cb);
-  book_type book;
+
+  typename book_type::config cfg;
+  book_type book(cfg);
+  compute_type tested(cb, cfg);
 
   time_point now = tested.now();
   long msgcnt = 0;
@@ -949,13 +960,15 @@ void test_compute_book_stock_directory_message(based_order_book& bk) {
  * expected for add_order_message.
  */
 BOOST_AUTO_TEST_CASE(compute_book_add_order_message) {
-  jb::itch5::map_based_order_book map_bk;
-  jb::itch5::testing::test_compute_book_add_order_message_buy(map_bk);
-  jb::itch5::testing::test_compute_book_add_order_message_sell(map_bk);
+  using namespace jb::itch5;
 
-  jb::itch5::array_based_order_book array_bk;
-  jb::itch5::testing::test_compute_book_add_order_message_buy(array_bk);
-  jb::itch5::testing::test_compute_book_add_order_message_sell(array_bk);
+  map_based_order_book map_bk;
+  testing::test_compute_book_add_order_message_buy(map_bk);
+  testing::test_compute_book_add_order_message_sell(map_bk);
+
+  array_based_order_book array_bk;
+  testing::test_compute_book_add_order_message_buy(array_bk);
+  testing::test_compute_book_add_order_message_sell(array_bk);
 }
 
 /**
