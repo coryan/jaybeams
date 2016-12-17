@@ -82,13 +82,13 @@ void test_side_type_errors(side_type& tested) {
   // ... reduce non existing order on an empty bottom levels
   if (diff < 0) {
     // buy side
-    BOOST_CHECK_THROW(tested.reduce_order(price4_t(100), 100), jb::feed_error);
+    BOOST_CHECK_THROW(tested.reduce_order(price4_t(1000), 100), jb::feed_error);
     // add one, so no empty now...
-    (void)tested.add_order(price4_t(101), 100);
+    (void)tested.add_order(price4_t(1100), 100);
     // try to reduce again
-    BOOST_CHECK_THROW(tested.reduce_order(price4_t(100), 100), jb::feed_error);
+    BOOST_CHECK_THROW(tested.reduce_order(price4_t(1000), 100), jb::feed_error);
     // and finally reduce the existing one but over quantity, should work
-    (void)tested.reduce_order(price4_t(101), 200);
+    (void)tested.reduce_order(price4_t(1100), 200);
   } else {
     // sell side
     BOOST_CHECK_THROW(
