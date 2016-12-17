@@ -64,6 +64,20 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(r, false);
   // .. and the book_depth should be incremented
   BOOST_CHECK_EQUAL(tested.count(), 2);
+  
+  // ... add an order below the low limit 5 cents
+  r = tested.add_order(price4_t(500), 700);
+  actual = tested.best_quote();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(100000));
+  BOOST_CHECK_EQUAL(actual.second, 100);
+  BOOST_CHECK_EQUAL(r, false);
+  // worst bid is now at the bottom_levels
+  actual = tested.worst_quote();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(500));
+  BOOST_CHECK_EQUAL(actual.second, 700);
+  // .. and the book_depth should be incremented
+  BOOST_CHECK_EQUAL(tested.count(), 3);
+
 
   // ... update at the bid increases the qty ...
   r = tested.add_order(price4_t(100000), 400);
@@ -72,7 +86,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 500);
   BOOST_CHECK_EQUAL(r, true);
   // .. and the book_depth should not be incremented
-  BOOST_CHECK_EQUAL(tested.count(), 2);
+  BOOST_CHECK_EQUAL(tested.count(), 3);
 
   // ... a better price changes both price (+1 ticks) and qty ...
   r = tested.add_order(price4_t(100100), 200);
@@ -81,7 +95,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 200);
   BOOST_CHECK_EQUAL(r, true); // inside moves one tick up
   // .. and the book_depth should be incremented
-  BOOST_CHECK_EQUAL(tested.count(), 3);
+  BOOST_CHECK_EQUAL(tested.count(), 4);
 
   // ... decrease below the bid has no effect ...
   r = tested.reduce_order(price4_t(100000), 400);
@@ -90,7 +104,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 200);
   BOOST_CHECK_EQUAL(r, false);
   // .. and the book depth should not be decremented
-  BOOST_CHECK_EQUAL(tested.count(), 3);
+  BOOST_CHECK_EQUAL(tested.count(), 4);
 
   // ... even when it is over the existing quantity ...
   r = tested.reduce_order(price4_t(100000), 200);
@@ -99,7 +113,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 200);
   BOOST_CHECK_EQUAL(r, false);
   // .. and the book_depth should be decremented
-  BOOST_CHECK_EQUAL(tested.count(), 2);
+  BOOST_CHECK_EQUAL(tested.count(), 3);
 
   // ... deleting the best bid uncovers the best price ...
   r = tested.reduce_order(price4_t(100100), 200);
@@ -108,10 +122,17 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 300);
   BOOST_CHECK_EQUAL(r, true);
   // .. and the book_depth should be decremented
-  BOOST_CHECK_EQUAL(tested.count(), 1);
+  BOOST_CHECK_EQUAL(tested.count(), 2);
 
   // ... deleting the remaining price takes the book depth to 0
   r = tested.reduce_order(price4_t(99900), 300);
+  actual = tested.best_quote();
+  BOOST_CHECK_EQUAL(actual.first, price4_t(500));
+  BOOST_CHECK_EQUAL(actual.second, 700);
+  BOOST_CHECK_EQUAL(r, true);
+  // .. and the book_depth should be decremented
+  BOOST_CHECK_EQUAL(tested.count(), 1);
+  r = tested.reduce_order(price4_t(500), 700);
   actual = tested.best_quote();
   BOOST_CHECK_EQUAL(actual.first, price4_t(0));
   BOOST_CHECK_EQUAL(actual.second, 0);
@@ -186,6 +207,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
   // .. and the book_depth should be incremented
   BOOST_CHECK_EQUAL(tested.count(), 2);
 
+  
   // ... deleting the best offer uncovers the best price ...
   r = tested.reduce_order(price4_t(99900), 200);
   actual = tested.best_quote();

@@ -320,6 +320,20 @@ public:
     return std::make_pair(bottom_levels_.size(), top_levels_count());
   }
 
+  /** Testing hooks to increase coverage
+   */
+  auto test_price_to_relative(price4_t const& px) const {
+    return price_to_relative(px);
+  }
+  // to test when is an empty side
+  auto test_relative_worst_top_level() const {
+    return relative_worst_top_level();
+  }
+  // to test with a px worse than px_begin_top
+  void test_move_top_to_bottom(price4_t const& px) {
+    move_top_to_bottom(px);
+  }
+
 private:
   /**
    * Transforms a top_levels_ relative position into an absolute price.
