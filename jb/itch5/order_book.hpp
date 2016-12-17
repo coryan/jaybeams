@@ -5,6 +5,21 @@
 #include <jb/itch5/buy_sell_indicator.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
 #include <jb/itch5/price_field.hpp>
+#include <jb/config_object.hpp>
+
+#include <type_traits>
+
+namespace jb {
+namespace defaults {
+
+#ifndef JB_ARRAY_DEFAULTS_max_size
+#define JB_ARRAY_DEFAULTS_max_size 10000
+#endif
+
+std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
+
+} // namespace defaults
+} // namespace jb
 
 namespace jb {
 namespace itch5 {
@@ -28,6 +43,9 @@ using book_depth_t = unsigned long int;
  * than a partial cancel, and whether changes in price are allowed or
  * create new order ids.
  *
+ * This class encapsulates the order book data structure as well as its
+ * configuration.
+ *
  * This class receives a stream of (unnormalized) ITCH-5.0 messages
  * for a single security, and organizes the orders in a
  * book, i.e. a  data structure where orders at the same price are
@@ -42,18 +60,19 @@ using book_depth_t = unsigned long int;
  * @tparam book_type defines data structure type of price book,
  * both sides buy and sell.
  * Must be compatible with jb::itch5::map_based_order_book
+ *
+ * @param cfg config
  */
 
 template <typename book_type>
 class order_book {
 public:
-  /// Initialize an empty order book.
-  order_book() = default;
+  class config;
 
-  /// Initialize an order book with max_size.
-  explicit order_book(std::size_t sz)
-      : buy_(sz)
-      , sell_(sz) {
+  /// Initialize an empty order book.
+  explicit order_book(config const& cfg)
+      : buy_(cfg.max_size())
+      , sell_(cfg.max_size()) {
   }
 
   //@{
@@ -144,6 +163,36 @@ public:
 private:
   typename book_type::buys_t buy_;
   typename book_type::sells_t sell_;
+};
+
+/**
+ * Configure an order_book config object
+ */
+template <typename book_type>
+class order_book<book_type>::config : public jb::config_object {
+public:
+  config()
+      : max_size(
+            desc("max-size")
+                .help(
+                    "Configure the max size of a array based order book."
+                    " Only used when enable-array-based is set"),
+            this, jb::defaults::max_size) {
+  }
+
+  config_object_constructors(config);
+
+  /// Validate the configuration
+  void validate() const override {
+    if ((max_size() <= 0) or (max_size() > jb::defaults::max_size)) {
+      std::ostringstream os;
+      os << "max-size must be > 0 and <=" << jb::defaults::max_size
+         << ", value=" << max_size();
+      throw jb::usage(os.str(), 1);
+    }
+  }
+
+  jb::config_attribute<config, std::size_t> max_size;
 };
 
 } // namespace itch5
