@@ -184,10 +184,10 @@ void test_side_type_add_reduce(side_type& tested) {
 */
 template <typename order_book>
 void test_order_book_type_trivial(order_book& tested) {
-  typename order_book::buys_t buy_test;
+  typename order_book::buys_t buy_test(10000);
   test_side_type_trivial(buy_test);
 
-  typename order_book::sells_t sell_test;
+  typename order_book::sells_t sell_test(10000);
   test_side_type_trivial(sell_test);
 }
 
@@ -197,10 +197,10 @@ void test_order_book_type_trivial(order_book& tested) {
  */
 template <typename order_book>
 void test_order_book_type_errors(order_book& tested) {
-  typename order_book::buys_t buy_test;
+  typename order_book::buys_t buy_test(10000);
   test_side_type_errors(buy_test);
 
-  typename order_book::sells_t sell_test;
+  typename order_book::sells_t sell_test(10000);
   test_side_type_errors(sell_test);
 }
 
@@ -210,10 +210,10 @@ void test_order_book_type_errors(order_book& tested) {
  */
 template <typename order_book>
 void test_order_book_type_add_reduce(order_book& tested) {
-  typename order_book::buys_t buy_test;
+  typename order_book::buys_t buy_test(10000);
   test_side_type_add_reduce(buy_test);
 
-  typename order_book::sells_t sell_test;
+  typename order_book::sells_t sell_test(10000);
   test_side_type_add_reduce(sell_test);
 }
 
