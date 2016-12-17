@@ -26,6 +26,10 @@ public:
   /// Initializes an empty side order book
   map_based_book_side() {
   }
+  /// Compatibility constructor, ignores parameter
+  explicit map_based_book_side(std::size_t)
+      : map_based_book_side() {
+  }
 
   /// The value used to represent an empty bid
   static half_quote empty_bid() {
