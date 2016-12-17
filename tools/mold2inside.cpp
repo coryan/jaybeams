@@ -108,7 +108,9 @@ int main(int argc, char* argv[]) try {
     };
   }
 
-  jb::itch5::compute_book<jb::itch5::map_based_order_book> handler(cb);
+  typename jb::itch5::order_book<jb::itch5::map_based_order_book>::config
+      cfg_bk;
+  jb::itch5::compute_book<jb::itch5::map_based_order_book> handler(cb, cfg_bk);
   auto process_buffer = [&handler](
       std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
       std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
