@@ -327,7 +327,7 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
 /**
  * @test Verify that buy side of order_book<book_type>
  * works as expected.
- *
+ */
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   using namespace jb::itch5;
   using map_book_type = order_book<map_based_order_book>;
@@ -346,11 +346,11 @@ BOOST_AUTO_TEST_CASE(order_book_buy) {
   array_book_type sh_array_tested(array_book_type::config().max_size(3000));
   testing::test_order_book_buy_order_handling(sh_array_tested);
 }
-*/
+
 /**
  * @test Verity that the sell side of
  * jb::itch5::order_book<jb::itch5::map_price> works as expected.
- *
+ */
 BOOST_AUTO_TEST_CASE(order_book_sell) {
   using namespace jb::itch5;
   using map_book_type = order_book<map_based_order_book>;
@@ -369,10 +369,10 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
   array_book_type sh_array_tested(array_book_type::config().max_size(3000));
   jb::itch5::testing::test_order_book_sell_order_handling(sh_array_tested);
 }
-*/
+
 /**
  * @test Verify that order_book handles errors as expected.
- *
+ */
 BOOST_AUTO_TEST_CASE(order_book_errors) {
   using namespace jb::itch5;
   using map_book_type = order_book<map_based_order_book>;
@@ -386,4 +386,3 @@ BOOST_AUTO_TEST_CASE(order_book_errors) {
   array_book_type array_tested(array_cfg);
   testing::test_order_book_errors(array_tested);
 }
-*/

@@ -26,6 +26,7 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_test) {
 BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
   jb::itch5::array_based_order_book tested;
   jb::itch5::testing::test_order_book_type_errors(tested);
+  jb::itch5::testing::test_order_book_type_errors_spec(tested);
 }
 
 /**
@@ -64,7 +65,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(r, false);
   // .. and the book_depth should be incremented
   BOOST_CHECK_EQUAL(tested.count(), 2);
-  
+
   // ... add an order below the low limit 5 cents
   r = tested.add_order(price4_t(500), 700);
   actual = tested.best_quote();
@@ -77,7 +78,6 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   BOOST_CHECK_EQUAL(actual.second, 700);
   // .. and the book_depth should be incremented
   BOOST_CHECK_EQUAL(tested.count(), 3);
-
 
   // ... update at the bid increases the qty ...
   r = tested.add_order(price4_t(100000), 400);
@@ -207,7 +207,6 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
   // .. and the book_depth should be incremented
   BOOST_CHECK_EQUAL(tested.count(), 2);
 
-  
   // ... deleting the best offer uncovers the best price ...
   r = tested.reduce_order(price4_t(99900), 200);
   actual = tested.best_quote();
