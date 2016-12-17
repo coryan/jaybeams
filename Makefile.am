@@ -90,7 +90,6 @@ benchmarks = \
 
 examples = \
   examples/configuration \
-  tools/itch5arrayinside \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
   tools/itch5inside \
@@ -417,9 +416,6 @@ examples_configuration_LDADD = jb/libjb.a
 examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wrappers.cpp
 examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
-tools_itch5arrayinside_SOURCES = tools/itch5arrayinside.cpp
-tools_itch5arrayinside_LDADD = jb/libitch5.a jb/libjb.a
-
 tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
 tools_itch5bookdepth_LDADD = jb/libitch5.a jb/libjb.a
 
@@ -618,10 +614,6 @@ jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
 jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
 jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
-jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
-jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
