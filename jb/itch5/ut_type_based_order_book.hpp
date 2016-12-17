@@ -56,33 +56,9 @@ void test_side_type_errors(side_type& tested) {
     diff = -10000;
   }
 
-  /// Uses Testing hooks to increase coverage
-  /// test with an empty side
-  BOOST_CHECK_THROW(
-      tested.test_relative_worst_top_level(), jb::feed_error);
-
   // Add two orders to the book ...
   (void)tested.add_order(price4_t(100000), 100);
   (void)tested.add_order(price4_t(100000 + diff), 200);
-
-  /** Uses Testing hooks to increase coverage
-   * px worse than the low limit
-   */
-  if (diff < 0) {
-    // buy side
-    BOOST_CHECK_THROW(
-	tested.test_price_to_relative(price4_t(1000000)), jb::feed_error);
-    /// to test with a px worse than px_begin_top
-    BOOST_CHECK_THROW(
-	tested.test_move_top_to_bottom(price4_t(1000000)), jb::feed_error);
-  } else {
-    // sell side
-    BOOST_CHECK_THROW(
-	tested.test_price_to_relative(price4_t(100)), jb::feed_error);
-    /// to test with a px worse than px_begin_top
-    BOOST_CHECK_THROW(
-	tested.test_move_top_to_bottom(price4_t(100)), jb::feed_error);
-  }
 
   // ... check the best quote ...
   auto actual = tested.best_quote();
@@ -99,6 +75,57 @@ void test_side_type_errors(side_type& tested) {
   BOOST_CHECK_EQUAL(actual.first, price4_t(100000 + diff));
   BOOST_CHECK_EQUAL(actual.second, 200);
 
+  // ... reduce a non existing price better than the inside
+  BOOST_CHECK_THROW(
+      tested.reduce_order(price4_t(100000 + 2 * diff), 100), jb::feed_error);
+
+  // ... reduce non existing order on an empty bottom levels
+  if (diff < 0) {
+    // buy side
+    BOOST_CHECK_THROW(tested.reduce_order(price4_t(100), 100), jb::feed_error);
+    // add one, so no empty now...
+    (void)tested.add_order(price4_t(101), 100);
+    // try to reduce again
+    BOOST_CHECK_THROW(tested.reduce_order(price4_t(100), 100), jb::feed_error);
+    // and finally reduce the existing one but over quantity, should work
+    (void)tested.reduce_order(price4_t(101), 200);
+  } else {
+    // sell side
+    BOOST_CHECK_THROW(
+        tested.reduce_order(price4_t(1000000), 100), jb::feed_error);
+    // add one, so no empty now...
+    (void)tested.add_order(price4_t(1000100), 100);
+    // try to reduce again
+    BOOST_CHECK_THROW(
+        tested.reduce_order(price4_t(1000000), 100), jb::feed_error);
+    // and finally reduce the existing one but over quantity, should work
+    (void)tested.reduce_order(price4_t(1000100), 200);
+  }
+}
+
+/**
+ * Test side type error handling.
+ * @tparam side_type Side to be tested
+ */
+template <typename side_type>
+void test_side_type_errors_spec(side_type& tested) {
+  using jb::itch5::price4_t;
+
+  int diff;
+  if (tested.check_less(price4_t(1), price4_t(0))) {
+    diff = 10000;
+  } else {
+    diff = -10000;
+  }
+
+  /// Uses Testing hooks to increase coverage
+  /// test with an empty side
+  BOOST_CHECK_THROW(tested.test_relative_worst_top_level(), jb::feed_error);
+
+  // Add two orders to the book ...
+  (void)tested.add_order(price4_t(100000), 100);
+  (void)tested.add_order(price4_t(100000 + diff), 200);
+
   // ... add order above the limit price
   BOOST_CHECK_THROW(tested.add_order(price4_t(-1), 200), jb::feed_error);
 
@@ -106,34 +133,24 @@ void test_side_type_errors(side_type& tested) {
   BOOST_CHECK_THROW(
       tested.reduce_order(price4_t(100000 + diff), -100), jb::feed_error);
 
-  // ... reduce a non existing price better than the inside
-  BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(100000 + 2*diff), 100), jb::feed_error);
-  
-  // ... reduce non existing order on an empty bottom levels
+  /** Uses Testing hooks to increase coverage
+   * px worse than the low limit
+   */
   if (diff < 0) {
     // buy side
     BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(100), 100), jb::feed_error);
-    // add one, so no empty now...
-    (void)tested.add_order(price4_t(101), 100);
-    // try to reduce again
+        tested.test_price_to_relative(price4_t(1000000)), jb::feed_error);
+    /// to test with a px worse than px_begin_top
     BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(100), 100), jb::feed_error);
-    // and finally reduce the existing one but over quantity, should work
-    (void)tested.reduce_order(price4_t(101), 200);
+        tested.test_move_top_to_bottom(price4_t(1000000)), jb::feed_error);
   } else {
     // sell side
     BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(1000000), 100), jb::feed_error);
-    // add one, so no empty now...
-    (void)tested.add_order(price4_t(1000100), 100);
-    // try to reduce again
+        tested.test_price_to_relative(price4_t(100)), jb::feed_error);
+    /// to test with a px worse than px_begin_top
     BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(1000000), 100), jb::feed_error); 
-    // and finally reduce the existing one but over quantity, should work
-    (void)tested.reduce_order(price4_t(1000100), 200);
- }
+        tested.test_move_top_to_bottom(price4_t(100)), jb::feed_error);
+  }
 }
 
 template <typename side_type>
@@ -262,6 +279,19 @@ void test_order_book_type_errors(order_book& tested) {
 
   typename order_book::sells_t sell_test(10000);
   test_side_type_errors(sell_test);
+}
+
+/**
+ * order_book type error handling array_based specific tests.
+ * @tparam order_book type based order book to be tested
+ */
+template <typename order_book>
+void test_order_book_type_errors_spec(order_book& tested) {
+  typename order_book::buys_t buy_test(10000);
+  test_side_type_errors_spec(buy_test);
+
+  typename order_book::sells_t sell_test(10000);
+  test_side_type_errors_spec(sell_test);
 }
 
 /**
