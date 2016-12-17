@@ -35,7 +35,8 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
   using jb::itch5::price4_t;
 
-  jb::itch5::array_based_order_book::buys_t tested;
+  std::size_t ticks = 5000;
+  jb::itch5::array_based_order_book::buys_t tested(2 * ticks);
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -126,7 +127,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
   using jb::itch5::price4_t;
 
-  jb::itch5::array_based_order_book::sells_t tested;
+  std::size_t ticks = 5000;
+  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -211,8 +213,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
   using jb::itch5::price4_t;
 
-  std::size_t ticks = jb::defaults::max_size / 2;
-  jb::itch5::array_based_order_book::buys_t tested;
+  std::size_t ticks = 5000;
+  jb::itch5::array_based_order_book::buys_t tested(2 * ticks);
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -383,8 +385,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
   using jb::itch5::price4_t;
   auto px_limit = jb::itch5::HIGHEST_PRICE;
 
-  std::size_t ticks = jb::defaults::max_size / 2;
-  jb::itch5::array_based_order_book::sells_t tested;
+  std::size_t ticks = 5000;
+  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -806,8 +808,8 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick_bug01) {
   using jb::itch5::price4_t;
   auto px_limit = jb::itch5::HIGHEST_PRICE;
 
-  jb::itch5::array_based_order_book::sells_t tested;
-  std::size_t ticks = jb::defaults::max_size / 2;
+  std::size_t ticks = 5000;
+  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();

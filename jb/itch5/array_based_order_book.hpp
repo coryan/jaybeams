@@ -16,18 +16,6 @@
 #include <vector>
 
 namespace jb {
-namespace defaults {
-#ifndef JB_DEFAULTS_ARRAY_max_size
-#define JB_DEFAULTS_ARRAY_max_size 10000;
-#endif
-
-/// top_levels_max_size
-const std::size_t max_size = JB_DEFAULTS_ARRAY_max_size;
-
-} // namespace defaults
-} // namespace jb
-
-namespace jb {
 namespace itch5 {
 
 /// A simple representation for price + quantity
@@ -67,7 +55,7 @@ int constexpr TK_DOLLAR = 10000;
 template <typename compare_t>
 class array_based_book_side {
 public:
-  array_based_book_side(std::size_t sz = jb::defaults::max_size)
+  explicit array_based_book_side(std::size_t sz)
       : better_()
       , max_size_(sz)
       , top_levels_(sz, 0)
