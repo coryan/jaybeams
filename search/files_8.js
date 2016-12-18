@@ -7,5 +7,6 @@ var searchData=
   ['itch5eventdepth_2ecpp',['itch5eventdepth.cpp',['../itch5eventdepth_8cpp.html',1,'']]],
   ['itch5inside_2ecpp',['itch5inside.cpp',['../itch5inside_8cpp.html',1,'']]],
   ['itch5moldreplay_2ecpp',['itch5moldreplay.cpp',['../itch5moldreplay_8cpp.html',1,'']]],
-  ['itch5stats_2ecpp',['itch5stats.cpp',['../itch5stats_8cpp.html',1,'']]]
+  ['itch5stats_2ecpp',['itch5stats.cpp',['../itch5stats_8cpp.html',1,'']]],
+  ['itch5trades_2ecpp',['itch5trades.cpp',['../itch5trades_8cpp.html',1,'']]]
 ];

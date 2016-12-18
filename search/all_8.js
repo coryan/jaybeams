@@ -42,6 +42,7 @@ var searchData=
   ['itch5inside_2ecpp',['itch5inside.cpp',['../itch5inside_8cpp.html',1,'']]],
   ['itch5moldreplay_2ecpp',['itch5moldreplay.cpp',['../itch5moldreplay_8cpp.html',1,'']]],
   ['itch5stats_2ecpp',['itch5stats.cpp',['../itch5stats_8cpp.html',1,'']]],
+  ['itch5trades_2ecpp',['itch5trades.cpp',['../itch5trades_8cpp.html',1,'']]],
   ['iterations',['iterations',['../classjb_1_1testing_1_1microbenchmark__config.html#a7bb7cde49db7372c0966ae786b60fd51',1,'jb::testing::microbenchmark_config::iterations()'],['../namespacejb_1_1testing_1_1defaults.html#a37c60b5fb550eaac95e60ad65a1bf1f6',1,'jb::testing::defaults::iterations()']]],
   ['itch_2d5_2e0_3a_20confused_20about_20securities_2c_20symbols_2c_20and_20tickers',['ITCH-5.0: Confused about Securities, Symbols, and Tickers',['../securities-vs-symbols.html',1,'']]]
 ];
