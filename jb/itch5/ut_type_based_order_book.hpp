@@ -138,7 +138,7 @@ void test_side_type_errors_spec(side_type& tested) {
 
   // ... reduce non existing order better the inside
   BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(100000 + diff), 100), jb::feed_error);
+      tested.reduce_order(price4_t(100000 - 2 * diff), 100), jb::feed_error);
 
   /** Uses Testing hooks to increase coverage
    * px worse than the low limit
