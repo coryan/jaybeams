@@ -611,10 +611,6 @@ jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
 jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
 jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_libs)
 
-jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
-jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
-jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
-
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
 jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
