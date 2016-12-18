@@ -26,7 +26,8 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_test) {
 BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
   jb::itch5::array_based_order_book tested;
   jb::itch5::testing::test_order_book_type_errors(tested);
-  jb::itch5::testing::test_order_book_type_errors_spec(tested);
+  jb::itch5::array_based_order_book sp_tested;
+  jb::itch5::testing::test_order_book_type_errors_spec(sp_tested);
 }
 
 /**
