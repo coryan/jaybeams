@@ -311,32 +311,31 @@ public:
                       << ", msg=" << msg;
       return;
     }
-    // ... find the right book for this order, create one if necessary ...
+    // ... find the right book for this order
+    // ... the book has to exists, since the original add_order created
+    // one if needed
     auto itbook = books_.find(position->second.stock);
-    if (itbook == books_.end()) {
-      auto newbk =
-          books_.emplace(position->second.stock, order_book<book_type>(cfg_));
-      itbook = newbk.first;
+    if (itbook != books_.end()) {
+      // ... update the order list and book, but do not make a callback ...
+      auto update = do_reduce(
+          position, itbook->second, recvts, msgcnt, msgoffset, msg.header,
+          msg.original_order_reference_number, 0);
+      // ... now we need to insert the new order ...
+      orders_.emplace(
+          msg.new_order_reference_number,
+          order_data{update.stock, update.buy_sell_indicator, msg.price,
+                     msg.shares});
+      (void)itbook->second.handle_add_order(
+          update.buy_sell_indicator, msg.price, msg.shares);
+      // ... adjust the update data structure ...
+      update.cxlreplx = true;
+      update.oldpx = update.px;
+      update.oldqty = -update.qty;
+      update.px = msg.price;
+      update.qty = msg.shares;
+      // ... and invoke the callback ...
+      callback_(msg.header, itbook->second, update);
     }
-    // ... update the order list and book, but do not make a callback ...
-    auto update = do_reduce(
-        position, itbook->second, recvts, msgcnt, msgoffset, msg.header,
-        msg.original_order_reference_number, 0);
-    // ... now we need to insert the new order ...
-    orders_.emplace(
-        msg.new_order_reference_number,
-        order_data{update.stock, update.buy_sell_indicator, msg.price,
-                   msg.shares});
-    (void)itbook->second.handle_add_order(
-        update.buy_sell_indicator, msg.price, msg.shares);
-    // ... adjust the update data structure ...
-    update.cxlreplx = true;
-    update.oldpx = update.px;
-    update.oldqty = -update.qty;
-    update.px = msg.price;
-    update.qty = msg.shares;
-    // ... and invoke the callback ...
-    callback_(msg.header, itbook->second, update);
   }
 
   /**
@@ -434,16 +433,14 @@ private:
                       << ", shares=" << shares;
       return;
     }
+    // the book is found, since add_order created it if needed
     auto itbook = books_.find(position->second.stock);
-    if (itbook == books_.end()) {
-      auto newbk =
-          books_.emplace(position->second.stock, order_book<book_type>(cfg_));
-      itbook = newbk.first;
+    if (itbook != books_.end()) {
+      auto u = do_reduce(
+          position, itbook->second, recvts, msgcnt, msgoffset, header,
+          order_reference_number, shares);
+      callback_(header, itbook->second, u);
     }
-    auto u = do_reduce(
-        position, itbook->second, recvts, msgcnt, msgoffset, header,
-        order_reference_number, shares);
-    callback_(header, itbook->second, u);
   }
 
   /**
