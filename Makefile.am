@@ -93,6 +93,7 @@ examples = \
   tools/itch5inside \
   tools/itch5moldreplay \
   tools/itch5stats \
+  tools/itch5trades \
   tools/mold2inside \
   tools/moldheartbeat
 
@@ -427,6 +428,9 @@ tools_itch5moldreplay_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIB)
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
 tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
 
+tools_itch5trades_SOURCES = tools/itch5trades.cpp
+tools_itch5trades_LDADD = jb/libitch5.a jb/libjb.a
+
 tools_mold2inside_SOURCES = tools/mold2inside.cpp
 tools_mold2inside_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
 
@@ -606,10 +610,6 @@ jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
 jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
 jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
-jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
-jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
