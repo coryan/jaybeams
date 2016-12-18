@@ -33,6 +33,7 @@ jb_unit_tests = \
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
   jb/itch5/ut_add_order_mpid_message \
+  jb/itch5/ut_array_based_order_book \
   jb/itch5/ut_base_decoders \
   jb/itch5/ut_base_encoders \
   jb/itch5/ut_broken_trade_message \
@@ -45,6 +46,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
   jb/itch5/ut_make_socket_udp_recv \
+  jb/itch5/ut_map_based_order_book \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
   jb/itch5/ut_mold_udp_pacer \
@@ -336,6 +338,7 @@ jb_libitch5_a_SOURCES = \
 jb_libitch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
   jb/itch5/add_order_mpid_message.hpp \
+  jb/itch5/array_based_order_book.hpp \
   jb/itch5/base_decoders.hpp \
   jb/itch5/base_encoders.hpp \
   jb/itch5/broken_trade_message.hpp \
@@ -349,6 +352,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/generate_inside.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
+  jb/itch5/map_based_order_book.hpp \
   jb/itch5/market_participant_position_message.hpp \
   jb/itch5/message_header.hpp \
   jb/itch5/mold_udp_channel.hpp \
@@ -579,6 +583,10 @@ jb_itch5_ut_add_order_mpid_message_SOURCES = jb/itch5/ut_add_order_mpid_message.
 jb_itch5_ut_add_order_mpid_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_mpid_messag
 jb_itch5_ut_add_order_mpid_message_LDADD = $(jb_ut_itch5_libs)
 
+jb_itch5_ut_array_based_order_book_SOURCES = jb/itch5/ut_array_based_order_book.cpp
+jb_itch5_ut_array_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_array_based_order_book
+jb_itch5_ut_array_based_order_book_LDADD = $(jb_ut_itch5_libs)
+
 jb_itch5_ut_base_decoders_SOURCES = jb/itch5/ut_base_decoders.cpp
 jb_itch5_ut_base_decoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_decoders
 jb_itch5_ut_base_decoders_LDADD = $(jb_ut_itch5_libs)
@@ -607,10 +615,6 @@ jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
 jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
 jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_libs)
 
-jb_itch5_ut_compute_book_depth_SOURCES = jb/itch5/ut_compute_book_depth.cpp
-jb_itch5_ut_compute_book_depth_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book_depth
-jb_itch5_ut_compute_book_depth_LDADD = $(jb_ut_itch5_libs)
-
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
 jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_libs)
@@ -630,6 +634,10 @@ jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
 jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
 jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_libs)
+
+jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
+jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
+jb_itch5_ut_map_based_order_book_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_market_participant_position_message_SOURCES = jb/itch5/ut_market_participant_position_message.cpp
 jb_itch5_ut_market_participant_position_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_market_participant_position_message

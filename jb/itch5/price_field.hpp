@@ -62,6 +62,12 @@ public:
     return *this;
   }
 
+  /// Addition assignment operator
+  price_field& operator+=(price_field const& rhs) {
+    value_ += rhs.value_;
+    return *this;
+  }
+
   //@{
   /**
    * @name Accessors
@@ -131,6 +137,14 @@ template <>
 inline price4_t max_price_field_value() {
   // Per the ITCH-5.0 spec, the maximum value is 200,000.0000
   return price4_t(std::uint32_t(200000) * std::uint32_t(price4_t::denom));
+}
+
+/// non-member addition operator
+template <typename price_field>
+inline price_field operator+(price_field const& lhs, price_field const& rhs) {
+  price_field temp(lhs.as_integer());
+  temp += rhs;
+  return temp;
 }
 
 } // namespace itch5
