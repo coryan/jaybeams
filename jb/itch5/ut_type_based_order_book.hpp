@@ -13,12 +13,12 @@ namespace testing {
  * side_type class trivial member tests.
  * @tparam side_type Side type to be tested
  *
- * Uses testing hook check_less to know if tested is buy or sell side
+ * Uses testing hook check_better to know if tested is buy or sell side
  */
 template <typename side_type>
 void test_side_type_trivial(side_type& tested) {
   using jb::itch5::price4_t;
-  auto is_less = tested.check_less(price4_t(1), price4_t(0));
+  auto is_less = tested.check_better(price4_t(1), price4_t(0));
   auto actual = tested.best_quote();
   if (is_less) {
     BOOST_CHECK_EQUAL(actual.first, price4_t(0));
@@ -50,19 +50,19 @@ void test_side_type_errors(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_less(price4_t(1), price4_t(0))) {
-    diff = 10000;
-  } else {
+  if (tested.check_better(price4_t(1), price4_t(0))) {
     diff = -10000;
+  } else {
+    diff = 10000;
   }
 
   // Add two orders to the book ...
   (void)tested.add_order(price4_t(100000), 100);
-  (void)tested.add_order(price4_t(100000 + diff), 200);
+  (void)tested.add_order(price4_t(100000 - diff), 200);
 
   // ... check the best quote ...
   auto actual = tested.best_quote();
-  BOOST_CHECK_EQUAL(actual.first, price4_t(100000 + diff));
+  BOOST_CHECK_EQUAL(actual.first, price4_t(100000 - diff));
   BOOST_CHECK_EQUAL(actual.second, 200);
 
   // ... remove the first order, once should work, the second time
@@ -72,8 +72,10 @@ void test_side_type_errors(side_type& tested) {
 
   // ... check the best quote again ...
   actual = tested.best_quote();
-  BOOST_CHECK_EQUAL(actual.first, price4_t(100000 + diff));
+  BOOST_CHECK_EQUAL(actual.first, price4_t(100000 - diff));
   BOOST_CHECK_EQUAL(actual.second, 200);
+  // .. and the book_depth should be incremented
+  BOOST_CHECK_EQUAL(tested.count(), 1);
 
   // ... reduce a non existing price better than the inside
   BOOST_CHECK_THROW(
@@ -82,6 +84,7 @@ void test_side_type_errors(side_type& tested) {
   // ... reduce non existing order on an empty bottom levels
   if (diff < 0) {
     // buy side
+    // reduce an non-existing order below the low range, empty bottom...
     BOOST_CHECK_THROW(tested.reduce_order(price4_t(1000), 100), jb::feed_error);
     // add one, so no empty now...
     (void)tested.add_order(price4_t(1100), 100);
@@ -92,14 +95,14 @@ void test_side_type_errors(side_type& tested) {
   } else {
     // sell side
     BOOST_CHECK_THROW(
-        tested.reduce_order(price4_t(1000000), 100), jb::feed_error);
+        tested.reduce_order(price4_t(700000), 100), jb::feed_error);
     // add one, so no empty now...
-    (void)tested.add_order(price4_t(1000100), 100);
+    (void)tested.add_order(price4_t(700100), 100);
     // try to reduce again
     BOOST_CHECK_THROW(
-        tested.reduce_order(price4_t(1000000), 100), jb::feed_error);
+        tested.reduce_order(price4_t(700000), 100), jb::feed_error);
     // and finally reduce the existing one but over quantity, should work
-    (void)tested.reduce_order(price4_t(1000100), 200);
+    (void)tested.reduce_order(price4_t(700100), 200);
   }
 }
 
@@ -112,10 +115,10 @@ void test_side_type_errors_spec(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_less(price4_t(1), price4_t(0))) {
-    diff = 10000;
-  } else {
+  if (tested.check_better(price4_t(1), price4_t(0))) {
     diff = -10000;
+  } else {
+    diff = 10000;
   }
 
   /// Uses Testing hooks to increase coverage
@@ -124,14 +127,14 @@ void test_side_type_errors_spec(side_type& tested) {
 
   // Add two orders to the book ...
   (void)tested.add_order(price4_t(100000), 100);
-  (void)tested.add_order(price4_t(100000 + diff), 200);
+  (void)tested.add_order(price4_t(100000 - diff), 200);
 
   // ... add order above the limit price
   BOOST_CHECK_THROW(tested.add_order(price4_t(-1), 200), jb::feed_error);
 
   // ... reduce order with negative qty
   BOOST_CHECK_THROW(
-      tested.reduce_order(price4_t(100000 + diff), -100), jb::feed_error);
+      tested.reduce_order(price4_t(100000 - diff), -100), jb::feed_error);
 
   /** Uses Testing hooks to increase coverage
    * px worse than the low limit
@@ -139,17 +142,17 @@ void test_side_type_errors_spec(side_type& tested) {
   if (diff < 0) {
     // buy side
     BOOST_CHECK_THROW(
-        tested.test_price_to_relative(price4_t(1000000)), jb::feed_error);
-    /// to test with a px worse than px_begin_top
-    BOOST_CHECK_THROW(
-        tested.test_move_top_to_bottom(price4_t(1000000)), jb::feed_error);
-  } else {
-    // sell side
-    BOOST_CHECK_THROW(
         tested.test_price_to_relative(price4_t(100)), jb::feed_error);
     /// to test with a px worse than px_begin_top
     BOOST_CHECK_THROW(
         tested.test_move_top_to_bottom(price4_t(100)), jb::feed_error);
+  } else {
+    // sell side
+    BOOST_CHECK_THROW(
+        tested.test_price_to_relative(price4_t(1000000)), jb::feed_error);
+    /// to test with a px worse than px_begin_top
+    BOOST_CHECK_THROW(
+        tested.test_move_top_to_bottom(price4_t(1000000)), jb::feed_error);
   }
 }
 
@@ -158,7 +161,7 @@ void test_side_type_add_reduce(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_less(price4_t(0), price4_t(1))) {
+  if (tested.check_better(price4_t(0), price4_t(1))) {
     diff = -10000;
   } else {
     diff = 10000;
