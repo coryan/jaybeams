@@ -1,6 +1,7 @@
 #ifndef jb_itch5_array_based_order_book_hpp
 #define jb_itch5_array_based_order_book_hpp
 
+#include <jb/itch5/half_quote.hpp>
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/price_levels.hpp>
 #include <jb/config_object.hpp>
@@ -72,9 +73,6 @@ public:
 
   jb::config_attribute<config, std::size_t> max_size;
 };
-
-/// A simple representation for price + quantity
-using half_quote = std::pair<price4_t, int>;
 
 /// The values used to represent the range of valid prices
 /// LOWEST_PRICE < valid price < HIGHEST_PRICE

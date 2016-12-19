@@ -1,6 +1,7 @@
 #ifndef jb_itch5_map_based_order_book_hpp
 #define jb_itch5_map_based_order_book_hpp
 
+#include <jb/itch5/half_quote.hpp>
 #include <jb/itch5/price_field.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
@@ -41,9 +42,6 @@ public:
   }
   /* no members */
 };
-
-/// A simple representation for price + quantity
-using half_quote = std::pair<price4_t, int>;
 
 /**
  * Represent one side of the book. Class implementation of struct
