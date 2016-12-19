@@ -142,7 +142,7 @@ inline price4_t max_price_field_value() {
 /// non-member addition operator
 template <typename price_field>
 inline price_field operator+(price_field const& lhs, price_field const& rhs) {
-  price_field temp(lhs.as_integer());
+  price_field temp = lhs;
   temp += rhs;
   return temp;
 }
