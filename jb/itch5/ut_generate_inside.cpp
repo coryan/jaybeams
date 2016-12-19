@@ -35,7 +35,7 @@ void test_generate_inside_basic(based_order_book& base) {
   // collect the statistics ...
   offline_feed_statistics stats{offline_feed_statistics::config()};
   // ... then a book with 3 orders on each side, widely spaced
-  typename book_type::config cfg;
+  typename based_order_book::config cfg;
   book_type book(cfg);
   book.handle_add_order(BUY, price4_t(10 * 10000), 300);
   book.handle_add_order(BUY, price4_t(11 * 10000), 200);
