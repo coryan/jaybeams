@@ -158,10 +158,7 @@ public:
   /// @returns the number of levels with non-zero quantity for the order side.
   /// This is the size of bottom_levels_ plus all non zero top_levels values
   std::size_t count() const {
-    if (!bottom_levels_.empty()) {
-      return bottom_levels_.size() + top_levels_count();
-    }
-    return top_levels_count();
+    return bottom_levels_.size() + top_levels_count();
   }
 
   /**
