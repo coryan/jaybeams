@@ -11,12 +11,12 @@ namespace testing {
  * side_type class trivial member tests.
  * @tparam side_type Side type to be tested
  *
- * Uses testing hook check_better to know if tested is buy or sell side
+ * Uses testing hook price_comp to know if tested is buy or sell side
  */
 template <typename side_type>
 void test_side_type_trivial(side_type& tested) {
   using jb::itch5::price4_t;
-  auto is_less = tested.check_better(price4_t(1), price4_t(0));
+  auto is_less = tested.price_comp(price4_t(1), price4_t(0));
   auto actual = tested.best_quote();
   if (is_less) {
     BOOST_CHECK_EQUAL(actual.first, price4_t(0));
@@ -48,7 +48,7 @@ void test_side_type_errors(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_better(price4_t(1), price4_t(0))) {
+  if (tested.price_comp(price4_t(1), price4_t(0))) {
     diff = -10000;
   } else {
     diff = 10000;
@@ -113,7 +113,7 @@ void test_side_type_errors_spec(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_better(price4_t(1), price4_t(0))) {
+  if (tested.price_comp(price4_t(1), price4_t(0))) {
     diff = -10000;
   } else {
     diff = 10000;
@@ -163,7 +163,7 @@ void test_side_type_add_reduce(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.check_better(price4_t(0), price4_t(1))) {
+  if (tested.price_comp(price4_t(0), price4_t(1))) {
     diff = -10000;
   } else {
     diff = 10000;
