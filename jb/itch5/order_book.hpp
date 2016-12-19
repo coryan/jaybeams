@@ -12,16 +12,6 @@
 namespace jb {
 namespace itch5 {
 
-namespace defaults {
-
-#ifndef JB_ARRAY_DEFAULTS_max_size
-#define JB_ARRAY_DEFAULTS_max_size 10000
-#endif
-
-std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
-
-} // namespace defaults
-
 /// Number of prices on a side order book
 using book_depth_t = unsigned long int;
 
@@ -59,18 +49,18 @@ using book_depth_t = unsigned long int;
  * both sides buy and sell.
  * Must be compatible with jb::itch5::map_based_order_book
  *
- * @param cfg config
+ * @param cfg book_type config
  */
 
 template <typename book_type>
 class order_book {
 public:
-  class config;
+  using book_type_config = typename book_type::config;
 
   /// Initialize an empty order book.
-  explicit order_book(config const& cfg)
-      : buy_(cfg.max_size())
-      , sell_(cfg.max_size()) {
+  explicit order_book(book_type_config const& cfg)
+      : buy_(cfg)
+      , sell_(cfg) {
   }
 
   //@{
@@ -161,36 +151,6 @@ public:
 private:
   typename book_type::buys_t buy_;
   typename book_type::sells_t sell_;
-};
-
-/**
- * Configure an order_book config object
- */
-template <typename book_type>
-class order_book<book_type>::config : public jb::config_object {
-public:
-  config()
-      : max_size(
-            desc("max-size")
-                .help(
-                    "Configure the max size of a array based order book."
-                    " Only used when enable-array-based is set"),
-            this, jb::itch5::defaults::max_size) {
-  }
-
-  config_object_constructors(config);
-
-  /// Validate the configuration
-  void validate() const override {
-    if ((max_size() <= 0) or (max_size() > jb::itch5::defaults::max_size)) {
-      std::ostringstream os;
-      os << "max-size must be > 0 and <=" << jb::itch5::defaults::max_size
-         << ", value=" << max_size();
-      throw jb::usage(os.str(), 1);
-    }
-  }
-
-  jb::config_attribute<config, std::size_t> max_size;
 };
 
 } // namespace itch5

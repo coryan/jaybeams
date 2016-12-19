@@ -294,32 +294,19 @@ void test_order_book_errors(book_type& tested) {
 } // namespace testing
 
 /**
- * @test Verify that order_book::config works as expected.
- */
-BOOST_AUTO_TEST_CASE(order_book_config_simple) {
-  using config =
-      jb::itch5::order_book<jb::itch5::array_based_order_book>::config;
-
-  BOOST_CHECK_NO_THROW(config().validate());
-  BOOST_CHECK_THROW(config().max_size(-7).validate(), jb::usage);
-  BOOST_CHECK_NO_THROW(config().max_size(3000).validate());
-  BOOST_CHECK_THROW(config().max_size(20000).validate(), jb::usage);
-}
-
-/**
  * @test Verify that jb::itch5::order_book<jb::itch5::map_price> works as
  * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_trivial) {
   using namespace jb::itch5;
-  using map_book_type = order_book<map_based_order_book>;
 
-  map_book_type::config map_cfg;
+  using map_book_type = order_book<map_based_order_book>;
+  map_based_order_book::config map_cfg;
   map_book_type map_tested(map_cfg);
   testing::test_order_book_trivial(map_tested);
 
   using array_book_type = order_book<array_based_order_book>;
-  array_book_type::config array_cfg;
+  array_based_order_book::config array_cfg;
   array_book_type array_tested(array_cfg);
   testing::test_order_book_trivial(array_tested);
 }
@@ -330,20 +317,21 @@ BOOST_AUTO_TEST_CASE(order_book_trivial) {
  */
 BOOST_AUTO_TEST_CASE(order_book_buy) {
   using namespace jb::itch5;
-  using map_book_type = order_book<map_based_order_book>;
 
-  map_book_type::config map_cfg;
+  using map_book_type = order_book<map_based_order_book>;
+  map_based_order_book::config map_cfg;
   map_book_type map_tested(map_cfg);
   testing::test_order_book_buy_order_handling(map_tested);
 
   using array_book_type = order_book<array_based_order_book>;
   // uses default max_size
-  array_book_type::config array_cfg;
+  array_based_order_book::config array_cfg;
   array_book_type array_tested(array_cfg);
   testing::test_order_book_buy_order_handling(array_tested);
 
   // defines max_size to 3000
-  array_book_type sh_array_tested(array_book_type::config().max_size(3000));
+  array_book_type sh_array_tested(
+      array_based_order_book::config().max_size(3000));
   testing::test_order_book_buy_order_handling(sh_array_tested);
 }
 
@@ -355,18 +343,19 @@ BOOST_AUTO_TEST_CASE(order_book_sell) {
   using namespace jb::itch5;
   using map_book_type = order_book<map_based_order_book>;
 
-  map_book_type::config map_cfg;
+  map_based_order_book::config map_cfg;
   map_book_type map_tested(map_cfg);
   testing::test_order_book_sell_order_handling(map_tested);
 
   using array_book_type = order_book<array_based_order_book>;
   // uses default max_size
-  array_book_type::config array_cfg;
+  array_based_order_book::config array_cfg;
   array_book_type array_tested(array_cfg);
   testing::test_order_book_sell_order_handling(array_tested);
 
   // defines max_size to 3000
-  array_book_type sh_array_tested(array_book_type::config().max_size(3000));
+  array_book_type sh_array_tested(
+      array_based_order_book::config().max_size(3000));
   jb::itch5::testing::test_order_book_sell_order_handling(sh_array_tested);
 }
 
@@ -377,12 +366,12 @@ BOOST_AUTO_TEST_CASE(order_book_errors) {
   using namespace jb::itch5;
   using map_book_type = order_book<map_based_order_book>;
 
-  map_book_type::config map_cfg;
+  map_based_order_book::config map_cfg;
   map_book_type map_tested(map_cfg);
   testing::test_order_book_errors(map_tested);
 
   using array_book_type = order_book<array_based_order_book>;
-  array_book_type::config array_cfg;
+  array_based_order_book::config array_cfg;
   array_book_type array_tested(array_cfg);
   testing::test_order_book_errors(array_tested);
 }
