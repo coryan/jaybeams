@@ -30,10 +30,10 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book_cache_aware works as
+ * @test Verify that the buy side of array_based_order_book works as
  * expected.
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_buy) {
   using namespace jb::itch5;
 
   const std::size_t ticks = 5000;
@@ -143,10 +143,10 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
 }
 
 /**
- * @test Verity that the sell side of jb::itch5::order_book_cache_aware works as
+ * @test Verity that the sell side of array_based_order_book works as
  * expected.
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_sell) {
   using namespace jb::itch5;
 
   const std::size_t ticks = 5000;
@@ -230,10 +230,10 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book_cache_aware works as
+ * @test Verify that the buy side of array_based_order_book works as
  * expected.
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_buy_range) {
   using namespace jb::itch5;
 
   const std::size_t ticks = 5000;
@@ -402,10 +402,10 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book_cache_aware works as
+ * @test Verify that the buy side of array_based_order_book works as
  * expected.
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_sell_range) {
   using namespace jb::itch5;
 
   const std::size_t ticks = 5000;
@@ -583,12 +583,12 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book_cache_aware
+ * @test Verify that the buy side of array_based_order_book
  * works as expected.
  * Test suite for prices below $1.00. A smaller tick offset is used to
  * facilitate the tests
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_buy_small_tick) {
   using namespace jb::itch5;
 
   array_based_order_book::buys_t tested(
@@ -729,12 +729,12 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
 }
 
 /**
- * @test Verify that the buy side of jb::itch5::order_book_cache_aware
+ * @test Verify that the buy side of array_based_order_book
  * works as expected.
  * Test suite for prices below $1.00. A smaller tick offset is used to
  * facilitate the tests
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_sell_small_tick) {
   using namespace jb::itch5;
 
   array_based_order_book::sells_t tested(
@@ -833,7 +833,7 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
  * @test itch5arrayinside exception generated. Adding test case to fix the
  * problem.
  */
-BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick_bug01) {
+BOOST_AUTO_TEST_CASE(array_based_order_book_sell_small_tick_bug01) {
   using namespace jb::itch5;
 
   const std::size_t ticks = 5000;
