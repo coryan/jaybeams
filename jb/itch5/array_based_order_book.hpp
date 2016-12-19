@@ -74,12 +74,6 @@ public:
   jb::config_attribute<config, std::size_t> max_size;
 };
 
-/// The values used to represent the range of valid prices
-/// LOWEST_PRICE < valid price < HIGHEST_PRICE
-const price4_t LOWEST_PRICE = price4_t(0);
-const price4_t HIGHEST_PRICE = max_price_field_value<price4_t>();
-const int WIRE_MAX = HIGHEST_PRICE.as_integer();
-
 /// price level limit between mill and penny
 int constexpr TK_DOLLAR = 10000;
 
@@ -121,12 +115,12 @@ public:
 
   /// The value used to represent an empty bid
   static half_quote empty_bid() {
-    return half_quote(LOWEST_PRICE, 0);
+    return half_quote(price4_t(0), 0);
   }
 
   /// The value used to represent an empty offer
   static half_quote empty_offer() {
-    return half_quote(HIGHEST_PRICE, 0);
+    return half_quote(max_price_field_value<price4_t>(), 0);
   }
 
   /// @returns an empty bid or offer based on compare function
@@ -198,7 +192,10 @@ public:
    */
   bool add_order(price4_t px, int qty) {
     // verify that px and qty are valid values. Throws feed_error otherwise
-    if ((px <= LOWEST_PRICE) or (px >= HIGHEST_PRICE) or (qty <= 0)) {
+    /// The values used to represent the range of valid prices
+
+    if ((px <= price4_t(0)) or (px >= max_price_field_value<price4_t>()) or
+        (qty <= 0)) {
       std::ostringstream os;
       os << "array_based_order_book::add_order value(s) out of range."
          << " px=" << px << " qty=" << qty;
@@ -408,11 +405,13 @@ private:
    */
   price4_t
   relative_above_base(price4_t const& px_base, int const rel_tick) const {
+    int const wire_max = max_price_field_value<price4_t>().as_integer();
+
     // check if px_base is above $1.00
     if (px_base > price4_t(TK_DOLLAR)) {
       // already better than $1.00, then rel_tick is in penny
       int wire_new = px_base.as_integer() + 100 * rel_tick;
-      wire_new = (wire_new < WIRE_MAX) ? wire_new : WIRE_MAX;
+      wire_new = (wire_new < wire_max) ? wire_new : wire_max;
       return price4_t(wire_new);
     }
     // px_base is below $1.00...

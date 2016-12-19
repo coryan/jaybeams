@@ -412,7 +412,7 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_sell_range) {
   array_based_order_book::sells_t tested(
       array_based_order_book::config().max_size(2 * ticks));
 
-  auto px_limit = HIGHEST_PRICE;
+  auto px_limit = max_price_field_value<price4_t>();
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -740,7 +740,7 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_sell_small_tick) {
   array_based_order_book::sells_t tested(
       array_based_order_book::config().max_size(3000));
 
-  auto px_limit = HIGHEST_PRICE;
+  auto px_limit = max_price_field_value<price4_t>();
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -840,7 +840,7 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_sell_small_tick_bug01) {
   array_based_order_book::sells_t tested(
       array_based_order_book::config().max_size(2 * ticks));
 
-  auto px_limit = HIGHEST_PRICE;
+  auto px_limit = max_price_field_value<price4_t>();
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
