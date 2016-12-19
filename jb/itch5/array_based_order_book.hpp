@@ -115,16 +115,6 @@ public:
       , px_end_top_(empty_quote().first.as_integer()) {
   }
 
-  /// The value used to represent an empty bid
-  static half_quote empty_bid() {
-    return half_quote(price4_t(0), 0);
-  }
-
-  /// The value used to represent an empty offer
-  static half_quote empty_offer() {
-    return half_quote(max_price_field_value<price4_t>(), 0);
-  }
-
   /// @returns an empty bid or offer based on compare function
   /// empty bid for less, empty offer for greater.
   half_quote empty_quote() const {
@@ -388,6 +378,16 @@ public:
   }
 
 private:
+  /// The value used to represent an empty bid
+  static half_quote empty_bid() {
+    return half_quote(price4_t(0), 0);
+  }
+
+  /// The value used to represent an empty offer
+  static half_quote empty_offer() {
+    return half_quote(max_price_field_value<price4_t>(), 0);
+  }
+
   /**
    * Transforms a top_levels_ relative position into an absolute price.
    * @param rel relative position of a price at top_levels_

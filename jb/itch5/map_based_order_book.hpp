@@ -55,16 +55,6 @@ public:
   map_based_book_side(map_based_order_book::config const& cfg) {
   }
 
-  /// The value used to represent an empty bid
-  static half_quote empty_bid() {
-    return half_quote(price4_t(0), 0);
-  }
-
-  /// The value used to represent an empty offer
-  static half_quote empty_offer() {
-    return half_quote(max_price_field_value<price4_t>(), 0);
-  }
-
   /// @returns an empty bid or offer based on compare function
   /// empty bid for less, empty offer for greater.
   half_quote empty_quote() const {
@@ -145,6 +135,17 @@ public:
    */
   bool check_better(price4_t const& px1, price4_t const& px2) const {
     return better_(px1, px2);
+  }
+
+private:
+  /// The value used to represent an empty bid
+  static half_quote empty_bid() {
+    return half_quote(price4_t(0), 0);
+  }
+
+  /// The value used to represent an empty offer
+  static half_quote empty_offer() {
+    return half_quote(max_price_field_value<price4_t>(), 0);
   }
 
 private:
