@@ -176,8 +176,8 @@ public:
    * - finally, updates qty at the relative(px)
    */
   bool add_order(price4_t px, int qty) {
-    if ((px <= price4_t(0)) or (px >= max_price_field_value<price4_t>()) or
-        (qty <= 0)) {
+    if (qty <= 0 or px <= price4_t(0) or
+        px >= max_price_field_value<price4_t>()) {
       std::ostringstream os;
       os << "array_based_order_book::add_order value(s) out of range."
          << " px=" << px << " qty=" << qty;
