@@ -78,7 +78,25 @@ public:
 int constexpr TK_DOLLAR = 10000;
 
 /**
- * Represent one side of the book. Class implementation of struct
+ * Represent one side of the book.
+ *
+ * This implementation uses a top_levels_ fix sized vector<price4_t> to
+ * keep the prices around the inside. We are hoping this makes a faster
+ * order book side (instead of map based).
+ *
+ * The top_levels_ range is kept by px_begin_top_ (worst price on the range)
+ * and px_end_top_ (best price on the range).
+ * If a price is worse than the px_begin_top_ is kept on the bottom_levels_
+ * (regular map).
+ * When a new inside crosses the limits of top_levels_, then the limits are
+ * redefined and prices are moved to or from bottom_levels_ depending on the
+ * direction the new inside is moving.
+ *
+ * The main motivation of this implementation is to have a second order book
+ * side type (in addition to map_based_order_book) in order for them to be
+ * tested/compare with the jaybeams FFT infrastructure.
+ *
+ * Class implementation of struct
  * array_based_order_book buy and side types.
  * @tparam compare_t function object class type to sort the side
  *
