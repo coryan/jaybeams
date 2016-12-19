@@ -144,7 +144,7 @@ public:
     if (px_inside_ == empty_quote().first) {
       return empty_quote(); // empty side
     }
-    if (!bottom_levels_.empty()) {
+    if (not bottom_levels_.empty()) {
       // ... worst price is at the bottom_levels_
       auto i = bottom_levels_.rbegin(); // get the worst bottom_levels price
       return half_quote(i->first, i->second);
@@ -320,7 +320,7 @@ public:
       if (px_inside_ == empty_quote().first) {
         // last top_levels_ price was removed...
         // ... get the new inside from the bottom_levels
-        if (!bottom_levels_.empty()) {
+        if (not bottom_levels_.empty()) {
           auto new_inside_it = bottom_levels_.begin();
           px_inside_ = new_inside_it->first;
         }
