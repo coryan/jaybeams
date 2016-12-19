@@ -18,6 +18,61 @@
 namespace jb {
 namespace itch5 {
 
+namespace defaults {
+
+#ifndef JB_ARRAY_DEFAULTS_max_size
+#define JB_ARRAY_DEFAULTS_max_size 10000
+#endif
+
+std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
+
+} // namespace defaults
+
+template <typename compare_t>
+class array_based_book_side;
+
+/**
+ * Define the types of buy and sell side classes.
+ *
+ * It is used as template parameter book_type of the
+ * template classes order_book and compute_book:
+ * - usage: jb::itch5::order_book<jb::itch5::array_based_order_book>
+ */
+struct array_based_order_book {
+  using buys_t = array_based_book_side<std::greater<price4_t>>;
+  using sells_t = array_based_book_side<std::less<price4_t>>;
+  class config;
+};
+
+/**
+ * Configure an array_based_order_book config object
+ */
+class array_based_order_book::config : public jb::config_object {
+public:
+  config()
+      : max_size(
+            desc("max-size")
+                .help(
+                    "Configure the max size of a array based order book."
+                    " Only used when enable-array-based is set"),
+            this, jb::itch5::defaults::max_size) {
+  }
+
+  config_object_constructors(config);
+
+  /// Validate the configuration
+  void validate() const override {
+    if ((max_size() <= 0) or (max_size() > jb::itch5::defaults::max_size)) {
+      std::ostringstream os;
+      os << "max-size must be > 0 and <=" << jb::itch5::defaults::max_size
+         << ", value=" << max_size();
+      throw jb::usage(os.str(), 1);
+    }
+  }
+
+  jb::config_attribute<config, std::size_t> max_size;
+};
+
 /// A simple representation for price + quantity
 using half_quote = std::pair<price4_t, int>;
 
@@ -55,10 +110,11 @@ int constexpr TK_DOLLAR = 10000;
 template <typename compare_t>
 class array_based_book_side {
 public:
-  explicit array_based_book_side(std::size_t sz)
+  class config;
+  explicit array_based_book_side(array_based_order_book::config const& cfg)
       : better_()
-      , max_size_(sz)
-      , top_levels_(sz, 0)
+      , max_size_(cfg.max_size())
+      , top_levels_(cfg.max_size(), 0)
       , bottom_levels_()
       , px_inside_(empty_quote().first.as_integer())
       , px_begin_top_(empty_quote().first.as_integer())
@@ -597,18 +653,6 @@ private:
 
   /// absolute price at the inside
   price4_t px_end_top_;
-};
-
-/**
- * Define the types of buy and sell side classes.
- *
- * It is used as template parameter book_type of the
- * template classes order_book and compute_book:
- * - usage: jb::itch5::order_book<jb::itch5::array_based_order_book>
- */
-struct array_based_order_book {
-  using buys_t = array_based_book_side<std::greater<price4_t>>;
-  using sells_t = array_based_book_side<std::less<price4_t>>;
 };
 
 } // namespace itch5

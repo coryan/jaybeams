@@ -34,10 +34,11 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
  * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
-  using jb::itch5::price4_t;
+  using namespace jb::itch5;
 
-  std::size_t ticks = 5000;
-  jb::itch5::array_based_order_book::buys_t tested(2 * ticks);
+  const std::size_t ticks = 5000;
+  array_based_order_book::buys_t tested(
+      array_based_order_book::config().max_size(2 * ticks));
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -146,10 +147,11 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy) {
  * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
-  using jb::itch5::price4_t;
+  using namespace jb::itch5;
 
-  std::size_t ticks = 5000;
-  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
+  const std::size_t ticks = 5000;
+  array_based_order_book::sells_t tested(
+      array_based_order_book::config().max_size(2 * ticks));
 
   // Add a new order ...
   auto r = tested.add_order(price4_t(100000), 100);
@@ -232,10 +234,11 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell) {
  * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
-  using jb::itch5::price4_t;
+  using namespace jb::itch5;
 
-  std::size_t ticks = 5000;
-  jb::itch5::array_based_order_book::buys_t tested(2 * ticks);
+  const std::size_t ticks = 5000;
+  array_based_order_book::buys_t tested(
+      array_based_order_book::config().max_size(2 * ticks));
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -403,11 +406,13 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_range) {
  * expected.
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
-  using jb::itch5::price4_t;
-  auto px_limit = jb::itch5::HIGHEST_PRICE;
+  using namespace jb::itch5;
 
-  std::size_t ticks = 5000;
-  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
+  const std::size_t ticks = 5000;
+  array_based_order_book::sells_t tested(
+      array_based_order_book::config().max_size(2 * ticks));
+
+  auto px_limit = HIGHEST_PRICE;
 
   // Check current range (min, max) ...
   auto rg = tested.get_limits();
@@ -584,9 +589,10 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_range) {
  * facilitate the tests
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
-  using jb::itch5::price4_t;
+  using namespace jb::itch5;
 
-  jb::itch5::array_based_order_book::buys_t tested(3000);
+  array_based_order_book::buys_t tested(
+      array_based_order_book::config().max_size(3000));
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -729,10 +735,12 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_buy_small_tick) {
  * facilitate the tests
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
-  using jb::itch5::price4_t;
-  auto px_limit = jb::itch5::HIGHEST_PRICE;
+  using namespace jb::itch5;
 
-  jb::itch5::array_based_order_book::sells_t tested(3000);
+  array_based_order_book::sells_t tested(
+      array_based_order_book::config().max_size(3000));
+
+  auto px_limit = HIGHEST_PRICE;
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -826,11 +834,13 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick) {
  * problem.
  */
 BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick_bug01) {
-  using jb::itch5::price4_t;
-  auto px_limit = jb::itch5::HIGHEST_PRICE;
+  using namespace jb::itch5;
 
-  std::size_t ticks = 5000;
-  jb::itch5::array_based_order_book::sells_t tested(2 * ticks);
+  const std::size_t ticks = 5000;
+  array_based_order_book::sells_t tested(
+      array_based_order_book::config().max_size(2 * ticks));
+
+  auto px_limit = HIGHEST_PRICE;
 
   // Check current range (min, max) default values ...
   auto rg = tested.get_limits();
@@ -905,4 +915,18 @@ BOOST_AUTO_TEST_CASE(order_book_cache_aware_sell_small_tick_bug01) {
   rg = tested.get_limits();
   BOOST_CHECK_EQUAL(std::get<1>(rg), price4_t(0));
   BOOST_CHECK_EQUAL(std::get<0>(rg), price4_t(10000));
+}
+
+/**
+ * @test Verify that array_based_order_book::config works as expected.
+ */
+BOOST_AUTO_TEST_CASE(array_based_order_book_config_simple) {
+  using namespace jb::itch5;
+  BOOST_CHECK_NO_THROW(array_based_order_book::config().validate());
+  BOOST_CHECK_THROW(
+      array_based_order_book::config().max_size(-7).validate(), jb::usage);
+  BOOST_CHECK_NO_THROW(
+      array_based_order_book::config().max_size(3000).validate());
+  BOOST_CHECK_THROW(
+      array_based_order_book::config().max_size(20000).validate(), jb::usage);
 }
