@@ -40,8 +40,8 @@ public:
       symbol_stats;
   jb::config_attribute<config, bool> enable_symbol_stats;
   jb::config_attribute<config, bool> enable_array_based;
-  jb::config_attribute<config, typename jb::itch5::order_book<
-                                   jb::itch5::array_based_order_book>::config>
+  jb::config_attribute<config,
+                       typename jb::itch5::array_based_order_book::config>
       book_cfg;
 };
 
@@ -113,8 +113,7 @@ int main(int argc, char* argv[]) try {
     (void)run_inside(cfg, book, cfg.book_cfg());
   } else {
     jb::itch5::map_based_order_book book;
-    typename jb::itch5::order_book<jb::itch5::map_based_order_book>::config
-        cfg_bk;
+    typename jb::itch5::map_based_order_book::config cfg_bk;
     (void)run_inside(cfg, book, cfg_bk);
   }
 

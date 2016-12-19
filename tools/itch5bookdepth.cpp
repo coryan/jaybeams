@@ -98,8 +98,7 @@ int main(int argc, char* argv[]) try {
     cb = std::move(chain);
   }
 
-  typename jb::itch5::order_book<jb::itch5::map_based_order_book>::config
-      cfg_bk;
+  typename jb::itch5::map_based_order_book::config cfg_bk;
   jb::itch5::compute_book<jb::itch5::map_based_order_book> handler(
       std::move(cb), cfg_bk);
   jb::itch5::process_iostream(in, handler);
