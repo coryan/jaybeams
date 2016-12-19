@@ -1,5 +1,5 @@
 #include <jb/itch5/array_based_order_book.hpp>
-#include <jb/itch5/ut_type_based_order_book.hpp>
+#include <jb/itch5/testing/ut_type_based_order_book.hpp>
 
 #include <boost/test/unit_test.hpp>
 
