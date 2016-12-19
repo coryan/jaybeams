@@ -340,7 +340,7 @@ public:
    * @returns true is px1 < px2
    * To test different implementations for buy and sell sides
    */
-  bool check_better(price4_t const& px1, price4_t const& px2) const {
+  bool price_comp(price4_t const& px1, price4_t const& px2) const {
     return better_(px1, px2);
   }
 

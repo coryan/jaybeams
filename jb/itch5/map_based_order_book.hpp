@@ -133,7 +133,7 @@ public:
    * To discriminate different implementations for buy and sell sides
    * during testing.
    */
-  bool check_better(price4_t const& px1, price4_t const& px2) const {
+  bool price_comp(price4_t const& px1, price4_t const& px2) const {
     return better_(px1, px2);
   }
 
