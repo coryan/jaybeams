@@ -10,6 +10,8 @@
 #include <type_traits>
 
 namespace jb {
+namespace itch5 {
+
 namespace defaults {
 
 #ifndef JB_ARRAY_DEFAULTS_max_size
@@ -19,10 +21,6 @@ namespace defaults {
 std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
 
 } // namespace defaults
-} // namespace jb
-
-namespace jb {
-namespace itch5 {
 
 /// Number of prices on a side order book
 using book_depth_t = unsigned long int;
@@ -177,16 +175,16 @@ public:
                 .help(
                     "Configure the max size of a array based order book."
                     " Only used when enable-array-based is set"),
-            this, jb::defaults::max_size) {
+            this, jb::itch5::defaults::max_size) {
   }
 
   config_object_constructors(config);
 
   /// Validate the configuration
   void validate() const override {
-    if ((max_size() <= 0) or (max_size() > jb::defaults::max_size)) {
+    if ((max_size() <= 0) or (max_size() > jb::itch5::defaults::max_size)) {
       std::ostringstream os;
-      os << "max-size must be > 0 and <=" << jb::defaults::max_size
+      os << "max-size must be > 0 and <=" << jb::itch5::defaults::max_size
          << ", value=" << max_size();
       throw jb::usage(os.str(), 1);
     }
