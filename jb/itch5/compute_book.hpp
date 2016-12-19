@@ -118,7 +118,7 @@ public:
   using time_point = jb::itch5::time_point;
 
   /// config type is used to construct the order_book
-  using book_type_config = typename order_book<book_type>::config;
+  using book_type_config = typename book_type::config;
 
   /**
    * Define the callback type
