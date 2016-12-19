@@ -100,22 +100,6 @@ int constexpr TK_DOLLAR = 10000;
  * array_based_order_book buy and side types.
  * @tparam compare_t function object class type to sort the side
  *
- * top_levels_ variables notation and definition:
- * - px_X : price4_t type. An actual price.
- *  - px_1 = price4_t(100000), price is $10.00
- *  - px_2 = price4_t(5000), price is c50 (fifty cents)
- * - tk_X : int type. A price level. First 10000 are mill, then penny.
- *  - tk_1 =  5010, price is c50.10
- *  - tk_2 = 10005, price is $1.05 ($1.00 + 5 penny)
- * - rel_X : size_t type. A relative position of a price at top_levels_
- *  - BUY side examples:
- *   - rel_1 = 20 (with px_begin_top_ = $30.00), tk_1 = 12920, px_1 = $30.20
- *   - rel_2 = 40 (with px_begin_top_ = c30.00), tk_2 = 3040, px_2 = c30.40
- *   - rel_3 = 1020 (with px_begin_top_ = c90.00), tk_3 = 10020, px_3 = $1.20
- *  - SELL side examples :
- *   - rel_1 = 20 (with px_begin_top_ = $30.00), tk_1 = 12880, px_1 = $29.80
- *   - rel_2 = 40 (with px_begin_top_ = c30.00), tk_2 = 2960, px_2 = c29.60
- *   - rel_3 = 1020 (with px_begin_top_ = $1.10), tk_3 = 8990, px_3 = c89.90
  */
 template <typename compare_t>
 class array_based_book_side {
