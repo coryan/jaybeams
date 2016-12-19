@@ -168,21 +168,14 @@ public:
    * @param qty the quantity of the new order
    * @returns true if the inside changed
    *
-   * Validates:
-   * - if px is off limits (<= empty_bid price or >= empty_offer price)
-   * - if qty <= 0
-   * - throws an exception if this is the case
-   * .
-   * Then:
+   * @throw feed_error px out of valid range, or qty <= 0
+   *
    * - if px is worse than the px_begin_top_ then px goes to bottom_levels
    * - if px is better than the inside then changes inside, redefines limits
    * if needed (moving the tail to bottom_levels if any)
    * - finally, updates qty at the relative(px)
    */
   bool add_order(price4_t px, int qty) {
-    // verify that px and qty are valid values. Throws feed_error otherwise
-    /// The values used to represent the range of valid prices
-
     if ((px <= price4_t(0)) or (px >= max_price_field_value<price4_t>()) or
         (qty <= 0)) {
       std::ostringstream os;
@@ -232,7 +225,12 @@ public:
    * @param qty the quantity reduced in the order
    * @returns true if the inside changed
    *
-   * Validates a positive qty
+   * @throw feed_error qty <= 0
+   * @throw feed_error px should be in bottom_levels_ but is empty
+   * @throw feed_error trying to reduce a non-existing bottom_levels price
+   * @throw feed_error trying to reduce a non-existing top_levels price
+   * @throw feed_error trying to reduce a price better than px_inside_
+   *
    * Checks and handles if px is a bottom_level_ price
    * Checks if top_levels_ is empty after reducing
    * If so, limits have to be redefined, and tail moved into top_levels
@@ -458,7 +456,9 @@ private:
 
   /**
    * Transforms an absolute price into a top_levels_ relative position.
-   * px has to be better or equal to px_begin_top_
+   *
+   * @throw feed_error px has to be better or equal to px_begin_top_
+   *
    * @param px an absolute price
    * @returns top_levels_ relative position of px compare with px_begin_top_
    */
@@ -476,6 +476,8 @@ private:
   }
 
   /**
+   * @throw feed_error top_levels_ is empty
+   *
    * @returns relative position of the worst valid price at top_levels
    */
   std::size_t relative_worst_top_level() const {
@@ -533,7 +535,8 @@ private:
    *
    * @param px_max first limit price that is not moved out.
    *
-   * Validates that px_max is in range (better or equal to px_begin_top_)
+   * @throw feed_error px_max is not in range (better or equal to px_begin_top_)
+   *
    * Inserts the prices into bottom_levels_
    * Shift top_levels_ prices in order for rel_max to become relative 0
    * Clear (value = 0) former relative position of moved prices
