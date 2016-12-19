@@ -12,6 +12,36 @@
 namespace jb {
 namespace itch5 {
 
+template <typename compare_t>
+class map_based_book_side;
+
+/**
+ * Define the types of buy and sell sides data structure.
+ *
+ * It is used as template parameter book_type of the
+ * template class order_book:
+ * - usage: jb::itch5::order_book<jb::itch5::map_based_order_book>
+ */
+struct map_based_order_book {
+  using buys_t = map_based_book_side<std::greater<price4_t>>;
+  using sells_t = map_based_book_side<std::less<price4_t>>;
+  class config;
+};
+
+/**
+ * Configure an map_based_order_book config object
+ */
+class map_based_order_book::config : public jb::config_object {
+public:
+  config() {
+  }
+  config_object_constructors(config);
+  /// empty
+  void validate() const override {
+  }
+  /* no members */
+};
+
 /// A simple representation for price + quantity
 using half_quote = std::pair<price4_t, int>;
 
@@ -24,11 +54,7 @@ template <typename compare_t>
 class map_based_book_side {
 public:
   /// Initializes an empty side order book
-  map_based_book_side() {
-  }
-  /// Compatibility constructor, ignores parameter
-  explicit map_based_book_side(std::size_t)
-      : map_based_book_side() {
+  map_based_book_side(map_based_order_book::config const& cfg) {
   }
 
   /// The value used to represent an empty bid
@@ -128,18 +154,6 @@ private:
   /// function object for inequality comparison of template parameter type.
   /// if better_(p1,p2) is true means p1 is strictly a better price than p2
   compare_t better_;
-};
-
-/**
- * Define the types of buy and sell sides data structure.
- *
- * It is used as template parameter book_type of the
- * template class order_book:
- * - usage: jb::itch5::order_book<jb::itch5::map_based_order_book>
- */
-struct map_based_order_book {
-  using buys_t = map_based_book_side<std::greater<price4_t>>;
-  using sells_t = map_based_book_side<std::less<price4_t>>;
 };
 
 } // namespace itch5
