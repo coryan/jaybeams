@@ -117,6 +117,9 @@ public:
   /// in some modules
   using time_point = jb::itch5::time_point;
 
+  /// config type is used to construct the order_book
+  using book_type_config = typename order_book<book_type>::config;
+
   /**
    * Define the callback type
    *
@@ -135,17 +138,14 @@ public:
   //@}
 
   /// Constructor
-  explicit compute_book(
-      callback_type&& cb, typename order_book<book_type>::config const& cfg)
+  explicit compute_book(callback_type&& cb, book_type_config const& cfg)
       : callback_(std::forward<callback_type>(cb))
       , books_()
       , orders_()
       , cfg_(cfg) {
   }
 
-  explicit compute_book(
-      callback_type const& cb,
-      typename order_book<book_type>::config const& cfg)
+  explicit compute_book(callback_type const& cb, book_type_config const& cfg)
       : compute_book(callback_type(cb), cfg) {
   }
 
@@ -497,8 +497,8 @@ private:
   /// The live orders indexed by the "order reference number"
   orders_by_id orders_;
 
-  /// pointer to the order book config
-  typename order_book<book_type>::config const& cfg_;
+  /// reference to the order book config
+  book_type_config const& cfg_;
 };
 
 inline bool operator==(book_update const& a, book_update const& b) {
