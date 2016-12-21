@@ -85,17 +85,15 @@ int constexpr TK_DOLLAR = 10000;
  * keep the prices around the inside. We are hoping this makes a faster
  * order book side (instead of map based).
  *
- * The top_levels_ range is kept by px_begin_top_ (worst price on the range)
- * and px_end_top_ (best price on the range).
- * If a price is worse than the px_begin_top_ is kept on the bottom_levels_
- * (regular map).
- * When a new inside crosses the limits of top_levels_, then the limits are
- * redefined and prices are moved to or from bottom_levels_ depending on the
- * direction the new inside is moving.
- *
- * The main motivation of this implementation is to have a second order book
- * side type (in addition to map_based_order_book) in order for them to be
- * tested/compare with the jaybeams FFT infrastructure.
+ * We have observed that most of the changes to an order book happen
+ * in the levels closer to the inside.  We are trying to exploit this
+ * observation by using a vector<> for the N levels closer to the inside,
+ * as updates in a vector should be O(1) instead of O(log N) for tree-based
+ * implementations, and O(1) (with a larger constant) for hash-based
+ * implementations.
+ * This introduces some complexity: maintaining all the levels in the vector
+ * would consume too much memory, so we use a vector for the N levels
+ * closer to the inside, and a map for all the other levels.
  *
  * Class implementation of struct
  * array_based_order_book buy and side types.
