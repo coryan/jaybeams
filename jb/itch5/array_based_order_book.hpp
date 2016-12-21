@@ -344,20 +344,6 @@ public:
     return better_(px1, px2);
   }
 
-  /** Testing hook.
-   * @returns {px_begin_top_, px_end_top_}
-   */
-  auto get_limits() const {
-    return std::make_tuple(px_begin_top_, px_end_top_);
-  }
-
-  /** Testing hook.
-   * @returns {bottom_levels_ size , top_levels_ size}
-   */
-  auto get_counts() const {
-    return std::make_pair(bottom_levels_.size(), top_levels_count());
-  }
-
   /** Testing hooks to increase coverage
    */
   auto test_price_to_relative(price4_t const& px) const {
