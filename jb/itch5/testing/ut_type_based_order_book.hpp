@@ -119,10 +119,6 @@ void test_side_type_errors_spec(side_type& tested) {
     diff = 10000;
   }
 
-  /// Uses Testing hooks to increase coverage
-  /// test with an empty side
-  BOOST_CHECK_THROW(tested.test_relative_worst_top_level(), jb::feed_error);
-
   // Add two orders to the book ...
   (void)tested.add_order(price4_t(100000), 100);
   (void)tested.add_order(price4_t(100000 - diff), 200);
@@ -137,25 +133,6 @@ void test_side_type_errors_spec(side_type& tested) {
   // ... reduce non existing order better the inside
   BOOST_CHECK_THROW(
       tested.reduce_order(price4_t(100000 - 2 * diff), 100), jb::feed_error);
-
-  /** Uses Testing hooks to increase coverage
-   * px worse than the low limit
-   */
-  if (diff < 0) {
-    // buy side
-    BOOST_CHECK_THROW(
-        tested.test_price_to_relative(price4_t(100)), jb::feed_error);
-    /// to test with a px worse than px_begin_top
-    BOOST_CHECK_THROW(
-        tested.test_move_top_to_bottom(price4_t(100)), jb::feed_error);
-  } else {
-    // sell side
-    BOOST_CHECK_THROW(
-        tested.test_price_to_relative(price4_t(1000000)), jb::feed_error);
-    /// to test with a px worse than px_begin_top
-    BOOST_CHECK_THROW(
-        tested.test_move_top_to_bottom(price4_t(1000000)), jb::feed_error);
-  }
 }
 
 template <typename side_type>

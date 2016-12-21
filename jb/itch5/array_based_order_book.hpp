@@ -4,6 +4,7 @@
 #include <jb/itch5/half_quote.hpp>
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/price_levels.hpp>
+#include <jb/assert_throw.hpp>
 #include <jb/config_object.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
@@ -344,20 +345,6 @@ public:
     return better_(px1, px2);
   }
 
-  /** Testing hooks to increase coverage
-   */
-  auto test_price_to_relative(price4_t const& px) const {
-    return price_to_relative(px);
-  }
-  // to test when is an empty side
-  auto test_relative_worst_top_level() const {
-    return relative_worst_top_level();
-  }
-  // to test with a px worse than px_begin_top
-  void test_move_top_to_bottom(price4_t const& px) {
-    move_top_to_bottom(px);
-  }
-
 private:
   /// The value used to represent an empty bid
   static half_quote empty_bid() {
@@ -449,13 +436,8 @@ private:
    * @returns top_levels_ relative position of px compare with px_begin_top_
    */
   std::size_t price_to_relative(price4_t const& px) const {
-    if (better_(px_begin_top_, px)) {
-      std::ostringstream os;
-      os << "array_based_order_book::price_to_relative."
-         << " Price out of range"
-         << " px_begin_top_=" << px_begin_top_ << " px=" << px;
-      throw jb::feed_error(os.str());
-    }
+    // check px is in range (better than px_bing_top_)
+    JB_ASSERT_THROW(not better_(px_begin_top_, px));
     int tk_px = price_levels(price4_t(0), px);
     int tk_begin_top = price_levels(price4_t(0), px_begin_top_);
     return std::abs(tk_px - tk_begin_top);
@@ -472,12 +454,7 @@ private:
         return i; // found it
       }
     }
-    // wow! this is a problem... top_levels_ was not considered empty
-    std::ostringstream os;
-    os << "array_based_order_book::relative_worst_top_level."
-       << " Seems to be an empty side"
-       << " px_inside=" << px_inside_;
-    throw jb::feed_error(os.str());
+    return max_size_; // not found!
   }
 
   /// @returns number of valid prices (>0) at top_levels_
@@ -521,21 +498,12 @@ private:
    *
    * @param px_max first limit price that is not moved out.
    *
-   * @throw feed_error px_max is not in range (better or equal to px_begin_top_)
-   *
    * Inserts the prices into bottom_levels_
    * Shift top_levels_ prices in order for rel_max to become relative 0
    * Clear (value = 0) former relative position of moved prices
    */
   void move_top_to_bottom(price4_t const px_max) {
-    if (better_(px_begin_top_, px_max)) {
-      // wow! this is a problem... incorrect value
-      std::ostringstream os;
-      os << "array_based_order_book::move_top_to_bottom."
-         << " Value out of range"
-         << " px_begin_top_=" << px_begin_top_ << " px_max=" << px_max;
-      throw jb::feed_error(os.str());
-    }
+    JB_ASSERT_THROW(not better_(px_begin_top_, px_max));
     // if px_max is better than px_inside_
     if (better_(px_max, px_inside_)) {
       // ... all top_prices_ have to be moved out
