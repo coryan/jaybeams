@@ -147,8 +147,11 @@ void test_side_type_add_reduce(side_type& tested) {
   }
   int base_p = 4000000;
 
+  BOOST_CHECK_EQUAL(tested.count(), 0);
+
   // Add a new order ...
   auto r = tested.add_order(price4_t(base_p), 100);
+  BOOST_CHECK_EQUAL(tested.count(), 1);
 
   // .. best quote should change ...
   auto actual = tested.best_quote();
