@@ -101,7 +101,6 @@ int constexpr TK_DOLLAR = 10000;
 template <typename compare_t>
 class array_based_book_side {
 public:
-  class config;
   explicit array_based_book_side(array_based_order_book::config const& cfg)
       : better_price_()
       , max_size_(cfg.max_size())
