@@ -17,7 +17,7 @@ namespace itch5 {
  * @throws std::bad_range if @a hi < @a lo
  */
 template <typename price_field_t>
-int price_levels(price_field_t lo, price_field_t hi) {
+std::size_t price_levels(price_field_t lo, price_field_t hi) {
   static_assert(
       price_field_t::denom >= 10000,
       "price_levels() does not work with denom < 10000");
@@ -44,6 +44,35 @@ int price_levels(price_field_t lo, price_field_t hi) {
   }
   // ... split the analysis ...
   return price_levels(lo, unit) + price_levels(unit, hi);
+}
+
+/**
+ * Compute the absolute price of a price level.
+ *
+ * @param p_level price level
+ * @returns absolute price
+ * @throws std::bad_range if p_level out of range
+ */
+template <typename price_field_t>
+auto level_to_price(typename price_field_t::wire_type const p_level) {
+  static_assert(
+      price_field_t::denom >= 10000,
+      "price_levels() does not work with denom < 10000");
+  static_assert(
+      price_field_t::denom % 10000 == 0,
+      "price_levels() does not work with (denom % 10000) != 0");
+
+  price_field_t const max_price = max_price_field_value<price_field_t>();
+  typename price_field_t::wire_type const max_level =
+      price_levels(price_field_t(0), max_price);
+  if (p_level > max_level) {
+    throw std::range_error("invalid price range in price_levels()");
+  }
+  if (p_level <= price_field_t::denom) {
+    return price_field_t(p_level);
+  }
+  int rem = (p_level - price_field_t::denom) * 100 + price_field_t::denom;
+  return price_field_t(rem);
 }
 
 } // namespace itch5
