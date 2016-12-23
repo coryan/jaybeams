@@ -88,3 +88,38 @@ BOOST_AUTO_TEST_CASE(launch_thread_basic) {
   BOOST_CHECK_EQUAL(g.value, 42);
   BOOST_CHECK_EQUAL(g.msg, "42");
 }
+
+/**
+ * @test Verify that jb::launch_thread<> detects OS errors.
+ */
+BOOST_AUTO_TEST_CASE(launch_thread_errors) {
+  jb::thread_config cfg;
+  cfg.ignore_setup_errors(false);
+  cfg.name("name_too_long_should_fail__1234567890ABCDEF__");
+
+  BOOST_TEST_MESSAGE("main id=" << std::this_thread::get_id());
+  int cnt = 0;
+  std::thread t;
+  jb::launch_thread(t, cfg, [&cnt]() {
+    BOOST_TEST_MESSAGE("id=" << std::this_thread::get_id());
+    ++cnt;
+  });
+  t.join();
+  BOOST_CHECK_EQUAL(cnt, 0);
+
+  cfg.name("").affinity(jb::cpu_set::parse("512"));
+  jb::launch_thread(t, cfg, [&cnt]() {
+    BOOST_TEST_MESSAGE("id=" << std::this_thread::get_id());
+    ++cnt;
+  });
+  t.join();
+  BOOST_CHECK_EQUAL(cnt, 0);
+
+  cfg.affinity(jb::cpu_set::parse("")).priority("1000000");
+  jb::launch_thread(t, cfg, [&cnt]() {
+    BOOST_TEST_MESSAGE("id=" << std::this_thread::get_id());
+    ++cnt;
+  });
+  t.join();
+  BOOST_CHECK_EQUAL(cnt, 0);
+}

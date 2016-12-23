@@ -1,4 +1,5 @@
 #include <jb/cpu_set.hpp>
+#include <jb/convert_cpu_set.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -197,4 +198,52 @@ BOOST_AUTO_TEST_CASE(cpu_set_istream) {
     BOOST_CHECK_EQUAL(a.status(300), true);
     BOOST_CHECK_EQUAL(a.status(301), true);
   }
+}
+
+/**
+ * @test Verify that the clear() operation works as expected for a range.
+ */
+BOOST_AUTO_TEST_CASE(cpu_set_clear) {
+  jb::cpu_set a;
+  a.set(2);
+  a.set(3);
+  a.set(4);
+  BOOST_CHECK_EQUAL(a.count(), 3);
+  BOOST_CHECK_EQUAL(a.status(3), true);
+  a.clear(2, 4);
+  BOOST_CHECK_EQUAL(a.count(), 0);
+  BOOST_CHECK_EQUAL(a.status(3), false);
+}
+
+/**
+ * @test Verify that the parse() function works as expected for
+ * invalid inputs.
+ */
+BOOST_AUTO_TEST_CASE(cpu_set_parse_invalid) {
+  BOOST_CHECK_THROW(jb::cpu_set::parse("zzz"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("1-zzz"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("zzz-2"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("1-2-zzz"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("1-2-3"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("-"), std::exception);
+  BOOST_CHECK_THROW(jb::cpu_set::parse("--"), std::exception);
+  BOOST_CHECK_NO_THROW(jb::cpu_set::parse("1-2"));
+}
+
+/**
+ * @test Verify that the YAML conversion functions work as expected.
+ */
+BOOST_AUTO_TEST_CASE(cpu_set_yaml_convert) {
+  jb::cpu_set empty;
+  YAML::Node encoded = YAML::convert<jb::cpu_set>::encode(empty);
+  BOOST_CHECK_EQUAL(encoded.as<std::string>(), std::string(""));
+  jb::cpu_set decoded;
+  YAML::convert<jb::cpu_set>::decode(encoded, decoded);
+  BOOST_CHECK_EQUAL(empty, decoded);
+  
+  jb::cpu_set a = jb::cpu_set::parse("1,3-5");
+  encoded = YAML::convert<jb::cpu_set>::encode(a);
+  BOOST_CHECK_EQUAL(encoded.as<std::string>(), std::string("1,3-5"));
+  YAML::convert<jb::cpu_set>::decode(encoded, decoded);
+  BOOST_CHECK_EQUAL(a, decoded);
 }

@@ -3,8 +3,8 @@
 #include <system_error>
 
 void jb::detail::os_check_error(int r, char const* msg) {
-  if (r != -1) {
+  if (r == 0) {
     return;
   }
-  throw std::system_error(errno, std::system_category(), msg);
+  throw std::system_error(r, std::system_category(), msg);
 }
