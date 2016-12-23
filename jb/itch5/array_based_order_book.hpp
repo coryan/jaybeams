@@ -76,7 +76,8 @@ public:
 };
 
 /// price level limit between mill and penny
-int constexpr TK_DOLLAR = 10000;
+  std::size_t const TK_DOLLAR =
+      price_levels(price4_t(0), price4_t::dollar_price());
 
 /**
  * Represent one side of the book.

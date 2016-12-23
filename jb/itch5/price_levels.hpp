@@ -25,7 +25,7 @@ std::size_t price_levels(price_field_t lo, price_field_t hi) {
       price_field_t::denom % 10000 == 0,
       "price_levels() does not work with (denom % 10000) != 0");
 
-  price_field_t const unit = price_field_t(price_field_t::denom);
+  price_field_t const unit = price_field_t::dollar_price();
   auto constexpr penny = price_field_t::denom / 100;
   auto constexpr mill = penny / 100;
 
@@ -63,7 +63,7 @@ auto level_to_price(typename price_field_t::wire_type const p_level) {
       "price_levels() does not work with (denom % 10000) != 0");
 
   price_field_t const max_price = max_price_field_value<price_field_t>();
-  typename price_field_t::wire_type const max_level =
+  std::size_t const max_level =
       price_levels(price_field_t(0), max_price);
   if (p_level > max_level) {
     throw std::range_error("invalid price range in price_levels()");
