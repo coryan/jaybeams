@@ -233,15 +233,6 @@ public:
     auto tk_px = price_levels(price4_t(0), px);
     // check and handles if it is a bottom_level_ price
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
-      if (bottom_levels_.empty()) {
-        std::ostringstream os;
-        os << "array_based_order_book::reduce_order."
-           << " Trying to reduce a non-existing bottom_levels_ price"
-           << " (empty bottom_levels_)."
-           << " tk_begin_top_=" << tk_begin_top_ << " px=" << px
-           << " qty=" << qty;
-        throw jb::feed_error(os.str());
-      }
       auto price_it = bottom_levels_.find(px);
       if (price_it == bottom_levels_.end()) {
         std::ostringstream os;
