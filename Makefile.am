@@ -16,6 +16,7 @@ jb_unit_tests = \
   jb/ut_config_files_location \
   jb/ut_config_object \
   jb/ut_config_object_vector \
+  jb/ut_cpu_set \
   jb/ut_event_rate_estimator \
   jb/ut_event_rate_histogram \
   jb/ut_explicit_cuts_binning \
@@ -24,11 +25,13 @@ jb_unit_tests = \
   jb/ut_histogram \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
+  jb/ut_launch_thread \
   jb/ut_logging \
   jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
   jb/ut_severity_level \
-  jb/ut_strtonum
+  jb/ut_strtonum \
+  jb/ut_thread_config
 
 jb_itch5_unit_tests = \
   jb/itch5/ut_add_order_message \
@@ -212,7 +215,12 @@ nobase_jb_libjb_a_HEADERS = \
   jb/config_files_location.hpp \
   jb/config_object.hpp \
   jb/config_recurse.hpp \
+  jb/convert_cpu_set.hpp \
   jb/convert_severity_level.hpp \
+  jb/cpu_set.hpp \
+  jb/detail/os_error.hpp \
+  jb/detail/reconfigure_thread.hpp \
+  jb/detail/thread_setup_wrapper.hpp \
   jb/event_rate_estimator.hpp \
   jb/event_rate_histogram.hpp \
   jb/explicit_cuts_binning.hpp \
@@ -222,11 +230,13 @@ nobase_jb_libjb_a_HEADERS = \
   jb/histogram.hpp \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
+  jb/launch_thread.hpp \
   jb/log.hpp \
   jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
+  jb/thread_config.hpp \
   jb/usage.hpp
 
 jb_libjb_a_SOURCES = \
@@ -235,13 +245,17 @@ jb_libjb_a_SOURCES = \
   jb/book_depth_statistics.cpp \
   jb/config_files_location.cpp \
   jb/config_object.cpp \
+  jb/cpu_set.cpp \
+  jb/detail/os_error.cpp \
+  jb/detail/reconfigure_thread.cpp \
   jb/fileio.cpp \
   jb/filetype.cpp \
   jb/histogram_summary.cpp \
   jb/log.cpp \
   jb/merge_yaml.cpp \
   jb/offline_feed_statistics.cpp \
-  jb/severity_level.cpp
+  jb/severity_level.cpp \
+  jb/thread_config.cpp
 
 jb_libjb_a_LIBADD = 
 
@@ -313,7 +327,6 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/broken_trade_message.cpp \
   jb/itch5/char_list_validator.cpp \
   jb/itch5/check_offset.cpp \
-  jb/itch5/compute_book.cpp \
   jb/itch5/cross_trade_message.cpp \
   jb/itch5/ipo_quoting_period_update_message.cpp \
   jb/itch5/market_participant_position_message.cpp \
@@ -323,7 +336,6 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/mwcb_breach_message.cpp \
   jb/itch5/mwcb_decline_level_message.cpp \
   jb/itch5/net_order_imbalance_indicator_message.cpp \
-  jb/itch5/order_book.cpp \
   jb/itch5/order_cancel_message.cpp \
   jb/itch5/order_delete_message.cpp \
   jb/itch5/order_executed_message.cpp \
@@ -364,7 +376,6 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/mwcb_decline_level_message.hpp \
   jb/itch5/net_order_imbalance_indicator_message.hpp \
   jb/itch5/order_book.hpp \
-  jb/itch5/order_book_def.hpp \
   jb/itch5/order_cancel_message.hpp \
   jb/itch5/order_delete_message.hpp \
   jb/itch5/order_executed_message.hpp \
@@ -474,6 +485,10 @@ jb_ut_config_object_vector_SOURCES = jb/ut_config_object_vector.cpp
 jb_ut_config_object_vector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_object_vector
 jb_ut_config_object_vector_LDADD = $(jb_ut_libs)
 
+jb_ut_cpu_set_SOURCES = jb/ut_cpu_set.cpp
+jb_ut_cpu_set_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_cpu_set
+jb_ut_cpu_set_LDADD = $(jb_ut_libs)
+
 jb_ut_event_rate_estimator_SOURCES = jb/ut_event_rate_estimator.cpp
 jb_ut_event_rate_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_event_rate_estimator
 jb_ut_event_rate_estimator_LDADD = $(jb_ut_libs)
@@ -506,6 +521,10 @@ jb_ut_integer_range_binning_SOURCES = jb/ut_integer_range_binning.cpp
 jb_ut_integer_range_binning_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_integer_range_binning
 jb_ut_integer_range_binning_LDADD = $(jb_ut_libs)
 
+jb_ut_launch_thread_SOURCES = jb/ut_launch_thread.cpp
+jb_ut_launch_thread_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_launch_thread
+jb_ut_launch_thread_LDADD = $(jb_ut_libs)
+
 jb_ut_logging_SOURCES = jb/ut_logging.cpp
 jb_ut_logging_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_logging
 jb_ut_logging_LDADD = $(jb_ut_libs)
@@ -525,6 +544,10 @@ jb_ut_severity_level_LDADD = $(jb_ut_libs)
 jb_ut_strtonum_SOURCES = jb/ut_strtonum.cpp
 jb_ut_strtonum_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_strtonum
 jb_ut_strtonum_LDADD = $(jb_ut_libs)
+
+jb_ut_thread_config_SOURCES = jb/ut_thread_config.cpp
+jb_ut_thread_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_thread_config
+jb_ut_thread_config_LDADD = $(jb_ut_libs)
 
 ################################################################
 # fftw unit tests

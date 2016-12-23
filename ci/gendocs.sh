@@ -7,8 +7,11 @@ set -ev
 git config --global user.name "${GIT_NAME?}"
 git config --global user.email "${GIT_EMAIL?}"
 
+# get the repo url 
+REPO_URL=$(git config --get remote.origin.url)
+
 # ... notice the target directory ...
-git clone https://github.com/coryan/jaybeams doc/html
+git clone "${REPO_URL?}" doc/html
 
 # Kill them all; let Git sort them out.
 # ... basically we remove any existing pages and then add everything
@@ -25,7 +28,7 @@ git add --all .
 
 # ... we always commit the changes locally, and if there is nothing to
 # commit exit successfully ...
-git commit -q -m"Automatically generated documentation" || exit 0
+git commit -q -m "Automatically generated documentation" || exit 0
 
 exit 0
 

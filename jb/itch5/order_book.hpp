@@ -2,20 +2,31 @@
 #define jb_itch5_order_book_hpp
 
 #include <jb/itch5/buy_sell_indicator.hpp>
-#include <jb/itch5/order_book_def.hpp>
 #include <jb/itch5/price_field.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
 #include <functional>
-#include <map>
 #include <utility>
 
 namespace jb {
 namespace itch5 {
 
+/**
+ * Define the types of buy and sell sides data structure.
+ *
+ * It is used as template parameter book_type of the
+ * template class order_book:
+ * - usage: jb::itch5::order_book<jb::itch5::map_price>
+ */
+struct map_price {
+  using buys_t = std::map<price4_t, int, std::greater<price4_t>>;
+  using sells_t = std::map<price4_t, int, std::less<price4_t>>;
+};
+
 /// A simple representation for price + quantity
-typedef std::pair<price4_t, int> half_quote;
+using half_quote = std::pair<price4_t, int>;
+using book_depth_t = unsigned long int;
 
 /**
  * Maintain the ITCH-5.0 order book for a single security.
@@ -42,7 +53,13 @@ typedef std::pair<price4_t, int> half_quote;
  * the total quantity available at that price?
  * - What is the best offer (lowest price of SELL orders) and what is
  * the total quantity available at that price?
+ *
+ * This is a template class.
+ * @tparam book_type defines data structure type of price book,
+ * both sides buy and sell. Must be compatible with jb::itch5::map_price
  */
+
+template <typename book_type>
 class order_book {
 public:
   /// Initialize an empty order book.
@@ -64,13 +81,40 @@ public:
    */
 
   /// @returns the best bid price and quantity
-  half_quote best_bid() const;
+  half_quote best_bid() const {
+    if (buy_.empty()) {
+      return empty_bid();
+    }
+    auto i = buy_.begin();
+    return half_quote(i->first, i->second);
+  }
+
   /// @returns the worst bid price and quantity
-  half_quote worst_bid() const;
+  half_quote worst_bid() const {
+    if (buy_.empty()) {
+      return empty_bid();
+    }
+    auto i = buy_.rbegin();
+    return half_quote(i->first, i->second);
+  }
+
   /// @returns the best offer price and quantity
-  half_quote best_offer() const;
+  half_quote best_offer() const {
+    if (sell_.empty()) {
+      return empty_offer();
+    }
+    auto i = sell_.begin();
+    return half_quote(i->first, i->second);
+  }
+
   /// @returns the worst offer price and quantity
-  half_quote worst_offer() const;
+  half_quote worst_offer() const {
+    if (sell_.empty()) {
+      return empty_offer();
+    }
+    auto i = sell_.rbegin();
+    return half_quote(i->first, i->second);
+  }
 
   /// @returns the number of levels with non-zero quantity for the BUY side.
   std::size_t buy_count() const {
@@ -174,11 +218,8 @@ private:
   }
 
 private:
-  typedef std::map<price4_t, int, std::greater<price4_t>> buys;
-  typedef std::map<price4_t, int, std::less<price4_t>> sells;
-
-  buys buy_;
-  sells sell_;
+  typename book_type::buys_t buy_;
+  typename book_type::sells_t sell_;
 };
 
 } // namespace itch5
