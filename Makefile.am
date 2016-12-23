@@ -350,7 +350,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/cross_type.hpp \
   jb/itch5/decoder.hpp \
   jb/itch5/generate_inside.hpp \
-  jb/itch5/half_quote.hpp \
+  jb/itch5/quote_defaults.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
   jb/itch5/map_based_order_book.hpp \
