@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_CASE(cpu_set_basic) {
   jb::cpu_set a;
   BOOST_REQUIRE_GT(a.capacity(), 0);
 
-  BOOST_MESSAGE("cpu_set capacity is " << a.capacity());
+  BOOST_TEST_MESSAGE("cpu_set capacity is " << a.capacity());
 
   a.set(1);
   a.set(3);
@@ -140,7 +140,6 @@ BOOST_AUTO_TEST_CASE(cpu_set_ostream) {
     os << a;
     BOOST_CHECK_EQUAL(os.str(), std::string("1-5,7,10-200,300-301"));
   }
-
 }
 
 /**
@@ -168,9 +167,7 @@ BOOST_AUTO_TEST_CASE(cpu_set_istream) {
     is >> a;
     BOOST_CHECK_EQUAL(a.count(), 5);
     for (int i = 1; i != 6; ++i) {
-      BOOST_CHECK_MESSAGE(
-          a.status(i),
-          "a.status(i) not true for i=" << i);
+      BOOST_CHECK_MESSAGE(a.status(i), "a.status(i) not true for i=" << i);
     }
   }
 
@@ -180,9 +177,7 @@ BOOST_AUTO_TEST_CASE(cpu_set_istream) {
     is >> a;
     BOOST_CHECK_EQUAL(a.count(), 6);
     for (int i = 1; i != 6; ++i) {
-      BOOST_CHECK_MESSAGE(
-          a.status(i),
-          "a.status(i) not true for i=" << i);
+      BOOST_CHECK_MESSAGE(a.status(i), "a.status(i) not true for i=" << i);
     }
     BOOST_CHECK_EQUAL(a.status(7), true);
   }
@@ -193,14 +188,10 @@ BOOST_AUTO_TEST_CASE(cpu_set_istream) {
     is >> a;
     BOOST_CHECK_EQUAL(a.count(), 199);
     for (int i = 1; i != 6; ++i) {
-      BOOST_CHECK_MESSAGE(
-          a.status(i),
-          "a.status(i) not true for i=" << i);
+      BOOST_CHECK_MESSAGE(a.status(i), "a.status(i) not true for i=" << i);
     }
     for (int i = 10; i != 200; ++i) {
-      BOOST_CHECK_MESSAGE(
-          a.status(i),
-          "a.status(i) not true for i=" << i);
+      BOOST_CHECK_MESSAGE(a.status(i), "a.status(i) not true for i=" << i);
     }
     BOOST_CHECK_EQUAL(a.status(7), true);
     BOOST_CHECK_EQUAL(a.status(300), true);
