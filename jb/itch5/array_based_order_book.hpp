@@ -78,10 +78,6 @@ public:
   jb::config_attribute<config, std::size_t> max_size;
 };
 
-/// price level limit between mill and penny
-std::size_t const TK_DOLLAR =
-    price_levels(price4_t(0), price4_t::dollar_price());
-
 /**
  * Represent one side of the book.
  *
