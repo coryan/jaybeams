@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['ignore_5fsetup_5ferrors',['ignore_setup_errors',['../classjb_1_1thread__config.html#ae4986998a011fc6fc882063c7d00c627',1,'jb::thread_config::ignore_setup_errors()'],['../namespacejb_1_1defaults.html#a547f91d66c2147f8e0c18fefedb8bb88',1,'jb::defaults::ignore_setup_errors()']]],
   ['imbalance_5fdirection',['imbalance_direction',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ae87c9afdc0c68c7a1ebd78ec432a79f5',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['imbalance_5fdirection_5ft',['imbalance_direction_t',['../namespacejb_1_1itch5.html#a21b9b3380ceb5f904362fe9ddb82dc3a',1,'jb::itch5']]],
   ['imbalance_5fshares',['imbalance_shares',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8eb4065c28520c0e678cee59522d92cf',1,'jb::itch5::net_order_imbalance_indicator_message']]],

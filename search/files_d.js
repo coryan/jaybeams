@@ -12,5 +12,7 @@ var searchData=
   ['order_5fexecuted_5fprice_5fmessage_2ecpp',['order_executed_price_message.cpp',['../order__executed__price__message_8cpp.html',1,'']]],
   ['order_5fexecuted_5fprice_5fmessage_2ehpp',['order_executed_price_message.hpp',['../order__executed__price__message_8hpp.html',1,'']]],
   ['order_5freplace_5fmessage_2ecpp',['order_replace_message.cpp',['../order__replace__message_8cpp.html',1,'']]],
-  ['order_5freplace_5fmessage_2ehpp',['order_replace_message.hpp',['../order__replace__message_8hpp.html',1,'']]]
+  ['order_5freplace_5fmessage_2ehpp',['order_replace_message.hpp',['../order__replace__message_8hpp.html',1,'']]],
+  ['os_5ferror_2ecpp',['os_error.cpp',['../os__error_8cpp.html',1,'']]],
+  ['os_5ferror_2ehpp',['os_error.hpp',['../os__error_8hpp.html',1,'']]]
 ];

@@ -6,7 +6,7 @@ var searchData=
   ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#a49fc0bb532133c9d3c8db1f20149c2db',1,'jb::itch5::order_book']]],
   ['enable_5fconsole_5flogging',['enable_console_logging',['../classjb_1_1log_1_1config.html#a47acc5c6c7048e2cc5482e78a78e31e9',1,'jb::log::config::enable_console_logging()'],['../namespacejb_1_1log_1_1defaults.html#a79eaf93d0011866944e62a67437cfcc1',1,'jb::log::defaults::enable_console_logging()']]],
   ['enable_5ffile_5flogging',['enable_file_logging',['../classjb_1_1log_1_1config.html#a23de33a08f412a865cbe0d19177698c6',1,'jb::log::config::enable_file_logging()'],['../namespacejb_1_1log_1_1defaults.html#a5ae3b08c0be6fe1a4e0dc82457e4dd09',1,'jb::log::defaults::enable_file_logging()']]],
-  ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;']]],
+  ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1cpu__set_01_4.html#ae6f147056708c3a4e63b3c9e7523a7bb',1,'YAML::convert&lt; jb::cpu_set &gt;::encode()'],['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;::encode()']]],
   ['encoder',['encoder',['../structjb_1_1itch5_1_1encoder.html',1,'jb::itch5']]],
   ['encoder_2ehpp',['encoder.hpp',['../encoder_8hpp.html',1,'']]],
   ['encoder_3c_20validate_2c_20std_3a_3auint16_5ft_20_3e',['encoder&lt; validate, std::uint16_t &gt;',['../structjb_1_1itch5_1_1encoder_3_01validate_00_01std_1_1uint16__t_01_4.html',1,'jb::itch5']]],

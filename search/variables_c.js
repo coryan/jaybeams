@@ -17,7 +17,7 @@ var searchData=
   ['price_5fvariation_5findicator',['price_variation_indicator',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a1f5beb4cd961c0c55f17342265add7f1',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['primary_5fmarket_5fmaker',['primary_market_maker',['../structjb_1_1itch5_1_1market__participant__position__message.html#a17f1d0f35656bc38d5740517382b1ffa',1,'jb::itch5::market_participant_position_message']]],
   ['printable',['printable',['../structjb_1_1itch5_1_1order__executed__price__message.html#a7c18ba4a5fe232f00c18b60d791e0a77',1,'jb::itch5::order_executed_price_message']]],
-  ['priority',['priority',['../classthread__config.html#ad49af9ae9eca36db5aca5f97a430b7ec',1,'thread_config']]],
+  ['priority',['priority',['../classjb_1_1thread__config.html#a95de796feff2a7da38e851fc48c0749a',1,'jb::thread_config::priority()'],['../classthread__config.html#ad49af9ae9eca36db5aca5f97a430b7ec',1,'thread_config::priority()']]],
   ['processing_5flatency_5f',['processing_latency_',['../classjb_1_1offline__feed__statistics.html#a197ef7696ca059b6c4128b78565db95c',1,'jb::offline_feed_statistics']]],
   ['px',['px',['../namespacejb_1_1itch5.html#a6e8132b3fc30ca205c549a80d6c7c2bd',1,'jb::itch5::book_update::px()'],['../namespacejb_1_1itch5.html#a751e5fe67f8854cafd3802a99d085069',1,'jb::itch5::order_data::px()']]]
 ];

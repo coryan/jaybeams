@@ -1,10 +1,11 @@
 var searchData=
 [
   ['n',['n',['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#aeb06359985a8195b357e4af50f8d44ad',1,'jb::testing::microbenchmark_base::summary']]],
-  ['name',['name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a291167dd8c9d7a716bebabf4ff8e6508',1,'jb::config_object::attribute_descriptor::name()'],['../classthread__config.html#af9a28a1d6ce3f56b8e699a1974d9e6bd',1,'thread_config::name()'],['../classjb_1_1config__object_1_1attribute__base.html#a904c70d9488d909bcc2eec237fd4e71d',1,'jb::config_object::attribute_base::name()']]],
+  ['name',['name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a291167dd8c9d7a716bebabf4ff8e6508',1,'jb::config_object::attribute_descriptor::name()'],['../classjb_1_1thread__config.html#a74898b385094d00d02237e21f5282892',1,'jb::thread_config::name()'],['../classthread__config.html#af9a28a1d6ce3f56b8e699a1974d9e6bd',1,'thread_config::name()'],['../classjb_1_1config__object_1_1attribute__base.html#a904c70d9488d909bcc2eec237fd4e71d',1,'jb::config_object::attribute_base::name()']]],
   ['namespaces_2edox',['namespaces.dox',['../namespaces_8dox.html',1,'']]],
-  ['native_5fpriority',['native_priority',['../classthread__config.html#a84826188fa4e0d57154ad72ba5409797',1,'thread_config']]],
-  ['native_5fscheduling_5fpolicy',['native_scheduling_policy',['../classthread__config.html#a87f9a3b3e0b378857c200d3365bba410',1,'thread_config']]],
+  ['native_5fhandle',['native_handle',['../classjb_1_1cpu__set.html#af9e0ab5eef23f4d889db5f797db2b703',1,'jb::cpu_set::native_handle()'],['../classjb_1_1cpu__set.html#ad9b7fb784b8cf98f8fcf1e6c0d60cf20',1,'jb::cpu_set::native_handle() const ']]],
+  ['native_5fpriority',['native_priority',['../classjb_1_1thread__config.html#a84826188fa4e0d57154ad72ba5409797',1,'jb::thread_config::native_priority()'],['../classthread__config.html#a84826188fa4e0d57154ad72ba5409797',1,'thread_config::native_priority()']]],
+  ['native_5fscheduling_5fpolicy',['native_scheduling_policy',['../classjb_1_1thread__config.html#a87f9a3b3e0b378857c200d3365bba410',1,'jb::thread_config::native_scheduling_policy()'],['../classthread__config.html#a87f9a3b3e0b378857c200d3365bba410',1,'thread_config::native_scheduling_policy()']]],
   ['nbins',['nbins',['../classjb_1_1histogram.html#a2b64d077321ffa69b6632fda4e28160e',1,'jb::histogram']]],
   ['near_5fprice',['near_price',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a760aa7c02cd6d39a38c1bc2c39e77dc4',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['net_5forder_5fimbalance_5findicator',['net_order_imbalance_indicator',['../namespacejb_1_1itch5_1_1testing.html#a40ef0ca7e16f86283e2e8ef9879bd98d',1,'jb::itch5::testing']]],

@@ -3,7 +3,7 @@ var searchData=
   ['element_5fcount',['element_count',['../namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b',1,'jb::fftw::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)'],['../namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc',1,'jb::fftw::detail::element_count(std::vector&lt; T, A &gt; const &amp;a)']]],
   ['empty_5fbid',['empty_bid',['../classjb_1_1itch5_1_1order__book.html#a263044619eddd0811c2920d72ab51f07',1,'jb::itch5::order_book']]],
   ['empty_5foffer',['empty_offer',['../classjb_1_1itch5_1_1order__book.html#a49fc0bb532133c9d3c8db1f20149c2db',1,'jb::itch5::order_book']]],
-  ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;']]],
+  ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1cpu__set_01_4.html#ae6f147056708c3a4e63b3c9e7523a7bb',1,'YAML::convert&lt; jb::cpu_set &gt;::encode()'],['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;::encode()']]],
   ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818',1,'jb::fftw::time_delay_estimator']]],
   ['estimated_5fmean',['estimated_mean',['../classjb_1_1histogram.html#aa73371973ff3b372acfd5d3fbe8b9238',1,'jb::histogram']]],
   ['estimated_5fquantile',['estimated_quantile',['../classjb_1_1histogram.html#a6c02b97a76ebee1a0bfbf2953130f213',1,'jb::histogram']]],
