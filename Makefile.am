@@ -309,6 +309,7 @@ nobase_jb_libitch5_a_HEADERS =
 jb_libitch5_a_SOURCES = \
   jb/itch5/add_order_message.cpp \
   jb/itch5/add_order_mpid_message.cpp \
+  jb/itch5/array_based_order_book.cpp \
   jb/itch5/base_decoders.cpp \
   jb/itch5/broken_trade_message.cpp \
   jb/itch5/char_list_validator.cpp \
