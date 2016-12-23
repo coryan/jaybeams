@@ -7,8 +7,8 @@
  * @test Trivial verification that array_based_order_book works as expected.
  */
 BOOST_AUTO_TEST_CASE(array_based_order_book_trivial) {
-  jb::itch5::array_based_order_book tested;
-  jb::itch5::testing::test_order_book_type_trivial(tested);
+  using namespace jb::itch5;
+  testing::test_order_book_type_trivial<array_based_order_book>();
 }
 
 /**
@@ -16,17 +16,17 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_trivial) {
  */
 
 BOOST_AUTO_TEST_CASE(array_based_order_book_test) {
-  jb::itch5::array_based_order_book tested;
-  jb::itch5::testing::test_order_book_type_add_reduce(tested);
+  using namespace jb::itch5;
+  testing::test_order_book_type_add_reduce<array_based_order_book>();
 }
 
 /**
  * @test Verify that array_based_order_book handles errors as expected.
  */
 BOOST_AUTO_TEST_CASE(array_based_order_book_errors) {
-  jb::itch5::array_based_order_book tested;
-  jb::itch5::testing::test_order_book_type_errors(tested);
-  jb::itch5::testing::test_order_book_type_errors_spec(tested);
+  using namespace jb::itch5;
+  testing::test_order_book_type_errors<array_based_order_book>();
+  testing::test_order_book_type_errors_spec<array_based_order_book>();
 }
 
 /**

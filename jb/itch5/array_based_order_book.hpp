@@ -1,9 +1,9 @@
 #ifndef jb_itch5_array_based_order_book_hpp
 #define jb_itch5_array_based_order_book_hpp
 
-#include <jb/itch5/half_quote.hpp>
 #include <jb/itch5/price_field.hpp>
 #include <jb/itch5/price_levels.hpp>
+#include <jb/itch5/quote_defaults.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/config_object.hpp>
 #include <jb/feed_error.hpp>
@@ -98,37 +98,28 @@ int constexpr TK_DOLLAR = 10000;
  * @tparam compare_t function object class type to sort the side
  *
  */
+
 template <typename compare_t>
 class array_based_book_side {
 public:
   explicit array_based_book_side(array_based_order_book::config const& cfg)
-      : better_price_()
-      , max_size_(cfg.max_size())
+      : max_size_(cfg.max_size())
       , top_levels_(cfg.max_size(), 0)
       , bottom_levels_()
-      , tk_inside_(price_levels(price4_t(0), empty_quote().first))
+      , tk_inside_(
+            price_levels(price4_t(0), side<compare_t>::empty_quote().first))
       , tk_begin_top_(tk_inside_)
       , tk_end_top_(tk_inside_) {
   }
 
-  /// @returns an empty bid or offer based on compare function
-  /// empty bid for less, empty offer for greater.
-  half_quote empty_quote() const {
-    if (better_price_level(1, 0)) {
-      // buy side
-      return empty_bid();
-    }
-    // sell side
-    return empty_offer();
-  }
-
   /// @returns the best bid price and quantity.
-  /// The inside is always at the top_levels_ (empty_quote.price when empty)
+  /// The inside is always at the top_levels_
   half_quote best_quote() const {
-    if (tk_inside_ == price_levels(price4_t(0), empty_quote().first)) {
-      return empty_quote();
+    if (tk_inside_ ==
+        price_levels(price4_t(0), side<compare_t>::empty_quote().first)) {
+      return side<compare_t>::empty_quote();
     }
-    auto rel_px = price_level_to_relative(tk_inside_);
+    auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     auto px_inside = level_to_price<price4_t>(tk_inside_);
     return half_quote(px_inside, top_levels_.at(rel_px));
   }
@@ -138,8 +129,9 @@ public:
   /// The worst price is at the bottom_levels (if not empty),
   /// at the top_levels otherwise.
   half_quote worst_quote() const {
-    if (tk_inside_ == price_levels(price4_t(0), empty_quote().first)) {
-      return empty_quote(); // empty side
+    if (tk_inside_ ==
+        price_levels(price4_t(0), side<compare_t>::empty_quote().first)) {
+      return side<compare_t>::empty_quote(); // empty side
     }
     if (not bottom_levels_.empty()) {
       // ... worst price is at the bottom_levels_
@@ -148,7 +140,8 @@ public:
     }
     // ... worst price at the top_levels_
     auto rel_worst = relative_worst_top_level();
-    auto tk_worst = relative_to_price_level(rel_worst);
+    auto tk_worst =
+        side<compare_t>::relative_to_level(tk_begin_top_, rel_worst);
     auto px_worst = level_to_price<price4_t>(tk_worst);
     return half_quote(px_worst, top_levels_.at(rel_worst));
   }
@@ -184,18 +177,18 @@ public:
     // get px price levels
     auto tk_px = price_levels(price4_t(0), px);
     // check if tk_px is worse than the first price of the top_levels_
-    if (better_price_level(tk_begin_top_, tk_px)) {
+    if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       // emplace the price at the bottom_levels, and return (false)
       auto emp_tup = bottom_levels_.emplace(px, 0);
       emp_tup.first->second += qty;
       return false;
     }
     // check if tk_px is equal or better than the current inside
-    if (not better_price_level(tk_inside_, tk_px)) {
+    if (not side<compare_t>::better_level(tk_inside_, tk_px)) {
       // ... check if limit redefine is needed
-      if (not better_price_level(tk_end_top_, tk_px)) {
+      if (not side<compare_t>::better_level(tk_end_top_, tk_px)) {
         // get the new limits based on the new inside tk_px
-        auto limits = get_limit_top_prices(tk_px);
+        auto limits = side<compare_t>::limit_top_prices(tk_px, max_size_ / 2);
         // move the tail [px_begin_top_, new px_begin_top_) to bottom_levels_
         move_top_to_bottom(std::get<0>(limits));
         // ... redefine the limits
@@ -207,13 +200,14 @@ public:
         tk_inside_ = tk_px;
       }
       // update top_levels_
-      auto rel_px = price_level_to_relative(tk_inside_);
+      auto rel_px =
+          side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
       top_levels_.at(rel_px) += qty;
       return true; // the inside changed
     }
     // is a top_levels change different than the inside
     // udates top_levels_ with new qty
-    auto rel_px = price_level_to_relative(tk_px);
+    auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
     top_levels_.at(rel_px) += qty;
     return false;
   }
@@ -246,7 +240,7 @@ public:
     // get px price level
     auto tk_px = price_levels(price4_t(0), px);
     // check and handles if it is a bottom_level_ price
-    if (better_price_level(tk_begin_top_, tk_px)) {
+    if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       if (bottom_levels_.empty()) {
         std::ostringstream os;
         os << "array_based_order_book::reduce_order."
@@ -280,7 +274,7 @@ public:
     }
 
     // handles the top_levels_ price
-    if (better_price_level(tk_px, tk_inside_)) {
+    if (side<compare_t>::better_level(tk_px, tk_inside_)) {
       std::ostringstream os;
       os << "array_based_order_book::reduce_order."
          << " Trying to reduce a non-existing top_levels_ price"
@@ -290,7 +284,7 @@ public:
       throw jb::feed_error(os.str());
     }
     // get px relative position
-    auto rel_px = price_level_to_relative(tk_px);
+    auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
     if (top_levels_.at(rel_px) == 0) {
       std::ostringstream os;
       os << "array_based_order_book::reduce_order."
@@ -318,7 +312,8 @@ public:
     if (top_levels_.at(rel_px) == 0) {
       // gets the new inside (if any)
       tk_inside_ = next_best_price_level();
-      if (tk_inside_ == price_levels(price4_t(0), empty_quote().first)) {
+      if (tk_inside_ ==
+          price_levels(price4_t(0), side<compare_t>::empty_quote().first)) {
         // last top_levels_ price was removed...
         // ... get the new inside from the bottom_levels
         if (not bottom_levels_.empty()) {
@@ -326,7 +321,8 @@ public:
           tk_inside_ = price_levels(price4_t(0), new_inside_it->first);
         }
         // redefine limits
-        auto limits = get_limit_top_prices(tk_inside_);
+        auto limits =
+            side<compare_t>::limit_top_prices(tk_inside_, max_size_ / 2);
         tk_begin_top_ = std::get<0>(limits);
         tk_end_top_ = std::get<1>(limits);
         // move tail prices from bottom_levels (tk_begin_top_ {, .begin()})
@@ -338,79 +334,14 @@ public:
 
   /**
    * Testing hook.
-   * @returns true is px1 < px2
+   * @returns true is side is ascending
    * To test different implementations for buy and sell sides
    */
-  bool price_comp(price4_t const& px1, price4_t const& px2) const {
-    return better_price_(px1, px2);
+  bool is_ascending() const {
+    return side<compare_t>::ascending;
   }
 
 private:
-  /// The value used to represent an empty bid
-  static half_quote empty_bid() {
-    return half_quote(price4_t(0), 0);
-  }
-
-  /// The value used to represent an empty offer
-  static half_quote empty_offer() {
-    return half_quote(max_price_field_value<price4_t>(), 0);
-  }
-
-  /**
-   * Transforms a top_levels_ relative position into a price level.
-   * @param rel relative position of a price at top_levels_
-   * @returns price level
-   */
-  auto relative_to_price_level(std::size_t rel) const {
-    auto rel_tick =
-        better_price_level(1, 0) ? tk_begin_top_ + rel : tk_begin_top_ - rel;
-    auto px_target = level_to_price<price4_t>(rel_tick);
-    return price_levels(price4_t(0), px_target);
-  }
-
-  /**
-   * @param tk_base base price level
-   * @param rel_tick price levels above tk_base
-   * @returns price level that is rel_tick price levels above px_base
-   */
-  std::size_t relative_above_base(
-      std::size_t const tk_base, std::size_t const rel_tick) const {
-    auto const level_max =
-        price_levels(price4_t(0), max_price_field_value<price4_t>());
-    if (tk_base + rel_tick >= level_max) {
-      return level_max;
-    }
-    return (tk_base + rel_tick);
-  }
-
-  /**
-   * @param tk_base base price level
-   * @param rel_tick price levels below tk_base
-   * @returns price level that is rel_tick price levels below px_base
-   */
-  std::size_t relative_below_base(
-      std::size_t const tk_base, std::size_t const rel_tick) const {
-    if (tk_base <= rel_tick) {
-      return 0;
-    }
-    return (tk_base - rel_tick);
-  }
-
-  /**
-   * Transforms a price level into a top_levels_ relative position.
-   *
-   * @throw feed_error tk_px has to be better or equal to tk_begin_top_
-   *
-   * @param tk_px a price level
-   * @returns top_levels_ relative position of tk_px compare with tk_begin_top_
-   */
-  std::size_t price_level_to_relative(std::size_t const tk_px) const {
-    // check tk_px is in range (better than tk_begin_top_)
-    JB_ASSERT_THROW(not better_price_level(tk_begin_top_, tk_px));
-    return tk_px > tk_begin_top_ ? tk_px - tk_begin_top_
-                                 : tk_begin_top_ - tk_px;
-  }
-
   /**
    * @throw feed_error top_levels_ is empty
    *
@@ -428,10 +359,11 @@ private:
   /// @returns number of valid prices (>0) at top_levels_
   std::size_t top_levels_count() const {
     // counts from 0 .. relative position of px_inside_
-    if (tk_inside_ == price_levels(price4_t(0), empty_quote().first)) {
+    if (tk_inside_ ==
+        price_levels(price4_t(0), side<compare_t>::empty_quote().first)) {
       return 0; // empty side
     }
-    auto rel_px = price_level_to_relative(tk_inside_);
+    auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     int result = 0;
     for (std::size_t i = 0; i != rel_px + 1; ++i) {
       if (top_levels_.at(i) != 0) {
@@ -439,25 +371,6 @@ private:
       }
     }
     return result;
-  }
-
-  /// @returns pair of price levels that are max_size/2 worse
-  /// and better than tk_px, limited to valid price levels
-  /// if tk_px is at the limit, return and empty quote values
-  auto get_limit_top_prices(std::size_t const tk_px) const {
-    auto const tk_empty = price_levels(price4_t(0), empty_quote().first);
-    if (tk_px == tk_empty) {
-      return std::make_pair(tk_empty, tk_empty);
-    }
-    auto tk_low = relative_below_base(tk_px, max_size_ / 2);
-    auto tk_low_base = relative_above_base(tk_low, max_size_ / 2);
-    auto tk_high = relative_above_base(tk_low_base, max_size_ / 2);
-    auto tk_high_base = relative_below_base(tk_high, max_size_ / 2);
-    if (tk_low_base != tk_high_base) {
-      tk_low = relative_below_base(tk_high_base, max_size_ / 2);
-    }
-    return better_price_level(1, 0) ? std::make_pair(tk_low, tk_high)
-                                    : std::make_pair(tk_high, tk_low);
   }
 
   /**
@@ -471,16 +384,17 @@ private:
    * Clear (value = 0) former relative position of moved prices
    */
   void move_top_to_bottom(std::size_t const tk_max) {
-    JB_ASSERT_THROW(not better_price_level(tk_begin_top_, tk_max));
+    JB_ASSERT_THROW(not side<compare_t>::better_level(tk_begin_top_, tk_max));
     // if tk_max is better than tk_inside_
-    if (better_price_level(tk_max, tk_inside_)) {
+    if (side<compare_t>::better_level(tk_max, tk_inside_)) {
       // ... all top_prices_ have to be moved out
       // valid prices are from 0 .. relative (tk_inside_) included
-      auto rel_inside = price_level_to_relative(tk_inside_);
+      auto rel_inside =
+          side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
       for (std::size_t i = 0; i != rel_inside + 1; ++i) {
         // move out and clear the price (if valid)
         if (top_levels_.at(i) != 0) {
-          auto tk_i = relative_to_price_level(i);
+          auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
           auto px_i = level_to_price<price4_t>(tk_i);
           bottom_levels_.emplace(px_i, top_levels_.at(i));
           top_levels_.at(i) = 0;
@@ -490,11 +404,11 @@ private:
     }
     // tk_max is worse than tk_inside
     // prices to move out are from 0.. relative (tk_max) excluded
-    auto rel_tk_max = price_level_to_relative(tk_max);
+    auto rel_tk_max = side<compare_t>::level_to_relative(tk_begin_top_, tk_max);
     for (std::size_t i = 0; i != rel_tk_max; ++i) {
       // ... move out the price i (if valid)
       if (top_levels_.at(i) != 0) {
-        auto tk_i = relative_to_price_level(i);
+        auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
         auto px_i = level_to_price<price4_t>(tk_i);
         bottom_levels_.emplace(px_i, top_levels_.at(i));
         top_levels_.at(i) = 0;
@@ -503,7 +417,8 @@ private:
     // shift price down rel_tk_max positions
     // from tk_max to tk_inside both included...
     // ...(the are no better prices than tk_inside_)
-    auto rel_tk_inside = price_level_to_relative(tk_inside_);
+    auto rel_tk_inside =
+        side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     std::size_t j = 0;
     for (std::size_t i = rel_tk_max; i <= rel_tk_inside; ++i, ++j) {
       if (top_levels_.at(i) != 0) {
@@ -526,9 +441,9 @@ private:
     auto le = bottom_levels_.begin();
     for (/* */; le != bottom_levels_.end(); ++le) {
       auto tk_le = price_levels(price4_t(0), le->first);
-      if (not better_price_level(tk_begin_top_, tk_le)) {
+      if (not side<compare_t>::better_level(tk_begin_top_, tk_le)) {
         // move price to top_levels_
-        auto rel_px = price_level_to_relative(tk_le);
+        auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_le);
         top_levels_.at(rel_px) = le->second;
       } else {
         // no more good prices to move...
@@ -545,31 +460,120 @@ private:
    */
   std::size_t next_best_price_level() const {
     // begins checking below the current inside
-    auto rel_inside = price_level_to_relative(tk_inside_);
+    auto rel_inside =
+        side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     if (rel_inside == 0) {
-      return price_levels(price4_t(0), empty_quote().first);
+      return price_levels(price4_t(0), side<compare_t>::empty_quote().first);
     }
     do {
       rel_inside--;
       if (top_levels_.at(rel_inside) != 0) {
         // got the next one...
-        return relative_to_price_level(rel_inside);
+        return side<compare_t>::relative_to_level(tk_begin_top_, rel_inside);
       }
     } while (rel_inside != 0);
-    return price_levels(price4_t(0), empty_quote().first);
+    return price_levels(price4_t(0), side<compare_t>::empty_quote().first);
   }
 
-  bool better_price_level(std::size_t const tk1, std::size_t const tk2) const {
-    auto px1 = level_to_price<price4_t>(tk1);
-    auto px2 = level_to_price<price4_t>(tk2);
-    return better_price_(px1, px2);
+  /// @returns pair of price levels that are rel worse
+  /// and better than tk_px, limited to valid price levels
+  /// if tk_px is at the limit, return and empty quote values
+  static auto get_limits(std::size_t const tk_px, std::size_t const rel) {
+    auto const tk_empty =
+        price_levels(price4_t(0), side<compare_t>::empty_quote().first);
+    if (tk_px == tk_empty) {
+      return std::make_pair(tk_empty, tk_empty);
+    }
+    auto const level_max =
+        price_levels(price4_t(0), max_price_field_value<price4_t>());
+
+    auto tk_low = tk_px <= rel ? 0 : tk_px - rel;
+    auto tk_low_base = tk_low + rel >= level_max ? level_max : tk_low + rel;
+    auto tk_high =
+        tk_low_base + rel >= level_max ? level_max : tk_low_base + rel;
+    auto tk_high_base = tk_high <= rel ? 0 : tk_high - rel;
+
+    if (tk_low_base != tk_high_base) {
+      tk_low = tk_high_base <= rel ? 0 : tk_high_base - rel;
+    }
+    return std::make_pair(tk_low, tk_high);
   }
+
+  /// template specialization struct to handle differences between BUY and SELL
+  /// version SELL side
+  template <typename ordering, class DUMMY = void>
+  struct side {
+    static bool constexpr ascending = false;
+
+    /// @returns an empty offer
+    static half_quote empty_quote() {
+      return empty_offer();
+    }
+
+    // @returns true if tk1 is less then tk2
+    static bool better_level(std::size_t const tk1, std::size_t const tk2) {
+      return tk1 < tk2;
+    }
+
+    // @returns pair a new limits
+    static auto
+    limit_top_prices(std::size_t const tk_px, std::size_t const rel) {
+      auto lim = get_limits(tk_px, rel);
+      return std::make_pair(std::get<1>(lim), std::get<0>(lim));
+    }
+
+    /// returns@ price level rel positions less than tk_ini
+    static auto
+    relative_to_level(std::size_t const tk_ini, std::size_t const rel) {
+      return tk_ini - rel;
+    }
+
+    /// @returns relative position of tk_px compare with tk_ini
+    static auto
+    level_to_relative(std::size_t const tk_ini, std::size_t const tk_px) {
+      // check tk_px is in range (less than tk_ini_)
+      JB_ASSERT_THROW(tk_px <= tk_ini);
+      return tk_ini - tk_px;
+    }
+  };
+
+  /// version BUY side
+  template <class DUMMY>
+  struct side<std::greater<price4_t>, DUMMY> {
+    static bool constexpr ascending = true;
+
+    /// @returns an empty bid
+    static half_quote empty_quote() {
+      return empty_bid();
+    }
+
+    // @returns true if tk1 is greater then tk2
+    static bool better_level(std::size_t const tk1, std::size_t const tk2) {
+      return tk1 > tk2;
+    }
+
+    // @returns pair a new limits
+    static auto
+    limit_top_prices(std::size_t const tk_px, std::size_t const rel) {
+      return get_limits(tk_px, rel);
+    }
+
+    /// returns@ price level rel positions greater than tk_ini
+    static auto
+    relative_to_level(std::size_t const tk_ini, std::size_t const rel) {
+      return tk_ini + rel;
+    }
+
+    /// @returns relative position of tk_px compare with tk_ini
+    static auto
+    level_to_relative(std::size_t const tk_ini, std::size_t const tk_px) {
+      // check tk_px is in range (better than tk_ini_)
+      JB_ASSERT_THROW(tk_px >= tk_ini);
+      return tk_px - tk_ini;
+    }
+  };
 
 private:
-  /// function object for inequality comparison of template parameter type.
-  /// if better_price(p1,p2) is true means p1 is strictly a better price than p2
-  compare_t better_price_;
-
   /// top_levels_ max size
   std::size_t max_size_;
 
