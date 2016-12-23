@@ -322,9 +322,8 @@ public:
 
 private:
   /**
-   * @throw feed_error top_levels_ is empty
-   *
-   * @returns relative position of the worst valid price at top_levels
+   * @returns relative position of the worst valid price at top_levels.
+   * @throw feed_error top_levels_ is empty.
    */
   std::size_t relative_worst_top_level() const {
     for (std::size_t i = 0; i != max_size_; ++i) {
