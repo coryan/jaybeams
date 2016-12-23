@@ -11,12 +11,12 @@ namespace testing {
  * side_type class trivial member tests.
  * @tparam side_type Side type to be tested
  *
- * Uses testing hook price_comp to know if tested is buy or sell side
+ * Uses testing hook is_ascending() to know if tested is buy or sell side
  */
 template <typename side_type>
 void test_side_type_trivial(side_type& tested) {
   using jb::itch5::price4_t;
-  auto is_less = tested.price_comp(price4_t(1), price4_t(0));
+  auto is_less = tested.is_ascending();
   auto actual = tested.best_quote();
   if (is_less) {
     BOOST_CHECK_EQUAL(actual.first, price4_t(0));
@@ -48,7 +48,7 @@ void test_side_type_errors(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.price_comp(price4_t(1), price4_t(0))) {
+  if (tested.is_ascending()) {
     diff = -10000;
   } else {
     diff = 10000;
@@ -113,7 +113,7 @@ void test_side_type_errors_spec(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.price_comp(price4_t(1), price4_t(0))) {
+  if (tested.is_ascending()) {
     diff = -10000;
   } else {
     diff = 10000;
@@ -140,10 +140,10 @@ void test_side_type_add_reduce(side_type& tested) {
   using jb::itch5::price4_t;
 
   int diff;
-  if (tested.price_comp(price4_t(0), price4_t(1))) {
-    diff = -10000;
-  } else {
+  if (tested.is_ascending()) {
     diff = 10000;
+  } else {
+    diff = -10000;
   }
   int base_p = 4000000;
 
@@ -231,9 +231,6 @@ void test_side_type_add_reduce(side_type& tested) {
   // ... deleting the remaining price takes the book depth to 0
   r = tested.reduce_order(price4_t(base_p - diff), 300);
   actual = tested.best_quote();
-  auto emp = tested.empty_quote(); // gets empty_quoted already tested
-  BOOST_CHECK_EQUAL(actual.first, emp.first);
-  BOOST_CHECK_EQUAL(actual.second, emp.second);
   // handler should return true... it is an inside change
   BOOST_CHECK_EQUAL(r, true);
   // .. and the book_depth should be decremented
@@ -245,7 +242,7 @@ void test_side_type_add_reduce(side_type& tested) {
 *@tparam order_book type based order book to be tested
 */
 template <typename order_book>
-void test_order_book_type_trivial(order_book& tested) {
+void test_order_book_type_trivial() {
 
   typename order_book::config cfg;
 
@@ -261,7 +258,7 @@ void test_order_book_type_trivial(order_book& tested) {
  * @tparam order_book type based order book to be tested
  */
 template <typename order_book>
-void test_order_book_type_errors(order_book& tested) {
+void test_order_book_type_errors() {
   typename order_book::config cfg;
 
   typename order_book::buys_t buy_test(cfg);
@@ -277,7 +274,7 @@ void test_order_book_type_errors(order_book& tested) {
  * @tparam order_book type based order book to be tested
  */
 template <typename order_book>
-void test_order_book_type_errors_spec(order_book& tested) {
+void test_order_book_type_errors_spec() {
   typename order_book::config cfg;
 
   typename order_book::buys_t buy_test(cfg);
@@ -293,7 +290,7 @@ void test_order_book_type_errors_spec(order_book& tested) {
  * @tparam order_book type based order book to be tested
  */
 template <typename order_book>
-void test_order_book_type_add_reduce(order_book& tested) {
+void test_order_book_type_add_reduce() {
   typename order_book::config cfg;
 
   typename order_book::buys_t buy_test(cfg);
