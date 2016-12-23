@@ -1,5 +1,5 @@
-#include <jb/cpu_set.hpp>
 #include <jb/convert_cpu_set.hpp>
+#include <jb/cpu_set.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(cpu_set_yaml_convert) {
   jb::cpu_set decoded;
   YAML::convert<jb::cpu_set>::decode(encoded, decoded);
   BOOST_CHECK_EQUAL(empty, decoded);
-  
+
   jb::cpu_set a = jb::cpu_set::parse("1,3-5");
   encoded = YAML::convert<jb::cpu_set>::encode(a);
   BOOST_CHECK_EQUAL(encoded.as<std::string>(), std::string("1,3-5"));
