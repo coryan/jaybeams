@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['map_5fprice',['map_price',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__price',1,'jb::itch5']]],
+  ['map_5fbased_5fbook_5fside',['map_based_book_side',['../classjb_1_1itch5_1_1map__based__book__side.html',1,'jb::itch5']]],
+  ['map_5fbased_5forder_5fbook',['map_based_order_book',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__based__order__book',1,'jb::itch5']]],
   ['market_5fparticipant_5fposition_5fmessage',['market_participant_position_message',['../structjb_1_1itch5_1_1market__participant__position__message.html',1,'jb::itch5']]],
   ['message_5fhandler_5fconcept',['message_handler_concept',['../classjb_1_1itch5_1_1message__handler__concept.html',1,'jb::itch5']]],
   ['message_5fheader',['message_header',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header',1,'jb::itch5']]],

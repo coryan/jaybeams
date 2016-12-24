@@ -1,30 +1,4 @@
 var searchData=
 [
-  ['have_5fboost',['HAVE_BOOST',['../jb-config_8hpp.html#a1644f282a4f84575a270f96b98d4f3c6',1,'jb-config.hpp']]],
-  ['have_5fboost_5fasio',['HAVE_BOOST_ASIO',['../jb-config_8hpp.html#af6997754ef39558161f9cbce861fefcf',1,'jb-config.hpp']]],
-  ['have_5fboost_5fdate_5ftime',['HAVE_BOOST_DATE_TIME',['../jb-config_8hpp.html#a864cdfb0b5b3b2fbed2808a33562efb9',1,'jb-config.hpp']]],
-  ['have_5fboost_5ffilesystem',['HAVE_BOOST_FILESYSTEM',['../jb-config_8hpp.html#a547dd280b4b8c381d9d69581ca861c87',1,'jb-config.hpp']]],
-  ['have_5fboost_5fiostreams',['HAVE_BOOST_IOSTREAMS',['../jb-config_8hpp.html#aff6c63c8f38407d4448c6525aa534b2b',1,'jb-config.hpp']]],
-  ['have_5fboost_5flog',['HAVE_BOOST_LOG',['../jb-config_8hpp.html#a2ef9f061181257862f8a31c4b7353b55',1,'jb-config.hpp']]],
-  ['have_5fboost_5flog_5fsetup',['HAVE_BOOST_LOG_SETUP',['../jb-config_8hpp.html#a692b78f2df8a67aefa069bd570c4a178',1,'jb-config.hpp']]],
-  ['have_5fboost_5fprogram_5foptions',['HAVE_BOOST_PROGRAM_OPTIONS',['../jb-config_8hpp.html#aecd1bc7fdfc4affb8ebbf9d332e5197d',1,'jb-config.hpp']]],
-  ['have_5fboost_5fsystem',['HAVE_BOOST_SYSTEM',['../jb-config_8hpp.html#a4d123235b596d41b8269e2f1672dad42',1,'jb-config.hpp']]],
-  ['have_5fboost_5fthread',['HAVE_BOOST_THREAD',['../jb-config_8hpp.html#a8440ed88a386b99b76d65ae079a52356',1,'jb-config.hpp']]],
-  ['have_5fboost_5funit_5ftest_5fframework',['HAVE_BOOST_UNIT_TEST_FRAMEWORK',['../jb-config_8hpp.html#a4abddb862d64c2962541b503613f4d89',1,'jb-config.hpp']]],
-  ['have_5fcxx14',['HAVE_CXX14',['../jb-config_8hpp.html#ae734d93598cc7af570ecbad61dc25087',1,'jb-config.hpp']]],
-  ['have_5ffftw3',['HAVE_FFTW3',['../jb-config_8hpp.html#a3c6447b1d67b78e05fde0a9b11868e5d',1,'jb-config.hpp']]],
-  ['have_5ffftw3f',['HAVE_FFTW3F',['../jb-config_8hpp.html#a46d650ea671d41a67bd0055ba35f28ab',1,'jb-config.hpp']]],
-  ['have_5ffftw3l',['HAVE_FFTW3L',['../jb-config_8hpp.html#a7e915940b32ffb12c9947389c6471156',1,'jb-config.hpp']]],
-  ['have_5finttypes_5fh',['HAVE_INTTYPES_H',['../jb-config_8hpp.html#ab90a030ff2790ebdc176660a6dd2a478',1,'jb-config.hpp']]],
-  ['have_5fmemory_5fh',['HAVE_MEMORY_H',['../jb-config_8hpp.html#ae93a78f9d076138897af441c9f86f285',1,'jb-config.hpp']]],
-  ['have_5fpthread',['HAVE_PTHREAD',['../jb-config_8hpp.html#aac699f6be8f38e3c8a5f375df9a12aaf',1,'jb-config.hpp']]],
-  ['have_5fpthread_5fprio_5finherit',['HAVE_PTHREAD_PRIO_INHERIT',['../jb-config_8hpp.html#a428591e6b13dacf3451dc891e385f51b',1,'jb-config.hpp']]],
-  ['have_5fstdint_5fh',['HAVE_STDINT_H',['../jb-config_8hpp.html#ab6cd6d1c63c1e26ea2d4537b77148354',1,'jb-config.hpp']]],
-  ['have_5fstdlib_5fh',['HAVE_STDLIB_H',['../jb-config_8hpp.html#a9e0e434ec1a6ddbd97db12b5a32905e0',1,'jb-config.hpp']]],
-  ['have_5fstring_5fh',['HAVE_STRING_H',['../jb-config_8hpp.html#ad4c234dd1625255dc626a15886306e7d',1,'jb-config.hpp']]],
-  ['have_5fstrings_5fh',['HAVE_STRINGS_H',['../jb-config_8hpp.html#a405d10d46190bcb0320524c54eafc850',1,'jb-config.hpp']]],
-  ['have_5fsys_5fstat_5fh',['HAVE_SYS_STAT_H',['../jb-config_8hpp.html#ace156430ba007d19b4348a950d0c692b',1,'jb-config.hpp']]],
-  ['have_5fsys_5ftypes_5fh',['HAVE_SYS_TYPES_H',['../jb-config_8hpp.html#a69dc70bea5d1f8bd2be9740e974fa666',1,'jb-config.hpp']]],
-  ['have_5funistd_5fh',['HAVE_UNISTD_H',['../jb-config_8hpp.html#a219b06937831d0da94d801ab13987639',1,'jb-config.hpp']]],
-  ['have_5fyaml_5fcpp',['HAVE_YAML_CPP',['../jb-config_8hpp.html#aa55f270e381b5a49f672e239d50e6736',1,'jb-config.hpp']]]
+  ['config_5fobject_5fconstructors',['config_object_constructors',['../config__object_8hpp.html#a6ee67c9f41be3b11fe990abce6d5b3ce',1,'config_object.hpp']]]
 ];

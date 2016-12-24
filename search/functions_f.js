@@ -6,7 +6,7 @@ var searchData=
   ['search_5fpath',['search_path',['../classjb_1_1config__files__locations__base.html#a995c646efb282395c7942b8a0f0a8c3b',1,'jb::config_files_locations_base']]],
   ['seconds',['seconds',['../classjb_1_1itch5_1_1seconds__field.html#ab9f5729934a31366f382d62768bd6e32',1,'jb::itch5::seconds_field']]],
   ['seconds_5ffield',['seconds_field',['../classjb_1_1itch5_1_1seconds__field.html#ae8b697299940c8999626e5b10dea87b0',1,'jb::itch5::seconds_field::seconds_field(int c=0)'],['../classjb_1_1itch5_1_1seconds__field.html#a54b7e2050caff397f5b20592c6396223',1,'jb::itch5::seconds_field::seconds_field(std::chrono::seconds const &amp;s)']]],
-  ['sell_5fcount',['sell_count',['../classjb_1_1itch5_1_1order__book.html#a92b35bf779b177e7f43c7c1c8e806fb3',1,'jb::itch5::order_book']]],
+  ['sell_5fcount',['sell_count',['../classjb_1_1itch5_1_1order__book.html#a9f5bf8320c76e3bcb46aed980b527570',1,'jb::itch5::order_book']]],
   ['set',['set',['../classjb_1_1cpu__set.html#a5763cb7df134b198e2b27c7091203ce3',1,'jb::cpu_set::set(int cpu)'],['../classjb_1_1cpu__set.html#aec18fcd137bee99d8fba1f87c6eed8de',1,'jb::cpu_set::set(int cpulo, int cpuhi)']]],
   ['severity_5flevel_5fwidth',['severity_level_width',['../namespacejb.html#acad72c331a63bfe75ce38b4dc718529b',1,'jb']]],
   ['severity_5fstatic_5fpredicate',['severity_static_predicate',['../namespacejb.html#abfc933e88c6a00c98531ffbcc80b6ea9',1,'jb']]],

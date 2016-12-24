@@ -45,7 +45,7 @@ var searchData=
   ['price_5ffield_2ehpp',['price_field.hpp',['../price__field_8hpp.html',1,'']]],
   ['price_5ffield_3c_20std_3a_3auint32_5ft_2c_2010000_20_3e',['price_field&lt; std::uint32_t, 10000 &gt;',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],
   ['price_5ffield_3c_20std_3a_3auint64_5ft_2c_20100000000_20_3e',['price_field&lt; std::uint64_t, 100000000 &gt;',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],
-  ['price_5flevels',['price_levels',['../namespacejb_1_1itch5.html#ac3dc22bff0f55bd576dfe0eafe9c79e5',1,'jb::itch5']]],
+  ['price_5flevels',['price_levels',['../namespacejb_1_1itch5.html#ae10fb02086c32464bc9c12d3d604df32',1,'jb::itch5']]],
   ['price_5flevels_2ehpp',['price_levels.hpp',['../price__levels_8hpp.html',1,'']]],
   ['price_5fvariation_5findicator',['price_variation_indicator',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a1f5beb4cd961c0c55f17342265add7f1',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['price_5fvariation_5findicator_5ft',['price_variation_indicator_t',['../namespacejb_1_1itch5.html#a7aeec6a74adbcb9180d4569fcefbb1af',1,'jb::itch5']]],

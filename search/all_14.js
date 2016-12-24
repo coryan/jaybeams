@@ -3,8 +3,8 @@ var searchData=
   ['uname_5fa',['uname_a',['../namespacejb_1_1testing.html#afc1a9e06c75eb1f164767ecf8e3e3e3b',1,'jb::testing']]],
   ['underflow_5fcount',['underflow_count',['../classjb_1_1histogram.html#a1847b98e285bd10f9121fa8f9792f811',1,'jb::histogram']]],
   ['underflow_5fcount_5f',['underflow_count_',['../classjb_1_1histogram.html#a300d6e8debc13bf1c68041a67aaa9db6',1,'jb::histogram']]],
-  ['unknown_5fmessage',['unknown_message',['../classjb_1_1itch5_1_1unknown__message.html',1,'jb::itch5']]],
   ['unknown_5fmessage',['unknown_message',['../classjb_1_1itch5_1_1unknown__message.html#aec28993fc999060c48d496dce11a1417',1,'jb::itch5::unknown_message::unknown_message(std::uint32_t count, std::size_t offset, std::size_t len, void const *buf)'],['../classjb_1_1itch5_1_1unknown__message.html#abbc4a4049b0f0eb33a57d33099efc2a4',1,'jb::itch5::unknown_message::unknown_message(unknown_message &amp;&amp;)=default'],['../classjb_1_1itch5_1_1unknown__message.html#ac1af1a7c2c2bbd2830e49e0844860596',1,'jb::itch5::unknown_message::unknown_message(unknown_message const &amp;)=delete']]],
+  ['unknown_5fmessage',['unknown_message',['../classjb_1_1itch5_1_1unknown__message.html',1,'jb::itch5']]],
   ['unknown_5fmessage_2ehpp',['unknown_message.hpp',['../unknown__message_8hpp.html',1,'']]],
   ['usage',['usage',['../classjb_1_1usage.html',1,'jb']]],
   ['usage',['usage',['../classjb_1_1usage.html#ad95db63ccdeb5d1b3f97c66a0c01997c',1,'jb::usage::usage(std::string const &amp;msg, int e)'],['../classjb_1_1usage.html#ae2ee10b6357e4bd80ceea036f60216b6',1,'jb::usage::usage(char const *msg, int e)']]],
@@ -13,6 +13,7 @@ var searchData=
   ['ut_5fadd_5forder_5fmpid_5fmessage_2ecpp',['ut_add_order_mpid_message.cpp',['../ut__add__order__mpid__message_8cpp.html',1,'']]],
   ['ut_5faligned_5fmulti_5farray_2ecpp',['ut_aligned_multi_array.cpp',['../ut__aligned__multi__array_8cpp.html',1,'']]],
   ['ut_5fallocator_2ecpp',['ut_allocator.cpp',['../ut__allocator_8cpp.html',1,'']]],
+  ['ut_5farray_5fbased_5forder_5fbook_2ecpp',['ut_array_based_order_book.cpp',['../ut__array__based__order__book_8cpp.html',1,'']]],
   ['ut_5fas_5fhhmmss_2ecpp',['ut_as_hhmmss.cpp',['../ut__as__hhmmss_8cpp.html',1,'']]],
   ['ut_5fassert_5fthrow_2ecpp',['ut_assert_throw.cpp',['../ut__assert__throw_8cpp.html',1,'']]],
   ['ut_5fbase_5fdecoders_2ecpp',['ut_base_decoders.cpp',['../ut__base__decoders_8cpp.html',1,'']]],
@@ -47,6 +48,7 @@ var searchData=
   ['ut_5flaunch_5fthread_2ecpp',['ut_launch_thread.cpp',['../ut__launch__thread_8cpp.html',1,'']]],
   ['ut_5flogging_2ecpp',['ut_logging.cpp',['../ut__logging_8cpp.html',1,'']]],
   ['ut_5fmake_5fsocket_5fudp_5frecv_2ecpp',['ut_make_socket_udp_recv.cpp',['../ut__make__socket__udp__recv_8cpp.html',1,'']]],
+  ['ut_5fmap_5fbased_5forder_5fbook_2ecpp',['ut_map_based_order_book.cpp',['../ut__map__based__order__book_8cpp.html',1,'']]],
   ['ut_5fmarket_5fparticipant_5fposition_5fmessage_2ecpp',['ut_market_participant_position_message.cpp',['../ut__market__participant__position__message_8cpp.html',1,'']]],
   ['ut_5fmerge_5fyaml_2ecpp',['ut_merge_yaml.cpp',['../ut__merge__yaml_8cpp.html',1,'']]],
   ['ut_5fmessage_5fheader_2ecpp',['ut_message_header.cpp',['../ut__message__header_8cpp.html',1,'']]],
@@ -84,5 +86,6 @@ var searchData=
   ['ut_5ftime_5fdelay_5festimator_2ecpp',['ut_time_delay_estimator.cpp',['../ut__time__delay__estimator_8cpp.html',1,'']]],
   ['ut_5ftimestamp_2ecpp',['ut_timestamp.cpp',['../ut__timestamp_8cpp.html',1,'']]],
   ['ut_5ftrade_5fmessage_2ecpp',['ut_trade_message.cpp',['../ut__trade__message_8cpp.html',1,'']]],
-  ['ut_5ftraits_2ecpp',['ut_traits.cpp',['../ut__traits_8cpp.html',1,'']]]
+  ['ut_5ftraits_2ecpp',['ut_traits.cpp',['../ut__traits_8cpp.html',1,'']]],
+  ['ut_5ftype_5fbased_5forder_5fbook_2ehpp',['ut_type_based_order_book.hpp',['../ut__type__based__order__book_8hpp.html',1,'']]]
 ];

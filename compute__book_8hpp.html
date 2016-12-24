@@ -113,6 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;<a class="el" href="order__replace__message_8hpp_source.html">jb/itch5/order_replace_message.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="stock__directory__message_8hpp_source.html">jb/itch5/stock_directory_message.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="unknown__message_8hpp_source.html">jb/itch5/unknown_message.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="assert__throw_8hpp_source.html">jb/assert_throw.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/functional/hash.hpp&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
@@ -174,7 +175,7 @@ Functions</h2></td></tr>
 <div class="textblock"><p>A flat struct to represent updates to an order book. </p>
 <p>Updates to an order book come in many forms, but they can all be represented with a simple structure that shows: what book is being updated, what side of the book is being updated, what price level is being updated, and how many shares are being added or removed from the book. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00038">38</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00039">39</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -242,7 +243,7 @@ The security updated by this order. <p>This is redundant for order updates and d
 <div class="textblock"><p>A convenient container for per-order data. </p>
 <p>Most market data feeds resend the security identifier and side with each order update, but ITCH-5.0 does not. One needs to lookup the symbol, side, original price, information based on the order id. This literal type is used to keep that information around. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00081">81</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00082">82</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">

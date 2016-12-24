@@ -3,6 +3,7 @@ var searchData=
   ['callable_5f',['callable_',['../structjb_1_1detail_1_1thread__setup__wrapper.html#acd830a113a548ab5be1755343af227cc',1,'jb::detail::thread_setup_wrapper']]],
   ['callback_5f',['callback_',['../classjb_1_1itch5_1_1compute__book.html#a3ffe2d20480ddae255c81be1c6e44536',1,'jb::itch5::compute_book']]],
   ['canceled_5fshares',['canceled_shares',['../structjb_1_1itch5_1_1order__cancel__message.html#a2bbae989935989bfc3dd89c939f99bef',1,'jb::itch5::order_cancel_message']]],
+  ['cfg_5f',['cfg_',['../classjb_1_1itch5_1_1compute__book.html#aaeb0435701863bc943d2f9cceb9d819d',1,'jb::itch5::compute_book']]],
   ['cl_5fdevice_5fname',['cl_device_name',['../classworker__config.html#a4fa3c9a8935c25792311593565abbcf1',1,'worker_config']]],
   ['class_5fname',['class_name',['../structjb_1_1config__object_1_1attribute__descriptor.html#a206024a1c4f2d90ee68e2e340048dac9',1,'jb::config_object::attribute_descriptor']]],
   ['compiler',['compiler',['../namespacejb_1_1testing.html#a8d69926f9843b51aae44f6e61ece2c52',1,'jb::testing']]],

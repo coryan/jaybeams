@@ -31,6 +31,7 @@ var searchData=
   ['ipo_5fquoting_5fperiod_5fupdate_5fmessage',['ipo_quoting_period_update_message',['../structjb_1_1itch5_1_1ipo__quoting__period__update__message.html',1,'jb::itch5']]],
   ['ipo_5fquoting_5fperiod_5fupdate_5fmessage_2ecpp',['ipo_quoting_period_update_message.cpp',['../ipo__quoting__period__update__message_8cpp.html',1,'']]],
   ['ipo_5fquoting_5fperiod_5fupdate_5fmessage_2ehpp',['ipo_quoting_period_update_message.hpp',['../ipo__quoting__period__update__message_8hpp.html',1,'']]],
+  ['is_5fascending',['is_ascending',['../classjb_1_1itch5_1_1array__based__book__side.html#adebb2c5bf75130e993fee00b5f03b34c',1,'jb::itch5::array_based_book_side::is_ascending()'],['../classjb_1_1itch5_1_1map__based__book__side.html#a3804087e3e1b788fcfae917d69ced0b8',1,'jb::itch5::map_based_book_side::is_ascending()']]],
   ['is_5fgz',['is_gz',['../namespacejb.html#a98980653629e6ad01527591d1a072cf8',1,'jb']]],
   ['is_5fpositional',['is_positional',['../structjb_1_1config__object_1_1attribute__descriptor.html#a4009947367cd37a8b06fb30703d80596',1,'jb::config_object::attribute_descriptor']]],
   ['issue_5fclassification',['issue_classification',['../structjb_1_1itch5_1_1stock__directory__message.html#aaf4eb9152a69d2faf67f2d525f453fbf',1,'jb::itch5::stock_directory_message']]],

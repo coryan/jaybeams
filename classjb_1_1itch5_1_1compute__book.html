@@ -121,17 +121,20 @@ Public Types</h2></td></tr>
 <tr class="memitem:adf3a0b44ab4dc8845abdde95a15814a8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8">time_point</a> = <a class="el" href="namespacejb_1_1itch5.html#ab841715d223ab0bb40378f1081fbc933">jb::itch5::time_point</a></td></tr>
 <tr class="memdesc:adf3a0b44ab4dc8845abdde95a15814a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">time_point is used as a compute_book&lt;book_type&gt; type in some modules  <a href="#adf3a0b44ab4dc8845abdde95a15814a8">More...</a><br /></td></tr>
 <tr class="separator:adf3a0b44ab4dc8845abdde95a15814a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2279353ca6c9c9e7fcaaa7efd1930c9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> = typename book_type::config</td></tr>
+<tr class="memdesc:ac2279353ca6c9c9e7fcaaa7efd1930c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">config type is used to construct the <a class="el" href="classjb_1_1itch5_1_1order__book.html" title="Maintain the ITCH-5.0 order book for a single security. ">order_book</a>  <a href="#ac2279353ca6c9c9e7fcaaa7efd1930c9">More...</a><br /></td></tr>
+<tr class="separator:ac2279353ca6c9c9e7fcaaa7efd1930c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf98f4ecf40b0878eb004188a6d1ae04"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> = std::function&lt; void(<a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header">message_header</a> const &amp;header, <a class="el" href="classjb_1_1itch5_1_1order__book.html">order_book</a>&lt; book_type &gt; const &amp;updated_book, <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1book__update">book_update</a> const &amp;update)&gt;</td></tr>
 <tr class="memdesc:acf98f4ecf40b0878eb004188a6d1ae04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the callback type.  <a href="#acf98f4ecf40b0878eb004188a6d1ae04">More...</a><br /></td></tr>
 <tr class="separator:acf98f4ecf40b0878eb004188a6d1ae04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4d8e128151287c57019bba33262d3ade"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#a4d8e128151287c57019bba33262d3ade">compute_book</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> &amp;&amp;cb)</td></tr>
-<tr class="memdesc:a4d8e128151287c57019bba33262d3ade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a4d8e128151287c57019bba33262d3ade">More...</a><br /></td></tr>
-<tr class="separator:a4d8e128151287c57019bba33262d3ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2adde6cd5511a3beff77b623cad5d99b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#a2adde6cd5511a3beff77b623cad5d99b">compute_book</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> const &amp;cb)</td></tr>
-<tr class="separator:a2adde6cd5511a3beff77b623cad5d99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb022b434081c4220d26f180a754c09d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#acb022b434081c4220d26f180a754c09d">compute_book</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> &amp;&amp;cb, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const &amp;cfg)</td></tr>
+<tr class="memdesc:acb022b434081c4220d26f180a754c09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#acb022b434081c4220d26f180a754c09d">More...</a><br /></td></tr>
+<tr class="separator:acb022b434081c4220d26f180a754c09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab768004ebce86abd6406a1027416184"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#aab768004ebce86abd6406a1027416184">compute_book</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> const &amp;cb, <a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const &amp;cfg)</td></tr>
+<tr class="separator:aab768004ebce86abd6406a1027416184"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a555092e105e30292e32a7fd786143fc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#a555092e105e30292e32a7fd786143fc5">handle_message</a> (<a class="el" href="classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8">time_point</a> recvts, long msgcnt, std::size_t msgoffset, <a class="el" href="structjb_1_1itch5_1_1add__order__message.html">add_order_message</a> const &amp;msg)</td></tr>
 <tr class="memdesc:a555092e105e30292e32a7fd786143fc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a new order message.  <a href="#a555092e105e30292e32a7fd786143fc5">More...</a><br /></td></tr>
 <tr class="separator:a555092e105e30292e32a7fd786143fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +204,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ae89ac95650eb6f4d6a7b246b435929bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf01e4c2b8bc6cd7fa1fe184d50629af">orders_by_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ae89ac95650eb6f4d6a7b246b435929bd">orders_</a></td></tr>
 <tr class="memdesc:ae89ac95650eb6f4d6a7b246b435929bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The live orders indexed by the "order reference number".  <a href="#ae89ac95650eb6f4d6a7b246b435929bd">More...</a><br /></td></tr>
 <tr class="separator:ae89ac95650eb6f4d6a7b246b435929bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeb0435701863bc943d2f9cceb9d819d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#aaeb0435701863bc943d2f9cceb9d819d">cfg_</a></td></tr>
+<tr class="memdesc:aaeb0435701863bc943d2f9cceb9d819d"><td class="mdescLeft">&#160;</td><td class="mdescRight">reference to the order book config  <a href="#aaeb0435701863bc943d2f9cceb9d819d">More...</a><br /></td></tr>
+<tr class="separator:aaeb0435701863bc943d2f9cceb9d819d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename book_type&gt;<br />
@@ -210,13 +216,31 @@ class jb::itch5::compute_book&lt; book_type &gt;</h3>
 <p>Keep a collection of all the order books, indexed by symbol, and forward the updates to them. Only process the relevant messages types in ITCH-5.0 that are necessary to keep the book.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">book_type</td><td>the type used to define order_book&lt;book_type&gt;, must be compatible with <a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__price" title="Define the types of buy and sell sides data structure. ">jb::itch5::map_price</a> </td></tr>
+    <tr><td class="paramname">book_type</td><td>the type used to define order_book&lt;book_type&gt;, must be compatible with jb::itch5::map_price </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00106">106</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00107">107</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ac2279353ca6c9c9e7fcaaa7efd1930c9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename book_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1itch5_1_1compute__book.html">jb::itch5::compute_book</a>&lt; book_type &gt;::<a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> =  typename book_type::config</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>config type is used to construct the <a class="el" href="classjb_1_1itch5_1_1order__book.html" title="Maintain the ITCH-5.0 order book for a single security. ">order_book</a> </p>
+
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00122">122</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af6dc87137454dffc31abf3153fa239fd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -239,7 +263,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>Represent the collection of order books. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00387">387</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00402">402</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -266,7 +290,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00134">134</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00138">138</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -284,7 +308,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>clock_type is used as a compute_book&lt;book_type&gt; type in some modules </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00114">114</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00115">115</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -310,7 +334,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>Represent the collection of all orders. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00390">390</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00405">405</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +358,7 @@ template&lt;typename book_type&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00391">391</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00406">406</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -352,12 +376,12 @@ template&lt;typename book_type&gt; </div>
 
 <p>time_point is used as a compute_book&lt;book_type&gt; type in some modules </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00118">118</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00119">119</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a4d8e128151287c57019bba33262d3ade"></a>
+<a class="anchor" id="acb022b434081c4220d26f180a754c09d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -370,8 +394,18 @@ template&lt;typename book_type&gt; </div>
           <td class="memname"><a class="el" href="classjb_1_1itch5_1_1compute__book.html">jb::itch5::compute_book</a>&lt; book_type &gt;::<a class="el" href="classjb_1_1itch5_1_1compute__book.html">compute_book</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td class="paramname"><em>cb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -383,11 +417,11 @@ template&lt;typename book_type&gt; </div>
 
 <p>Constructor. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00138">138</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00142">142</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2adde6cd5511a3beff77b623cad5d99b"></a>
+<a class="anchor" id="aab768004ebce86abd6406a1027416184"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -400,8 +434,18 @@ template&lt;typename book_type&gt; </div>
           <td class="memname"><a class="el" href="classjb_1_1itch5_1_1compute__book.html">jb::itch5::compute_book</a>&lt; book_type &gt;::<a class="el" href="classjb_1_1itch5_1_1compute__book.html">compute_book</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#acf98f4ecf40b0878eb004188a6d1ae04">callback_type</a> const &amp;&#160;</td>
-          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td class="paramname"><em>cb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -411,7 +455,7 @@ template&lt;typename book_type&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00144">144</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00149">149</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -501,9 +545,9 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00441">441</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00460">460</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
-<p>References <a class="el" href="order__book_8hpp_source.html#l00163">jb::itch5::order_book&lt; book_type &gt;::handle_order_reduced()</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__book_8hpp_source.html#l00059">jb::itch5::book_update::qty</a>, <a class="el" href="compute__book_8hpp_source.html#l00042">jb::itch5::book_update::recvts</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="order__book_8hpp_source.html#l00134">jb::itch5::order_book&lt; book_type &gt;::handle_order_reduced()</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="compute__book_8hpp_source.html#l00060">jb::itch5::book_update::qty</a>, <a class="el" href="compute__book_8hpp_source.html#l00043">jb::itch5::book_update::recvts</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
 </div>
 </div>
@@ -565,11 +609,9 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00159">159</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00164">164</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
-
-<p>Referenced by <a class="el" href="ut__compute__book_8cpp_source.html#l00026">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -630,7 +672,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00195">195</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00206">206</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -691,7 +733,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00211">211</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00222">222</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
@@ -754,7 +796,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00228">228</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00239">239</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -815,7 +857,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00245">245</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00256">256</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
@@ -878,7 +920,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00262">262</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00273">273</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
@@ -941,9 +983,9 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00278">278</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00289">289</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
-<p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
 </div>
 </div>
@@ -1005,7 +1047,7 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00339">339</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00354">354</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a04a75036e9d520bb983c5ed03b8d0182">jb::trace</a>.</p>
 
@@ -1062,7 +1104,7 @@ template&lt;typename message_type &gt; </div>
 <p>Ignore all other message types. </p>
 <p>We are only interested in a handful of message types, anything else is captured by this template function and ignored. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00354">354</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00369">369</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -1137,9 +1179,9 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00404">404</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00419">419</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
-<p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
 </div>
 </div>
@@ -1186,11 +1228,9 @@ template&lt;typename book_type&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00363">363</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00378">378</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 <p>References <a class="el" href="unknown__message_8hpp_source.html#l00037">jb::itch5::unknown_message::buf()</a>, <a class="el" href="unknown__message_8hpp_source.html#l00028">jb::itch5::unknown_message::count()</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="unknown__message_8hpp_source.html#l00031">jb::itch5::unknown_message::offset()</a>.</p>
-
-<p>Referenced by <a class="el" href="ut__compute__book_8cpp_source.html#l00203">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -1219,9 +1259,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>Return the current timestamp for delay measurements. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00380">380</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="ut__compute__book_8cpp_source.html#l00026">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00395">395</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -1250,9 +1288,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>Return the symbols known in the order book. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00371">371</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="ut__compute__book_8cpp_source.html#l00026">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00386">386</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -1279,7 +1315,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>The order books indexed by security. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00477">477</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00496">496</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -1305,7 +1341,33 @@ template&lt;typename book_type&gt; </div>
 
 <p>Store the callback function, this is invoked on each event that changes a book. </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00474">474</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00493">493</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaeb0435701863bc943d2f9cceb9d819d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename book_type&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1itch5_1_1compute__book.html#ac2279353ca6c9c9e7fcaaa7efd1930c9">book_type_config</a> const&amp; <a class="el" href="classjb_1_1itch5_1_1compute__book.html">jb::itch5::compute_book</a>&lt; book_type &gt;::cfg_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>reference to the order book config </p>
+
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00502">502</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -1331,7 +1393,7 @@ template&lt;typename book_type&gt; </div>
 
 <p>The live orders indexed by the "order reference number". </p>
 
-<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00480">480</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="compute__book_8hpp_source.html#l00499">499</a> of file <a class="el" href="compute__book_8hpp_source.html">compute_book.hpp</a>.</p>
 
 </div>
 </div>

@@ -108,12 +108,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;<a class="el" href="fileio_8hpp_source.html">jb/fileio.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="log_8hpp_source.html">jb/log.hpp</a>&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 </div>
 <p><a href="itch5inside_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a073edec987183f01df5a639b4c101d5e"><td class="memTemplParams" colspan="2">template&lt;typename book_type_t , typename cfg_book_t &gt; </td></tr>
+<tr class="memitem:a073edec987183f01df5a639b4c101d5e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="itch5inside_8cpp.html#a073edec987183f01df5a639b4c101d5e">run_inside</a> (config const &amp;cfg, cfg_book_t const &amp;cfg_book)</td></tr>
+<tr class="memdesc:a073edec987183f01df5a639b4c101d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template function to refactor the usage of a book side type.  <a href="#a073edec987183f01df5a639b4c101d5e">More...</a><br /></td></tr>
+<tr class="separator:a073edec987183f01df5a639b4c101d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="itch5inside_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
 <tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -147,10 +152,60 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>if enable_array_based uses array_based_order_book type and the config built by the call's arguments</p>
+<p>... uses map_based_order_book type and a default config </p>
 
-<p>Definition at line <a class="el" href="itch5inside_8cpp_source.html#l00045">45</a> of file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
+<p>Definition at line <a class="el" href="itch5inside_8cpp_source.html#l00115">115</a> of file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
 
-<p>References <a class="el" href="config__object_8hpp_source.html#l00240">jb::config_object::desc()</a>, <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>, <a class="el" href="generate__inside_8hpp_source.html#l00078">jb::itch5::generate_inside()</a>, <a class="el" href="log_8cpp_source.html#l00198">jb::log::init()</a>, <a class="el" href="fileio_8cpp_source.html#l00027">jb::open_input_file()</a>, <a class="el" href="fileio_8cpp_source.html#l00012">jb::open_output_file()</a>, <a class="el" href="offline__feed__statistics_8cpp_source.html#l00120">jb::offline_feed_statistics::print_csv_header()</a>, <a class="el" href="process__iostream_8hpp_source.html#l00056">jb::itch5::process_iostream()</a>, and <a class="el" href="offline__feed__statistics_8hpp_source.html#l00154">jb::offline_feed_statistics::config::reporting_interval_seconds</a>.</p>
+<p>References <a class="el" href="config__object_8hpp_source.html#l00240">jb::config_object::desc()</a>, <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>, and <a class="el" href="offline__feed__statistics_8hpp_source.html#l00154">jb::offline_feed_statistics::config::reporting_interval_seconds</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a073edec987183f01df5a639b4c101d5e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename book_type_t , typename cfg_book_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void run_inside </td>
+          <td>(</td>
+          <td class="paramtype">config const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cfg_book_t const &amp;&#160;</td>
+          <td class="paramname"><em>cfg_book</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Template function to refactor the usage of a book side type. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">book_type_t</td><td>based order book type </td></tr>
+    <tr><td class="paramname">cfg_book_t</td><td>Defines the config type</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cfg</td><td>Application config object </td></tr>
+    <tr><td class="paramname">cfg_book</td><td>Book side config object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="itch5inside_8cpp_source.html#l00060">60</a> of file <a class="el" href="itch5inside_8cpp_source.html">itch5inside.cpp</a>.</p>
+
+<p>References <a class="el" href="generate__inside_8hpp_source.html#l00078">jb::itch5::generate_inside()</a>, <a class="el" href="log_8cpp_source.html#l00198">jb::log::init()</a>, <a class="el" href="fileio_8cpp_source.html#l00027">jb::open_input_file()</a>, <a class="el" href="fileio_8cpp_source.html#l00012">jb::open_output_file()</a>, <a class="el" href="offline__feed__statistics_8cpp_source.html#l00120">jb::offline_feed_statistics::print_csv_header()</a>, and <a class="el" href="process__iostream_8hpp_source.html#l00056">jb::itch5::process_iostream()</a>.</p>
 
 </div>
 </div>

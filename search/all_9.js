@@ -15,6 +15,7 @@ var searchData=
   ['itch5',['itch5',['../namespacejb_1_1itch5.html',1,'jb']]],
   ['jb',['jb',['../namespacejb.html',1,'']]],
   ['jb_2dconfig_2ehpp',['jb-config.hpp',['../jb-config_8hpp.html',1,'']]],
+  ['jb_5farray_5fdefaults_5fmax_5fsize',['JB_ARRAY_DEFAULTS_max_size',['../array__based__order__book_8hpp.html#a3c04383cd5841dd828b19552df849bca',1,'array_based_order_book.hpp']]],
   ['jb_5fassert_5fthrow',['JB_ASSERT_THROW',['../assert__throw_8hpp.html#a503f533c0ce1b5a57594f16306ae677a',1,'assert_throw.hpp']]],
   ['jb_5fbook_5fdepth_5fstats_5fdefaults_5fmax_5fbook_5fdepth',['JB_BOOK_DEPTH_STATS_DEFAULTS_max_book_depth',['../book__depth__statistics_8cpp.html#a560cd30caabb7980e8911c1ef364efda',1,'book_depth_statistics.cpp']]],
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
@@ -55,7 +56,7 @@ var searchData=
   ['jaybeams_20tools',['JayBeams Tools',['../md_tools_README.html',1,'']]],
   ['mold_5fudp_5fprotocol',['mold_udp_protocol',['../namespacejb_1_1itch5_1_1mold__udp__protocol.html',1,'jb::itch5']]],
   ['protocol',['protocol',['../namespacejb_1_1itch5_1_1protocol.html',1,'jb::itch5']]],
-  ['testing',['testing',['../namespacejb_1_1testing.html',1,'jb']]],
   ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]],
+  ['testing',['testing',['../namespacejb_1_1testing.html',1,'jb']]],
   ['yaml',['yaml',['../namespacejb_1_1yaml.html',1,'jb']]]
 ];

@@ -99,6 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classjb_1_1itch5_1_1price__field-members.html">List of all members</a>  </div>
@@ -140,6 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7679544b98b1fe26a3f26c87eb894785"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1price__field.html#a7679544b98b1fe26a3f26c87eb894785">operator=</a> (<a class="el" href="classjb_1_1itch5_1_1price__field.html#aa710c346344979f32250d174c8d0775a">wire_type</a> rhs)</td></tr>
 <tr class="memdesc:a7679544b98b1fe26a3f26c87eb894785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment from.  <a href="#a7679544b98b1fe26a3f26c87eb894785">More...</a><br /></td></tr>
 <tr class="separator:a7679544b98b1fe26a3f26c87eb894785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6bbbad12a1822f76872c4fba7e6507"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1price__field.html#a5a6bbbad12a1822f76872c4fba7e6507">operator+=</a> (<a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a> const &amp;rhs)</td></tr>
+<tr class="memdesc:a5a6bbbad12a1822f76872c4fba7e6507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Addition assignment operator.  <a href="#a5a6bbbad12a1822f76872c4fba7e6507">More...</a><br /></td></tr>
+<tr class="separator:a5a6bbbad12a1822f76872c4fba7e6507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:a001a7324df514a2e18008345ea690a2d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1price__field.html#a001a7324df514a2e18008345ea690a2d">as_double</a> () const </td></tr>
 <tr class="separator:a001a7324df514a2e18008345ea690a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +154,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a57648b7c3033d7f04c08cced33941142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40c0524b97fbe4d5c51d73a9575fb243"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1price__field.html#a40c0524b97fbe4d5c51d73a9575fb243">operator&lt;</a> (<a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a> const &amp;rhs) const </td></tr>
 <tr class="separator:a40c0524b97fbe4d5c51d73a9575fb243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ae6c54d9a712f27f66912274825528649"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1price__field.html#ae6c54d9a712f27f66912274825528649">dollar_price</a> ()</td></tr>
+<tr class="separator:ae6c54d9a712f27f66912274825528649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -246,7 +255,7 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 
 <p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00050">50</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00124">jb::itch5::max_price_field_value()</a>.</p>
+<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00098">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::dollar_price()</a>, and <a class="el" href="price__field_8hpp_source.html#l00135">jb::itch5::max_price_field_value()</a>.</p>
 
 </div>
 </div>
@@ -304,7 +313,7 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00069">69</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00075">75</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -331,7 +340,64 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00073">73</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00079">79</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae6c54d9a712f27f66912274825528649"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a> <a class="el" href="classjb_1_1itch5_1_1price__field.html">jb::itch5::price_field</a>&lt; wire_type_t, denom_v &gt;::dollar_price </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00098">98</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5a6bbbad12a1822f76872c4fba7e6507"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&amp; <a class="el" href="classjb_1_1itch5_1_1price__field.html">jb::itch5::price_field</a>&lt; wire_type_t, denom_v &gt;::operator+= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1price__field.html">price_field</a>&lt; wire_type_t, denom_v &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Addition assignment operator. </p>
+
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00066">66</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -359,7 +425,7 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00086">86</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00092">92</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -419,7 +485,7 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 
 <p>Base comparison operators. </p>
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00082">82</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00088">88</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
 </div>
 </div>
@@ -448,7 +514,7 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 
 <p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00041">41</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00124">jb::itch5::max_price_field_value()</a>.</p>
+<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00098">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::dollar_price()</a>, and <a class="el" href="price__field_8hpp_source.html#l00135">jb::itch5::max_price_field_value()</a>.</p>
 
 </div>
 </div>
@@ -500,9 +566,9 @@ template&lt;typename wire_type_t, std::intmax_t denom_v&gt; </div>
 
 <p>The value as an integer. </p>
 
-<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00093">93</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
+<p>Definition at line <a class="el" href="price__field_8hpp_source.html#l00104">104</a> of file <a class="el" href="price__field_8hpp_source.html">price_field.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00069">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::as_double()</a>, <a class="el" href="price__field_8hpp_source.html#l00073">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::as_integer()</a>, <a class="el" href="price__field_8hpp_source.html#l00086">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator&lt;()</a>, <a class="el" href="price__field_8hpp_source.html#l00060">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator=()</a>, and <a class="el" href="price__field_8hpp_source.html#l00082">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="price__field_8hpp_source.html#l00075">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::as_double()</a>, <a class="el" href="price__field_8hpp_source.html#l00079">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::as_integer()</a>, <a class="el" href="price__field_8hpp_source.html#l00066">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator+=()</a>, <a class="el" href="price__field_8hpp_source.html#l00092">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator&lt;()</a>, <a class="el" href="price__field_8hpp_source.html#l00060">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator=()</a>, and <a class="el" href="price__field_8hpp_source.html#l00088">jb::itch5::price_field&lt; std::uint32_t, 10000 &gt;::operator==()</a>.</p>
 
 </div>
 </div>

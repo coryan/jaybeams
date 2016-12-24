@@ -102,20 +102,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">order_book.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="buy__sell__indicator_8hpp_source.html">jb/itch5/buy_sell_indicator.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="array__based__order__book_8hpp_source.html">jb/itch5/array_based_order_book.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="buy__sell__indicator_8hpp_source.html">jb/itch5/buy_sell_indicator.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="map__based__order__book_8hpp_source.html">jb/itch5/map_based_order_book.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="price__field_8hpp_source.html">jb/itch5/price_field.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="feed__error_8hpp_source.html">jb/feed_error.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="log_8hpp_source.html">jb/log.hpp</a>&gt;</code><br />
-<code>#include &lt;functional&gt;</code><br />
-<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;<a class="el" href="quote__defaults_8hpp_source.html">jb/itch5/quote_defaults.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="config__object_8hpp_source.html">jb/config_object.hpp</a>&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
 </div>
 <p><a href="order__book_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:structjb_1_1itch5_1_1map__price"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__price">jb::itch5::map_price</a></td></tr>
-<tr class="memdesc:structjb_1_1itch5_1_1map__price"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the types of buy and sell sides data structure.  <a href="namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__price">More...</a><br /></td></tr>
-<tr class="separator:structjb_1_1itch5_1_1map__price"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1order__book.html">jb::itch5::order_book&lt; book_type &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maintain the ITCH-5.0 order book for a single security.  <a href="classjb_1_1itch5_1_1order__book.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,48 +129,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:adbd4336049c6195a48cb314a385a750b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#adbd4336049c6195a48cb314a385a750b">jb::itch5::half_quote</a> = std::pair&lt; price4_t, int &gt;</td></tr>
-<tr class="memdesc:adbd4336049c6195a48cb314a385a750b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple representation for price + quantity.  <a href="namespacejb_1_1itch5.html#adbd4336049c6195a48cb314a385a750b">More...</a><br /></td></tr>
-<tr class="separator:adbd4336049c6195a48cb314a385a750b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5218a0e160bb8bc9784c18fc45c531d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab5218a0e160bb8bc9784c18fc45c531d">jb::itch5::book_depth_t</a> = unsigned long int</td></tr>
+<tr class="memdesc:ab5218a0e160bb8bc9784c18fc45c531d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of prices on a side order book.  <a href="namespacejb_1_1itch5.html#ab5218a0e160bb8bc9784c18fc45c531d">More...</a><br /></td></tr>
 <tr class="separator:ab5218a0e160bb8bc9784c18fc45c531d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/><h2 class="groupheader">Class Documentation</h2>
-<a name="structjb_1_1itch5_1_1map__price" id="structjb_1_1itch5_1_1map__price"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct jb::itch5::map_price</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="textblock"><p>Define the types of buy and sell sides data structure. </p>
-<p>It is used as template parameter book_type of the template class <a class="el" href="classjb_1_1itch5_1_1order__book.html" title="Maintain the ITCH-5.0 order book for a single security. ">order_book</a>:</p><ul>
-<li>usage: jb::itch5::order_book&lt;jb::itch5::map_price&gt; </li>
-</ul>
-
-<p>Definition at line <a class="el" href="order__book_8hpp_source.html#l00022">22</a> of file <a class="el" href="order__book_8hpp_source.html">order_book.hpp</a>.</p>
-</div><table class="fieldtable">
-<tr><th colspan="3">Class Members</th></tr>
-<tr><td class="fieldtype">
-<a class="anchor" id="ac0e2b8202f35682ad6b745bf4743ec58"></a>typedef map&lt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>, int, <br class="typebreak" />
-greater&lt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> &gt;&gt;</td>
-<td class="fieldname">
-buys_t</td>
-<td class="fielddoc">
-</td></tr>
-<tr><td class="fieldtype">
-<a class="anchor" id="ae9796f775d9ce7a37596bb1ec0aef724"></a>typedef map&lt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>, int, <br class="typebreak" />
-less&lt; <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> &gt;&gt;</td>
-<td class="fieldname">
-sells_t</td>
-<td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

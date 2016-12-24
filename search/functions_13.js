@@ -5,5 +5,6 @@ var searchData=
   ['worker_5fconfig',['worker_config',['../classworker__config.html#a995e38f56bea88e411bab36fe21f859d',1,'worker_config']]],
   ['worst_5fbid',['worst_bid',['../classjb_1_1itch5_1_1order__book.html#a1b358f83129912dffb6557675c3770a9',1,'jb::itch5::order_book']]],
   ['worst_5foffer',['worst_offer',['../classjb_1_1itch5_1_1order__book.html#a12ea91d38526ffade3a07ae61ffc8cea',1,'jb::itch5::order_book']]],
+  ['worst_5fquote',['worst_quote',['../classjb_1_1itch5_1_1array__based__book__side.html#a34343398a8011f29b705502f35cb3b67',1,'jb::itch5::array_based_book_side::worst_quote()'],['../classjb_1_1itch5_1_1map__based__book__side.html#a775b16ceef91b6c42dde5b3942131a79',1,'jb::itch5::map_based_book_side::worst_quote()']]],
   ['write_5fresults',['write_results',['../classjb_1_1testing_1_1microbenchmark__base.html#a37e8b8191b0fcd3f4cf8ce1c99e1a1b0',1,'jb::testing::microbenchmark_base']]]
 ];

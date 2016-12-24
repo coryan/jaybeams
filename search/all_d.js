@@ -13,6 +13,7 @@ var searchData=
   ['net_5forder_5fimbalance_5findicator_5fmessage_2ecpp',['net_order_imbalance_indicator_message.cpp',['../net__order__imbalance__indicator__message_8cpp.html',1,'']]],
   ['net_5forder_5fimbalance_5findicator_5fmessage_2ehpp',['net_order_imbalance_indicator_message.hpp',['../net__order__imbalance__indicator__message_8hpp.html',1,'']]],
   ['new_5forder_5freference_5fnumber',['new_order_reference_number',['../structjb_1_1itch5_1_1order__replace__message.html#a6ebd864c6871020d7e39737be5acb0fb',1,'jb::itch5::order_replace_message']]],
+  ['next_5fbest_5fprice_5flevel',['next_best_price_level',['../classjb_1_1itch5_1_1array__based__book__side.html#a98ed9cad415d1e35dd4109244c97c4a4',1,'jb::itch5::array_based_book_side']]],
   ['next_5ftid',['next_tid',['../namespacejb_1_1log.html#a9d7f70d39a186df0fbfecc208a347f85',1,'jb::log']]],
   ['noop_5fvalidator',['noop_validator',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]],
   ['noop_5fvalidator_2ehpp',['noop_validator.hpp',['../noop__validator_8hpp.html',1,'']]],
