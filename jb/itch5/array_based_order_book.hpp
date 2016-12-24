@@ -326,12 +326,11 @@ private:
    * @throw feed_error top_levels_ is empty.
    */
   std::size_t relative_worst_top_level() const {
-    for (std::size_t i = 0; i != max_size_; ++i) {
-      if (top_levels_.at(i) != 0) {
-        return i; // found it
-      }
-    }
-    return max_size_; // not found!
+    return std::distance(
+        top_levels_.begin(),
+        std::find_if(top_levels_.begin(), top_levels_.end(), [](auto x) {
+          return x != 0;
+        }));
   }
 
   /// @returns number of valid prices (>0) at top_levels_
