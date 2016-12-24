@@ -87,3 +87,29 @@ BOOST_AUTO_TEST_CASE(stream_price_field_8) {
   os << actual;
   BOOST_CHECK_EQUAL(os.str(), "123456789.00012000");
 }
+
+/**
+ * @test Verify addition and addition assignment operator work as expected.
+ */
+BOOST_AUTO_TEST_CASE(addition_operators_field_4) {
+  jb::itch5::price4_t px_1(5000);
+  jb::itch5::price4_t px_2(10000);
+  jb::itch5::price4_t px_res;
+  px_res += px_1;
+  BOOST_CHECK_EQUAL(px_res, jb::itch5::price4_t(5000));
+  px_res = px_1 + px_2;
+  BOOST_CHECK_EQUAL(px_res, jb::itch5::price4_t(15000));
+}
+
+/**
+ * @test Verify addition and addition assignment operator work as expected.
+ */
+BOOST_AUTO_TEST_CASE(addition_operators_field_8) {
+  jb::itch5::price8_t px_1(5000);
+  jb::itch5::price8_t px_2(10000);
+  jb::itch5::price8_t px_res;
+  px_res += px_1;
+  BOOST_CHECK_EQUAL(px_res, jb::itch5::price8_t(5000));
+  px_res = px_1 + px_2;
+  BOOST_CHECK_EQUAL(px_res, jb::itch5::price8_t(15000));
+}

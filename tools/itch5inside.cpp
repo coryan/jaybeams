@@ -16,6 +16,7 @@
 #include <jb/log.hpp>
 
 #include <stdexcept>
+#include <type_traits>
 #include <unordered_map>
 
 /**
@@ -38,13 +39,25 @@ public:
   jb::config_attribute<config, jb::offline_feed_statistics::config>
       symbol_stats;
   jb::config_attribute<config, bool> enable_symbol_stats;
+  jb::config_attribute<config, bool> enable_array_based;
+  jb::config_attribute<config,
+                       typename jb::itch5::array_based_order_book::config>
+      book_cfg;
 };
 
 } // anonymous namespace
 
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.load_overrides(argc, argv, std::string("itch5inside.yaml"), "JB_ROOT");
+/**
+ * Template function to refactor the usage of a book side type.
+ *
+ * @tparam book_type_t based order book type
+ * @tparam cfg_book_t Defines the config type
+
+ * @param cfg Application config object
+ * @param cfg_book Book side config object
+ */
+template <typename book_type_t, typename cfg_book_t>
+void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
   jb::log::init(cfg.log());
 
   boost::iostreams::filtering_istream in;
@@ -56,10 +69,10 @@ int main(int argc, char* argv[]) try {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  jb::itch5::compute_book<jb::itch5::map_price>::callback_type cb = [&stats,
+  typename jb::itch5::compute_book<book_type_t>::callback_type cb = [&stats,
                                                                      &out](
       jb::itch5::message_header const& header,
-      jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
+      jb::itch5::order_book<book_type_t> const& updated_book,
       jb::itch5::book_update const& update) {
     auto pl = std::chrono::steady_clock::now() - update.recvts;
     (void)jb::itch5::generate_inside(
@@ -72,7 +85,7 @@ int main(int argc, char* argv[]) try {
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
     cb = [&stats, &out, &per_symbol, symcfg](
         jb::itch5::message_header const& header,
-        jb::itch5::order_book<jb::itch5::map_price> const& updated_book,
+        jb::itch5::order_book<book_type_t> const& updated_book,
         jb::itch5::book_update const& update) {
       auto pl = std::chrono::steady_clock::now() - update.recvts;
       if (not jb::itch5::generate_inside(
@@ -89,7 +102,7 @@ int main(int argc, char* argv[]) try {
     };
   }
 
-  jb::itch5::compute_book<jb::itch5::map_price> handler(cb);
+  jb::itch5::compute_book<book_type_t> handler(cb, cfg_book);
   jb::itch5::process_iostream(in, handler);
 
   jb::offline_feed_statistics::print_csv_header(std::cout);
@@ -97,6 +110,21 @@ int main(int argc, char* argv[]) try {
     i.second.print_csv(i.first.c_str(), std::cout);
   }
   stats.print_csv("__aggregate__", std::cout);
+}
+
+int main(int argc, char* argv[]) try {
+  config cfg;
+  cfg.load_overrides(argc, argv, std::string("itch5inside.yaml"), "JB_ROOT");
+
+  /// if enable_array_based uses array_based_order_book type
+  /// and the config built by the call's arguments
+  if (cfg.enable_array_based()) {
+    (void)run_inside<jb::itch5::array_based_order_book>(cfg, cfg.book_cfg());
+  } else {
+    /// ... uses map_based_order_book type and a default config
+    typename jb::itch5::map_based_order_book::config cfg_bk;
+    (void)run_inside<jb::itch5::map_based_order_book>(cfg, cfg_bk);
+  }
 
   return 0;
 } catch (jb::usage const& u) {
@@ -145,7 +173,14 @@ config::config()
                   "If set, enable per-symbol statistics."
                   "  Collecting per-symbol statistics is expensive in both"
                   " memory and execution time, so it is disabled by default."),
-          this, false) {
+          this, false)
+    , enable_array_based(
+          desc("enable-array-based")
+              .help(
+                  "If set, enable array_based_order_book usage."
+                  " It is disabled by default."),
+          this, false)
+    , book_cfg(desc("book-config", "order-book-config"), this) {
 }
 
 void config::validate() const {
@@ -161,9 +196,11 @@ void config::validate() const {
         "  You must specify an output file.",
         1);
   }
+
   log().validate();
   stats().validate();
   symbol_stats().validate();
+  book_cfg().validate();
 }
 
 } // anonymous namespace

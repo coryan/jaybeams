@@ -11,6 +11,7 @@
 #include <jb/itch5/order_replace_message.hpp>
 #include <jb/itch5/stock_directory_message.hpp>
 #include <jb/itch5/unknown_message.hpp>
+#include <jb/assert_throw.hpp>
 
 #include <boost/functional/hash.hpp>
 #include <chrono>
@@ -117,6 +118,9 @@ public:
   /// in some modules
   using time_point = jb::itch5::time_point;
 
+  /// config type is used to construct the order_book
+  using book_type_config = typename book_type::config;
+
   /**
    * Define the callback type
    *
@@ -135,14 +139,15 @@ public:
   //@}
 
   /// Constructor
-  explicit compute_book(callback_type&& cb)
+  explicit compute_book(callback_type&& cb, book_type_config const& cfg)
       : callback_(std::forward<callback_type>(cb))
       , books_()
-      , orders_() {
+      , orders_()
+      , cfg_(cfg) {
   }
 
-  explicit compute_book(callback_type const& cb)
-      : compute_book(callback_type(cb)) {
+  explicit compute_book(callback_type const& cb, book_type_config const& cfg)
+      : compute_book(callback_type(cb), cfg) {
   }
 
   /**
@@ -177,11 +182,17 @@ public:
       return;
     }
     // ... find the right book for this order, create one if necessary ...
-    auto& book = books_[msg.stock];
-    (void)book.handle_add_order(msg.buy_sell_indicator, msg.price, msg.shares);
+    auto itbook = books_.find(msg.stock);
+    if (itbook == books_.end()) {
+      auto newbk = books_.emplace(msg.stock, order_book<book_type>(cfg_));
+      itbook = newbk.first;
+    }
+    (void)itbook->second.handle_add_order(
+        msg.buy_sell_indicator, msg.price, msg.shares);
     callback_(
-        msg.header, book, book_update{recvts, msg.stock, msg.buy_sell_indicator,
-                                      msg.price, msg.shares});
+        msg.header, itbook->second,
+        book_update{recvts, msg.stock, msg.buy_sell_indicator, msg.price,
+                    msg.shares});
   }
 
   /**
@@ -301,17 +312,21 @@ public:
                       << ", msg=" << msg;
       return;
     }
-    auto& book = books_[position->second.stock];
+    // ... find the right book for this order
+    auto itbook = books_.find(position->second.stock);
+    // ... the book has to exists, since the original add_order created
+    // one if needed
+    JB_ASSERT_THROW(itbook != books_.end());
     // ... update the order list and book, but do not make a callback ...
     auto update = do_reduce(
-        position, book, recvts, msgcnt, msgoffset, msg.header,
+        position, itbook->second, recvts, msgcnt, msgoffset, msg.header,
         msg.original_order_reference_number, 0);
     // ... now we need to insert the new order ...
     orders_.emplace(
         msg.new_order_reference_number,
         order_data{update.stock, update.buy_sell_indicator, msg.price,
                    msg.shares});
-    (void)book.handle_add_order(
+    (void)itbook->second.handle_add_order(
         update.buy_sell_indicator, msg.price, msg.shares);
     // ... adjust the update data structure ...
     update.cxlreplx = true;
@@ -320,7 +335,7 @@ public:
     update.px = msg.price;
     update.qty = msg.shares;
     // ... and invoke the callback ...
-    callback_(msg.header, book, update);
+    callback_(msg.header, itbook->second, update);
   }
 
   /**
@@ -341,7 +356,7 @@ public:
       stock_directory_message const& msg) {
     JB_LOG(trace) << " " << msgcnt << ":" << msgoffset << " " << msg;
     // ... create the book and update the map ...
-    books_.emplace(msg.stock, order_book<book_type>());
+    books_.emplace(msg.stock, order_book<book_type>(cfg_));
   }
 
   /**
@@ -418,11 +433,15 @@ private:
                       << ", shares=" << shares;
       return;
     }
-    auto& book = books_[position->second.stock];
+    // find the book..
+    auto itbook = books_.find(position->second.stock);
+    // ... the book has to exist, since the original add_order created
+    // one if needed
+    JB_ASSERT_THROW(itbook != books_.end());
     auto u = do_reduce(
-        position, book, recvts, msgcnt, msgoffset, header,
+        position, itbook->second, recvts, msgcnt, msgoffset, header,
         order_reference_number, shares);
-    callback_(header, book, u);
+    callback_(header, itbook->second, u);
   }
 
   /**
@@ -478,6 +497,9 @@ private:
 
   /// The live orders indexed by the "order reference number"
   orders_by_id orders_;
+
+  /// reference to the order book config
+  book_type_config const& cfg_;
 };
 
 inline bool operator==(book_update const& a, book_update const& b) {
