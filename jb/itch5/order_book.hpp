@@ -5,6 +5,7 @@
 #include <jb/itch5/buy_sell_indicator.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
 #include <jb/itch5/price_field.hpp>
+#include <jb/itch5/quote_defaults.hpp>
 #include <jb/config_object.hpp>
 
 #include <type_traits>
@@ -86,16 +87,6 @@ public:
   /// @returns the worst offer price and quantity
   half_quote worst_offer() const {
     return sell_.worst_quote();
-  }
-
-  /// @returns an empty bid
-  half_quote empty_bid() const {
-    return buy_.empty_quote();
-  }
-
-  /// @returns an empty offer
-  half_quote empty_offer() const {
-    return sell_.empty_quote();
   }
 
   book_depth_t buy_count() const {

@@ -11,6 +11,7 @@
 #include <jb/itch5/order_replace_message.hpp>
 #include <jb/itch5/stock_directory_message.hpp>
 #include <jb/itch5/unknown_message.hpp>
+#include <jb/assert_throw.hpp>
 
 #include <boost/functional/hash.hpp>
 #include <chrono>
@@ -312,30 +313,29 @@ public:
       return;
     }
     // ... find the right book for this order
+    auto itbook = books_.find(position->second.stock);
     // ... the book has to exists, since the original add_order created
     // one if needed
-    auto itbook = books_.find(position->second.stock);
-    if (itbook != books_.end()) {
-      // ... update the order list and book, but do not make a callback ...
-      auto update = do_reduce(
-          position, itbook->second, recvts, msgcnt, msgoffset, msg.header,
-          msg.original_order_reference_number, 0);
-      // ... now we need to insert the new order ...
-      orders_.emplace(
-          msg.new_order_reference_number,
-          order_data{update.stock, update.buy_sell_indicator, msg.price,
-                     msg.shares});
-      (void)itbook->second.handle_add_order(
-          update.buy_sell_indicator, msg.price, msg.shares);
-      // ... adjust the update data structure ...
-      update.cxlreplx = true;
-      update.oldpx = update.px;
-      update.oldqty = -update.qty;
-      update.px = msg.price;
-      update.qty = msg.shares;
-      // ... and invoke the callback ...
-      callback_(msg.header, itbook->second, update);
-    }
+    JB_ASSERT_THROW(itbook != books_.end());
+    // ... update the order list and book, but do not make a callback ...
+    auto update = do_reduce(
+        position, itbook->second, recvts, msgcnt, msgoffset, msg.header,
+        msg.original_order_reference_number, 0);
+    // ... now we need to insert the new order ...
+    orders_.emplace(
+        msg.new_order_reference_number,
+        order_data{update.stock, update.buy_sell_indicator, msg.price,
+                   msg.shares});
+    (void)itbook->second.handle_add_order(
+        update.buy_sell_indicator, msg.price, msg.shares);
+    // ... adjust the update data structure ...
+    update.cxlreplx = true;
+    update.oldpx = update.px;
+    update.oldqty = -update.qty;
+    update.px = msg.price;
+    update.qty = msg.shares;
+    // ... and invoke the callback ...
+    callback_(msg.header, itbook->second, update);
   }
 
   /**
@@ -433,14 +433,15 @@ private:
                       << ", shares=" << shares;
       return;
     }
-    // the book is found, since add_order created it if needed
+    // find the book..
     auto itbook = books_.find(position->second.stock);
-    if (itbook != books_.end()) {
-      auto u = do_reduce(
-          position, itbook->second, recvts, msgcnt, msgoffset, header,
-          order_reference_number, shares);
-      callback_(header, itbook->second, u);
-    }
+    // ... the book has to exist, since the original add_order created
+    // one if needed
+    JB_ASSERT_THROW(itbook != books_.end());
+    auto u = do_reduce(
+        position, itbook->second, recvts, msgcnt, msgoffset, header,
+        order_reference_number, shares);
+    callback_(header, itbook->second, u);
   }
 
   /**

@@ -1,8 +1,8 @@
 #ifndef jb_itch5_map_based_order_book_hpp
 #define jb_itch5_map_based_order_book_hpp
 
-#include <jb/itch5/half_quote.hpp>
 #include <jb/itch5/price_field.hpp>
+#include <jb/itch5/quote_defaults.hpp>
 #include <jb/feed_error.hpp>
 #include <jb/log.hpp>
 
@@ -55,19 +55,10 @@ public:
   map_based_book_side(map_based_order_book::config const& cfg) {
   }
 
-  /// @returns an empty bid or offer based on compare function
-  /// empty bid for less, empty offer for greater.
-  half_quote empty_quote() const {
-    if (better_(price4_t(1), price4_t(0))) {
-      return empty_bid();
-    }
-    return empty_offer();
-  }
-
   /// @returns the best side price and quantity
   half_quote best_quote() const {
     if (levels_.empty()) {
-      return empty_quote();
+      return side<compare_t>::empty_quote();
     }
     auto i = levels_.begin();
     return half_quote(i->first, i->second);
@@ -76,7 +67,7 @@ public:
   /// @returns the worst side price and quantity
   half_quote worst_quote() const {
     if (levels_.empty()) {
-      return empty_quote();
+      return side<compare_t>::empty_quote();
     }
     auto i = levels_.rbegin();
     return half_quote(i->first, i->second);
@@ -129,30 +120,39 @@ public:
 
   /**
    * Testing hook.
-   * @returns true if px2 is a higher price than px1
+   * @returns true if side is in ascending order (BUY side)
    * To discriminate different implementations for buy and sell sides
    * during testing.
    */
-  bool price_comp(price4_t const& px1, price4_t const& px2) const {
-    return better_(px1, px2);
+  bool is_ascending() const {
+    return side<compare_t>::ascending;
   }
 
-private:
-  /// The value used to represent an empty bid
-  static half_quote empty_bid() {
-    return half_quote(price4_t(0), 0);
-  }
+  /// template specialization struct to handle differences between BUY and SELL
+  /// version SELL side
+  template <typename ordering, class DUMMY = void>
+  struct side {
+    static bool constexpr ascending = false;
 
-  /// The value used to represent an empty offer
-  static half_quote empty_offer() {
-    return half_quote(max_price_field_value<price4_t>(), 0);
-  }
+    /// @returns an empty offer
+    static half_quote empty_quote() {
+      return empty_offer();
+    }
+  };
+
+  /// version BUY side
+  template <class DUMMY>
+  struct side<std::greater<price4_t>, DUMMY> {
+    static bool constexpr ascending = true;
+
+    /// @returns an empty bid
+    static half_quote empty_quote() {
+      return empty_bid();
+    }
+  };
 
 private:
   std::map<price4_t, int, compare_t> levels_;
-  /// function object for inequality comparison of template parameter type.
-  /// if better_(p1,p2) is true means p1 is strictly a better price than p2
-  compare_t better_;
 };
 
 } // namespace itch5

@@ -94,6 +94,11 @@ public:
   }
   //@}
 
+  // Simple representation of $1.00
+  static price_field dollar_price() {
+    return price_field(price_field::denom);
+  }
+
 private:
   /// The value as an integer
   wire_type value_;

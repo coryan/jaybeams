@@ -50,17 +50,14 @@ public:
 /**
  * Template function to refactor the usage of a book side type.
  *
- * @tparam book_type_t Defines the book side type used by
- * compute_book and order_book
+ * @tparam book_type_t based order book type
  * @tparam cfg_book_t Defines the config type
- *
+
  * @param cfg Application config object
- * @param bk Dummy parameter to define the book side type
  * @param cfg_book Book side config object
  */
 template <typename book_type_t, typename cfg_book_t>
-void run_inside(
-    config const& cfg, book_type_t const& bk, cfg_book_t const& cfg_book) {
+void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
   jb::log::init(cfg.log());
 
   boost::iostreams::filtering_istream in;
@@ -122,13 +119,11 @@ int main(int argc, char* argv[]) try {
   /// if enable_array_based uses array_based_order_book type
   /// and the config built by the call's arguments
   if (cfg.enable_array_based()) {
-    jb::itch5::array_based_order_book book;
-    (void)run_inside(cfg, book, cfg.book_cfg());
+    (void)run_inside<jb::itch5::array_based_order_book>(cfg, cfg.book_cfg());
   } else {
     /// ... uses map_based_order_book type and a default config
-    jb::itch5::map_based_order_book book;
     typename jb::itch5::map_based_order_book::config cfg_bk;
-    (void)run_inside(cfg, book, cfg_bk);
+    (void)run_inside<jb::itch5::map_based_order_book>(cfg, cfg_bk);
   }
 
   return 0;
