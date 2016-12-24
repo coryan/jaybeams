@@ -80,7 +80,7 @@ void test_side_type_errors(side_type& tested) {
       tested.reduce_order(price4_t(100000 + 2 * diff), 100), jb::feed_error);
 
   // ... reduce non existing order on an empty bottom levels
-  if (diff < 0) {
+  if (tested.is_ascending()) {
     // buy side
     // reduce an non-existing order below the low range, empty bottom...
     BOOST_CHECK_THROW(tested.reduce_order(price4_t(1000), 100), jb::feed_error);
