@@ -44,8 +44,8 @@ class array_based_book_side;
  * - usage: jb::itch5::order_book<jb::itch5::array_based_order_book>
  */
 struct array_based_order_book {
-  using buys_t = array_based_book_side<std::greater<price4_t>>;
-  using sells_t = array_based_book_side<std::less<price4_t>>;
+  using buys_t = array_based_book_side<std::greater<std::size_t>>;
+  using sells_t = array_based_book_side<std::less<std::size_t>>;
   class config;
 };
 
@@ -136,7 +136,8 @@ public:
     if (not bottom_levels_.empty()) {
       // ... worst price is at the bottom_levels_
       auto i = bottom_levels_.rbegin(); // get the worst bottom_levels price
-      return half_quote(i->first, i->second);
+      auto px_worst = level_to_price<price4_t>(i->first);
+      return half_quote(px_worst, i->second);
     }
     // ... worst price at the top_levels_
     auto rel_worst = relative_worst_top_level();
@@ -173,7 +174,7 @@ public:
     // check if tk_px is worse than the first price of the top_levels_
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       // emplace the price at the bottom_levels, and return (false)
-      auto emp_tup = bottom_levels_.emplace(px, 0);
+      auto emp_tup = bottom_levels_.emplace(tk_px, 0);
       emp_tup.first->second += qty;
       return false;
     }
@@ -229,7 +230,7 @@ public:
     auto tk_px = price_levels(price4_t(0), px);
     // check and handles if it is a bottom_level_ price
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
-      auto price_it = bottom_levels_.find(px);
+      auto price_it = bottom_levels_.find(tk_px);
       if (price_it == bottom_levels_.end()) {
         std::ostringstream os;
         os << "array_based_order_book::reduce_order."
@@ -296,8 +297,7 @@ public:
         // last top_levels_ price was removed...
         // ... get the new inside from the bottom_levels
         if (not bottom_levels_.empty()) {
-          auto new_inside_it = bottom_levels_.begin();
-          tk_inside_ = price_levels(price4_t(0), new_inside_it->first);
+          tk_inside_ = bottom_levels_.begin()->first;
         }
         // redefine limits
         auto limits =
@@ -373,8 +373,7 @@ private:
         // move out and clear the price (if valid)
         if (top_levels_.at(i) != 0) {
           auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-          auto px_i = level_to_price<price4_t>(tk_i);
-          bottom_levels_.emplace(px_i, top_levels_.at(i));
+          bottom_levels_.emplace(tk_i, top_levels_.at(i));
           top_levels_.at(i) = 0;
         }
       }
@@ -387,8 +386,7 @@ private:
       // ... move out the price i (if valid)
       if (top_levels_.at(i) != 0) {
         auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-        auto px_i = level_to_price<price4_t>(tk_i);
-        bottom_levels_.emplace(px_i, top_levels_.at(i));
+        bottom_levels_.emplace(tk_i, top_levels_.at(i));
         top_levels_.at(i) = 0;
       }
     }
@@ -418,7 +416,7 @@ private:
     // traverse all bottom_levels_ prices worse than or equal to tk_begin_top_
     auto le = bottom_levels_.begin();
     for (/* */; le != bottom_levels_.end(); ++le) {
-      auto tk_le = price_levels(price4_t(0), le->first);
+      auto tk_le = le->first;
       if (not side<compare_t>::better_level(tk_begin_top_, tk_le)) {
         // move price to top_levels_
         auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_le);
@@ -521,7 +519,7 @@ private:
 
   /// version BUY side
   template <class DUMMY>
-  struct side<std::greater<price4_t>, DUMMY> {
+  struct side<std::greater<std::size_t>, DUMMY> {
     static bool constexpr ascending = true;
 
     /// @returns an empty bid.
@@ -567,8 +565,8 @@ private:
   /// the best relative prices and quantity
   std::vector<int> top_levels_;
 
-  /// the worst (tail) absolute prices and quantity
-  std::map<price4_t, int, compare_t> bottom_levels_;
+  /// the worst (tail) price level and quantity
+  std::map<std::size_t, int, compare_t> bottom_levels_;
 
   /// price level the inside
   std::size_t tk_inside_;
