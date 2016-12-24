@@ -28,8 +28,7 @@ namespace defaults {
 #ifndef JB_ARRAY_DEFAULTS_max_size
 #define JB_ARRAY_DEFAULTS_max_size 10000
 #endif
-
-std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
+static std::size_t Max_Size = JB_ARRAY_DEFAULTS_max_size;
 
 } // namespace defaults
 
@@ -60,20 +59,13 @@ public:
                 .help(
                     "Configure the max size of a array based order book."
                     " Only used when enable-array-based is set"),
-            this, jb::itch5::defaults::max_size) {
+            this, jb::itch5::defaults::Max_Size) {
   }
 
   config_object_constructors(config);
 
   /// Validate the configuration
-  void validate() const override {
-    if ((max_size() <= 0) or (max_size() > jb::itch5::defaults::max_size)) {
-      std::ostringstream os;
-      os << "max-size must be > 0 and <=" << jb::itch5::defaults::max_size
-         << ", value=" << max_size();
-      throw jb::usage(os.str(), 1);
-    }
-  }
+  void validate() const override;
 
   jb::config_attribute<config, std::size_t> max_size;
 };
@@ -155,17 +147,16 @@ public:
 
   /**
    * Add a price and quantity to the side order book.
+   * - if px is worse than the px_begin_top_ then px goes to bottom_levels
+   * - if px is better than the inside then changes inside, redefines limits
+   * if needed (moving the tail to bottom_levels if any)
+   * - finally, updates qty at the relative(px)
    *
    * @param px the price of the new order
    * @param qty the quantity of the new order
    * @returns true if the inside changed
    *
    * @throw feed_error px out of valid range, or qty <= 0
-   *
-   * - if px is worse than the px_begin_top_ then px goes to bottom_levels
-   * - if px is better than the inside then changes inside, redefines limits
-   * if needed (moving the tail to bottom_levels if any)
-   * - finally, updates qty at the relative(px)
    */
   bool add_order(price4_t px, int qty) {
     validate_add_order_params(qty, px);
