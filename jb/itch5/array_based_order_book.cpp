@@ -26,7 +26,7 @@ void array_based_order_book::config::validate() const {
 }
 
 /// handle exception with tk_begin_top_, px, and qty
-void handle_exception(
+void raise_exception(
     std::string str, std::size_t tk_begin_top, price4_t px, int qty) {
   std::ostringstream os;
   os << str << " tk_begin_top_=" << tk_begin_top << " px=" << px
@@ -35,7 +35,7 @@ void handle_exception(
 }
 
 /// handle exception with relative inside and px relative position
-void handle_exception(
+void raise_exception(
     std::string str, std::size_t tk_begin_top, std::size_t tk_inside,
     std::size_t rel_px, price4_t px, int qty) {
   std::ostringstream os;

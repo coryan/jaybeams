@@ -21,8 +21,8 @@ namespace itch5 {
 
 // forward declaration of
 void validate_add_order_params(int, price4_t px = price4_t(0));
-void handle_exception(std::string, std::size_t, price4_t, int);
-void handle_exception(
+void raise_exception(std::string, std::size_t, price4_t, int);
+void raise_exception(
     std::string, std::size_t, std::size_t, std::size_t, price4_t, int);
 
 namespace defaults {
@@ -225,7 +225,7 @@ public:
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       auto price_it = bottom_levels_.find(tk_px);
       if (price_it == bottom_levels_.end()) {
-        handle_exception(
+        raise_exception(
             "array_based_book_side::reduce_order."
             " Trying to reduce non-existing bottom_levels_price.",
             tk_begin_top_, px, qty);
@@ -246,7 +246,7 @@ public:
 
     // handles the top_levels_ price
     if (side<compare_t>::better_level(tk_px, tk_inside_)) {
-      handle_exception(
+      raise_exception(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (better px_inside).",
@@ -255,7 +255,7 @@ public:
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
     if (top_levels_.at(rel_px) == 0) {
-      handle_exception(
+      raise_exception(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (top_levels_[rel_px] == 0).",
