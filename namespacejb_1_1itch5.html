@@ -487,6 +487,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab0e08e24bec4bc11897d3e8bf50c75ca">validate_add_order_params</a> (int qty, <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> px)</td></tr>
 <tr class="memdesc:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">check that parameters are valid  <a href="#ab0e08e24bec4bc11897d3e8bf50c75ca">More...</a><br /></td></tr>
 <tr class="separator:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab266243d0913ff00b9a9697564af7dc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab266243d0913ff00b9a9697564af7dc6">raise_exception</a> (std::string str, std::size_t tk_begin_top, <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> px, int qty)</td></tr>
+<tr class="memdesc:ab266243d0913ff00b9a9697564af7dc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle exception with tk_begin_top_, px, and qty  <a href="#ab266243d0913ff00b9a9697564af7dc6">More...</a><br /></td></tr>
+<tr class="separator:ab266243d0913ff00b9a9697564af7dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a92fede040abeab72e624eb5ae6018c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a8a92fede040abeab72e624eb5ae6018c">raise_exception</a> (std::string str, std::size_t tk_begin_top, std::size_t tk_inside, std::size_t rel_px, <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> px, int qty)</td></tr>
+<tr class="memdesc:a8a92fede040abeab72e624eb5ae6018c"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle exception with relative inside and px relative position  <a href="#a8a92fede040abeab72e624eb5ae6018c">More...</a><br /></td></tr>
+<tr class="separator:a8a92fede040abeab72e624eb5ae6018c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ce85c85e022a6073c99be6863c8a2f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a25ce85c85e022a6073c99be6863c8a2f">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1itch5_1_1broken__trade__message.html">broken_trade_message</a> const &amp;x)</td></tr>
 <tr class="memdesc:a25ce85c85e022a6073c99be6863c8a2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streaming operator for <a class="el" href="structjb_1_1itch5_1_1broken__trade__message.html" title="Represent an &#39;Broken Trade / Order Execution&#39; message in the ITCH-5.0 protocol. ">jb::itch5::broken_trade_message</a>.  <a href="#a25ce85c85e022a6073c99be6863c8a2f">More...</a><br /></td></tr>
 <tr class="separator:a25ce85c85e022a6073c99be6863c8a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -675,7 +681,7 @@ Functions</h2></td></tr>
 <li>usage: jb::itch5::order_book&lt;jb::itch5::array_based_order_book&gt; </li>
 </ul>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00046">46</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00038">38</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -2068,38 +2074,6 @@ template&lt;typename price_field &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0a4e89472b7e3c9e10a2cb04448ba729"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__delete__message.html">order_delete_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html" title="Represent an &#39;Order Delete&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_delete_message</a>. </p>
-
-<p>Definition at line <a class="el" href="order__delete__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__delete__message_8cpp_source.html">order_delete_message.cpp</a>.</p>
-
-<p>References <a class="el" href="order__delete__message_8hpp_source.html#l00015">jb::itch5::order_delete_message::header</a>, and <a class="el" href="order__delete__message_8hpp_source.html#l00016">jb::itch5::order_delete_message::order_reference_number</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a25ce85c85e022a6073c99be6863c8a2f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2129,6 +2103,38 @@ template&lt;typename price_field &gt; </div>
 <p>Definition at line <a class="el" href="broken__trade__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="broken__trade__message_8cpp_source.html">broken_trade_message.cpp</a>.</p>
 
 <p>References <a class="el" href="broken__trade__message_8hpp_source.html#l00016">jb::itch5::broken_trade_message::header</a>, and <a class="el" href="broken__trade__message_8hpp_source.html#l00017">jb::itch5::broken_trade_message::match_number</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0a4e89472b7e3c9e10a2cb04448ba729"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1order__delete__message.html">order_delete_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1order__delete__message.html" title="Represent an &#39;Order Delete&#39; message in the ITCH-5.0 protocol. ">jb::itch5::order_delete_message</a>. </p>
+
+<p>Definition at line <a class="el" href="order__delete__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="order__delete__message_8cpp_source.html">order_delete_message.cpp</a>.</p>
+
+<p>References <a class="el" href="order__delete__message_8hpp_source.html#l00015">jb::itch5::order_delete_message::header</a>, and <a class="el" href="order__delete__message_8hpp_source.html#l00016">jb::itch5::order_delete_message::order_reference_number</a>.</p>
 
 </div>
 </div>
@@ -2228,38 +2234,6 @@ template&lt;typename price_field &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a111a53a903439caa44861fdf81b9a687"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html">mwcb_decline_level_message</a> const &amp;&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html" title="Represent a &#39;MWCB Decline Level&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_decline_level_message</a>. </p>
-
-<p>Definition at line <a class="el" href="mwcb__decline__level__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__decline__level__message_8cpp_source.html">mwcb_decline_level_message.cpp</a>.</p>
-
-<p>References <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00021">jb::itch5::mwcb_decline_level_message::header</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00022">jb::itch5::mwcb_decline_level_message::level_1</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00023">jb::itch5::mwcb_decline_level_message::level_2</a>, and <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00024">jb::itch5::mwcb_decline_level_message::level_3</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a1f41e49eb631ddf4a7095096e7e1e0ab"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2292,7 +2266,7 @@ template&lt;typename price_field &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a367727e6ec13bf59484d27ebcf180765"></a>
+<a class="anchor" id="a111a53a903439caa44861fdf81b9a687"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2305,7 +2279,7 @@ template&lt;typename price_field &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html">mwcb_breach_message</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html">mwcb_decline_level_message</a> const &amp;&#160;</td>
           <td class="paramname"><em>x</em>&#160;</td>
         </tr>
         <tr>
@@ -2316,11 +2290,11 @@ template&lt;typename price_field &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html" title="Represent a &#39;MWCB Breach&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_breach_message</a>. </p>
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__decline__level__message.html" title="Represent a &#39;MWCB Decline Level&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_decline_level_message</a>. </p>
 
-<p>Definition at line <a class="el" href="mwcb__breach__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__breach__message_8cpp_source.html">mwcb_breach_message.cpp</a>.</p>
+<p>Definition at line <a class="el" href="mwcb__decline__level__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__decline__level__message_8cpp_source.html">mwcb_decline_level_message.cpp</a>.</p>
 
-<p>References <a class="el" href="mwcb__breach__message_8hpp_source.html#l00027">jb::itch5::mwcb_breach_message::breached_level</a>, and <a class="el" href="mwcb__breach__message_8hpp_source.html#l00026">jb::itch5::mwcb_breach_message::header</a>.</p>
+<p>References <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00021">jb::itch5::mwcb_decline_level_message::header</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00022">jb::itch5::mwcb_decline_level_message::level_1</a>, <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00023">jb::itch5::mwcb_decline_level_message::level_2</a>, and <a class="el" href="mwcb__decline__level__message_8hpp_source.html#l00024">jb::itch5::mwcb_decline_level_message::level_3</a>.</p>
 
 </div>
 </div>
@@ -2353,6 +2327,38 @@ template&lt;typename price_field &gt; </div>
 <p>Definition at line <a class="el" href="cross__trade__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="cross__trade__message_8cpp_source.html">cross_trade_message.cpp</a>.</p>
 
 <p>References <a class="el" href="cross__trade__message_8hpp_source.html#l00021">jb::itch5::cross_trade_message::cross_price</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00023">jb::itch5::cross_trade_message::cross_type</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00018">jb::itch5::cross_trade_message::header</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00022">jb::itch5::cross_trade_message::match_number</a>, <a class="el" href="cross__trade__message_8hpp_source.html#l00019">jb::itch5::cross_trade_message::shares</a>, and <a class="el" href="cross__trade__message_8hpp_source.html#l00020">jb::itch5::cross_trade_message::stock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a367727e6ec13bf59484d27ebcf180765"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; jb::itch5::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html">mwcb_breach_message</a> const &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Streaming operator for <a class="el" href="structjb_1_1itch5_1_1mwcb__breach__message.html" title="Represent a &#39;MWCB Breach&#39; message in the ITCH-5.0 protocol. ">jb::itch5::mwcb_breach_message</a>. </p>
+
+<p>Definition at line <a class="el" href="mwcb__breach__message_8cpp_source.html#l00008">8</a> of file <a class="el" href="mwcb__breach__message_8cpp_source.html">mwcb_breach_message.cpp</a>.</p>
+
+<p>References <a class="el" href="mwcb__breach__message_8hpp_source.html#l00027">jb::itch5::mwcb_breach_message::breached_level</a>, and <a class="el" href="mwcb__breach__message_8hpp_source.html#l00026">jb::itch5::mwcb_breach_message::header</a>.</p>
 
 </div>
 </div>
@@ -3176,7 +3182,7 @@ template&lt;typename price_field_t &gt; </div>
 
 <p>Definition at line <a class="el" href="price__levels_8hpp_source.html#l00020">20</a> of file <a class="el" href="price__levels_8hpp_source.html">price_levels.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00170">jb::itch5::array_based_book_side&lt; compare_t &gt;::add_order()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00117">jb::itch5::array_based_book_side&lt; compare_t &gt;::best_quote()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00456">jb::itch5::array_based_book_side&lt; compare_t &gt;::get_limits()</a>, <a class="el" href="price__levels_8hpp_source.html#l00057">level_to_price()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00436">jb::itch5::array_based_book_side&lt; compare_t &gt;::next_best_price_level()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00227">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00337">jb::itch5::array_based_book_side&lt; compare_t &gt;::top_levels_count()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00131">jb::itch5::array_based_book_side&lt; compare_t &gt;::worst_quote()</a>.</p>
+<p>Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00146">jb::itch5::array_based_book_side&lt; compare_t &gt;::add_order()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00094">jb::itch5::array_based_book_side&lt; compare_t &gt;::best_quote()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00425">jb::itch5::array_based_book_side&lt; compare_t &gt;::get_limits()</a>, <a class="el" href="price__levels_8hpp_source.html#l00057">level_to_price()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00405">jb::itch5::array_based_book_side&lt; compare_t &gt;::next_best_price_level()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00203">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>, <a class="el" href="array__based__order__book_8hpp_source.html#l00306">jb::itch5::array_based_book_side&lt; compare_t &gt;::top_levels_count()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00108">jb::itch5::array_based_book_side&lt; compare_t &gt;::worst_quote()</a>.</p>
 
 </div>
 </div>
@@ -3247,6 +3253,104 @@ template&lt;typename message_handler , typename... message_types&gt; </div>
 <p>References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, and <a class="el" href="structjb_1_1itch5_1_1decoder.html#a393a87d597c91ef3516edf906f23f479">jb::itch5::decoder&lt; validate, T &gt;::r()</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__process__iostream__mlist_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab266243d0913ff00b9a9697564af7dc6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::itch5::raise_exception </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>tk_begin_top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>&#160;</td>
+          <td class="paramname"><em>px</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>qty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>handle exception with tk_begin_top_, px, and qty </p>
+
+<p>Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00047">47</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00203">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a92fede040abeab72e624eb5ae6018c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::itch5::raise_exception </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>tk_begin_top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>tk_inside</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>rel_px</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a>&#160;</td>
+          <td class="paramname"><em>px</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>qty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>handle exception with relative inside and px relative position </p>
+
+<p>Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00056">56</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
 
 </div>
 </div>
@@ -3415,9 +3519,9 @@ template&lt;typename duration_t , typename book_type &gt; </div>
 
 <p>check that parameters are valid </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00010">10</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00037">37</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00170">jb::itch5::array_based_book_side&lt; compare_t &gt;::add_order()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00227">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>.</p>
+<p>Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00146">jb::itch5::array_based_book_side&lt; compare_t &gt;::add_order()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00203">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>.</p>
 
 </div>
 </div>

@@ -197,7 +197,7 @@ class jb::itch5::array_based_book_side&lt; compare_t &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00037">37</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00029">29</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a917ac6cd1721e1914c2b0425dc8b7c2b"></a>
 <div class="memitem">
@@ -223,7 +223,7 @@ template&lt;typename compare_t &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00105">105</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00082">82</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -263,6 +263,11 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 
 <p>Add a price and quantity to the side order book. </p>
+<ul>
+<li>if px is worse than the px_begin_top_ then px goes to bottom_levels</li>
+<li>if px is better than the inside then changes inside, redefines limits if needed (moving the tail to bottom_levels if any)</li>
+<li>finally, updates qty at the relative(px)</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">px</td><td>the price of the new order </td></tr>
@@ -273,21 +278,16 @@ template&lt;typename compare_t &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>true if the inside changed</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classjb_1_1feed__error.html" title="Communicate feed error exceptions. ">feed_error</a></td><td>px out of valid range, or qty &lt;= 0</td></tr>
+    <tr><td class="paramname"><a class="el" href="classjb_1_1feed__error.html" title="Communicate feed error exceptions. ">feed_error</a></td><td>px out of valid range, or qty &lt;= 0 </td></tr>
   </table>
   </dd>
 </dl>
-<ul>
-<li>if px is worse than the px_begin_top_ then px goes to bottom_levels</li>
-<li>if px is better than the inside then changes inside, redefines limits if needed (moving the tail to bottom_levels if any)</li>
-<li>finally, updates qty at the relative(px) </li>
-</ul>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00170">170</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00146">146</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
-<p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>, and <a class="el" href="array__based__order__book_8cpp_source.html#l00010">jb::itch5::validate_add_order_params()</a>.</p>
+<p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>, and <a class="el" href="array__based__order__book_8cpp_source.html#l00037">jb::itch5::validate_add_order_params()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00038">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -315,11 +315,11 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the best bid price and quantity. The inside is always at the top_levels_ </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00117">117</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00094">94</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00038">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -347,9 +347,9 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the number of levels with non-zero quantity for the order side. This is the size of bottom_levels_ plus all non zero top_levels values </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00152">152</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00129">129</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00038">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -388,7 +388,7 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>pair of price levels that are rel worse and better than tk_px, limited to valid price levels if tk_px is at the limit, return and empty quote values </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00456">456</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00425">425</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>.</p>
 
@@ -420,7 +420,7 @@ template&lt;typename compare_t &gt; </div>
 <p>Testing hook. </p>
 <dl class="section return"><dt>Returns</dt><dd>true is side is ascending To test different implementations for buy and sell sides </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00319">319</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00288">288</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -450,7 +450,7 @@ template&lt;typename compare_t &gt; </div>
 <p>Move relative prices from best price to tk_begin_top* (included) out of bottom_levels_ to top_levels_. </p>
 <p>*tk_begin_top_ is updated before calling this function. </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00411">411</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00380">380</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -487,7 +487,7 @@ template&lt;typename compare_t &gt; </div>
 </dl>
 <p>Inserts the prices into bottom_levels_ Shift top_levels_ prices in order for rel_max to become relative 0 Clear (value = 0) former relative position of moved prices </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00363">363</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00332">332</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="assert__throw_8hpp_source.html#l00014">JB_ASSERT_THROW</a>.</p>
 
@@ -517,7 +517,7 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the best next price level from the inside. (return empty quote price if none available). </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00436">436</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00405">405</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>.</p>
 
@@ -578,11 +578,11 @@ template&lt;typename compare_t &gt; </div>
 </dl>
 <p>Checks and handles if px is a bottom_level_ price Checks if top_levels_ is empty after reducing If so, limits have to be redefined, and tail moved into top_levels </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00227">227</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00203">203</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
-<p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>, <a class="el" href="array__based__order__book_8cpp_source.html#l00010">jb::itch5::validate_add_order_params()</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
+<p>References <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>, <a class="el" href="array__based__order__book_8cpp_source.html#l00047">jb::itch5::raise_exception()</a>, <a class="el" href="array__based__order__book_8cpp_source.html#l00037">jb::itch5::validate_add_order_params()</a>, and <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603a7b83d3f08fa392b79e3f553b585971cd">jb::warning</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00038">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -616,7 +616,7 @@ template&lt;typename compare_t &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00328">328</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00297">297</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -644,7 +644,7 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>number of valid prices (&gt;0) at top_levels_ </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00337">337</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00306">306</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>.</p>
 
@@ -674,11 +674,11 @@ template&lt;typename compare_t &gt; </div>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the worst bid price and quantity. Check if the side is empty first (return empty_quote in this case) The worst price is at the bottom_levels (if not empty), at the top_levels otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00131">131</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00108">108</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 <p>References <a class="el" href="price__levels_8hpp_source.html#l00020">jb::itch5::price_levels()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00036">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="ut__array__based__order__book_8cpp_source.html#l00038">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -705,7 +705,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>the worst (tail) price level and quantity </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00568">568</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00537">537</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -731,7 +731,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>top_levels_ max size </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00562">562</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00531">531</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -757,7 +757,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>worst price level on the top_levels_ range </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00574">574</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00543">543</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -783,7 +783,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>one price level past-the-best price in top_levels_ range </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00577">577</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00546">546</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -809,7 +809,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>price level the inside </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00571">571</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00540">540</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
@@ -835,7 +835,7 @@ template&lt;typename compare_t &gt; </div>
 
 <p>the best relative prices and quantity </p>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00565">565</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00534">534</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
 </div>
 </div>
