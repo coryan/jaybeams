@@ -20,18 +20,10 @@
 namespace jb {
 namespace itch5 {
 
-// forward declaration of
+/**
+ * Refactor add_order() validation to a non-template standalone function.
+ */
 void validate_add_order_params(int, price4_t px = price4_t(0));
-
-namespace defaults {
-
-#ifndef JB_ARRAY_DEFAULTS_max_size
-#define JB_ARRAY_DEFAULTS_max_size 10000
-#endif
-
-std::size_t max_size = JB_ARRAY_DEFAULTS_max_size;
-
-} // namespace defaults
 
 template <typename compare_t>
 class array_based_book_side;
@@ -54,26 +46,11 @@ struct array_based_order_book {
  */
 class array_based_order_book::config : public jb::config_object {
 public:
-  config()
-      : max_size(
-            desc("max-size")
-                .help(
-                    "Configure the max size of a array based order book."
-                    " Only used when enable-array-based is set"),
-            this, jb::itch5::defaults::max_size) {
-  }
-
+  config();
   config_object_constructors(config);
 
   /// Validate the configuration
-  void validate() const override {
-    if ((max_size() <= 0) or (max_size() > jb::itch5::defaults::max_size)) {
-      std::ostringstream os;
-      os << "max-size must be > 0 and <=" << jb::itch5::defaults::max_size
-         << ", value=" << max_size();
-      throw jb::usage(os.str(), 1);
-    }
-  }
+  void validate() const override;
 
   jb::config_attribute<config, std::size_t> max_size;
 };
@@ -98,7 +75,6 @@ public:
  * @tparam compare_t function object class type to sort the side
  *
  */
-
 template <typename compare_t>
 class array_based_book_side {
 public:
