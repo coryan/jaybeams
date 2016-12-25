@@ -12,8 +12,7 @@ namespace po = boost::program_options;
 
 namespace {
 bool config_file_found(
-    jb::config_files_locations<> const& search,
-    std::string const& filename,
+    jb::config_files_locations<> const& search, std::string const& filename,
     boost::filesystem::path& full_path) {
   try {
     full_path = search.find_configuration_file(filename);
