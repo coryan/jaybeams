@@ -70,6 +70,6 @@ free
 egrep ^processor /proc/cpuinfo 
 
 # ... print out the details of hardware, including CPU, memory, etc ...
-sudo lshw -sanitize
+# sudo lshw -sanitize
 
 exit 0
