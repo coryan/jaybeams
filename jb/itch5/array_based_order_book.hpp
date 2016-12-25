@@ -25,15 +25,6 @@ void raise_exception(std::string, std::size_t, price4_t, int);
 void raise_exception(
     std::string, std::size_t, std::size_t, std::size_t, price4_t, int);
 
-namespace defaults {
-
-#ifndef JB_ARRAY_DEFAULTS_max_size
-#define JB_ARRAY_DEFAULTS_max_size 10000
-#endif
-static std::size_t Max_Size = JB_ARRAY_DEFAULTS_max_size;
-
-} // namespace defaults
-
 template <typename compare_t>
 class array_based_book_side;
 
@@ -55,15 +46,7 @@ struct array_based_order_book {
  */
 class array_based_order_book::config : public jb::config_object {
 public:
-  config()
-      : max_size(
-            desc("max-size")
-                .help(
-                    "Configure the max size of a array based order book."
-                    " Only used when enable-array-based is set"),
-            this, jb::itch5::defaults::Max_Size) {
-  }
-
+  config();
   config_object_constructors(config);
 
   /// Validate the configuration
