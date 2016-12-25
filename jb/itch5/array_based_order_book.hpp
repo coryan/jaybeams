@@ -13,7 +13,6 @@
 #include <cmath>
 #include <functional>
 #include <map>
-#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -24,6 +23,9 @@ namespace itch5 {
  * Refactor add_order() validation to a non-template standalone function.
  */
 void validate_add_order_params(int, price4_t px = price4_t(0));
+void raise_exception(std::string, std::size_t, price4_t, int);
+void raise_exception(
+    std::string, std::size_t, std::size_t, std::size_t, price4_t, int);
 
 template <typename compare_t>
 class array_based_book_side;
@@ -52,7 +54,7 @@ public:
   /// Validate the configuration
   void validate() const override;
 
-  jb::config_attribute<config, std::size_t> max_size;
+  jb::config_attribute<config, int> max_size;
 };
 
 /**
@@ -131,17 +133,16 @@ public:
 
   /**
    * Add a price and quantity to the side order book.
+   * - if px is worse than the px_begin_top_ then px goes to bottom_levels
+   * - if px is better than the inside then changes inside, redefines limits
+   * if needed (moving the tail to bottom_levels if any)
+   * - finally, updates qty at the relative(px)
    *
    * @param px the price of the new order
    * @param qty the quantity of the new order
    * @returns true if the inside changed
    *
    * @throw feed_error px out of valid range, or qty <= 0
-   *
-   * - if px is worse than the px_begin_top_ then px goes to bottom_levels
-   * - if px is better than the inside then changes inside, redefines limits
-   * if needed (moving the tail to bottom_levels if any)
-   * - finally, updates qty at the relative(px)
    */
   bool add_order(price4_t px, int qty) {
     validate_add_order_params(qty, px);
@@ -208,12 +209,10 @@ public:
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       auto price_it = bottom_levels_.find(tk_px);
       if (price_it == bottom_levels_.end()) {
-        std::ostringstream os;
-        os << "array_based_order_book::reduce_order."
-           << " Trying to reduce a non-existing bottom_levels_ price."
-           << " tk_begin_top_=" << tk_begin_top_ << " px=" << px
-           << " qty=" << qty;
-        throw jb::feed_error(os.str());
+        raise_exception(
+            "array_based_book_side::reduce_order."
+            " Trying to reduce non-existing bottom_levels_price.",
+            tk_begin_top_, px, qty);
       }
       // ... reduce the quantity ...
       price_it->second -= qty;
@@ -231,25 +230,20 @@ public:
 
     // handles the top_levels_ price
     if (side<compare_t>::better_level(tk_px, tk_inside_)) {
-      std::ostringstream os;
-      os << "array_based_order_book::reduce_order."
-         << " Trying to reduce a non-existing top_levels_ price"
-         << " (better px_inside)."
-         << " tk_begin_top_=" << tk_begin_top_ << " tk_inside_=" << tk_inside_
-         << " tk_end_top_=" << tk_end_top_ << " px=" << px << " qty=" << qty;
-      throw jb::feed_error(os.str());
+      raise_exception(
+          "array_based_book_side::reduce_order."
+          " Trying to reduce a non-existing top_levels_ price"
+          " (better px_inside).",
+          tk_begin_top_, px, qty);
     }
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
     if (top_levels_.at(rel_px) == 0) {
-      std::ostringstream os;
-      os << "array_based_order_book::reduce_order."
-         << " Trying to reduce a non-existing top_levels_ price"
-         << " (top_levels_[rel_px] == 0)."
-         << " tk_begin_top_=" << tk_begin_top_ << " tk_inside_=" << tk_inside_
-         << " tk_end_top_=" << tk_end_top_ << " px relative position=" << rel_px
-         << " px=" << px << " qty=" << qty;
-      throw jb::feed_error(os.str());
+      raise_exception(
+          "array_based_book_side::reduce_order."
+          " Trying to reduce a non-existing top_levels_ price"
+          " (top_levels_[rel_px] == 0).",
+          tk_begin_top_, tk_inside_, rel_px, px, qty);
     }
 
     // ... reduce the quantity ...
