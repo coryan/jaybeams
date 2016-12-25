@@ -26,7 +26,7 @@
 set -ev
 
 # ... get the current CPU power management settings ...
-governor=`cpupower frequency-info -p | cut -f3,3 -d' ' | grep -v :`
+governor=`cpupower frequency-info -p | grep 'The governor ".*" may decide' | cut -f2,2 -d'"' `
 
 # ... set the CPU power management to optimize for performance ...
 sudo cpupower frequency-set -g performance
