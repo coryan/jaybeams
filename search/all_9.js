@@ -53,6 +53,7 @@ var searchData=
   ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]],
   ['jb_5ftesting_5fmax_5fdifferences',['JB_TESTING_MAX_DIFFERENCES',['../check__complex__close__enough_8hpp.html#a20aeb5a0bdb905aa2be9c2b010886562',1,'check_complex_close_enough.hpp']]],
   ['log',['log',['../namespacejb_1_1log.html',1,'jb']]],
+  ['jaybeams_20style_20guide_20and_20coding_20standards',['JayBeams Style Guide and Coding Standards',['../md_doc_style_guide.html',1,'']]],
   ['jaybeams_20tools',['JayBeams Tools',['../md_tools_README.html',1,'']]],
   ['mold_5fudp_5fprotocol',['mold_udp_protocol',['../namespacejb_1_1itch5_1_1mold__udp__protocol.html',1,'jb::itch5']]],
   ['protocol',['protocol',['../namespacejb_1_1itch5_1_1protocol.html',1,'jb::itch5']]],

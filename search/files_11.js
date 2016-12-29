@@ -14,6 +14,7 @@ var searchData=
   ['stock_5ftrading_5faction_5fmessage_2ecpp',['stock_trading_action_message.cpp',['../stock__trading__action__message_8cpp.html',1,'']]],
   ['stock_5ftrading_5faction_5fmessage_2ehpp',['stock_trading_action_message.hpp',['../stock__trading__action__message_8hpp.html',1,'']]],
   ['strtonum_2ehpp',['strtonum.hpp',['../strtonum_8hpp.html',1,'']]],
+  ['style_5fguide_2emd',['style_guide.md',['../style__guide_8md.html',1,'']]],
   ['system_5fevent_5fmessage_2ecpp',['system_event_message.cpp',['../system__event__message_8cpp.html',1,'']]],
   ['system_5fevent_5fmessage_2ehpp',['system_event_message.hpp',['../system__event__message_8hpp.html',1,'']]]
 ];
