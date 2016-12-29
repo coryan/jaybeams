@@ -8,6 +8,8 @@ RUN dnf update -y && dnf install -y \
     boost \
     boost-devel \
     clang \
+    clinfo \
+    cmake \
     compiler-rt \
     doxygen \
     fftw-devel \
@@ -15,7 +17,10 @@ RUN dnf update -y && dnf install -y \
     gcc-c++ \
     git \
     make \
+    ocl-icd-devel \
+    opencl-headers \
     patch \
+    pocl-devel \
     tar \
     wget \
     yaml-cpp-devel
@@ -28,5 +33,28 @@ RUN cd skye-0.3.2 && \
     make check && \
     make install
 
+
+WORKDIR /var/tmp/build-clFFT
+RUN wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz
+RUN tar -xf v2.12.2.tar.gz
+RUN cd clFFT-2.12.2/src && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.12.2 . && \
+    make && \
+    make install
+
+# ... use this to avoid settint LD_LIBRARY_PATH everywhere ...
+RUN echo /usr/local/clFFT-2.12.2/lib64 | tee /etc/ld.so.conf.d/clfft-2.12.2.conf
+RUN ldconfig
+
+WORKDIR /var/tmp/build-boost-compute
+RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz
+RUN tar -xf boost-1.62.0.tar.gz
+RUN cd compute-boost-1.62.0 && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/boost-compute-1.62.0 \
+      -DBOOST_COMPUTE_THREAD_SAFE=ON \
+      -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" .. && \
+    make && make install
+
 WORKDIR /root
-RUN /bin/rm -fr /var/tmp/build-skye
+RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/build-clFFT /var/tmp/build-boost-compute
