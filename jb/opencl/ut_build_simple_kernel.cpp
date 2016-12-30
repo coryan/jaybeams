@@ -43,22 +43,29 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
 
-  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
-      context, device, valid_program, "add_double"));
-  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
-      context, device, valid_program, "add_float"));
-  BOOST_CHECK_THROW(jb::opencl::build_simple_kernel(
-      context, device, invalid_program, "add_float"), std::exception);
+  BOOST_CHECK_NO_THROW(
+      jb::opencl::build_simple_kernel(
+          context, device, valid_program, "add_double"));
+  BOOST_CHECK_NO_THROW(
+      jb::opencl::build_simple_kernel(
+          context, device, valid_program, "add_float"));
+  BOOST_CHECK_THROW(
+      jb::opencl::build_simple_kernel(
+          context, device, invalid_program, "add_float"),
+      std::exception);
 
   std::istringstream is(valid_program);
-  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
-      context, device, is, "add_double"));
-  is.str(valid_program); is.clear();
-  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
-      context, device, is, "add_float"));
-  is.str(invalid_program); is.clear();
-  BOOST_CHECK_THROW(jb::opencl::build_simple_kernel(
-          context, device, is, "add_float"), std::exception);
+  BOOST_CHECK_NO_THROW(
+      jb::opencl::build_simple_kernel(context, device, is, "add_double"));
+  is.str(valid_program);
+  is.clear();
+  BOOST_CHECK_NO_THROW(
+      jb::opencl::build_simple_kernel(context, device, is, "add_float"));
+  is.str(invalid_program);
+  is.clear();
+  BOOST_CHECK_THROW(
+      jb::opencl::build_simple_kernel(context, device, is, "add_float"),
+      std::exception);
 }
 
 /**
@@ -69,21 +76,24 @@ BOOST_AUTO_TEST_CASE(build_simple_program) {
   boost::compute::context context(device);
 
   boost::compute::program program;
-  BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(
-      context, device, valid_program));
+  BOOST_CHECK_NO_THROW(
+      program =
+          jb::opencl::build_simple_program(context, device, valid_program));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
 
-  BOOST_CHECK_THROW(jb::opencl::build_simple_program(
-      context, device, invalid_program), std::exception);
+  BOOST_CHECK_THROW(
+      jb::opencl::build_simple_program(context, device, invalid_program),
+      std::exception);
 
   std::istringstream is(valid_program);
-  BOOST_CHECK_NO_THROW(program = jb::opencl::build_simple_program(
-      context, device, is));
+  BOOST_CHECK_NO_THROW(
+      program = jb::opencl::build_simple_program(context, device, is));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
 
-  is.str(invalid_program); is.clear();
-  BOOST_CHECK_THROW(jb::opencl::build_simple_program(
-      context, device, is), std::exception);
+  is.str(invalid_program);
+  is.clear();
+  BOOST_CHECK_THROW(
+      jb::opencl::build_simple_program(context, device, is), std::exception);
 }

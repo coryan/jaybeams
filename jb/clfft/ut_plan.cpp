@@ -1,8 +1,8 @@
-#include <jb/clfft/plan.hpp>
 #include <jb/clfft/init.hpp>
+#include <jb/clfft/plan.hpp>
 #include <jb/opencl/device_selector.hpp>
-#include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/testing/create_square_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <complex>
@@ -106,7 +106,6 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
 
   jb::testing::check_vector_close_enough(dst, src, tol);
 }
-
 
 /**
  * @test Verify that the plan detects errors and reports them.

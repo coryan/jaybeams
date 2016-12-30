@@ -19,12 +19,11 @@ boost::compute::device device_selector(config const& cfg);
  */
 boost::compute::device device_selector();
 
-
 namespace detail {
 
 /// Return the best available device of the given type
-template<typename Filter>
-boost::compute::device best_device(Filter filter, char const *filter_name) {
+template <typename Filter>
+boost::compute::device best_device(Filter filter, char const* filter_name) {
   boost::compute::device selection;
   unsigned int count = 0;
   for (auto const& d : boost::compute::system::devices()) {

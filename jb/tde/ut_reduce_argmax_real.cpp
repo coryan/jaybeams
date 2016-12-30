@@ -1,5 +1,5 @@
-#include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
+#include <jb/opencl/device_selector.hpp>
 #include <jb/testing/check_vector_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 
@@ -12,7 +12,7 @@
 #include <sstream>
 
 /**
- * @test Test max_element for std::complex<float> 
+ * @test Test max_element for std::complex<float>
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
   constexpr std::size_t size = 32768;
@@ -33,28 +33,23 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
 
   boost::compute::vector<std::complex<precision_t>> a(size, context);
 
-  boost::compute::copy(
-      src.begin(), src.end(), a.begin(), queue);
+  boost::compute::copy(src.begin(), src.end(), a.begin(), queue);
 
   typedef std::complex<precision_t> value_type;
   BOOST_COMPUTE_FUNCTION(
       bool, less_real, (value_type const& a, value_type const& b),
       { return a.x < b.x; });
 
-  auto actual = boost::compute::max_element(
-      a.begin(), a.end(), less_real, queue);
+  auto actual =
+      boost::compute::max_element(a.begin(), a.end(), less_real, queue);
 
   auto pos = std::max_element(
-      src.begin(), src.end(),
-      [](value_type const& a, value_type const& b) {
+      src.begin(), src.end(), [](value_type const& a, value_type const& b) {
         return real(a) < real(b);
       });
 
   auto expected = std::distance(src.begin(), pos);
-  BOOST_CHECK_EQUAL(
-      expected, std::distance(a.begin(), actual));
+  BOOST_CHECK_EQUAL(expected, std::distance(a.begin(), actual));
   BOOST_MESSAGE(
       "Maximum found at " << expected << " value = " << src[expected]);
-                
 }
-

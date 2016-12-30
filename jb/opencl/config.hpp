@@ -10,11 +10,11 @@ namespace opencl {
  * Configure the OpenCL device / context options.
  */
 class config : public jb::config_object {
- public:
+public:
   config();
   config_object_constructors(config);
 
-  jb::config_attribute<config,std::string> device_name;
+  jb::config_attribute<config, std::string> device_name;
 };
 
 } // namespace opencl

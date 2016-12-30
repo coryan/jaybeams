@@ -1,7 +1,7 @@
-#include <jb/clfft/error.hpp>
+#include "jb/clfft/error.hpp"
 
-#include <clFFT.h>
 #include <boost/compute/exception/opencl_error.hpp>
+#include <clFFT.h>
 #include <sstream>
 #include <utility>
 
@@ -19,30 +19,30 @@ std::string jb::clfft::clfft_error::to_string(cl_int error) {
   if (error < CLFFT_BUGCHECK) {
     return boost::compute::opencl_error::to_string(error);
   }
-  // 
-  switch(error) {
-    case CLFFT_BUGCHECK:
-      return "bugcheck";
-    case CLFFT_NOTIMPLEMENTED:
-      return "functionality is not implemented yet";
-    case CLFFT_TRANSPOSED_NOTIMPLEMENTED:
-      return "transposed functionality is not implemented"
-          " for this transformation";
-    case CLFFT_FILE_NOT_FOUND:
-      return "tried to open an existing file on the host system, but failed";
-    case CLFFT_FILE_CREATE_FAILURE:
-      return "tried to create a file on the host system, but failed";
-    case CLFFT_VERSION_MISMATCH:
-      return "version conflict between client and library";
-    case CLFFT_INVALID_PLAN:
-      return "requested plan could not be found";
-    case CLFFT_DEVICE_NO_DOUBLE:
-      return "double precision not supported on this device";
-    case CLFFT_DEVICE_MISMATCH:
-      return "attempt to run on a device using a plan"
-          " baked for a different device";
-    case CLFFT_ENDSTATUS:
-      return "ENDSTATUS - first error code out of range";
+  //
+  switch (error) {
+  case CLFFT_BUGCHECK:
+    return "bugcheck";
+  case CLFFT_NOTIMPLEMENTED:
+    return "functionality is not implemented yet";
+  case CLFFT_TRANSPOSED_NOTIMPLEMENTED:
+    return "transposed functionality is not implemented"
+           " for this transformation";
+  case CLFFT_FILE_NOT_FOUND:
+    return "tried to open an existing file on the host system, but failed";
+  case CLFFT_FILE_CREATE_FAILURE:
+    return "tried to create a file on the host system, but failed";
+  case CLFFT_VERSION_MISMATCH:
+    return "version conflict between client and library";
+  case CLFFT_INVALID_PLAN:
+    return "requested plan could not be found";
+  case CLFFT_DEVICE_NO_DOUBLE:
+    return "double precision not supported on this device";
+  case CLFFT_DEVICE_MISMATCH:
+    return "attempt to run on a device using a plan"
+           " baked for a different device";
+  case CLFFT_ENDSTATUS:
+    return "ENDSTATUS - first error code out of range";
   }
   return "unknown error code";
 }

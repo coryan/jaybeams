@@ -1,6 +1,6 @@
 #include <jb/opencl/config.hpp>
-#include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
+#include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
 #include <boost/compute/algorithm/copy.hpp>
@@ -8,18 +8,18 @@
 #include <boost/compute/container/vector.hpp>
 #include <cstdint>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 #include <unistd.h>
 
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config()
       : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this)
-  {}
+      , opencl(desc("opencl"), this) {
+  }
 
   jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
   jb::config_attribute<config, jb::opencl::config> opencl;
@@ -35,40 +35,35 @@ int default_size() {
   return pagesize;
 }
 
-
-template<bool upload>
+template <bool upload>
 class fixture {
- public:
+public:
   fixture(
-      boost::compute::context& context,
-      boost::compute::command_queue& q,
+      boost::compute::context& context, boost::compute::command_queue& q,
       bool aligned)
-      : fixture(default_size(), context, q, aligned)
-  {}
+      : fixture(default_size(), context, q, aligned) {
+  }
   fixture(
-      int size,
-      boost::compute::context& context,
-      boost::compute::command_queue& q,
-      bool aligned)
+      int size, boost::compute::context& context,
+      boost::compute::command_queue& q, bool aligned)
       : dev(size / sizeof(int), context)
       , host((size + get_page_size()) / sizeof(int))
       , queue(q)
       , start(host.begin())
-      , end(host.begin() + size / sizeof(int))
-  {
+      , end(host.begin() + size / sizeof(int)) {
     int pagesize = get_page_size();
-    std::intptr_t ptr = reinterpret_cast<std::intptr_t>(
-        boost::addressof(*start));
+    std::intptr_t ptr =
+        reinterpret_cast<std::intptr_t>(boost::addressof(*start));
     if (not aligned) {
       if (ptr % pagesize == 0) {
-        // simply increment the ptr to get an unaligned buffer 
+        // simply increment the ptr to get an unaligned buffer
         ++start;
         ++end;
       }
       return;
     }
-    while (ptr % pagesize != 0 and ++start != host.end()
-           and ++end != host.end()) {
+    while (ptr % pagesize != 0 and ++start != host.end() and
+           ++end != host.end()) {
       ptr = reinterpret_cast<std::intptr_t>(boost::addressof(*start));
     }
     if (ptr % pagesize != 0) {
@@ -80,7 +75,7 @@ class fixture {
     boost::compute::copy(start, end, dev.begin(), queue);
   }
 
- private:
+private:
   boost::compute::vector<int> dev;
   std::vector<int> host;
   boost::compute::command_queue queue;
@@ -89,12 +84,12 @@ class fixture {
 };
 
 /// Implement the download case
-template<>
+template <>
 void fixture<false>::run() {
   boost::compute::copy(dev.begin(), dev.end(), start, queue);
 }
 
-template<bool upload>
+template <bool upload>
 void benchmark_test_case(config const& cfg, bool aligned) {
   boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
   boost::compute::context context(device);
@@ -111,7 +106,7 @@ void benchmark_test_case(config const& cfg, bool aligned) {
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.benchmark(
-      jb::testing::microbenchmark_config().test_case("upload:aligned"))
+         jb::testing::microbenchmark_config().test_case("upload:aligned"))
       .process_cmdline(argc, argv);
 
   std::cerr << "Configuration for test\n" << cfg << std::endl;
@@ -132,20 +127,18 @@ int main(int argc, char* argv[]) try {
        << ": upload:aligned"
        << ", upload:misaligned"
        << ", download:saligned"
-       << ", download:misaligned"
-       << std::endl;
+       << ", download:misaligned" << std::endl;
     throw jb::usage(os.str(), 1);
   }
 
   return 0;
-} catch(jb::usage const& ex) {
+} catch (jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
   return ex.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-

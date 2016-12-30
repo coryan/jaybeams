@@ -88,7 +88,7 @@ microbenchmark_config::microbenchmark_config()
               " It is common, but not required, for these prefixes to be"
               " a comma-separated list of values."),
           this) {
-  }
+}
 
 } // namespace testing
 } // namespace jb

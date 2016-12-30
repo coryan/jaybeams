@@ -7,17 +7,17 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/utility/wait_list.hpp>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config()
       : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this)
-  {}
+      , opencl(desc("opencl"), this) {
+  }
 
   jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
   jb::config_attribute<config, jb::opencl::config> opencl;
@@ -29,21 +29,19 @@ __kernel void empty() {
 )""";
 
 class fixture {
- public:
+public:
+  fixture(boost::compute::context& context, boost::compute::command_queue& q)
+      : fixture(1, context, q) {
+  }
   fixture(
-      boost::compute::context& context,
-      boost::compute::command_queue& q)
-      : fixture(1, context, q)
-  {}
-  fixture(
-      int size,
-      boost::compute::context& context,
+      int size, boost::compute::context& context,
       boost::compute::command_queue& q)
       : chain_length(size)
-      , kernel(jb::opencl::build_simple_kernel(
-          context, context.get_device(), source, "empty"))
-      , queue(q)
-  {}
+      , kernel(
+            jb::opencl::build_simple_kernel(
+                context, context.get_device(), source, "empty"))
+      , queue(q) {
+  }
 
   void run() {
     boost::compute::wait_list wait;
@@ -54,7 +52,7 @@ class fixture {
     wait.wait();
   }
 
- private:
+private:
   int chain_length;
   boost::compute::kernel kernel;
   boost::compute::command_queue queue;
@@ -81,14 +79,13 @@ int main(int argc, char* argv[]) try {
   benchmark_test_case(cfg);
 
   return 0;
-} catch(jb::usage const& ex) {
+} catch (jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
   return ex.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-

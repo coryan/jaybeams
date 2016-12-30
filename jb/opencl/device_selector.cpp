@@ -1,4 +1,4 @@
-#include <jb/opencl/device_selector.hpp>
+#include "jb/opencl/device_selector.hpp"
 #include <jb/opencl/config.hpp>
 
 #include <iostream>
@@ -14,8 +14,7 @@ boost::compute::device jb::opencl::device_selector(config const& cfg) {
         [](device const& d) { return d.type() & device::gpu; }, "GPU");
   }
   if (cfg.device_name() == "") {
-    return detail::best_device(
-        [](device const& d) { return true; }, "ANY");
+    return detail::best_device([](device const& d) { return true; }, "ANY");
   }
   if (cfg.device_name() == "SYSTEM:DEFAULT") {
     return boost::compute::system::default_device();

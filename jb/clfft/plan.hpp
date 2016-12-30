@@ -5,9 +5,9 @@
 #include <jb/clfft/init.hpp>
 
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/container/vector.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/event.hpp>
-#include <boost/compute/container/vector.hpp>
 #include <boost/compute/utility/wait_list.hpp>
 
 namespace jb {
@@ -17,15 +17,19 @@ namespace clfft {
  * Wrap clfftPlanHandle objects in a class that can automatically
  * destroy them.
  */
-template<typename invector, typename outvector>
+template <typename invector, typename outvector>
 class plan {
- public:
+public:
   /// Default constructor
-  plan() : p_(), d_(ENDDIRECTION) {}
+  plan()
+      : p_()
+      , d_(ENDDIRECTION) {
+  }
 
   /// Basic move constructor
   plan(plan&& rhs)
-      : p_(rhs.p_), d_(rhs.d_) {
+      : p_(rhs.p_)
+      , d_(rhs.d_) {
     plan tmp;
     rhs.p_ = tmp.p_;
     rhs.d_ = tmp.d_;
@@ -50,14 +54,12 @@ class plan {
 
   /// Queue the transform
   boost::compute::event enqueue(
-      outvector& out, invector const& in,
-      boost::compute::command_queue& queue,
+      outvector& out, invector const& in, boost::compute::command_queue& queue,
       boost::compute::wait_list const& wait = boost::compute::wait_list()) {
     boost::compute::event event;
     cl_int err = clfftEnqueueTransform(
-        p_, d_, 1, &queue.get(),
-        wait.size(), wait.get_event_ptr(), &event.get(),
-        &in.get_buffer().get(), &out.get_buffer().get(), nullptr);
+        p_, d_, 1, &queue.get(), wait.size(), wait.get_event_ptr(),
+        &event.get(), &in.get_buffer().get(), &out.get_buffer().get(), nullptr);
     jb::clfft::check_error_code(err, "clfftEnqueueTransform");
     return event;
   }
@@ -76,12 +78,11 @@ class plan {
     return create_plan_1d_impl(out, in, context, queue, CLFFT_BACKWARD);
   }
 
- private:
+private:
   /// Refactor common code to create forward and backward plan.
   static plan create_plan_1d_impl(
       outvector const& out, invector const& in,
-      boost::compute::context& context,
-      boost::compute::command_queue& queue,
+      boost::compute::context& context, boost::compute::command_queue& queue,
       clfftDirection direction) {
     if (out.size() != in.size()) {
       throw std::invalid_argument("clfft::plan - size mismatch");
@@ -92,7 +93,7 @@ class plan {
 
     // ... the length on each dimension, if we had more dimensions
     // this would be an array with 2 or 3 elements ...
-    std::size_t lengths[] = { in.size() };
+    std::size_t lengths[] = {in.size()};
 
     // ... create a default plan ...
     clfftPlanHandle plan;
@@ -129,7 +130,7 @@ class plan {
     queue.finish();
 
     // ... return the wrapper ...
-    return jb::clfft::plan<invector, outvector>(plan, direction); 
+    return jb::clfft::plan<invector, outvector>(plan, direction);
   }
 
   //@{
@@ -140,27 +141,29 @@ class plan {
   plan& operator=(plan const&) = delete;
   //@}
 
- private:
+private:
   /// Constructor from a clfftPlanHandle
   explicit plan(clfftPlanHandle p, clfftDirection d)
-      : p_(p), d_(d) {}
+      : p_(p)
+      , d_(d) {
+  }
 
- private:
+private:
   clfftPlanHandle p_;
   clfftDirection d_;
 };
 
-template<typename invector, typename outvector>
+template <typename invector, typename outvector>
 plan<invector, outvector> create_forward_plan_1d(
-    outvector const& out, invector const& in,
-    boost::compute::context& ct, boost::compute::command_queue& q) {
+    outvector const& out, invector const& in, boost::compute::context& ct,
+    boost::compute::command_queue& q) {
   return plan<invector, outvector>::create_forward_plan_1d(out, in, ct, q);
 }
 
-template<typename invector, typename outvector>
+template <typename invector, typename outvector>
 plan<invector, outvector> create_inverse_plan_1d(
-    outvector const& out, invector const& in,
-    boost::compute::context& ct, boost::compute::command_queue& q) {
+    outvector const& out, invector const& in, boost::compute::context& ct,
+    boost::compute::command_queue& q) {
   return plan<invector, outvector>::create_inverse_plan_1d(out, in, ct, q);
 }
 

@@ -27,7 +27,7 @@ namespace opencl {
  * @returns A Future, once fulfilled it points to the end of the
  * result range.
  */
-template<class DeviceIterator, class HostIterator>
+template <class DeviceIterator, class HostIterator>
 inline boost::compute::future<HostIterator> copy_to_host_async(
     DeviceIterator first, DeviceIterator last, HostIterator result,
     boost::compute::command_queue& queue,
@@ -48,8 +48,7 @@ inline boost::compute::future<HostIterator> copy_to_host_async(
       "jb::opencl::copy_to_host_async() is not supported"
       " for non-contiguous iterators");
 
-  typedef typename std::iterator_traits<DeviceIterator>::value_type
-      value_type;
+  typedef typename std::iterator_traits<DeviceIterator>::value_type value_type;
 
   std::size_t count = bcdetail::iterator_range_size(first, last);
   if (count == 0) {
@@ -59,10 +58,9 @@ inline boost::compute::future<HostIterator> copy_to_host_async(
   bc::buffer const& buffer = first.get_buffer();
   std::size_t offset = first.get_index();
 
-  auto event =
-      queue.enqueue_read_buffer_async(
-          buffer, offset * sizeof(value_type), count * sizeof(value_type),
-          ::boost::addressof(*result));
+  auto event = queue.enqueue_read_buffer_async(
+      buffer, offset * sizeof(value_type), count * sizeof(value_type),
+      ::boost::addressof(*result));
 
   return bc::make_future(
       bcdetail::iterator_plus_distance(result, count), event);
@@ -70,6 +68,5 @@ inline boost::compute::future<HostIterator> copy_to_host_async(
 
 } // namespace opencl
 } // namespace jb
-
 
 #endif // jb_opencl_copy_to_host_async_hpp

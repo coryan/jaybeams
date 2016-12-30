@@ -1,6 +1,6 @@
-#include <jb/tde/conjugate_and_multiply.hpp>
-#include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
+#include <jb/opencl/device_selector.hpp>
+#include <jb/tde/conjugate_and_multiply.hpp>
 #include <jb/testing/check_vector_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 
@@ -11,7 +11,7 @@
 
 namespace {
 
-template<typename precision_t>
+template <typename precision_t>
 void check_conjugate_and_multiply() {
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
@@ -34,14 +34,11 @@ void check_conjugate_and_multiply() {
   boost::compute::vector<std::complex<precision_t>> out(size, context);
   std::vector<std::complex<precision_t>> actual(size);
 
-  boost::compute::copy(
-      asrc.begin(), asrc.end(), a.begin(), queue);
-  boost::compute::copy(
-      bsrc.begin(), bsrc.end(), b.begin(), queue);
+  boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
+  boost::compute::copy(bsrc.begin(), bsrc.end(), b.begin(), queue);
 
   auto future = jb::tde::conjugate_and_multiply(
-      a.begin(), a.end(), b.begin(), b.end(), out.begin(),
-      queue);
+      a.begin(), a.end(), b.begin(), b.end(), out.begin(), queue);
   auto done = jb::opencl::copy_to_host_async(
       out.begin(), out.end(), actual.begin(), queue,
       boost::compute::wait_list(future.get_event()));

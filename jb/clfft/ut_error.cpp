@@ -1,7 +1,7 @@
 #include <jb/clfft/error.hpp>
 
-#include <clFFT.h>
 #include <boost/test/unit_test.hpp>
+#include <clFFT.h>
 
 /**
  * @test Verify that jb::opencl::check_error_code works as expected.
@@ -33,4 +33,3 @@ BOOST_AUTO_TEST_CASE(clfft_error_to_string) {
       jb::clfft::clfft_error::to_string(CL_DEVICE_NOT_FOUND),
       "unknown error code");
 }
-

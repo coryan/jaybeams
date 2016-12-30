@@ -13,13 +13,13 @@ namespace clfft {
  * This class represents an error return a clFFT function.
  */
 class clfft_error : public std::runtime_error {
- public:
+public:
   /// Constructor from a clFFT error code and a message
   clfft_error(cl_int error, char const* msg);
-  
+
   /// Destructor
-  ~clfft_error() noexcept
-  {}
+  ~clfft_error() noexcept {
+  }
 
   /// Returns the numeric error code.
   cl_int error_code() const noexcept {
@@ -29,11 +29,11 @@ class clfft_error : public std::runtime_error {
   /// Convert error code to a string
   static std::string to_string(cl_int error);
 
- private:
+private:
   /// Generate a what() string given an error code and message
   std::string to_what(cl_int error, char const* msg);
-  
- private:
+
+private:
   cl_int error_;
   std::string what_;
 };

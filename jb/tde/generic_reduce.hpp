@@ -11,9 +11,9 @@
 namespace jb {
 namespace tde {
 
-template<typename reducer, typename input_type_t, typename output_type_t>
+template <typename reducer, typename input_type_t, typename output_type_t>
 class generic_reduce {
- public:
+public:
   typedef input_type_t input_type;
   typedef output_type_t output_type;
 
@@ -26,8 +26,7 @@ class generic_reduce {
       , queue_(queue)
       , program_(reducer::create_program(queue))
       , initial_(program_, "generic_transform_reduce_initial")
-      , intermediate_(program_, "generic_transform_reduce_intermediate")
-  {
+      , intermediate_(program_, "generic_transform_reduce_intermediate") {
     // ... size the first pass of the reduction.  We need to balance two
     // constraints:
     //   (a) We cannot use more memory than whatever the device
@@ -62,26 +61,26 @@ class generic_reduce {
 
     // ... so in a single pass we will need this many workgroups to
     // handle all the data ...
-    auto workgroups = std::max(
-        std::size_t(1), size_ / effective_workgroup_size_);
+    auto workgroups =
+        std::max(std::size_t(1), size_ / effective_workgroup_size_);
 
-    JB_LOG(trace)
-        << "Reducer plan settings:"
-        << "\n  size_ = " << size_
-        << "\n  sizeof(output)=" << sizeof_output_type_
-        << "\n  scratch_size=" << scratch_size_
-        << "\n  local_mem_size=" << local_mem_size
-        << "\n  max_workgroup_size=" << max_workgroup_size_
-        << "\n  effective_workgroup_size=" << effective_workgroup_size_
-        << "\n  workgroups=" << workgroups
-        << "\n  workgroups * effective_workgroup_size="
-        << workgroups * effective_workgroup_size_;
+    JB_LOG(trace) << "Reducer plan settings:"
+                  << "\n  size_ = " << size_
+                  << "\n  sizeof(output)=" << sizeof_output_type_
+                  << "\n  scratch_size=" << scratch_size_
+                  << "\n  local_mem_size=" << local_mem_size
+                  << "\n  max_workgroup_size=" << max_workgroup_size_
+                  << "\n  effective_workgroup_size="
+                  << effective_workgroup_size_
+                  << "\n  workgroups=" << workgroups
+                  << "\n  workgroups * effective_workgroup_size="
+                  << workgroups * effective_workgroup_size_;
 
     // ... a lot of that silly math was to size the output buffer ...
-    ping_ = boost::compute::vector<output_type>(
-        workgroups, queue_.get_context());
-    pong_ = boost::compute::vector<output_type>(
-        workgroups, queue_.get_context());
+    ping_ =
+        boost::compute::vector<output_type>(workgroups, queue_.get_context());
+    pong_ =
+        boost::compute::vector<output_type>(workgroups, queue_.get_context());
   }
 
   typedef typename boost::compute::vector<input_type>::iterator vector_iterator;
@@ -92,7 +91,7 @@ class generic_reduce {
     if (src.size() != size_) {
       throw std::invalid_argument("mismatched size");
     }
-    
+
     auto workgroup_size = effective_workgroup_size_;
     auto workgroups = size_ / workgroup_size;
     if (workgroups == 0) {
@@ -103,21 +102,19 @@ class generic_reduce {
         static_cast<long long>(workgroups * workgroup_size));
     auto VPT = div.quot + (div.rem != 0);
 
-    JB_LOG(trace)
-        << "Executing (initial) reducer plan for :"
-        << "\n    size_ = " << size_
-        << "\n    sizeof(output)=" << sizeof_output_type_
-        << "\n    scratch_size=" << scratch_size_
-        << "\n    max_workgroup_size=" << max_workgroup_size_
-        << "\n    effective_workgroup_size=" << effective_workgroup_size_
-        << "\n    workgroups=" << workgroups
-        << "\n    workgroup_size=" << workgroup_size
-        << "\n    worgroups*workgroup_size="
-        << workgroups * workgroup_size
-        << "\n    arg.VPT=" << VPT
-        << "\n    arg.TPB=" << workgroup_size
-        << "\n    arg.N=" << size_
-        ;
+    JB_LOG(trace) << "Executing (initial) reducer plan for :"
+                  << "\n    size_ = " << size_
+                  << "\n    sizeof(output)=" << sizeof_output_type_
+                  << "\n    scratch_size=" << scratch_size_
+                  << "\n    max_workgroup_size=" << max_workgroup_size_
+                  << "\n    effective_workgroup_size="
+                  << effective_workgroup_size_
+                  << "\n    workgroups=" << workgroups
+                  << "\n    workgroup_size=" << workgroup_size
+                  << "\n    worgroups*workgroup_size="
+                  << workgroups * workgroup_size << "\n    arg.VPT=" << VPT
+                  << "\n    arg.TPB=" << workgroup_size
+                  << "\n    arg.N=" << size_;
 
     int arg = 0;
     initial_.set_arg(arg++, ping_);
@@ -130,8 +127,7 @@ class generic_reduce {
     auto event = queue_.enqueue_1d_range_kernel(
         initial_, 0, workgroups * workgroup_size, workgroup_size, wait);
 
-    for (auto pass_output_size = workgroups;
-         pass_output_size > 1;
+    for (auto pass_output_size = workgroups; pass_output_size > 1;
          pass_output_size = workgroups) {
       // ... it is possible (specially towards the end) that we do not
       // have enough work to fill a "workgroup_size" number of
@@ -149,27 +145,28 @@ class generic_reduce {
           static_cast<long long>(workgroups * workgroup_size));
       auto VPT = div.quot + (div.rem != 0);
 
-      JB_LOG(trace)
-          << "  executing (intermediate) reducer plan with :"
-          << "\n    size_ = " << size_
-          << "\n    sizeof(output)=" << sizeof_output_type_
-          << "\n    scratch_size=" << scratch_size_
-          << "\n    max_workgroup_size=" << max_workgroup_size_
-          << "\n    effective_workgroup_size=" << effective_workgroup_size_
-          << "\n    workgroups=" << workgroups
-          << "\n    workgroup_size=" << workgroup_size
-          << "\n    worgroups*workgroup_size=" << workgroups * workgroup_size
-          << "\n    pass_output_size=" << pass_output_size
-          << "\n    arg.VPT=" << VPT
-          << "\n    arg.TPB=" << workgroup_size
-          << "\n    arg.N=" << pass_output_size
-          ;
+      JB_LOG(trace) << "  executing (intermediate) reducer plan with :"
+                    << "\n    size_ = " << size_
+                    << "\n    sizeof(output)=" << sizeof_output_type_
+                    << "\n    scratch_size=" << scratch_size_
+                    << "\n    max_workgroup_size=" << max_workgroup_size_
+                    << "\n    effective_workgroup_size="
+                    << effective_workgroup_size_
+                    << "\n    workgroups=" << workgroups
+                    << "\n    workgroup_size=" << workgroup_size
+                    << "\n    worgroups*workgroup_size="
+                    << workgroups * workgroup_size
+                    << "\n    pass_output_size=" << pass_output_size
+                    << "\n    arg.VPT=" << VPT
+                    << "\n    arg.TPB=" << workgroup_size
+                    << "\n    arg.N=" << pass_output_size;
 
       // ... prepare the kernel ...
       int arg = 0;
       intermediate_.set_arg(arg++, pong_);
       intermediate_.set_arg(arg++, boost::compute::ulong_(VPT));
-      intermediate_.set_arg(arg++, boost::compute::ulong_(workgroup_size) /* TPB */);
+      intermediate_.set_arg(
+          arg++, boost::compute::ulong_(workgroup_size) /* TPB */);
       intermediate_.set_arg(arg++, boost::compute::ulong_(pass_output_size));
       intermediate_.set_arg(arg++, ping_);
       intermediate_.set_arg(
@@ -183,7 +180,7 @@ class generic_reduce {
     return boost::compute::make_future(ping_.begin(), event);
   }
 
- private:
+private:
   std::size_t size_;
   boost::compute::command_queue queue_;
   boost::compute::program program_;

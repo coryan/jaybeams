@@ -1,23 +1,23 @@
 #include <jb/clfft/plan.hpp>
 #include <jb/opencl/config.hpp>
-#include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
+#include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
 #include <boost/compute/command_queue.hpp>
 #include <chrono>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace {
 
 class config : public jb::config_object {
- public:
+public:
   config()
       : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this)
-  {}
+      , opencl(desc("opencl"), this) {
+  }
 
   jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
   jb::config_attribute<config, jb::opencl::config> opencl;
@@ -25,35 +25,30 @@ class config : public jb::config_object {
 
 int nsamples = 2048;
 
-template<bool pipelined>
+template <bool pipelined>
 class fixture {
- public:
+public:
+  fixture(boost::compute::context& context, boost::compute::command_queue& q)
+      : fixture(nsamples, context, q) {
+  }
   fixture(
-      boost::compute::context& context,
-      boost::compute::command_queue& q)
-      : fixture(nsamples, context, q)
-  {}
-  fixture(
-      int size,
-      boost::compute::context& context,
+      int size, boost::compute::context& context,
       boost::compute::command_queue& q)
       : src(size)
       , in(size, context)
       , out(size, context)
       , dst(size)
       , queue(q)
-      , fft(jb::clfft::create_forward_plan_1d(out, in, context, queue))
-  {}
-
-  void run() {
-    boost::compute::copy(
-        src.begin(), src.end(), in.begin(), queue);
-    fft.enqueue(out, in, queue).wait();
-    boost::compute::copy(
-        out.begin(), out.end(), dst.begin(), queue);
+      , fft(jb::clfft::create_forward_plan_1d(out, in, context, queue)) {
   }
 
- private:
+  void run() {
+    boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
+    fft.enqueue(out, in, queue).wait();
+    boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
+  }
+
+private:
   typedef boost::compute::vector<std::complex<float>> invector;
   typedef boost::compute::vector<std::complex<float>> outvector;
   std::vector<std::complex<float>> src;
@@ -64,22 +59,19 @@ class fixture {
   jb::clfft::plan<invector, outvector> fft;
 };
 
-template<>
+template <>
 void fixture<true>::run() {
   using namespace boost::compute;
-  auto upload_done = copy_async(
-      src.begin(), src.end(), in.begin(), queue);
-  auto fft_done = fft.enqueue(
-      out, in, queue, wait_list(upload_done.get_event()));
+  auto upload_done = copy_async(src.begin(), src.end(), in.begin(), queue);
+  auto fft_done =
+      fft.enqueue(out, in, queue, wait_list(upload_done.get_event()));
   auto download_done = jb::opencl::copy_to_host_async(
-      out.begin(), out.end(), dst.begin(), queue,
-      wait_list(fft_done));
+      out.begin(), out.end(), dst.begin(), queue, wait_list(fft_done));
   download_done.wait();
 }
 
-template<bool pipelined>
-void benchmark_test_case(
-    config const& cfg) {
+template <bool pipelined>
+void benchmark_test_case(config const& cfg) {
   jb::clfft::init init;
   boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
   boost::compute::context context(device);
@@ -96,7 +88,7 @@ void benchmark_test_case(
 int main(int argc, char* argv[]) try {
   config cfg;
   cfg.benchmark(
-      jb::testing::microbenchmark_config().test_case("complex:float:async"))
+         jb::testing::microbenchmark_config().test_case("complex:float:async"))
       .process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
@@ -111,20 +103,18 @@ int main(int argc, char* argv[]) try {
     os << "Unknown test case (" << test_case << ")" << std::endl;
     os << " --test-case must be one of"
        << ": complex:float:async"
-       << ", complex:float:sync"
-       << std::endl;
+       << ", complex:float:sync" << std::endl;
     throw jb::usage(os.str(), 1);
   }
 
   return 0;
-} catch(jb::usage const& ex) {
+} catch (jb::usage const& ex) {
   std::cerr << "usage: " << ex.what() << std::endl;
   return ex.exit_status();
-} catch(std::exception const& ex) {
+} catch (std::exception const& ex) {
   std::cerr << "standard exception raised: " << ex.what() << std::endl;
   return 1;
-} catch(...) {
+} catch (...) {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-

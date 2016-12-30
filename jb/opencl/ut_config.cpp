@@ -10,10 +10,7 @@ BOOST_AUTO_TEST_CASE(opencl_config_basic) {
 
   BOOST_CHECK_EQUAL(config.device_name(), "");
 
-  config
-      .device_name("foo")
-      .device_name("bar")
-      ;
+  config.device_name("foo").device_name("bar");
 
   BOOST_CHECK_EQUAL(config.device_name(), "bar");
 }
@@ -21,7 +18,7 @@ BOOST_AUTO_TEST_CASE(opencl_config_basic) {
 BOOST_AUTO_TEST_CASE(cl_config_cmdline) {
   char argv0[] = "a/b/c";
   char argv1[] = "--device-name=Tahiti";
-  char *argv[] = {argv0, argv1};
+  char* argv[] = {argv0, argv1};
   int argc = sizeof(argv) / sizeof(argv[0]);
 
   jb::opencl::config config;

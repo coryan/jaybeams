@@ -4,16 +4,16 @@
 #include <jb/tde/conjugate_and_multiply_kernel.hpp>
 #include <jb/complex_traits.hpp>
 #include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/container/vector.hpp>
 #include <boost/compute/buffer.hpp>
+#include <boost/compute/container/vector.hpp>
 
 namespace jb {
 namespace tde {
 
-template<typename T>
+template <typename T>
 struct conjugate_and_multiply_traits;
 
-template<>
+template <>
 struct conjugate_and_multiply_traits<float> {
   static std::string flags() {
     return std::string("-DTYPENAME_MACRO=float2");
@@ -23,7 +23,7 @@ struct conjugate_and_multiply_traits<float> {
   }
 };
 
-template<>
+template <>
 struct conjugate_and_multiply_traits<double> {
   static std::string flags() {
     return std::string("-DTYPENAME_MACRO=double2");
@@ -33,9 +33,9 @@ struct conjugate_and_multiply_traits<double> {
   }
 };
 
-template<typename precision_t>
-boost::compute::kernel conjugate_and_multiply_kernel(
-    boost::compute::context context) {
+template <typename precision_t>
+boost::compute::kernel
+conjugate_and_multiply_kernel(boost::compute::context context) {
   typedef conjugate_and_multiply_traits<precision_t> traits;
   auto cache = boost::compute::program_cache::get_global_cache(context);
   auto program = cache->get_or_build(
@@ -44,15 +44,14 @@ boost::compute::kernel conjugate_and_multiply_kernel(
   return program.create_kernel("conjugate_and_multiply");
 }
 
-template<typename InputIterator, typename OutputIterator>
-boost::compute::future<OutputIterator>
-conjugate_and_multiply(
-    InputIterator a_start, InputIterator a_end,
-    InputIterator b_start, InputIterator b_end,
-    OutputIterator output, boost::compute::command_queue& queue,
+template <typename InputIterator, typename OutputIterator>
+boost::compute::future<OutputIterator> conjugate_and_multiply(
+    InputIterator a_start, InputIterator a_end, InputIterator b_start,
+    InputIterator b_end, OutputIterator output,
+    boost::compute::command_queue& queue,
     boost::compute::wait_list const& wait = boost::compute::wait_list()) {
-  typedef typename std::iterator_traits<InputIterator>::value_type
-      input_value_type;
+  typedef
+      typename std::iterator_traits<InputIterator>::value_type input_value_type;
   typedef typename std::iterator_traits<OutputIterator>::value_type
       output_value_type;
   typedef typename jb::extract_value_type<input_value_type>::precision
@@ -93,8 +92,8 @@ conjugate_and_multiply(
   bc::buffer const& b_buffer = b_start.get_buffer();
   bc::buffer const& dst_buffer = output.get_buffer();
 
-  auto kernel = conjugate_and_multiply_kernel<precision_type>(
-      queue.get_context());
+  auto kernel =
+      conjugate_and_multiply_kernel<precision_type>(queue.get_context());
   kernel.set_arg(0, dst_buffer);
   kernel.set_arg(1, a_buffer);
   kernel.set_arg(2, b_buffer);

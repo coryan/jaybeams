@@ -11,7 +11,7 @@ namespace clfft {
  * destroy them.
  */
 class init {
- public:
+public:
   init();
   ~init();
 

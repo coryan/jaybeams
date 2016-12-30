@@ -1,16 +1,16 @@
-#include <jb/tde/generic_reduce.hpp>
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/config.hpp>
+#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/tde/generic_reduce.hpp>
+#include <jb/testing/check_complex_close_enough.hpp>
+#include <jb/testing/create_random_timeseries.hpp>
 #include <jb/complex_traits.hpp>
 #include <jb/log.hpp>
 #include <jb/p2ceil.hpp>
-#include <jb/testing/check_complex_close_enough.hpp>
-#include <jb/testing/create_random_timeseries.hpp>
 
+#include <boost/compute/command_queue.hpp>
 #include <boost/compute/container.hpp>
 #include <boost/compute/context.hpp>
-#include <boost/compute/command_queue.hpp>
 #include <boost/compute/type_traits.hpp>
 #include <boost/compute/types/complex.hpp>
 #include <boost/test/unit_test.hpp>
@@ -21,15 +21,15 @@
 namespace jb {
 namespace tde {
 
-template<typename T>
+template <typename T>
 class reduce_sum : public generic_reduce<reduce_sum<T>, T, T> {
- public:
+public:
   reduce_sum(std::size_t size, boost::compute::command_queue const& queue)
-      : generic_reduce<reduce_sum<T>, T, T>(size, queue)
-  {}
+      : generic_reduce<reduce_sum<T>, T, T>(size, queue) {
+  }
 
-  static boost::compute::program create_program(
-      boost::compute::command_queue const& queue) {
+  static boost::compute::program
+  create_program(boost::compute::command_queue const& queue) {
     std::ostringstream os;
     os << "typedef " << boost::compute::type_name<T>() << " reduce_input_t;\n";
     os << "typedef " << boost::compute::type_name<T>() << " reduce_output_t;\n";
@@ -48,18 +48,15 @@ inline void reduce_combine(
 
 )""";
     os << generic_reduce_program_source;
-    JB_LOG(trace)
-        << "================ cut here ================\n"
-        << os.str() << "\n"
-        << "================ cut here ================\n"
-        ;
+    JB_LOG(trace) << "================ cut here ================\n"
+                  << os.str() << "\n"
+                  << "================ cut here ================\n";
     auto program = boost::compute::program::create_with_source(
         os.str(), queue.get_context());
     try {
       program.build();
-    } catch(boost::compute::opencl_error const& ex) {
-      JB_LOG(error) << "errors building program: "
-                    << ex.what() << "\n"
+    } catch (boost::compute::opencl_error const& ex) {
+      JB_LOG(error) << "errors building program: " << ex.what() << "\n"
                     << program.build_log() << "\n";
       throw;
     }
@@ -67,13 +64,12 @@ inline void reduce_combine(
   }
 };
 
-
 } // namespace tde
 } // namespace jb
 
 namespace {
 
-template<typename T>
+template <typename T>
 std::function<T()> create_random_generator(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_int_distribution<T> dis(-1000, 1000);
@@ -82,28 +78,31 @@ std::function<T()> create_random_generator(unsigned int seed) {
   return [state]() { return state->second(state->first); };
 }
 
-template<>
+template <>
 std::function<float()> create_random_generator<float>(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<float> dis(1, 2);
-  typedef std::pair<std::mt19937, std::uniform_real_distribution<float>> state_type;
+  typedef std::pair<std::mt19937, std::uniform_real_distribution<float>>
+      state_type;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
 }
 
-template<>
+template <>
 std::function<double()> create_random_generator<double>(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<double> dis(1, 2);
-  typedef std::pair<std::mt19937, std::uniform_real_distribution<double>> state_type;
+  typedef std::pair<std::mt19937, std::uniform_real_distribution<double>>
+      state_type;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
 }
 
-template<typename value_type>
+template <typename value_type>
 void check_generic_reduce(std::size_t size) {
   BOOST_MESSAGE("Testing with size = " << size);
-  boost::compute::device device = jb::opencl::device_selector(jb::opencl::config());
+  boost::compute::device device =
+      jb::opencl::device_selector(jb::opencl::config());
   BOOST_MESSAGE("Running on device = " << device.name());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
@@ -129,14 +128,14 @@ void check_generic_reduce(std::size_t size) {
   auto done = reducer.execute(asrc, a);
   done.wait();
 
-  value_type expected = std::accumulate(
-      asrc.begin(), asrc.end(), value_type(0));
+  value_type expected =
+      std::accumulate(asrc.begin(), asrc.end(), value_type(0));
   value_type actual = *done.get();
   BOOST_CHECK_MESSAGE(
       jb::testing::close_enough(actual, expected, size),
-      "mismatched CPU vs. GPU results expected(CPU)=" << expected
-      << " actual(GPU)=" << actual
-      << " delta=" << (actual - expected));
+      "mismatched CPU vs. GPU results expected(CPU)="
+          << expected << " actual(GPU)=" << actual
+          << " delta=" << (actual - expected));
 }
 
 } // anonymous namespace
@@ -148,8 +147,8 @@ void check_generic_reduce(std::size_t size) {
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_int_2e6) {
   int const N = 16;
-  for (int i = -N/2; i != N/2; ++i) {
-    std::size_t const size = (1<<8) + i;
+  for (int i = -N / 2; i != N / 2; ++i) {
+    std::size_t const size = (1 << 8) + i;
     check_generic_reduce<int>(size);
   }
 }
@@ -161,8 +160,8 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_2e6) {
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_int_2e13) {
   int const N = 16;
-  for (int i = -N/2; i != N/2; ++i) {
-    std::size_t const size = (1<<13) + i;
+  for (int i = -N / 2; i != N / 2; ++i) {
+    std::size_t const size = (1 << 13) + i;
     check_generic_reduce<int>(size);
   }
 }
@@ -172,7 +171,7 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_2e13) {
  * expected for 2^20 (1 million binary)
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_int_2e20) {
-  std::size_t const size = (1<<20);
+  std::size_t const size = (1 << 20);
   check_generic_reduce<int>(size);
 }
 
