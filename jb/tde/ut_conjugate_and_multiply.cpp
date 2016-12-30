@@ -21,7 +21,7 @@ void check_conjugate_and_multiply() {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<precision_t> dis(-1000, 1000);
   auto generator = [&gen, &dis]() { return dis(gen); };
-  BOOST_MESSAGE("SEED = " << seed);
+  BOOST_TEST_MESSAGE("SEED = " << seed);
 
   constexpr std::size_t size = 32768;
   std::vector<std::complex<precision_t>> asrc;

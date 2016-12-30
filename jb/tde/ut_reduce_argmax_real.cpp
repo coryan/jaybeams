@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<precision_t> dis(-1000, 1000);
   auto generator = [&gen, &dis]() { return dis(gen); };
-  BOOST_MESSAGE("SEED = " << seed);
+  BOOST_TEST_MESSAGE("SEED = " << seed);
 
   std::vector<std::complex<precision_t>> src;
   jb::testing::create_random_timeseries(generator, size, src);
@@ -50,6 +50,6 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
 
   auto expected = std::distance(src.begin(), pos);
   BOOST_CHECK_EQUAL(expected, std::distance(a.begin(), actual));
-  BOOST_MESSAGE(
+  BOOST_TEST_MESSAGE(
       "Maximum found at " << expected << " value = " << src[expected]);
 }

@@ -100,15 +100,15 @@ std::function<double()> create_random_generator<double>(unsigned int seed) {
 
 template <typename value_type>
 void check_generic_reduce(std::size_t size) {
-  BOOST_MESSAGE("Testing with size = " << size);
+  BOOST_TEST_MESSAGE("Testing with size = " << size);
   boost::compute::device device =
       jb::opencl::device_selector(jb::opencl::config());
-  BOOST_MESSAGE("Running on device = " << device.name());
+  BOOST_TEST_MESSAGE("Running on device = " << device.name());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
 
   unsigned int seed = std::random_device()();
-  BOOST_MESSAGE("SEED = " << seed);
+  BOOST_TEST_MESSAGE("SEED = " << seed);
   typedef typename jb::extract_value_type<value_type>::precision scalar_type;
   auto generator = create_random_generator<scalar_type>(seed);
 
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_MAX) {
   boost::compute::device device = jb::opencl::device_selector();
   auto max_mem = device.max_memory_alloc_size();
   std::size_t const size = max_mem / sizeof(int);
-  BOOST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
+  BOOST_TEST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
   check_generic_reduce<int>(size);
 }
 #endif /* 0 */
