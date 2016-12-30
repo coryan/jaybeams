@@ -34,9 +34,9 @@ RUN tar -xf autoconf-archive-2016.09.16.tar.xz
 RUN cd autoconf-archive-2016.09.16 && ./configure --prefix=/usr && make && make install
 
 WORKDIR /var/tmp/build-skye
-RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
-RUN tar -xf skye-0.3.tar.gz
-RUN cd skye-0.3 && \
+RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
+RUN tar -xf skye-0.3.2.tar.gz
+RUN cd skye-0.3.2 && \
     CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
     make check && \
     make install
