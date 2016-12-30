@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install -y \
     automake \
     clang \
     clang-format \
-    clinfo \
     cmake \
     doxygen \
     findutils \
@@ -15,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     lcov \
     libboost-all-dev \
     libclang-dev \
+    libclfft-dev \
     libfftw3-dev \
     libyaml-cpp-dev \
     llvm \
@@ -46,24 +46,14 @@ RUN wget -q http://portablecl.org/downloads/pocl-0.13.tar.gz
 RUN tar -zxf pocl-0.13.tar.gz
 RUN cd pocl-0.13 && ./configure && make && make install
 
-WORKDIR /var/tmp/build-clFFT
-RUN wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz
-RUN tar -xf v2.12.2.tar.gz
-RUN cd clFFT-2.12.2/src && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local . && \
-    make && \
-    make install
-
 WORKDIR /var/tmp/build-boost-compute
 RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz
 RUN tar -xf boost-1.62.0.tar.gz
-RUN cd compute-boost-1.62.0 && \
-    mkdir build && cd build && \
-    CC=clang CXX=clang++ cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-      -DBOOST_COMPUTE_THREAD_SAFE=ON \
-      -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Qunused-arguments -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" .. && \
-    make && make install
+WORKDIR /var/tmp/build-boost-compute/compute-boost-1.62.0
+RUN cmake . && make && make DESTDIR=staging install
+RUN cp -r staging/usr/local/include/compute/boost/compute.hpp /usr/include/boost/
+RUN cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/
 
 WORKDIR /root
 RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
-RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build-pocl
+RUN /bin/rm -fr /var/tmp/build-boost-compute /var/tmp/build-pocl
