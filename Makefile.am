@@ -790,7 +790,7 @@ jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
 jb_itch5_bm_order_book_CPPFLAGS = 
-jb_itch5_bm_order_book_LDADD = jb/libitch5.a jb/libjb.a
+jb_itch5_bm_order_book_LDADD = jb/libitch5.a jb/libjb_testing.a jb/libjb.a
 
 ################################################################
 # testing unit tests
