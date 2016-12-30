@@ -4,8 +4,7 @@ MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 RUN apt-get update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
-RUN apt-get update
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     automake \
     clang-3.8 \
     clinfo \
