@@ -118,11 +118,46 @@ instructions were originally written for Fedora 23, I will try to make
 them more generic over time.  Please submit patches to support other
 systems.
 
-Installing the developement tools:
+@subsection fedora_install_tools Installing the Developement Tools
 
 @code
-sudo yum install git gcc-c++ clang boost-devel boost autoconf automake autoconf-archive make yaml-cpp-devel
+sudo dnf install -y autoconf \
+    autoconf-archive \
+    automake \
+    boost \
+    boost-devel \
+    clang \
+    clinfo \
+    cmake \
+    doxygen \
+    fftw-devel \
+    findutils \
+    gcc-c++ \
+    git \
+    make \
+    ocl-icd-devel \
+    opencl-headers \
+    patch \
+    pocl-devel \
+    tar \
+    wget \
+    yaml-cpp-devel
 @endcode
+
+The `autoconf-archive` distributed with Fedora 23 triggers a bug in
+clang++ when determining if it supports C++11, to work around this
+problem you can patch the macros:
+
+@code
+cd /var/tmp
+git clone --depth 2 https://github.com/coryan/jaybeams.git
+cd /var/tmp/jaybeams
+patch -d / -p0 < m4/ax_cxx_compile_stdcxx.m4.patch
+@endcode
+
+@subsection fedora_install_libraries Installing Additional Libraries
+
+<b>Skye (Small Mocking framework)</b>
 
 We are going to manually install a small mocking framework
 [Skye](https://github.com/coryan/Skye)
@@ -133,6 +168,33 @@ tar -xf skye-0.3.2.tar.gz
 (cd skye-0.3.2 && ./configure && make check && sudo make install)
 @endcode
 
+<b>clFFT (FFT library for OpenCL)</b>
+
+@code
+wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz
+tar -xf v2.12.2.tar.gz
+cd clFFT-2.12.2/src
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.12.2 .
+make
+sudo make install
+cd ..
+
+# ... use this to avoid settint LD_LIBRARY_PATH everywhere ...
+echo /usr/local/clFFT-2.12.2/lib64 | sudo tee /etc/ld.so.conf.d/clfft-2.12.2.conf
+sudo ldconfig
+@endcode
+
+<b>Download and install Boost.Compute</b>
+
+@code
+wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz
+tar -xf boost-1.62.0.tar.gz
+cd compute-boost-1.62.0
+cmake . && make && make DESTDIR=staging install
+sudo cp -r staging/usr/local/include/compute/boost/compute.hpp /usr/include/boost/
+sudo cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/
+@endcode
+
 @subsection fedora_build Checkout the Code and Build
 
 This is the easy part:
@@ -140,19 +202,6 @@ This is the easy part:
 @code
 git clone https://github.com/coryan/jaybeams.git
 cd jaybeams
-@endcode
-
-The `autoconf-archive` distributed with Fedora 23 triggers a bug in
-clang++ when determining if it supports C++11, to work around this
-problem you can patch the macros:
-
-@code
-rpm -q autoconf-archive | grep -q 2016.03.20 && sudo patch -p0 < m4/ax_cxx_compile_stdcxx.m4.patch 
-@endcode
-
-With the code compiled in this way, you can now compile the code:
-
-@code
 ./bootstrap
 ./configure
 make

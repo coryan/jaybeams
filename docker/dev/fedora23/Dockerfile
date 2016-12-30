@@ -30,9 +30,9 @@ WORKDIR /var/tmp/jaybeams
 RUN patch -d / -p0 < m4/ax_cxx_compile_stdcxx.m4.patch
 
 WORKDIR /var/tmp/build-skye
-RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.tar.gz
-RUN tar -xf skye-0.3.tar.gz
-RUN cd skye-0.3 && \
+RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3/skye-0.3.2.tar.gz
+RUN tar -xf skye-0.3.2.tar.gz
+RUN cd skye-0.3.2 && \
     CXX=g++ CC=gcc ./configure && \
     make check && \
     make install
