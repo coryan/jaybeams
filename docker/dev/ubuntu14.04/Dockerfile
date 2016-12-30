@@ -63,6 +63,10 @@ RUN cd clFFT-2.12.2/src && \
     make && \
     make install
 
+# ... use this to avoid setting LD_LIBRARY_PATH everywhere ...
+RUN echo /usr/local/clFFT-2.12.2/lib64 | tee /etc/ld.so.conf.d/clfft-2.12.2.conf
+RUN ldconfig
+
 WORKDIR /var/tmp/build-boost-compute
 RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz
 RUN tar -xf boost-1.62.0.tar.gz
