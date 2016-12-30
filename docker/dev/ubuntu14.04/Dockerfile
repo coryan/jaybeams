@@ -67,14 +67,12 @@ RUN cd clFFT-2.12.2/src && \
 WORKDIR /var/tmp/build-boost-compute
 RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz
 RUN tar -xf boost-1.62.0.tar.gz
-#RUN cd compute-boost-1.62.0 && \
-#    mkdir build && cd build && \
-#    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/compute-boost \
-#      -DBOOST_COMPUTE_THREAD_SAFE=ON \
-#      -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCL_VERSION_1_2 -Wno-deprecated-declarations -Wno-constant-logical-operand" .. && \
-#    make && make install
+WORKDIR /var/tmp/build-boost-compute/compute-boost-1.62.0
+RUN cmake . && make && make DESTDIR=staging install
+RUN cp -r staging/usr/local/include/compute/boost/compute.hpp /usr/include/boost/
+RUN cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/
 
-#WORKDIR /root
-#RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
-#RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build-pocl
+WORKDIR /root
+RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
+RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build-pocl
 
