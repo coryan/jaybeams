@@ -269,8 +269,7 @@ void run_benchmark(config const& cfg, book_type_config const& book_cfg) {
   auto r = bm.run(cfg.fixture(), book_cfg, seed);
 
   typename benchmark::summary s(r);
-  JB_LOG(info) << cfg.microbenchmark().test_case() << " summary " << s
-               << std::endl;
+  JB_LOG(info) << cfg.microbenchmark().test_case() << " summary " << s;
   if (cfg.microbenchmark().verbose()) {
     bm.write_results(std::cout, r);
   }
