@@ -3,9 +3,11 @@
 // typedef ... reduce_input_t;
 // typedef ... reduce_output_t;
 
-// void reduce_initialize(reduce_output_t*);
-// void reduce_transform(reduce_output_t* dst, reduce_input_t const* src);
-// void reduce_combine(reduce_output_t* lsh, reduce_output_t const* tmp);
+// void reduce_initialize(reduce_output_t* dst);
+// void reduce_transform(
+//    reduce_output_t* dst, reduce_input_t const* src, unsigned long offset);
+// void reduce_combine(
+//    reduce_output_t* accumulated, reduce_output_t const* value);
 
 inline void reduce_combine_local2local(
     __local reduce_output_t* accumulated, __local reduce_output_t* value) {
@@ -19,7 +21,7 @@ inline void reduce_transform_global(
     reduce_output_t* lhs,
     __global reduce_input_t const* src, unsigned long offset) {
   reduce_input_t val = src[offset];
-  reduce_transform(lhs, &val);
+  reduce_transform(lhs, &val, offset);
 }
 
 void reduce_scratch(__local reduce_output_t* scratch, uint size);

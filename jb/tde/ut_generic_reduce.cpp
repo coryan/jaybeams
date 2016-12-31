@@ -5,8 +5,6 @@
 #include <jb/testing/check_complex_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 #include <jb/complex_traits.hpp>
-#include <jb/log.hpp>
-#include <jb/p2ceil.hpp>
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container.hpp>
@@ -28,39 +26,21 @@ public:
       : generic_reduce<reduce_sum<T>, T, T>(size, queue) {
   }
 
-  static boost::compute::program
-  create_program(boost::compute::command_queue const& queue) {
-    std::ostringstream os;
-    os << "typedef " << boost::compute::type_name<T>() << " reduce_input_t;\n";
-    os << "typedef " << boost::compute::type_name<T>() << " reduce_output_t;\n";
-    os << R"""(
-inline void reduce_initialize(reduce_output_t* lhs) {
-  *lhs = (reduce_output_t)(0);
-}
-inline void reduce_transform(
-    reduce_output_t* lhs, reduce_input_t const* value) {
-  *lhs = *value;
-}
-inline void reduce_combine(
-    reduce_output_t* accumulated, reduce_output_t* value) {
-  *accumulated = *accumulated + *value;
-}
+  /// @returns the body of the initialization function
+  static std::string initialize_body(char const* lhs) {
+    return std::string("*") + lhs + " = 0;";
+  }
 
-)""";
-    os << generic_reduce_program_source;
-    JB_LOG(trace) << "================ cut here ================\n"
-                  << os.str() << "\n"
-                  << "================ cut here ================\n";
-    auto program = boost::compute::program::create_with_source(
-        os.str(), queue.get_context());
-    try {
-      program.build();
-    } catch (boost::compute::opencl_error const& ex) {
-      JB_LOG(error) << "errors building program: " << ex.what() << "\n"
-                    << program.build_log() << "\n";
-      throw;
-    }
-    return program;
+  /// @returns the body of the transform function
+  static std::string
+  transform_body(char const* lhs, char const* value, char const*) {
+    return std::string("*") + lhs + " = *" + value + ";";
+  }
+
+  /// @returns the body of the combine function
+  static std::string combine_body(char const* accumulated, char const* value) {
+    return std::string("*") + accumulated + " = *" + accumulated + " + *" +
+           value + ";";
   }
 };
 
@@ -125,7 +105,7 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
   }
 
   jb::tde::reduce_sum<value_type> reducer(size, queue);
-  auto done = reducer.execute(asrc, a);
+  auto done = reducer.execute(a);
   done.wait();
 
   value_type expected =

@@ -1,0 +1,94 @@
+// -*- c++ -*-
+namespace jb {
+namespace tde {
+
+/**
+ * The interface for reducers assumed by jb::tde::generic_reducer
+ *
+ * The generic reduce algorithm is implemented using the Curiously
+ * Recurring Template Pattern (CRTP), the derived class must provide
+ * the following interface, and derive from generic_reduced with the
+ * derived class as a template parameter.
+ *
+ * The reducer just provides three small code segments:
+ * -# the reduction function itself, in combine_body().
+ * -# an initializer for the results, in initialize_body().
+ * -# the initial transformation of the inputs.  Some reducers (for
+ * example argmax), need to transform the input data before they can
+ * start work on it.
+ */
+class reducer_concept
+    : public generic_reducer<reducer_concept, float, float> {
+public:
+  /// Constructor
+  reducer_concept(std::size_t size, boost::compute::command_queue const& queue)
+      : generic_reducer<reducer_concept, float, float>(size, queue) {
+  }
+
+  /**
+   * Produce a code segment to combine two values.
+   *
+   * @param accumulated the name of the variable used as an
+   * accumulator.
+   * @param value the new value to be considered
+   * @returns a code segment initializing updating the @a accumulated
+   * variable.  For example, if this was the MIN reduction the code
+   * might be:
+   * @code{.cpp}
+   *     if (*accumulated > *value) { *accumulated = *value; }
+   * @endcode
+   * or
+   * @code
+   *    *accumulated = min(*accumulated, *value);
+   * @endcode
+   * both as strings, of course.
+   */
+  static std::string combine_body(char const* accumulated, char const* value) {
+  }
+
+  /**
+   * Produce a code segment to initialize a variable for name @a lhs
+   *
+   * @param dst the name of the variable to initialize.
+   * @returns a code segment initializing the variable, for example,
+   * if this was the MAX reduction the code might be:
+   * @code
+   * *lhs = MIN_FLOAT;
+   * @endcode
+   */
+  static std::string initialize_body(char const* dst) {
+  }
+
+  /**
+   * Produce the code segment for the initial transform of the input.
+   *
+   * Some reductions make a transformation of the data in the first
+   * transform, this is a hook to create the body of this function.
+   * Most reductions would simply use "*lhs = *value".
+   *
+   * @param dst the name of the variable where the result will be
+   * stored.
+   * @param src the name of the variable where the input value is
+   * stored.
+   * @param offset the name of the variable where the input offset (in
+   * the global input vector) is stored.
+   *
+   * @returns a code segment implementing the initial transform
+   * phase.  For example, if we are implementing "max of imaginary
+   * part" this could be:
+   * @code
+   * *lhs = value->y;
+   * @endcode
+   * Likewise, if we are implementing "ARGMAX" this could be
+   * implemented as:
+   * @code
+   * dst->offset = offset; dst->value = *src;
+   * @endcode
+   */
+  static std::string
+  transform_body(char const* dst, char const* src, char const* offset) {
+  }
+};
+
+} // namespace jb
+} // namespace tde
