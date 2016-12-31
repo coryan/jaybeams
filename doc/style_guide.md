@@ -115,7 +115,7 @@ fast FFT library.
 
 #### YAML-CPP Library
 
-Implement a YAML [yaml.org](http://www.yaml.org) parser for C++.
+Implement a [YAML](http://www.yaml.org) parser for C++.
 
 **Rationale:** Largely grandfathered in.
 
@@ -141,8 +141,9 @@ low-level formatting issues.  We use version 3.8 or higher to do the
 formatting.  The configuration file is included with
 the source code.
 
-Notice that this includes the order of `#``include` directives.  We
-follow the suggestions from Lakos: first include the main header file,
+Notice that the formatting prescribes the order of `#``include`
+directives.
+We follow the suggestions from Lakos: first include the main header file,
 then local files, the increasingly lower dependencies.  The objective
 is to detect missing dependencies in the header files early.
 With `clang-format` the main header file must be labeled specially by
