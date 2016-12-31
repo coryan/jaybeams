@@ -64,18 +64,6 @@ public:
     auto workgroups =
         std::max(std::size_t(1), size_ / effective_workgroup_size_);
 
-    JB_LOG(trace) << "Reducer plan settings:"
-                  << "\n  size_ = " << size_
-                  << "\n  sizeof(output)=" << sizeof_output_type_
-                  << "\n  scratch_size=" << scratch_size_
-                  << "\n  local_mem_size=" << local_mem_size
-                  << "\n  max_workgroup_size=" << max_workgroup_size_
-                  << "\n  effective_workgroup_size="
-                  << effective_workgroup_size_
-                  << "\n  workgroups=" << workgroups
-                  << "\n  workgroups * effective_workgroup_size="
-                  << workgroups * effective_workgroup_size_;
-
     // ... a lot of that silly math was to size the output buffer ...
     ping_ =
         boost::compute::vector<output_type>(workgroups, queue_.get_context());
@@ -101,20 +89,6 @@ public:
         static_cast<long long>(size_),
         static_cast<long long>(workgroups * workgroup_size));
     auto VPT = div.quot + (div.rem != 0);
-
-    JB_LOG(trace) << "Executing (initial) reducer plan for :"
-                  << "\n    size_ = " << size_
-                  << "\n    sizeof(output)=" << sizeof_output_type_
-                  << "\n    scratch_size=" << scratch_size_
-                  << "\n    max_workgroup_size=" << max_workgroup_size_
-                  << "\n    effective_workgroup_size="
-                  << effective_workgroup_size_
-                  << "\n    workgroups=" << workgroups
-                  << "\n    workgroup_size=" << workgroup_size
-                  << "\n    worgroups*workgroup_size="
-                  << workgroups * workgroup_size << "\n    arg.VPT=" << VPT
-                  << "\n    arg.TPB=" << workgroup_size
-                  << "\n    arg.N=" << size_;
 
     int arg = 0;
     initial_.set_arg(arg++, ping_);
@@ -144,22 +118,6 @@ public:
           static_cast<long long>(pass_output_size),
           static_cast<long long>(workgroups * workgroup_size));
       auto VPT = div.quot + (div.rem != 0);
-
-      JB_LOG(trace) << "  executing (intermediate) reducer plan with :"
-                    << "\n    size_ = " << size_
-                    << "\n    sizeof(output)=" << sizeof_output_type_
-                    << "\n    scratch_size=" << scratch_size_
-                    << "\n    max_workgroup_size=" << max_workgroup_size_
-                    << "\n    effective_workgroup_size="
-                    << effective_workgroup_size_
-                    << "\n    workgroups=" << workgroups
-                    << "\n    workgroup_size=" << workgroup_size
-                    << "\n    worgroups*workgroup_size="
-                    << workgroups * workgroup_size
-                    << "\n    pass_output_size=" << pass_output_size
-                    << "\n    arg.VPT=" << VPT
-                    << "\n    arg.TPB=" << workgroup_size
-                    << "\n    arg.N=" << pass_output_size;
 
       // ... prepare the kernel ...
       int arg = 0;
