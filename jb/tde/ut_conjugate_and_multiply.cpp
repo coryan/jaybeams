@@ -12,7 +12,7 @@
 namespace {
 
 template <typename precision_t>
-void check_conjugate_and_multiply() {
+void check_conjugate_and_multiply_sized(int asize, int bsize) {
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
@@ -23,33 +23,53 @@ void check_conjugate_and_multiply() {
   auto generator = [&gen, &dis]() { return dis(gen); };
   BOOST_TEST_MESSAGE("SEED = " << seed);
 
-  constexpr std::size_t size = 32768;
   std::vector<std::complex<precision_t>> asrc;
-  jb::testing::create_random_timeseries(generator, size, asrc);
+  jb::testing::create_random_timeseries(generator, asize, asrc);
   std::vector<std::complex<precision_t>> bsrc;
-  jb::testing::create_random_timeseries(generator, size, bsrc);
+  jb::testing::create_random_timeseries(generator, bsize, bsrc);
 
-  boost::compute::vector<std::complex<precision_t>> a(size, context);
-  boost::compute::vector<std::complex<precision_t>> b(size, context);
-  boost::compute::vector<std::complex<precision_t>> out(size, context);
-  std::vector<std::complex<precision_t>> actual(size);
+  boost::compute::vector<std::complex<precision_t>> a(asize, context);
+  boost::compute::vector<std::complex<precision_t>> b(bsize, context);
+  boost::compute::vector<std::complex<precision_t>> out(asize, context);
+  std::vector<std::complex<precision_t>> actual(asize);
 
   boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
   boost::compute::copy(bsrc.begin(), bsrc.end(), b.begin(), queue);
 
   auto future = jb::tde::conjugate_and_multiply(
       a.begin(), a.end(), b.begin(), b.end(), out.begin(), queue);
+  if (not future.valid()) {
+    BOOST_CHECK_EQUAL(asize, 0);
+    return;
+  }
   auto done = jb::opencl::copy_to_host_async(
       out.begin(), out.end(), actual.begin(), queue,
       boost::compute::wait_list(future.get_event()));
 
-  std::vector<std::complex<precision_t>> expected(size);
-  for (std::size_t i = 0; i != size; ++i) {
+  std::vector<std::complex<precision_t>> expected(asize);
+  for (int i = 0; i != asize; ++i) {
     expected[i] = std::conj(asrc[i]) * bsrc[i];
   }
   done.wait();
 
   jb::testing::check_vector_close_enough(actual, expected);
+}
+
+template <typename precision_t>
+void check_conjugate_and_multiply() {
+  constexpr std::size_t size = 32768;
+  check_conjugate_and_multiply_sized<precision_t>(size, size);
+}
+
+template <typename precision_t>
+void check_conjugate_and_multiply_empty() {
+  check_conjugate_and_multiply_sized<precision_t>(0, 0);
+}
+
+template <typename precision_t>
+void check_conjugate_and_multiply_mismatched() {
+  constexpr std::size_t size = 32768;
+  check_conjugate_and_multiply_sized<precision_t>(size, size / 2);
 }
 
 } // anonymous namespace
@@ -68,4 +88,38 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double) {
   check_conjugate_and_multiply<double>();
+}
+
+/**
+ * @test Verify that jb::tde::conjugate_and_multiple() works for empty
+ * arrays.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_empty) {
+  BOOST_CHECK_NO_THROW(check_conjugate_and_multiply_empty<float>());
+}
+
+/**
+ * @test Verify that jb::tde::conjugate_and_multiple() works for empty
+ * arrays.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_empty) {
+  BOOST_CHECK_NO_THROW(check_conjugate_and_multiply_empty<double>());
+}
+
+/**
+ * @test Verify that jb::tde::conjugate_and_multiple() detects
+ * mismatched arrays.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_error) {
+  BOOST_CHECK_THROW(
+      check_conjugate_and_multiply_mismatched<float>(), std::exception);
+}
+
+/**
+ * @test Verify that jb::tde::conjugate_and_multiple() detects
+ * mismatched arrays.
+ */
+BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_error) {
+  BOOST_CHECK_THROW(
+      check_conjugate_and_multiply_mismatched<double>(), std::exception);
 }
