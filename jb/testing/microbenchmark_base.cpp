@@ -41,5 +41,5 @@ std::ostream& jb::testing::operator<<(
             << ", p99=" << duration_cast<microseconds>(x.p99).count()
             << ", p99.9=" << duration_cast<microseconds>(x.p99_9).count()
             << ", max=" << duration_cast<microseconds>(x.max).count()
-            << ", N=" << x.n;
+            << " us, N=" << x.n;
 }
