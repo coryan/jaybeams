@@ -25,6 +25,7 @@ public:
   jb::config_attribute<microbenchmark_config, int> size;
   jb::config_attribute<microbenchmark_config, bool> verbose;
   jb::config_attribute<microbenchmark_config, std::string> test_case;
+  jb::config_attribute<microbenchmark_config, std::string> prefix;
 };
 
 } // namespace testing

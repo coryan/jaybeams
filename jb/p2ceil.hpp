@@ -1,11 +1,10 @@
-#ifndef jb_itch5_p2ceil_hpp
-#define jb_itch5_p2ceil_hpp
+#ifndef jb_p2ceil_hpp
+#define jb_p2ceil_hpp
 
 #include <cstdint>
 #include <type_traits>
 
 namespace jb {
-namespace itch5 {
 
 /**
  * Implement the key operation in the p2ceil() function.
@@ -93,7 +92,6 @@ constexpr std::uint8_t p2ceil(std::uint8_t n) {
   return 1 + p2ceil_kernel(4, p2ceil_kernel(2, p2ceil_kernel(1, n)));
 }
 
-} // namespace itch5
 } // namespace jb
 
-#endif // jb_itch5_p2ceil_hpp
+#endif /* jb_p2ceil_hpp */

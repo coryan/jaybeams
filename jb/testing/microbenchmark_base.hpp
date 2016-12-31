@@ -28,7 +28,9 @@ public:
       : config_(cfg) {
   }
 
-  /// Summary of the microbenchmark results.
+  /**
+   * A simple object to contain the summary of the test results
+   */
   struct summary {
     summary() {
     }
@@ -45,12 +47,23 @@ public:
     std::size_t n;
   };
 
+  /**
+   * Produce the results of the test in a format that works for most cases
+   *
+   * In most of the JayBeams tests we print the summary results to
+   * stderr and the summary results to stdout.  That makes it
+   * relatively easy to capture both separately in driver scripts.
+   */
+  void typical_output(results const& r) const;
+
+  /// Stream the detailed results
   void write_results(std::ostream& os, results const& r) const;
 
 protected:
   microbenchmark_config config_;
 };
 
+/// Stream the summary of a microbenchmark results in microseconds
 std::ostream&
 operator<<(std::ostream& os, microbenchmark_base::summary const& x);
 

@@ -3,8 +3,6 @@
 
 #include <jb/testing/resize_if_applicable.hpp>
 
-#include <chrono>
-
 namespace jb {
 namespace testing {
 
