@@ -1,7 +1,7 @@
 #ifndef jb_testing_microbenchmark_config_hpp
 #define jb_testing_microbenchmark_config_hpp
 
-#include <jb/config_object.hpp>
+#include <jb/thread_config.hpp>
 #include <string>
 
 namespace jb {
@@ -25,6 +25,8 @@ public:
   jb::config_attribute<microbenchmark_config, int> size;
   jb::config_attribute<microbenchmark_config, bool> verbose;
   jb::config_attribute<microbenchmark_config, std::string> test_case;
+  jb::config_attribute<microbenchmark_config, bool> reconfigure_thread;
+  jb::config_attribute<microbenchmark_config, thread_config> thread;
 };
 
 } // namespace testing

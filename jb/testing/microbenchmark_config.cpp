@@ -42,10 +42,18 @@ namespace defaults {
 #define JB_DEFAULTS_microbenchmark_verbose false
 #endif
 
+// TODO(#71) disable thread configuration until we figure out why it
+// is *slower* and *less predictable* in the real-time scheduling
+// classes.
+#ifndef JB_DEFAULTS_microbenchmark_reconfigure_thread
+#define JB_DEFAULTS_microbenchmark_reconfigure_thread false
+#endif
+
 int warmup_iterations = JB_DEFAULTS_microbenchmark_warmup_iterations;
 int iterations = JB_DEFAULTS_microbenchmark_iterations;
 int size = JB_DEFAULTS_microbenchmark_size;
 bool verbose = JB_DEFAULTS_microbenchmark_verbose;
+bool reconfigure_thread = JB_DEFAULTS_microbenchmark_reconfigure_thread;
 
 } // namespace defaults
 
@@ -76,7 +84,26 @@ microbenchmark_config::microbenchmark_config()
                   "same problem."
                   "  Use this option to configure such benchmarks"
                   ", most microbenchmarks will ignore it."),
-          this) {
+          this)
+    , reconfigure_thread(
+          desc("reconfigure-thread")
+              .help(
+                  "If set reconfigure the main thread scheduling parameters"
+                  "before running the benchmark. "
+                  "The actual scheduling parameters are configured via the "
+                  "--thread option.  Unsetting this flag is useful when "
+                  "testing "
+                  "with external scheduling parameter settings, e.g. chrt(1) "
+                  "and taskset(1)."),
+          this, defaults::reconfigure_thread)
+    , thread(
+          desc("thread", "thread")
+              .help(
+                  "Configure how the main thread scheduling parameters are "
+                  "set before running the benchmark. "
+                  "By default we attempt to run the test in the FIFO "
+                  "scheduling class, at the maximum allowable priority."),
+          this, thread_config().scheduler("FIFO").priority("MAX")) {
 }
 
 } // namespace testing
