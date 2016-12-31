@@ -10,6 +10,7 @@
 #include <jb/itch5/array_based_order_book.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
 #include <jb/itch5/price_levels.hpp>
+#include <jb/testing/compile_info.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/log.hpp>
 
@@ -284,6 +285,11 @@ int main(int argc, char* argv[]) try {
   jb::log::init(cfg.log());
   if (cfg.microbenchmark().verbose()) {
     JB_LOG(info) << "Configuration for test\n" << cfg;
+    JB_LOG(info) << "Compile-time configuration:"
+                 << "\nuname:          " << jb::testing::uname_a
+                 << "\ncompiler:       " << jb::testing::compiler
+                 << "\ncompiler flags: " << jb::testing::compiler_flags
+                 << "\nlinker:         " << jb::testing::linker << "\n";
   }
 
   using namespace jb::itch5;
