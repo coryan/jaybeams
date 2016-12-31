@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double) {
 }
 
 /**
- * @test Verify that jb::tde::conjugate_and_multiple() works for empty
+ * @test Verify that jb::tde::conjugate_and_multiply() works for empty
  * arrays.
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_empty) {
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_empty) {
 }
 
 /**
- * @test Verify that jb::tde::conjugate_and_multiple() works for empty
+ * @test Verify that jb::tde::conjugate_and_multiply() works for empty
  * arrays.
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_empty) {
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_empty) {
 }
 
 /**
- * @test Verify that jb::tde::conjugate_and_multiple() detects
+ * @test Verify that jb::tde::conjugate_and_multiply() detects
  * mismatched arrays.
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_error) {
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_error) {
 }
 
 /**
- * @test Verify that jb::tde::conjugate_and_multiple() detects
+ * @test Verify that jb::tde::conjugate_and_multiply() detects
  * mismatched arrays.
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_error) {
