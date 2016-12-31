@@ -42,11 +42,8 @@ namespace defaults {
 #define JB_DEFAULTS_microbenchmark_verbose false
 #endif
 
-// TODO(#71) disable thread configuration until we figure out why it
-// is *slower* and *less predictable* in the real-time scheduling
-// classes.
 #ifndef JB_DEFAULTS_microbenchmark_reconfigure_thread
-#define JB_DEFAULTS_microbenchmark_reconfigure_thread false
+#define JB_DEFAULTS_microbenchmark_reconfigure_thread true
 #endif
 
 int warmup_iterations = JB_DEFAULTS_microbenchmark_warmup_iterations;
