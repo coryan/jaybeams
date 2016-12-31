@@ -10,22 +10,22 @@ namespace itch5 {
 using half_quote = std::pair<price4_t, int>;
 
 /// convenient value to represent an empty bid limit price
-static price4_t empty_bid_price() {
+inline price4_t empty_bid_price() {
   return price4_t(0);
 }
 
 /// convenient value to represent an empty offer limit price
-static price4_t empty_offer_price() {
+inline price4_t empty_offer_price() {
   return max_price_field_value<price4_t>();
 }
 
 /// The value used to represent an empty bid
-static half_quote empty_bid() {
+inline half_quote empty_bid() {
   return half_quote(empty_bid_price(), 0);
 }
 
 /// The value used to represent an empty offer
-static half_quote empty_offer() {
+inline half_quote empty_offer() {
   return half_quote(empty_offer_price(), 0);
 }
 

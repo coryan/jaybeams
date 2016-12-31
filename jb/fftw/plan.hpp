@@ -74,17 +74,21 @@ std::size_t nsamples(std::vector<T, A> const& a) {
 } // namespace detail
 
 /**
- * Wrap FFTW3 plan objects to automatically destroy them.
+ * Wrap FFTW3 plan objects.
  *
  * The FFTW3 optimizes execution by pre-computing coefficients and
  * execution plans for a DFT based on the original types, size and
- * alingment of the data.  These plans must be destroyed to release
- * resources.  FFTW3, being a C library, requires wrappers to automate
- * the destruction of these objects.
+ * alingment of the data.  In C++, we prefer the type system to
+ * remember details like this instead of getting an error message when
+ * we use the wrong types (or a crash).
  *
  * In addition, the FFTW3 library uses different names for the types
  * that have single (fftwf_*), double (fftw_*) or quad-precision
  * (fftwl_*).  In C++ we prefer to hide such details in generics.
+ *
+ * Finally, these plans must be destroyed to release resources.
+ * FFTW3, being a C library, requires wrappers to automate the
+ * destruction of these objects.
  *
  * @tparam in_timeseries_type the type of the input timeseries
  * @tparam out_timeseries_type the type of the output timeseries

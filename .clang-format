@@ -13,18 +13,22 @@ BinPackParameters: true
 BreakConstructorInitializersBeforeComma: true
 ColumnLimit: 80
 IncludeCategories:
-  - Regex:    '^<jb/[^/]*/'
+  - Regex:    '^<jb/clfft/'
     Priority: 1
-  - Regex:    '^<jb/'
+  - Regex:    '^<jb/opencl/'
     Priority: 2
+  - Regex:    '^<jb/[^/]*/'
+    Priority: 9
+  - Regex:    '^<jb/'
+    Priority: 10
   - Regex:    '^<skye/'
-    Priority: 3
+    Priority: 30
   - Regex:    '^<boost/'
-    Priority: 4
+    Priority: 40
   - Regex:    '^<yaml-cpp/'
-    Priority: 5
+    Priority: 50
   - Regex:    '^<fftw3'
-    Priority: 5
+    Priority: 50
 UseTab: Never
 PointerAlignment: Left
 Standard: Cpp11

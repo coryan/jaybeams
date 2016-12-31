@@ -76,6 +76,17 @@ microbenchmark_config::microbenchmark_config()
                   "same problem."
                   "  Use this option to configure such benchmarks"
                   ", most microbenchmarks will ignore it."),
+          this)
+    , prefix(
+          desc("prefix").help(
+              "Define the prefix for the detailed results output."
+              "  Often microbenchmark results are further analyzed with"
+              " tools such as R or Python scripts, in such cases prefixing"
+              " the output with the attributes of the test (size, test-case,"
+              " system configuration, etc) can make it easier to mix the"
+              " output from multiple microbenchmarks into a single result."
+              " It is common, but not required, for these prefixes to be"
+              " a comma-separated list of values."),
           this) {
 }
 

@@ -6,6 +6,10 @@ AC_INIT([JayBeams], [0.1], [coryan@users.noreply.github.com])
 
 # Move as many of the generated files as possible to a subdirectory
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_MACRO_DIR([m4])
+
+# ... include the m4 subdirectory in the search path for macros ...
+AC_CONFIG_MACRO_DIR([m4])
 
 # Yes, this is a C++ project.
 AC_LANG([C++])
@@ -55,10 +59,14 @@ AX_CXXFLAGS_WARN_ALL
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
 
-# Checks for libraries.
-AX_BOOST_BASE([1.55],[],[
-  AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
+# ... we need Boost with a version higher than 1.55 because Boost.Log ...
+AX_BOOST_BASE([1.55], [], [
+    AC_MSG_ERROR([
+        unable to find a suitable Boost library, need version >= 1.55.
+    ])
 ])
+
+# ... then check for each specific Boost.* library we use ...
 AX_BOOST_ASIO
 AX_BOOST_LOG
 AX_BOOST_LOG_SETUP
@@ -72,9 +80,35 @@ AX_BOOST_UNIT_TEST_FRAMEWORK
 
 AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
 
+# ... find out if OpenCL is installed, enable it by default, but users can
+# disable OpenCL (and anything that depends on it) using --without-opencl ...
+AX_OPENCL([1.1], [], [
+    AC_MSG_ERROR([unable to find a suitable OpenCL library])
+])
+
+# ... create a conditional for automake ..
+AM_CONDITIONAL([HAVE_OPENCL], [test "x$ax_want_opencl" = "xyes"])
+
+# ... we want to use clFFT and Boost.Compute only if OpenCL is enabled ...
+AM_COND_IF([HAVE_OPENCL], [
+    AX_CLFFT([], [
+        AC_MSG_ERROR([Unable to find clFFT library.])
+    ])
+    AX_BOOST_COMPUTE([], [
+        AC_MSG_ERROR([Unable to find Boost.Compute library.])
+    ])
+    # ... Boost.Compute uses deprecated features of OpenCL 1.1, so we
+    # have to disable warnings about them if we end up using both ...
+    AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
+       [AX_APPEND_FLAG(-Wno-deprecated-declarations, CXXFLAGS)], [])
+])
+
+
+# ... YAML-CPP is a library to parse YAML files ...
 AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
-                 [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
-                 [AC_MSG_ERROR([Unable to find yaml-cpp library])])
+    [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
+    [AC_MSG_ERROR([Unable to find yaml-cpp library])
+])
 
 AC_ARG_ENABLE([fftw3],
         AS_HELP_STRING([--enable-fftw3],
@@ -98,11 +132,5 @@ AS_IF([test "x$enable_fftw3" = "xyes"], [
 ])
 
 AM_CONDITIONAL([USE_FFTW3], [test "x$enable_fftw3" = "xyes"])
-
-# Checks for header files (and header-only libraries)
-
-# Checks for typedefs, structures, and compiler characteristics.
-
-# Checks for library functions.
 
 AC_OUTPUT

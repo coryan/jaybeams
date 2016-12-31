@@ -47,12 +47,7 @@ int main(int argc, char* argv[]) try {
 
   benchmark bm(cfg);
   auto r = bm.run(cfg.test_case());
-
-  benchmark::summary s(r);
-  std::cerr << cfg.test_case() << " summary " << s << std::endl;
-  if (cfg.verbose()) {
-    bm.write_results(std::cout, r);
-  }
+  bm.typical_output(r);
 
   return 0;
 } catch (jb::usage const& ex) {
