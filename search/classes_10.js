@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['validate_5fissue_5fsubtype',['validate_issue_subtype',['../structjb_1_1itch5_1_1validate__issue__subtype.html',1,'jb::itch5']]]
+  ['unknown_5fmessage',['unknown_message',['../classjb_1_1itch5_1_1unknown__message.html',1,'jb::itch5']]],
+  ['usage',['usage',['../classjb_1_1usage.html',1,'jb']]]
 ];

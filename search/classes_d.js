@@ -1,17 +1,7 @@
 var searchData=
 [
-  ['seconds_5ffield',['seconds_field',['../classjb_1_1itch5_1_1seconds__field.html',1,'jb::itch5']]],
-  ['short_5fstring_5ffield',['short_string_field',['../classjb_1_1itch5_1_1short__string__field.html',1,'jb::itch5']]],
-  ['short_5fstring_5ffield_3c_202_2c_20validate_5fissue_5fsubtype_20_3e',['short_string_field&lt; 2, validate_issue_subtype &gt;',['../classjb_1_1itch5_1_1short__string__field.html',1,'jb::itch5']]],
-  ['short_5fstring_5ffield_3c_204_20_3e',['short_string_field&lt; 4 &gt;',['../classjb_1_1itch5_1_1short__string__field.html',1,'jb::itch5']]],
-  ['short_5fstring_5ffield_3c_208_20_3e',['short_string_field&lt; 8 &gt;',['../classjb_1_1itch5_1_1short__string__field.html',1,'jb::itch5']]],
-  ['side',['side',['../structjb_1_1itch5_1_1map__based__book__side_1_1side.html',1,'jb::itch5::map_based_book_side']]],
-  ['side',['side',['../structjb_1_1itch5_1_1array__based__book__side_1_1side.html',1,'jb::itch5::array_based_book_side']]],
-  ['side_3c_20std_3a_3agreater_3c_20price4_5ft_20_3e_2c_20dummy_20_3e',['side&lt; std::greater&lt; price4_t &gt;, DUMMY &gt;',['../structjb_1_1itch5_1_1map__based__book__side_1_1side_3_01std_1_1greater_3_01price4__t_01_4_00_01DUMMY_01_4.html',1,'jb::itch5::map_based_book_side']]],
-  ['side_3c_20std_3a_3agreater_3c_20std_3a_3asize_5ft_20_3e_2c_20dummy_20_3e',['side&lt; std::greater&lt; std::size_t &gt;, DUMMY &gt;',['../structjb_1_1itch5_1_1array__based__book__side_1_1side_3_01std_1_1greater_3_01std_1_1size__t_01_4_00_01DUMMY_01_4.html',1,'jb::itch5::array_based_book_side']]],
-  ['stn_5ftraits',['stn_traits',['../namespacejb.html#structjb_1_1stn__traits',1,'jb']]],
-  ['stock_5fdirectory_5fmessage',['stock_directory_message',['../structjb_1_1itch5_1_1stock__directory__message.html',1,'jb::itch5']]],
-  ['stock_5ftrading_5faction_5fmessage',['stock_trading_action_message',['../structjb_1_1itch5_1_1stock__trading__action__message.html',1,'jb::itch5']]],
-  ['summary',['summary',['../structjb_1_1testing_1_1microbenchmark__base_1_1summary.html',1,'jb::testing::microbenchmark_base']]],
-  ['system_5fevent_5fmessage',['system_event_message',['../structjb_1_1itch5_1_1system__event__message.html',1,'jb::itch5']]]
+  ['rebind',['rebind',['../classjb_1_1fftw_1_1allocator.html#structjb_1_1fftw_1_1allocator_1_1rebind',1,'jb::fftw::allocator']]],
+  ['reduce_5fsum',['reduce_sum',['../classjb_1_1tde_1_1reduce__sum.html',1,'jb::tde']]],
+  ['reducer_5fconcept',['reducer_concept',['../classjb_1_1tde_1_1reducer__concept.html',1,'jb::tde']]],
+  ['reg_5fsho_5frestriction_5fmessage',['reg_sho_restriction_message',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html',1,'jb::itch5']]]
 ];

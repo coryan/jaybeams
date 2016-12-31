@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['d_5f',['d_',['../classjb_1_1clfft_1_1plan.html#af5008423a8de1b5a175dab86b58efcb7',1,'jb::clfft::plan']]],
   ['data_2ecpp',['data.cpp',['../data_8cpp.html',1,'']]],
   ['data_2ehpp',['data.hpp',['../data_8hpp.html',1,'']]],
   ['deallocate',['deallocate',['../classjb_1_1fftw_1_1allocator.html#a19a735d101ef36eb224121bca6010525',1,'jb::fftw::allocator']]],
@@ -54,6 +55,10 @@ var searchData=
   ['descriptor_5f',['descriptor_',['../classjb_1_1config__object_1_1attribute__base.html#a553321dbe99fd894a609944ea5a50004',1,'jb::config_object::attribute_base']]],
   ['destroy',['destroy',['../classjb_1_1fftw_1_1allocator.html#ab5552f4e219d366cb6c509ef07de6685',1,'jb::fftw::allocator']]],
   ['destroy_5fplan',['destroy_plan',['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a898cd3e7b6baf88093d50b0f943da548',1,'jb::fftw::traits&lt; double &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#ae3eccdbe618a250766aeaf9826448225',1,'jb::fftw::traits&lt; float &gt;::destroy_plan()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a638f8bb3577aaa6c3d46502abdffeeff',1,'jb::fftw::traits&lt; long double &gt;::destroy_plan()']]],
+  ['device_5fname',['device_name',['../classjb_1_1opencl_1_1config.html#a5404c88a075841fa764936d348568b4e',1,'jb::opencl::config::device_name()'],['../namespacejb_1_1opencl_1_1defaults.html#a91290d4492dcada3a89890212af8ffee',1,'jb::opencl::defaults::device_name()']]],
+  ['device_5fselector',['device_selector',['../namespacejb_1_1opencl.html#a719035c163e035df6504f50a67bf7773',1,'jb::opencl::device_selector(config const &amp;cfg)'],['../namespacejb_1_1opencl.html#aed518f64d8fc5487983975e34bca5633',1,'jb::opencl::device_selector()']]],
+  ['device_5fselector_2ecpp',['device_selector.cpp',['../device__selector_8cpp.html',1,'']]],
+  ['device_5fselector_2ehpp',['device_selector.hpp',['../device__selector_8hpp.html',1,'']]],
   ['difference_5ftype',['difference_type',['../classjb_1_1fftw_1_1allocator.html#a59d26b2b7c8604f8b02eaa40c07ea71d',1,'jb::fftw::allocator']]],
   ['do_5freduce',['do_reduce',['../classjb_1_1itch5_1_1compute__book.html#a6ce8b28bef65b6bec0b1708270f66d22',1,'jb::itch5::compute_book']]],
   ['dollar_5fprice',['dollar_price',['../classjb_1_1itch5_1_1price__field.html#ae6c54d9a712f27f66912274825528649',1,'jb::itch5::price_field']]],

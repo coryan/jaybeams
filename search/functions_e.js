@@ -8,6 +8,8 @@ var searchData=
   ['record_5flatency_5fstats',['record_latency_stats',['../namespacejb_1_1itch5.html#ae8e80de5d5c3a620a47185a1ab16738c',1,'jb::itch5']]],
   ['record_5fsample',['record_sample',['../classjb_1_1offline__feed__statistics.html#afabf39eec3f0f6fcb30e7e7cccd8092a',1,'jb::offline_feed_statistics']]],
   ['reduce_5forder',['reduce_order',['../classjb_1_1itch5_1_1array__based__book__side.html#a9bd4364601481218e1510f3f0cf59493',1,'jb::itch5::array_based_book_side::reduce_order()'],['../classjb_1_1itch5_1_1map__based__book__side.html#abce7dd4fbf2d73a6c30d6c9172e7943d',1,'jb::itch5::map_based_book_side::reduce_order()']]],
+  ['reduce_5fsum',['reduce_sum',['../classjb_1_1tde_1_1reduce__sum.html#ab2e01946a142ab4b08300e631d117194',1,'jb::tde::reduce_sum']]],
+  ['reducer_5fconcept',['reducer_concept',['../classjb_1_1tde_1_1reducer__concept.html#a6a2268e4074bdc4ddcc6aeab56f917cd',1,'jb::tde::reducer_concept']]],
   ['reg_5fsho_5frestriction',['reg_sho_restriction',['../namespacejb_1_1itch5_1_1testing.html#a2b71a80752f62af5034cc49c53c27d4e',1,'jb::itch5::testing']]],
   ['relative_5fto_5flevel',['relative_to_level',['../structjb_1_1itch5_1_1array__based__book__side_1_1side.html#ac8e6b95ed3d5b7891b9f17685f97050d',1,'jb::itch5::array_based_book_side::side::relative_to_level()'],['../structjb_1_1itch5_1_1array__based__book__side_1_1side_3_01std_1_1greater_3_01std_1_1size__t_01_4_00_01DUMMY_01_4.html#a34fdfb781d97a2e8e0b4e929629ab4a0',1,'jb::itch5::array_based_book_side::side&lt; std::greater&lt; std::size_t &gt;, DUMMY &gt;::relative_to_level()']]],
   ['relative_5fworst_5ftop_5flevel',['relative_worst_top_level',['../classjb_1_1itch5_1_1array__based__book__side.html#a66eaba437714b3fb8ae847d415138f66',1,'jb::itch5::array_based_book_side']]],

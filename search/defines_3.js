@@ -4,6 +4,7 @@ var searchData=
   ['jb_5fassert_5fthrow',['JB_ASSERT_THROW',['../assert__throw_8hpp.html#a503f533c0ce1b5a57594f16306ae677a',1,'assert_throw.hpp']]],
   ['jb_5fbook_5fdepth_5fstats_5fdefaults_5fmax_5fbook_5fdepth',['JB_BOOK_DEPTH_STATS_DEFAULTS_max_book_depth',['../book__depth__statistics_8cpp.html#a560cd30caabb7980e8911c1ef364efda',1,'book_depth_statistics.cpp']]],
   ['jb_5fdefault_5fbindir',['JB_DEFAULT_BINDIR',['../config__files__location_8cpp.html#a6f11bd9e4ae0f221dbde7e0150dd409b',1,'config_files_location.cpp']]],
+  ['jb_5fdefault_5fdevice_5fname',['JB_DEFAULT_device_name',['../config_8cpp.html#a82df9dca6ef39969c2acffb0e3d93ce5',1,'config.cpp']]],
   ['jb_5fdefault_5fignore_5fsetup_5ferrors',['JB_DEFAULT_ignore_setup_errors',['../thread__config_8cpp.html#a5604ad2510d3a27d3d5e6d81b121efbe',1,'thread_config.cpp']]],
   ['jb_5fdefault_5fsysconfdir',['JB_DEFAULT_SYSCONFDIR',['../config__files__location_8cpp.html#a709c1a1fea37547a0e723d87695c9136',1,'config_files_location.cpp']]],
   ['jb_5fdefault_5fthread_5fconfig_5fpriority',['JB_DEFAULT_thread_config_priority',['../thread__config_8cpp.html#aaff6199578811f76793d770a1cad4ba0',1,'thread_config.cpp']]],

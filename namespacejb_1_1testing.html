@@ -124,6 +124,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html">check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1create__random__sample.html">create_random_sample</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap a random number generator so it can be used for both real and complex numbers.  <a href="structjb_1_1testing_1_1create__random__sample.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1create__random__sample_3_01std_1_1complex_3_01T_01_4_01_4.html">create_random_sample&lt; std::complex&lt; T &gt; &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialize <a class="el" href="structjb_1_1testing_1_1create__random__sample.html" title="Wrap a random number generator so it can be used for both real and complex numbers. ">create_random_sample</a> for complex numbers.  <a href="structjb_1_1testing_1_1create__random__sample_3_01std_1_1complex_3_01T_01_4_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1extrapolate__periodic.html">extrapolate_periodic</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A functor to extrapolate a periodic timseries.  <a href="structjb_1_1testing_1_1extrapolate__periodic.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,6 +188,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ad4835a88eef05bbce85c17fc8cbd1dde"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ad4835a88eef05bbce85c17fc8cbd1dde">check_vector_close_enough</a> (vector const &amp;actual, vector const &amp;expected, int tol=1, int max_differences=<a class="el" href="check__complex__close__enough_8hpp.html#a20aeb5a0bdb905aa2be9c2b010886562">JB_TESTING_MAX_DIFFERENCES</a>)</td></tr>
 <tr class="memdesc:ad4835a88eef05bbce85c17fc8cbd1dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="#ad4835a88eef05bbce85c17fc8cbd1dde">More...</a><br /></td></tr>
 <tr class="separator:ad4835a88eef05bbce85c17fc8cbd1dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf78ce6dd64c5a077058a8396a1472cf"><td class="memTemplParams" colspan="2">template&lt;typename timeseries , typename generator &gt; </td></tr>
+<tr class="memitem:aaf78ce6dd64c5a077058a8396a1472cf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aaf78ce6dd64c5a077058a8396a1472cf">create_random_timeseries</a> (generator &amp;gen, int nsamples, timeseries &amp;ts)</td></tr>
+<tr class="memdesc:aaf78ce6dd64c5a077058a8396a1472cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a simple timeseries where the values look like a random.  <a href="#aaf78ce6dd64c5a077058a8396a1472cf">More...</a><br /></td></tr>
+<tr class="separator:aaf78ce6dd64c5a077058a8396a1472cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ec6202c64cde66b23bf55e02f44740"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
 <tr class="memitem:ae1ec6202c64cde66b23bf55e02f44740"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ae1ec6202c64cde66b23bf55e02f44740">create_square_timeseries</a> (int nsamples, timeseries &amp;ts)</td></tr>
 <tr class="memdesc:ae1ec6202c64cde66b23bf55e02f44740"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a simple timeseries where the values look like a square.  <a href="#ae1ec6202c64cde66b23bf55e02f44740">More...</a><br /></td></tr>
@@ -207,6 +217,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a39cfe14ddf5a1eff70f9be2c975140c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay a timeseries using zeroes for early values.  <a href="#a39cfe14ddf5a1eff70f9be2c975140c2">More...</a><br /></td></tr>
 <tr class="separator:a39cfe14ddf5a1eff70f9be2c975140c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1eba65c6a944932d1447f72b3c80bf1"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#af1eba65c6a944932d1447f72b3c80bf1">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html">microbenchmark_base::summary</a> const &amp;x)</td></tr>
+<tr class="memdesc:af1eba65c6a944932d1447f72b3c80bf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream the summary of a microbenchmark results in microseconds.  <a href="#af1eba65c6a944932d1447f72b3c80bf1">More...</a><br /></td></tr>
 <tr class="separator:af1eba65c6a944932d1447f72b3c80bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -277,7 +288,7 @@ template&lt;typename value_type &gt; </div>
 
 <p>Definition at line <a class="el" href="check__array__close__enough_8hpp_source.html#l00017">17</a> of file <a class="el" href="check__array__close__enough_8hpp_source.html">check_array_close_enough.hpp</a>.</p>
 
-<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>, <a class="el" href="check__complex__close__enough_8hpp_source.html#l00092">format()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
+<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>, <a class="el" href="check__complex__close__enough_8hpp_source.html#l00095">format()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00047">jb::testing::defaults::size</a>.</p>
 
 </div>
 </div>
@@ -355,7 +366,7 @@ template&lt;typename floating &gt; </div>
 
 <p>Verify that a floating point value is "close enough" to 0. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00077">77</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00080">80</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -387,7 +398,7 @@ template&lt;typename real &gt; </div>
 
 <p>Verify that a complex number is "close enough" to 0. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00085">85</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00088">88</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -437,7 +448,7 @@ template&lt;typename vector &gt; </div>
 
 <p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
 
-<p>Referenced by <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00022">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;::check()</a>.</p>
+<p>Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00022">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;::check()</a>.</p>
 
 </div>
 </div>
@@ -492,7 +503,7 @@ template&lt;typename real &gt; </div>
 
 <p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">24</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="check__array__close__enough_8hpp_source.html#l00017">check_array_close_enough()</a>, <a class="el" href="check__vector__close__enough_8hpp_source.html#l00017">check_vector_close_enough()</a>, and <a class="el" href="check__complex__close__enough_8hpp_source.html#l00045">close_enough()</a>.</p>
+<p>Referenced by <a class="el" href="check__array__close__enough_8hpp_source.html#l00017">check_array_close_enough()</a>, <a class="el" href="check__vector__close__enough_8hpp_source.html#l00017">check_vector_close_enough()</a>, <a class="el" href="check__complex__close__enough_8hpp_source.html#l00048">close_enough()</a>, and <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>.</p>
 
 </div>
 </div>
@@ -545,7 +556,7 @@ template&lt;typename real &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00045">45</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00048">48</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 <p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
 
@@ -600,9 +611,51 @@ template&lt;typename real &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00067">67</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00070">70</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 <p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaf78ce6dd64c5a077058a8396a1472cf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries , typename generator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::create_random_timeseries </td>
+          <td>(</td>
+          <td class="paramtype">generator &amp;&#160;</td>
+          <td class="paramname"><em>gen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nsamples</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">timeseries &amp;&#160;</td>
+          <td class="paramname"><em>ts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a simple timeseries where the values look like a random. </p>
+
+<p>Definition at line <a class="el" href="create__random__timeseries_8hpp_source.html#l00013">13</a> of file <a class="el" href="create__random__timeseries_8hpp_source.html">create_random_timeseries.hpp</a>.</p>
+
+<p>References <a class="el" href="fftw_2plan_8hpp_source.html#l00058">jb::fftw::detail::nsamples()</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__reduce__argmax__real_8cpp_source.html#l00017">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>.</p>
 
 </div>
 </div>
@@ -634,11 +687,11 @@ template&lt;typename timeseries &gt; </div>
 
 <p>Create a simple timeseries where the values look like a square. </p>
 
-<p>Definition at line <a class="el" href="create__square__timeseries_8hpp_source.html#l00013">13</a> of file <a class="el" href="create__square__timeseries_8hpp_source.html">create_square_timeseries.hpp</a>.</p>
+<p>Definition at line <a class="el" href="create__square__timeseries_8hpp_source.html#l00011">11</a> of file <a class="el" href="create__square__timeseries_8hpp_source.html">create_square_timeseries.hpp</a>.</p>
 
-<p>References <a class="el" href="plan_8hpp_source.html#l00058">jb::fftw::detail::nsamples()</a>.</p>
+<p>References <a class="el" href="fftw_2plan_8hpp_source.html#l00058">jb::fftw::detail::nsamples()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__time__delay__estimator_8cpp_source.html#l00011">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>
@@ -670,7 +723,7 @@ template&lt;typename timeseries &gt; </div>
 
 <p>Create a simple timeseries where the values look like a triangle. </p>
 
-<p>Definition at line <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00013">13</a> of file <a class="el" href="create__triangle__timeseries_8hpp_source.html">create_triangle_timeseries.hpp</a>.</p>
+<p>Definition at line <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00011">11</a> of file <a class="el" href="create__triangle__timeseries_8hpp_source.html">create_triangle_timeseries.hpp</a>.</p>
 
 <p>Referenced by <a class="el" href="ut__delay__timeseries_8cpp_source.html#l00024">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -889,7 +942,7 @@ template&lt;typename precision_t &gt; </div>
 
 <p>Wrap FFTW-style complex numbers in std::complex for iostreaming. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00092">92</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00095">95</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 <p>Referenced by <a class="el" href="check__array__close__enough_8hpp_source.html#l00017">check_array_close_enough()</a>.</p>
 
@@ -913,7 +966,7 @@ template&lt;typename value_type &gt; </div>
 
 <p>Allow generic treatment of FFTW-style complex numbers and other types. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00098">98</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00101">101</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -941,9 +994,11 @@ template&lt;typename value_type &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00033">33</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
+<p>Stream the summary of a microbenchmark results in microseconds. </p>
 
-<p>References <a class="el" href="microbenchmark__base_8hpp_source.html#l00044">jb::testing::microbenchmark_base::summary::max</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00037">jb::testing::microbenchmark_base::summary::min</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00045">jb::testing::microbenchmark_base::summary::n</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00038">jb::testing::microbenchmark_base::summary::p25</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00039">jb::testing::microbenchmark_base::summary::p50</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00040">jb::testing::microbenchmark_base::summary::p75</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00041">jb::testing::microbenchmark_base::summary::p90</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00042">jb::testing::microbenchmark_base::summary::p99</a>, and <a class="el" href="microbenchmark__base_8hpp_source.html#l00043">jb::testing::microbenchmark_base::summary::p99_9</a>.</p>
+<p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00049">49</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__base_8hpp_source.html#l00046">jb::testing::microbenchmark_base::summary::max</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00039">jb::testing::microbenchmark_base::summary::min</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00047">jb::testing::microbenchmark_base::summary::n</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00040">jb::testing::microbenchmark_base::summary::p25</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00041">jb::testing::microbenchmark_base::summary::p50</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00042">jb::testing::microbenchmark_base::summary::p75</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00043">jb::testing::microbenchmark_base::summary::p90</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00044">jb::testing::microbenchmark_base::summary::p99</a>, and <a class="el" href="microbenchmark__base_8hpp_source.html#l00045">jb::testing::microbenchmark_base::summary::p99_9</a>.</p>
 
 </div>
 </div>
@@ -973,7 +1028,7 @@ template&lt;typename value_type &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">-g -Wall -Qunused-arguments</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">-g -Wall -Qunused-arguments -Wno-deprecated-declarations</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
 <p>The compiler flags. </p>
 
 <p>Definition at line <a class="el" href="compile__info_8cpp_source.html#l00013">13</a> of file <a class="el" href="compile__info_8cpp_source.html">compile_info.cpp</a>.</p>
@@ -1005,7 +1060,7 @@ template&lt;typename value_type &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux bcf7d124967d 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux 398b5aaa43f2 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
 <p>The kernel version, release, machine hardware, etc. </p>
 
 <p>Definition at line <a class="el" href="compile__info_8cpp_source.html#l00003">3</a> of file <a class="el" href="compile__info_8cpp_source.html">compile_info.cpp</a>.</p>

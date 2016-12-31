@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['offline_5ffeed_5fstatistics',['offline_feed_statistics',['../classjb_1_1offline__feed__statistics.html',1,'jb']]],
-  ['order_5fbook',['order_book',['../classjb_1_1itch5_1_1order__book.html',1,'jb::itch5']]],
-  ['order_5fcancel_5fmessage',['order_cancel_message',['../structjb_1_1itch5_1_1order__cancel__message.html',1,'jb::itch5']]],
-  ['order_5fdata',['order_data',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1order__data',1,'jb::itch5']]],
-  ['order_5fdelete_5fmessage',['order_delete_message',['../structjb_1_1itch5_1_1order__delete__message.html',1,'jb::itch5']]],
-  ['order_5fexecuted_5fmessage',['order_executed_message',['../structjb_1_1itch5_1_1order__executed__message.html',1,'jb::itch5']]],
-  ['order_5fexecuted_5fprice_5fmessage',['order_executed_price_message',['../structjb_1_1itch5_1_1order__executed__price__message.html',1,'jb::itch5']]],
-  ['order_5freplace_5fmessage',['order_replace_message',['../structjb_1_1itch5_1_1order__replace__message.html',1,'jb::itch5']]]
+  ['net_5forder_5fimbalance_5findicator_5fmessage',['net_order_imbalance_indicator_message',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html',1,'jb::itch5']]],
+  ['noop_5fvalidator',['noop_validator',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]],
+  ['noop_5fvalidator_3c_20char_20const_20_2a_20_3e',['noop_validator&lt; char const * &gt;',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]]
 ];

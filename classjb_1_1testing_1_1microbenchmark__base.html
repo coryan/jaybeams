@@ -124,7 +124,7 @@ Inheritance diagram for jb::testing::microbenchmark_base:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html">summary</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summary of the microbenchmark results.  <a href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple object to contain the summary of the test results.  <a href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -143,7 +143,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a346b1f18c2fbf3dd73c57bf536dc5e29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#a346b1f18c2fbf3dd73c57bf536dc5e29">microbenchmark_base</a> (<a class="el" href="classjb_1_1testing_1_1microbenchmark__config.html">microbenchmark_config</a> const &amp;cfg)</td></tr>
 <tr class="memdesc:a346b1f18c2fbf3dd73c57bf536dc5e29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a configuration.  <a href="#a346b1f18c2fbf3dd73c57bf536dc5e29">More...</a><br /></td></tr>
 <tr class="separator:a346b1f18c2fbf3dd73c57bf536dc5e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77a7b575e2a44ab8f4043baf1d4a55c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#a77a7b575e2a44ab8f4043baf1d4a55c8">typical_output</a> (<a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#aaf697c9132c05541c42a068c5e58d366">results</a> const &amp;r) const </td></tr>
+<tr class="memdesc:a77a7b575e2a44ab8f4043baf1d4a55c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Produce the results of the test in a format that works for most cases.  <a href="#a77a7b575e2a44ab8f4043baf1d4a55c8">More...</a><br /></td></tr>
+<tr class="separator:a77a7b575e2a44ab8f4043baf1d4a55c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37e8b8191b0fcd3f4cf8ce1c99e1a1b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#a37e8b8191b0fcd3f4cf8ce1c99e1a1b0">write_results</a> (std::ostream &amp;os, <a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#aaf697c9132c05541c42a068c5e58d366">results</a> const &amp;r) const </td></tr>
+<tr class="memdesc:a37e8b8191b0fcd3f4cf8ce1c99e1a1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream the detailed results.  <a href="#a37e8b8191b0fcd3f4cf8ce1c99e1a1b0">More...</a><br /></td></tr>
 <tr class="separator:a37e8b8191b0fcd3f4cf8ce1c99e1a1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -242,6 +246,29 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a77a7b575e2a44ab8f4043baf1d4a55c8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::microbenchmark_base::typical_output </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1testing_1_1microbenchmark__base.html#aaf697c9132c05541c42a068c5e58d366">results</a> const &amp;&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Produce the results of the test in a format that works for most cases. </p>
+<p>In most of the JayBeams tests we print the summary results to stderr and the summary results to stdout. That makes it relatively easy to capture both separately in driver scripts. </p>
+
+<p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00005">5</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__base_8hpp_source.html#l00063">config_</a>, <a class="el" href="microbenchmark__config_8hpp_source.html#l00025">jb::testing::microbenchmark_config::size</a>, <a class="el" href="microbenchmark__config_8hpp_source.html#l00027">jb::testing::microbenchmark_config::test_case</a>, <a class="el" href="microbenchmark__config_8hpp_source.html#l00026">jb::testing::microbenchmark_config::verbose</a>, and <a class="el" href="microbenchmark__base_8cpp_source.html#l00020">write_results()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a37e8b8191b0fcd3f4cf8ce1c99e1a1b0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -266,7 +293,13 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00005">5</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
+<p>Stream the detailed results. </p>
+
+<p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00020">20</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
+
+<p>References <a class="el" href="microbenchmark__base_8hpp_source.html#l00063">config_</a>, and <a class="el" href="microbenchmark__config_8hpp_source.html#l00028">jb::testing::microbenchmark_config::prefix</a>.</p>
+
+<p>Referenced by <a class="el" href="microbenchmark__base_8cpp_source.html#l00005">typical_output()</a>.</p>
 
 </div>
 </div>
@@ -289,9 +322,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="microbenchmark__base_8hpp_source.html#l00051">51</a> of file <a class="el" href="microbenchmark__base_8hpp_source.html">microbenchmark_base.hpp</a>.</p>
+<p>Definition at line <a class="el" href="microbenchmark__base_8hpp_source.html#l00063">63</a> of file <a class="el" href="microbenchmark__base_8hpp_source.html">microbenchmark_base.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00097">jb::testing::microbenchmark&lt; Fixture &gt;::run()</a>, <a class="el" href="microbenchmark_8hpp_source.html#l00170">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, and <a class="el" href="microbenchmark_8hpp_source.html#l00139">jb::testing::microbenchmark&lt; Fixture &gt;::run_fixed_size()</a>.</p>
+<p>Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00097">jb::testing::microbenchmark&lt; Fixture &gt;::run()</a>, <a class="el" href="microbenchmark_8hpp_source.html#l00170">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, <a class="el" href="microbenchmark_8hpp_source.html#l00139">jb::testing::microbenchmark&lt; Fixture &gt;::run_fixed_size()</a>, <a class="el" href="microbenchmark__base_8cpp_source.html#l00005">typical_output()</a>, and <a class="el" href="microbenchmark__base_8cpp_source.html#l00020">write_results()</a>.</p>
 
 </div>
 </div>

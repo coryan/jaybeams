@@ -30,8 +30,8 @@ var searchData=
   ['theoretical_5fmax_5freturn_5ftype',['theoretical_max_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a51163101883cc9eaa24670b0850d2b30',1,'jb::histogram::check_constraints']]],
   ['theoretical_5fmin',['theoretical_min',['../classjb_1_1explicit__cuts__binning.html#a57e43f460ee02dda4ab8989200bedaa5',1,'jb::explicit_cuts_binning::theoretical_min()'],['../classjb_1_1integer__range__binning.html#ae4fff6d616059d31f12a69146a5455f3',1,'jb::integer_range_binning::theoretical_min()'],['../classjb_1_1binning__strategy__concept.html#ab5573334c72460265e7404e982a3fe43',1,'jb::binning_strategy_concept::theoretical_min()']]],
   ['theoretical_5fmin_5freturn_5ftype',['theoretical_min_return_type',['../structjb_1_1histogram_1_1check__constraints.html#a02c2bafc23b12680456f0f5a19995793',1,'jb::histogram::check_constraints']]],
-  ['thread_5fconfig',['thread_config',['../classthread__config.html',1,'thread_config'],['../classjb_1_1thread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'jb::thread_config::thread_config()'],['../classthread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'thread_config::thread_config()']]],
   ['thread_5fconfig',['thread_config',['../classjb_1_1thread__config.html',1,'jb']]],
+  ['thread_5fconfig',['thread_config',['../classthread__config.html',1,'thread_config'],['../classjb_1_1thread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'jb::thread_config::thread_config()'],['../classthread__config.html#a1f0dc3e8f948b170168c1b39ff74bfaa',1,'thread_config::thread_config()']]],
   ['thread_5fconfig_2ecpp',['thread_config.cpp',['../thread__config_8cpp.html',1,'']]],
   ['thread_5fconfig_2ehpp',['thread_config.hpp',['../thread__config_8hpp.html',1,'']]],
   ['thread_5fconfig_5fpriority',['thread_config_priority',['../namespacejb_1_1defaults.html#a4fdcc772a9ec33706643baeb8e37f1b5',1,'jb::defaults']]],
@@ -47,8 +47,8 @@ var searchData=
   ['time_5fdelay_5festimator_2ehpp',['time_delay_estimator.hpp',['../time__delay__estimator_8hpp.html',1,'']]],
   ['time_5fpoint',['time_point',['../classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8',1,'jb::itch5::compute_book::time_point()'],['../classjb_1_1itch5_1_1mold__udp__pacer.html#a527bef6a80e4cc1ccfaed92be8ab2355',1,'jb::itch5::mold_udp_pacer::time_point()'],['../classjb_1_1itch5_1_1message__handler__concept.html#a6914100f32d23b02408ac05cc90a677a',1,'jb::itch5::message_handler_concept::time_point()'],['../namespacejb_1_1itch5.html#ab841715d223ab0bb40378f1081fbc933',1,'jb::itch5::time_point()']]],
   ['timeseries_5ftype',['timeseries_type',['../classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682',1,'jb::fftw::time_delay_estimator']]],
-  ['timestamp',['timestamp',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp',1,'jb::itch5']]],
   ['timestamp',['timestamp',['../namespacejb_1_1itch5.html#ad92760ff287cf318b3e6cbe3523ead61',1,'jb::itch5::message_header::timestamp()'],['../namespacejb_1_1log.html#a2fcd5ab31c65f0cf2f00e6912ee445ba',1,'jb::log::TimeStamp()']]],
+  ['timestamp',['timestamp',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1timestamp',1,'jb::itch5']]],
   ['timestamp_2ecpp',['timestamp.cpp',['../timestamp_8cpp.html',1,'']]],
   ['timestamp_2ehpp',['timestamp.hpp',['../timestamp_8hpp.html',1,'']]],
   ['tk_5fbegin_5ftop_5f',['tk_begin_top_',['../classjb_1_1itch5_1_1array__based__book__side.html#a35b6ea51020c723162db31ed69c2c6d8',1,'jb::itch5::array_based_book_side']]],
@@ -58,6 +58,8 @@ var searchData=
   ['tmpa_5f',['tmpa_',['../classjb_1_1fftw_1_1time__delay__estimator.html#a0364b61f00bcd79829651abc2245b4f8',1,'jb::fftw::time_delay_estimator']]],
   ['tmpb_5f',['tmpb_',['../classjb_1_1fftw_1_1time__delay__estimator.html#af90b9b479651762c3e9b5f7e3e280c3f',1,'jb::fftw::time_delay_estimator']]],
   ['to_5fstream',['to_stream',['../classjb_1_1config__object.html#a2e6cb95f0f698146271dc7a1f039ba44',1,'jb::config_object']]],
+  ['to_5fstring',['to_string',['../classjb_1_1clfft_1_1clfft__error.html#a13a15584f477db40a99da625baddc0d9',1,'jb::clfft::clfft_error']]],
+  ['to_5fwhat',['to_what',['../classjb_1_1clfft_1_1clfft__error.html#a6a25d996cc50ad111fd5f7f3f8f2b287',1,'jb::clfft::clfft_error']]],
   ['to_5fyaml',['to_yaml',['../classjb_1_1config__attribute.html#a3b21219f7f16a046b1af60c747801efa',1,'jb::config_attribute::to_yaml()'],['../classjb_1_1config__object_1_1attribute__base.html#a8fa673cfc315ec0083eaa77c62bdd0dc',1,'jb::config_object::attribute_base::to_yaml()'],['../classjb_1_1config__object.html#afdebdfbd658bc4b30e75ea72ff5bb09b',1,'jb::config_object::to_yaml()'],['../structjb_1_1config__recurse.html#a2798310b52c2efb7fe91beeb035bc9a2',1,'jb::config_recurse::to_yaml(T const &amp;x, Args...)'],['../structjb_1_1config__recurse.html#a4ab6490332e8e0edd3d99555388be049',1,'jb::config_recurse::to_yaml(T const &amp;object)'],['../structjb_1_1config__recurse.html#a94719c873d0f87fc5d072c17a4a14500',1,'jb::config_recurse::to_yaml(config_attribute&lt; C, T &gt; const &amp;object)'],['../structjb_1_1config__recurse.html#af57910954d6b628d860a577377e9dae2',1,'jb::config_recurse::to_yaml(Sequence const &amp;seq)'],['../structjb_1_1config__recurse.html#a782ea6f62e07bb9f8438a1b414c83fe9',1,'jb::config_recurse::to_yaml(std::pair&lt; U, V &gt; const &amp;object)']]],
   ['top_5flevels_5f',['top_levels_',['../classjb_1_1itch5_1_1array__based__book__side.html#a87eea59d66dd8071e61271b7d05f32d6',1,'jb::itch5::array_based_book_side']]],
   ['top_5flevels_5fcount',['top_levels_count',['../classjb_1_1itch5_1_1array__based__book__side.html#a722f27f7653d1b3f43f2fed88db7e1ad',1,'jb::itch5::array_based_book_side']]],
@@ -77,5 +79,7 @@ var searchData=
   ['traits_3c_20long_20double_20_3e',['traits&lt; long double &gt;',['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html',1,'jb::fftw']]],
   ['traits_3c_20std_3a_3acomplex_3c_20t_20_3e_20_3e',['traits&lt; std::complex&lt; T &gt; &gt;',['../structjb_1_1fftw_1_1traits_3_01std_1_1complex_3_01T_01_4_01_4.html',1,'jb::fftw']]],
   ['traits_3c_20t_20_3e',['traits&lt; T &gt;',['../namespacejb_1_1fftw.html',1,'jb::fftw']]],
-  ['ts',['ts',['../namespacejb_1_1itch5.html#aad04f74db84a3f638ac349ff5b6a5412',1,'jb::itch5::timestamp']]]
+  ['transform_5fbody',['transform_body',['../classjb_1_1tde_1_1reduce__sum.html#a429715a6aa3b594f299c9970fb5bdb40',1,'jb::tde::reduce_sum::transform_body()'],['../classjb_1_1tde_1_1reducer__concept.html#a27436eedb074702e6ba0a65d5d19d00a',1,'jb::tde::reducer_concept::transform_body()']]],
+  ['ts',['ts',['../namespacejb_1_1itch5.html#aad04f74db84a3f638ac349ff5b6a5412',1,'jb::itch5::timestamp']]],
+  ['typical_5foutput',['typical_output',['../classjb_1_1testing_1_1microbenchmark__base.html#a77a7b575e2a44ab8f4043baf1d4a55c8',1,'jb::testing::microbenchmark_base']]]
 ];
