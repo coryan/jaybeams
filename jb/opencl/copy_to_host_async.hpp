@@ -51,16 +51,12 @@ inline boost::compute::future<HostIterator> copy_to_host_async(
   typedef typename std::iterator_traits<DeviceIterator>::value_type value_type;
 
   std::size_t count = bcdetail::iterator_range_size(first, last);
-  if (count == 0) {
-    return bc::future<HostIterator>();
-  }
-
   bc::buffer const& buffer = first.get_buffer();
   std::size_t offset = first.get_index();
 
   auto event = queue.enqueue_read_buffer_async(
       buffer, offset * sizeof(value_type), count * sizeof(value_type),
-      ::boost::addressof(*result));
+      ::boost::addressof(*result), wait);
 
   return bc::make_future(
       bcdetail::iterator_plus_distance(result, count), event);

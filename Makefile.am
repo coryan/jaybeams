@@ -629,6 +629,7 @@ if HAVE_OPENCL
 jb_opencl_lib = jb/libjb_opencl.a
 jb_opencl_unit_tests = \
   jb/opencl/ut_build_simple_kernel \
+  jb/opencl/ut_copy_to_host_async \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector
 jb_opencl_examples = \
@@ -701,6 +702,10 @@ jb_opencl_ut_build_simple_kernel_LDADD = $(jb_ut_opencl_libs)
 jb_opencl_ut_config_SOURCES = jb/opencl/ut_config.cpp
 jb_opencl_ut_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_config
 jb_opencl_ut_config_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_ut_copy_to_host_async_SOURCES = jb/opencl/ut_copy_to_host_async.cpp
+jb_opencl_ut_copy_to_host_async_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_copy_to_host_async
+jb_opencl_ut_copy_to_host_async_LDADD = $(jb_ut_opencl_libs)
 
 jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
