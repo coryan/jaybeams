@@ -1,6 +1,7 @@
 #ifndef jb_fftw_time_delay_estimator_hpp
 #define jb_fftw_time_delay_estimator_hpp
 
+#include <jb/detail/array_traits.hpp>
 #include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>

@@ -226,6 +226,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/convert_cpu_set.hpp \
   jb/convert_severity_level.hpp \
   jb/cpu_set.hpp \
+  jb/detail/array_traits.hpp \
   jb/detail/os_error.hpp \
   jb/detail/reconfigure_thread.hpp \
   jb/detail/thread_setup_wrapper.hpp \

@@ -11,10 +11,14 @@ class has_resize {
 private:
   template <typename T>
   static constexpr auto check(T*) -> typename std::is_void<
-      decltype(std::declval<T>().resize(std::declval<std::size_t>()))>::type;
+      decltype(std::declval<T>().resize(std::declval<std::size_t>()))>::type {
+    return std::true_type();
+  }
 
   template <typename T>
-  static constexpr std::false_type check(...);
+  static constexpr std::false_type check(...) {
+    return std::false_type();
+  }
 
 public:
   using type = decltype(check<C>(nullptr));
