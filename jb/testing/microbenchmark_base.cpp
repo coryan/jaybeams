@@ -6,7 +6,8 @@ void jb::testing::microbenchmark_base::write_results(
     std::ostream& os, results const& r) const {
   using namespace std::chrono;
   for (auto const& v : r) {
-    os << duration_cast<nanoseconds>(v.second).count() << "\n";
+    os << config_.test_case() << "," << v.first << ","
+       << duration_cast<nanoseconds>(v.second).count() << "\n";
   }
 }
 
