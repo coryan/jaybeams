@@ -98,7 +98,7 @@ public:
     // we want to measure the time to execute the operations, not the
     // time to generate them ...
     std::vector<operation> operations;
-    operations.reserve(size + 1);
+    operations.reserve(size);
 
     // ... the operations are generated at random, we use one of the
     // standard PRNG in the library.  Notice that the seed is a
@@ -169,7 +169,7 @@ public:
     operations.push_back({level2price(initial_level), initial_qty});
     book[initial_level] = initial_qty;
 
-    for (int i = 0; i != size; ++i) {
+    for (int i = 1; i != size; ++i) {
       // ... find out what is the current best level, or use
       // initial_level if it is not available ...
       int best_level;
