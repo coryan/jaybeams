@@ -20,7 +20,6 @@
 #include <jb/itch5/array_based_order_book.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
 #include <jb/itch5/price_levels.hpp>
-#include <jb/testing/compile_info.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
@@ -122,8 +121,7 @@ public:
     std::vector<int> boundaries(
         {0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(), cfg.p99(), cfg.p999(),
          cfg.p100()});
-    std::vector<double> weights(
-        {0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
+    std::vector<double> weights({0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
     JB_ASSERT_THROW(boundaries.size() == weights.size() + 1);
     std::piecewise_constant_distribution<> ddis(
         boundaries.begin(), boundaries.end(), weights.begin());
@@ -224,7 +222,7 @@ public:
     }
     operations_ = std::move(operations);
 
-    JB_LOG(info) << "Simulated depth histogram summary: "
+    JB_LOG(info) << "Simulated depth histogram: "
                  << book_depth_histogram.summary();
     JB_LOG(info) << "Desired: " << jb::histogram_summary{0.0,
                                                          double(cfg.p25()),
@@ -300,7 +298,10 @@ void run_benchmark(config const& cfg, book_type_config const& book_cfg) {
   auto r = bm.run(cfg.fixture(), book_cfg, seed);
 
   typename benchmark::summary s(r);
-  JB_LOG(info) << cfg.microbenchmark().test_case() << " summary " << s;
+  // ... print the summary and full results to std::cout, without
+  // using JB_LOG() because this is parsed by the driver script ...
+  std::cerr << cfg.microbenchmark().test_case() << " summary " << s
+            << std::endl;
   if (cfg.microbenchmark().verbose()) {
     bm.write_results(std::cout, r);
   }
@@ -315,11 +316,6 @@ int main(int argc, char* argv[]) try {
   jb::log::init(cfg.log());
   if (cfg.microbenchmark().verbose()) {
     JB_LOG(info) << "Configuration for test\n" << cfg;
-    JB_LOG(info) << "Compile-time configuration:"
-                 << "\nuname:          " << jb::testing::uname_a
-                 << "\ncompiler:       " << jb::testing::compiler
-                 << "\ncompiler flags: " << jb::testing::compiler_flags
-                 << "\nlinker:         " << jb::testing::linker << "\n";
   }
 
   using namespace jb::itch5;

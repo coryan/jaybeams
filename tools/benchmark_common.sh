@@ -11,11 +11,22 @@ Starting $basename at $timestamp
 This file contains both environmental conditions and results
 The environmental conditions are printed on lines starting with #
 The results are on plain lines without a comment prefix
+
+Most of the system configuration is logged at the end of the results
 EOF
 }
 
 # Print out a header explaining the file contents
-startup() {
+benchmark_startup() {
+    cat <<EOF
+This script may prompt you for your sudo password.  sudo privileges are
+required to
+  (1) configure the cpu frequency governor
+  (2) disable real-time scheduling limits
+Use the companion 'benchmark_teardown.sh' script to restore system
+settings to typical defaults.  All changes are logged in case you
+need to manually restore them.
+EOF
     basename=`basename $0 .sh`
     LOG=$basename.$$.results.csv
     TMPERR=/tmp/${basename}.$$.err
@@ -23,20 +34,38 @@ startup() {
     trap "/bin/rm -f $TMPERR $TMPOUT" 0
     #LOG=/dev/stdout
 
+    echo
     echo "Saving results to $LOG"
+    echo
     echo '#' >$LOG
     print_header | log $LOG
+    cpu_governor_startup | log $LOG
+    full_rt_scheduling_startup | log $LOG
+}
+
+benchmark_teardown() {
+    full_rt_scheduling_teardown | log $LOG
+    cpu_governor_teardown | log $LOG
 }
 
 # Prepare the CPU power governor to optimize for performance, this
 # tends to produce more consistent results, in other settings the CPU
 # often stays in low power settings for too long and the benchmark
 # runs slower than expected.
-setup_cpu_governor() {
+cpu_governor_startup() {
+    # ... first find out if there is a cpupower command at all ...
+    if which cpupower>/dev/null && cpupower | grep -q ' driver: '; then
+	HAS_CPUPOWER=yes
+    else
+	HAS_CPUPOWER=no
+	echo "No cpupower(1) command found or no cpupower driver."
+	echo "Benchmark will execute without changing the cpupower configuration."
+	return 0
+    fi
     # ... preserve the current CPU power management settings ...
-    governor=`cpupower frequency-info -p | grep 'The governor ".*" may decide' | cut -f2,2 -d'"' `
+    old_governor=`cpupower frequency-info -p | grep 'The governor ".*" may decide' | cut -f2,2 -d'"' `
     # ... restore the cpu power governor at the end of the benchmark ...
-    trap "/bin/rm -f $TMPERR $TMPOUT; sudo cpupower frequency-set -g $governor" 0
+    trap "/bin/rm -f $TMPERR $TMPOUT; cpu_governor_teardown $old_governor" 0
     # ... change the cpu power governor ...
     echo
     echo "Change the CPU power management governor to 'performance':"
@@ -47,41 +76,71 @@ setup_cpu_governor() {
     sudo cpupower frequency-info
 }
 
+cpu_governor_teardown() {
+    if [ "x$HAS_CPUPOWER" = "xyes" ]; then
+	if [ "x$old_governor" = "x" ]; then
+	    gov=$1
+	else
+	    gov=$old_governor
+	fi
+	if [ "x$gov" == "x" ]; then
+	    echo "no governor variable set, assuming 'ondemand'"
+	    gov="ondemand"
+	fi
+	echo "Restoring cpupower governor to $gov"
+	sudo cpupower frequency-set -g $gov
+    fi
+}
+
 # Print out the relevant (and some potentially irrelevant)
 # environmental conditions
 print_environment() {
     # capture the name of the program
-
     program=$1
+
     # ... print out the current git revision ...
+    echo
+    echo
+    echo "Last revision commited to git"
     git rev-parse HEAD
+    echo
+    echo "Current git status"
+    git status
 
     # ... print out compilation details ...
+    echo
+    echo "Compilation details"
     cat jb/testing/compile_info.cpp || \
         echo "cannot find compile_info.cpp file"
 
     # ... print out the libraries linked against the program ...
-    echo "ldd version"
+    echo
+    echo "dynamically loaded libraries in the program"
     ldd $1
 
     # ... print out the C library information ...
+    echo
     echo "ldd version"
     ldd --version || echo "cannot run ldd to get libc info"
 
     # ... another way to print the C library info ...
+    echo
     echo "glibc version"
     `ldd /usr/bin/touch | grep libc.so | awk '{print $3}'` --version || \
         echo "failed to get libc.so information"
 
     # ... print out the available memory ...
+    echo
     echo "Memory and swap information"
     free
 
     # ... print out how many CPUs (or cores or whatevers) ...
+    echo
     echo "Processor count"
     egrep ^processor /proc/cpuinfo 
 
     # ... print out the details of hardware, including CPU, memory, etc ...
+    echo
     echo "Hardware details:"
     sudo lshw -sanitize
 }
@@ -103,4 +162,23 @@ EOF
                 -e 's/us, N=/ | /g' | \
             awk '{print $0, "|"}'
     fi
+}
+
+require_full_rt_scheduling() {
+    if cat /proc/sys/kernel/sched_rt_runtime_us | grep -q -- -1; then
+	echo "System seems to be configured for benchmarking, good"
+    else
+	echo "System does not seem to be configured for benchmarking, aborting"
+	exit 1
+    fi
+}
+
+full_rt_scheduling_startup() {
+    echo "Disabling RT scheduling limits, RT processes can take 100% of the CPU"
+    echo -1 | sudo tee /proc/sys/kernel/sched_rt_runtime_us
+}
+
+full_rt_scheduling_teardown() {
+    echo "Disabling RT scheduling limits, RT processes can take 100% of the CPU"
+    echo 950000 | sudo tee /proc/sys/kernel/sched_rt_runtime_us
 }

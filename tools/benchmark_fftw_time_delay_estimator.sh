@@ -30,7 +30,7 @@ bindir=`dirname $0`
 source ${bindir?}/benchmark_common.sh
 
 # ... pick a log file ...
-startup
+bechmark_startup
 
 # ... run the benchmark for different test cases ...
 ERR=/tmp/${basename}.$$.err
@@ -42,6 +42,9 @@ for test in double:aligned float:aligned double:unaligned float:unaligned; do
     cat $OUT >>$LOG
     cat $ERR | log $LOG
 done
+
+# ... teardown the benchmark configuration changes ...
+benchmark_teardown
 
 # ... print out the conditions under which the test ran ...
 print_environment jb/fftw/bm_time_delay_estimator | log $LOG
