@@ -11,11 +11,12 @@ namespace jb {
 namespace fftw {
 
 /**
- * Determine if a timeseries tye guarantees alignment.
+ * Determine if a timeseries type guarantees alignment.
  */
 template <typename T>
 struct always_aligned : public std::false_type {};
 
+/// By construction these vectors are always 128-bit aligned.
 template <typename T>
 struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 

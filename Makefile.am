@@ -1,13 +1,14 @@
 # JayBeams uses a non-recursive make, this is the only Makefile.
 
 instdir = $(prefix)/lib
+
 inst_LIBRARIES = \
   jb/libjb.a \
-  jb/libitch5.a
+  jb/libjb_itch5.a
 
 noinst_LIBRARIES = \
   jb/libjb_testing.a \
-  jb/libitch5_testing.a
+  jb/libjb_itch5_testing.a
 
 jb_unit_tests = \
   jb/ut_as_hhmmss \
@@ -29,6 +30,7 @@ jb_unit_tests = \
   jb/ut_logging \
   jb/ut_merge_yaml \
   jb/ut_offline_feed_statistics \
+  jb/ut_p2ceil \
   jb/ut_severity_level \
   jb/ut_strtonum \
   jb/ut_thread_config
@@ -64,7 +66,6 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_order_executed_message \
   jb/itch5/ut_order_executed_price_message \
   jb/itch5/ut_order_replace_message \
-  jb/itch5/ut_p2ceil \
   jb/itch5/ut_price_field \
   jb/itch5/ut_price_levels \
   jb/itch5/ut_process_buffer_mlist \
@@ -123,7 +124,9 @@ LDFLAGS = \
 YAML_CPP_LIBS=@YAML_CPP_LIBS@
 
 LIBS = \
+  $(YAML_CPP_LDFLAGS) \
   $(YAML_CPP_LIBS) \
+  $(BOOST_LDFLAGS) \
   $(BOOST_LOG_SETUP_LIB) \
   $(BOOST_LOG_LIB) \
   $(BOOST_FILESYSTEM_LIB) \
@@ -150,8 +153,8 @@ jb_ut_testing_libs = \
   $(jb_ut_libs)
 
 jb_ut_itch5_libs = \
-  jb/libitch5_testing.a \
-  jb/libitch5.a \
+  jb/libjb_itch5_testing.a \
+  jb/libjb_itch5.a \
   $(jb_ut_libs)
 
 ################################################################
@@ -184,18 +187,13 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
 examples += examples/fftw_correlation_no_wrappers
-AM_CXXFLAGS += $(FFTW3_CPPFLAGS) \
-  $(FFTW3F_CPPFLAGS) \
-  $(FFTW3L_CPPFLAGS)
-LDFLAGS += $(FFTW3_LDFLAGS) \
-  $(FFTW3F_LDFLAGS) \
-  $(FFTW3L_LDFLAGS)
+AM_CXXFLAGS += $(FFTW3_CPPFLAGS)
+LDFLAGS += $(FFTW3_LDFLAGS)
 jb_ut_fftw_libs = \
-  $(FFTW3_LIBS) \
-  $(FFTW3F_LIBS) \
-  $(FFTW3L_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
+  $(FFTW3_LDFLAGS) \
+  $(FFTW3_LIBS) \
   $(jb_ut_libs)
 else
 jb_ut_fftw_libs =
@@ -236,6 +234,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/log.hpp \
   jb/merge_yaml.hpp \
   jb/offline_feed_statistics.hpp \
+  jb/p2ceil.hpp \
   jb/severity_level.hpp \
   jb/strtonum.hpp \
   jb/thread_config.hpp \
@@ -283,7 +282,7 @@ jb_libjb_testing_a_HEADERS = \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp
 
-jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
+jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::uname_a[] = R"""(' >>$@; \
@@ -299,30 +298,30 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
-	$(CXX) -Wl,--version >>$@ 2>&1; \
+	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
 
 ################################################################
-# jb/libitch5_testing.a
+# jb/libjb_itch5_testing.a
 ################################################################
 
-jb_libitch5_testing_adir = $(includedir)
-jb_libitch5_testing_a_SOURCES = \
+jb_libjb_itch5_testing_adir = $(includedir)
+jb_libjb_itch5_testing_a_SOURCES = \
   jb/itch5/testing/data.cpp \
   jb/itch5/testing/messages.cpp
-jb_libitch5_testing_a_HEADERS = \
+jb_libjb_itch5_testing_a_HEADERS = \
   jb/itch5/testing/data.hpp \
   jb/itch5/testing/messages.hpp
 
 ################################################################
-# jb/libitch5.a
+# jb/libjb_itch5.a
 ################################################################
 
-jb_libitch5_adir = $(includedir)
-nobase_jb_libitch5_a_HEADERS =
+jb_libjb_itch5_adir = $(includedir)
+nobase_jb_libjb_itch5_a_HEADERS =
 
-jb_libitch5_a_SOURCES = \
+jb_libjb_itch5_a_SOURCES = \
   jb/itch5/add_order_message.cpp \
   jb/itch5/add_order_mpid_message.cpp \
   jb/itch5/array_based_order_book.cpp \
@@ -352,7 +351,7 @@ jb_libitch5_a_SOURCES = \
   jb/itch5/timestamp.cpp \
   jb/itch5/trade_message.cpp
 
-jb_libitch5_a_HEADERS = \
+jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
   jb/itch5/add_order_mpid_message.hpp \
   jb/itch5/array_based_order_book.hpp \
@@ -387,7 +386,6 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/order_executed_message.hpp \
   jb/itch5/order_executed_price_message.hpp \
   jb/itch5/order_replace_message.hpp \
-  jb/itch5/p2ceil.hpp \
   jb/itch5/price_field.hpp \
   jb/itch5/price_levels.hpp \
   jb/itch5/process_buffer_mlist.hpp \
@@ -406,7 +404,7 @@ jb_libitch5_a_HEADERS = \
   jb/itch5/trade_message.hpp \
   jb/itch5/unknown_message.hpp
 
-jb_libitch5_a_LIBADD =
+jb_libjb_itch5_a_LIBADD =
 
 ################################################################
 # jb/libjb_fftw.a
@@ -425,6 +423,14 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/traits.hpp
 
 ################################################################
+# jb/libjb_fftw.a
+################################################################
+
+jb_libjb_tde_adir = $(includedir)
+jb_libjb_tde_a_SOURCES =
+jb_libjb_tde_a_HEADERS =
+
+################################################################
 # examples
 ################################################################
 
@@ -435,28 +441,28 @@ examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wra
 examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
-tools_itch5bookdepth_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5bookdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 tools_itch5eventdepth_SOURCES = tools/itch5eventdepth.cpp
-tools_itch5eventdepth_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5eventdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 tools_itch5inside_SOURCES = tools/itch5inside.cpp
-tools_itch5inside_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5inside_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 tools_itch5moldreplay_SOURCES = tools/itch5moldreplay.cpp
-tools_itch5moldreplay_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIB)
+tools_itch5moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a $(BOOST_ASIO_LIB)
 
 tools_itch5stats_SOURCES = tools/itch5stats.cpp
-tools_itch5stats_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 tools_itch5trades_SOURCES = tools/itch5trades.cpp
-tools_itch5trades_LDADD = jb/libitch5.a jb/libjb.a
+tools_itch5trades_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 tools_mold2inside_SOURCES = tools/mold2inside.cpp
-tools_mold2inside_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
+tools_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
 
 tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
-tools_moldheartbeat_LDADD = jb/libitch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
+tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a $(BOOST_ASIO_LIBS)
 
 ################################################################
 # benchmarks and unit tests
@@ -538,6 +544,10 @@ jb_ut_merge_yaml_SOURCES = jb/ut_merge_yaml.cpp
 jb_ut_merge_yaml_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_merge_yaml
 jb_ut_merge_yaml_LDADD = $(jb_ut_libs)
 
+jb_ut_p2ceil_SOURCES = jb/ut_p2ceil.cpp
+jb_ut_p2ceil_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_p2ceil
+jb_ut_p2ceil_LDADD = $(jb_ut_libs)
+
 jb_ut_offline_feed_statistics_SOURCES = jb/ut_offline_feed_statistics.cpp
 jb_ut_offline_feed_statistics_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_offline_feed_statistics
 jb_ut_offline_feed_statistics_LDADD = $(jb_ut_libs)
@@ -598,11 +608,203 @@ jb_fftw_bm_time_delay_estimator_SOURCES = jb/fftw/bm_time_delay_estimator.cpp
 jb_fftw_bm_time_delay_estimator_CPPFLAGS =
 jb_fftw_bm_time_delay_estimator_LDADD = \
   $(FFTW3_LIBS) \
-  $(FFTW3F_LIBS) \
-  $(FFTW3L_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   jb/libjb.a
+
+################################################################
+# Conditionally enable the OpenCL components
+################################################################
+if HAVE_OPENCL
+
+jb_opencl_lib = jb/libjb_opencl.a
+jb_opencl_unit_tests = \
+  jb/opencl/ut_build_simple_kernel \
+  jb/opencl/ut_copy_to_host_async \
+  jb/opencl/ut_config \
+  jb/opencl/ut_device_selector
+jb_opencl_examples = \
+  jb/opencl/show_device
+jb_opencl_benchmarks = \
+  jb/opencl/bm_copy_buffer \
+  jb/opencl/bm_launch_kernel
+jb_ut_opencl_libs = \
+  $(jb_opencl_lib) \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  $(jb_ut_libs)
+
+jb_clfft_lib = jb/libjb_clfft.a
+jb_clfft_unit_tests = \
+  jb/clfft/ut_error \
+  jb/clfft/ut_plan
+jb_clfft_benchmarks = \
+  jb/clfft/bm_single_fft
+jb_ut_clfft_libs = \
+  $(jb_clfft_lib) \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  $(jb_ut_opencl_libs)
+
+jb_tde_lib = jb/libjb_tde.a
+jb_tde_unit_tests = \
+  jb/tde/ut_conjugate_and_multiply \
+  jb/tde/ut_generic_reduce \
+  jb/tde/ut_reduce_argmax_real
+jb_tde_benchmarks = \
+  jb/tde/bm_reduce_argmax_real
+jb_ut_tde_libs = \
+  $(jb_tde_lib) \
+  $(jb_ut_clfft_libs)
+
+AM_CXXFLAGS += \
+  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
+
+inst_LIBRARIES += $(jb_opencl_lib) $(jb_clfft_lib) $(jb_tde_lib)
+check_PROGRAMS += \
+  $(jb_opencl_unit_tests) \
+  $(jb_clfft_unit_tests) \
+  $(jb_tde_unit_tests)
+
+noinst_PROGRAMS += \
+  $(jb_opencl_examples) \
+  $(jb_opencl_benchmarks) \
+  $(jb_clfft_benchmarks) \
+  $(jb_tde_benchmarks)
+
+#
+# jb/libjb_opencl.a
+#
+
+jb_libjb_opencl_adir = $(includedir)
+jb_libjb_opencl_a_SOURCES = \
+  jb/opencl/build_simple_kernel.cpp \
+  jb/opencl/config.cpp \
+  jb/opencl/device_selector.cpp
+jb_libjb_opencl_a_HEADERS = \
+  jb/opencl/build_simple_kernel.hpp \
+  jb/opencl/config.hpp \
+  jb/opencl/device_selector.hpp
+
+jb_opencl_ut_build_simple_kernel_SOURCES = jb/opencl/ut_build_simple_kernel.cpp
+jb_opencl_ut_build_simple_kernel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_build_simple_kernel
+jb_opencl_ut_build_simple_kernel_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_ut_config_SOURCES = jb/opencl/ut_config.cpp
+jb_opencl_ut_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_config
+jb_opencl_ut_config_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_ut_copy_to_host_async_SOURCES = jb/opencl/ut_copy_to_host_async.cpp
+jb_opencl_ut_copy_to_host_async_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_copy_to_host_async
+jb_opencl_ut_copy_to_host_async_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
+jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
+jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_libs)
+
+jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
+jb_opencl_show_device_CPPFLAGS = 
+jb_opencl_show_device_LDADD = jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
+
+jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
+jb_opencl_bm_copy_buffer_CPPFLAGS = 
+jb_opencl_bm_copy_buffer_LDADD = jb/libjb_testing.a jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
+
+jb_opencl_bm_launch_kernel_SOURCES = jb/opencl/bm_launch_kernel.cpp
+jb_opencl_bm_launch_kernel_CPPFLAGS = 
+jb_opencl_bm_launch_kernel_LDADD = jb/libjb_testing.a jb/libjb_opencl.a $(OPENCL_LIB) jb/libjb.a
+
+#
+# jb/libjb_clfft.a
+#
+
+jb_libjb_clfft_adir = $(includedir)
+jb_libjb_clfft_a_SOURCES = \
+  jb/clfft/error.cpp \
+  jb/clfft/init.cpp
+jb_libjb_clfft_a_HEADERS = \
+  jb/clfft/error.hpp \
+  jb/clfft/init.hpp \
+  jb/clfft/plan.hpp
+
+jb_clfft_ut_error_SOURCES = jb/clfft/ut_error.cpp
+jb_clfft_ut_error_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_error
+jb_clfft_ut_error_LDADD = $(jb_ut_clfft_libs)
+
+jb_clfft_ut_plan_SOURCES = jb/clfft/ut_plan.cpp
+jb_clfft_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_plan
+jb_clfft_ut_plan_LDADD = $(jb_ut_clfft_libs)
+
+jb_clfft_bm_single_fft_SOURCES = jb/clfft/bm_single_fft.cpp
+jb_clfft_bm_single_fft_CPPFLAGS =
+jb_clfft_bm_single_fft_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_clfft.a \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  jb/libjb_opencl.a \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  jb/libjb.a
+
+#
+# jb/libjb_tde.a
+#
+
+jb_libjb_tde_a_SOURCES += \
+  jb/tde/conjugate_and_multiply_kernel.cpp \
+  jb/tde/generic_reduce_program.cpp
+jb_libjb_tde_a_HEADERS += \
+  jb/tde/conjugate_and_multiply_kernel.hpp \
+  jb/tde/generic_reduce_program.hpp
+
+jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::conjugate_and_multiply_kernel_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+jb/tde/reduce_argmax_real_kernel.cpp: jb/tde/reduce_argmax_real_kernel.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/reduce_argmax_real_kernel.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::reduce_argmax_real_kernel_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+jb/tde/generic_reduce_program.cpp: jb/tde/generic_reduce_program.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/tde/generic_reduce_program.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::tde::generic_reduce_program_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
+jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
+jb_tde_ut_conjugate_and_multiply_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_ut_reduce_argmax_real_SOURCES = jb/tde/ut_reduce_argmax_real.cpp
+jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_reduce_argmax_real
+jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_ut_generic_reduce_SOURCES = jb/tde/ut_generic_reduce.cpp
+jb_tde_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_generic_reduce
+jb_tde_ut_generic_reduce_LDADD = $(jb_ut_tde_libs)
+
+jb_tde_bm_reduce_argmax_real_SOURCES = jb/tde/bm_reduce_argmax_real.cpp
+jb_tde_bm_reduce_argmax_real_CPPFLAGS =
+jb_tde_bm_reduce_argmax_real_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_tde.a \
+  jb/libjb_clfft.a \
+  $(CLFFT_LDFLAGS) \
+  $(CLFFT_LIB) \
+  jb/libjb_opencl.a \
+  $(OPENCL_LDFLAGS) \
+  $(OPENCL_LIB) \
+  jb/libjb.a
+
+endif
 
 ################################################################
 # itch5 unit tests
@@ -727,10 +929,6 @@ jb_itch5_ut_order_executed_price_message_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_order_replace_message_SOURCES = jb/itch5/ut_order_replace_message.cpp
 jb_itch5_ut_order_replace_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_replace_message
 jb_itch5_ut_order_replace_message_LDADD = $(jb_ut_itch5_libs)
-
-jb_itch5_ut_p2ceil_SOURCES = jb/itch5/ut_p2ceil.cpp
-jb_itch5_ut_p2ceil_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_p2ceil
-jb_itch5_ut_p2ceil_LDADD = $(jb_ut_itch5_libs)
 
 jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
 jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field

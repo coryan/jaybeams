@@ -27,6 +27,7 @@ public:
   jb::config_attribute<microbenchmark_config, std::string> test_case;
   jb::config_attribute<microbenchmark_config, bool> reconfigure_thread;
   jb::config_attribute<microbenchmark_config, thread_config> thread;
+  jb::config_attribute<microbenchmark_config, std::string> prefix;
 };
 
 } // namespace testing
