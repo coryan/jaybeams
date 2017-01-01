@@ -15,8 +15,6 @@ var searchData=
   ['have_5fclfft',['HAVE_CLFFT',['../jb-config_8hpp.html#a0e489c0bbe04db342bdf0c47184f25ba',1,'jb-config.hpp']]],
   ['have_5fcxx14',['HAVE_CXX14',['../jb-config_8hpp.html#ae734d93598cc7af570ecbad61dc25087',1,'jb-config.hpp']]],
   ['have_5ffftw3',['HAVE_FFTW3',['../jb-config_8hpp.html#a3c6447b1d67b78e05fde0a9b11868e5d',1,'jb-config.hpp']]],
-  ['have_5ffftw3f',['HAVE_FFTW3F',['../jb-config_8hpp.html#a46d650ea671d41a67bd0055ba35f28ab',1,'jb-config.hpp']]],
-  ['have_5ffftw3l',['HAVE_FFTW3L',['../jb-config_8hpp.html#a7e915940b32ffb12c9947389c6471156',1,'jb-config.hpp']]],
   ['have_5finttypes_5fh',['HAVE_INTTYPES_H',['../jb-config_8hpp.html#ab90a030ff2790ebdc176660a6dd2a478',1,'jb-config.hpp']]],
   ['have_5fmemory_5fh',['HAVE_MEMORY_H',['../jb-config_8hpp.html#ae93a78f9d076138897af441c9f86f285',1,'jb-config.hpp']]],
   ['have_5fopencl',['HAVE_OPENCL',['../jb-config_8hpp.html#aa4c7aabdfaf0c68e1d01c595ca31d4cd',1,'jb-config.hpp']]],
