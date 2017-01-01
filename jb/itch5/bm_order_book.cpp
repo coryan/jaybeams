@@ -2,10 +2,20 @@
  * @file
  *
  * This is a benchmark for jb::itch5::array_based_order_book and
- * jb::itch5::map_based_order_book.  It runs the order book
- * computation over a portion of an ITCH-5.0 file, typically the
- * program is driven by a script or by cachegrind to collect
- * performance information.
+ * jb::itch5::map_based_order_book.  It computes a valid stream of
+ * book operations, and runs the operations over the book type
+ * multiple times to measure its performance and variability.
+ *
+ * Some effort is made to make sure the stream of book operations is
+ * statistically similar to the observed behaviour of the ITCH-5.0
+ * feed.
+ *
+ * To make the test reproduceable, the user can pass in the seed to
+ * the PRNGs used to create the stream of book operations.
+ *
+ * The program uses the jb::microbenchmark<> class, taking advantage
+ * of common features such as command-line configurable number of
+ * iterations, scheduling attributes, warmup cycles, etc.
  */
 #include <jb/itch5/array_based_order_book.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
@@ -82,7 +92,7 @@ public:
   fixture(
       int size, fixture_config const& cfg, book_config const& bkcfg,
       unsigned int seed)
-      : book_(bkcfg) {
+      : bkcfg_(bkcfg) {
     // The benchmark prepares a list of @a size operations to execute
     // in the run() function.  We do this in the constructor because
     // we want to measure the time to execute the operations, not the
@@ -136,7 +146,8 @@ public:
     // terms of price levels and then converting to prices makes the
     // code easier to read ...
     std::function<price4_t(int)> level2price;
-    if (book_.is_ascending()) {
+    book_side tmp(bkcfg_);
+    if (tmp.is_ascending()) {
       level2price = [](int level) {
         return jb::itch5::level_to_price<price4_t>(level);
       };
@@ -177,7 +188,7 @@ public:
       }
       int qty = sdis(generator);
       // ... normalize the level to the valid range ...
-      if (level < 0) {
+      if (level <= 0) {
         level = 1;
       } else if (level >= max_level) {
         level = max_level - 1;
@@ -206,25 +217,23 @@ public:
 
   /// Run an iteration of the test ...
   void run() {
+    // ... creating a book in each iteration is less than ideal, but
+    // it is the only way to make sure the operations are applied to a
+    // well-known state ...
+    book_side book(bkcfg_);
     // ... iterate over the operations and pass them to the book ...
     for (auto const& op : operations_) {
       if (op.delta < 0) {
-        book_.reduce_order(op.px, -op.delta);
+        book.reduce_order(op.px, -op.delta);
       } else {
-        book_.add_order(op.px, op.delta);
+        book.add_order(op.px, op.delta);
       }
     }
   }
 
 private:
-  /**
-   * The book used in the benchmark.
-   *
-   * Notice that the book is created in the construction phase because
-   * we want to benchmark the add_order() and remove_order()
-   * operations, not the time taken to create a book.
-   */
-  book_side book_;
+  /// The configuration for the book side
+  book_config bkcfg_;
 
   /// A simple representation for book operations.
   struct operation {
