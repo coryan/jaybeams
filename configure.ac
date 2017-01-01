@@ -6,7 +6,6 @@ AC_INIT([JayBeams], [0.1], [coryan@users.noreply.github.com])
 
 # Move as many of the generated files as possible to a subdirectory
 AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_MACRO_DIR([m4])
 
 # ... include the m4 subdirectory in the search path for macros ...
 AC_CONFIG_MACRO_DIR([m4])
