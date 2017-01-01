@@ -187,21 +187,13 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
 examples += examples/fftw_correlation_no_wrappers
-AM_CXXFLAGS += $(FFTW3_CPPFLAGS) \
-  $(FFTW3F_CPPFLAGS) \
-  $(FFTW3L_CPPFLAGS)
-LDFLAGS += $(FFTW3_LDFLAGS) \
-  $(FFTW3F_LDFLAGS) \
-  $(FFTW3L_LDFLAGS)
+AM_CXXFLAGS += $(FFTW3_CPPFLAGS)
+LDFLAGS += $(FFTW3_LDFLAGS)
 jb_ut_fftw_libs = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   $(FFTW3_LDFLAGS) \
   $(FFTW3_LIBS) \
-  $(FFTW3F_LDFLAGS) \
-  $(FFTW3F_LIBS) \
-  $(FFTW3L_LDFLAGS) \
-  $(FFTW3L_LIBS) \
   $(jb_ut_libs)
 else
 jb_ut_fftw_libs =
@@ -622,8 +614,6 @@ jb_fftw_bm_time_delay_estimator_SOURCES = jb/fftw/bm_time_delay_estimator.cpp
 jb_fftw_bm_time_delay_estimator_CPPFLAGS =
 jb_fftw_bm_time_delay_estimator_LDADD = \
   $(FFTW3_LIBS) \
-  $(FFTW3F_LIBS) \
-  $(FFTW3L_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   jb/libjb.a
