@@ -18,10 +18,9 @@ echo >${OUT?}
 for test in map:buy map:sell array:buy array:sell; do
     echo ${test?}
     /usr/bin/time ./jb/itch5/bm_order_book --seed=3966899719 \
-                  --microbenchmark.thread.affinity=1,2,3 \
                   --microbenchmark.verbose=true \
                   --microbenchmark.prefix=${test?}, \
-                  --microbenchmark.iterations=50000 \
+                  --microbenchmark.iterations=5000 \
                   --microbenchmark.test-case=${test?} >>${OUT?}
 done 2>${LOG?}
 
