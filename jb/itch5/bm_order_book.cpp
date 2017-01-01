@@ -22,6 +22,8 @@
 #include <jb/itch5/price_levels.hpp>
 #include <jb/testing/compile_info.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/histogram.hpp>
+#include <jb/integer_range_binning.hpp>
 #include <jb/log.hpp>
 
 #include <random>
@@ -121,9 +123,9 @@ public:
         {0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(), cfg.p99(), cfg.p999(),
          cfg.p100()});
     std::vector<double> weights(
-        {0, 0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
-    JB_ASSERT_THROW(boundaries.size() == weights.size());
-    std::piecewise_linear_distribution<> ddis(
+        {0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
+    JB_ASSERT_THROW(boundaries.size() == weights.size() + 1);
+    std::piecewise_constant_distribution<> ddis(
         boundaries.begin(), boundaries.end(), weights.begin());
 
     // ... we also randomly pick whenther the new operation is better
@@ -157,6 +159,11 @@ public:
       };
     }
 
+    // ... we keep a histogram of the intended depths so we can verify
+    // that we are generating a valid simulation ...
+    jb::histogram<jb::integer_range_binning<int>> book_depth_histogram(
+        jb::integer_range_binning<int>(0, 8192));
+
     // ... keep track of the contents in a simulated book, indexed by
     // price level ...
     std::map<int, int> book;
@@ -168,6 +175,7 @@ public:
     int const initial_qty = 5000;
     operations.push_back({level2price(initial_level), initial_qty});
     book[initial_level] = initial_qty;
+    book_depth_histogram.sample(0);
 
     for (int i = 1; i != size; ++i) {
       // ... find out what is the current best level, or use
@@ -180,11 +188,12 @@ public:
       }
       // ... generate a new level to operate at, and a qty to modify
       // ...
+      int depth = static_cast<int>(ddis(generator));
       int level;
       if (bdis(generator)) {
-        level = best_level - static_cast<int>(ddis(generator));
+        level = best_level - depth;
       } else {
-        level = best_level + static_cast<int>(ddis(generator));
+        level = best_level + depth;
       }
       int qty = sdis(generator);
       // ... normalize the level to the valid range ...
@@ -207,12 +216,24 @@ public:
       // ... now insert the operation into the array, and record it in
       // the book ...
       book[level] += qty;
+      book_depth_histogram.sample(depth);
       if (book[level] == 0) {
         book.erase(level);
       }
       operations.push_back({level2price(level), qty});
     }
     operations_ = std::move(operations);
+
+    JB_LOG(info) << "Simulated depth histogram summary: "
+                 << book_depth_histogram.summary();
+    JB_LOG(info) << "Desired: " << jb::histogram_summary{0.0,
+                                                         double(cfg.p25()),
+                                                         double(cfg.p50()),
+                                                         double(cfg.p75()),
+                                                         double(cfg.p90()),
+                                                         double(cfg.p99()),
+                                                         double(cfg.p100()),
+                                                         1};
   }
 
   /// Run an iteration of the test ...
