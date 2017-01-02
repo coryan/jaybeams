@@ -80,3 +80,23 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_config_simple) {
       config().reporting_interval_seconds(-1).validate(), jb::usage);
   BOOST_CHECK_NO_THROW(config().reporting_interval_seconds(0).validate());
 }
+
+/**
+ * @test Test corner cases in jb::offline_feed_statistics to improve
+ * code coverage.
+ */
+BOOST_AUTO_TEST_CASE(offline_feed_statististics_coverage) {
+  jb::offline_feed_statistics::config cfg;
+  jb::offline_feed_statistics stats(cfg);
+
+  stats.sample(std::chrono::seconds(1), std::chrono::microseconds(1));
+  BOOST_CHECK_NO_THROW(stats.log_final_progress());
+
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(1),
+      std::chrono::microseconds(1));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(1),
+      std::chrono::microseconds(1));
+  BOOST_CHECK_NO_THROW(stats.log_final_progress());
+}
