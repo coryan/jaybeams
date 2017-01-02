@@ -3,80 +3,28 @@ require(ggplot2)
 require(boot)
 require(pwr)
 
-## How much data do we need to collect to make the test powerful enough?
-
-## We want each iteration to be at least 5 nanoseconds faster, all the
-## measurements are in microseconds, so that becomes ...
-desired.improvement <- 5 / 1000.0
-## ... we run this many operations per iteration:
-iteration.operations <- 100000
-## ... so the desired delta for each iteration is:
-desired.delta <- desired.improvement * iteration.operations
-## ... in previous runs we have observed around this much standard deviation:
-observed.sd <- 600
-## ... and it may not matter but we have observed about this for the mean
-observed.mean <- 6100
-
-## ... if we use the conventional values for power analysis ...
-power.t.test(n=NULL, sig.level=0.05, power=0.8,
-             delta=desired.delta, sd=observed.sd)
-
-## ... if we use more strict values ...
-p <- power.t.test(n=NULL, sig.level=0.01, power=0.95,
-             delta=desired.delta, sd=observed.sd)
-p
-
-## "it has been shown" [1] that we only need 15% more data to apply the
-## Mann-Whitney U test.  I have not been able to find a reference, but two
-## sources say so.  In any case, the number produce above is trivial
-## (< 100 samples), generating 5,000 costs nothing in a computer.
-##
-## [1]: http://www.jerrydallal.com/lhsp/npar.htm
-##  https://www.graphpad.com/guides/prism/6/statistics/index.htm?stat_sample_size_for_nonparametric_.htm
-
-min.samples <- max(5000, 1.15 * p$n)
+## How much data do we need to collect to obtain statiscally
+## significant results?  This value was obtained using
+## bm_order_book_analyze_initial.R:
+min.samples <- 5000
+expected.sd <- 200
 
 ## Pick your code branch here ...
-use.args <- TRUE
-use.hardcoded <- FALSE
-use.download <- FALSE
+args <- commandArgs(trailingOnly=TRUE)
 
-if (use.args) {
-    args <- commandArgs(trailingOnly=TRUE)
+baseline.file <- args[1]
+candidate.file <- args[2]
 
-    baseline.file <- args[1]
-    candidate.file <- args[2]
-}
-if (use.hardcoded) {
-    baseline.file <- '/home/coryan/jaybeams/gcc/bm_order_book_results.14622.csv'
-    candidate.file <- '/home/coryan/jaybeams/gcc/bm_order_book_results.14819.csv'
-}
-if (use.args | use.hardcoded) {
-    ## read the given files, skipping comments, into a data.frame()
-    baseline <- read.csv(
-        baseline.file, header=FALSE, col.names=c('testcase', 'nanoseconds'),
-        comment.char='#')
-    baseline$run <- factor('baseline')
-    candidate <- read.csv(
-        candidate.file, header=FALSE, col.names=c('testcase', 'nanoseconds'),
-        comment.char='#')
-    candidate$run <- factor('candidate')
-    data <- rbind(baseline, candidate)
-}
-
-if (use.download) {
-    prefix <- '/home/coryan/Downloads/build-02/bm_order_book_results'
-    data <- data.frame()
-    for (run in c('4703', '4737', '4780', '4808', '4836')) {
-        file <- paste(prefix, run, 'csv', sep='.')
-        d <- read.csv(
-            file, header=FALSE, col.names=c('testcase', 'nanoseconds'),
-            comment.char='#')
-        d$run <- factor(run)
-        data <- rbind(data, d)
-    }
-}
-
+## read the given files, skipping comments, into a data.frame()
+baseline <- read.csv(
+    baseline.file, header=FALSE, col.names=c('testcase', 'nanoseconds'),
+    comment.char='#')
+baseline$run <- factor('baseline')
+candidate <- read.csv(
+    candidate.file, header=FALSE, col.names=c('testcase', 'nanoseconds'),
+    comment.char='#')
+candidate$run <- factor('candidate')
+data <- rbind(baseline, candidate)
 
 ## express the time in microseconds
 data$microseconds <- data$nanoseconds / 1000.0
@@ -88,6 +36,24 @@ data$booktype <- factor(sapply(
 data$side <- factor(sapply(
     data$testcase,
     function(x) strsplit(as.character(x), split=':')[[1]][2]))
+
+## Is this data any good?  Does it have the minimum number of samples
+## to be sufficiently powered ...
+samples.per.factor <- aggregate(
+    microseconds ~ run + testcase, data=data,
+    FUN=length)
+actual.min.samples <- min(samples.per.factor$microseconds)
+
+if (actual.min.samples < min.samples) {
+    print(paste0("The test must have at least ", min.samples,
+                 " samples.  Only ", actual.min.samples,
+                 " present for some testcases"))
+    print(samples.per.factor)
+    quit(save='ask')
+} else {
+    print(paste0("The test had enough samples for power=",
+                 desired.power, ", significance=", desired.significance))
+}
 
 ## Is the data on 'candidate' significantly different from the data in 
 ## 'baseline', first just plot it:
@@ -113,6 +79,7 @@ ggplot(data=data, aes(x=testcase, y=microseconds, color=run)) +
   xlab("Test Case") +
   theme(legend.position="bottom")
 
+## ... and one more ...
 ggplot(data=subset(data, testcase=='array:sell'),
        aes(x=testcase, y=microseconds, color=run)) +
   geom_boxplot() +
@@ -129,8 +96,12 @@ ggplot(data=r.median, aes(x=testcase, y=microseconds, color=run)) +
   xlab("Test Case") +
   theme(legend.position="bottom")
 
-r.range <- aggregate(microseconds ~ testcase, data=aggregate(microseconds ~ run + testcase, data=data, FUN=median), FUN=function(x) max(x) - min(x))
+## ... calculate the range across all runs ...
+r.range <- aggregate(
+    microseconds ~ testcase, data=r.median, FUN=function(x) max(x) - min(x))
 
+## ... and select the factors where the range is higher than the
+## desired threshold ...
 r.effect.threshold <- subset(r.range, microseconds > desired.delta)
 r.effect.threshold
 if (nrow(r.effect.threshold) == 0) {
@@ -140,109 +111,62 @@ if (nrow(r.effect.threshold) == 0) {
     q(save="ask")
 }
 
+## ... analyze if the performance is significantly different by book
+## type. First the mandatory plots ...
+ggplot(data=data, aes(x=side, y=microseconds, color=booktype)) +
+  geom_violin() +
+  ylab("Elapsed Time (us)") +
+  xlab("Side") +
+  theme(legend.position="bottom")
+ggplot(data=data, aes(x=side, y=microseconds, color=booktype)) +
+  geom_boxplot() +
+  ylab("Elapsed Time (us)") +
+  xlab("Side") +
+  theme(legend.position="bottom")
 
-d <- subset(data, testcase=='array:sell')
-p <- pairwise.wilcox.test(x=d$microseconds, g=d$run)
+## ... calculate the median by book type ...
+b.median <- aggregate(microseconds ~ booktype + side, data=data, FUN=median)
+## ... print and visualize, in my experiments things are pretty
+## obvious, but we want to use this as an opportunity to learn ...
+summary(b.median)
+ggplot(data=b.median, aes(x=booktype, y=microseconds, color=side)) +
+  geom_point(size=4) +
+  ylab("Elapsed Time (us)") +
+  xlab("Book Type") +
+  theme(legend.position="bottom")
 
-wilcox.test(x=subset(d, run=='4808')$microseconds, y=subset(d, run=='4780')$microseconds)
+## ... and then calculate the range ..
+b.range <- aggregate(
+    microseconds ~ side, data=b.median, FUN=function(x) max(x) - min(x))
 
-runs <- levels(data$run)
-for (candidate in tail(runs, -1)) {
-    baseline <- runs[[1]]
-    for (testcase in levels(data$testcase)) {
-        wilcox.test(
-    }
+## ... and select the factors where the range is higher than the
+## desired threshold ...
+b.effect.threshold <- subset(b.range, microseconds > desired.delta)
+b.effect.threshold
+
+## ... dumb users like me (coryan) need to be told what these results mean ...
+if (nrow(b.effect.threshold) == 0) {
+    print("No side differ in median by more than the desired effect")
+    print("There is no need for more analysis, the results are not")
+    print("meaningful, the statistics are not going to help")
+    q(save="ask")
+} else {
+    print("Some of the sides have a estimated effect larger then the threshold")
+    print("... we need to figure out if it was just luck")
 }
 
-
-
-## ... is the 
-w.array.buy <- wilcox.test(
-    microseconds ~ run, data=subset(data, testcase=='array:buy'))
-
-aggregate(microseconds ~ run, FUN=sd, data=subset(data, testcase=='array:buy'))
-
-
-# plot the data, it is pretty obvious that the map book is faster ...
-ggplot(data=data, aes(x=testcase, y=microseconds, color=booktype)) +
-  geom_boxplot() +
-  ylab("Elapsed Time (us)") +
-  xlab("Test Case") +
-  theme(legend.position="bottom")
-
-ggplot(data=data, aes(x=testcase, y=microseconds, color=booktype)) +
-  geom_violin() +
-  ylab("Elapsed Time (us)") +
-  xlab("Test Case") +
-  theme(legend.position="bottom")
-
-ggplot(data=data, aes(x=run, y=microseconds, color=booktype)) +
-  geom_boxplot() +
-  ylab("Elapsed Time (us)") +
-  xlab("Program Run") +
-  theme(legend.position="bottom")
-
-ggplot(data=data, aes(x=run, y=microseconds, color=booktype)) +
-  geom_boxplot() +
-  ylab("Elapsed Time (us)") +
-  xlab("Program Run") +
-  theme(legend.position="bottom")
-
-ggplot(data=data, aes(x=run, y=microseconds, color=testcase)) +
-  geom_boxplot() +
-  ylab("Elapsed Time (us)") +
-  xlab("Program Run") +
-  theme(legend.position="bottom")
-
-ggplot(data=data, aes(x=run, y=microseconds, color=testcase)) +
-  geom_violin() +
-  ylab("Elapsed Time (us)") +
-  xlab("Program Run") +
-  theme(legend.position="bottom")
-
-# ... but compute the statistics anyway ...
-aggregate(microseconds ~ booktype, data=data, summary)
-
-# ... and run the statistical test ...
-wilcox.test(microseconds ~ booktype, data=data, conf.int=TRUE)
-
-# ... the null hypothesis is that both are the same, if p-value is
-# small, we can reject the null hypothesis ...
-wilcox.test(microseconds ~ booktype, data=subset(data, run='baseline'), conf.int=TRUE)
-wilcox.test(microseconds ~ booktype, data=subset(data, run='candidate'), conf.int=TRUE)
-
-# ... are the two runs very different? ...
-aggregate(microseconds ~ booktype + run, data=data, FUN=summary)
-aggregate(microseconds ~ run + testcase, data=data, FUN=summary)
-
-# ... try with some stats ...
-wilcox.test(microseconds ~ run, data=subset(data, booktype='array'))
-wilcox.test(microseconds ~ run, data=subset(data, booktype='map'))
-kruskal.test(microseconds ~ run, data=subset(data, booktype='array'))
-kruskal.test(microseconds ~ run, data=subset(data, booktype='map'))
-
-aggregate(microseconds ~ booktype + run, data=data, FUN=sd)
-aggregate(microseconds ~ booktype + run, data=data, FUN=mean)
-
-# ... let's see if we can expect reproduceable results from multiple
-# runs ...
-
-baseline.buy <- subset(data, side == 'buy' & run == 'baseline')
-summary(baseline.buy)
-
-b <- boot(baseline.buy$microseconds, function(x,d) sd(x[d]), R=1000)
-b
-plot(b)
-
-wilcox.test(microseconds ~ run, data=subset(data, booktype=='map'&side=='buy'))
-
-ggplot(data=subset(data, booktype=='map'),
-       aes(x=run, y=microseconds, color=side)) +
-  geom_violin() +
-  ylab("Elapsed Time (us)") +
-  xlab("Program Run") +
-  theme(legend.position="bottom")
-
-aggregate(microseconds ~ run + side, data=subset(data, booktype=='map'),FUN=sd)
+w.median <- wilcox.test(microseconds ~ booktype, data)
+print("Median latencies in microseconds by book type are:")
+aggregate(microseconds ~ booktype, data=data, FUN=median)
+if ((w.median$p.value < desired.significance)) {
+    print(paste0("Using the Mann-Whitney U test, we reject the ",
+                 "null hypothesis that both distributions are identical ",
+                 "with significance ", desired.significance))
+    n <- aggregate(microseconds ~ booktype, data=data, FUN=length)
+    print(paste0("The Mann-Whitney U test p-value is ",
+                 w.median$p.value,
+                 ", counts: "))
+    print(n)
+}
 
 q(save='no')
