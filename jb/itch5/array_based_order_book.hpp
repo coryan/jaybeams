@@ -19,13 +19,60 @@
 namespace jb {
 namespace itch5 {
 
+namespace detail {
 /**
- * Refactor add_order() validation to a non-template standalone function.
+ * Raise the right exception when we detect invalid parameters for
+ * add_order() or reduce_order()
+ *
+ * @param operation the name of the operation that is being processed,
+ * typically add_order() or reduce_order().
+ * @param qty the qty in the operation
+ * @param px the price of the operation
+ *
+ * @throws a feed_error with nicely formatted output **always**
  */
-void validate_add_order_params(int, price4_t px = price4_t(0));
-void raise_exception(std::string, std::size_t, price4_t, int);
-void raise_exception(
-    std::string, std::size_t, std::size_t, std::size_t, price4_t, int);
+[[noreturn]] void raise_invalid_operation_parameters(
+    char const *operation, int qty, price4_t px);
+
+/**
+ * Validate the input parameters for all array_order_book operations.
+ *
+ * Both add_order() and reduce_order() require basically the same
+ * validation, refactor to a common function.
+ *
+ * @param operation the name of the operation that is being processed,
+ * typically add_order() or reduce_order().
+ * @param qty the qty in the operation
+ * @param px the price of the operation
+ *
+ * @throws a feed_error with nicely formatted output if the validation fails.
+ */
+inline void validate_operation_params(
+    char const *operation, int qty, price4_t px) {
+  if (qty > 0 and px >= price4_t(0)
+      and px < max_price_field_value<price4_t>()) {
+    return;
+  }
+  raise_invalid_operation_parameters(operation, qty, px);
+}
+
+/**
+ * Raise an exception describing a invalid reduce operation.
+ *
+ * @param msg a human readable explanation of the error condition
+ * @param tk_begin_top the first price in the "top-levels"
+ * @param tk_inside the price at the inside
+ * @param px the price of the reduce operation being attempted
+ * @param book_qty the qty that the book has at that price level, 0 if
+ * the level does not exist
+ * @param qty the qty of the reduce operation being attempted
+ *
+ * @throws feed error with a nicely formatted message, **always**.
+ */
+[[noreturn]] void raise_invalid_reduce(
+    std::string const& msg, std::size_t tk_begin_top, std::size_t tk_inside,
+    price4_t px, int book_qty, int qty);
+} // namespace detail
 
 template <typename compare_t>
 class array_based_book_side;
@@ -145,7 +192,7 @@ public:
    * @throw feed_error px out of valid range, or qty <= 0
    */
   bool add_order(price4_t px, int qty) {
-    validate_add_order_params(qty, px);
+    detail::validate_operation_params("add_order", qty, px);
     // get px price levels
     auto tk_px = price_levels(price4_t(0), px);
     // check if tk_px is worse than the first price of the top_levels_
@@ -202,17 +249,17 @@ public:
    * If so, limits have to be redefined, and tail moved into top_levels
    */
   bool reduce_order(price4_t px, int qty) {
-    validate_add_order_params(qty);
+    detail::validate_operation_params("reduce_order", qty, px);
     // get px price level
     auto tk_px = price_levels(price4_t(0), px);
     // check and handles if it is a bottom_level_ price
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       auto price_it = bottom_levels_.find(tk_px);
       if (price_it == bottom_levels_.end()) {
-        raise_exception(
+        detail::raise_invalid_reduce(
             "array_based_book_side::reduce_order."
             " Trying to reduce non-existing bottom_levels_price.",
-            tk_begin_top_, px, qty);
+            tk_begin_top_, tk_inside_, px, 0, qty);
       }
       // ... reduce the quantity ...
       price_it->second -= qty;
@@ -230,20 +277,20 @@ public:
 
     // handles the top_levels_ price
     if (side<compare_t>::better_level(tk_px, tk_inside_)) {
-      raise_exception(
+      detail::raise_invalid_reduce(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (better px_inside).",
-          tk_begin_top_, px, qty);
+          tk_begin_top_, tk_inside_, px, 0, qty);
     }
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
     if (top_levels_.at(rel_px) == 0) {
-      raise_exception(
+      detail::raise_invalid_reduce(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (top_levels_[rel_px] == 0).",
-          tk_begin_top_, tk_inside_, rel_px, px, qty);
+          tk_begin_top_, tk_inside_, px, 0, qty);
     }
 
     // ... reduce the quantity ...
