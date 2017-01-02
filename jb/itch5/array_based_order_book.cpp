@@ -33,7 +33,7 @@ void array_based_order_book::config::validate() const {
 
 namespace detail {
 void raise_invalid_operation_parameters(
-    char const *operation, int qty, price4_t px) {
+    char const* operation, int qty, price4_t px) {
   std::ostringstream os;
   os << "array_based_book_side::" << operation << " - parameters out of range:"
      << " px=" << px << " should be in [" << price4_t(0) << ","

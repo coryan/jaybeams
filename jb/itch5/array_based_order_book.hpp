@@ -31,8 +31,8 @@ namespace detail {
  *
  * @throws a feed_error with nicely formatted output **always**
  */
-[[noreturn]] void raise_invalid_operation_parameters(
-    char const *operation, int qty, price4_t px);
+[[noreturn]] void
+raise_invalid_operation_parameters(char const* operation, int qty, price4_t px);
 
 /**
  * Validate the input parameters for all array_order_book operations.
@@ -47,10 +47,10 @@ namespace detail {
  *
  * @throws a feed_error with nicely formatted output if the validation fails.
  */
-inline void validate_operation_params(
-    char const *operation, int qty, price4_t px) {
-  if (qty > 0 and px >= price4_t(0)
-      and px < max_price_field_value<price4_t>()) {
+inline void
+validate_operation_params(char const* operation, int qty, price4_t px) {
+  if (qty > 0 and px >= price4_t(0) and
+      px < max_price_field_value<price4_t>()) {
     return;
   }
   raise_invalid_operation_parameters(operation, qty, px);
