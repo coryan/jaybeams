@@ -133,7 +133,7 @@ public:
     // ... for the size, we use a uniform distribution in the
     // [-1000,1000] range, though we have to trim the results based on
     // what is actually in the book ...
-    std::uniform_int_distribution<> sdis(-1000, 1000);
+    std::uniform_int_distribution<> sdis(-5000, 5000);
 
     // ... save the maximum possible price level ...
     using jb::itch5::price4_t;
@@ -161,6 +161,8 @@ public:
     // that we are generating a valid simulation ...
     jb::histogram<jb::integer_range_binning<int>> book_depth_histogram(
         jb::integer_range_binning<int>(0, 8192));
+    jb::histogram<jb::integer_range_binning<int>> qty_histogram(
+        jb::integer_range_binning<int>(sdis.a(), sdis.b()));
 
     // ... keep track of the contents in a simulated book, indexed by
     // price level ...
@@ -170,10 +172,11 @@ public:
     // base level, this is just so the initial operations do not
     // create a lot of random noise ...
     int const initial_level = 100000;
-    int const initial_qty = 5000;
+    int const initial_qty = sdis.b();
     operations.push_back({level2price(initial_level), initial_qty});
     book[initial_level] = initial_qty;
     book_depth_histogram.sample(0);
+    qty_histogram.sample(initial_qty);
 
     for (int i = 1; i != size; ++i) {
       // ... find out what is the current best level, or use
@@ -193,28 +196,33 @@ public:
       } else {
         level = best_level + depth;
       }
-      int qty = sdis(generator);
       // ... normalize the level to the valid range ...
       if (level <= 0) {
         level = 1;
       } else if (level >= max_level) {
         level = max_level - 1;
       }
-      // ... normalize the qty too ...
-      if (qty == 0) {
-        qty = 100;
-      } else if (qty < 0) {
-        auto f = book.find(level);
-        if (f == book.end()) {
-          qty = -qty;
-        } else if (f->second + qty < 0) {
-          qty = -f->second;
-        }
+
+      // ... generate the qty, but make sure it is valid, first
+      // establish the minimum value we can generate ...
+      int min_qty = sdis.a();
+      auto f = book.find(level);
+      if (f == book.end()) {
+        min_qty = 100;
+      } else {
+        min_qty = std::max(min_qty, - f->second);
+      }
+      // ... then keep generating values until we are in range, oh,
+      // and zero is not a valid value ...
+      int qty = sdis(generator);
+      while (qty < min_qty or qty == 0) {
+        qty = sdis(generator);
       }
       // ... now insert the operation into the array, and record it in
       // the book ...
       book[level] += qty;
       book_depth_histogram.sample(depth);
+      qty_histogram.sample(qty);
       if (book[level] == 0) {
         book.erase(level);
       }
@@ -232,6 +240,8 @@ public:
                                                          double(cfg.p99()),
                                                          double(cfg.p100()),
                                                          1};
+    JB_LOG(info) << "Simulated qty histogram: "
+                 << qty_histogram.summary();
   }
 
   /// Run an iteration of the test ...
