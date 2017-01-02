@@ -219,13 +219,13 @@ public:
       // update top_levels_
       auto rel_px =
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
-      top_levels_.at(rel_px) += qty;
+      top_levels_[rel_px] += qty;
       return true; // the inside changed
     }
     // is a top_levels change different than the inside
     // udates top_levels_ with new qty
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    top_levels_.at(rel_px) += qty;
+    top_levels_[rel_px] += qty;
     return false;
   }
 
@@ -283,7 +283,7 @@ public:
     }
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    if (top_levels_.at(rel_px) == 0) {
+    if (top_levels_[rel_px] == 0) {
       detail::raise_invalid_reduce(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
@@ -292,19 +292,19 @@ public:
     }
 
     // ... reduce the quantity ...
-    top_levels_.at(rel_px) -= qty;
-    if (top_levels_.at(rel_px) < 0) {
+    top_levels_[rel_px] -= qty;
+    if (top_levels_[rel_px] < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       JB_LOG(warning) << "negative quantity in order book";
-      top_levels_.at(rel_px) = 0; // cant't be negative
+      top_levels_[rel_px] = 0; // cant't be negative
     }
     // ... if it is not the inside we are done
     if (tk_px != tk_inside_) {
       return false;
     }
     // Is inside, ... now check if it was removed
-    if (top_levels_.at(rel_px) == 0) {
+    if (top_levels_[rel_px] == 0) {
       // gets the new inside (if any)
       tk_inside_ = next_best_price_level();
       if (tk_inside_ == tk_empty_quote) {
@@ -374,7 +374,7 @@ private:
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     int result = 0;
     for (std::size_t i = 0; i != rel_px + 1; ++i) {
-      if (top_levels_.at(i) != 0) {
+      if (top_levels_[i] != 0) {
         result++;
       }
     }
@@ -399,27 +399,13 @@ private:
       // valid prices are from 0 .. relative (tk_inside_) included
       auto rel_inside =
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
-      for (std::size_t i = 0; i != rel_inside + 1; ++i) {
-        // move out and clear the price (if valid)
-        if (top_levels_.at(i) != 0) {
-          auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-          bottom_levels_.emplace(tk_i, top_levels_.at(i));
-          top_levels_.at(i) = 0;
-        }
-      }
+      move_top_to_bottom_ranged(rel_inside + 1);
       return;
     }
     // tk_max is worse than tk_inside
     // prices to move out are from 0.. relative (tk_max) excluded
     auto rel_tk_max = side<compare_t>::level_to_relative(tk_begin_top_, tk_max);
-    for (std::size_t i = 0; i != rel_tk_max; ++i) {
-      // ... move out the price i (if valid)
-      if (top_levels_.at(i) != 0) {
-        auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-        bottom_levels_.emplace(tk_i, top_levels_.at(i));
-        top_levels_.at(i) = 0;
-      }
-    }
+    move_top_to_bottom_ranged(rel_tk_max);
     // shift price down rel_tk_max positions
     // from tk_max to tk_inside both included...
     // ...(the are no better prices than tk_inside_)
@@ -427,11 +413,47 @@ private:
         side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     std::size_t j = 0;
     for (std::size_t i = rel_tk_max; i <= rel_tk_inside; ++i, ++j) {
-      if (top_levels_.at(i) != 0) {
-        top_levels_.at(j) = top_levels_.at(i);
-        top_levels_.at(i) = 0;
+      if (top_levels_[i] != 0) {
+        top_levels_[j] = top_levels_[i];
+        top_levels_[i] = 0;
       }
     }
+  }
+
+  /**
+   * Move the bottom N levels from the top vector to the bottom map.
+   *
+   * This function "copies" the bottom N levels from the top vector,
+   * and then zeroes out that portion of the vector ...
+   *
+   * @param N the number of elements to move.
+   */
+  void move_top_to_bottom_ranged(std::size_t N) {
+    // ... this is a private function, we do not need to check the
+    // arguments ...
+    for (std::size_t i = 0; i != N; ++i) {
+      auto qty = top_levels_[i];
+      // ... skip levels that have no qty, we do not want to grow the
+      // map too much ...
+      if (qty == 0) {
+        continue;
+      }
+      auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
+      // ... this loop is always inserting a better price than what is
+      // on the bottom map (because the by definition top_levels_
+      // contains the best price levels).  Also, each price inserted
+      // is better than any previous insertion (because we iterate in
+      // ascending order of better-price).  And finally the
+      // bottom_levels_ is reverse sorted, so the best price is at the
+      // beginning.  That means we can give the map a hint, indicating
+      // to insert at the beginning, and change this from O(logN) to
+      // O(1) (amortized) ...
+      bottom_levels_.emplace_hint(bottom_levels_.begin(), tk_i, qty);
+    }
+    // ... another loop to fill out with 0, supposedly std::fill() is
+    // optimized for vectors in most C++ implementations (use
+    // memset(3) or something similar) ...
+    std::fill(top_levels_.begin(), top_levels_.begin() + N, 0);
   }
 
   /**
@@ -450,7 +472,7 @@ private:
       if (not side<compare_t>::better_level(tk_begin_top_, tk_le)) {
         // move price to top_levels_
         auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_le);
-        top_levels_.at(rel_px) = le->second;
+        top_levels_[rel_px] = le->second;
       } else {
         // no more good prices to move...
         break;
@@ -473,7 +495,7 @@ private:
     }
     do {
       rel_inside--;
-      if (top_levels_.at(rel_inside) != 0) {
+      if (top_levels_[rel_inside] != 0) {
         // got the next one...
         return side<compare_t>::relative_to_level(tk_begin_top_, rel_inside);
       }
