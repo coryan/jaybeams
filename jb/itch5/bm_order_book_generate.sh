@@ -12,16 +12,17 @@ benchmark_startup
 # ... create the baseline data for the order book benchmark ...
 for test in map:buy map:sell array:buy array:sell; do
     load=`uptime`
-    echo "Running testcase ${test}, current load $load"
-    echo "Running testcase ${test}, current load $load" | log $LOG
+    echo "Running testcase ${test?}, current load ${load?}"
+    echo | log $LOG
+    echo "Running testcase ${test?}, current load ${load?}" | log $LOG
     /usr/bin/time ./jb/itch5/bm_order_book --seed=3966899719 \
                   --microbenchmark.verbose=true \
                   --microbenchmark.prefix=${test?}, \
                   --microbenchmark.iterations=5000 \
                   --microbenchmark.test-case=${test?} \
 		  >$TMPOUT 2>$TMPERR
-    cat $TMPOUT >>$LOG
     cat $TMPERR | log $LOG
+    cat $TMPOUT >>$LOG
 done
 
 # ... teardown the benchmark configuration changes ...

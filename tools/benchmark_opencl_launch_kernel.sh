@@ -16,6 +16,7 @@ clinfo | log $LOG
 # ... run the benchmark at different sizes ...
 for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
     load=`uptime`
+    echo "Running test at size=$size, current load $load"
     echo | log $LOG
     echo "Running test at size=$size, current load $load" | log $LOG
     /usr/bin/time chrt -f 50 ./jb/opencl/bm_launch_kernel \
@@ -24,8 +25,8 @@ for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
                   --benchmark.test-case="$size" \
                   --benchmark.prefix="launch_kernel,${size}," \
                   --benchmark.size=${size?} >$TMPOUT 2>$TMPERR
-    cat $TMPOUT >>$LOG
     cat $TMPERR | log $LOG
+    cat $TMPOUT >>$LOG
 done
 
 # ... teardown the benchmark configuration changes ...
