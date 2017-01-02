@@ -93,10 +93,22 @@ BOOST_AUTO_TEST_CASE(offline_feed_statististics_coverage) {
   BOOST_CHECK_NO_THROW(stats.log_final_progress());
 
   stats.sample(
-      std::chrono::seconds(1) + std::chrono::microseconds(1),
-      std::chrono::microseconds(1));
+      std::chrono::seconds(1) + std::chrono::microseconds(2),
+      std::chrono::microseconds(2));
   stats.sample(
-      std::chrono::seconds(1) + std::chrono::microseconds(1),
-      std::chrono::microseconds(1));
+      std::chrono::seconds(1) + std::chrono::microseconds(3),
+      std::chrono::microseconds(3));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(1002),
+      std::chrono::microseconds(4));
+  stats.sample(
+      std::chrono::seconds(1) + std::chrono::microseconds(1003),
+      std::chrono::microseconds(5));
+  stats.sample(
+      std::chrono::seconds(2) + std::chrono::microseconds(2),
+      std::chrono::microseconds(4));
+  stats.sample(
+      std::chrono::seconds(2) + std::chrono::microseconds(3),
+      std::chrono::microseconds(5));
   BOOST_CHECK_NO_THROW(stats.log_final_progress());
 }
