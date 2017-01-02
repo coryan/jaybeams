@@ -97,20 +97,6 @@ ggplot(data=r.median, aes(x=testcase, y=microseconds, color=run)) +
   xlab("Test Case") +
   theme(legend.position="bottom")
 
-## ... calculate the range across all runs ...
-r.range <- aggregate(
-    microseconds ~ testcase, data=r.median, FUN=function(x) max(x) - min(x))
-
-## ... and select the factors where the range is higher than the
-## desired threshold ...
-r.effect.threshold <- subset(r.range, microseconds > desired.delta)
-if (nrow(r.effect.threshold) == 0) {
-    print("No runs differ in median by more than the desired effect")
-    print("There is no need for more analysis, the results are not")
-    print("meaningful, the statistics are not going to help")
-    q(save="ask")
-}
-
 ## ... we want to know if the performance changed for the 'array'
 ## booktype (the map booktype is not changing), so select that first
 ## ...
@@ -121,24 +107,33 @@ data.array <- subset(data, booktype == 'array')
 print("Median latencies in microseconds by run are:")
 print(aggregate(microseconds ~ run, data=data.array, FUN=median))
 
+## ... calculate the range across all runs ...
+r.range <- aggregate(
+    microseconds ~ testcase, data=r.median, FUN=function(x) max(x) - min(x))
+
 ## ... this is the statistically test we are using ...
 w.run <- wilcox.test(microseconds ~ run, data.array, conf.int=TRUE)
-if ((w.run$p.value < desired.significance)) {
-    print(paste0("Using the Mann-Whitney U test, we reject the ",
-                 "null hypothesis that both runs (candidate vs. baseline)",
-		 " are identical, at the alpha=", desired.significance,
-                 " level"))
-    n <- aggregate(microseconds ~ run, data=data.array, FUN=length)
-    print(paste0("The sample counts were: "))
-    print(n)
-    print(w.run)
+if (abs(w.run$estimate) < desired.delta) {
+    print(paste0("We cannot reject the null hypothesis,",
+                  " the candidate and baseline data",
+		  " location parameters difference is smaller",
+		  " than the desired effect: ", desired.delta))
+} else if (w.run$p.value >= desired.significance) {
+    print(paste0("We cannot reject the null hypothesis,",
+                  " the Mann-Whitnet U test p-value is larger",
+		  " than the desired significance level of",
+		  " alpha=", desired.significance))
 } else {
-    print(paste0("We cannot reject the null hypothesis, ",
-                  "the candidate and baseline data are not ",
-		  "statistically different at the alpha=",
-		  desired.significance, " level"))
-    print(w.run)
+    print(paste0("Using the Mann-Whitney U test, we reject the",
+                 " null hypothesis that both runs (candidate vs. baseline)",
+		 " are identical, at the significance level of",
+		 " alpha=", desired.significance,
+		 ".  Furthermore, the effect of the changes in",
+		 " the candidate is quantified using the",
+		 " Hodges–Lehmann (HL) estimator as: ",
+		 w.run$estimate))
 }
+print(w.run)
 cat("[press [enter] to continue]")
 readLines("stdin", n=1)
 
