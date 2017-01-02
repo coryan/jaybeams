@@ -1,13 +1,13 @@
 #!/usr/bin/env Rscript
 require(ggplot2)
-require(boot)
-require(pwr)
 
 ## How much data do we need to collect to obtain statiscally
-## significant results?  This value was obtained using
-## bm_order_book_analyze_initial.R:
+## significant results?  These values ared documented in bm_order_book_analyze_initial.R:
 min.samples <- 5000
 expected.sd <- 200
+desired.delta <- (1.0/3.0)/1000.0 * 100000
+desired.significance <- 0.01
+desired.power <- 0.95
 
 ## Pick your code branch here ...
 args <- commandArgs(trailingOnly=TRUE)
@@ -51,8 +51,7 @@ if (actual.min.samples < min.samples) {
     print(samples.per.factor)
     quit(save='ask')
 } else {
-    print(paste0("The test had enough samples for power=",
-                 desired.power, ", significance=", desired.significance))
+    print(paste0("The test had enough samples"));
 }
 
 ## Is the data on 'candidate' significantly different from the data in 
@@ -89,7 +88,9 @@ ggplot(data=subset(data, testcase=='array:sell'),
 
 ## ... just print a summary by run and booktype first ...
 r.median <- aggregate(microseconds ~ run + testcase, data=data, FUN=median)
-summary(r.median)
+print("Median latency by run and testcase")
+print(r.median)
+
 ggplot(data=r.median, aes(x=testcase, y=microseconds, color=run)) +
   geom_point(size=4) +
   ylab("Elapsed Time (us)") +
@@ -103,13 +104,43 @@ r.range <- aggregate(
 ## ... and select the factors where the range is higher than the
 ## desired threshold ...
 r.effect.threshold <- subset(r.range, microseconds > desired.delta)
-r.effect.threshold
 if (nrow(r.effect.threshold) == 0) {
     print("No runs differ in median by more than the desired effect")
     print("There is no need for more analysis, the results are not")
     print("meaningful, the statistics are not going to help")
     q(save="ask")
 }
+
+## ... we want to know if the performance changed for the 'array'
+## booktype (the map booktype is not changing), so select that first
+## ...
+data.array <- subset(data, booktype == 'array')
+
+## ... now we want to see if there is a meaningful, and statistically
+## significant difference for the performance between both runs ...
+print("Median latencies in microseconds by run are:")
+print(aggregate(microseconds ~ run, data=data.array, FUN=median))
+
+## ... this is the statistically test we are using ...
+w.run <- wilcox.test(microseconds ~ run, data.array, conf.int=TRUE)
+if ((w.run$p.value < desired.significance)) {
+    print(paste0("Using the Mann-Whitney U test, we reject the ",
+                 "null hypothesis that both runs (candidate vs. baseline)",
+		 " are identical, at the alpha=", desired.significance,
+                 " level"))
+    n <- aggregate(microseconds ~ run, data=data.array, FUN=length)
+    print(paste0("The sample counts were: "))
+    print(n)
+    print(w.run)
+} else {
+    print(paste0("We cannot reject the null hypothesis, ",
+                  "the candidate and baseline data are not ",
+		  "statistically different at the alpha=",
+		  desired.significance, " level"))
+    print(w.run)
+}
+cat("[press [enter] to continue]")
+readLines("stdin", n=1)
 
 ## ... analyze if the performance is significantly different by book
 ## type. First the mandatory plots ...
@@ -167,6 +198,14 @@ if ((w.median$p.value < desired.significance)) {
                  w.median$p.value,
                  ", counts: "))
     print(n)
+} else {
+    print(paste0("We cannot reject the null hypothesis, ",
+                  "the map and array books are not ",
+		  "statistically different at the alpha=",
+		  desired.significance, " level"))
+     print(w.median)
 }
+cat("[press [enter] to continue]")
+readLines("stdin", n=1)
 
 q(save='no')
