@@ -18,16 +18,17 @@ for test in gpu:float cpu:float gpu:complex:float cpu:complex:float; do
     for size in 5000 `seq 10000 10000 100000` \
                     `seq 200000 100000 500000`; do
         load=`uptime`
+        echo "Running testcase $test at size=$size, current load $load"
         echo | log $LOG
-        echo "Running test at size=$size, current load $load" | log $LOG
+        echo "Running testcase $test at size=$size, current load $load" | log $LOG
         /usr/bin/time chrt -f 50 ./jb/tde/bm_reduce_argmax_real \
                       --benchmark.verbose=1 \
                       --benchmark.iterations=10000 \
                       --benchmark.prefix="${test?},${size?}," \
                       --benchmark.test-case="${test?}" \
                       --benchmark.size=${size?} >$TMPOUT 2>$TMPERR
-        cat $TMPOUT >>$LOG
         cat $TMPERR | log $LOG
+        cat $TMPOUT >>$LOG
     done
 done
 
