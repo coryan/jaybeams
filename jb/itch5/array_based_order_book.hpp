@@ -349,10 +349,9 @@ public:
    * otherwise the template definitions get too gnarly.
    */
   static std::size_t price_levels_empty_quote() {
-    return price_levels(
-      price4_t(0), side<compare_t>::empty_quote_price());
+    return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
   }
-  
+
 private:
   /**
    * @returns relative position of the worst valid price at top_levels.
@@ -587,7 +586,7 @@ private:
     }
   };
 
-private :
+private:
   /// top_levels_ max size
   std::size_t max_size_;
 
@@ -607,7 +606,7 @@ private :
   std::size_t tk_end_top_;
 };
 
-template<typename compare_t>
+template <typename compare_t>
 std::size_t const array_based_book_side<compare_t>::tk_empty_quote =
     array_based_book_side<compare_t>::price_levels_empty_quote();
 
