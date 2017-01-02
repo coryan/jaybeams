@@ -127,12 +127,12 @@ public:
 template <typename compare_t>
 class array_based_book_side {
 public:
+  /// Constructor, initialize a book side from its configuration
   explicit array_based_book_side(array_based_order_book::config const& cfg)
       : max_size_(cfg.max_size())
       , top_levels_(cfg.max_size(), 0)
       , bottom_levels_()
-      , tk_inside_(
-            price_levels(price4_t(0), side<compare_t>::empty_quote_price()))
+      , tk_inside_(tk_empty_quote)
       , tk_begin_top_(tk_inside_)
       , tk_end_top_(tk_inside_) {
   }
@@ -140,8 +140,7 @@ public:
   /// @returns the best bid price and quantity.
   /// The inside is always at the top_levels_
   half_quote best_quote() const {
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return side<compare_t>::empty_quote();
     }
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
@@ -154,8 +153,7 @@ public:
   /// The worst price is at the bottom_levels (if not empty),
   /// at the top_levels otherwise.
   half_quote worst_quote() const {
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return side<compare_t>::empty_quote(); // empty side
     }
     if (not bottom_levels_.empty()) {
@@ -309,8 +307,7 @@ public:
     if (top_levels_.at(rel_px) == 0) {
       // gets the new inside (if any)
       tk_inside_ = next_best_price_level();
-      if (tk_inside_ ==
-          price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+      if (tk_inside_ == tk_empty_quote) {
         // last top_levels_ price was removed...
         // ... get the new inside from the bottom_levels
         if (not bottom_levels_.empty()) {
@@ -337,6 +334,25 @@ public:
     return side<compare_t>::ascending;
   }
 
+  /**
+   *  Cache the number of levels for the empty quote.
+   *
+   * This value is used numerous times in the critical path, and we
+   * want to avoid recomputing it over and over.
+   */
+  static std::size_t const tk_empty_quote;
+
+  /**
+   * Return the number of price levels for the empty quote.
+   *
+   * This is mostly used to initialize tk_empty_quote, because
+   * otherwise the template definitions get too gnarly.
+   */
+  static std::size_t price_levels_empty_quote() {
+    return price_levels(
+      price4_t(0), side<compare_t>::empty_quote_price());
+  }
+  
 private:
   /**
    * @returns relative position of the worst valid price at top_levels.
@@ -353,8 +369,7 @@ private:
   /// @returns number of valid prices (>0) at top_levels_
   std::size_t top_levels_count() const {
     // counts from 0 .. relative position of px_inside_
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return 0; // empty side
     }
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
@@ -455,7 +470,7 @@ private:
     auto rel_inside =
         side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     if (rel_inside == 0) {
-      return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
+      return tk_empty_quote;
     }
     do {
       rel_inside--;
@@ -464,17 +479,15 @@ private:
         return side<compare_t>::relative_to_level(tk_begin_top_, rel_inside);
       }
     } while (rel_inside != 0);
-    return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
+    return tk_empty_quote;
   }
 
   /// @returns pair of price levels that are rel worse
   /// and better than tk_px, limited to valid price levels
   /// if tk_px is at the limit, return and empty quote values
   static auto get_limits(std::size_t const tk_px, std::size_t const rel) {
-    auto const tk_empty =
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price());
-    if (tk_px == tk_empty) {
-      return std::make_pair(tk_empty, tk_empty);
+    if (tk_px == tk_empty_quote) {
+      return std::make_pair(tk_empty_quote, tk_empty_quote);
     }
     auto const level_max = price_levels(price4_t(0), empty_offer_price());
 
@@ -574,7 +587,7 @@ private:
     }
   };
 
-private:
+private :
   /// top_levels_ max size
   std::size_t max_size_;
 
@@ -593,6 +606,10 @@ private:
   /// one price level past-the-best price in top_levels_ range
   std::size_t tk_end_top_;
 };
+
+template<typename compare_t>
+std::size_t const array_based_book_side<compare_t>::tk_empty_quote =
+    array_based_book_side<compare_t>::price_levels_empty_quote();
 
 } // namespace itch5
 } // namespace jb
