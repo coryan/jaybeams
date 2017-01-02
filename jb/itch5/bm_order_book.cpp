@@ -210,7 +210,7 @@ public:
       if (f == book.end()) {
         min_qty = 100;
       } else {
-        min_qty = std::max(min_qty, - f->second);
+        min_qty = std::max(min_qty, -f->second);
       }
       // ... then keep generating values until we are in range, oh,
       // and zero is not a valid value ...
@@ -240,8 +240,7 @@ public:
                                                          double(cfg.p99()),
                                                          double(cfg.p100()),
                                                          1};
-    JB_LOG(info) << "Simulated qty histogram: "
-                 << qty_histogram.summary();
+    JB_LOG(info) << "Simulated qty histogram: " << qty_histogram.summary();
   }
 
   /// Run an iteration of the test ...
