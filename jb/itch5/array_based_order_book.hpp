@@ -99,7 +99,7 @@ public:
     }
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     auto px_inside = level_to_price<price4_t>(tk_inside_);
-    return half_quote(px_inside, top_levels_.at(rel_px));
+    return half_quote(px_inside, top_levels_[rel_px]);
   }
 
   /// @returns the worst bid price and quantity.
@@ -122,7 +122,7 @@ public:
     auto tk_worst =
         side<compare_t>::relative_to_level(tk_begin_top_, rel_worst);
     auto px_worst = level_to_price<price4_t>(tk_worst);
-    return half_quote(px_worst, top_levels_.at(rel_worst));
+    return half_quote(px_worst, top_levels_[rel_worst]);
   }
 
   /// @returns the number of levels with non-zero quantity for the order side.
@@ -174,13 +174,13 @@ public:
       // update top_levels_
       auto rel_px =
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
-      top_levels_.at(rel_px) += qty;
+      top_levels_[rel_px] += qty;
       return true; // the inside changed
     }
     // is a top_levels change different than the inside
     // udates top_levels_ with new qty
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    top_levels_.at(rel_px) += qty;
+    top_levels_[rel_px] += qty;
     return false;
   }
 
@@ -238,7 +238,7 @@ public:
     }
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    if (top_levels_.at(rel_px) == 0) {
+    if (top_levels_[rel_px] == 0) {
       raise_exception(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
@@ -247,19 +247,19 @@ public:
     }
 
     // ... reduce the quantity ...
-    top_levels_.at(rel_px) -= qty;
-    if (top_levels_.at(rel_px) < 0) {
+    top_levels_[rel_px] -= qty;
+    if (top_levels_[rel_px] < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       JB_LOG(warning) << "negative quantity in order book";
-      top_levels_.at(rel_px) = 0; // cant't be negative
+      top_levels_[rel_px] = 0; // cant't be negative
     }
     // ... if it is not the inside we are done
     if (tk_px != tk_inside_) {
       return false;
     }
     // Is inside, ... now check if it was removed
-    if (top_levels_.at(rel_px) == 0) {
+    if (top_levels_[rel_px] == 0) {
       // gets the new inside (if any)
       tk_inside_ = next_best_price_level();
       if (tk_inside_ ==
@@ -313,7 +313,7 @@ private:
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     int result = 0;
     for (std::size_t i = 0; i != rel_px + 1; ++i) {
-      if (top_levels_.at(i) != 0) {
+      if (top_levels_[i] != 0) {
         result++;
       }
     }
@@ -340,10 +340,10 @@ private:
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
       for (std::size_t i = 0; i != rel_inside + 1; ++i) {
         // move out and clear the price (if valid)
-        if (top_levels_.at(i) != 0) {
+        if (top_levels_[i] != 0) {
           auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-          bottom_levels_.emplace(tk_i, top_levels_.at(i));
-          top_levels_.at(i) = 0;
+          bottom_levels_.emplace(tk_i, top_levels_[i]);
+          top_levels_[i] = 0;
         }
       }
       return;
@@ -353,10 +353,10 @@ private:
     auto rel_tk_max = side<compare_t>::level_to_relative(tk_begin_top_, tk_max);
     for (std::size_t i = 0; i != rel_tk_max; ++i) {
       // ... move out the price i (if valid)
-      if (top_levels_.at(i) != 0) {
+      if (top_levels_[i] != 0) {
         auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-        bottom_levels_.emplace(tk_i, top_levels_.at(i));
-        top_levels_.at(i) = 0;
+        bottom_levels_.emplace(tk_i, top_levels_[i]);
+        top_levels_[i] = 0;
       }
     }
     // shift price down rel_tk_max positions
@@ -366,9 +366,9 @@ private:
         side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     std::size_t j = 0;
     for (std::size_t i = rel_tk_max; i <= rel_tk_inside; ++i, ++j) {
-      if (top_levels_.at(i) != 0) {
-        top_levels_.at(j) = top_levels_.at(i);
-        top_levels_.at(i) = 0;
+      if (top_levels_[i] != 0) {
+        top_levels_[j] = top_levels_[i];
+        top_levels_[i] = 0;
       }
     }
   }
@@ -389,7 +389,7 @@ private:
       if (not side<compare_t>::better_level(tk_begin_top_, tk_le)) {
         // move price to top_levels_
         auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_le);
-        top_levels_.at(rel_px) = le->second;
+        top_levels_[rel_px] = le->second;
       } else {
         // no more good prices to move...
         break;
@@ -412,7 +412,7 @@ private:
     }
     do {
       rel_inside--;
-      if (top_levels_.at(rel_inside) != 0) {
+      if (top_levels_[rel_inside] != 0) {
         // got the next one...
         return side<compare_t>::relative_to_level(tk_begin_top_, rel_inside);
       }
