@@ -112,7 +112,25 @@ public:
    */
   void print_csv(std::string const& name, std::ostream& os) const;
 
+  /**
+   * Final progress report at the end of the input.
+   */
+  void log_final_progress() const;
+
 private:
+  /**
+   * Report progress up to a certain point in the input
+   *
+   * @param ts the (logical) timestamp of the current event in the input
+   */
+  void log_progress(std::chrono::nanoseconds ts) const;
+
+  /**
+   * Refactor non-template portions of sample()
+   *
+   * @param ts the logical timestamp of the event in the input stream
+   * @param processing_latency the processing latency for the event
+   */
   void record_sample(
       std::chrono::nanoseconds ts, std::chrono::nanoseconds processing_latency);
 

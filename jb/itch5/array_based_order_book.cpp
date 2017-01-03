@@ -6,12 +6,11 @@ namespace jb {
 namespace itch5 {
 
 namespace defaults {
+#ifndef JB_ITCH5_DEFAULTS_array_based_book_max_size
+#define JB_ITCH5_DEFAULTS_array_based_book_max_size 8192
+#endif // JB_ITCH5_DEFAULTS_array_based_book_max_size
 
-#ifndef JB_ARRAY_DEFAULTS_max_size
-#define JB_ARRAY_DEFAULTS_max_size 10000
-#endif
-std::size_t const max_size = JB_ARRAY_DEFAULTS_max_size;
-
+int max_size = JB_ITCH5_DEFAULTS_array_based_book_max_size;
 } // namespace defaults
 
 array_based_order_book::config::config()
@@ -25,41 +24,32 @@ array_based_order_book::config::config()
 
 /// Validate the configuration
 void array_based_order_book::config::validate() const {
-  if ((max_size() <= 0) or (max_size() > defaults::max_size)) {
+  if (max_size() <= 0) {
     std::ostringstream os;
-    os << "max-size must be > 0 and <=" << defaults::max_size
-       << ", value=" << max_size();
+    os << "max-size option must be > 0, value=" << max_size();
     throw jb::usage(os.str(), 1);
   }
 }
 
-/// check that parameters are valid
-void validate_add_order_params(int qty, price4_t px) {
-  if (qty <= 0 or px >= max_price_field_value<price4_t>()) {
-    std::ostringstream os;
-    os << "array_based_book_side::validate_add_order_params out of range."
-       << " px=" << px << " qty=" << qty;
-    throw jb::feed_error(os.str());
-  }
-}
-
-/// handle exception with tk_begin_top_, px, and qty
-void raise_exception(
-    std::string str, std::size_t tk_begin_top, price4_t px, int qty) {
+namespace detail {
+void raise_invalid_operation_parameters(
+    char const* operation, int qty, price4_t px) {
   std::ostringstream os;
-  os << str << " tk_begin_top_=" << tk_begin_top << " px=" << px
-     << " qty=" << qty;
+  os << "array_based_book_side::" << operation << " - parameters out of range:"
+     << " px=" << px << " should be in [" << price4_t(0) << ","
+     << max_price_field_value<price4_t>() << "), qty=" << qty
+     << " should be >= 0";
   throw jb::feed_error(os.str());
 }
 
-/// handle exception with relative inside and px relative position
-void raise_exception(
-    std::string str, std::size_t tk_begin_top, std::size_t tk_inside,
-    std::size_t rel_px, price4_t px, int qty) {
+void raise_invalid_reduce(
+    std::string const& msg, std::size_t tk_begin_top, std::size_t tk_inside,
+    price4_t px, int book_qty, int qty) {
   std::ostringstream os;
-  os << str << " tk_begin_top_=" << tk_begin_top << " tk_inside_" << tk_inside
-     << " px relative position " << rel_px << " px=" << px << " qty=" << qty;
+  os << msg << " tk_begin_top=" << tk_begin_top << ", tk_inside=" << tk_inside
+     << ", px=" << px << ", book_qty=" << book_qty << ", qty=" << qty;
   throw jb::feed_error(os.str());
 }
+} // namespace detail
 } // namespace itch5
 } // namespace jb

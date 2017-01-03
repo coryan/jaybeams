@@ -10,6 +10,20 @@
 
 namespace po = boost::program_options;
 
+namespace {
+bool config_file_found(
+    jb::config_files_locations<> const& search, std::string const& filename,
+    boost::filesystem::path& full_path) {
+  try {
+    full_path = search.find_configuration_file(filename);
+    return true;
+  } catch (std::runtime_error const&) {
+    // ... ignore search failures and return false ...
+  }
+  return false;
+}
+} // anonymous namespace
+
 jb::config_object::config_object()
     : attributes_() {
 }
@@ -21,11 +35,13 @@ void jb::config_object::load_overrides(
   jb::config_files_locations<> search(
       argc > 1 ? argv[0] : argv0, environment_variable_name);
   try {
-    auto full = search.find_configuration_file(filename);
-    JB_LOG(debug) << "loading overrides from " << full;
-    std::ifstream is(full.string());
-    load_overrides(argc, argv, is);
-    return;
+    boost::filesystem::path full;
+    if (config_file_found(search, filename, full)) {
+      JB_LOG(debug) << "loading overrides from " << full;
+      std::ifstream is(full.string());
+      load_overrides(argc, argv, is);
+      return;
+    }
   } catch (std::runtime_error const& ex) {
     JB_LOG(warning) << "fail to load overrides " << ex.what();
   }
@@ -38,11 +54,13 @@ void jb::config_object::load_overrides(
   char argv0[] = "undefined";
   jb::config_files_locations<> search(argc > 1 ? argv[0] : argv0);
   try {
-    auto full = search.find_configuration_file(filename);
-    JB_LOG(debug) << "loading overrides from " << full;
-    std::ifstream is(full.string());
-    load_overrides(argc, argv, is);
-    return;
+    boost::filesystem::path full;
+    if (config_file_found(search, filename, full)) {
+      JB_LOG(debug) << "loading overrides from " << full;
+      std::ifstream is(full.string());
+      load_overrides(argc, argv, is);
+      return;
+    }
   } catch (std::runtime_error const& ex) {
     JB_LOG(warning) << "fail to load overrides " << ex.what();
   }

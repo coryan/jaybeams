@@ -30,18 +30,21 @@ bindir=`dirname $0`
 source ${bindir?}/benchmark_common.sh
 
 # ... pick a log file ...
-startup
+bechmark_startup
 
 # ... run the benchmark for different test cases ...
-ERR=/tmp/${basename}.$$.err
-OUT=/tmp/${basename}.$$.out
 for test in double:aligned float:aligned double:unaligned float:unaligned; do
     load=`uptime`
-    echo "Running test at size=$size, current load $load" | log $LOG
-    /usr/bin/time ./jb/fftw/bm_time_delay_estimator --test-case=${test} --iterations=1000000 >$OUT 2>$ERR
-    cat $OUT >>$LOG
-    cat $ERR | log $LOG
+    echo "Running testcase ${test}, current load $load"
+    echo | log $LOG
+    echo "Running testcase ${test}, current load $load" | log $LOG
+    /usr/bin/time ./jb/fftw/bm_time_delay_estimator --test-case=${test} --iterations=1000000 >$TMPOUT 2>$TMPERR
+    cat $TMPERR | log $LOG
+    cat $TMPOUT >>$LOG
 done
+
+# ... teardown the benchmark configuration changes ...
+benchmark_teardown
 
 # ... print out the conditions under which the test ran ...
 print_environment jb/fftw/bm_time_delay_estimator | log $LOG

@@ -40,10 +40,15 @@ public:
       symbol_stats;
   jb::config_attribute<config, bool> enable_symbol_stats;
   jb::config_attribute<config, bool> enable_array_based;
-  jb::config_attribute<config,
-                       typename jb::itch5::array_based_order_book::config>
-      book_cfg;
+  using book_config = typename jb::itch5::array_based_order_book::config;
+  jb::config_attribute<config, book_config> book_cfg;
+
+  jb::config_attribute<config, int> stop_after_seconds;
 };
+
+/// A simple struct to signal termination of the
+/// jb::itch5::process_iostream() loop
+struct abort_process_iostream {};
 
 } // anonymous namespace
 
@@ -69,11 +74,18 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
   std::map<jb::itch5::stock_t, jb::offline_feed_statistics> per_symbol;
   jb::offline_feed_statistics stats(cfg.stats());
 
-  typename jb::itch5::compute_book<book_type_t>::callback_type cb = [&stats,
-                                                                     &out](
+  std::chrono::seconds stop_after(cfg.stop_after_seconds());
+
+  using callback_type =
+      typename jb::itch5::compute_book<book_type_t>::callback_type;
+  callback_type cb = [&stats, &out, stop_after](
       jb::itch5::message_header const& header,
       jb::itch5::order_book<book_type_t> const& updated_book,
       jb::itch5::book_update const& update) {
+    if (stop_after != std::chrono::seconds(0) and
+        stop_after <= header.timestamp.ts) {
+      throw abort_process_iostream{};
+    }
     auto pl = std::chrono::steady_clock::now() - update.recvts;
     (void)jb::itch5::generate_inside(
         stats, out, header, updated_book, update, pl);
@@ -83,10 +95,14 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
     // ... replace the calback with one that also records the stats
     // for each symbol ...
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
-    cb = [&stats, &out, &per_symbol, symcfg](
+    cb = [&stats, &out, &per_symbol, symcfg, stop_after](
         jb::itch5::message_header const& header,
         jb::itch5::order_book<book_type_t> const& updated_book,
         jb::itch5::book_update const& update) {
+      if (stop_after != std::chrono::seconds(0) and
+          stop_after <= header.timestamp.ts) {
+        throw abort_process_iostream{};
+      }
       auto pl = std::chrono::steady_clock::now() - update.recvts;
       if (not jb::itch5::generate_inside(
               stats, out, header, updated_book, update, pl)) {
@@ -103,7 +119,15 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
   }
 
   jb::itch5::compute_book<book_type_t> handler(cb, cfg_book);
-  jb::itch5::process_iostream(in, handler);
+  try {
+    jb::itch5::process_iostream(in, handler);
+  } catch (abort_process_iostream const&) {
+    // nothing to do, the loop is terminated by the exception and we
+    // continue the code ...
+    JB_LOG(info) << "process_iostream aborted, stop_after_seconds="
+                 << cfg.stop_after_seconds();
+  }
+  stats.log_final_progress();
 
   jb::offline_feed_statistics::print_csv_header(std::cout);
   for (auto const& i : per_symbol) {
@@ -180,7 +204,15 @@ config::config()
                   "If set, enable array_based_order_book usage."
                   " It is disabled by default."),
           this, false)
-    , book_cfg(desc("book-config", "order-book-config"), this) {
+    , book_cfg(desc("book-config", "order-book-config"), this)
+    , stop_after_seconds(
+          desc("stop-after-seconds")
+              .help(
+                  "If non-zero, stop processing the input after this many "
+                  "seconds in the input.  For example, if set to 34500 (= 9 * "
+                  "3600 + 35 * 60) the processing will stop when the first "
+                  "event timestamped after 09:35:00 is received."),
+          this, 0) {
 }
 
 void config::validate() const {
@@ -195,6 +227,9 @@ void config::validate() const {
         "Missing output-file setting."
         "  You must specify an output file.",
         1);
+  }
+  if (stop_after_seconds() < 0) {
+    throw jb::usage("The stop-after-seconds must be >= 0", 1);
   }
 
   log().validate();

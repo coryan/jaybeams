@@ -8,14 +8,7 @@ bindir=`dirname $0`
 source ${bindir?}/benchmark_common.sh
 
 # ... pick a log file ...
-startup
-
-# ... set the CPU power management to optimize for performance ...
-setup_cpu_governor | log $LOG
-
-# ... capture the conditions under which the test ran, do that before
-# sudo expires ...
-print_environment jb/opencl/bm_launch_kernel | log $LOG
+benchmark_startup
 
 # ... capture information about OpenCL devices ...
 clinfo | log $LOG
@@ -23,6 +16,7 @@ clinfo | log $LOG
 # ... run the benchmark at different sizes ...
 for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
     load=`uptime`
+    echo "Running test at size=$size, current load $load"
     echo | log $LOG
     echo "Running test at size=$size, current load $load" | log $LOG
     /usr/bin/time chrt -f 50 ./jb/opencl/bm_launch_kernel \
@@ -31,9 +25,12 @@ for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
                   --benchmark.test-case="$size" \
                   --benchmark.prefix="launch_kernel,${size}," \
                   --benchmark.size=${size?} >$TMPOUT 2>$TMPERR
-    cat $TMPOUT >>$LOG
     cat $TMPERR | log $LOG
+    cat $TMPOUT >>$LOG
 done
+
+# ... teardown the benchmark configuration changes ...
+benchmark_teardown
 
 # ... produce a SVG graph using R ..
 echo "Running R script to produce SVG graph"
