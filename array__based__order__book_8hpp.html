@@ -147,18 +147,20 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb_1_1itch5"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html">jb::itch5</a></td></tr>
 <tr class="memdesc:namespacejb_1_1itch5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains classes and functions to parse NASDAQ ITCH-5.0 messages, more information about ITCH-5.0 can be found at: <a href="http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf">http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf</a>. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacejb_1_1itch5_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html">jb::itch5::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab0e08e24bec4bc11897d3e8bf50c75ca">jb::itch5::validate_add_order_params</a> (int qty, price4_t px)</td></tr>
-<tr class="memdesc:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">check that parameters are valid  <a href="namespacejb_1_1itch5.html#ab0e08e24bec4bc11897d3e8bf50c75ca">More...</a><br /></td></tr>
-<tr class="separator:ab0e08e24bec4bc11897d3e8bf50c75ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab266243d0913ff00b9a9697564af7dc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#ab266243d0913ff00b9a9697564af7dc6">jb::itch5::raise_exception</a> (std::string str, std::size_t tk_begin_top, price4_t px, int qty)</td></tr>
-<tr class="memdesc:ab266243d0913ff00b9a9697564af7dc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle exception with tk_begin_top_, px, and qty  <a href="namespacejb_1_1itch5.html#ab266243d0913ff00b9a9697564af7dc6">More...</a><br /></td></tr>
-<tr class="separator:ab266243d0913ff00b9a9697564af7dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a92fede040abeab72e624eb5ae6018c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a8a92fede040abeab72e624eb5ae6018c">jb::itch5::raise_exception</a> (std::string str, std::size_t tk_begin_top, std::size_t tk_inside, std::size_t rel_px, price4_t px, int qty)</td></tr>
-<tr class="memdesc:a8a92fede040abeab72e624eb5ae6018c"><td class="mdescLeft">&#160;</td><td class="mdescRight">handle exception with relative inside and px relative position  <a href="namespacejb_1_1itch5.html#a8a92fede040abeab72e624eb5ae6018c">More...</a><br /></td></tr>
-<tr class="separator:a8a92fede040abeab72e624eb5ae6018c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1932443e5ff357c8876064f71c5bcd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#ad1932443e5ff357c8876064f71c5bcd5">jb::itch5::detail::raise_invalid_operation_parameters</a> (char const *operation, int qty, price4_t px)</td></tr>
+<tr class="memdesc:ad1932443e5ff357c8876064f71c5bcd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise the right exception when we detect invalid parameters for <a class="el" href="namespacejb_1_1itch5_1_1testing.html#aa82f84469d55e86ab8edcb273039efd5">add_order()</a> or reduce_order()  <a href="namespacejb_1_1itch5_1_1detail.html#ad1932443e5ff357c8876064f71c5bcd5">More...</a><br /></td></tr>
+<tr class="separator:ad1932443e5ff357c8876064f71c5bcd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d35ee6f4007bca347b30981ade171b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#ab6d35ee6f4007bca347b30981ade171b">jb::itch5::detail::validate_operation_params</a> (char const *operation, int qty, price4_t px)</td></tr>
+<tr class="memdesc:ab6d35ee6f4007bca347b30981ade171b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate the input parameters for all array_order_book operations.  <a href="namespacejb_1_1itch5_1_1detail.html#ab6d35ee6f4007bca347b30981ade171b">More...</a><br /></td></tr>
+<tr class="separator:ab6d35ee6f4007bca347b30981ade171b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0debbd04dbae03cc9736c76814177ac4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#a0debbd04dbae03cc9736c76814177ac4">jb::itch5::detail::raise_invalid_reduce</a> (std::string const &amp;msg, std::size_t tk_begin_top, std::size_t tk_inside, price4_t px, int book_qty, int qty)</td></tr>
+<tr class="memdesc:a0debbd04dbae03cc9736c76814177ac4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise an exception describing a invalid reduce operation.  <a href="namespacejb_1_1itch5_1_1detail.html#a0debbd04dbae03cc9736c76814177ac4">More...</a><br /></td></tr>
+<tr class="separator:a0debbd04dbae03cc9736c76814177ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/><h2 class="groupheader">Class Documentation</h2>
 <a name="structjb_1_1itch5_1_1array__based__order__book" id="structjb_1_1itch5_1_1array__based__order__book"></a>
@@ -175,7 +177,7 @@ Functions</h2></td></tr>
 <li>usage: jb::itch5::order_book&lt;jb::itch5::array_based_order_book&gt; </li>
 </ul>
 
-<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00038">38</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00087">87</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">

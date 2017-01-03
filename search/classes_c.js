@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['plan',['plan',['../classjb_1_1clfft_1_1plan.html',1,'jb::clfft']]],
   ['plan',['plan',['../classjb_1_1fftw_1_1plan.html',1,'jb::fftw']]],
+  ['plan',['plan',['../classjb_1_1clfft_1_1plan.html',1,'jb::clfft']]],
   ['plan_3c_20frequency_5ftimeseries_5ftype_2c_20output_5ftimeseries_5ftype_20_3e',['plan&lt; frequency_timeseries_type, output_timeseries_type &gt;',['../classjb_1_1fftw_1_1plan.html',1,'jb::fftw']]],
   ['plan_3c_20timeseries_5ftype_2c_20frequency_5ftimeseries_5ftype_20_3e',['plan&lt; timeseries_type, frequency_timeseries_type &gt;',['../classjb_1_1fftw_1_1plan.html',1,'jb::fftw']]],
   ['price_5ffield',['price_field',['../classjb_1_1itch5_1_1price__field.html',1,'jb::itch5']]],
