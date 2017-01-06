@@ -42,6 +42,11 @@ std::size_t price_levels(price_field_t lo, price_field_t hi) {
     // case ...
     return (hi.as_integer() - lo.as_integer()) / mill;
   }
+  if (lo.as_integer() == 0) {
+    // ... we treat lo == 0 especially because it is a very common
+    // case, better to avoid the extra computation if we can ...
+    return 10000 + (hi.as_integer() - unit.as_integer()) / penny;
+  }
   // ... split the analysis ...
   return price_levels(lo, unit) + price_levels(unit, hi);
 }

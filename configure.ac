@@ -6,6 +6,10 @@ AC_INIT([JayBeams], [0.1], [coryan@users.noreply.github.com])
 
 # Move as many of the generated files as possible to a subdirectory
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_MACRO_DIR([m4])
+
+# ... include the m4 subdirectory in the search path for macros ...
+AC_CONFIG_MACRO_DIR([m4])
 
 # Yes, this is a C++ project.
 AC_LANG([C++])
@@ -55,10 +59,14 @@ AX_CXXFLAGS_WARN_ALL
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
 
-# Checks for libraries.
-AX_BOOST_BASE([1.55],[],[
-  AC_MSG_ERROR([unable to find a suitable Boost library, need version >= 1.55])
+# ... we need Boost with a version higher than 1.55 because Boost.Log ...
+AX_BOOST_BASE([1.55], [], [
+    AC_MSG_ERROR([
+        unable to find a suitable Boost library, need version >= 1.55.
+    ])
 ])
+
+# ... then check for each specific Boost.* library we use ...
 AX_BOOST_ASIO
 AX_BOOST_LOG
 AX_BOOST_LOG_SETUP
@@ -72,37 +80,38 @@ AX_BOOST_UNIT_TEST_FRAMEWORK
 
 AX_PTHREAD([], [AC_MSG_ERROR([unable to find the Pthreads library.]) ])
 
-AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
-                 [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
-                 [AC_MSG_ERROR([Unable to find yaml-cpp library])])
-
-AC_ARG_ENABLE([fftw3],
-        AS_HELP_STRING([--enable-fftw3],
-                [Enable FFTW3-based time delay analysis components]))
-
-AS_IF([test "x$enable_fftw3" = "xyes"], [
-  # FFTW3 Single Precision
-  AX_CHECK_LIBRARY(FFTW3F, [fftw3.h], [fftw3f],
-	[FFTW3F_LIBS=-lfftw3f AC_SUBST(FFTW3F_LIBS)],
-        [AC_MSG_ERROR([Unable to find single-precision FFTW3 library])])
-
-  # FFTW3 Double Precision
-  AX_CHECK_LIBRARY(FFTW3, [fftw3.h], [fftw3],
-	[FFTW3_LIBS=-lfftw3 AC_SUBST(FFTW3_LIBS)],
-        [AC_MSG_ERROR([Unable to find double-precision FFTW3 library])])
-
-  # FFTW3 Quad (long double) Precision
-  AX_CHECK_LIBRARY(FFTW3L, [fftw3.h], [fftw3l],
-	[FFTW3L_LIBS=-lfftw3l AC_SUBST(FFTW3L_LIBS)],
-        [AC_MSG_ERROR([Unable to find quad-precision FFTW3 library])])
+# ... find out if OpenCL is installed, enable it by default, but users can
+# disable OpenCL (and anything that depends on it) using --without-opencl ...
+AX_OPENCL([1.1], [], [
+    AC_MSG_ERROR([unable to find a suitable OpenCL library])
 ])
 
-AM_CONDITIONAL([USE_FFTW3], [test "x$enable_fftw3" = "xyes"])
+# ... create a conditional for automake ..
+AM_CONDITIONAL([HAVE_OPENCL], [test "x$ax_want_opencl" = "xyes"])
 
-# Checks for header files (and header-only libraries)
+# ... we want to use clFFT and Boost.Compute only if OpenCL is enabled ...
+AM_COND_IF([HAVE_OPENCL], [
+    AX_CLFFT([], [
+        AC_MSG_ERROR([Unable to find clFFT library.])
+    ])
+    AX_BOOST_COMPUTE([], [
+        AC_MSG_ERROR([Unable to find Boost.Compute library.])
+    ])
+    # ... Boost.Compute uses deprecated features of OpenCL 1.1, so we
+    # have to disable warnings about them if we end up using both ...
+    AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
+       [AX_APPEND_FLAG(-Wno-deprecated-declarations, CXXFLAGS)], [])
+])
 
-# Checks for typedefs, structures, and compiler characteristics.
 
-# Checks for library functions.
+# ... YAML-CPP is a library to parse YAML files ...
+AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
+    [YAML_CPP_LIBS=-lyaml-cpp AC_SUBST(YAML_CPP_LIBS)],
+    [AC_MSG_ERROR([Unable to find yaml-cpp library])
+])
+
+# ... require FFTW3 by default, but allow the user to disable it ...
+AX_FFTW3([], [])
+AM_CONDITIONAL([USE_FFTW3], [test "x$ax_want_fftw3" = "xyes"])
 
 AC_OUTPUT

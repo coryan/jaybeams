@@ -8,9 +8,6 @@
 #include <stdexcept>
 #include <string>
 
-/**
- * Convenience types and functions for benchmarking std::chrono clocks.
- */
 namespace {
 
 // We expect delays to be around 1250 microseconds, max delays are
@@ -57,11 +54,7 @@ void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
   benchmark bm(cfg);
 
   auto r = bm.run();
-  typename benchmark::summary s(r);
-  std::cerr << cfg.test_case() << " summary " << s << std::endl;
-  if (cfg.verbose()) {
-    bm.write_results(std::cout, r);
-  }
+  bm.typical_output(r);
 }
 
 } // anonymous namespace

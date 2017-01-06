@@ -1,8 +1,6 @@
 #ifndef jb_testing_create_triangle_timeseries_hpp
 #define jb_testing_create_triangle_timeseries_hpp
 
-#include <chrono>
-
 namespace jb {
 namespace testing {
 

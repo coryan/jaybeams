@@ -22,6 +22,9 @@ namespace testing {
  */
 template <typename real>
 bool close_enough(real actual, real expected, int tol) {
+  if (std::numeric_limits<real>::is_integer) {
+    return actual == expected;
+  }
   real const eps = tol * std::numeric_limits<real>::epsilon();
   if (std::abs(expected) < eps) {
     return std::abs(actual) < eps;

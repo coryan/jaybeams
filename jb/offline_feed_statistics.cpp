@@ -7,6 +7,20 @@
 
 namespace {
 
+/**
+ * Log a histogram used to capture message rates.
+ *
+ * @param ts the logical timestamp of the data processed.  Typically
+ * this would be the timestamp recorded in a file being replayed, or
+ * the logical timestamp in an experiment.  It is not the wall clock
+ * time when the program was running.
+ * @param period_name a human readable string representing the time
+ * period over which the rate is being measured.
+ * @param histo the histogram that has captured the message rates
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::event_rate_histogram<>
+ */
 template <typename event_rate_histogram_t>
 void report_rate(
     std::chrono::nanoseconds ts, char const* period_name,
@@ -24,6 +38,15 @@ void report_rate(
                << ", N=" << histo.nsamples();
 }
 
+/**
+ * Print a summary of an event rate histogram in CSV form
+ *
+ * @param os the output stream where the CSV line is printed
+ * @param histo the histogram that has captured the message rates
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::event_rate_histogram<>
+ */
 template <typename event_rate_histogram_t>
 void csv_rate(std::ostream& os, event_rate_histogram_t const& histo) {
   os << "," << histo.observed_min() << "," << histo.estimated_quantile(0.25)
@@ -34,6 +57,19 @@ void csv_rate(std::ostream& os, event_rate_histogram_t const& histo) {
      << histo.estimated_quantile(0.9999) << "," << histo.observed_max();
 }
 
+/**
+ * Log a histogram used to capture message inter-arrival times.
+ *
+ * @param ts the logical timestamp of the data processed.  Typically
+ * this would be the timestamp recorded in a file being replayed, or
+ * the logical timestamp in an experiment.  It is not the wall clock
+ * time when the program was running.
+ * @param name a human readable string representing the measurement
+ * @param histo the histogram that has captured the message rates
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::histogram<>
+ */
 template <typename latency_histogram_t>
 void report_arrival(
     std::chrono::nanoseconds ts, char const* name,
@@ -54,6 +90,15 @@ void report_arrival(
                << "ns, N=" << histo.nsamples();
 }
 
+/**
+ * Print a summary of message interarrival histogram CSV form
+ *
+ * @param os the output stream where the CSV line is printed
+ * @param histo the histogram that has captured the message rates
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::histogram<>
+ */
 template <typename latency_histogram_t>
 void csv_arrival(std::ostream& os, latency_histogram_t const& histo) {
   os << "," << histo.observed_min() << "," << histo.estimated_quantile(0.0001)
@@ -66,6 +111,19 @@ void csv_arrival(std::ostream& os, latency_histogram_t const& histo) {
      << "," << histo.observed_max();
 }
 
+/**
+ * Log a histogram used to capture latencies (such as processing latency)
+ *
+ * @param ts the logical timestamp of the data processed.  Typically
+ * this would be the timestamp recorded in a file being replayed, or
+ * the logical timestamp in an experiment.  It is not the wall clock
+ * time when the program was running.
+ * @param name a human readable string representing the measurement
+ * @param histo the histogram that has captured the message rates
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::histogram<> where the samples are nanoseconds
+ */
 template <typename latency_histogram_t>
 void report_latency(
     std::chrono::nanoseconds ts, char const* name,
@@ -84,6 +142,15 @@ void report_latency(
                << "ns, N=" << histo.nsamples();
 }
 
+/**
+ * Print a summary of latency measurements in CSV form
+ *
+ * @param os the output stream where the CSV line is printed
+ * @param histo the histogram that has captured the latencies
+ *
+ * @tparam the type of histogram used, typical an instantiation of
+ * jb::histogram<> where the samples are nanoseconds
+ */
 template <typename latency_histogram_t>
 void csv_latency(std::ostream& os, latency_histogram_t const& histo) {
   os << "," << histo.observed_min() << "," << histo.estimated_quantile(0.10)
@@ -136,29 +203,51 @@ void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {
   os << "\n";
 }
 
+void jb::offline_feed_statistics::log_final_progress() const {
+  using namespace std::chrono;
+  log_progress(duration_cast<nanoseconds>(std::chrono::hours(24)));
+}
+
+void jb::offline_feed_statistics::log_progress(
+    std::chrono::nanoseconds ts) const {
+  // ... if we have no samples in the interrival histogram logging
+  // progress does not work, so don't do it ...
+  if (interarrival_.nsamples() == 0) {
+    return;
+  }
+  report_rate(ts, "sec ", per_sec_rate_);
+  report_rate(ts, "msec", per_msec_rate_);
+  report_rate(ts, "usec", per_usec_rate_);
+  report_arrival(ts, "arrival    ", interarrival_);
+  report_latency(ts, "processing ", processing_latency_);
+}
+
 void jb::offline_feed_statistics::record_sample(
     std::chrono::nanoseconds ts, std::chrono::nanoseconds pl) {
-  using namespace std::chrono;
+  // ... first record the sample in the per-second, per-millisecond,
+  // and per-microsecond histograms ...
   per_sec_rate_.sample(ts);
   per_msec_rate_.sample(ts);
   per_usec_rate_.sample(ts);
 
+  // ... we need at least two samples to start recording interrival
+  // times, check if there was a previous sample
   if (processing_latency_.nsamples() > 0) {
-    nanoseconds d = ts - last_ts_;
+    // ... measure the delay and record it ...
+    std::chrono::nanoseconds d = ts - last_ts_;
     interarrival_.sample(d.count());
-  } else {
-    last_report_ts_ = ts;
   }
-  processing_latency_.sample(pl.count());
+  // ... save the timestamp so we can record the interarrival latency
+  // next time ...
   last_ts_ = ts;
 
-  if (ts - last_report_ts_ > reporting_interval_ and
-      interarrival_.nsamples() > 0) {
-    report_rate(ts, "sec ", per_sec_rate_);
-    report_rate(ts, "msec", per_msec_rate_);
-    report_rate(ts, "usec", per_usec_rate_);
-    report_arrival(ts, "arrival    ", interarrival_);
-    report_latency(ts, "processing ", processing_latency_);
+  // ... and record the processing latency, must be after recording
+  // the interarrival time, as this also serves as a sentinel ...
+  processing_latency_.sample(pl.count());
+
+  // ... log progress every so many seconds ...
+  if (ts - last_report_ts_ > reporting_interval_) {
+    log_progress(ts);
     last_report_ts_ = ts;
   }
 }
