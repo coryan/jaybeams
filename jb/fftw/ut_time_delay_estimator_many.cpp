@@ -1,55 +1,62 @@
-#ifndef jb_fftw_time_delay_estimator_hpp
-#define jb_fftw_time_delay_estimator_hpp
-
-#include <jb/detail/array_traits.hpp>
+#include <jb/fftw/aligned_multi_array.hpp>
 #include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
-#include <jb/complex_traits.hpp>
+#include <jb/testing/create_square_timeseries.hpp>
+#include <jb/testing/create_triangle_timeseries.hpp>
+#include <jb/testing/delay_timeseries.hpp>
+
+#include <boost/test/unit_test.hpp>
+#include <chrono>
+
+/**
+ * Helpers to test jb::time_delay_estimator_many
+ */
+namespace {} // anonymous namespace
 
 namespace jb {
 namespace fftw {
 
-/**
- * A simple time delay estimator based on cross-correlation
- */
-template <typename timeseries_t,
-          template <typename T> class vector = jb::fftw::aligned_vector>
-class time_delay_estimator {
+template <typename array_t, template <typename T, std::size_t K>
+                            class multi_array = jb::fftw::aligned_multi_array>
+class time_delay_estimator_many {
 public:
   //@{
   /**
    * @name Type traits
    */
   /// The input timeseries type
-  typedef timeseries_t timeseries_type;
+  using array_type = array_t;
 
   /// The values stored in the input timeseries
-  typedef typename timeseries_type::value_type value_type;
+  using element_type =
+      typename jb::detail::array_traits<array_type>::element_type;
 
   /// Extract T out of std::complex<T>, otherwise simply T.
-  typedef typename jb::extract_value_type<value_type>::precision precision_type;
+  using precision_type =
+      typename jb::extract_value_type<element_type>::precision;
 
   /// The type used to store the DFT of the input timeseries
-  typedef vector<std::complex<precision_type>> frequency_timeseries_type;
+  using frequency_array_type =
+      multi_array<std::complex<precision_type>, array_type::dimensionality>;
 
   /// The type used to stored the inverse of the DFT
-  typedef vector<precision_type> output_timeseries_type;
+  using output_array_type =
+      multi_array<precision_type, array_type::dimensionality>;
 
   /// The execution plan to apply the (forward) DFT
-  typedef jb::fftw::plan<timeseries_type, frequency_timeseries_type> dplan;
+  using dplan = jb::fftw::plan<array_type, frequency_array_type>;
 
   /// The execution plan to apply the inverse (aka backward) DFT
-  typedef jb::fftw::plan<frequency_timeseries_type, output_timeseries_type>
-      iplan;
+  using iplan = jb::fftw::plan<frequency_array_type, output_array_type>;
   //@}
 
   /// Constructor
-  time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
-      : tmpa_(a.size())
-      , tmpb_(b.size())
+  time_delay_estimator_many(array_type const& a, array_type const& b)
+      : tmpa_(jb::detail::array_shape(a))
+      , tmpb_(jb::detail::array_shape(b))
       , a2tmpa_(create_forward_plan(a, tmpa_, planning_flags()))
       , b2tmpb_(create_forward_plan(b, tmpb_, planning_flags()))
-      , out_(a.size())
+      , out_(jb::detail::array_shape(a))
       , tmpa2out_(create_backward_plan(tmpa_, out_, planning_flags())) {
     if (a.size() != b.size()) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
@@ -57,8 +64,8 @@ public:
   }
 
   /// Compute the time-delay estimate between two timeseries
-  std::pair<bool, precision_type>
-  estimate_delay(timeseries_type const& a, timeseries_type const& b) {
+  std::vector<std::pair<bool, precision_type>>
+  estimate_delay(array_type const& a, array_type const& b) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
@@ -70,8 +77,8 @@ public:
     a2tmpa_.execute(a, tmpa_);
     b2tmpb_.execute(b, tmpb_);
     // ... then we compute Conj(A) * B for the transformed inputs ...
-    for (std::size_t i = 0; i != tmpa_.size(); ++i) {
-      tmpa_[i] = std::conj(tmpa_[i]) * tmpb_[i];
+    for (std::size_t i = 0; i != tmpa_.num_elements(); ++i) {
+      tmpa_.data()[i] = std::conj(tmpa_.data()[i]) * tmpb_.data()[i];
     }
     // ... then we compute the inverse Fourier transform to the result ...
     tmpa2out_.execute(tmpa_, out_);
@@ -98,22 +105,48 @@ private:
    * Determine the correct FFTW planning flags given the inputs.
    */
   static int planning_flags() {
-    if (always_aligned<timeseries_t>::value) {
+    if (jb::fftw::always_aligned<array_type>::value) {
       return FFTW_MEASURE;
     }
     return FFTW_MEASURE | FFTW_UNALIGNED;
   }
 
 private:
-  frequency_timeseries_type tmpa_;
-  frequency_timeseries_type tmpb_;
+  frequency_array_type tmpa_;
+  frequency_array_type tmpb_;
   dplan a2tmpa_;
   dplan b2tmpb_;
-  output_timeseries_type out_;
+  output_array_type out_;
   iplan tmpa2out_;
 };
 
 } // namespace fftw
 } // namespace jb
 
-#endif // jb_fftw_time_delay_estimator_hpp
+/**
+ * @test Verify that we can create and use a simple time delay estimator.
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_simple) {
+  int const nsamples = 1 << 15;
+  int const delay = 1250;
+  int const S = 128;
+  using array_type = jb::fftw::aligned_multi_array<float, 2>;
+  using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
+
+  array_type a(boost::extents[S][nsamples]);
+  array_type b(boost::extents[S][nsamples]);
+  int count = 0;
+  for (auto vector : a) {
+    if (++count % 2 == 0) {
+      jb::testing::create_triangle_timeseries(nsamples, vector);
+    } else {
+      jb::testing::create_square_timeseries(nsamples, vector);
+    }
+  }
+  for (int i = 0; i != S; ++i) {
+    for (int j = 0; j != nsamples; ++j) {
+      b[i][j] = a[i][(j + delay) % nsamples];
+    }
+  }
+  tested_type tested(a, b);
+}
