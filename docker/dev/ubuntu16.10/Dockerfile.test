@@ -1,0 +1,13 @@
+ARG user=developer
+ARG cxx=g++
+ARG cxxflags=""
+
+WORKDIR /
+RUN useradd -m $user
+USER $user
+WORKDIR /home/$user
+RUN git clone --depth=2 https://github.com/coryan/jaybeams.git
+WORKDIR /home/$user/jaybeams
+RUN ./bootstrap
+RUN CXX=$cxx CXXFLAGS=$cxxflags ./configure --enable-fftw3
+RUN make -j 4 check
