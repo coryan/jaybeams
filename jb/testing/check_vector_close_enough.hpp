@@ -30,8 +30,7 @@ int check_vector_close_enough(
     if (close_enough(actual[i], expected[i], tol)) {
       continue;
     }
-    BOOST_CHECK_MESSAGE(
-        close_enough(actual[i], expected[i], tol),
+    BOOST_TEST_MESSAGE(
         "in item i=" << i << " difference higher than tolerance=" << tol
                      << ", actual[i]=" << actual[i]
                      << ", expected[i]=" << expected[i]);

@@ -52,7 +52,13 @@ void check_conjugate_and_multiply_sized(int asize, int bsize) {
   }
   done.wait();
 
-  jb::testing::check_vector_close_enough(actual, expected);
+  int max_differences = asize / 1000;
+  int result = jb::testing::check_vector_close_enough(
+      actual, expected, 1, max_differences);
+  BOOST_CHECK_MESSAGE(
+      result >= max_differences,
+      "too many differences higher than tolerance=1, result = "
+          << result << ", expected less than " << max_differences);
 }
 
 template <typename precision_t>
