@@ -111,20 +111,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aff99c176f00ff1c99461e879c75bb771"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html#aff99c176f00ff1c99461e879c75bb771">check</a> (multi_array const &amp;actual, multi_array const &amp;expected, int tol, int max_differences)</td></tr>
-<tr class="separator:aff99c176f00ff1c99461e879c75bb771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae157b1aedb9e30b7d088acd25a08eb7f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html#ae157b1aedb9e30b7d088acd25a08eb7f">check</a> (multi_array const &amp;actual, multi_array const &amp;expected, int tol, int max_differences_printed)</td></tr>
+<tr class="memdesc:ae157b1aedb9e30b7d088acd25a08eb7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two 1-dimensional multi-arrays of floating point or complex numbers find the differences and report them via Boost.Test functions.  <a href="#ae157b1aedb9e30b7d088acd25a08eb7f">More...</a><br /></td></tr>
+<tr class="separator:ae157b1aedb9e30b7d088acd25a08eb7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename multi_array&gt;<br />
 struct jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;</h3>
 
 <p>Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs. </p>
-<p><em>expected</em>, when the dimensionality is 1.</p>
-<p>Given two collections of floating point or complex numbers find the differences and report them via Boost.Test functions. </p>
+<p><em>expected</em>, when the dimensionality is 1. </p>
 
-<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00021">21</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00018">18</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aff99c176f00ff1c99461e879c75bb771"></a>
+<a class="anchor" id="ae157b1aedb9e30b7d088acd25a08eb7f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -155,7 +155,7 @@ template&lt;typename multi_array &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>max_differences</em>&#160;</td>
+          <td class="paramname"><em>max_differences_printed</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -170,9 +170,21 @@ template&lt;typename multi_array &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00022">22</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+<p>Given two 1-dimensional multi-arrays of floating point or complex numbers find the differences and report them via Boost.Test functions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">actual</td><td>the actual values observed in the test </td></tr>
+    <tr><td class="paramname">expected</td><td>the values expected by the test </td></tr>
+    <tr><td class="paramname">tol</td><td>the error accepted by the test, or more precisely, the test will tolerate up to tol*epsilon relative error. </td></tr>
+    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the vectors are large and printing all the differences can be overwhelming.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of errors detected. </dd></dl>
 
-<p>References <a class="el" href="check__vector__close__enough_8hpp_source.html#l00017">jb::testing::check_vector_close_enough()</a>.</p>
+<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00033">33</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__vector__close__enough_8hpp_source.html#l00028">jb::testing::check_vector_close_enough()</a>.</p>
 
 </div>
 </div>

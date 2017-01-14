@@ -112,6 +112,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2713bbc304110b86ab7f441a4cc1561"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_010_01_4.html#ae2713bbc304110b86ab7f441a4cc1561">check</a> (multi_array const &amp;actual, multi_array const &amp;expected, int tol, int max_differences)</td></tr>
+<tr class="memdesc:ae2713bbc304110b86ab7f441a4cc1561"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two 0-dimensional multi-arrays of floating point or complex numbers find the differences and report them via Boost.Test functions.  <a href="#ae2713bbc304110b86ab7f441a4cc1561">More...</a><br /></td></tr>
 <tr class="separator:ae2713bbc304110b86ab7f441a4cc1561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -121,7 +122,7 @@ struct jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 0 &gt
 <p>Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs. </p>
 <p><em>expected</em>, when the dimensionality is 0. </p>
 
-<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00038">38</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00046">46</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ae2713bbc304110b86ab7f441a4cc1561"></a>
 <div class="memitem">
@@ -169,7 +170,19 @@ template&lt;typename multi_array &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00039">39</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+<p>Given two 0-dimensional multi-arrays of floating point or complex numbers find the differences and report them via Boost.Test functions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">actual</td><td>the actual values observed in the test </td></tr>
+    <tr><td class="paramname">expected</td><td>the values expected by the test </td></tr>
+    <tr><td class="paramname">tol</td><td>the error accepted by the test, or more precisely, the test will tolerate up to tol*epsilon relative error. </td></tr>
+    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the vectors are large and printing all the differences can be overwhelming.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of errors detected. </dd></dl>
+
+<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00061">61</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
 
 </div>
 </div>

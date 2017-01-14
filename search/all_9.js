@@ -65,7 +65,7 @@ var searchData=
   ['jb_5fofs_5fdefaults_5fmax_5fmessages_5fper_5fsecond',['JB_OFS_DEFAULTS_max_messages_per_second',['../offline__feed__statistics_8cpp.html#a992e94492edb304b3ec48833f01de2e3',1,'offline_feed_statistics.cpp']]],
   ['jb_5fofs_5fdefaults_5fmax_5fprocessing_5flatency_5fnanoseconds',['JB_OFS_DEFAULTS_max_processing_latency_nanoseconds',['../offline__feed__statistics_8cpp.html#abbf6b2de533edc5db00be80bf41ea8a4',1,'offline_feed_statistics.cpp']]],
   ['jb_5fofs_5fdefaults_5freporting_5finterval_5fseconds',['JB_OFS_DEFAULTS_reporting_interval_seconds',['../offline__feed__statistics_8cpp.html#a61cda7e48624eb9af033c73f59f6fc1b',1,'offline_feed_statistics.cpp']]],
-  ['jb_5ftesting_5fmax_5fdifferences',['JB_TESTING_MAX_DIFFERENCES',['../check__complex__close__enough_8hpp.html#a20aeb5a0bdb905aa2be9c2b010886562',1,'check_complex_close_enough.hpp']]],
+  ['jb_5ftesting_5fmax_5fdifferences_5fprinted',['JB_TESTING_MAX_DIFFERENCES_PRINTED',['../check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9',1,'check_complex_close_enough.hpp']]],
   ['log',['log',['../namespacejb_1_1log.html',1,'jb']]],
   ['jaybeams_20style_20guide_20and_20coding_20standards',['JayBeams Style Guide and Coding Standards',['../md_doc_style_guide.html',1,'']]],
   ['jaybeams_20tools',['JayBeams Tools',['../md_tools_README.html',1,'']]],
