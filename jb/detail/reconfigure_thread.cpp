@@ -17,7 +17,7 @@ void jb::detail::reconfigure_this_thread(jb::thread_config const& config) {
 
   if (config.affinity().count() > 0) {
     r = pthread_setaffinity_np(
-        self, config.affinity().capacity(),
+        self, sizeof(cpu_set_t),
         const_cast<cpu_set_t*>(config.affinity().native_handle()));
     if (not config.ignore_setup_errors()) {
       os_check_error(r, "reconfigure_this_thread() - setting affinity");

@@ -663,6 +663,4 @@ BOOST_AUTO_TEST_CASE(array_based_order_book_config_simple) {
       array_based_order_book::config().max_size(-7).validate(), jb::usage);
   BOOST_CHECK_NO_THROW(
       array_based_order_book::config().max_size(3000).validate());
-  BOOST_CHECK_THROW(
-      array_based_order_book::config().max_size(20000).validate(), jb::usage);
 }

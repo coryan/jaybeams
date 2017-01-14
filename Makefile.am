@@ -90,7 +90,8 @@ unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
   $(jb_itch5_unit_tests)
 
 benchmarks = \
-  jb/bm_clocks
+  jb/bm_clocks \
+  jb/itch5/bm_order_book
 
 examples = \
   examples/configuration \
@@ -987,6 +988,14 @@ jb_itch5_ut_timestamp_LDADD = $(jb_ut_itch5_libs)
 jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
 jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
 jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_libs)
+
+################################################################
+# itch5 benchmarks
+################################################################
+
+jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
+jb_itch5_bm_order_book_CPPFLAGS = 
+jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 ################################################################
 # testing unit tests

@@ -19,11 +19,60 @@
 namespace jb {
 namespace itch5 {
 
-// forward declaration of
-void validate_add_order_params(int, price4_t px = price4_t(0));
-void raise_exception(std::string, std::size_t, price4_t, int);
-void raise_exception(
-    std::string, std::size_t, std::size_t, std::size_t, price4_t, int);
+namespace detail {
+/**
+ * Raise the right exception when we detect invalid parameters for
+ * add_order() or reduce_order()
+ *
+ * @param operation the name of the operation that is being processed,
+ * typically add_order() or reduce_order().
+ * @param qty the qty in the operation
+ * @param px the price of the operation
+ *
+ * @throws a feed_error with nicely formatted output **always**
+ */
+[[noreturn]] void
+raise_invalid_operation_parameters(char const* operation, int qty, price4_t px);
+
+/**
+ * Validate the input parameters for all array_order_book operations.
+ *
+ * Both add_order() and reduce_order() require basically the same
+ * validation, refactor to a common function.
+ *
+ * @param operation the name of the operation that is being processed,
+ * typically add_order() or reduce_order().
+ * @param qty the qty in the operation
+ * @param px the price of the operation
+ *
+ * @throws a feed_error with nicely formatted output if the validation fails.
+ */
+inline void
+validate_operation_params(char const* operation, int qty, price4_t px) {
+  if (qty > 0 and px >= price4_t(0) and
+      px < max_price_field_value<price4_t>()) {
+    return;
+  }
+  raise_invalid_operation_parameters(operation, qty, px);
+}
+
+/**
+ * Raise an exception describing a invalid reduce operation.
+ *
+ * @param msg a human readable explanation of the error condition
+ * @param tk_begin_top the first price in the "top-levels"
+ * @param tk_inside the price at the inside
+ * @param px the price of the reduce operation being attempted
+ * @param book_qty the qty that the book has at that price level, 0 if
+ * the level does not exist
+ * @param qty the qty of the reduce operation being attempted
+ *
+ * @throws feed error with a nicely formatted message, **always**.
+ */
+[[noreturn]] void raise_invalid_reduce(
+    std::string const& msg, std::size_t tk_begin_top, std::size_t tk_inside,
+    price4_t px, int book_qty, int qty);
+} // namespace detail
 
 template <typename compare_t>
 class array_based_book_side;
@@ -52,7 +101,7 @@ public:
   /// Validate the configuration
   void validate() const override;
 
-  jb::config_attribute<config, std::size_t> max_size;
+  jb::config_attribute<config, int> max_size;
 };
 
 /**
@@ -75,16 +124,15 @@ public:
  * @tparam compare_t function object class type to sort the side
  *
  */
-
 template <typename compare_t>
 class array_based_book_side {
 public:
+  /// Constructor, initialize a book side from its configuration
   explicit array_based_book_side(array_based_order_book::config const& cfg)
       : max_size_(cfg.max_size())
       , top_levels_(cfg.max_size(), 0)
       , bottom_levels_()
-      , tk_inside_(
-            price_levels(price4_t(0), side<compare_t>::empty_quote_price()))
+      , tk_inside_(tk_empty_quote)
       , tk_begin_top_(tk_inside_)
       , tk_end_top_(tk_inside_) {
   }
@@ -92,8 +140,7 @@ public:
   /// @returns the best bid price and quantity.
   /// The inside is always at the top_levels_
   half_quote best_quote() const {
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return side<compare_t>::empty_quote();
     }
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
@@ -106,8 +153,7 @@ public:
   /// The worst price is at the bottom_levels (if not empty),
   /// at the top_levels otherwise.
   half_quote worst_quote() const {
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return side<compare_t>::empty_quote(); // empty side
     }
     if (not bottom_levels_.empty()) {
@@ -144,7 +190,7 @@ public:
    * @throw feed_error px out of valid range, or qty <= 0
    */
   bool add_order(price4_t px, int qty) {
-    validate_add_order_params(qty, px);
+    detail::validate_operation_params("add_order", qty, px);
     // get px price levels
     auto tk_px = price_levels(price4_t(0), px);
     // check if tk_px is worse than the first price of the top_levels_
@@ -173,13 +219,13 @@ public:
       // update top_levels_
       auto rel_px =
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
-      top_levels_.at(rel_px) += qty;
+      top_levels_[rel_px] += qty;
       return true; // the inside changed
     }
     // is a top_levels change different than the inside
     // udates top_levels_ with new qty
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    top_levels_.at(rel_px) += qty;
+    top_levels_[rel_px] += qty;
     return false;
   }
 
@@ -201,17 +247,17 @@ public:
    * If so, limits have to be redefined, and tail moved into top_levels
    */
   bool reduce_order(price4_t px, int qty) {
-    validate_add_order_params(qty);
+    detail::validate_operation_params("reduce_order", qty, px);
     // get px price level
     auto tk_px = price_levels(price4_t(0), px);
     // check and handles if it is a bottom_level_ price
     if (side<compare_t>::better_level(tk_begin_top_, tk_px)) {
       auto price_it = bottom_levels_.find(tk_px);
       if (price_it == bottom_levels_.end()) {
-        raise_exception(
+        detail::raise_invalid_reduce(
             "array_based_book_side::reduce_order."
             " Trying to reduce non-existing bottom_levels_price.",
-            tk_begin_top_, px, qty);
+            tk_begin_top_, tk_inside_, px, 0, qty);
       }
       // ... reduce the quantity ...
       price_it->second -= qty;
@@ -229,40 +275,39 @@ public:
 
     // handles the top_levels_ price
     if (side<compare_t>::better_level(tk_px, tk_inside_)) {
-      raise_exception(
+      detail::raise_invalid_reduce(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (better px_inside).",
-          tk_begin_top_, px, qty);
+          tk_begin_top_, tk_inside_, px, 0, qty);
     }
     // get px relative position
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_px);
-    if (top_levels_.at(rel_px) == 0) {
-      raise_exception(
+    if (top_levels_[rel_px] == 0) {
+      detail::raise_invalid_reduce(
           "array_based_book_side::reduce_order."
           " Trying to reduce a non-existing top_levels_ price"
           " (top_levels_[rel_px] == 0).",
-          tk_begin_top_, tk_inside_, rel_px, px, qty);
+          tk_begin_top_, tk_inside_, px, 0, qty);
     }
 
     // ... reduce the quantity ...
-    top_levels_.at(rel_px) -= qty;
-    if (top_levels_.at(rel_px) < 0) {
+    top_levels_[rel_px] -= qty;
+    if (top_levels_[rel_px] < 0) {
       // ... this is "Not Good[tm]", somehow we missed an order or
       // processed a delete twice ...
       JB_LOG(warning) << "negative quantity in order book";
-      top_levels_.at(rel_px) = 0; // cant't be negative
+      top_levels_[rel_px] = 0; // cant't be negative
     }
     // ... if it is not the inside we are done
     if (tk_px != tk_inside_) {
       return false;
     }
     // Is inside, ... now check if it was removed
-    if (top_levels_.at(rel_px) == 0) {
+    if (top_levels_[rel_px] == 0) {
       // gets the new inside (if any)
       tk_inside_ = next_best_price_level();
-      if (tk_inside_ ==
-          price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+      if (tk_inside_ == tk_empty_quote) {
         // last top_levels_ price was removed...
         // ... get the new inside from the bottom_levels
         if (not bottom_levels_.empty()) {
@@ -289,6 +334,24 @@ public:
     return side<compare_t>::ascending;
   }
 
+  /**
+   *  Cache the number of levels for the empty quote.
+   *
+   * This value is used numerous times in the critical path, and we
+   * want to avoid recomputing it over and over.
+   */
+  static std::size_t const tk_empty_quote;
+
+  /**
+   * Return the number of price levels for the empty quote.
+   *
+   * This is mostly used to initialize tk_empty_quote, because
+   * otherwise the template definitions get too gnarly.
+   */
+  static std::size_t price_levels_empty_quote() {
+    return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
+  }
+
 private:
   /**
    * @returns relative position of the worst valid price at top_levels.
@@ -305,14 +368,13 @@ private:
   /// @returns number of valid prices (>0) at top_levels_
   std::size_t top_levels_count() const {
     // counts from 0 .. relative position of px_inside_
-    if (tk_inside_ ==
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price())) {
+    if (tk_inside_ == tk_empty_quote) {
       return 0; // empty side
     }
     auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     int result = 0;
     for (std::size_t i = 0; i != rel_px + 1; ++i) {
-      if (top_levels_.at(i) != 0) {
+      if (top_levels_[i] != 0) {
         result++;
       }
     }
@@ -337,27 +399,13 @@ private:
       // valid prices are from 0 .. relative (tk_inside_) included
       auto rel_inside =
           side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
-      for (std::size_t i = 0; i != rel_inside + 1; ++i) {
-        // move out and clear the price (if valid)
-        if (top_levels_.at(i) != 0) {
-          auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-          bottom_levels_.emplace(tk_i, top_levels_.at(i));
-          top_levels_.at(i) = 0;
-        }
-      }
+      move_top_to_bottom_ranged(rel_inside + 1);
       return;
     }
     // tk_max is worse than tk_inside
     // prices to move out are from 0.. relative (tk_max) excluded
     auto rel_tk_max = side<compare_t>::level_to_relative(tk_begin_top_, tk_max);
-    for (std::size_t i = 0; i != rel_tk_max; ++i) {
-      // ... move out the price i (if valid)
-      if (top_levels_.at(i) != 0) {
-        auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
-        bottom_levels_.emplace(tk_i, top_levels_.at(i));
-        top_levels_.at(i) = 0;
-      }
-    }
+    move_top_to_bottom_ranged(rel_tk_max);
     // shift price down rel_tk_max positions
     // from tk_max to tk_inside both included...
     // ...(the are no better prices than tk_inside_)
@@ -365,11 +413,47 @@ private:
         side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     std::size_t j = 0;
     for (std::size_t i = rel_tk_max; i <= rel_tk_inside; ++i, ++j) {
-      if (top_levels_.at(i) != 0) {
-        top_levels_.at(j) = top_levels_.at(i);
-        top_levels_.at(i) = 0;
+      if (top_levels_[i] != 0) {
+        top_levels_[j] = top_levels_[i];
+        top_levels_[i] = 0;
       }
     }
+  }
+
+  /**
+   * Move the bottom N levels from the top vector to the bottom map.
+   *
+   * This function "copies" the bottom N levels from the top vector,
+   * and then zeroes out that portion of the vector ...
+   *
+   * @param N the number of elements to move.
+   */
+  void move_top_to_bottom_ranged(std::size_t N) {
+    // ... this is a private function, we do not need to check the
+    // arguments ...
+    for (std::size_t i = 0; i != N; ++i) {
+      auto qty = top_levels_[i];
+      // ... skip levels that have no qty, we do not want to grow the
+      // map too much ...
+      if (qty == 0) {
+        continue;
+      }
+      auto tk_i = side<compare_t>::relative_to_level(tk_begin_top_, i);
+      // ... this loop is always inserting a better price than what is
+      // on the bottom map (because the by definition top_levels_
+      // contains the best price levels).  Also, each price inserted
+      // is better than any previous insertion (because we iterate in
+      // ascending order of better-price).  And finally the
+      // bottom_levels_ is reverse sorted, so the best price is at the
+      // beginning.  That means we can give the map a hint, indicating
+      // to insert at the beginning, and change this from O(logN) to
+      // O(1) (amortized) ...
+      bottom_levels_.emplace_hint(bottom_levels_.begin(), tk_i, qty);
+    }
+    // ... another loop to fill out with 0, supposedly std::fill() is
+    // optimized for vectors in most C++ implementations (use
+    // memset(3) or something similar) ...
+    std::fill(top_levels_.begin(), top_levels_.begin() + N, 0);
   }
 
   /**
@@ -388,7 +472,7 @@ private:
       if (not side<compare_t>::better_level(tk_begin_top_, tk_le)) {
         // move price to top_levels_
         auto rel_px = side<compare_t>::level_to_relative(tk_begin_top_, tk_le);
-        top_levels_.at(rel_px) = le->second;
+        top_levels_[rel_px] = le->second;
       } else {
         // no more good prices to move...
         break;
@@ -407,26 +491,24 @@ private:
     auto rel_inside =
         side<compare_t>::level_to_relative(tk_begin_top_, tk_inside_);
     if (rel_inside == 0) {
-      return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
+      return tk_empty_quote;
     }
     do {
       rel_inside--;
-      if (top_levels_.at(rel_inside) != 0) {
+      if (top_levels_[rel_inside] != 0) {
         // got the next one...
         return side<compare_t>::relative_to_level(tk_begin_top_, rel_inside);
       }
     } while (rel_inside != 0);
-    return price_levels(price4_t(0), side<compare_t>::empty_quote_price());
+    return tk_empty_quote;
   }
 
   /// @returns pair of price levels that are rel worse
   /// and better than tk_px, limited to valid price levels
   /// if tk_px is at the limit, return and empty quote values
   static auto get_limits(std::size_t const tk_px, std::size_t const rel) {
-    auto const tk_empty =
-        price_levels(price4_t(0), side<compare_t>::empty_quote_price());
-    if (tk_px == tk_empty) {
-      return std::make_pair(tk_empty, tk_empty);
+    if (tk_px == tk_empty_quote) {
+      return std::make_pair(tk_empty_quote, tk_empty_quote);
     }
     auto const level_max = price_levels(price4_t(0), empty_offer_price());
 
@@ -545,6 +627,10 @@ private:
   /// one price level past-the-best price in top_levels_ range
   std::size_t tk_end_top_;
 };
+
+template <typename compare_t>
+std::size_t const array_based_book_side<compare_t>::tk_empty_quote =
+    array_based_book_side<compare_t>::price_levels_empty_quote();
 
 } // namespace itch5
 } // namespace jb

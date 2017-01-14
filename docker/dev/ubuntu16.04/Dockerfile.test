@@ -9,5 +9,5 @@ WORKDIR /home/$user
 RUN git clone --depth=2 https://github.com/coryan/jaybeams.git
 WORKDIR /home/$user/jaybeams
 RUN ./bootstrap
-RUN CXX=$cxx CXXFLAGS=$cxxflags ./configure --enable-fftw3
+RUN CXX=$cxx CXXFLAGS=$cxxflags ./configure
 RUN make -j 4 check

@@ -1,6 +1,7 @@
 #ifndef jb_testing_microbenchmark_hpp
 #define jb_testing_microbenchmark_hpp
 
+#include <jb/detail/reconfigure_thread.hpp>
 #include <jb/testing/microbenchmark_base.hpp>
 
 namespace jb {
@@ -95,6 +96,9 @@ public:
    */
   template <typename... Args>
   results run(Args&&... args) {
+    if (config_.reconfigure_thread()) {
+      jb::detail::reconfigure_this_thread(config_.thread());
+    }
     if (config_.size() != 0) {
       return run_fixed_size(std::forward<Args>(args)...);
     }
