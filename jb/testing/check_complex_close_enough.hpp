@@ -102,9 +102,9 @@ value_type format(value_type t) {
   return t;
 }
 
-#ifndef JB_TESTING_MAX_DIFFERENCES
-#define JB_TESTING_MAX_DIFFERENCES 8
-#endif // JB_TESTING_MAX_DIFFERENCES
+#ifndef JB_TESTING_MAX_DIFFERENCES_PRINTED
+#define JB_TESTING_MAX_DIFFERENCES_PRINTED 8
+#endif // JB_TESTING_MAX_DIFFERENCES_PRINTED
 
 } // namespace testing
 } // namespace jb
