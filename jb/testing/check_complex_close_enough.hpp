@@ -46,8 +46,7 @@ bool close_enough(real actual, real expected, int tol) {
  */
 template <typename real>
 bool close_enough(
-    std::complex<real> const& actual, std::complex<real> const& expected,
-    int tol = 1) {
+    std::complex<real> actual, std::complex<real> expected, int tol = 1) {
   return (
       close_enough(actual.real(), expected.real(), tol) and
       close_enough(actual.imag(), expected.imag(), tol));
@@ -100,6 +99,64 @@ std::complex<precision_t> format(precision_t v[2]) {
 template <typename value_type>
 value_type format(value_type t) {
   return t;
+}
+
+/**
+ * Calculate the relative error between two float point numbers.
+ *
+ * @return the relative error of actual compared to offset.
+ *
+ * @param actual the number the test got
+ * @param expected the number the test expected
+ *
+ * @tparam real the type of floating point number (float, double, long double)
+ */
+template <typename real>
+real relative_error(real actual, real expected) {
+  if (std::numeric_limits<real>::is_integer) {
+    return std::abs(actual - expected);
+  }
+  if (std::abs(expected) < std::numeric_limits<real>::epsilon()) {
+    return std::abs(actual);
+  }
+  return std::abs((actual - expected) / expected);
+}
+
+/**
+ * Calculate the relative error between two complex numbers.
+ *
+ * @return the relative error of actual compared to offset, using the
+ * Manhattan metric.
+ *
+ * @param actual the number the test got
+ * @param expected the number the test expected
+ *
+ * @tparam real the type of floating point number (float, double, long double)
+ */
+template <typename real>
+real relative_error(std::complex<real> actual, std::complex<real> expected) {
+  return std::max(
+      relative_error(actual.real(), expected.real()),
+      relative_error(actual.imag(), expected.imag()));
+}
+
+/**
+ * Calculate the relative error between two complex numbers in FFTW
+ * representation.
+ *
+ * @return the relative error of actual compared to offset, using the
+ * Manhattan metric.
+ *
+ * @param actual the number the test got
+ * @param expected the number the test expected
+ *
+ * @tparam real the type of floating point number (float, double, long double)
+ */
+template <typename real>
+real relative_error(real actual[2], real expected[2]) {
+  return std::max(
+      relative_error(actual[0], expected[0]),
+      relative_error(actual[1], expected[1]));
 }
 
 #ifndef JB_TESTING_MAX_DIFFERENCES_PRINTED

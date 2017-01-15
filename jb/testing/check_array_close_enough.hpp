@@ -35,11 +35,12 @@ int check_array_close_enough(
       continue;
     }
     if (++count <= max_differences_printed) {
-      BOOST_CHECK_MESSAGE(
-          close_enough(actual[i], expected[i], tol),
+      auto error = relative_error(actual[i], expected[i]);
+      BOOST_TEST_MESSAGE(
           "in item i=" << i << " difference higher than tolerance=" << tol
                        << ", actual[i]=" << format(actual[i])
-                       << ", expected[i]=" << format(expected[i]));
+                       << ", expected[i]=" << format(expected[i])
+                       << ", error=" << error);
     }
   }
   BOOST_CHECK_MESSAGE(count == 0, "found " << count << " differences");
