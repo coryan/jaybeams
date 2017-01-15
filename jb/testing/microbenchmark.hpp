@@ -4,8 +4,67 @@
 #include <jb/detail/reconfigure_thread.hpp>
 #include <jb/testing/microbenchmark_base.hpp>
 
+#include <type_traits>
+#include <utility>
+
 namespace jb {
 namespace testing {
+
+namespace detail {
+/**
+ * A helper to call Fixture::iteration_setup() in the microbenchmarks.
+ *
+ * This is the no-op for fixtures that do not provide a
+ * iteration_setup() member function.
+ *
+ * @tparam Fixture the type of the Fixture
+ * @tparam Args unused, just a way for SFINAE to fallback on something.
+ */
+template <typename Fixture, typename... Args>
+void call_iteration_setup(Fixture&&, Args&&...) {
+}
+
+/**
+ * A helper to call Fixture::iteration_setup() in the microbenchmarks.
+ *
+ * This is the version for fixtures that do provide a
+ * iteration_setup() member function.
+ *
+ * @tparam Fixture the type of the Fixture
+ */
+template <typename Fixture,
+          typename = decltype(std::declval<Fixture>().iteration_setup())>
+void call_iteration_setup(Fixture&& fixture) {
+  fixture.iteration_setup();
+}
+
+/**
+ * A helper to call Fixture::iteration_teardown() in the microbenchmarks.
+ *
+ * This is the no-op for fixtures that do not provide a
+ * iteration_teardown() member function.
+ *
+ * @tparam Fixture the type of the Fixture
+ * @tparam Args unused, just a way for SFINAE to fallback on something.
+ */
+template <typename Fixture, typename... Args>
+void call_iteration_teardown(Fixture&&, Args&&...) {
+}
+
+/**
+ * A helper to call Fixture::iteration_teardown() in the microbenchmarks.
+ *
+ * This is the version for fixtures that do provide a
+ * iteration_teardown() member function.
+ *
+ * @tparam Fixture the type of the Fixture
+ */
+template <typename Fixture,
+          typename = decltype(std::declval<Fixture>().iteration_teardown())>
+void call_iteration_teardown(Fixture&& fixture) {
+  fixture.iteration_teardown();
+}
+} // namespace detail
 
 /**
  * Run a micro-benchmark on a given class.
@@ -190,11 +249,13 @@ private:
    * @param size the size of the test
    */
   static void run_iteration(Fixture& fixture, results& r, int size) {
+    detail::call_iteration_setup(fixture);
     auto start = clock::now();
     fixture.run();
     auto stop = clock::now();
 
     r.emplace_back(std::make_pair(size, stop - start));
+    detail::call_iteration_teardown(fixture);
   }
 };
 
