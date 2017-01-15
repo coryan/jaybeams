@@ -25,6 +25,7 @@
 #include <jb/integer_range_binning.hpp>
 #include <jb/log.hpp>
 
+#include <algorithm>
 #include <random>
 #include <stdexcept>
 #include <type_traits>
@@ -71,6 +72,27 @@ public:
   jb::config_attribute<config, unsigned int> seed;
 };
 
+/// A simple representation for book operations.
+struct operation {
+  /// The price to modify
+  jb::itch5::price4_t px;
+  /// The quantity, negative values indicate the operation is a
+  /// remove_order(), positive that it is an add_order() operation.
+  int delta;
+};
+
+/**
+ * Create a sequence of operations.
+ *
+ * @param seed a seed for the PRNG, or 0 if the generator should be
+ *   initialized from std::random_device.
+ * @param size the number of elements in the sequence
+ * @param cfg describe the statistical properties of the sequence
+ * @param is_ascending if true generate operations for a BUY book.
+ */
+std::vector<operation> create_operations(
+    int seed, int size, fixture_config const& cfg, bool is_ascending);
+
 /// Run the benchmark for a specific book type
 template <typename book_side, typename book_config>
 class fixture {
@@ -93,184 +115,54 @@ public:
   fixture(
       int size, fixture_config const& cfg, book_config const& bkcfg,
       unsigned int seed)
-      : bkcfg_(bkcfg) {
-    // The benchmark prepares a list of @a size operations to execute
-    // in the run() function.  We do this in the constructor because
-    // we want to measure the time to execute the operations, not the
-    // time to generate them ...
-    std::vector<operation> operations;
-    operations.reserve(size);
+      : size_(size)
+      , cfg_(cfg)
+      , bkcfg_(bkcfg)
+      , book_(bkcfg_)
+      , seed_(seed)
+      , operations_() {
+  }
 
-    // ... the operations are generated at random, we use one of the
-    // standard PRNG in the library.  Notice that the seed is a
-    // parameter into the benchmark, so it can be executed multiple
-    // times with the same sequence of operations ...
-    // BTW, I am aware (see [1]) of the deficiencies in initializing a
-    // Mersenne-Twister with only 32 bits of seed, I am not looking
-    // for a statistically unbiased, nor a cryptographically strong
-    // PRNG.  We just want something that explores more of the test
-    // space than normal, and can also be easily controlled from the
-    // command line.
-    // [1]: http://www.pcg-random.org/blog/
-    std::mt19937_64 generator(seed);
+  void iteration_setup() {
+    // ... creating a book in each iteration is less than ideal, but
+    // it is the only way to make sure the operations are applied to a
+    // well-known state ...
+    book_ = std::move(book_side(bkcfg_));
 
-    // ... use the configuration parameters to create a "depth
-    // distribution".  The default values are chosen from
-    // realistic market data, so the benchmark should generate data
-    // that is statistically similar to what the market shows ...
-    std::vector<int> boundaries(
-        {0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(), cfg.p99(), cfg.p999(),
-         cfg.p100()});
-    std::vector<double> weights({0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
-    JB_ASSERT_THROW(boundaries.size() == weights.size() + 1);
-    std::piecewise_constant_distribution<> ddis(
-        boundaries.begin(), boundaries.end(), weights.begin());
-
-    // ... we also randomly pick whenther the new operation is better
-    // or worse than the current inside ...
-    std::uniform_int_distribution<> bdis(0, 1);
-
-    // ... for the size, we use a uniform distribution in the
-    // [-1000,1000] range, though we have to trim the results based on
-    // what is actually in the book ...
-    std::uniform_int_distribution<> sdis(-5000, 5000);
-
-    // ... save the maximum possible price level ...
-    using jb::itch5::price4_t;
-    int const max_level = jb::itch5::price_levels(
-        price4_t(0), jb::itch5::max_price_field_value<price4_t>());
-
-    // ... we need a function to convert price levels to prices, the
-    // function depends on whether the book is ascending by price
-    // (BUY) or descending by price (SELL).  Writing this function in
-    // terms of price levels and then converting to prices makes the
-    // code easier to read ...
-    std::function<price4_t(int)> level2price;
-    book_side tmp(bkcfg_);
-    if (tmp.is_ascending()) {
-      level2price = [](int level) {
-        return jb::itch5::level_to_price<price4_t>(level);
-      };
-    } else {
-      level2price = [max_level](int level) {
-        return jb::itch5::level_to_price<price4_t>(max_level - level);
-      };
-    }
-
-    // ... we keep a histogram of the intended depths so we can verify
-    // that we are generating a valid simulation ...
-    jb::histogram<jb::integer_range_binning<int>> book_depth_histogram(
-        jb::integer_range_binning<int>(0, 8192));
-    jb::histogram<jb::integer_range_binning<int>> qty_histogram(
-        jb::integer_range_binning<int>(sdis.a(), sdis.b()));
-
-    // ... keep track of the contents in a simulated book, indexed by
-    // price level ...
-    std::map<int, int> book;
-
-    // ... start the book with a large order at 100000 levels from the
-    // base level, this is just so the initial operations do not
-    // create a lot of random noise ...
-    int const initial_level = 100000;
-    int const initial_qty = sdis.b();
-    operations.push_back({level2price(initial_level), initial_qty});
-    book[initial_level] = initial_qty;
-    book_depth_histogram.sample(0);
-    qty_histogram.sample(initial_qty);
-
-    for (int i = 1; i != size; ++i) {
-      // ... find out what is the current best level, or use
-      // initial_level if it is not available ...
-      int best_level;
-      if (not book.empty()) {
-        best_level = book.rbegin()->first;
-      } else {
-        best_level = initial_level;
-      }
-      // ... generate a new level to operate at, and a qty to modify
-      // ...
-      int depth = static_cast<int>(ddis(generator));
-      int level;
-      if (bdis(generator)) {
-        level = best_level - depth;
-      } else {
-        level = best_level + depth;
-      }
-      // ... normalize the level to the valid range ...
-      if (level <= 0) {
-        level = 1;
-      } else if (level >= max_level) {
-        level = max_level - 1;
-      }
-
-      // ... generate the qty, but make sure it is valid, first
-      // establish the minimum value we can generate ...
-      int min_qty = sdis.a();
-      auto f = book.find(level);
-      if (f == book.end()) {
-        min_qty = 100;
-      } else {
-        min_qty = std::max(min_qty, -f->second);
-      }
-      // ... then keep generating values until we are in range, oh,
-      // and zero is not a valid value ...
-      int qty = sdis(generator);
-      while (qty < min_qty or qty == 0) {
-        qty = sdis(generator);
-      }
-      // ... now insert the operation into the array, and record it in
-      // the book ...
-      book[level] += qty;
-      book_depth_histogram.sample(depth);
-      qty_histogram.sample(qty);
-      if (book[level] == 0) {
-        book.erase(level);
-      }
-      operations.push_back({level2price(level), qty});
-    }
-    operations_ = std::move(operations);
-
-    JB_LOG(info) << "Simulated depth histogram: "
-                 << book_depth_histogram.summary();
-    JB_LOG(info) << "Desired: " << jb::histogram_summary{0.0,
-                                                         double(cfg.p25()),
-                                                         double(cfg.p50()),
-                                                         double(cfg.p75()),
-                                                         double(cfg.p90()),
-                                                         double(cfg.p99()),
-                                                         double(cfg.p100()),
-                                                         1};
-    JB_LOG(info) << "Simulated qty histogram: " << qty_histogram.summary();
+    // ... prepare a list of @a size_ operations to execute
+    // in the run() function.  We do this for each iteration because
+    // we want to sample the population of all possible inputs ...
+    operations_ = create_operations(seed_, size_, cfg_, book_.is_ascending());
   }
 
   /// Run an iteration of the test ...
   void run() {
-    // ... creating a book in each iteration is less than ideal, but
-    // it is the only way to make sure the operations are applied to a
-    // well-known state ...
-    book_side book(bkcfg_);
     // ... iterate over the operations and pass them to the book ...
     for (auto const& op : operations_) {
       if (op.delta < 0) {
-        book.reduce_order(op.px, -op.delta);
+        book_.reduce_order(op.px, -op.delta);
       } else {
-        book.add_order(op.px, op.delta);
+        book_.add_order(op.px, op.delta);
       }
     }
   }
 
 private:
+  /// The size for the test
+  int size_;
+
+  /// The configuration for this fixture
+  fixture_config cfg_;
+
   /// The configuration for the book side
   book_config bkcfg_;
 
-  /// A simple representation for book operations.
-  struct operation {
-    /// The price to modify
-    jb::itch5::price4_t px;
-    /// The quantity, negative values indicate the operation is a
-    /// remove_order(), positive that it is an add_order() operation.
-    int delta;
-  };
+  /// ... the book used in each iteration ...
+  book_side book_;
+
+  /// The seed to generate the operations, if 0 use
+  /// std::random_device.
+  unsigned int seed_;
 
   /// The sequence of operations to apply...
   std::vector<operation> operations_;
@@ -287,24 +179,12 @@ private:
  */
 template <typename book_side, typename book_type_config>
 void run_benchmark(config const& cfg, book_type_config const& book_cfg) {
-  // The benchmark creates a (pseudo-)random sequence of operations
-  // and measures their performance.  The same set of operations is
-  // tested over and over, by providing the same seed to the PRNG in
-  // the test.  The user can even use the same seed in two runs of the
-  // benchmark by providing a non-zero value as a command-line
-  // argument.
-  auto seed = cfg.seed();
-  if (seed == 0) {
-    // ... by default we initialize the seed with whatever system
-    // entry source is available in the standard C++ library.
-    seed = std::random_device()();
-  }
   JB_LOG(info) << "Running benchmark for " << cfg.microbenchmark().test_case()
-               << " with SEED=" << seed;
+               << " with SEED=" << cfg.seed();
   using benchmark =
       jb::testing::microbenchmark<fixture<book_side, book_type_config>>;
   benchmark bm(cfg.microbenchmark());
-  auto r = bm.run(cfg.fixture(), book_cfg, seed);
+  auto r = bm.run(cfg.fixture(), book_cfg, cfg.seed());
 
   typename benchmark::summary s(r);
   // ... print the summary and full results to std::cout, without
@@ -522,4 +402,189 @@ void config::validate() const {
   map_book().validate();
   fixture().validate();
 }
+
+std::vector<operation> create_operations(
+    int seed, int size, fixture_config const& cfg, bool is_ascending) {
+  // ... the operations are generated based on a PRNG, we use one of
+  // the standard generators from the C++ library ...
+  std::mt19937_64 generator;
+
+  if (seed != 0) {
+    // ... the user wants a repeatable (but not well randomized) test,
+    // this is useful when comparing micro-optimizations to see if
+    // anything has changed, or when measuring the performance of the
+    // microbenchmark framework itself ...
+    //
+    // BTW, I am aware (see [1]) of the deficiencies in initializing a
+    // Mersenne-Twister with only 32 bits of seed, in this case I am
+    // not looking for a statistically unbiased, nor a
+    // cryptographically strong PRNG.  We just want something that can
+    // be easily controlled from the command line....
+    //
+    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
+    //
+    generator.seed(seed);
+  } else {
+    // ... in this case we make every effort to initialize from a good
+    // source of entropy.  There are no guarantees that
+    // std::random_device is a good source of entropy, but for the
+    // platforms JayBeams uses it is ...
+    std::random_device rd;
+    // ... the mt19937 will call the SeedSeq generate() function N*K
+    // times, where:
+    //   N = generator.state_size
+    //   K = ceil(generator.word_size / 32)
+    // details in:
+    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
+    // so we populate the SeedSeq with that many words, tedious as
+    // that is.  The SeedSeq will do complicated math to mix the input
+    // and ensure all the bits are distributed across as much of the
+    // space as possible, even with a single word of input.  But it is
+    // better to start that seed_seq with more entropy ...
+    //
+    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
+    //
+    auto S = generator.state_size * (generator.word_size / 32);
+    std::vector<unsigned int> seeds(S);
+    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
+    // ... std::seed_seq is an implementation of the SeedSeq concept,
+    // which cleverly remixes its input in case we got numbers in a
+    // small range ...
+    std::seed_seq seq(seeds.begin(), seeds.end());
+    // ... and then use the std::seed_seq to fill the generator ...
+    generator.seed(seq);
+  }
+
+  // ... we will save the operations here, and return them at the end ...
+  std::vector<operation> operations;
+  operations.reserve(size);
+
+  // ... use the configuration parameters to create a "depth
+  // distribution".  The default values are chosen from
+  // realistic market data, so the benchmark should generate data
+  // that is statistically similar to what the market shows ...
+  std::vector<int> boundaries(
+      {0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(), cfg.p99(), cfg.p999(),
+       cfg.p100()});
+  std::vector<double> weights({0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
+  JB_ASSERT_THROW(boundaries.size() == weights.size() + 1);
+  std::piecewise_constant_distribution<> ddis(
+      boundaries.begin(), boundaries.end(), weights.begin());
+
+  // ... we also randomly pick whenther the new operation is better
+  // or worse than the current inside ...
+  std::uniform_int_distribution<> bdis(0, 1);
+
+  // ... for the size, we use a uniform distribution in the
+  // [-1000,1000] range, though we have to trim the results based on
+  // what is actually in the book ...
+  std::uniform_int_distribution<> sdis(-5000, 5000);
+
+  // ... save the maximum possible price level ...
+  using jb::itch5::price4_t;
+  int const max_level = jb::itch5::price_levels(
+      price4_t(0), jb::itch5::max_price_field_value<price4_t>());
+
+  // ... we need a function to convert price levels to prices, the
+  // function depends on whether the book is ascending by price
+  // (BUY) or descending by price (SELL).  Writing this function in
+  // terms of price levels and then converting to prices makes the
+  // code easier to read ...
+  std::function<price4_t(int)> level2price;
+  if (is_ascending) {
+    level2price = [](int level) {
+      return jb::itch5::level_to_price<price4_t>(level);
+    };
+  } else {
+    level2price = [max_level](int level) {
+      return jb::itch5::level_to_price<price4_t>(max_level - level);
+    };
+  }
+
+  // ... we keep a histogram of the intended depths so we can verify
+  // that we are generating a valid simulation ...
+  jb::histogram<jb::integer_range_binning<int>> book_depth_histogram(
+      jb::integer_range_binning<int>(0, 8192));
+  jb::histogram<jb::integer_range_binning<int>> qty_histogram(
+      jb::integer_range_binning<int>(sdis.a(), sdis.b()));
+
+  // ... keep track of the contents in a simulated book, indexed by
+  // price level ...
+  std::map<int, int> book;
+
+  // ... start the book with a large order at 100000 levels from the
+  // base level, this is just so the initial operations do not
+  // create a lot of random noise ...
+  int const initial_level = 100000;
+  int const initial_qty = sdis.b();
+  operations.push_back({level2price(initial_level), initial_qty});
+  book[initial_level] = initial_qty;
+  book_depth_histogram.sample(0);
+  qty_histogram.sample(initial_qty);
+
+  for (int i = 1; i != size; ++i) {
+    // ... find out what is the current best level, or use
+    // initial_level if it is not available ...
+    int best_level;
+    if (not book.empty()) {
+      best_level = book.rbegin()->first;
+    } else {
+      best_level = initial_level;
+    }
+    // ... generate a new level to operate at, and a qty to modify
+    // ...
+    int depth = static_cast<int>(ddis(generator));
+    int level;
+    if (bdis(generator)) {
+      level = best_level - depth;
+    } else {
+      level = best_level + depth;
+    }
+    // ... normalize the level to the valid range ...
+    if (level <= 0) {
+      level = 1;
+    } else if (level >= max_level) {
+      level = max_level - 1;
+    }
+
+    // ... generate the qty, but make sure it is valid, first
+    // establish the minimum value we can generate ...
+    int min_qty = sdis.a();
+    auto f = book.find(level);
+    if (f == book.end()) {
+      min_qty = 100;
+    } else {
+      min_qty = std::max(min_qty, -f->second);
+    }
+    // ... then keep generating values until we are in range, oh,
+    // and zero is not a valid value ...
+    int qty = sdis(generator);
+    while (qty < min_qty or qty == 0) {
+      qty = sdis(generator);
+    }
+    // ... now insert the operation into the array, and record it in
+    // the book ...
+    book[level] += qty;
+    book_depth_histogram.sample(depth);
+    qty_histogram.sample(qty);
+    if (book[level] == 0) {
+      book.erase(level);
+    }
+    operations.push_back({level2price(level), qty});
+  }
+
+  JB_LOG(trace) << "Simulated depth histogram: "
+                << book_depth_histogram.summary();
+  JB_LOG(trace) << "Desired: " << jb::histogram_summary{0.0,
+                                                        double(cfg.p25()),
+                                                        double(cfg.p50()),
+                                                        double(cfg.p75()),
+                                                        double(cfg.p90()),
+                                                        double(cfg.p99()),
+                                                        double(cfg.p100()),
+                                                        1};
+  JB_LOG(trace) << "Simulated qty histogram: " << qty_histogram.summary();
+  return operations;
+}
+
 } // anonymous namespace
