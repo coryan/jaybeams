@@ -50,6 +50,8 @@ public:
   jb::config_attribute<fixture_config, int> p99;
   jb::config_attribute<fixture_config, int> p999;
   jb::config_attribute<fixture_config, int> p100;
+
+  jb::config_attribute<fixture_config, int> max_p999_delta;
 };
 
 /// Configuration parameters for bm_order_book
@@ -243,47 +245,53 @@ int main(int argc, char* argv[]) try {
 
 namespace {
 namespace defaults {
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_test_case
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_test_case "array:buy"
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_test_case
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_test_case
+#define JB_ITCH5_DEFAULT_bm_order_book_test_case "array:buy"
+#endif // JB_ITCH5_DEFAULT_bm_order_book_test_case
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p25
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p25 0
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p25
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p25
+#define JB_ITCH5_DEFAULT_bm_order_book_p25 0
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p25
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p50
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p50 1
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p50
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p50
+#define JB_ITCH5_DEFAULT_bm_order_book_p50 1
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p50
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p75
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p75 6
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p75
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p75
+#define JB_ITCH5_DEFAULT_bm_order_book_p75 6
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p75
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p90
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p90 14
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p90
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p90
+#define JB_ITCH5_DEFAULT_bm_order_book_p90 14
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p90
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p99
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p99 203
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p99
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p99
+#define JB_ITCH5_DEFAULT_bm_order_book_p99 203
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p99
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p999
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p999 2135
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p999
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p999
+#define JB_ITCH5_DEFAULT_bm_order_book_p999 2135
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p999
 
-#ifndef JB_ITCH5_DEFAULT_bm_array_based_order_book_p100
-#define JB_ITCH5_DEFAULT_bm_array_based_order_book_p100 20000000
-#endif // JB_ITCH5_DEFAULT_bm_array_based_order_book_p100
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_p100
+#define JB_ITCH5_DEFAULT_bm_order_book_p100 20000000
+#endif // JB_ITCH5_DEFAULT_bm_order_book_p100
+
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta
+#define JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta 200
+#endif // JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta
 
 std::string const test_case =
-    JB_ITCH5_DEFAULT_bm_array_based_order_book_test_case;
-int constexpr p25 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p25;
-int constexpr p50 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p50;
-int constexpr p75 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p75;
-int constexpr p90 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p90;
-int constexpr p99 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p99;
-int constexpr p999 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p999;
-int constexpr p100 = JB_ITCH5_DEFAULT_bm_array_based_order_book_p100;
+    JB_ITCH5_DEFAULT_bm_order_book_test_case;
+int constexpr p25 = JB_ITCH5_DEFAULT_bm_order_book_p25;
+int constexpr p50 = JB_ITCH5_DEFAULT_bm_order_book_p50;
+int constexpr p75 = JB_ITCH5_DEFAULT_bm_order_book_p75;
+int constexpr p90 = JB_ITCH5_DEFAULT_bm_order_book_p90;
+int constexpr p99 = JB_ITCH5_DEFAULT_bm_order_book_p99;
+int constexpr p999 = JB_ITCH5_DEFAULT_bm_order_book_p999;
+int constexpr p100 = JB_ITCH5_DEFAULT_bm_order_book_p100;
+
+int constexpr max_p999_delta = JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta;
 
 } // namespace defaults
 
@@ -338,44 +346,67 @@ fixture_config::fixture_config()
               "these changes controled by this argument (and similar ones), "
               "the default values are chosen to match the observed behavior "
               "in real market feeds."),
-          this, defaults::p100) {
+          this, defaults::p100),
+      max_p999_delta(
+          desc("max-p999-delta").help(
+              "The maximum delta for the desired vs. actual event depth "
+              "distribution at the p99.9 level. "
+              "The benchmark generates random book changes, with the "
+              "distribution of the event depths controlled by the "
+              "--pXYZ arguments. "
+              "Any generated set of book changes whose p99.9 differs by "
+              "more than this value from the requested value is rejected, "
+              "and a new set of book changes is generated."),
+          this, defaults::max_p999_delta) {
 }
 
 void fixture_config::validate() const {
-
   if (p25() < 0 or p25() > p50()) {
     std::ostringstream os;
     os << "p25 (" << p25() << ") must be >= 0 and > p50 (" << p50() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p50() < 0 or p50() > p75()) {
     std::ostringstream os;
     os << "p50 (" << p50() << ") must be >= 0 and > p75 (" << p75() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p75() < 0 or p75() > p90()) {
     std::ostringstream os;
     os << "p75 (" << p75() << ") must be >= 0 and > p90 (" << p90() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p90() < 0 or p90() > p99()) {
     std::ostringstream os;
     os << "p90 (" << p90() << ") must be >= 0 and > p99 (" << p99() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p99() < 0 or p99() > p999()) {
     std::ostringstream os;
     os << "p99 (" << p99() << ") must be >= 0 and > p999 (" << p999() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p999() < 0 or p999() > p100()) {
     std::ostringstream os;
     os << "p999 (" << p999() << ") must be >= 0 and > p100 (" << p100() << ")";
     throw jb::usage(os.str(), 1);
   }
+
   if (p100() < 0) {
     std::ostringstream os;
     os << "p1000 (" << p100() << ") must be >= 0";
+    throw jb::usage(os.str(), 1);
+  }
+
+  if (max_p999_delta() < 0 or max_p999_delta() > p999() / 2) {
+    std::ostringstream os;
+    os << "max-p999-delta (" << max_p999_delta() << ") must be > 0"
+       << " and must be <= p999/2 (" << p999() / 2 << ")";
     throw jb::usage(os.str(), 1);
   }
 }
@@ -404,56 +435,8 @@ void config::validate() const {
 }
 
 std::vector<operation> create_operations(
-    int seed, int size, fixture_config const& cfg, bool is_ascending) {
-  // ... the operations are generated based on a PRNG, we use one of
-  // the standard generators from the C++ library ...
-  std::mt19937_64 generator;
-
-  if (seed != 0) {
-    // ... the user wants a repeatable (but not well randomized) test,
-    // this is useful when comparing micro-optimizations to see if
-    // anything has changed, or when measuring the performance of the
-    // microbenchmark framework itself ...
-    //
-    // BTW, I am aware (see [1]) of the deficiencies in initializing a
-    // Mersenne-Twister with only 32 bits of seed, in this case I am
-    // not looking for a statistically unbiased, nor a
-    // cryptographically strong PRNG.  We just want something that can
-    // be easily controlled from the command line....
-    //
-    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
-    //
-    generator.seed(seed);
-  } else {
-    // ... in this case we make every effort to initialize from a good
-    // source of entropy.  There are no guarantees that
-    // std::random_device is a good source of entropy, but for the
-    // platforms JayBeams uses it is ...
-    std::random_device rd;
-    // ... the mt19937 will call the SeedSeq generate() function N*K
-    // times, where:
-    //   N = generator.state_size
-    //   K = ceil(generator.word_size / 32)
-    // details in:
-    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
-    // so we populate the SeedSeq with that many words, tedious as
-    // that is.  The SeedSeq will do complicated math to mix the input
-    // and ensure all the bits are distributed across as much of the
-    // space as possible, even with a single word of input.  But it is
-    // better to start that seed_seq with more entropy ...
-    //
-    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
-    //
-    auto S = generator.state_size * (generator.word_size / 32);
-    std::vector<unsigned int> seeds(S);
-    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
-    // ... std::seed_seq is an implementation of the SeedSeq concept,
-    // which cleverly remixes its input in case we got numbers in a
-    // small range ...
-    std::seed_seq seq(seeds.begin(), seeds.end());
-    // ... and then use the std::seed_seq to fill the generator ...
-    generator.seed(seq);
-  }
+    std::mt19937_64& generator, int& actual_p999, int size,
+    fixture_config const& cfg, bool is_ascending) {
 
   // ... we will save the operations here, and return them at the end ...
   std::vector<operation> operations;
@@ -584,6 +567,77 @@ std::vector<operation> create_operations(
                                                         double(cfg.p100()),
                                                         1};
   JB_LOG(trace) << "Simulated qty histogram: " << qty_histogram.summary();
+
+  actual_p999 = book_depth_histogram.estimated_quantile(0.999);
+  return operations;
+}
+
+std::vector<operation> create_operations(
+    int seed, int size, fixture_config const& cfg, bool is_ascending) {
+  // ... the operations are generated based on a PRNG, we use one of
+  // the standard generators from the C++ library ...
+  std::mt19937_64 generator;
+
+  if (seed != 0) {
+    // ... the user wants a repeatable (but not well randomized) test,
+    // this is useful when comparing micro-optimizations to see if
+    // anything has changed, or when measuring the performance of the
+    // microbenchmark framework itself ...
+    //
+    // BTW, I am aware (see [1]) of the deficiencies in initializing a
+    // Mersenne-Twister with only 32 bits of seed, in this case I am
+    // not looking for a statistically unbiased, nor a
+    // cryptographically strong PRNG.  We just want something that can
+    // be easily controlled from the command line....
+    //
+    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
+    //
+    generator.seed(seed);
+  } else {
+    // ... in this case we make every effort to initialize from a good
+    // source of entropy.  There are no guarantees that
+    // std::random_device is a good source of entropy, but for the
+    // platforms JayBeams uses it is ...
+    std::random_device rd;
+    // ... the mt19937 will call the SeedSeq generate() function N*K
+    // times, where:
+    //   N = generator.state_size
+    //   K = ceil(generator.word_size / 32)
+    // details in:
+    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
+    // so we populate the SeedSeq with that many words, tedious as
+    // that is.  The SeedSeq will do complicated math to mix the input
+    // and ensure all the bits are distributed across as much of the
+    // space as possible, even with a single word of input.  But it is
+    // better to start that seed_seq with more entropy ...
+    //
+    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
+    //
+    auto S = generator.state_size * (generator.word_size / 32);
+    std::vector<unsigned int> seeds(S);
+    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
+    // ... std::seed_seq is an implementation of the SeedSeq concept,
+    // which cleverly remixes its input in case we got numbers in a
+    // small range ...
+    std::seed_seq seq(seeds.begin(), seeds.end());
+    // ... and then use the std::seed_seq to fill the generator ...
+    generator.seed(seq);
+  }
+
+  int const min_p999 = cfg.p999() - cfg.max_p999_delta();
+  int const max_p999 = cfg.p999() + cfg.max_p999_delta();
+  int actual_p999 = 0;
+  std::vector<operation> operations;
+  int count = 0;
+  do {
+    if (actual_p999 != 0) {
+      JB_LOG(trace) << "retrying for p999 = " << actual_p999
+                    << ", count=" << ++count;
+    }
+    operations =
+        create_operations(generator, actual_p999, size, cfg, is_ascending);
+  } while(actual_p999 < min_p999 or max_p999 < actual_p999);
+
   return operations;
 }
 
