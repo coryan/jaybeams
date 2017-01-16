@@ -96,13 +96,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">microbenchmark.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="reconfigure__thread_8hpp_source.html">jb/detail/reconfigure_thread.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="microbenchmark__base_8hpp_source.html">jb/testing/microbenchmark_base.hpp</a>&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
 </div>
 <p><a href="microbenchmark_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -120,6 +123,27 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb_1_1testing"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html">jb::testing</a></td></tr>
 <tr class="memdesc:namespacejb_1_1testing"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions and classes to simplify unit tests. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacejb_1_1testing_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html">jb::testing::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a75b996585dc363b095627115fcc8eb82"><td class="memTemplParams" colspan="2">template&lt;typename Fixture , typename... Args&gt; </td></tr>
+<tr class="memitem:a75b996585dc363b095627115fcc8eb82"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#a75b996585dc363b095627115fcc8eb82">jb::testing::detail::call_iteration_setup</a> (Fixture &amp;&amp;, Args &amp;&amp;...)</td></tr>
+<tr class="memdesc:a75b996585dc363b095627115fcc8eb82"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper to call Fixture::iteration_setup() in the microbenchmarks.  <a href="namespacejb_1_1testing_1_1detail.html#a75b996585dc363b095627115fcc8eb82">More...</a><br /></td></tr>
+<tr class="separator:a75b996585dc363b095627115fcc8eb82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1801b6682b24219ea4ad8db0862980a8"><td class="memTemplParams" colspan="2">template&lt;typename Fixture , typename  = decltype(std::declval&lt;Fixture&gt;().iteration_setup())&gt; </td></tr>
+<tr class="memitem:a1801b6682b24219ea4ad8db0862980a8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#a1801b6682b24219ea4ad8db0862980a8">jb::testing::detail::call_iteration_setup</a> (Fixture &amp;&amp;fixture)</td></tr>
+<tr class="memdesc:a1801b6682b24219ea4ad8db0862980a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper to call Fixture::iteration_setup() in the microbenchmarks.  <a href="namespacejb_1_1testing_1_1detail.html#a1801b6682b24219ea4ad8db0862980a8">More...</a><br /></td></tr>
+<tr class="separator:a1801b6682b24219ea4ad8db0862980a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1c4f804b12e630b12db157d5e14e405"><td class="memTemplParams" colspan="2">template&lt;typename Fixture , typename... Args&gt; </td></tr>
+<tr class="memitem:aa1c4f804b12e630b12db157d5e14e405"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#aa1c4f804b12e630b12db157d5e14e405">jb::testing::detail::call_iteration_teardown</a> (Fixture &amp;&amp;, Args &amp;&amp;...)</td></tr>
+<tr class="memdesc:aa1c4f804b12e630b12db157d5e14e405"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper to call Fixture::iteration_teardown() in the microbenchmarks.  <a href="namespacejb_1_1testing_1_1detail.html#aa1c4f804b12e630b12db157d5e14e405">More...</a><br /></td></tr>
+<tr class="separator:aa1c4f804b12e630b12db157d5e14e405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="memTemplParams" colspan="2">template&lt;typename Fixture , typename  = decltype(std::declval&lt;Fixture&gt;().iteration_teardown())&gt; </td></tr>
+<tr class="memitem:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#a95bc2d9bacdc22d870ce8b92eb05c4f0">jb::testing::detail::call_iteration_teardown</a> (Fixture &amp;&amp;fixture)</td></tr>
+<tr class="memdesc:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper to call Fixture::iteration_teardown() in the microbenchmarks.  <a href="namespacejb_1_1testing_1_1detail.html#a95bc2d9bacdc22d870ce8b92eb05c4f0">More...</a><br /></td></tr>
+<tr class="separator:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

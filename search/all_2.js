@@ -1,6 +1,8 @@
 var searchData=
 [
   ['c_5fstr',['c_str',['../classjb_1_1itch5_1_1short__string__field.html#afe05f2e5aaca9c13979f3161504b523c',1,'jb::itch5::short_string_field']]],
+  ['call_5fiteration_5fsetup',['call_iteration_setup',['../namespacejb_1_1testing_1_1detail.html#a75b996585dc363b095627115fcc8eb82',1,'jb::testing::detail::call_iteration_setup(Fixture &amp;&amp;, Args &amp;&amp;...)'],['../namespacejb_1_1testing_1_1detail.html#a1801b6682b24219ea4ad8db0862980a8',1,'jb::testing::detail::call_iteration_setup(Fixture &amp;&amp;fixture)']]],
+  ['call_5fiteration_5fteardown',['call_iteration_teardown',['../namespacejb_1_1testing_1_1detail.html#aa1c4f804b12e630b12db157d5e14e405',1,'jb::testing::detail::call_iteration_teardown(Fixture &amp;&amp;, Args &amp;&amp;...)'],['../namespacejb_1_1testing_1_1detail.html#a95bc2d9bacdc22d870ce8b92eb05c4f0',1,'jb::testing::detail::call_iteration_teardown(Fixture &amp;&amp;fixture)']]],
   ['call_5fwith_5fempty_5fpacket',['call_with_empty_packet',['../structjb_1_1itch5_1_1mold__udp__channel__tester.html#aa98ad30dfb6ebc0c8a187aea7a4b0625',1,'jb::itch5::mold_udp_channel_tester']]],
   ['call_5fwith_5ferror_5fcode',['call_with_error_code',['../structjb_1_1itch5_1_1mold__udp__channel__tester.html#a89f72955be76280c5eb4e8e0e347be86',1,'jb::itch5::mold_udp_channel_tester']]],
   ['callable_5f',['callable_',['../structjb_1_1detail_1_1thread__setup__wrapper.html#acd830a113a548ab5be1755343af227cc',1,'jb::detail::thread_setup_wrapper']]],
@@ -164,8 +166,8 @@ var searchData=
   ['count_5f',['count_',['../classjb_1_1itch5_1_1seconds__field.html#a7dceda2a4557c3ef69d04a1d7449a906',1,'jb::itch5::seconds_field::count_()'],['../classjb_1_1itch5_1_1unknown__message.html#a5bab5905f423795c7cf473e0e0af3be9',1,'jb::itch5::unknown_message::count_()']]],
   ['counter_5ftype',['counter_type',['../classjb_1_1event__rate__estimator.html#ad20c51ab72c5fc59da908f88d890d25d',1,'jb::event_rate_estimator::counter_type()'],['../classjb_1_1histogram.html#a90639505faf40ecd0f1a5fb526906c2b',1,'jb::histogram::counter_type()']]],
   ['counters',['counters',['../classjb_1_1histogram.html#af4ad87cdc2a5e3067bb5416ac616d443',1,'jb::histogram']]],
-  ['cpu_5fset',['cpu_set',['../classjb_1_1cpu__set.html',1,'jb']]],
   ['cpu_5fset',['cpu_set',['../classjb_1_1cpu__set.html#a4cb4fde8225554456d034dde49a09d32',1,'jb::cpu_set']]],
+  ['cpu_5fset',['cpu_set',['../classjb_1_1cpu__set.html',1,'jb']]],
   ['cpu_5fset_2ecpp',['cpu_set.cpp',['../cpu__set_8cpp.html',1,'']]],
   ['cpu_5fset_2ehpp',['cpu_set.hpp',['../cpu__set_8hpp.html',1,'']]],
   ['create_5fbackward_5fimpl',['create_backward_impl',['../classjb_1_1fftw_1_1plan.html#a8af3e4df04be46d3101d98b8e0db3ba6',1,'jb::fftw::plan::create_backward_impl(std::size_t nsamples, fftw_complex_type const *in, fftw_complex_type *out, int flags)'],['../classjb_1_1fftw_1_1plan.html#ad564d27f58ef0771b82b5bc6746c33ea',1,'jb::fftw::plan::create_backward_impl(std::size_t nsamples, fftw_complex_type const *in, precision_type *out, int flags)']]],

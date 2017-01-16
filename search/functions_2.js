@@ -1,6 +1,8 @@
 var searchData=
 [
   ['c_5fstr',['c_str',['../classjb_1_1itch5_1_1short__string__field.html#afe05f2e5aaca9c13979f3161504b523c',1,'jb::itch5::short_string_field']]],
+  ['call_5fiteration_5fsetup',['call_iteration_setup',['../namespacejb_1_1testing_1_1detail.html#a75b996585dc363b095627115fcc8eb82',1,'jb::testing::detail::call_iteration_setup(Fixture &amp;&amp;, Args &amp;&amp;...)'],['../namespacejb_1_1testing_1_1detail.html#a1801b6682b24219ea4ad8db0862980a8',1,'jb::testing::detail::call_iteration_setup(Fixture &amp;&amp;fixture)']]],
+  ['call_5fiteration_5fteardown',['call_iteration_teardown',['../namespacejb_1_1testing_1_1detail.html#aa1c4f804b12e630b12db157d5e14e405',1,'jb::testing::detail::call_iteration_teardown(Fixture &amp;&amp;, Args &amp;&amp;...)'],['../namespacejb_1_1testing_1_1detail.html#a95bc2d9bacdc22d870ce8b92eb05c4f0',1,'jb::testing::detail::call_iteration_teardown(Fixture &amp;&amp;fixture)']]],
   ['call_5fwith_5fempty_5fpacket',['call_with_empty_packet',['../structjb_1_1itch5_1_1mold__udp__channel__tester.html#aa98ad30dfb6ebc0c8a187aea7a4b0625',1,'jb::itch5::mold_udp_channel_tester']]],
   ['call_5fwith_5ferror_5fcode',['call_with_error_code',['../structjb_1_1itch5_1_1mold__udp__channel__tester.html#a89f72955be76280c5eb4e8e0e347be86',1,'jb::itch5::mold_udp_channel_tester']]],
   ['capacity',['capacity',['../classjb_1_1cpu__set.html#aab07cbd87f76d1625edb474cdb278a1d',1,'jb::cpu_set']]],
