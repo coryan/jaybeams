@@ -233,7 +233,9 @@ private:
   void run_base(Fixture& fixture, results& r, int size) {
     for (int i = 0; i != config_.warmup_iterations(); ++i) {
       (void)clock::now();
+      detail::call_iteration_setup(fixture);
       fixture.run();
+      detail::call_iteration_teardown(fixture);
     }
     r.reserve(r.size() + config_.iterations());
     for (int i = 0; i != config_.iterations(); ++i) {
