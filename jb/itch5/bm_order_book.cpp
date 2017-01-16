@@ -141,13 +141,13 @@ std::function<void()> create_iteration(
   return std::function<void()>(std::move(lambda));
 }
 
+/// The default number of iterations for the benchmark
+static int constexpr default_size = 20000;
+
 /// Run the benchmark for a specific book type
 template <typename order_book, typename book_config>
 class fixture {
 public:
-  /// The default number of iterations for the benchmark
-  static int constexpr default_size = 100000;
-
   /// Default constructor, delegate on the constructor given the
   /// number of iterations
   fixture(fixture_config const& cfg, book_config const& bkcfg, int seed)
@@ -238,7 +238,8 @@ int main(int argc, char* argv[]) try {
   // initialize the logging framework ...
   jb::log::init(cfg.log());
   if (cfg.microbenchmark().verbose()) {
-    JB_LOG(info) << "Configuration for test\n" << cfg;
+    JB_LOG(info) << "Configuration for test\n" << cfg << "\n";
+    JB_LOG(info) << "  default_size=" << default_size;
   }
 
   using namespace jb::itch5;
