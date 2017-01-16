@@ -26,6 +26,7 @@
 #include <jb/log.hpp>
 
 #include <algorithm>
+#include <functional>
 #include <random>
 #include <stdexcept>
 #include <type_traits>
@@ -84,6 +85,27 @@ struct operation {
 };
 
 /**
+ * Initialize a PRNG based on the seed command-line argument.
+ *
+ * If seed is 0 the PRNG is initialized using std::random_device.
+ * That provides a lot of entropy into the PRNG.  But sometimes we
+ * want to run the same test over and over, with predictable results,
+ * for example to debug the benchmark, or to fine-tune the operating
+ * system parameters with a consistent benchmark.  In that case we can
+ * provide a seed to initialize the generator.
+ *
+ * One should not use the generator initialized with a 32-bit seed for
+ * anything that requires good statistical properties in the generated
+ * numbers.
+ *
+ * @param seed the seed parameter as documented above.
+ * @return a generator initialized with @a seed if seed is not zero,
+ *   and initialized with the output from std::random_device if it is
+ *   zero.
+ */
+std::mt19937_64 initialize_generator(int seed);
+
+/**
  * Create a sequence of operations.
  *
  * @param seed a seed for the PRNG, or 0 if the generator should be
@@ -93,10 +115,33 @@ struct operation {
  * @param is_ascending if true generate operations for a BUY book.
  */
 std::vector<operation> create_operations(
-    int seed, int size, fixture_config const& cfg, bool is_ascending);
+    std::mt19937_64& generator, int size, fixture_config const& cfg,
+    bool is_ascending);
+
+template <typename order_book_side, typename book_config>
+std::function<void()> create_iteration(
+    std::mt19937_64& generator, int size, fixture_config const& cfg,
+    book_config const& bkcfg) {
+  order_book_side bk(bkcfg);
+  std::vector<operation> ops =
+      create_operations(generator, size, cfg, bk.is_ascending());
+
+  auto lambda = [book = std::move(bk), operations = std::move(ops) ]() mutable {
+    // ... iterate over the operations and pass them to the book ...
+    for (auto const& op : operations) {
+      if (op.delta < 0) {
+        book.reduce_order(op.px, -op.delta);
+      } else {
+        book.add_order(op.px, op.delta);
+      }
+    }
+  };
+
+  return std::function<void()>(std::move(lambda));
+}
 
 /// Run the benchmark for a specific book type
-template <typename book_side, typename book_config>
+template <typename order_book, typename book_config>
 class fixture {
 public:
   /// The default number of iterations for the benchmark
@@ -120,33 +165,23 @@ public:
       : size_(size)
       , cfg_(cfg)
       , bkcfg_(bkcfg)
-      , book_(bkcfg_)
-      , seed_(seed)
-      , operations_() {
+      , generator_(initialize_generator(seed)) {
   }
 
   void iteration_setup() {
-    // ... creating a book in each iteration is less than ideal, but
-    // it is the only way to make sure the operations are applied to a
-    // well-known state ...
-    book_ = std::move(book_side(bkcfg_));
-
-    // ... prepare a list of @a size_ operations to execute
-    // in the run() function.  We do this for each iteration because
-    // we want to sample the population of all possible inputs ...
-    operations_ = create_operations(seed_, size_, cfg_, book_.is_ascending());
+    std::uniform_int_distribution<> side(0, 1);
+    if (side(generator_)) {
+      iteration_ = create_iteration<typename order_book::buys_t>(
+          generator_, size_, cfg_, bkcfg_);
+    } else {
+      iteration_ = create_iteration<typename order_book::sells_t>(
+          generator_, size_, cfg_, bkcfg_);
+    }
   }
 
   /// Run an iteration of the test ...
   void run() {
-    // ... iterate over the operations and pass them to the book ...
-    for (auto const& op : operations_) {
-      if (op.delta < 0) {
-        book_.reduce_order(op.px, -op.delta);
-      } else {
-        book_.add_order(op.px, op.delta);
-      }
-    }
+    iteration_();
   }
 
 private:
@@ -159,15 +194,11 @@ private:
   /// The configuration for the book side
   book_config bkcfg_;
 
-  /// ... the book used in each iteration ...
-  book_side book_;
+  /// The PRNG, initialized based on the seed parameter
+  std::mt19937_64 generator_;
 
-  /// The seed to generate the operations, if 0 use
-  /// std::random_device.
-  unsigned int seed_;
-
-  /// The sequence of operations to apply...
-  std::vector<operation> operations_;
+  /// Store the state and functions to execute in the next iteration
+  std::function<void()> iteration_;
 };
 
 /**
@@ -179,12 +210,12 @@ private:
  * @tparam book_type the type of book to use in the benchmark
  * @tparam book_type_config the configuration class for @a book_type
  */
-template <typename book_side, typename book_type_config>
+template <typename book_type, typename book_type_config>
 void run_benchmark(config const& cfg, book_type_config const& book_cfg) {
   JB_LOG(info) << "Running benchmark for " << cfg.microbenchmark().test_case()
                << " with SEED=" << cfg.seed();
   using benchmark =
-      jb::testing::microbenchmark<fixture<book_side, book_type_config>>;
+      jb::testing::microbenchmark<fixture<book_type, book_type_config>>;
   benchmark bm(cfg.microbenchmark());
   auto r = bm.run(cfg.fixture(), book_cfg, cfg.seed());
 
@@ -211,14 +242,10 @@ int main(int argc, char* argv[]) try {
 
   using namespace jb::itch5;
   auto test_case = cfg.microbenchmark().test_case();
-  if (test_case == "array:buy") {
-    run_benchmark<array_based_order_book::buys_t>(cfg, cfg.array_book());
-  } else if (test_case == "array:sell") {
-    run_benchmark<array_based_order_book::sells_t>(cfg, cfg.array_book());
-  } else if (test_case == "map:buy") {
-    run_benchmark<map_based_order_book::buys_t>(cfg, cfg.map_book());
-  } else if (test_case == "map:sell") {
-    run_benchmark<map_based_order_book::sells_t>(cfg, cfg.map_book());
+  if (test_case == "array") {
+    run_benchmark<array_based_order_book>(cfg, cfg.array_book());
+  } else if (test_case == "map") {
+    run_benchmark<map_based_order_book>(cfg, cfg.map_book());
   } else {
     // ... it is tempting to move this code to the validate() member
     // function, but then we have to repeat the valid configurations
@@ -226,8 +253,7 @@ int main(int argc, char* argv[]) try {
     std::ostringstream os;
     os << "Unknown test case (" << test_case << ")" << std::endl;
     os << " --microbenchmark.test-case must be one of"
-       << ": array:buy, array:sell"
-       << ", map:buy, map:sell" << std::endl;
+       << ": array, map" << std::endl;
     throw jb::usage(os.str(), 1);
   }
 
@@ -246,7 +272,7 @@ int main(int argc, char* argv[]) try {
 namespace {
 namespace defaults {
 #ifndef JB_ITCH5_DEFAULT_bm_order_book_test_case
-#define JB_ITCH5_DEFAULT_bm_order_book_test_case "array:buy"
+#define JB_ITCH5_DEFAULT_bm_order_book_test_case "array"
 #endif // JB_ITCH5_DEFAULT_bm_order_book_test_case
 
 #ifndef JB_ITCH5_DEFAULT_bm_order_book_p25
@@ -434,7 +460,60 @@ void config::validate() const {
   fixture().validate();
 }
 
-std::vector<operation> create_operations(
+std::mt19937_64 initialize_generator(int seed) {
+  // ... the operations are generated based on a PRNG, we use one of
+  // the standard generators from the C++ library ...
+  std::mt19937_64 generator;
+
+  if (seed != 0) {
+    // ... the user wants a repeatable (but not well randomized) test,
+    // this is useful when comparing micro-optimizations to see if
+    // anything has changed, or when measuring the performance of the
+    // microbenchmark framework itself ...
+    //
+    // BTW, I am aware (see [1]) of the deficiencies in initializing a
+    // Mersenne-Twister with only 32 bits of seed, in this case I am
+    // not looking for a statistically unbiased, nor a
+    // cryptographically strong PRNG.  We just want something that can
+    // be easily controlled from the command line....
+    //
+    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
+    //
+    generator.seed(seed);
+  } else {
+    // ... in this case we make every effort to initialize from a good
+    // source of entropy.  There are no guarantees that
+    // std::random_device is a good source of entropy, but for the
+    // platforms JayBeams uses it is ...
+    std::random_device rd;
+    // ... the mt19937 will call the SeedSeq generate() function N*K
+    // times, where:
+    //   N = generator.state_size
+    //   K = ceil(generator.word_size / 32)
+    // details in:
+    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
+    // so we populate the SeedSeq with that many words, tedious as
+    // that is.  The SeedSeq will do complicated math to mix the input
+    // and ensure all the bits are distributed across as much of the
+    // space as possible, even with a single word of input.  But it is
+    // better to start that seed_seq with more entropy ...
+    //
+    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
+    //
+    auto S = generator.state_size * (generator.word_size / 32);
+    std::vector<unsigned int> seeds(S);
+    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
+    // ... std::seed_seq is an implementation of the SeedSeq concept,
+    // which cleverly remixes its input in case we got numbers in a
+    // small range ...
+    std::seed_seq seq(seeds.begin(), seeds.end());
+    // ... and then use the std::seed_seq to fill the generator ...
+    generator.seed(seq);
+  }
+  return generator;
+}
+
+std::vector<operation> create_operations_without_validation(
     std::mt19937_64& generator, int& actual_p999, int size,
     fixture_config const& cfg, bool is_ascending) {
 
@@ -573,56 +652,8 @@ std::vector<operation> create_operations(
 }
 
 std::vector<operation> create_operations(
-    int seed, int size, fixture_config const& cfg, bool is_ascending) {
-  // ... the operations are generated based on a PRNG, we use one of
-  // the standard generators from the C++ library ...
-  std::mt19937_64 generator;
-
-  if (seed != 0) {
-    // ... the user wants a repeatable (but not well randomized) test,
-    // this is useful when comparing micro-optimizations to see if
-    // anything has changed, or when measuring the performance of the
-    // microbenchmark framework itself ...
-    //
-    // BTW, I am aware (see [1]) of the deficiencies in initializing a
-    // Mersenne-Twister with only 32 bits of seed, in this case I am
-    // not looking for a statistically unbiased, nor a
-    // cryptographically strong PRNG.  We just want something that can
-    // be easily controlled from the command line....
-    //
-    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
-    //
-    generator.seed(seed);
-  } else {
-    // ... in this case we make every effort to initialize from a good
-    // source of entropy.  There are no guarantees that
-    // std::random_device is a good source of entropy, but for the
-    // platforms JayBeams uses it is ...
-    std::random_device rd;
-    // ... the mt19937 will call the SeedSeq generate() function N*K
-    // times, where:
-    //   N = generator.state_size
-    //   K = ceil(generator.word_size / 32)
-    // details in:
-    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
-    // so we populate the SeedSeq with that many words, tedious as
-    // that is.  The SeedSeq will do complicated math to mix the input
-    // and ensure all the bits are distributed across as much of the
-    // space as possible, even with a single word of input.  But it is
-    // better to start that seed_seq with more entropy ...
-    //
-    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
-    //
-    auto S = generator.state_size * (generator.word_size / 32);
-    std::vector<unsigned int> seeds(S);
-    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
-    // ... std::seed_seq is an implementation of the SeedSeq concept,
-    // which cleverly remixes its input in case we got numbers in a
-    // small range ...
-    std::seed_seq seq(seeds.begin(), seeds.end());
-    // ... and then use the std::seed_seq to fill the generator ...
-    generator.seed(seq);
-  }
+    std::mt19937_64& generator, int size, fixture_config const& cfg,
+    bool is_ascending) {
 
   int const min_p999 = cfg.p999() - cfg.max_p999_delta();
   int const max_p999 = cfg.p999() + cfg.max_p999_delta();
@@ -634,8 +665,8 @@ std::vector<operation> create_operations(
       JB_LOG(trace) << "retrying for p999 = " << actual_p999
                     << ", count=" << ++count;
     }
-    operations =
-        create_operations(generator, actual_p999, size, cfg, is_ascending);
+    operations = create_operations_without_validation(
+        generator, actual_p999, size, cfg, is_ascending);
   } while(actual_p999 < min_p999 or max_p999 < actual_p999);
 
   return operations;
