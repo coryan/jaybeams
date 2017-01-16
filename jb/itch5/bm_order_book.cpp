@@ -126,7 +126,8 @@ std::function<void()> create_iteration(
   std::vector<operation> ops =
       create_operations(generator, size, cfg, bk.is_ascending());
 
-  auto lambda = [book = std::move(bk), operations = std::move(ops) ]() mutable {
+  auto lambda =
+      [ book = std::move(bk), operations = std::move(ops) ]() mutable {
     // ... iterate over the operations and pass them to the book ...
     for (auto const& op : operations) {
       if (op.delta < 0) {
@@ -307,8 +308,7 @@ namespace defaults {
 #define JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta 200
 #endif // JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta
 
-std::string const test_case =
-    JB_ITCH5_DEFAULT_bm_order_book_test_case;
+std::string const test_case = JB_ITCH5_DEFAULT_bm_order_book_test_case;
 int constexpr p25 = JB_ITCH5_DEFAULT_bm_order_book_p25;
 int constexpr p50 = JB_ITCH5_DEFAULT_bm_order_book_p50;
 int constexpr p75 = JB_ITCH5_DEFAULT_bm_order_book_p75;
@@ -372,17 +372,18 @@ fixture_config::fixture_config()
               "these changes controled by this argument (and similar ones), "
               "the default values are chosen to match the observed behavior "
               "in real market feeds."),
-          this, defaults::p100),
-      max_p999_delta(
-          desc("max-p999-delta").help(
-              "The maximum delta for the desired vs. actual event depth "
-              "distribution at the p99.9 level. "
-              "The benchmark generates random book changes, with the "
-              "distribution of the event depths controlled by the "
-              "--pXYZ arguments. "
-              "Any generated set of book changes whose p99.9 differs by "
-              "more than this value from the requested value is rejected, "
-              "and a new set of book changes is generated."),
+          this, defaults::p100)
+    , max_p999_delta(
+          desc("max-p999-delta")
+              .help(
+                  "The maximum delta for the desired vs. actual event depth "
+                  "distribution at the p99.9 level. "
+                  "The benchmark generates random book changes, with the "
+                  "distribution of the event depths controlled by the "
+                  "--pXYZ arguments. "
+                  "Any generated set of book changes whose p99.9 differs by "
+                  "more than this value from the requested value is rejected, "
+                  "and a new set of book changes is generated."),
           this, defaults::max_p999_delta) {
 }
 
@@ -667,7 +668,7 @@ std::vector<operation> create_operations(
     }
     operations = create_operations_without_validation(
         generator, actual_p999, size, cfg, is_ascending);
-  } while(actual_p999 < min_p999 or max_p999 < actual_p999);
+  } while (actual_p999 < min_p999 or max_p999 < actual_p999);
 
   return operations;
 }
