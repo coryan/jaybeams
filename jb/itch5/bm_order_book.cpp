@@ -53,6 +53,9 @@ public:
   jb::config_attribute<fixture_config, int> p100;
 
   jb::config_attribute<fixture_config, int> max_p999_delta;
+
+  jb::config_attribute<fixture_config, int> min_qty;
+  jb::config_attribute<fixture_config, int> max_qty;
 };
 
 /// Configuration parameters for bm_order_book
@@ -309,6 +312,14 @@ namespace defaults {
 #define JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta 200
 #endif // JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta
 
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_min_qty
+#define JB_ITCH5_DEFAULT_bm_order_book_min_qty -5000
+#endif // JB_ITCH5_DEFAULT_bm_order_book_min_qty
+
+#ifndef JB_ITCH5_DEFAULT_bm_order_book_max_qty
+#define JB_ITCH5_DEFAULT_bm_order_book_max_qty 5000
+#endif // JB_ITCH5_DEFAULT_bm_order_book_max_qty
+
 std::string const test_case = JB_ITCH5_DEFAULT_bm_order_book_test_case;
 int constexpr p25 = JB_ITCH5_DEFAULT_bm_order_book_p25;
 int constexpr p50 = JB_ITCH5_DEFAULT_bm_order_book_p50;
@@ -320,6 +331,8 @@ int constexpr p100 = JB_ITCH5_DEFAULT_bm_order_book_p100;
 
 int constexpr max_p999_delta = JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta;
 
+int constexpr min_qty = JB_ITCH5_DEFAULT_bm_order_book_min_qty;
+int constexpr max_qty = JB_ITCH5_DEFAULT_bm_order_book_max_qty;
 } // namespace defaults
 
 fixture_config::fixture_config()
@@ -385,7 +398,17 @@ fixture_config::fixture_config()
                   "Any generated set of book changes whose p99.9 differs by "
                   "more than this value from the requested value is rejected, "
                   "and a new set of book changes is generated."),
-          this, defaults::max_p999_delta) {
+          this, defaults::max_p999_delta)
+    , min_qty(
+          desc("min-qty").help(
+              "Generate book changes uniformly distributed between "
+              "--min-qty and --max-qty (both inclusive."),
+          this, defaults::min_qty)
+    , max_qty(
+          desc("max-qty").help(
+              "Generate book changes uniformly distributed between "
+              "--min-qty and --max-qty (both inclusive."),
+          this, defaults::max_qty) {
 }
 
 void fixture_config::validate() const {
@@ -435,6 +458,18 @@ void fixture_config::validate() const {
     std::ostringstream os;
     os << "max-p999-delta (" << max_p999_delta() << ") must be > 0"
        << " and must be <= p999/2 (" << p999() / 2 << ")";
+    throw jb::usage(os.str(), 1);
+  }
+
+  if (min_qty() >= 0) {
+    std::ostringstream os;
+    os << "min-qty (" << min_qty() << ") must be < 0";
+    throw jb::usage(os.str(), 1);
+  }
+
+  if (max_qty() <= 0) {
+    std::ostringstream os;
+    os << "max-qty (" << max_qty() << ") must be > 0";
     throw jb::usage(os.str(), 1);
   }
 }
@@ -535,15 +570,6 @@ std::vector<operation> create_operations_without_validation(
   std::piecewise_constant_distribution<> ddis(
       boundaries.begin(), boundaries.end(), weights.begin());
 
-  // ... we also randomly pick whenther the new operation is better
-  // or worse than the current inside ...
-  std::uniform_int_distribution<> bdis(0, 1);
-
-  // ... for the size, we use a uniform distribution in the
-  // [-1000,1000] range, though we have to trim the results based on
-  // what is actually in the book ...
-  std::uniform_int_distribution<> sdis(-5000, 5000);
-
   // ... save the maximum possible price level ...
   using jb::itch5::price4_t;
   int const max_level = jb::itch5::price_levels(
@@ -570,36 +596,35 @@ std::vector<operation> create_operations_without_validation(
   jb::histogram<jb::integer_range_binning<int>> book_depth_histogram(
       jb::integer_range_binning<int>(0, 8192));
   jb::histogram<jb::integer_range_binning<int>> qty_histogram(
-      jb::integer_range_binning<int>(sdis.a(), sdis.b()));
+      jb::integer_range_binning<int>(cfg.min_qty(), cfg.max_qty()));
 
   // ... keep track of the contents in a simulated book, indexed by
   // price level ...
   std::map<int, int> book;
 
-  // ... start the book with a large order at 100000 levels from the
-  // base level, this is just so the initial operations do not
-  // create a lot of random noise ...
-  int const initial_level = 100000;
-  int const initial_qty = sdis.b();
-  operations.push_back({level2price(initial_level), initial_qty});
-  book[initial_level] = initial_qty;
-  book_depth_histogram.sample(0);
-  qty_histogram.sample(initial_qty);
-
-  for (int i = 1; i != size; ++i) {
+  for (int i = 0; i != size; ++i) {
+    if (book.empty()) {
+      // ... generate the initial order randomly, as long as it has a
+      // legal price level and a qty in the configured range ...
+      auto const initial_qty =
+          std::uniform_int_distribution<>(1, cfg.max_qty())(generator);
+      auto const initial_level =
+          std::uniform_int_distribution<>(1, max_level - 1)(generator);
+      operations.push_back({level2price(initial_level), initial_qty});
+      book[initial_level] = initial_qty;
+      book_depth_histogram.sample(0);
+      qty_histogram.sample(initial_qty);
+      continue;
+    }
     // ... find out what is the current best level, or use
     // initial_level if it is not available ...
-    int best_level;
-    if (not book.empty()) {
-      best_level = book.rbegin()->first;
-    } else {
-      best_level = initial_level;
-    }
-    // ... generate a new level to operate at, and a qty to modify
-    // ...
+    int best_level = book.rbegin()->first;
+    // ... generate a new level to operate at ...
     int depth = static_cast<int>(ddis(generator));
     int level;
-    if (bdis(generator)) {
+    // ... pick if the operation will be above or below the current
+    // level ...
+    if (std::uniform_int_distribution<>(0, 1)(generator)) {
       level = best_level - depth;
     } else {
       level = best_level + depth;
@@ -613,18 +638,22 @@ std::vector<operation> create_operations_without_validation(
 
     // ... generate the qty, but make sure it is valid, first
     // establish the minimum value we can generate ...
-    int min_qty = sdis.a();
+    int min_qty;
     auto f = book.find(level);
-    if (f == book.end()) {
-      min_qty = 100;
+    if (f != book.end()) {
+      min_qty = std::max(cfg.min_qty(), -f->second);
     } else {
-      min_qty = std::max(min_qty, -f->second);
+      // ... empty level, the operation must add something ...
+      min_qty = 1;
     }
     // ... then keep generating values until we are in range, oh,
     // and zero is not a valid value ...
-    int qty = sdis(generator);
-    while (qty < min_qty or qty == 0) {
-      qty = sdis(generator);
+    int qty = 0;
+    while (qty == 0) {
+      // ... for the size, we use a uniform distribution in the
+      // [cfg.min_qty(), cfg.max_qty()] range, though we have to trim
+      // the results based on what is actually in the book ...
+      qty = std::uniform_int_distribution<>(min_qty, cfg.max_qty())(generator);
     }
     // ... now insert the operation into the array, and record it in
     // the book ...
