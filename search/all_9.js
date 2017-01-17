@@ -35,6 +35,8 @@ var searchData=
   ['jb_5fdefaults_5fmicrobenchmark_5fverbose',['JB_DEFAULTS_microbenchmark_verbose',['../microbenchmark__config_8cpp.html#a2f2535ae27f433e8afaa113d42a71c22',1,'microbenchmark_config.cpp']]],
   ['jb_5fdefaults_5fmicrobenchmark_5fwarmup_5fiterations',['JB_DEFAULTS_microbenchmark_warmup_iterations',['../microbenchmark__config_8cpp.html#afe41fbc54d6f32ec0a4e86d11ca22bd1',1,'microbenchmark_config.cpp']]],
   ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fmax_5fp999_5fdelta',['JB_ITCH5_DEFAULT_bm_order_book_max_p999_delta',['../bm__order__book_8cpp.html#ad63ad941174d7b93eae29f58ec1be13d',1,'bm_order_book.cpp']]],
+  ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fmax_5fqty',['JB_ITCH5_DEFAULT_bm_order_book_max_qty',['../bm__order__book_8cpp.html#a37dc20107f7197948da04cb10f4f9b87',1,'bm_order_book.cpp']]],
+  ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fmin_5fqty',['JB_ITCH5_DEFAULT_bm_order_book_min_qty',['../bm__order__book_8cpp.html#a255504fc7905a99fa739d035385847ba',1,'bm_order_book.cpp']]],
   ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fp100',['JB_ITCH5_DEFAULT_bm_order_book_p100',['../bm__order__book_8cpp.html#a2ed5f1d45d45fb937cf23e0c0071432a',1,'bm_order_book.cpp']]],
   ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fp25',['JB_ITCH5_DEFAULT_bm_order_book_p25',['../bm__order__book_8cpp.html#a06d5a1e71a18c8a5190db49a3a2fc6ad',1,'bm_order_book.cpp']]],
   ['jb_5fitch5_5fdefault_5fbm_5forder_5fbook_5fp50',['JB_ITCH5_DEFAULT_bm_order_book_p50',['../bm__order__book_8cpp.html#a599cb1a088670ea413bec55b66ecff60',1,'bm_order_book.cpp']]],
@@ -75,7 +77,7 @@ var searchData=
   ['opencl',['opencl',['../namespacejb_1_1opencl.html',1,'jb']]],
   ['protocol',['protocol',['../namespacejb_1_1itch5_1_1protocol.html',1,'jb::itch5']]],
   ['tde',['tde',['../namespacejb_1_1tde.html',1,'jb']]],
-  ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]],
   ['testing',['testing',['../namespacejb_1_1testing.html',1,'jb']]],
+  ['testing',['testing',['../namespacejb_1_1itch5_1_1testing.html',1,'jb::itch5']]],
   ['yaml',['yaml',['../namespacejb_1_1yaml.html',1,'jb']]]
 ];
