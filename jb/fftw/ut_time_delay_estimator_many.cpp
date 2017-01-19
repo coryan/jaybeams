@@ -1,12 +1,26 @@
 #include <jb/fftw/aligned_multi_array.hpp>
 #include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
+#include <jb/testing/check_complex_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <chrono>
+
+namespace jb {
+  namespace testing {
+    template <typename T, typename U>
+    struct same_type {
+      static const bool value = false;
+    };
+    template <typename T>
+    struct same_type<T,T> {
+      static const bool value = true;
+    };
+  }
+}
 
 /**
  * Helpers to test jb::time_delay_estimator_many
@@ -15,6 +29,59 @@ namespace {} // anonymous namespace
 
 namespace jb {
 namespace fftw {
+  
+  /// Type used to store the TDE between two timeseries
+  /// handles TDE result for container type timeseries
+  template <typename container_t, typename value_t>
+  class tde_result {
+  public: 
+    using record_type = value_t;
+    tde_result(container_t const& a)
+      : value_{0} {
+    }
+
+    value_t& operator[](std::size_t pos) { return value_; }
+    value_t const& operator[](std::size_t pos) const { return value_; }
+
+  private:
+    record_type value_;
+  };
+
+  /// handles TDE result for array_type timeseries
+  template <typename T, std::size_t K, typename value_t>
+  class tde_result<jb::fftw::aligned_multi_array<T,K>, value_t> {
+  public:
+    using array_type = jb::fftw::aligned_multi_array<T,K>;
+    using record_type =
+      jb::fftw::aligned_multi_array<value_t, K - 1>;
+
+    tde_result(array_type const& a)
+      : record_{jb::detail::array_shape(a)} {
+    }
+
+    value_t& operator[](std::size_t pos) { return record_.data()[pos]; }
+    value_t const& operator[](std::size_t pos) const { return record_.data()[pos]; }
+
+  private:
+    record_type record_;
+  };
+
+  /// handles TDE result for array_type dimensionality = 1 timeseries
+  template <typename T, typename value_t>
+  class tde_result<jb::fftw::aligned_multi_array<T,1>, value_t> {
+  public:
+    using array_type = jb::fftw::aligned_multi_array<T,1>;
+    using record_type = value_t;
+    tde_result(array_type const& a)
+      : value_{0} {
+    }
+
+    value_t& operator[](std::size_t pos) { return value_; }
+    value_t const & operator[](std::size_t pos) const { return value_; }
+
+  private:
+    record_type value_;
+};
 
 template <typename array_t, template <typename T, std::size_t K>
                             class multi_array = jb::fftw::aligned_multi_array>
@@ -50,228 +117,39 @@ public:
   /// The execution plan to apply the inverse (aka backward) DFT
   using iplan = jb::fftw::plan<frequency_array_type, output_array_type>;
 
-  /// TDE base result type
-  /// size_t is the arg max of the cross correlation
-  /// precision_type is the max of the cross correlation
-  using tde_base_result_type = std::pair<std::size_t, precision_type>;
+  /// The type used to store the TDE confidence between two timeseries
+  using confidence_type = tde_result<array_t, precision_type>;
 
-  //@}
+  /// The type used to store the TDE argmax between two timeseries
+  using argmax_type = tde_result<array_t, std::size_t>;
 
-  /// Type used to store the TDE between two timeseries
-  /// handles TDE result for container type timeseries
-  template <typename container_type>
-  struct tde_result {
-    using element_type = tde_base_result_type;
+  /// The sqr sum of a timeseries
+  using sum2_type = tde_result<array_t, precision_type>;
 
-    tde_result(container_type const& a)
-        : nsamples_{a.nsamples()}
-        , num_timeseries_{1}
-        , result_{0} {
-    }
-
-    std::size_t nsamples() const {
-      return nsamples_;
-    }
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    std::size_t getargmax(std::size_t i) const {
-      return std::get<0>(result_);
-    }
-    precision_type getmax(std::size_t i) const {
-      return std::get<1>(result_);
-    }
-
-    void push(std::size_t argmax, precision_type max) {
-      result_ = std::make_pair(argmax, max);
-    }
-
-  private:
-    std::size_t nsamples_;
-    std::size_t num_timeseries_;
-    element_type result_;
-  };
-
-  /// handles TDE result for array_type timeseries
-  template <typename T, std::size_t K, typename A>
-  struct tde_result<boost::multi_array<T, K, A>> {
-    using element_type = boost::multi_array<tde_base_result_type,
-                                            array_type::dimensionality - 1>;
-
-    tde_result(boost::multi_array<T, K, A> const& a)
-        : nsamples_{jb::detail::nsamples(a)}
-        , num_timeseries_{jb::detail::element_count(a) / nsamples_}
-        , result_{jb::detail::array_shape(a)}
-        , pos_{0} {
-    }
-
-    void push(std::size_t argmax, precision_type max) {
-      result_.data()[pos_++] = std::make_pair(argmax, max);
-    }
-
-    std::size_t nsamples() const {
-      return nsamples_;
-    }
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    std::size_t getargmax(std::size_t i) const {
-      return std::get<0>(result_.data()[i]);
-    }
-    precision_type getmax(std::size_t i) const {
-      return std::get<1>(result_.data()[i]);
-    }
-
-  private:
-    std::size_t nsamples_;
-    std::size_t num_timeseries_;
-    element_type result_;
-    std::size_t pos_;
-  };
-
-  /// handles TDE result for array_type dimensionality = 2 timeseries
-  template <typename T, typename A>
-  struct tde_result<boost::multi_array<T, 2, A>> {
-    using element_type = std::vector<tde_base_result_type>;
-
-    tde_result(boost::multi_array<T, 2, A> const& a)
-        : nsamples_{jb::detail::nsamples(a)}
-        , num_timeseries_{jb::detail::element_count(a) / nsamples_}
-        , result_{element_type(num_timeseries_)}
-        , pos_{0} {
-    }
-
-    std::size_t nsamples() const {
-      return nsamples_;
-    }
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    std::size_t getargmax(std::size_t i) const {
-      return std::get<0>(result_[i]);
-    }
-    precision_type getmax(std::size_t i) const {
-      return std::get<1>(result_[i]);
-    }
-
-    void push(std::size_t argmax, precision_type max) {
-      result_[pos_++] = std::make_pair(argmax, max);
-    }
-
-  private:
-    std::size_t nsamples_;
-    std::size_t num_timeseries_;
-    element_type result_;
-    std::size_t pos_;
-  };
-
-  /// Type used to accumulate a characteristic of a timeseries
-  /// handles accumulate for container type timeseries
-  template <typename container_type>
-  struct accumulator {
-    using element_type = precision_type;
-
-    accumulator(container_type const& a)
-        : num_timeseries_{1}
-        , result_{0} {
-    }
-
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    precision_type getdata(std::size_t pos) const {
-      return result_;
-    }
-
-    void push(precision_type value) {
-      result_ = value;
-    }
-
-  private:
-    std::size_t num_timeseries_;
-    element_type result_;
-  };
-
-  /// handles accumulator for array_type timeseries
-  template <typename T, std::size_t K, typename A>
-  struct accumulator<boost::multi_array<T, K, A>> {
-    using element_type =
-        boost::multi_array<precision_type, array_type::dimensionality - 1>;
-
-    accumulator(boost::multi_array<T, K, A> const& a)
-        : num_timeseries_{jb::detail::element_count(a) /
-                          jb::detail::nsamples(a)}
-        , result_{jb::detail::array_shape(a)}
-        , pos_{0} {
-    }
-
-    void push(precision_type value) {
-      result_.data()[pos_++] = value;
-    }
-
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    precision_type getdata(std::size_t pos) const {
-      return result_.data()[pos];
-    }
-
-  private:
-    std::size_t num_timeseries_;
-    element_type result_;
-    std::size_t pos_;
-  };
-
-  /// handles accumulator for array_type dimensionality = 2 timeseries
-  template <typename T, typename A>
-  struct accumulator<boost::multi_array<T, 2, A>> {
-    using element_type = std::vector<precision_type>;
-
-    accumulator(boost::multi_array<T, 2, A> const& a)
-        : num_timeseries_{jb::detail::element_count(a) /
-                          jb::detail::nsamples(a)}
-        , result_{element_type(num_timeseries_)}
-        , pos_{0} {
-    }
-
-    std::size_t num_timeseries() const {
-      return num_timeseries_;
-    }
-    precision_type getdata(std::size_t pos) const {
-      return result_[pos];
-    }
-
-    void push(precision_type value) {
-      result_[pos_++] = value;
-    }
-
-  private:
-    std::size_t num_timeseries_;
-    element_type result_;
-    std::size_t pos_;
-  };
-
-  /// The base type used to store the TDE between two timeseries
-  using tde_type = tde_result<array_type>;
-
-  /// The base type used to accumulate sum sqr of a timeseries
-  using sum2_type = accumulator<array_type>;
+  //@}  
 
   /// Constructor
   time_delay_estimator_many(array_type const& a, array_type const& b)
-      : tmpa_(jb::detail::array_shape(a))
-      , tmpb_(jb::detail::array_shape(b))
-      , a2tmpa_(create_forward_plan(a, tmpa_, planning_flags()))
-      , b2tmpb_(create_forward_plan(b, tmpb_, planning_flags()))
-      , out_(jb::detail::array_shape(a))
-      , tmpa2out_(create_backward_plan(tmpa_, out_, planning_flags())) {
+      : tmpa_{jb::detail::array_shape(a)}
+      , tmpb_{jb::detail::array_shape(b)}
+      , a2tmpa_{create_forward_plan(a, tmpa_, planning_flags())}
+      , b2tmpb_{create_forward_plan(b, tmpb_, planning_flags())}
+      , out_{jb::detail::array_shape(a)}
+      , tmpa2out_{create_backward_plan(tmpa_, out_, planning_flags())}
+      , nsamples_{jb::detail::nsamples(a)} 
+      , num_timeseries_{jb::detail::element_count(a) / nsamples_} {
     if (a.size() != b.size()) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
-    }
+    } 
   }
 
   /// Compute the time-delay estimate between two timeseries
-  tde_type estimate_delay(array_type const& a, array_type const& b) {
+  void estimate_delay(
+       array_type const& a,
+       array_type const& b,
+       sum2_type const& sum2,
+       confidence_type& confidence,
+       argmax_type& argmax) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
@@ -284,36 +162,34 @@ public:
     b2tmpb_.execute(b, tmpb_);
     // ... then we compute Conj(A) * B for the transformed inputs ...
     for (std::size_t i = 0; i != tmpa_.num_elements(); ++i) {
-      tmpa_.data()[i] = std::conj(tmpa_.data()[i]) * tmpb_.data()[i];
+      tmpa_.data()[i] = std::conj(tmpa_.data()[i]) * (tmpb_.data()[i]);
     }
     // ... then we compute the inverse Fourier transform to the result ...
     tmpa2out_.execute(tmpa_, out_);
 
     // ... finally we compute (argmax,max) for the result(s) ...
-    tde_type tde(out_);
     std::size_t k = 0;
-    for (std::size_t i = 0; i != tde.num_timeseries(); ++i) {
-      precision_type max = std::numeric_limits<precision_type>::min();
-      std::size_t argmax = 0;
-      for (std::size_t j = 0; j != tde.nsamples(); ++j, ++k) {
-        if (max < out_.data()[k]) {
-          max = out_.data()[k];
-          argmax = j;
+    for (std::size_t i = 0; i != num_timeseries_; ++i) {
+      precision_type max_val = std::numeric_limits<precision_type>::min();
+      std::size_t argmax_val = 0;
+      for (std::size_t j = 0; j != nsamples_; ++j, ++k) {
+        if (max_val < out_.data()[k]) {
+          max_val = out_.data()[k];
+          argmax_val = j;
         }
       }
-      tde.push(argmax, max);
+      confidence[i] = max_val;
+      argmax[i] = argmax_val;
     }
-    return tde;
   }
 
   precision_type
-  best_estimate_delay(tde_type const& tde, sum2_type const& sum2) {
+  best_estimate_delay(confidence_type const& confidence, argmax_type const& argmax) {
     precision_type accumulator = 0;
     precision_type weight = 0;
-    for (std::size_t i = 0; i != tde.num_timeseries(); ++i) {
-      precision_type confidence = tde.getmax(i) / sum2.getdata(i);
-      accumulator += tde.getargmax(i) * confidence;
-      weight += confidence;
+    for (std::size_t i = 0; i != num_timeseries_; ++i) {
+      accumulator += argmax[i] * confidence[i];
+      weight += confidence[i];
     }
     return accumulator / weight;
   }
@@ -336,28 +212,94 @@ private:
   dplan b2tmpb_;
   output_array_type out_;
   iplan tmpa2out_;
+  std::size_t nsamples_;
+  std::size_t num_timeseries_;
 };
 
 } // namespace fftw
 } // namespace jb
 
 /**
+ * @test Verify that jb::fftw::time_delay_estimator_many dimension = 1
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_dim_1) {
+  int const nsamples = 10000;
+  int const delay = 200;
+  
+  using array_type = jb::fftw::aligned_multi_array<float, 1>;
+  using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
+  using confidence_type = typename tested_type::confidence_type;
+  using argmax_type = typename tested_type::argmax_type;
+
+  array_type a(boost::extents[nsamples]);
+  array_type b(boost::extents[nsamples]);
+  confidence_type confidence(a);
+  argmax_type argmax(a);
+
+  using sum2_type = jb::fftw::tde_result<array_type, float>;
+  sum2_type sum2(b);
+
+  // check types
+  bool res = jb::testing::same_type<confidence_type::record_type, float>::value;
+  BOOST_CHECK_MESSAGE(res == true, "confidence record_type is not float");
+  res = jb::testing::same_type<argmax_type::record_type, std::size_t>::value;
+  BOOST_CHECK_MESSAGE(res == true, " argmax record_type is not size_t");
+  res = jb::testing::same_type<sum2_type::record_type, float>::value;
+  BOOST_CHECK_MESSAGE(res == true, "sum2 record_type is not float");
+  res = jb::testing::same_type<tested_type::precision_type, float>::value;
+  BOOST_CHECK_MESSAGE(res == true, "tested precision_type is not float");
+  
+  
+  jb::testing::create_triangle_timeseries(nsamples, b);
+  float acc_sum2 = 0;
+  for (int i = 0; i != nsamples; ++i) {
+      a[i] = b[(i + delay) % nsamples];
+      acc_sum2 += a[i] * a[i];
+  }
+  sum2[0] = acc_sum2;
+
+  tested_type tested(a, b);
+  (void)tested.estimate_delay(a, b, sum2, confidence, argmax);
+
+  BOOST_CHECK_MESSAGE(argmax[0] == 2, "argmax = " << argmax[0]);
+}
+
+
+/**
  * @test Verify that we can create and use a simple time delay estimator.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_simple) {
-  int const nsamples = 1 << 15;
-  int const delay = 1250;
-  int const S = 128;
+  //  int const nsamples = 1 << 15;
+  int const nsamples = 1000;
+  int const delay = 25;
+  int const S = 4;
   using array_type = jb::fftw::aligned_multi_array<float, 2>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
-  using sum2_type = typename tested_type::sum2_type;
+  using confidence_type = typename tested_type::confidence_type;
+  using argmax_type = typename tested_type::argmax_type;
 
   array_type a(boost::extents[S][nsamples]);
   array_type b(boost::extents[S][nsamples]);
-  sum2_type sum2(a);
+  confidence_type confidence(a);
+  argmax_type argmax(a);
 
+  using sum2_type = jb::fftw::tde_result<array_type, float>;
+  sum2_type sum2(b);
+
+  // check types
+  using test_array_type = jb::fftw::aligned_multi_array<float, 1>;
+  using test_argmax_array_type = jb::fftw::aligned_multi_array<std::size_t, 1>;
+  bool res = jb::testing::same_type<confidence_type::record_type, test_array_type>::value;
+  BOOST_CHECK_MESSAGE(res == true, "confidence record_type is not multi array float");
+  res = jb::testing::same_type<argmax_type::record_type, test_argmax_array_type>::value;
+  BOOST_CHECK_MESSAGE(res == true, " argmax record_type is not multi array");
+  res = jb::testing::same_type<sum2_type::record_type, test_array_type>::value;
+  BOOST_CHECK_MESSAGE(res == true, "sum2 record_type is not multi array float");
+  res = jb::testing::same_type<tested_type::precision_type, float>::value;
+  BOOST_CHECK_MESSAGE(res == true, "tested precision_type is not float");
+    
   int count = 0;
-  for (auto vector : a) {
+  for (auto vector : b) {
     if (++count % 2 == 0) {
       jb::testing::create_triangle_timeseries(nsamples, vector);
     } else {
@@ -365,16 +307,95 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_simple) {
     }
   }
   for (int i = 0; i != S; ++i) {
-    float sum = 0;
+    float acc_sum2 = 0;
     for (int j = 0; j != nsamples; ++j) {
-      b[i][j] = a[i][(j + delay) % nsamples];
-      sum += a[i][j] * a[i][j];
+      a[i][j] = b[i][(j + delay) % nsamples];
+      acc_sum2 += a[i][j] * a[i][j];
     }
-    sum2.push(sum);
+    sum2[i] = acc_sum2;
   }
 
   tested_type tested(a, b);
-  auto res = tested.estimate_delay(a, b);
-  auto estimate_delay = tested.best_estimate_delay(res, sum2);
-  BOOST_CHECK_EQUAL(estimate_delay, 0.123456); // why not, right?
+  (void)tested.estimate_delay(a, b, sum2, confidence, argmax);
+  for (int i = 0; i != S; ++i) {
+    BOOST_CHECK_MESSAGE(argmax[i] == delay, "argmax[" << i << "] = " << argmax[i]);
+  }
+  //  auto estimate_delay = tested.best_estimate_delay(confidence, argmax);
+  //  BOOST_CHECK_CLOSE(estimate_delay, 0.123456); // why not, right?
 }
+
+
+/**
+ * @test Verify that we can create and use a simple time delay estimator.
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_just_checking) {
+  //  int const nsamples = 1 << 15;
+  int const nsamples = 100;
+  int const S = 20;
+  using array_type = jb::fftw::aligned_multi_array<float, 2>;
+  using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
+  using confidence_type = typename tested_type::confidence_type;
+  using argmax_type = typename tested_type::argmax_type;
+
+  array_type a(boost::extents[S][nsamples]);
+  array_type b(boost::extents[S][nsamples]);
+  confidence_type confidence(a);
+  argmax_type argmax(a);
+
+  using sum2_type = jb::fftw::tde_result<array_type, float>;
+  sum2_type sum2(b);
+   
+  for (std::size_t j = 0; j !=a.num_elements(); ++j) {
+      a.data()[j] = 100+j;
+      b.data()[j] = 200+j;
+    }
+
+    int k = 0;
+  for (int i = 0; i != S; ++i) {
+    for (int j = 0; j != nsamples; ++j) {
+      BOOST_CHECK_MESSAGE(
+	  a[i][j] == 100+k, "a[" << i << "][" << j << "] = " << a[i][j]);
+      BOOST_CHECK_MESSAGE(b[i][j] == 200+k, "b[" << i << "][" << j << "] = " << b[i][j]);
+      k++;
+    }
+  }
+}
+
+/**
+ * @test Verify that we can create and use a simple time delay estimator.
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_just_checking_dim_1) {
+  //  int const nsamples = 1 << 15;
+  int const nsamples = 10;
+  using array_type = jb::fftw::aligned_multi_array<float, 1>;
+  using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
+  using confidence_type = typename tested_type::confidence_type;
+  using argmax_type = typename tested_type::argmax_type;
+
+  array_type a(boost::extents[nsamples]);
+  array_type b(boost::extents[nsamples]);
+  confidence_type confidence(a);
+  argmax_type argmax(a);
+
+  using sum2_type = jb::fftw::tde_result<array_type, float>;
+  sum2_type sum2(b);
+   
+    for (int j = 0; j != nsamples; ++j) {
+      a.data()[j] = 100+j;
+      b.data()[j] = 200+j;
+    }
+    sum2[0] = 1;
+    BOOST_CHECK_MESSAGE(sum2[0] == 1, "sum2[0] = " << sum2[0]);
+    confidence[0] = 2;
+    BOOST_CHECK_MESSAGE(confidence[0] == 2, "confidence[0] = " << confidence[0]);
+    argmax[0] = 3;
+    BOOST_CHECK_MESSAGE(argmax[0] == 3, "argmax[0] = " << argmax[0]);
+
+    for (int j = 0; j != nsamples; ++j) {
+      BOOST_CHECK_MESSAGE(
+	  a[j] == 100+j, "a[" << j << "] = " << a[j]);
+      BOOST_CHECK_MESSAGE(b[j] == 200+j, "b[" << j << "] = " << b[j]);
+    }
+}
+
+
