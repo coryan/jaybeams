@@ -10,15 +10,15 @@ bindir=`dirname $0`
 benchmark_startup
 
 # ... create the baseline data for the order book benchmark ...
-for test in map:buy map:sell array:buy array:sell; do
+for test in map array; do
     load=`uptime`
     echo "Running testcase ${test?}, current load ${load?}"
     echo | log $LOG
     echo "Running testcase ${test?}, current load ${load?}" | log $LOG
-    /usr/bin/time ./jb/itch5/bm_order_book --seed=3966899719 \
+    /usr/bin/time ./jb/itch5/bm_order_book \
                   --microbenchmark.verbose=true \
                   --microbenchmark.prefix=${test?}, \
-                  --microbenchmark.iterations=5000 \
+                  --microbenchmark.iterations=20000 \
                   --microbenchmark.test-case=${test?} \
 		  >$TMPOUT 2>$TMPERR
     cat $TMPERR | log $LOG

@@ -12,25 +12,39 @@ namespace testing {
  *
  * Given two collections of floating point or complex numbers find the
  * differences and report them via Boost.Test functions.
+ *
+ * @param size the size of the vector / collection
+ * @param actual the actual values observed in the test
+ * @param expected the values expected by the test
+ * @param tol the error accepted by the test, or more precisely, the
+ *   test will tolerate up to tol*epsilon relative error.
+ * @param max_differences_printed how many differences will be printed
+ *   out in full detail, some of the vectors are large and printing
+ *   all the differences can be overwhelming.
+ *
+ * @returns the number of errors detected.
  */
 template <typename value_type>
-void check_array_close_enough(
+int check_array_close_enough(
     std::size_t size, value_type const* actual, value_type const* expected,
-    int tol = 1, int max_differences = JB_TESTING_MAX_DIFFERENCES) {
+    int tol = 1,
+    int max_differences_printed = JB_TESTING_MAX_DIFFERENCES_PRINTED) {
   int count = 0;
   for (std::size_t i = 0; i != size; ++i) {
     if (close_enough(actual[i], expected[i], tol)) {
       continue;
     }
-    if (++count <= max_differences) {
-      BOOST_CHECK_MESSAGE(
-          close_enough(actual[i], expected[i], tol),
+    if (++count <= max_differences_printed) {
+      auto error = relative_error(actual[i], expected[i]);
+      BOOST_TEST_MESSAGE(
           "in item i=" << i << " difference higher than tolerance=" << tol
                        << ", actual[i]=" << format(actual[i])
-                       << ", expected[i]=" << format(expected[i]));
+                       << ", expected[i]=" << format(expected[i])
+                       << ", error=" << error);
     }
   }
   BOOST_CHECK_MESSAGE(count == 0, "found " << count << " differences");
+  return count;
 }
 
 } // namespace testing
