@@ -422,7 +422,9 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/allocator.hpp \
   jb/fftw/cast.hpp \
   jb/fftw/plan.hpp \
+  jb/fftw/tde_result.hpp \
   jb/fftw/time_delay_estimator.hpp \
+  jb/fftw/time_delay_estimator_many.hpp \
   jb/fftw/traits.hpp
 
 ################################################################
