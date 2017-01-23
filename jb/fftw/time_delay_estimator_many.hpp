@@ -3,6 +3,8 @@
 
 #include <jb/fftw/aligned_multi_array.hpp>
 #include <jb/fftw/alignment_traits.hpp>
+#include <jb/fftw/plan.hpp>
+#include <jb/complex_traits.hpp>
 
 namespace jb {
 namespace fftw {

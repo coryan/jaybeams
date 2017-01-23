@@ -183,6 +183,7 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_cast_vector \
   jb/fftw/ut_plan \
   jb/fftw/ut_plan_many \
+  jb/fftw/ut_tde_result \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
@@ -596,6 +597,10 @@ jb_fftw_ut_plan_LDADD = $(jb_ut_fftw_libs)
 jb_fftw_ut_plan_many_SOURCES = jb/fftw/ut_plan_many.cpp
 jb_fftw_ut_plan_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan_many
 jb_fftw_ut_plan_many_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_tde_result_SOURCES = jb/fftw/ut_tde_result.cpp
+jb_fftw_ut_tde_result_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_tde_result
+jb_fftw_ut_tde_result_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
 jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator

@@ -1,6 +1,9 @@
 #ifndef jb_fftw_tde_result_hpp
 #define jb_fftw_tde_result_hpp
 
+#include <jb/detail/array_traits.hpp>
+#include <jb/fftw/aligned_multi_array.hpp>
+
 namespace jb {
 namespace fftw {
 
