@@ -277,6 +277,7 @@ jb_libjb_testing_a_HEADERS = \
   jb/testing/check_array_close_enough.hpp \
   jb/testing/check_complex_close_enough.hpp \
   jb/testing/check_multi_array_close_enough.hpp \
+  jb/testing/check_tde_result_close_enough.hpp \
   jb/testing/check_vector_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
