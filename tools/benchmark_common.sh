@@ -98,11 +98,14 @@ print_environment() {
     # capture the name of the program
     program=$1
 
+    # ... in general this prints out metadata about the test from the
+    # high-level stuff down towards the hardware ...
     # ... print out the current git revision ...
     echo
     echo
     echo "Last revision commited to git"
     git rev-parse HEAD
+
     echo
     echo "Current git status"
     git status
@@ -118,16 +121,54 @@ print_environment() {
     echo "dynamically loaded libraries in the program"
     ldd $1
 
+    # ... print out the rpms that provided these libraries ...
+    if which rpm>/dev/null; then
+        echo
+        echo "dynamic libraries provided by the following packages"
+        for lib in $(ldd $1 | grep '=>' | awk '{print $3}') \
+                   $(ldd $1 | grep ld-linux | awk '{print $1}'); do
+            echo ${lib?} ': ' $(rpm -q --whatprovides ${lib?})
+        done
+    elif which dpkg >/dev/null; then
+        echo
+        echo "dynamic libraries provided by the following packages"
+        for lib in $(ldd $1 | grep '=>' | awk '{print $3}') \
+                   $(ldd $1 | grep ld-linux | awk '{print $1}'); do
+            echo ${lib?} ': ' $(dpkg -S ${lib?})
+            pkg=$(dpkg -S ${lib?} | cut -d: -f1)
+            echo ${lib?} ': ' ${pkg?} $(apt-cache show ${pkg?} | grep Version:)
+        done
+    else
+        echo
+        echo "cannot determine packages, please report this as a bug"
+    fi
+
+    # ... print out the C++ library information ...
+    echo
+    echo "libstdc++ version"
+    lib=$(ldd $1 | grep libstdc++.so | awk '{print $3}' 2>&1)
+    if [ "x${lib?}" = "x" ]; then
+        echo "  not using libstdc++"
+    else
+        strings ${lib?} | egrep '(GLIBCXX|GLIBCPP)_[0-9]' | tail -2
+    fi
+
     # ... print out the C library information ...
     echo
-    echo "ldd version"
+    echo "glibc version via ldd version"
     ldd --version || echo "cannot run ldd to get libc info"
 
     # ... another way to print the C library info ...
     echo
     echo "glibc version"
-    `ldd /usr/bin/touch | grep libc.so | awk '{print $3}'` --version || \
+    `ldd /usr/bin/env | grep libc.so | awk '{print $3}'` --version || \
         echo "failed to get libc.so information"
+
+    # ... print out the kernel version and other details, skip the
+    # hostname though ....
+    echo
+    echo "kernel version and platform"
+    uname -s -r -v -m -p -i -o
 
     # ... print out the available memory ...
     echo
@@ -175,10 +216,10 @@ require_full_rt_scheduling() {
 
 full_rt_scheduling_startup() {
     echo "Disabling RT scheduling limits, RT processes can take 100% of the CPU"
-    echo -1 | sudo tee /proc/sys/kernel/sched_rt_runtime_us
+    echo -1 | sudo tee /proc/sys/kernel/sched_rt_runtime_us > /dev/null
 }
 
 full_rt_scheduling_teardown() {
-    echo "Disabling RT scheduling limits, RT processes can take 100% of the CPU"
-    echo 950000 | sudo tee /proc/sys/kernel/sched_rt_runtime_us
+    echo "Restore RT scheduling limits, RT processses limited to 95% of the CPU"
+    echo 950000 | sudo tee /proc/sys/kernel/sched_rt_runtime_us >/dev/null
 }
