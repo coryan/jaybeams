@@ -69,7 +69,7 @@ template <typename real>
 bool close_enough(real actual[2], real expected[2], int tol = 1) {
   return (
       close_enough(actual[0], expected[0], tol) and
-      close_enough(actual[0], expected[0], tol));
+      close_enough(actual[1], expected[1], tol));
 }
 
 /**
