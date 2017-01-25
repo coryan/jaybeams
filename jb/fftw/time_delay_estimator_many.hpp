@@ -4,6 +4,7 @@
 #include <jb/fftw/aligned_multi_array.hpp>
 #include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
+#include <jb/testing/check_complex_close_enough.hpp>
 #include <jb/complex_traits.hpp>
 
 namespace jb {
@@ -115,7 +116,7 @@ public:
     // ... then we compute the inverse Fourier transform to the result ...
     tmpa2out_.execute(tmpa_, out_);
 
-    // ... finally we compute (argmax,max) for the result(s) ...
+    // ... finally we compute confidence and argmax for the result(s) ...
     std::size_t k = 0;
     for (std::size_t i = 0; i != num_timeseries_; ++i) {
       precision_type max_val = std::numeric_limits<precision_type>::min();
@@ -126,7 +127,11 @@ public:
           argmax_val = j;
         }
       }
-      confidence[i] = max_val;
+      if (jb::testing::close_enough(sum2[i], precision_type{0}, 1)) {
+        confidence[i] = std::numeric_limits<precision_type>::max();
+      } else {
+        confidence[i] = max_val / sum2[i];
+      }
       argmax[i] = argmax_val;
     }
   }
