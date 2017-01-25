@@ -89,7 +89,7 @@ container, e.g. `mkdir ${HOSTNAME?} && cd ${HOSTNAME?}`
 @code
 mkdir build
 cd build
-./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+../configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
 make -j 4 check
 @endcode
 

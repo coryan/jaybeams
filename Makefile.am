@@ -183,7 +183,9 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_cast_vector \
   jb/fftw/ut_plan \
   jb/fftw/ut_plan_many \
+  jb/fftw/ut_tde_result \
   jb/fftw/ut_time_delay_estimator \
+  jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
 examples += examples/fftw_correlation_no_wrappers
@@ -218,6 +220,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/convert_cpu_set.hpp \
   jb/convert_severity_level.hpp \
   jb/cpu_set.hpp \
+  jb/detail/array_traits.hpp \
   jb/detail/os_error.hpp \
   jb/detail/reconfigure_thread.hpp \
   jb/detail/thread_setup_wrapper.hpp \
@@ -274,6 +277,7 @@ jb_libjb_testing_a_HEADERS = \
   jb/testing/check_array_close_enough.hpp \
   jb/testing/check_complex_close_enough.hpp \
   jb/testing/check_multi_array_close_enough.hpp \
+  jb/testing/check_tde_result_close_enough.hpp \
   jb/testing/check_vector_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
@@ -416,10 +420,13 @@ jb_libjb_fftw_a_SOURCES = \
 jb_libjb_fftw_a_HEADERS = \
   jb/fftw/aligned_multi_array.hpp \
   jb/fftw/aligned_vector.hpp \
+  jb/fftw/alignment_traits.hpp \
   jb/fftw/allocator.hpp \
   jb/fftw/cast.hpp \
   jb/fftw/plan.hpp \
+  jb/fftw/tde_result.hpp \
   jb/fftw/time_delay_estimator.hpp \
+  jb/fftw/time_delay_estimator_many.hpp \
   jb/fftw/traits.hpp
 
 ################################################################
@@ -592,9 +599,17 @@ jb_fftw_ut_plan_many_SOURCES = jb/fftw/ut_plan_many.cpp
 jb_fftw_ut_plan_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan_many
 jb_fftw_ut_plan_many_LDADD = $(jb_ut_fftw_libs)
 
+jb_fftw_ut_tde_result_SOURCES = jb/fftw/ut_tde_result.cpp
+jb_fftw_ut_tde_result_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_tde_result
+jb_fftw_ut_tde_result_LDADD = $(jb_ut_fftw_libs)
+
 jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
 jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator
 jb_fftw_ut_time_delay_estimator_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_time_delay_estimator_many_SOURCES = jb/fftw/ut_time_delay_estimator_many.cpp
+jb_fftw_ut_time_delay_estimator_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator_many
+jb_fftw_ut_time_delay_estimator_many_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
 jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits

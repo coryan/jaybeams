@@ -11,6 +11,13 @@ namespace itch5 {
  * @typedef event_code_t
  *
  * Represent the 'Event Code' field on a 'System Event Message'
+ *
+ * - O: Start of Messages
+ * - S: Start of System hours
+ * - Q: Start of Market hours
+ * - M: End of Market hours
+ * - E: End of System hours
+ * - C: End of Messages
  */
 typedef char_list_field<u'O', u'S', u'Q', u'M', u'E', u'C'> event_code_t;
 

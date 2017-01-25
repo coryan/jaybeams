@@ -1,24 +1,13 @@
 #ifndef jb_fftw_time_delay_estimator_hpp
 #define jb_fftw_time_delay_estimator_hpp
 
-#include <jb/fftw/aligned_vector.hpp>
+#include <jb/detail/array_traits.hpp>
+#include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>
 
-#include <type_traits>
-
 namespace jb {
 namespace fftw {
-
-/**
- * Determine if a timeseries type guarantees alignment.
- */
-template <typename T>
-struct always_aligned : public std::false_type {};
-
-/// By construction these vectors are always 128-bit aligned.
-template <typename T>
-struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 
 /**
  * A simple time delay estimator based on cross-correlation
