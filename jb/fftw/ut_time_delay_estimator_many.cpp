@@ -301,13 +301,24 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
         acc_sum2 += a[i][j][k] * a[i][j][k];
       }
       sum2[count] = acc_sum2;
-      expected_argmax[count] = static_cast<std::size_t>(delay);
-      expected_confidence[count] = static_cast<float>(nsamples);
     }
   }
 
   // run the TDE...
   (void)tested.estimate_delay(a, b, sum2, confidence, argmax);
+  // argmax should be around 0, which means possible around nsamples-1 also
+  // so, let's "shift mod" argmax by a multiple of tol in order to make
+  // close enough check simple to implement...
+  count = 0;
+  std::size_t shift = 10 * static_cast<std::size_t>(tol);
+  for (int i = 0; i != S; ++i) {
+    for (int j = 0; j != V; ++j, ++count) {
+      expected_confidence[count] = static_cast<float>(nsamples);
+      expected_argmax[count] = shift;
+      argmax[count] = (argmax[count] + shift) % nsamples;
+    }
+  }
+
   // check argmax within delay +/- tol
   BOOST_CHECK_MESSAGE(
       jb::testing::tde_result_close_enough(argmax, expected_argmax, tol),
@@ -318,5 +329,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   BOOST_CHECK_MESSAGE(
       jb::testing::tde_result_close_enough(
           confidence, expected_confidence, 10 * tol),
-      "confidence is not within tolerance(" << 10 * tol << ")");
+      "confidence is not within tolerance("
+          << 10 * tol << "), confidence[0]=" << confidence[0]
+          << ", expected_confidence[0]=" << expected_confidence[0]);
 }
