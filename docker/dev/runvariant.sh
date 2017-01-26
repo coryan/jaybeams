@@ -41,6 +41,10 @@ image=$( (cat $dockerfile; cat <<__EOF__
 ARG user
 ARG uid
 
+RUN grep -q Ubuntu /etc/lsb-release && apt-get update && apt-get install -y lshw sudo time || :
+RUN grep -q Fedora /etc/fedora-release && dnf update && dnf install -y lshw sudo time || :
+RUN echo \$user ALL=NOPASSWD: ALL >>/etc/sudoers
+
 WORKDIR /root
 RUN useradd -m -u \$uid \$user
 VOLUME /home/\$user/jaybeams
