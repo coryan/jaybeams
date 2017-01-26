@@ -125,15 +125,15 @@ print_environment() {
     if which rpm>/dev/null; then
         echo
         echo "dynamic libraries provided by the following packages"
-        for lib in $(ldd $1 | grep '=>' | awk '{print $3}') \
-                   $(ldd $1 | grep ld-linux | awk '{print $1}'); do
+        for lib in $(ldd $1 | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
+                   $(ldd $1 | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
             echo ${lib?} ': ' $(rpm -q --whatprovides ${lib?})
         done
     elif which dpkg >/dev/null; then
         echo
         echo "dynamic libraries provided by the following packages"
-        for lib in $(ldd $1 | grep '=>' | awk '{print $3}') \
-                   $(ldd $1 | grep ld-linux | awk '{print $1}'); do
+        for lib in $(ldd $1 | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
+                   $(ldd $1 | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
             echo ${lib?} ': ' $(dpkg -S ${lib?})
             pkg=$(dpkg -S ${lib?} | cut -d: -f1)
             echo ${lib?} ': ' ${pkg?} $(apt-cache show ${pkg?} | grep Version:)
