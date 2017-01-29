@@ -417,7 +417,6 @@ jb_libjb_fftw_a_SOURCES = \
 jb_libjb_fftw_a_HEADERS = \
   jb/fftw/aligned_multi_array.hpp \
   jb/fftw/aligned_vector.hpp \
-  jb/fftw/alignment_traits.hpp \
   jb/fftw/allocator.hpp \
   jb/fftw/cast.hpp \
   jb/fftw/plan.hpp \

@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   using array_type = jb::fftw::aligned_multi_array<float, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   using array_type = jb::fftw::aligned_multi_array<float, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -96,9 +96,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
@@ -168,7 +168,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   using array_type = jb::fftw::aligned_multi_array<float, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -176,9 +176,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   using array_type = jb::fftw::aligned_multi_array<float, 2>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][nsamples]);
   array_type b(boost::extents[S][nsamples]);
@@ -244,9 +244,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   sum2_type sum2(b);
@@ -301,7 +301,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   using array_type = jb::fftw::aligned_multi_array<float, 1>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[nsamples]);
   array_type b(boost::extents[nsamples]);
@@ -309,9 +309,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   sum2_type sum2(b);
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   using array_type = std::vector<float>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(nsamples);
   array_type b(nsamples);
@@ -370,9 +370,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, float>;
   sum2_type sum2(b);
@@ -425,7 +425,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   using array_type = jb::fftw::aligned_multi_array<double, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -433,9 +433,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, double>;
   // sum of square value of timeseries
@@ -493,7 +493,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   using array_type = jb::fftw::aligned_multi_array<double, 2>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[S][nsamples]);
   array_type b(boost::extents[S][nsamples]);
@@ -501,9 +501,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
@@ -558,7 +558,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   using array_type = jb::fftw::aligned_multi_array<double, 1>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(boost::extents[nsamples]);
   array_type b(boost::extents[nsamples]);
@@ -566,9 +566,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
@@ -619,7 +619,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   using array_type = std::vector<double>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
 
   array_type a(nsamples);
   array_type b(nsamples);
@@ -627,9 +627,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
@@ -682,7 +682,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<float>, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
@@ -691,9 +691,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   // sum of square value of timeseries
   sum2_type sum2(b);
@@ -750,7 +750,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<float>, 2>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][nsamples]);
@@ -759,9 +759,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   sum2_type sum2(b);
 
@@ -815,7 +815,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<float>, 1>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[nsamples]);
@@ -824,9 +824,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   sum2_type sum2(b);
 
@@ -876,7 +876,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   using array_type = std::vector<std::complex<float>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(nsamples);
@@ -885,9 +885,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -938,7 +938,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_double) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<double>, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
@@ -947,9 +947,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   // sum of square value of timeseries
   sum2_type sum2(b);
@@ -1006,7 +1006,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<double>, 2>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][nsamples]);
@@ -1015,9 +1015,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   sum2_type sum2(b);
 
@@ -1071,7 +1071,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
   using array_type = jb::fftw::aligned_multi_array<std::complex<double>, 1>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[nsamples]);
@@ -1080,9 +1080,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   sum2_type sum2(b);
 
@@ -1132,7 +1132,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
   using array_type = std::vector<std::complex<double>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
-  using argmax_type = typename tested_type::argmax_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
   using sum2_type = typename tested_type::sum2_type;
 
   array_type a(nsamples);
@@ -1141,9 +1141,9 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
   // expected confidence result to compare within tolerance tol
   confidence_type expected_confidence(a);
 
-  argmax_type argmax(a);
+  estimated_delay_type argmax(a);
   // expected argmax result to compare within tolerance tol
-  argmax_type expected_argmax(a);
+  estimated_delay_type expected_argmax(a);
 
   sum2_type sum2(b);
 

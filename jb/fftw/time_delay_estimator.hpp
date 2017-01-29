@@ -2,7 +2,6 @@
 #define jb_fftw_time_delay_estimator_hpp
 
 #include <jb/detail/array_traits.hpp>
-#include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>
 
@@ -50,9 +49,8 @@ public:
    * The optimal algorithm to compute the  FFTs used in the cross correlation
    * depends on the size of the input parameters and their memory alignment.
    *
-   * The FFTW library casts the constness of their arguments to change their
-   * values, so we are making it explicit pasing non-const reference arguments
-   * to the constructor.
+   * The FFTW library modifies the arguments to compute the optimal
+   * execution plan, do not assume the values are unmodified.
    *
    * @param a container type (e.g. vector<>) timeseries
    * @param b container type (e.g. vector<>) timeseries
@@ -111,7 +109,7 @@ private:
    * Determine the correct FFTW planning flags given the inputs.
    */
   static int planning_flags() {
-    if (always_aligned<timeseries_t>::value) {
+    if (jb::detail::always_aligned<timeseries_t>::value) {
       return FFTW_MEASURE;
     }
     return FFTW_MEASURE | FFTW_UNALIGNED;
