@@ -49,8 +49,8 @@ public:
    * The optimal algorithm to compute the  FFTs used in the cross correlation
    * depends on the size of the input parameters and their memory alignment.
    *
-   * The FFTW library modifies the arguments to compute the optimal 
-   * execution plan, do not assume the values are unmodified.   
+   * The FFTW library modifies the arguments to compute the optimal
+   * execution plan, do not assume the values are unmodified.
    *
    * @param a container type (e.g. vector<>) timeseries
    * @param b container type (e.g. vector<>) timeseries

@@ -58,8 +58,8 @@ public:
   /// The type used to store the TDE confidence between two timeseries
   using confidence_type = jb::fftw::tde_result<array_t, precision_type>;
 
-  /// The type used to store the TDE argmax between two timeseries
-  using argmax_type = jb::fftw::tde_result<array_t, std::size_t>;
+  /// The type used to store the estimated_delay between two timeseries
+  using estimated_delay_type = jb::fftw::tde_result<array_t, std::size_t>;
 
   /// The sqr sum of a timeseries
   using sum2_type = jb::fftw::tde_result<array_t, precision_type>;
@@ -73,8 +73,8 @@ public:
    * The optimal algorithm to compute the  FFTs used in the cross correlation
    * depends on the size of the input parameters and their memory alignment.
    *
-   * The FFTW library modifies the arguments to compute the optimal 
-   * execution plan, do not assume the values are unmodified.   
+   * The FFTW library modifies the arguments to compute the optimal
+   * execution plan, do not assume the values are unmodified.
    *
    * @param a multi array timeseries
    * @param b multi array timeseries
@@ -96,15 +96,15 @@ public:
   /**
    * Compute the time-delay estimate between two timeseries a and b.
    *
-   * @param confidence to return the confidence of TDE(a,b)
-   * @param argmax to return argmax of TDE(a,b)
+   * @param confidence to return the TDE(a,b) confidence
+   * @param estimated_delay to return the result of TDE(a,b)
    * @param a input timeseries, FFTW library might modify their values
    * @param b input timeseries, FFTW library might modify their values
    * @param sum2 contains sqr sum of one of the timeseries (a or b)
    */
   void estimate_delay(
-      confidence_type& confidence, argmax_type& argmax, array_type& a,
-      array_type& b, sum2_type const& sum2) {
+      confidence_type& confidence, estimated_delay_type& estimated_delay,
+      array_type& a, array_type& b, sum2_type const& sum2) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
@@ -126,17 +126,17 @@ public:
     // ... then we compute the inverse Fourier transform to the result ...
     tmpa2out_.execute(tmpa_, out_);
 
-    // ... finally we compute confidence and argmax for the result(s) ...
+    // ... finally we compute the estimated delay and its confidence
     // @todo issue #86: investigate use of SSE instructions
     std::size_t k = 0;
     precision_type* it_out = out_.data();
     for (std::size_t i = 0; i != num_timeseries_; ++i) {
       precision_type max_val = std::numeric_limits<precision_type>::min();
-      std::size_t argmax_val = 0;
+      std::size_t tde_val = 0;
       for (std::size_t j = 0; j != nsamples_; ++j, ++k, ++it_out) {
         if (max_val < *it_out) {
           max_val = *it_out;
-          argmax_val = j;
+          tde_val = j;
         }
       }
       if (jb::testing::check_close_enough(sum2[i], precision_type{0}, 1)) {
@@ -144,7 +144,7 @@ public:
       } else {
         confidence[i] = max_val / sum2[i];
       }
-      argmax[i] = argmax_val;
+      estimated_delay[i] = tde_val;
     }
   }
 
