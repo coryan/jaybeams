@@ -43,8 +43,21 @@ public:
       iplan;
   //@}
 
-  /// Constructor
-  time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
+  /**
+   * Constructs a time delay estimator using @param a and @param b as prototypes
+   * for the arguments.
+   *
+   * The optimal algorithm to compute the  FFTs used in the cross correlation
+   * depends on the size of the input parameters and their memory alignment.
+   *
+   * The FFTW library casts the constness of their arguments to change their
+   * values, so we are making it explicit pasing non-const reference arguments
+   * to the constructor.
+   *
+   * @param a container type (e.g. vector<>) timeseries
+   * @param b container type (e.g. vector<>) timeseries
+   */
+  time_delay_estimator(timeseries_type& a, timeseries_type& b)
       : tmpa_(a.size())
       , tmpb_(b.size())
       , a2tmpa_(create_forward_plan(a, tmpa_, planning_flags()))
@@ -58,7 +71,7 @@ public:
 
   /// Compute the time-delay estimate between two timeseries
   std::pair<bool, precision_type>
-  estimate_delay(timeseries_type const& a, timeseries_type const& b) {
+  estimate_delay(timeseries_type& a, timeseries_type& b) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
