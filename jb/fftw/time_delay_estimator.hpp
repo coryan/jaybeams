@@ -2,7 +2,6 @@
 #define jb_fftw_time_delay_estimator_hpp
 
 #include <jb/detail/array_traits.hpp>
-#include <jb/fftw/alignment_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>
 
@@ -111,7 +110,7 @@ private:
    * Determine the correct FFTW planning flags given the inputs.
    */
   static int planning_flags() {
-    if (always_aligned<timeseries_t>::value) {
+    if (jb::detail::always_aligned<timeseries_t>::value) {
       return FFTW_MEASURE;
     }
     return FFTW_MEASURE | FFTW_UNALIGNED;

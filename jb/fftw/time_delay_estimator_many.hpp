@@ -1,7 +1,7 @@
 #ifndef jb_fftw_time_delay_estimator_many_hpp
 #define jb_fftw_time_delay_estimator_many_hpp
 
-#include <jb/fftw/alignment_traits.hpp>
+#include <jb/detail/array_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/testing/check_close_enough.hpp>
 #include <jb/complex_traits.hpp>
@@ -154,7 +154,7 @@ private:
    * Determine the correct FFTW planning flags given the inputs.
    */
   static int planning_flags() {
-    if (jb::fftw::always_aligned<array_type>::value) {
+    if (jb::detail::always_aligned<array_type>::value) {
       return FFTW_MEASURE | FFTW_PRESERVE_INPUT;
     }
     return FFTW_MEASURE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED;

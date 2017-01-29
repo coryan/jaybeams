@@ -3,7 +3,6 @@
 
 #include <jb/detail/array_traits.hpp>
 #include <jb/fftw/aligned_multi_array.hpp>
-#include <jb/fftw/alignment_traits.hpp>
 #include <jb/testing/resize_if_applicable.hpp>
 #include <boost/multi_array.hpp>
 

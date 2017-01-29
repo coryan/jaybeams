@@ -5,6 +5,7 @@
 #include <jb/fftw/aligned_vector.hpp>
 
 #include <boost/multi_array.hpp>
+#include <type_traits>
 #include <vector>
 
 namespace jb {
@@ -163,6 +164,42 @@ inline std::vector<std::size_t>
 array_shape(boost::multi_array<T, K, A> const& a) {
   return std::vector<std::size_t>(a.shape(), a.shape() + a.dimensionality);
 }
+
+/**
+ * Determine if a timeseries type guarantees alignment suitable for
+ * SIMD optimizations.
+ *
+ * We provide specializations for aligned_vector (e.g. std::vector<>) and
+ * aligned_multi_array (e.g. boost::multi_array) to be able to operate
+ * on them generically.
+ *
+ * @tparam T the type stored by the timeseries container
+ */
+template <typename T>
+struct always_aligned : public std::false_type {};
+
+/**
+ * Determine if a aligned_vector timeseries type guarantees alignment suitable
+ * for
+ * SIMD optimizations.
+ *
+ * @tparam T the type stored by the aligned_vector timeseries
+ */
+template <typename T>
+struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
+
+/**
+ * Determine if a aligned_multi_array timeseries type guarantees alignment
+ * suitable for
+ * SIMD optimizations.
+ *
+ * @tparam T the type stored by the aligned_multi_array timeseries
+ * @tparam K aligned_multi_array dimensionality
+ *
+ */
+template <typename T, std::size_t K>
+struct always_aligned<jb::fftw::aligned_multi_array<T, K>>
+    : public std::true_type {};
 
 } // namespace detail
 } // namespace jb
