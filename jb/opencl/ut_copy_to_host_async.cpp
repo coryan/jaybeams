@@ -1,7 +1,7 @@
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 
-#include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 #include <jb/complex_traits.hpp>
 
@@ -62,7 +62,8 @@ void check_copy_to_host_async_sized(int dsize, int hsize) {
   // ... resize the receiving buffer based on the returned iterator ...
   actual.resize(done.get() - actual.begin());
 
-  jb::testing::check_vector_close_enough(actual, expected);
+  bool res = jb::testing::check_collection_close_enough(actual, expected);
+  BOOST_CHECK_MESSAGE(res, "collections are not within default tolerance");
 }
 } // anonymous namespace
 

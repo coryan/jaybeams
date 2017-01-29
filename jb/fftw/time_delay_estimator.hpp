@@ -1,24 +1,12 @@
 #ifndef jb_fftw_time_delay_estimator_hpp
 #define jb_fftw_time_delay_estimator_hpp
 
-#include <jb/fftw/aligned_vector.hpp>
+#include <jb/detail/array_traits.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/complex_traits.hpp>
 
-#include <type_traits>
-
 namespace jb {
 namespace fftw {
-
-/**
- * Determine if a timeseries type guarantees alignment.
- */
-template <typename T>
-struct always_aligned : public std::false_type {};
-
-/// By construction these vectors are always 128-bit aligned.
-template <typename T>
-struct always_aligned<jb::fftw::aligned_vector<T>> : public std::true_type {};
 
 /**
  * A simple time delay estimator based on cross-correlation
@@ -54,8 +42,20 @@ public:
       iplan;
   //@}
 
-  /// Constructor
-  time_delay_estimator(timeseries_type const& a, timeseries_type const& b)
+  /**
+   * Constructs a time delay estimator using @param a and @param b as prototypes
+   * for the arguments.
+   *
+   * The optimal algorithm to compute the  FFTs used in the cross correlation
+   * depends on the size of the input parameters and their memory alignment.
+   *
+   * The FFTW library modifies the arguments to compute the optimal
+   * execution plan, do not assume the values are unmodified.
+   *
+   * @param a container type (e.g. vector<>) timeseries
+   * @param b container type (e.g. vector<>) timeseries
+   */
+  time_delay_estimator(timeseries_type& a, timeseries_type& b)
       : tmpa_(a.size())
       , tmpb_(b.size())
       , a2tmpa_(create_forward_plan(a, tmpa_, planning_flags()))
@@ -69,7 +69,7 @@ public:
 
   /// Compute the time-delay estimate between two timeseries
   std::pair<bool, precision_type>
-  estimate_delay(timeseries_type const& a, timeseries_type const& b) {
+  estimate_delay(timeseries_type& a, timeseries_type& b) {
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
@@ -109,7 +109,7 @@ private:
    * Determine the correct FFTW planning flags given the inputs.
    */
   static int planning_flags() {
-    if (always_aligned<timeseries_t>::value) {
+    if (jb::detail::always_aligned<timeseries_t>::value) {
       return FFTW_MEASURE;
     }
     return FFTW_MEASURE | FFTW_UNALIGNED;

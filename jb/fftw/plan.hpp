@@ -1,6 +1,7 @@
 #ifndef jb_fftw_plan_hpp
 #define jb_fftw_plan_hpp
 
+#include <jb/detail/array_traits.hpp>
 #include <jb/fftw/cast.hpp>
 #include <jb/complex_traits.hpp>
 
@@ -13,24 +14,6 @@ int constexpr default_plan_flags =
     (FFTW_ESTIMATE | FFTW_PRESERVE_INPUT | FFTW_UNALIGNED);
 
 namespace detail {
-/**
- * Define traits for container-like types.
- */
-template <typename T>
-struct container_traits {
-  /// Define the type of the elements in the container
-  typedef typename T::value_type element_type;
-};
-
-/**
- * Define traits for boost::multi_array<> containers.
- */
-template <typename T, std::size_t K, typename A>
-struct container_traits<boost::multi_array<T, K, A>> {
-  /// Define the type of the elements in the array
-  typedef typename boost::multi_array<T, K, A>::element element_type;
-};
-
 /**
  * Helper function to check the inputs to a create_*_plan_*()
  *
@@ -46,31 +29,6 @@ struct container_traits<boost::multi_array<T, K, A>> {
 void check_plan_inputs(
     std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples,
     std::size_t on_nsamples, char const* function_name);
-
-/// Count the number of elements in boost::multi_array<>
-template <typename T, std::size_t K, typename A>
-std::size_t element_count(boost::multi_array<T, K, A> const& a) {
-  return a.num_elements();
-}
-
-/// Count the number of samples in a boost::multi_array<>
-template <typename T, std::size_t K, typename A>
-std::size_t nsamples(boost::multi_array<T, K, A> const& a) {
-  return a.shape()[a.num_dimensions() - 1];
-}
-
-/// Count the number of elements in a std::vector<>
-template <typename T, typename A>
-std::size_t element_count(std::vector<T, A> const& a) {
-  return a.size();
-}
-
-/// Count the number of samples in a std::vector<>
-template <typename T, typename A>
-std::size_t nsamples(std::vector<T, A> const& a) {
-  return a.size();
-}
-
 } // namespace detail
 
 /**
@@ -100,14 +58,14 @@ public:
   /**
    * type traits
    */
-  typedef typename detail::container_traits<in_timeseries_type>::element_type
-      in_value_type;
-  typedef
-      typename jb::extract_value_type<in_value_type>::precision precision_type;
-  typedef ::jb::fftw::traits<precision_type> traits;
-  typedef typename traits::std_complex_type std_complex_type;
-  typedef typename traits::fftw_complex_type fftw_complex_type;
-  typedef typename traits::fftw_plan_type fftw_plan_type;
+  using in_value_type =
+      typename jb::detail::array_traits<in_timeseries_type>::element_type;
+  using precision_type =
+      typename jb::extract_value_type<in_value_type>::precision;
+  using traits = ::jb::fftw::traits<precision_type>;
+  using std_complex_type = typename traits::std_complex_type;
+  using fftw_complex_type = typename traits::fftw_complex_type;
+  using fftw_plan_type = typename traits::fftw_plan_type;
   //@}
 
   /// Create unusable, empty, or null plan
@@ -148,8 +106,8 @@ public:
   void execute(in_timeseries_type const& in, out_timeseries_type& out) const {
     using namespace detail;
     check_plan_inputs(
-        element_count(in), element_count(out), nsamples(in), nsamples(out),
-        __func__);
+        jb::detail::element_count(in), jb::detail::element_count(out),
+        jb::detail::nsamples(in), jb::detail::nsamples(out), __func__);
     execute_impl(fftw_cast(in), fftw_cast(out));
   }
 
@@ -276,15 +234,15 @@ plan<in_array_type, out_array_type> create_forward_plan(
     int flags = default_plan_flags) {
   using namespace detail;
   check_plan_inputs(
-      element_count(in), element_count(out), nsamples(in), nsamples(out),
-      __func__);
-  auto howmany = element_count(in) / nsamples(in);
+      jb::detail::element_count(in), jb::detail::element_count(out),
+      jb::detail::nsamples(in), jb::detail::nsamples(out), __func__);
+  auto howmany = jb::detail::element_count(in) / jb::detail::nsamples(in);
   if (howmany == 1) {
     return plan<in_array_type, out_array_type>::create_forward_impl(
-        nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+        jb::detail::nsamples(in), fftw_cast(in), fftw_cast(out), flags);
   }
   return plan<in_array_type, out_array_type>::create_forward_many_impl(
-      howmany, nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+      howmany, jb::detail::nsamples(in), fftw_cast(in), fftw_cast(out), flags);
 }
 
 /**
@@ -307,15 +265,15 @@ plan<in_array_type, out_array_type> create_backward_plan(
     int flags = default_plan_flags) {
   using namespace detail;
   check_plan_inputs(
-      element_count(in), element_count(out), nsamples(in), nsamples(out),
-      __func__);
-  auto howmany = element_count(in) / nsamples(in);
+      jb::detail::element_count(in), jb::detail::element_count(out),
+      jb::detail::nsamples(in), jb::detail::nsamples(out), __func__);
+  auto howmany = jb::detail::element_count(in) / jb::detail::nsamples(in);
   if (howmany == 1) {
     return plan<in_array_type, out_array_type>::create_backward_impl(
-        nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+        jb::detail::nsamples(in), fftw_cast(in), fftw_cast(out), flags);
   }
   return plan<in_array_type, out_array_type>::create_backward_many_impl(
-      howmany, nsamples(in), fftw_cast(in), fftw_cast(out), flags);
+      howmany, jb::detail::nsamples(in), fftw_cast(in), fftw_cast(out), flags);
 }
 
 /**
@@ -324,14 +282,14 @@ plan<in_array_type, out_array_type> create_backward_plan(
 template <typename in_timeseries_type, typename out_timeseries_type>
 struct plan<in_timeseries_type, out_timeseries_type>::check_constraints {
   check_constraints() {
-    typedef typename detail::container_traits<in_timeseries_type>::element_type
-        in_value_type;
-    typedef typename detail::container_traits<out_timeseries_type>::element_type
-        out_value_type;
-    typedef typename jb::extract_value_type<in_value_type>::precision
-        in_precision_type;
-    typedef typename jb::extract_value_type<out_value_type>::precision
-        out_precision_type;
+    using in_value_type =
+        typename jb::detail::array_traits<in_timeseries_type>::element_type;
+    using out_value_type =
+        typename jb::detail::array_traits<out_timeseries_type>::element_type;
+    using in_precision_type =
+        typename jb::extract_value_type<in_value_type>::precision;
+    using out_precision_type =
+        typename jb::extract_value_type<out_value_type>::precision;
     static_assert(
         std::is_same<in_precision_type, out_precision_type>::value,
         "Mismatched precision_type, both timeseries must have the same"
