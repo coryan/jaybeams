@@ -123,9 +123,8 @@ std::vector<operation> create_operations(
 
 template <typename order_book_side, typename book_config>
 std::function<void()> create_iteration(
-    int seed, int size, fixture_config const& cfg,
+    std::mt19937_64& generator, int size, fixture_config const& cfg,
     book_config const& bkcfg) {
-  auto generator = initialize_generator(seed);
   order_book_side bk(bkcfg);
   std::vector<operation> ops =
       create_operations(generator, size, cfg, bk.is_ascending());
@@ -170,18 +169,17 @@ public:
       : size_(size)
       , cfg_(cfg)
       , bkcfg_(bkcfg)
-      , seed_(seed)
-      , generator_(initialize_generator(seed_)) {
+      , generator_(initialize_generator(seed)) {
   }
 
   void iteration_setup() {
     std::uniform_int_distribution<> side(0, 1);
     if (side(generator_)) {
       iteration_ = create_iteration<typename order_book::buys_t>(
-          seed_, size_, cfg_, bkcfg_);
+          generator_, size_, cfg_, bkcfg_);
     } else {
       iteration_ = create_iteration<typename order_book::sells_t>(
-          seed_, size_, cfg_, bkcfg_);
+          generator_, size_, cfg_, bkcfg_);
     }
   }
 
@@ -199,9 +197,6 @@ private:
 
   /// The configuration for the book side
   book_config bkcfg_;
-
-  /// The seed to initialize the generator for each iteration
-  int seed_;
 
   /// The PRNG, initialized based on the seed parameter
   std::mt19937_64 generator_;
