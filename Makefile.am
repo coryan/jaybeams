@@ -647,7 +647,8 @@ jb_fftw_ut_plan_many_LDADD = $(jb_ut_fftw_ldadd)
 
 jb_fftw_ut_tde_result_SOURCES = jb/fftw/ut_tde_result.cpp
 jb_fftw_ut_tde_result_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_tde_result
-jb_fftw_ut_tde_result_LDADD = $(jb_ut_fftw_libs)
+jb_fftw_ut_tde_result_LDFLAGS = $(jb_ut_fftw_ldflags)
+jb_fftw_ut_tde_result_LDADD = $(jb_ut_fftw_ldadd)
 
 jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
 jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator
@@ -656,7 +657,8 @@ jb_fftw_ut_time_delay_estimator_LDADD = $(jb_ut_fftw_ldadd)
 
 jb_fftw_ut_time_delay_estimator_many_SOURCES = jb/fftw/ut_time_delay_estimator_many.cpp
 jb_fftw_ut_time_delay_estimator_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator_many
-jb_fftw_ut_time_delay_estimator_many_LDADD = $(jb_ut_fftw_libs)
+jb_fftw_ut_time_delay_estimator_many_LDFLAGS = $(jb_ut_fftw_ldflags)
+jb_fftw_ut_time_delay_estimator_many_LDADD = $(jb_ut_fftw_ldadd)
 
 jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
 jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits
@@ -1120,7 +1122,7 @@ jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
-jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_libs)
+jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_ldadd)
 
 jb_testing_ut_create_square_timeseries_SOURCES = jb/testing/ut_create_square_timeseries.cpp
 jb_testing_ut_create_square_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_square_timeseries
