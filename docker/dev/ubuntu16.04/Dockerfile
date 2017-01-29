@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     git \
     lcov \
     libboost-all-dev \
+    libbz2-dev \
     libclang-dev \
     libclfft-dev \
     libfftw3-dev \
