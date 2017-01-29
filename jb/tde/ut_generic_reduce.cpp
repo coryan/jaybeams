@@ -2,7 +2,7 @@
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/tde/generic_reduce.hpp>
-#include <jb/testing/check_complex_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 #include <jb/complex_traits.hpp>
 
@@ -53,7 +53,7 @@ template <typename T>
 std::function<T()> create_random_generator(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_int_distribution<T> dis(-1000, 1000);
-  typedef std::pair<std::mt19937, std::uniform_int_distribution<T>> state_type;
+  using state_type = std::pair<std::mt19937, std::uniform_int_distribution<T>>;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
 }
@@ -62,8 +62,8 @@ template <>
 std::function<float()> create_random_generator<float>(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<float> dis(1, 2);
-  typedef std::pair<std::mt19937, std::uniform_real_distribution<float>>
-      state_type;
+  using state_type =
+      std::pair<std::mt19937, std::uniform_real_distribution<float>>;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
 }
@@ -72,8 +72,8 @@ template <>
 std::function<double()> create_random_generator<double>(unsigned int seed) {
   std::mt19937 gen(seed);
   std::uniform_real_distribution<double> dis(1, 2);
-  typedef std::pair<std::mt19937, std::uniform_real_distribution<double>>
-      state_type;
+  using state_type =
+      std::pair<std::mt19937, std::uniform_real_distribution<double>>;
   std::shared_ptr<state_type> state(new state_type(gen, dis));
   return [state]() { return state->second(state->first); };
 }
@@ -89,7 +89,7 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
 
   unsigned int seed = std::random_device()();
   BOOST_TEST_MESSAGE("SEED = " << seed);
-  typedef typename jb::extract_value_type<value_type>::precision scalar_type;
+  using scalar_type = typename jb::extract_value_type<value_type>::precision;
   auto generator = create_random_generator<scalar_type>(seed);
 
   std::vector<value_type> asrc;
@@ -112,7 +112,7 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
       std::accumulate(asrc.begin(), asrc.end(), value_type(0));
   value_type actual = *done.get();
   BOOST_CHECK_MESSAGE(
-      jb::testing::close_enough(actual, expected, size),
+      jb::testing::check_close_enough(actual, expected, size),
       "mismatched C++ vs. OpenCL results expected(C++)="
           << expected << " actual(OpenCL)=" << actual
           << " delta=" << (actual - expected));
