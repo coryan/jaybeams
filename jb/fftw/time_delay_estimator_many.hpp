@@ -73,9 +73,8 @@ public:
    * The optimal algorithm to compute the  FFTs used in the cross correlation
    * depends on the size of the input parameters and their memory alignment.
    *
-   * The FFTW library casts the constness of their arguments to change their
-   * values, so we are making it explicit pasing non-const reference arguments
-   * to the constructor.
+   * The FFTW library modifies the arguments to compute the optimal 
+   * execution plan, do not assume the values are unmodified.   
    *
    * @param a multi array timeseries
    * @param b multi array timeseries
