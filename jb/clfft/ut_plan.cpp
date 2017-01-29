@@ -1,7 +1,7 @@
 #include <jb/clfft/init.hpp>
 #include <jb/clfft/plan.hpp>
 #include <jb/opencl/device_selector.hpp>
-#include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -14,9 +14,9 @@
 BOOST_AUTO_TEST_CASE(clfft_plan_default) {
   jb::clfft::init init;
   {
-    typedef boost::compute::vector<std::complex<float>> invector;
-    typedef boost::compute::vector<std::complex<float>> outvector;
-    typedef jb::clfft::plan<invector, outvector> tested_type;
+    using invector = boost::compute::vector<std::complex<float>>;
+    using outvector = boost::compute::vector<std::complex<float>>;
+    using tested_type = jb::clfft::plan<invector, outvector>;
     tested_type x;
     tested_type y;
   }
@@ -32,8 +32,8 @@ BOOST_AUTO_TEST_CASE(clfft_plan_move) {
   jb::clfft::init init;
 
   std::size_t size = 128;
-  typedef boost::compute::vector<std::complex<float>> invector;
-  typedef boost::compute::vector<std::complex<float>> outvector;
+  using invector = boost::compute::vector<std::complex<float>>;
+  using outvector = boost::compute::vector<std::complex<float>>;
 
   std::vector<std::complex<float>> src(size);
   jb::testing::create_square_timeseries(size, src);
@@ -83,8 +83,8 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
 
-  typedef boost::compute::vector<std::complex<float>> invector;
-  typedef boost::compute::vector<std::complex<float>> outvector;
+  using invector = boost::compute::vector<std::complex<float>>;
+  using outvector = boost::compute::vector<std::complex<float>>;
 
   std::vector<std::complex<float>> src(size);
   jb::testing::create_square_timeseries(size, src);
@@ -104,15 +104,16 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   std::vector<std::complex<float>> dst(size);
   boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
 
-  jb::testing::check_vector_close_enough(dst, src, tol);
+  bool res = jb::testing::check_collection_close_enough(dst, src, tol);
+  BOOST_CHECK_MESSAGE(res, "collections are not within tolerance=" << tol);
 }
 
 /**
  * @test Verify that the plan detects errors and reports them.
  */
 BOOST_AUTO_TEST_CASE(clfft_plan_error) {
-  typedef boost::compute::vector<std::complex<float>> invector;
-  typedef boost::compute::vector<std::complex<float>> outvector;
+  using invector = boost::compute::vector<std::complex<float>>;
+  using outvector = boost::compute::vector<std::complex<float>>;
 
   std::size_t const size = 1 << 8;
   boost::compute::device device = boost::compute::system::default_device();

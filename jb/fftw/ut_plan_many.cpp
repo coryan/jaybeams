@@ -1,5 +1,5 @@
 #include <jb/fftw/plan.hpp>
-#include <jb/testing/check_multi_array_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 
 #include <boost/multi_array.hpp>
 #include <boost/test/unit_test.hpp>
@@ -75,7 +75,7 @@ void test_plan_complex2complex() {
   }
   // ... compare the input to the output, they should be nearly
   // identical ...
-  jb::testing::check_multi_array_close_enough(out, in, tol);
+  jb::testing::check_collection_close_enough(out, in, tol);
 }
 
 /// Verify that plans work for a batch of floating point to complex
@@ -142,7 +142,8 @@ void test_plan_real2complex() {
   }
   // ... compare the input to the output, they should be nearly
   // identical ...
-  jb::testing::check_multi_array_close_enough(out, in, tol);
+  bool res = jb::testing::check_collection_close_enough(out, in, tol);
+  BOOST_CHECK_MESSAGE(res, "collections are not within tolerance=" << tol);
 }
 
 /// A generic test parametric on the precision of the floating point

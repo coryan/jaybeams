@@ -40,7 +40,7 @@ public:
     }
   }
 
-  typedef jb::fftw::time_delay_estimator<timeseries_type> tested;
+  using tested = jb::fftw::time_delay_estimator<timeseries_type>;
 
 private:
   timeseries_type a;
@@ -50,7 +50,7 @@ private:
 
 template <typename vector_type>
 void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
-  typedef jb::testing::microbenchmark<fixture<vector_type>> benchmark;
+  using benchmark = jb::testing::microbenchmark<fixture<vector_type>>;
   benchmark bm(cfg);
 
   auto r = bm.run();

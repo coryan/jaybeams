@@ -1,6 +1,6 @@
 #include <jb/fftw/allocator.hpp>
 #include <jb/fftw/plan.hpp>
-#include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <vector>
@@ -35,7 +35,8 @@ void test_plan_real2complex() {
   for (std::size_t i = 0; i != std::size_t(nsamples); ++i) {
     out[i] /= nsamples;
   }
-  jb::testing::check_vector_close_enough(out, in, tol);
+  bool res = jb::testing::check_collection_close_enough(out, in, tol);
+  BOOST_CHECK_MESSAGE(res, "collections are not within tolerance=" << tol);
 }
 
 } // anonymous namespace

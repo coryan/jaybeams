@@ -1,4 +1,4 @@
-#include <jb/testing/check_complex_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 
 #include <boost/test/unit_test.hpp>

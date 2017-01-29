@@ -81,6 +81,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_trade_message
 
 jb_testing_unit_tests = \
+  jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
   jb/testing/ut_delay_timeseries \
@@ -274,11 +275,7 @@ jb_libjb_testing_a_SOURCES = \
   jb/testing/microbenchmark_config.cpp
 
 jb_libjb_testing_a_HEADERS = \
-  jb/testing/check_array_close_enough.hpp \
-  jb/testing/check_complex_close_enough.hpp \
-  jb/testing/check_multi_array_close_enough.hpp \
-  jb/testing/check_tde_result_close_enough.hpp \
-  jb/testing/check_vector_close_enough.hpp \
+  jb/testing/check_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
@@ -1008,6 +1005,10 @@ jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 ################################################################
 # testing unit tests
 ################################################################
+
+jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
+jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
+jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_libs)
 
 jb_testing_ut_create_square_timeseries_SOURCES = jb/testing/ut_create_square_timeseries.cpp
 jb_testing_ut_create_square_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_square_timeseries
