@@ -1,6 +1,5 @@
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
-#include <jb/testing/check_vector_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 
 #include <boost/compute/algorithm/max_element.hpp>
@@ -16,7 +15,7 @@
  */
 BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
   constexpr std::size_t size = 32768;
-  typedef float precision_t;
+  using precision_t = float;
 
   boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
@@ -35,7 +34,7 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float) {
 
   boost::compute::copy(src.begin(), src.end(), a.begin(), queue);
 
-  typedef std::complex<precision_t> value_type;
+  using value_type = std::complex<precision_t>;
   BOOST_COMPUTE_FUNCTION(
       bool, less_real, (value_type const& a, value_type const& b),
       { return a.x < b.x; });

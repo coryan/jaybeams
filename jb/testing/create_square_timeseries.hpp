@@ -1,6 +1,8 @@
 #ifndef jb_testing_create_square_timeseries_hpp
 #define jb_testing_create_square_timeseries_hpp
 
+#include <jb/testing/resize_if_applicable.hpp>
+
 namespace jb {
 namespace testing {
 
@@ -9,8 +11,8 @@ namespace testing {
  */
 template <typename timeseries>
 void create_square_timeseries(int nsamples, timeseries& ts) {
+  resize_if_applicable(ts, nsamples);
   typedef typename timeseries::value_type value_type;
-  ts.resize(nsamples);
   for (int i = 0; i != nsamples; ++i) {
     if (i < nsamples / 4) {
       ts[i] = value_type(-100);

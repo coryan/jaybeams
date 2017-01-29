@@ -81,6 +81,7 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_trade_message
 
 jb_testing_unit_tests = \
+  jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
   jb/testing/ut_delay_timeseries \
@@ -183,7 +184,9 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_cast_vector \
   jb/fftw/ut_plan \
   jb/fftw/ut_plan_many \
+  jb/fftw/ut_tde_result \
   jb/fftw/ut_time_delay_estimator \
+  jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
 examples += examples/fftw_correlation_no_wrappers
@@ -218,6 +221,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/convert_cpu_set.hpp \
   jb/convert_severity_level.hpp \
   jb/cpu_set.hpp \
+  jb/detail/array_traits.hpp \
   jb/detail/os_error.hpp \
   jb/detail/reconfigure_thread.hpp \
   jb/detail/thread_setup_wrapper.hpp \
@@ -271,10 +275,7 @@ jb_libjb_testing_a_SOURCES = \
   jb/testing/microbenchmark_config.cpp
 
 jb_libjb_testing_a_HEADERS = \
-  jb/testing/check_array_close_enough.hpp \
-  jb/testing/check_complex_close_enough.hpp \
-  jb/testing/check_multi_array_close_enough.hpp \
-  jb/testing/check_vector_close_enough.hpp \
+  jb/testing/check_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
@@ -419,7 +420,9 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/allocator.hpp \
   jb/fftw/cast.hpp \
   jb/fftw/plan.hpp \
+  jb/fftw/tde_result.hpp \
   jb/fftw/time_delay_estimator.hpp \
+  jb/fftw/time_delay_estimator_many.hpp \
   jb/fftw/traits.hpp
 
 ################################################################
@@ -592,9 +595,17 @@ jb_fftw_ut_plan_many_SOURCES = jb/fftw/ut_plan_many.cpp
 jb_fftw_ut_plan_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_plan_many
 jb_fftw_ut_plan_many_LDADD = $(jb_ut_fftw_libs)
 
+jb_fftw_ut_tde_result_SOURCES = jb/fftw/ut_tde_result.cpp
+jb_fftw_ut_tde_result_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_tde_result
+jb_fftw_ut_tde_result_LDADD = $(jb_ut_fftw_libs)
+
 jb_fftw_ut_time_delay_estimator_SOURCES = jb/fftw/ut_time_delay_estimator.cpp
 jb_fftw_ut_time_delay_estimator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator
 jb_fftw_ut_time_delay_estimator_LDADD = $(jb_ut_fftw_libs)
+
+jb_fftw_ut_time_delay_estimator_many_SOURCES = jb/fftw/ut_time_delay_estimator_many.cpp
+jb_fftw_ut_time_delay_estimator_many_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_time_delay_estimator_many
+jb_fftw_ut_time_delay_estimator_many_LDADD = $(jb_ut_fftw_libs)
 
 jb_fftw_ut_traits_SOURCES = jb/fftw/ut_traits.cpp
 jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_traits
@@ -993,6 +1004,10 @@ jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 ################################################################
 # testing unit tests
 ################################################################
+
+jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
+jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
+jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_libs)
 
 jb_testing_ut_create_square_timeseries_SOURCES = jb/testing/ut_create_square_timeseries.cpp
 jb_testing_ut_create_square_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_square_timeseries
