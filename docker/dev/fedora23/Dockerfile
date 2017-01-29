@@ -7,6 +7,7 @@ RUN dnf update -y && dnf install -y \
     automake \
     boost \
     boost-devel \
+    bzip2-devel \
     clang \
     clinfo \
     cmake \
@@ -22,7 +23,8 @@ RUN dnf update -y && dnf install -y \
     pocl-devel \
     tar \
     wget \
-    yaml-cpp-devel
+    yaml-cpp-devel \
+    zlib-devel
 
 WORKDIR /var/tmp
 RUN git clone --depth 2 https://github.com/coryan/jaybeams.git
