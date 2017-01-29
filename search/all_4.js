@@ -1,8 +1,8 @@
 var searchData=
 [
   ['effective_5fworkgroup_5fsize_5f',['effective_workgroup_size_',['../classjb_1_1tde_1_1generic__reduce.html#a4ef1c4158491bd14975f56fbd5b2bcb4',1,'jb::tde::generic_reduce']]],
-  ['element_5fcount',['element_count',['../namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b',1,'jb::fftw::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)'],['../namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc',1,'jb::fftw::detail::element_count(std::vector&lt; T, A &gt; const &amp;a)']]],
-  ['element_5ftype',['element_type',['../namespacejb_1_1fftw_1_1detail.html#a8e7356029c557277823a820d6aa90e60',1,'jb::fftw::detail::container_traits::element_type()'],['../namespacejb_1_1fftw_1_1detail.html#a0666cef4725023dbee6a4e4ea772f203',1,'jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;::element_type()']]],
+  ['element_5fcount',['element_count',['../namespacejb_1_1detail.html#a298ceb1d8c3d4102ff6b08005c5911c4',1,'jb::detail::element_count(container_type const &amp;a)'],['../namespacejb_1_1detail.html#aed6c23779f668fcb9955c65b06b2cbde',1,'jb::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)']]],
+  ['element_5ftype',['element_type',['../namespacejb_1_1detail.html#a38f290c63aee93a9434b4399177d0192',1,'jb::detail::array_traits::element_type()'],['../namespacejb_1_1detail.html#ad2f712a7d493c320850365c2e75c68f8',1,'jb::detail::array_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;::element_type()'],['../classjb_1_1fftw_1_1time__delay__estimator__many.html#aed5fca5b164db282d60bffe0e99e7fb8',1,'jb::fftw::time_delay_estimator_many::element_type()']]],
   ['empty_5fbid',['empty_bid',['../namespacejb_1_1itch5.html#a80eb7a8e0a75353b1e4e7cbe4e09b40a',1,'jb::itch5']]],
   ['empty_5fbid_5fprice',['empty_bid_price',['../namespacejb_1_1itch5.html#a60f21bf53e13c4ef05cd22eafff6b1a6',1,'jb::itch5']]],
   ['empty_5foffer',['empty_offer',['../namespacejb_1_1itch5.html#ad0abe06afe72c8725a5c996ba2a9da24',1,'jb::itch5']]],
@@ -27,7 +27,8 @@ var searchData=
   ['error_2ehpp',['error.hpp',['../error_8hpp.html',1,'']]],
   ['error_5f',['error_',['../classjb_1_1clfft_1_1clfft__error.html#a6f2ea9709d0de398667b003ed5adc354',1,'jb::clfft::clfft_error']]],
   ['error_5fcode',['error_code',['../classjb_1_1clfft_1_1clfft__error.html#ac8ae3edd104d4a0219c8631671404aa0',1,'jb::clfft::clfft_error']]],
-  ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818',1,'jb::fftw::time_delay_estimator']]],
+  ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#abb50a7bf5e1a176a90b80a3999fcf9d9',1,'jb::fftw::time_delay_estimator::estimate_delay()'],['../classjb_1_1fftw_1_1time__delay__estimator__many.html#a659e3b2419c8963c891b3173c0342774',1,'jb::fftw::time_delay_estimator_many::estimate_delay()']]],
+  ['estimated_5fdelay_5ftype',['estimated_delay_type',['../classjb_1_1fftw_1_1time__delay__estimator__many.html#a9a229485aaad73c192609831044d2676',1,'jb::fftw::time_delay_estimator_many']]],
   ['estimated_5fmean',['estimated_mean',['../classjb_1_1histogram.html#aa73371973ff3b372acfd5d3fbe8b9238',1,'jb::histogram']]],
   ['estimated_5fquantile',['estimated_quantile',['../classjb_1_1histogram.html#a6c02b97a76ebee1a0bfbf2953130f213',1,'jb::histogram']]],
   ['etp_5fflag',['etp_flag',['../structjb_1_1itch5_1_1stock__directory__message.html#a082ebd64c61593fc755b2eece5bd9373',1,'jb::itch5::stock_directory_message']]],

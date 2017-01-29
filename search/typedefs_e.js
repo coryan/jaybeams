@@ -4,5 +4,6 @@ var searchData=
   ['time_5fpoint',['time_point',['../classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8',1,'jb::itch5::compute_book::time_point()'],['../classjb_1_1itch5_1_1mold__udp__pacer.html#a527bef6a80e4cc1ccfaed92be8ab2355',1,'jb::itch5::mold_udp_pacer::time_point()'],['../namespacejb_1_1itch5.html#ab841715d223ab0bb40378f1081fbc933',1,'jb::itch5::time_point()']]],
   ['timeseries_5ftype',['timeseries_type',['../classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682',1,'jb::fftw::time_delay_estimator']]],
   ['trading_5fstate_5ft',['trading_state_t',['../namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303',1,'jb::itch5']]],
-  ['traits',['traits',['../classjb_1_1fftw_1_1plan.html#ad7ae9d0f3a921b54bde9a5b98f596c16',1,'jb::fftw::plan']]]
+  ['traits',['traits',['../classjb_1_1fftw_1_1plan.html#a64209d6f5fd3d1d11d6d9296c4480900',1,'jb::fftw::plan']]],
+  ['type',['type',['../classjb_1_1testing_1_1has__resize.html#a6da62d1402f4d4024724bc1512b91d99',1,'jb::testing::has_resize']]]
 ];

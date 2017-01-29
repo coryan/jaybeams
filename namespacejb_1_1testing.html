@@ -117,15 +117,6 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html">check_multi_array_close_enough_helper</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_010_01_4.html">check_multi_array_close_enough_helper&lt; multi_array, 0 &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_010_01_4.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html">check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1create__random__sample.html">create_random_sample</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap a random number generator so it can be used for both real and complex numbers.  <a href="structjb_1_1testing_1_1create__random__sample.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,6 +128,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1extrapolate__with__zeroes.html">extrapolate_with_zeroes</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A functor to extrapolate with zeroes.  <a href="structjb_1_1testing_1_1extrapolate__with__zeroes.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1has__resize.html">has_resize</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type trait to evaluate if a collection of numbers (e.g.  <a href="classjb_1_1testing_1_1has__resize.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1microbenchmark.html">microbenchmark</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a micro-benchmark on a given class.  <a href="classjb_1_1testing_1_1microbenchmark.html#details">More...</a><br /></td></tr>
@@ -150,29 +144,25 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3462a707575fce86c99a98d7958597c1"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
-<tr class="memitem:a3462a707575fce86c99a98d7958597c1"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a3462a707575fce86c99a98d7958597c1">check_array_close_enough</a> (std::size_t size, value_type const *actual, value_type const *expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:a3462a707575fce86c99a98d7958597c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="#a3462a707575fce86c99a98d7958597c1">More...</a><br /></td></tr>
-<tr class="separator:a3462a707575fce86c99a98d7958597c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51cd9a4af36e91adf96772bdc8dd41f8"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
-<tr class="memitem:a51cd9a4af36e91adf96772bdc8dd41f8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a51cd9a4af36e91adf96772bdc8dd41f8">close_enough</a> (real actual, real expected, int tol)</td></tr>
-<tr class="memdesc:a51cd9a4af36e91adf96772bdc8dd41f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare floating point values with some tolerance.  <a href="#a51cd9a4af36e91adf96772bdc8dd41f8">More...</a><br /></td></tr>
-<tr class="separator:a51cd9a4af36e91adf96772bdc8dd41f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1b43c10fea35dbdef8ccc0752a15c25"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
-<tr class="memitem:aa1b43c10fea35dbdef8ccc0752a15c25"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aa1b43c10fea35dbdef8ccc0752a15c25">close_enough</a> (std::complex&lt; real &gt; const &amp;actual, std::complex&lt; real &gt; const &amp;expected, int tol=1)</td></tr>
-<tr class="memdesc:aa1b43c10fea35dbdef8ccc0752a15c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare complex number values with some tolerance.  <a href="#aa1b43c10fea35dbdef8ccc0752a15c25">More...</a><br /></td></tr>
-<tr class="separator:aa1b43c10fea35dbdef8ccc0752a15c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa697bf9aa0ed0e580e4d5c651dd4427e"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
-<tr class="memitem:aa697bf9aa0ed0e580e4d5c651dd4427e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aa697bf9aa0ed0e580e4d5c651dd4427e">close_enough</a> (real actual[2], real expected[2], int tol=1)</td></tr>
-<tr class="memdesc:aa697bf9aa0ed0e580e4d5c651dd4427e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare complex number (as arrays of size 2) values with some tolerance.  <a href="#aa697bf9aa0ed0e580e4d5c651dd4427e">More...</a><br /></td></tr>
-<tr class="separator:aa697bf9aa0ed0e580e4d5c651dd4427e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026133e5a091fd8636681b469ba43edf"><td class="memTemplParams" colspan="2">template&lt;typename value_t , typename std::enable_if&lt; std::is_integral&lt; value_t &gt;::value &gt;::type *  = nullptr&gt; </td></tr>
+<tr class="memitem:a026133e5a091fd8636681b469ba43edf"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a026133e5a091fd8636681b469ba43edf">check_close_enough</a> (value_t num_a, value_t num_b, int tol)</td></tr>
+<tr class="memdesc:a026133e5a091fd8636681b469ba43edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two numbers of the same integer type check if the difference is within a given tolerance.  <a href="#a026133e5a091fd8636681b469ba43edf">More...</a><br /></td></tr>
+<tr class="separator:a026133e5a091fd8636681b469ba43edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adadefce6e18404e7f8575842cc05fd5e"><td class="memTemplParams" colspan="2">template&lt;typename value_t &gt; </td></tr>
+<tr class="memitem:adadefce6e18404e7f8575842cc05fd5e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#adadefce6e18404e7f8575842cc05fd5e">check_close_enough</a> (std::complex&lt; value_t &gt; com_a, std::complex&lt; value_t &gt; com_b, int tol=1)</td></tr>
+<tr class="memdesc:adadefce6e18404e7f8575842cc05fd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two complex numbers of the same value type check if the difference is within a given tolerance.  <a href="#adadefce6e18404e7f8575842cc05fd5e">More...</a><br /></td></tr>
+<tr class="separator:adadefce6e18404e7f8575842cc05fd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a465de59cf5740ecc1899670ff1e82de1"><td class="memTemplParams" colspan="2">template&lt;typename value_t &gt; </td></tr>
+<tr class="memitem:a465de59cf5740ecc1899670ff1e82de1"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a465de59cf5740ecc1899670ff1e82de1">check_close_enough</a> (value_t com_a[2], value_t com_b[2], int tol=1)</td></tr>
+<tr class="memdesc:a465de59cf5740ecc1899670ff1e82de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare complex number (as arrays of size 2) values with some tolerance.  <a href="#a465de59cf5740ecc1899670ff1e82de1">More...</a><br /></td></tr>
+<tr class="separator:a465de59cf5740ecc1899670ff1e82de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b7e2edacbea63616c91ba14874e176c"><td class="memTemplParams" colspan="2">template&lt;typename floating &gt; </td></tr>
 <tr class="memitem:a0b7e2edacbea63616c91ba14874e176c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a0b7e2edacbea63616c91ba14874e176c">check_small</a> (floating t, double small)</td></tr>
-<tr class="memdesc:a0b7e2edacbea63616c91ba14874e176c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify that a floating point value is "close enough" to 0.  <a href="#a0b7e2edacbea63616c91ba14874e176c">More...</a><br /></td></tr>
+<tr class="memdesc:a0b7e2edacbea63616c91ba14874e176c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify that a floating point value is "close enough" to a small number.  <a href="#a0b7e2edacbea63616c91ba14874e176c">More...</a><br /></td></tr>
 <tr class="separator:a0b7e2edacbea63616c91ba14874e176c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2948723340c62d5802695a560c1cef47"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
 <tr class="memitem:a2948723340c62d5802695a560c1cef47"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a2948723340c62d5802695a560c1cef47">check_small</a> (std::complex&lt; real &gt; t, double small)</td></tr>
-<tr class="memdesc:a2948723340c62d5802695a560c1cef47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify that a complex number is "close enough" to 0.  <a href="#a2948723340c62d5802695a560c1cef47">More...</a><br /></td></tr>
+<tr class="memdesc:a2948723340c62d5802695a560c1cef47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify that a complex number is "close enough" to a small number.  <a href="#a2948723340c62d5802695a560c1cef47">More...</a><br /></td></tr>
 <tr class="separator:a2948723340c62d5802695a560c1cef47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae90ad9a1678a875ce6ffe9ccd36df176"><td class="memTemplParams" colspan="2">template&lt;typename precision_t &gt; </td></tr>
 <tr class="memitem:ae90ad9a1678a875ce6ffe9ccd36df176"><td class="memTemplItemLeft" align="right" valign="top">std::complex&lt; precision_t &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ae90ad9a1678a875ce6ffe9ccd36df176">format</a> (precision_t v[2])</td></tr>
@@ -182,14 +172,30 @@ Functions</h2></td></tr>
 <tr class="memitem:a6086e7f33bdd0ae72e455e927a22091c"><td class="memTemplItemLeft" align="right" valign="top">value_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a6086e7f33bdd0ae72e455e927a22091c">format</a> (value_type t)</td></tr>
 <tr class="memdesc:a6086e7f33bdd0ae72e455e927a22091c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allow generic treatment of FFTW-style complex numbers and other types.  <a href="#a6086e7f33bdd0ae72e455e927a22091c">More...</a><br /></td></tr>
 <tr class="separator:a6086e7f33bdd0ae72e455e927a22091c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memTemplParams" colspan="2">template&lt;typename multi_array &gt; </td></tr>
-<tr class="memitem:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab6c3190f9b9a712ef6d700deb5398b63">check_multi_array_close_enough</a> (multi_array const &amp;actual, multi_array const &amp;expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:ab6c3190f9b9a712ef6d700deb5398b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="#ab6c3190f9b9a712ef6d700deb5398b63">More...</a><br /></td></tr>
-<tr class="separator:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab62c8da3cbf048661d16fcb64abf6162"><td class="memTemplParams" colspan="2">template&lt;typename vector &gt; </td></tr>
-<tr class="memitem:ab62c8da3cbf048661d16fcb64abf6162"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab62c8da3cbf048661d16fcb64abf6162">check_vector_close_enough</a> (vector const &amp;actual, vector const &amp;expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:ab62c8da3cbf048661d16fcb64abf6162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="#ab62c8da3cbf048661d16fcb64abf6162">More...</a><br /></td></tr>
-<tr class="separator:ab62c8da3cbf048661d16fcb64abf6162"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eb0e41631532f810404b3a8296893c9"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
+<tr class="memitem:a3eb0e41631532f810404b3a8296893c9"><td class="memTemplItemLeft" align="right" valign="top">real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a3eb0e41631532f810404b3a8296893c9">relative_error</a> (real actual, real expected)</td></tr>
+<tr class="memdesc:a3eb0e41631532f810404b3a8296893c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the relative error between two float point numbers.  <a href="#a3eb0e41631532f810404b3a8296893c9">More...</a><br /></td></tr>
+<tr class="separator:a3eb0e41631532f810404b3a8296893c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a011af68292fcc847d52839c6294a5ad7"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
+<tr class="memitem:a011af68292fcc847d52839c6294a5ad7"><td class="memTemplItemLeft" align="right" valign="top">real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a011af68292fcc847d52839c6294a5ad7">relative_error</a> (std::complex&lt; real &gt; actual, std::complex&lt; real &gt; expected)</td></tr>
+<tr class="memdesc:a011af68292fcc847d52839c6294a5ad7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the relative error between two complex numbers.  <a href="#a011af68292fcc847d52839c6294a5ad7">More...</a><br /></td></tr>
+<tr class="separator:a011af68292fcc847d52839c6294a5ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad972872e3b17e20fdfaf0a42ac59c467"><td class="memTemplParams" colspan="2">template&lt;typename real &gt; </td></tr>
+<tr class="memitem:ad972872e3b17e20fdfaf0a42ac59c467"><td class="memTemplItemLeft" align="right" valign="top">real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ad972872e3b17e20fdfaf0a42ac59c467">relative_error</a> (real actual[2], real expected[2])</td></tr>
+<tr class="memdesc:ad972872e3b17e20fdfaf0a42ac59c467"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the relative error between two complex numbers in FFTW representation.  <a href="#ad972872e3b17e20fdfaf0a42ac59c467">More...</a><br /></td></tr>
+<tr class="separator:ad972872e3b17e20fdfaf0a42ac59c467"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2938af2a800aa36f1475bdc4fcd62a0"><td class="memTemplParams" colspan="2">template&lt;typename collection_t &gt; </td></tr>
+<tr class="memitem:ab2938af2a800aa36f1475bdc4fcd62a0"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab2938af2a800aa36f1475bdc4fcd62a0">check_collection_close_enough</a> (collection_t const &amp;a, collection_t const &amp;b, int tol=1, int max_differences_printed=<a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
+<tr class="memdesc:ab2938af2a800aa36f1475bdc4fcd62a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two collections of numbers of the same value type, find the differences that are out of a given tolerance and report them via Boost.Test functions.  <a href="#ab2938af2a800aa36f1475bdc4fcd62a0">More...</a><br /></td></tr>
+<tr class="separator:ab2938af2a800aa36f1475bdc4fcd62a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abeec6b8e9b530daea62d3d67d9f23b1c"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K&gt; </td></tr>
+<tr class="memitem:abeec6b8e9b530daea62d3d67d9f23b1c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#abeec6b8e9b530daea62d3d67d9f23b1c">check_collection_close_enough</a> (boost::multi_array&lt; T, K &gt; const &amp;a, boost::multi_array&lt; T, K &gt; const &amp;b, int tol=1, int max_differences_printed=<a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
+<tr class="memdesc:abeec6b8e9b530daea62d3d67d9f23b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialization for boost::multi_array type.  <a href="#abeec6b8e9b530daea62d3d67d9f23b1c">More...</a><br /></td></tr>
+<tr class="separator:abeec6b8e9b530daea62d3d67d9f23b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e0968a9f821693176302d60fa0292f"><td class="memTemplParams" colspan="2">template&lt;typename value_t &gt; </td></tr>
+<tr class="memitem:a53e0968a9f821693176302d60fa0292f"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a53e0968a9f821693176302d60fa0292f">check_collection_close_enough</a> (std::size_t size, value_t const *a, value_t const *b, int tol=1, int max_differences_printed=<a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
+<tr class="memdesc:a53e0968a9f821693176302d60fa0292f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two collections of integers, floating point or complex numbers find the differences that are out of a given tolerance and report them via Boost.Test functions.  <a href="#a53e0968a9f821693176302d60fa0292f">More...</a><br /></td></tr>
+<tr class="separator:a53e0968a9f821693176302d60fa0292f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf78ce6dd64c5a077058a8396a1472cf"><td class="memTemplParams" colspan="2">template&lt;typename timeseries , typename generator &gt; </td></tr>
 <tr class="memitem:aaf78ce6dd64c5a077058a8396a1472cf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aaf78ce6dd64c5a077058a8396a1472cf">create_random_timeseries</a> (generator &amp;gen, int nsamples, timeseries &amp;ts)</td></tr>
 <tr class="memdesc:aaf78ce6dd64c5a077058a8396a1472cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a simple timeseries where the values look like a random.  <a href="#aaf78ce6dd64c5a077058a8396a1472cf">More...</a><br /></td></tr>
@@ -202,6 +208,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a186ae9de4fcc643ef5629ab32335c822"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a186ae9de4fcc643ef5629ab32335c822">create_triangle_timeseries</a> (int nsamples, timeseries &amp;ts)</td></tr>
 <tr class="memdesc:a186ae9de4fcc643ef5629ab32335c822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a simple timeseries where the values look like a triangle.  <a href="#a186ae9de4fcc643ef5629ab32335c822">More...</a><br /></td></tr>
 <tr class="separator:a186ae9de4fcc643ef5629ab32335c822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aee811fb74397c8ed027a3d64e9d7f39c">create_triangle_timeseries</a> (int nsamples, boost::multi_array&lt; T, K, A &gt; &amp;ts)</td></tr>
+<tr class="memdesc:aee811fb74397c8ed027a3d64e9d7f39c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a family of timeseries where the values look like parallel triangles shifted by a constant value.  <a href="#aee811fb74397c8ed027a3d64e9d7f39c">More...</a><br /></td></tr>
+<tr class="separator:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2512b2f0492857a7a2b786fe2daf36c"><td class="memTemplParams" colspan="2">template&lt;typename timeseries_t , typename duration_t , typename extrapolation_functor &gt; </td></tr>
 <tr class="memitem:ae2512b2f0492857a7a2b786fe2daf36c"><td class="memTemplItemLeft" align="right" valign="top">timeseries_t::value_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ae2512b2f0492857a7a2b786fe2daf36c">extrapolate_timeseries</a> (timeseries_t const &amp;ts, duration_t t, duration_t sampling_period, extrapolation_functor const &amp;extrapolation)</td></tr>
 <tr class="memdesc:ae2512b2f0492857a7a2b786fe2daf36c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function to get the extrapolated value of a timeseries.  <a href="#ae2512b2f0492857a7a2b786fe2daf36c">More...</a><br /></td></tr>
@@ -221,6 +231,18 @@ Functions</h2></td></tr>
 <tr class="memitem:af1eba65c6a944932d1447f72b3c80bf1"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#af1eba65c6a944932d1447f72b3c80bf1">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html">microbenchmark_base::summary</a> const &amp;x)</td></tr>
 <tr class="memdesc:af1eba65c6a944932d1447f72b3c80bf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream the summary of a microbenchmark results in microseconds.  <a href="#af1eba65c6a944932d1447f72b3c80bf1">More...</a><br /></td></tr>
 <tr class="separator:af1eba65c6a944932d1447f72b3c80bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ac2768bc4971e54f96c19b4f5f697bce6">resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize, std::true_type)</td></tr>
+<tr class="memdesc:ac2768bc4971e54f96c19b4f5f697bce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize a timeseries to a newsize.  <a href="#ac2768bc4971e54f96c19b4f5f697bce6">More...</a><br /></td></tr>
+<tr class="separator:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab65f006ed68ff8b7012203f85b4c3817"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:ab65f006ed68ff8b7012203f85b4c3817"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab65f006ed68ff8b7012203f85b4c3817">resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize, std::false_type)</td></tr>
+<tr class="memdesc:ab65f006ed68ff8b7012203f85b4c3817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dummy specialization for non-resizable timeseries collections.  <a href="#ab65f006ed68ff8b7012203f85b4c3817">More...</a><br /></td></tr>
+<tr class="separator:ab65f006ed68ff8b7012203f85b4c3817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a7d731fe4764b9c2ddd44dc6eb6379c20">resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize)</td></tr>
+<tr class="memdesc:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize a timeseries to a newsize if it is resizable.  <a href="#a7d731fe4764b9c2ddd44dc6eb6379c20">More...</a><br /></td></tr>
+<tr class="separator:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -240,14 +262,331 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Helper functions and classes to simplify unit tests. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a3462a707575fce86c99a98d7958597c1"></a>
+<a class="anchor" id="a026133e5a091fd8636681b469ba43edf"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename value_type &gt; </div>
+template&lt;typename value_t , typename std::enable_if&lt; std::is_integral&lt; value_t &gt;::value &gt;::type *  = nullptr&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">int jb::testing::check_array_close_enough </td>
+          <td class="memname">bool jb::testing::check_close_enough </td>
+          <td>(</td>
+          <td class="paramtype">value_t&#160;</td>
+          <td class="paramname"><em>num_a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">value_t&#160;</td>
+          <td class="paramname"><em>num_b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tol</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given two numbers of the same integer type check if the difference is within a given tolerance. </p>
+<p>Given two numbers of the same floating-point type check if the difference is within a given tolerance.</p>
+<p>Tolerance is expressed as the difference between any pair of integer numbers.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num_a</td><td>the first number to compare </td></tr>
+    <tr><td class="paramname">num_b</td><td>the second number to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that the pair of numbers have to be within </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_t</td><td>the type of the integral argument numbers</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Tolerance is expressed in "number of epsilons" (i.e., the function will tolerate errors up to tolerance * std::numeric_limit&lt;real&gt;::epsilon()</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num_a</td><td>the first number to compare </td></tr>
+    <tr><td class="paramname">num_b</td><td>the second number to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that the pair of numbers have to be within </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_t</td><td>the type of the floating-point argument numbers </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00034">34</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__check__close__enough_8cpp_source.html#l00013">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00093">check_close_enough()</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00235">check_collection_close_enough()</a>, <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>, and <a class="el" href="time__delay__estimator__many_8hpp_source.html#l00105">jb::fftw::time_delay_estimator_many&lt; array_t &gt;::estimate_delay()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adadefce6e18404e7f8575842cc05fd5e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::testing::check_close_enough </td>
+          <td>(</td>
+          <td class="paramtype">std::complex&lt; value_t &gt;&#160;</td>
+          <td class="paramname"><em>com_a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::complex&lt; value_t &gt;&#160;</td>
+          <td class="paramname"><em>com_b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tol</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given two complex numbers of the same value type check if the difference is within a given tolerance. </p>
+<p>If value types are floating-point numbers, tolerance is expressed in "number of epsilons" (i.e., the function will tolerate errors up to tolerance * std::numeric_limit&lt;real&gt;::epsilon()</p>
+<p>If value types are integer numbers, tolerance is expressed as the difference between any pair of integer numbers.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the both the real and imaginary parts are within tolerance</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">com_a</td><td>the first complex number to compare </td></tr>
+    <tr><td class="paramname">com_b</td><td>the second complex number to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that the pair of numbers have to be within </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_type</td><td>the type of std::complex number </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00093">93</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00034">check_close_enough()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a465de59cf5740ecc1899670ff1e82de1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::testing::check_close_enough </td>
+          <td>(</td>
+          <td class="paramtype">value_t&#160;</td>
+          <td class="paramname"><em>com_a</em>[2], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">value_t&#160;</td>
+          <td class="paramname"><em>com_b</em>[2], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tol</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare complex number (as arrays of size 2) values with some tolerance. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the both the real and imaginary parts are within tolerance.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">com_a</td><td>the first complex number to compare </td></tr>
+    <tr><td class="paramname">com_b</td><td>the second complex number to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that the pair of numbers have to be within </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_type</td><td>the type of std::complex number </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00113">113</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00034">check_close_enough()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2938af2a800aa36f1475bdc4fcd62a0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename collection_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::testing::check_collection_close_enough </td>
+          <td>(</td>
+          <td class="paramtype">collection_t const &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">collection_t const &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tol</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given two collections of numbers of the same value type, find the differences that are out of a given tolerance and report them via Boost.Test functions. </p>
+<p>Collections of numbers are any container representation (e.g. vector, deque), boost::multi_array, c-like array, etc.</p>
+<p>Value types are integers, floating-point, and std::complex (integers or floating-point).</p>
+<p>If value types are floating-point numbers, tolerance is expressed in "number of epsilons" (i.e., the function will tolerate errors up to tolerance * std::numeric_limit&lt;real&gt;::epsilon()</p>
+<p>If value types are integer numbers, tolerance is expressed as the difference between any pair of integer numbers.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>the first collection of numbers to compare </td></tr>
+    <tr><td class="paramname">b</td><td>the second collection of numbers to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that each pair of numbers have to be within </td></tr>
+    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the collections are large and printing all the differences can be overwhelming </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">collection_t</td><td>the type of the collection containing the numbers (e.g. std::vector&lt;&gt;, boost::multi_array) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00235">235</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00034">check_close_enough()</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00138">format()</a>, and <a class="el" href="check__close__enough_8hpp_source.html#l00159">relative_error()</a>.</p>
+
+<p>Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abeec6b8e9b530daea62d3d67d9f23b1c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t K&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::testing::check_collection_close_enough </td>
+          <td>(</td>
+          <td class="paramtype">boost::multi_array&lt; T, K &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::multi_array&lt; T, K &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tol</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specialization for boost::multi_array type. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>the first multi array of numbers to compare </td></tr>
+    <tr><td class="paramname">b</td><td>the second multi array of numbers to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that each pair of numbers have to be within </td></tr>
+    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the collections are large and printing all the differences can be overwhelming </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>type of the value stored on the timeseries </td></tr>
+    <tr><td class="paramname">K</td><td>timeseries dimensionality </td></tr>
+    <tr><td class="paramname">A</td><td>an Allocator type for type T allocator storage </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00275">275</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00034">check_close_enough()</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00138">format()</a>, and <a class="el" href="check__close__enough_8hpp_source.html#l00159">relative_error()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a53e0968a9f821693176302d60fa0292f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jb::testing::check_collection_close_enough </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
@@ -255,73 +594,14 @@ template&lt;typename value_type &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">value_type const *&#160;</td>
-          <td class="paramname"><em>actual</em>, </td>
+          <td class="paramtype">value_t const *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">value_type const *&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>tol</em> = <code>1</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs. </p>
-<p><em>expected</em>.</p>
-<p>Given two collections of floating point or complex numbers find the differences and report them via Boost.Test functions.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">size</td><td>the size of the vector / collection </td></tr>
-    <tr><td class="paramname">actual</td><td>the actual values observed in the test </td></tr>
-    <tr><td class="paramname">expected</td><td>the values expected by the test </td></tr>
-    <tr><td class="paramname">tol</td><td>the error accepted by the test, or more precisely, the test will tolerate up to tol*epsilon relative error. </td></tr>
-    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the vectors are large and printing all the differences can be overwhelming.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the number of errors detected. </dd></dl>
-
-<p>Definition at line <a class="el" href="check__array__close__enough_8hpp_source.html#l00028">28</a> of file <a class="el" href="check__array__close__enough_8hpp_source.html">check_array_close_enough.hpp</a>.</p>
-
-<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>, <a class="el" href="check__complex__close__enough_8hpp_source.html#l00095">format()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00051">jb::testing::defaults::size</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab6c3190f9b9a712ef6d700deb5398b63"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename multi_array &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">int jb::testing::check_multi_array_close_enough </td>
-          <td>(</td>
-          <td class="paramtype">multi_array const &amp;&#160;</td>
-          <td class="paramname"><em>actual</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">multi_array const &amp;&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
+          <td class="paramtype">value_t const *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -333,7 +613,7 @@ template&lt;typename multi_array &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
+          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -343,21 +623,28 @@ template&lt;typename multi_array &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs. </p>
-<p><em>expected</em>.</p>
-<p>Given two collections of floating point or complex numbers find the differences and report them via Boost.Test functions.</p>
+<p>Given two collections of integers, floating point or complex numbers find the differences that are out of a given tolerance and report them via Boost.Test functions. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">actual</td><td>the actual values observed in the test </td></tr>
-    <tr><td class="paramname">expected</td><td>the values expected by the test </td></tr>
-    <tr><td class="paramname">tol</td><td>the error accepted by the test, or more precisely, the test will tolerate up to tol*epsilon relative error. </td></tr>
-    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the vectors are large and printing all the differences can be overwhelming.</td></tr>
+    <tr><td class="paramname">size</td><td>the size of collection </td></tr>
+    <tr><td class="paramname">a</td><td>the first multi array of numbers to compare </td></tr>
+    <tr><td class="paramname">b</td><td>the second multi array of numbers to compare </td></tr>
+    <tr><td class="paramname">tol</td><td>tolerance that each pair of numbers have to be within </td></tr>
+    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the collections are large and printing all the differences can be overwhelming </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the number of errors detected. </dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">value_t</td><td>value type of the number stored on collections </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00122">122</a> of file <a class="el" href="check__multi__array__close__enough_8hpp_source.html">check_multi_array_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00318">318</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00034">check_close_enough()</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00138">format()</a>, <a class="el" href="check__close__enough_8hpp_source.html#l00159">relative_error()</a>, and <a class="el" href="microbenchmark__config_8cpp_source.html#l00051">jb::testing::defaults::size</a>.</p>
 
 </div>
 </div>
@@ -387,9 +674,9 @@ template&lt;typename floating &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Verify that a floating point value is "close enough" to 0. </p>
+<p>Verify that a floating point value is "close enough" to a small number. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00080">80</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00123">123</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -419,235 +706,9 @@ template&lt;typename real &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Verify that a complex number is "close enough" to 0. </p>
+<p>Verify that a complex number is "close enough" to a small number. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00088">88</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab62c8da3cbf048661d16fcb64abf6162"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename vector &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">int jb::testing::check_vector_close_enough </td>
-          <td>(</td>
-          <td class="paramtype">vector const &amp;&#160;</td>
-          <td class="paramname"><em>actual</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">vector const &amp;&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>tol</em> = <code>1</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>max_differences_printed</em> = <code><a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs. </p>
-<p><em>expected</em>.</p>
-<p>Given two collections of floating point or complex numbers find the differences and report them via Boost.Test functions.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">size</td><td>the size of the vector / collection </td></tr>
-    <tr><td class="paramname">actual</td><td>the actual values observed in the test </td></tr>
-    <tr><td class="paramname">expected</td><td>the values expected by the test </td></tr>
-    <tr><td class="paramname">tol</td><td>the error accepted by the test, or more precisely, the test will tolerate up to tol*epsilon relative error. </td></tr>
-    <tr><td class="paramname">max_differences_printed</td><td>how many differences will be printed out in full detail, some of the vectors are large and printing all the differences can be overwhelming.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the number of errors detected. </dd></dl>
-
-<p>Definition at line <a class="el" href="check__vector__close__enough_8hpp_source.html#l00028">28</a> of file <a class="el" href="check__vector__close__enough_8hpp_source.html">check_vector_close_enough.hpp</a>.</p>
-
-<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
-
-<p>Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="check__multi__array__close__enough_8hpp_source.html#l00033">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;::check()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a51cd9a4af36e91adf96772bdc8dd41f8"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename real &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool jb::testing::close_enough </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>actual</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>tol</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Compare floating point values with some tolerance. </p>
-<dl class="section return"><dt>Returns</dt><dd>true if the numbers are within tolerance.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">actual</td><td>the first number to compare </td></tr>
-    <tr><td class="paramname">expected</td><td>the second number to compare </td></tr>
-    <tr><td class="paramname">tol</td><td>expressed in "number of epsilons", i.e., the function will tolerate errors up to tol * std::numeric_limit&lt;real&gt;::epsilon() </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">24</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="check__array__close__enough_8hpp_source.html#l00028">check_array_close_enough()</a>, <a class="el" href="check__vector__close__enough_8hpp_source.html#l00028">check_vector_close_enough()</a>, <a class="el" href="check__complex__close__enough_8hpp_source.html#l00048">close_enough()</a>, and <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa1b43c10fea35dbdef8ccc0752a15c25"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename real &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool jb::testing::close_enough </td>
-          <td>(</td>
-          <td class="paramtype">std::complex&lt; real &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>actual</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::complex&lt; real &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>tol</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Compare complex number values with some tolerance. </p>
-<dl class="section return"><dt>Returns</dt><dd>true if the both the real and imaginary parts are within tolerance according to <a class="el" href="namespacejb_1_1testing.html#a51cd9a4af36e91adf96772bdc8dd41f8" title="Compare floating point values with some tolerance. ">jb::testing::close_enough()</a>.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">actual</td><td>the actual value </td></tr>
-    <tr><td class="paramname">expected</td><td>the value <em>actual</em> is compared against. </td></tr>
-    <tr><td class="paramname">tol</td><td>expressed in "number of epsilons", i.e., the function will tolerate errors up to tol * std::numeric_limit&lt;real&gt;::epsilon() </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00048">48</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
-
-<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa697bf9aa0ed0e580e4d5c651dd4427e"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename real &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool jb::testing::close_enough </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>actual</em>[2], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>expected</em>[2], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>tol</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Compare complex number (as arrays of size 2) values with some tolerance. </p>
-<dl class="section return"><dt>Returns</dt><dd>true if the both the real and imaginary parts are within tolerance according to <a class="el" href="namespacejb_1_1testing.html#a51cd9a4af36e91adf96772bdc8dd41f8" title="Compare floating point values with some tolerance. ">jb::testing::close_enough()</a>.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">actual</td><td>the actual value </td></tr>
-    <tr><td class="paramname">expected</td><td>the value <em>actual</em> is compared against. </td></tr>
-    <tr><td class="paramname">tol</td><td>expressed in "number of epsilons", i.e., the function will tolerate errors up to tol * std::numeric_limit&lt;real&gt;::epsilon() </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00070">70</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
-
-<p>References <a class="el" href="check__complex__close__enough_8hpp_source.html#l00024">close_enough()</a>.</p>
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00131">131</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -687,9 +748,9 @@ template&lt;typename timeseries , typename generator &gt; </div>
 
 <p>Definition at line <a class="el" href="create__random__timeseries_8hpp_source.html#l00013">13</a> of file <a class="el" href="create__random__timeseries_8hpp_source.html">create_random_timeseries.hpp</a>.</p>
 
-<p>References <a class="el" href="fftw_2plan_8hpp_source.html#l00058">jb::fftw::detail::nsamples()</a>.</p>
+<p>References <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__reduce__argmax__real_8cpp_source.html#l00017">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>.</p>
+<p>Referenced by <a class="el" href="ut__reduce__argmax__real_8cpp_source.html#l00016">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>.</p>
 
 </div>
 </div>
@@ -721,9 +782,9 @@ template&lt;typename timeseries &gt; </div>
 
 <p>Create a simple timeseries where the values look like a square. </p>
 
-<p>Definition at line <a class="el" href="create__square__timeseries_8hpp_source.html#l00011">11</a> of file <a class="el" href="create__square__timeseries_8hpp_source.html">create_square_timeseries.hpp</a>.</p>
+<p>Definition at line <a class="el" href="create__square__timeseries_8hpp_source.html#l00013">13</a> of file <a class="el" href="create__square__timeseries_8hpp_source.html">create_square_timeseries.hpp</a>.</p>
 
-<p>References <a class="el" href="fftw_2plan_8hpp_source.html#l00058">jb::fftw::detail::nsamples()</a>.</p>
+<p>References <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="resize__if__applicable_8hpp_source.html#l00047">resize_if_applicable()</a>.</p>
 
 <p>Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>.</p>
 
@@ -757,9 +818,61 @@ template&lt;typename timeseries &gt; </div>
 
 <p>Create a simple timeseries where the values look like a triangle. </p>
 
-<p>Definition at line <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00011">11</a> of file <a class="el" href="create__triangle__timeseries_8hpp_source.html">create_triangle_timeseries.hpp</a>.</p>
+<p>Definition at line <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">16</a> of file <a class="el" href="create__triangle__timeseries_8hpp_source.html">create_triangle_timeseries.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="ut__delay__timeseries_8cpp_source.html#l00024">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p>References <a class="el" href="resize__if__applicable_8hpp_source.html#l00047">resize_if_applicable()</a>.</p>
+
+<p>Referenced by <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00080">BOOST_AUTO_TEST_CASE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aee811fb74397c8ed027a3d64e9d7f39c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t K, typename A &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::create_triangle_timeseries </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nsamples</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::multi_array&lt; T, K, A &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a family of timeseries where the values look like parallel triangles shifted by a constant value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nsamples</td><td>samples on each timeseries </td></tr>
+    <tr><td class="paramname">ts</td><td>multi array containing timeseries to be filled as triangle</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>type of the timeseries field </td></tr>
+    <tr><td class="paramname">K</td><td>timeseries dimensionality </td></tr>
+    <tr><td class="paramname">A</td><td>an Allocator type for type T allocator storage </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The values stored in the input timeseries </p>
+
+<p>Definition at line <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00038">38</a> of file <a class="el" href="create__triangle__timeseries_8hpp_source.html">create_triangle_timeseries.hpp</a>.</p>
+
+<p>References <a class="el" href="array__traits_8hpp_source.html#l00055">jb::detail::element_count()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
 
 </div>
 </div>
@@ -976,9 +1089,9 @@ template&lt;typename precision_t &gt; </div>
 
 <p>Wrap FFTW-style complex numbers in std::complex for iostreaming. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00095">95</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00138">138</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
 
-<p>Referenced by <a class="el" href="check__array__close__enough_8hpp_source.html#l00028">check_array_close_enough()</a>.</p>
+<p>Referenced by <a class="el" href="check__close__enough_8hpp_source.html#l00235">check_collection_close_enough()</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +1113,7 @@ template&lt;typename value_type &gt; </div>
 
 <p>Allow generic treatment of FFTW-style complex numbers and other types. </p>
 
-<p>Definition at line <a class="el" href="check__complex__close__enough_8hpp_source.html#l00101">101</a> of file <a class="el" href="check__complex__close__enough_8hpp_source.html">check_complex_close_enough.hpp</a>.</p>
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00144">144</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
 
 </div>
 </div>
@@ -1033,6 +1146,303 @@ template&lt;typename value_type &gt; </div>
 <p>Definition at line <a class="el" href="microbenchmark__base_8cpp_source.html#l00049">49</a> of file <a class="el" href="microbenchmark__base_8cpp_source.html">microbenchmark_base.cpp</a>.</p>
 
 <p>References <a class="el" href="microbenchmark__base_8hpp_source.html#l00046">jb::testing::microbenchmark_base::summary::max</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00039">jb::testing::microbenchmark_base::summary::min</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00047">jb::testing::microbenchmark_base::summary::n</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00040">jb::testing::microbenchmark_base::summary::p25</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00041">jb::testing::microbenchmark_base::summary::p50</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00042">jb::testing::microbenchmark_base::summary::p75</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00043">jb::testing::microbenchmark_base::summary::p90</a>, <a class="el" href="microbenchmark__base_8hpp_source.html#l00044">jb::testing::microbenchmark_base::summary::p99</a>, and <a class="el" href="microbenchmark__base_8hpp_source.html#l00045">jb::testing::microbenchmark_base::summary::p99_9</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3eb0e41631532f810404b3a8296893c9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">real jb::testing::relative_error </td>
+          <td>(</td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>actual</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>expected</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the relative error between two float point numbers. </p>
+<dl class="section return"><dt>Returns</dt><dd>the relative error of actual compared to offset.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">actual</td><td>the number the test got </td></tr>
+    <tr><td class="paramname">expected</td><td>the number the test expected</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00159">159</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="check__close__enough_8hpp_source.html#l00235">check_collection_close_enough()</a>, and <a class="el" href="check__close__enough_8hpp_source.html#l00181">relative_error()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a011af68292fcc847d52839c6294a5ad7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">real jb::testing::relative_error </td>
+          <td>(</td>
+          <td class="paramtype">std::complex&lt; real &gt;&#160;</td>
+          <td class="paramname"><em>actual</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::complex&lt; real &gt;&#160;</td>
+          <td class="paramname"><em>expected</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the relative error between two complex numbers. </p>
+<dl class="section return"><dt>Returns</dt><dd>the relative error of actual compared to offset, using the Manhattan metric.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">actual</td><td>the number the test got </td></tr>
+    <tr><td class="paramname">expected</td><td>the number the test expected</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00181">181</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00159">relative_error()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad972872e3b17e20fdfaf0a42ac59c467"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">real jb::testing::relative_error </td>
+          <td>(</td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>actual</em>[2], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>expected</em>[2]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the relative error between two complex numbers in FFTW representation. </p>
+<dl class="section return"><dt>Returns</dt><dd>the relative error of actual compared to offset, using the Manhattan metric.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">actual</td><td>the number the test got </td></tr>
+    <tr><td class="paramname">expected</td><td>the number the test expected</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">real</td><td>the type of floating point number (float, double, long double) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="check__close__enough_8hpp_source.html#l00200">200</a> of file <a class="el" href="check__close__enough_8hpp_source.html">check_close_enough.hpp</a>.</p>
+
+<p>References <a class="el" href="check__close__enough_8hpp_source.html#l00159">relative_error()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac2768bc4971e54f96c19b4f5f697bce6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::resize_if_applicable </td>
+          <td>(</td>
+          <td class="paramtype">timeseries &amp;&#160;</td>
+          <td class="paramname"><em>ts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>newsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::true_type&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resize a timeseries to a newsize. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ts</td><td>timeseries are any container representation (e.g. vector, deque), boost::multi_array, c-like array, etc </td></tr>
+    <tr><td class="paramname">newsize</td><td>size to resize the timeseries if possible </td></tr>
+    <tr><td class="paramname">std::true_type</td><td>type to represent the bool value true </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">timeseries</td><td>type of the timeseries collection representation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="resize__if__applicable_8hpp_source.html#l00047">47</a> of file <a class="el" href="resize__if__applicable_8hpp_source.html">resize_if_applicable.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="create__square__timeseries_8hpp_source.html#l00013">create_square_timeseries()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">create_triangle_timeseries()</a>, and <a class="el" href="resize__if__applicable_8hpp_source.html#l00074">resize_if_applicable()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab65f006ed68ff8b7012203f85b4c3817"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::resize_if_applicable </td>
+          <td>(</td>
+          <td class="paramtype">timeseries &amp;&#160;</td>
+          <td class="paramname"><em>ts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>newsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::false_type&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dummy specialization for non-resizable timeseries collections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ts</td><td>timeseries are any container representation (e.g. vector, deque), boost::multi_array, c-like array, etc </td></tr>
+    <tr><td class="paramname">newsize</td><td>size to resize the timeseries if possible </td></tr>
+    <tr><td class="paramname">std::true_type</td><td>type to represent the bool value false </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">timeseries</td><td>type of the timeseries collection representation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="resize__if__applicable_8hpp_source.html#l00061">61</a> of file <a class="el" href="resize__if__applicable_8hpp_source.html">resize_if_applicable.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7d731fe4764b9c2ddd44dc6eb6379c20"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename timeseries &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::testing::resize_if_applicable </td>
+          <td>(</td>
+          <td class="paramtype">timeseries &amp;&#160;</td>
+          <td class="paramname"><em>ts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>newsize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resize a timeseries to a newsize if it is resizable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ts</td><td>timeseries are any container representation (e.g. vector, deque), boost::multi_array, c-like array, etc </td></tr>
+    <tr><td class="paramname">newsize</td><td>size to resize the timeseries if possible </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">timeseries</td><td>type of the timeseries collection representation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="resize__if__applicable_8hpp_source.html#l00074">74</a> of file <a class="el" href="resize__if__applicable_8hpp_source.html">resize_if_applicable.hpp</a>.</p>
+
+<p>References <a class="el" href="resize__if__applicable_8hpp_source.html#l00047">resize_if_applicable()</a>.</p>
 
 </div>
 </div>
@@ -1094,7 +1504,7 @@ template&lt;typename value_type &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux ae3338377c55 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux c6640f00ef64 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
 <p>The kernel version, release, machine hardware, etc. </p>
 
 <p>Definition at line <a class="el" href="compile__info_8cpp_source.html#l00003">3</a> of file <a class="el" href="compile__info_8cpp_source.html">compile_info.cpp</a>.</p>

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>JayBeams: jb/testing/check_array_close_enough.hpp File Reference</title>
+<title>JayBeams: jb/testing/resize_if_applicable.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -95,16 +95,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">check_array_close_enough.hpp File Reference</div>  </div>
+<div class="title">resize_if_applicable.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="check__complex__close__enough_8hpp_source.html">jb/testing/check_complex_close_enough.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;type_traits&gt;</code><br />
 </div>
-<p><a href="check__array__close__enough_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="resize__if__applicable_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1testing_1_1has__resize.html">jb::testing::has_resize&lt; C &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type trait to evaluate if a collection of numbers (e.g.  <a href="classjb_1_1testing_1_1has__resize.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
@@ -116,10 +123,18 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3462a707575fce86c99a98d7958597c1"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
-<tr class="memitem:a3462a707575fce86c99a98d7958597c1"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a3462a707575fce86c99a98d7958597c1">jb::testing::check_array_close_enough</a> (std::size_t size, value_type const *actual, value_type const *expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:a3462a707575fce86c99a98d7958597c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="namespacejb_1_1testing.html#a3462a707575fce86c99a98d7958597c1">More...</a><br /></td></tr>
-<tr class="separator:a3462a707575fce86c99a98d7958597c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ac2768bc4971e54f96c19b4f5f697bce6">jb::testing::resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize, std::true_type)</td></tr>
+<tr class="memdesc:ac2768bc4971e54f96c19b4f5f697bce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize a timeseries to a newsize.  <a href="namespacejb_1_1testing.html#ac2768bc4971e54f96c19b4f5f697bce6">More...</a><br /></td></tr>
+<tr class="separator:ac2768bc4971e54f96c19b4f5f697bce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab65f006ed68ff8b7012203f85b4c3817"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:ab65f006ed68ff8b7012203f85b4c3817"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab65f006ed68ff8b7012203f85b4c3817">jb::testing::resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize, std::false_type)</td></tr>
+<tr class="memdesc:ab65f006ed68ff8b7012203f85b4c3817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dummy specialization for non-resizable timeseries collections.  <a href="namespacejb_1_1testing.html#ab65f006ed68ff8b7012203f85b4c3817">More...</a><br /></td></tr>
+<tr class="separator:ab65f006ed68ff8b7012203f85b4c3817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memTemplParams" colspan="2">template&lt;typename timeseries &gt; </td></tr>
+<tr class="memitem:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a7d731fe4764b9c2ddd44dc6eb6379c20">jb::testing::resize_if_applicable</a> (timeseries &amp;ts, std::size_t newsize)</td></tr>
+<tr class="memdesc:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize a timeseries to a newsize if it is resizable.  <a href="namespacejb_1_1testing.html#a7d731fe4764b9c2ddd44dc6eb6379c20">More...</a><br /></td></tr>
+<tr class="separator:a7d731fe4764b9c2ddd44dc6eb6379c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>JayBeams: jb::fftw::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt; Struct Template Reference</title>
+<title>JayBeams: jb::detail::always_aligned&lt; T &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -92,36 +92,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacejb.html">jb</a></li><li class="navelem"><a class="el" href="namespacejb_1_1fftw.html">fftw</a></li><li class="navelem"><a class="el" href="structjb_1_1fftw_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.html">always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacejb.html">jb</a></li><li class="navelem"><a class="el" href="namespacejb_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="structjb_1_1detail_1_1always__aligned.html">always_aligned</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">jb::fftw::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt; Struct Template Reference</div>  </div>
+<div class="title">jb::detail::always_aligned&lt; T &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>By construction these vectors are always 128-bit aligned.  
- <a href="structjb_1_1fftw_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.html#details">More...</a></p>
+<p>Determine if a timeseries type guarantees alignment suitable for SIMD optimizations.  
+ <a href="structjb_1_1detail_1_1always__aligned.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for jb::fftw::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;:</div>
+Inheritance diagram for jb::detail::always_aligned&lt; T &gt;:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="structjb_1_1fftw_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.png" usemap="#jb::fftw::always_5Faligned_3C_20jb::fftw::aligned_5Fvector_3C_20T_20_3E_20_3E_map" alt=""/>
-  <map id="jb::fftw::always_5Faligned_3C_20jb::fftw::aligned_5Fvector_3C_20T_20_3E_20_3E_map" name="jb::fftw::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;_map">
+  <img src="structjb_1_1detail_1_1always__aligned.png" usemap="#jb::detail::always_5Faligned_3C_20T_20_3E_map" alt=""/>
+  <map id="jb::detail::always_5Faligned_3C_20T_20_3E_map" name="jb::detail::always_aligned&lt; T &gt;_map">
 </map>
  </div></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
-struct jb::fftw::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;</h3>
+struct jb::detail::always_aligned&lt; T &gt;</h3>
 
-<p>By construction these vectors are always 128-bit aligned. </p>
+<p>Determine if a timeseries type guarantees alignment suitable for SIMD optimizations. </p>
+<p>We provide specializations for aligned_vector (e.g. std::vector&lt;&gt;) and aligned_multi_array (e.g. boost::multi_array) to be able to operate on them generically.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type stored by the timeseries container </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="time__delay__estimator_8hpp_source.html#l00021">21</a> of file <a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a>.</p>
+<p>Definition at line <a class="el" href="array__traits_8hpp_source.html#l00179">179</a> of file <a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>jb/fftw/<a class="el" href="time__delay__estimator_8hpp_source.html">time_delay_estimator.hpp</a></li>
+<li>jb/detail/<a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

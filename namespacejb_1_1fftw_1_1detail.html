@@ -95,100 +95,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">jb::fftw::detail Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits">container_traits</a></td></tr>
-<tr class="memdesc:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define traits for container-like types.  <a href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits">More...</a><br /></td></tr>
-<tr class="separator:structjb_1_1fftw_1_1detail_1_1container__traits"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4">container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</a></td></tr>
-<tr class="memdesc:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define traits for boost::multi_array&lt;&gt; containers.  <a href="namespacejb_1_1fftw_1_1detail.html#structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4">More...</a><br /></td></tr>
-<tr class="separator:structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a75b62fb246a15ac35cb6d1b5daaa4a39">check_plan_inputs</a> (std::size_t in_elements, std::size_t on_elements, std::size_t in_nsamples, std::size_t on_nsamples, char const *function_name)</td></tr>
 <tr class="memdesc:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to check the inputs to a create_*_plan_*()  <a href="#a75b62fb246a15ac35cb6d1b5daaa4a39">More...</a><br /></td></tr>
 <tr class="separator:a75b62fb246a15ac35cb6d1b5daaa4a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7edb455830e7fe6f7e3050bddd88640b"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
-<tr class="memitem:a7edb455830e7fe6f7e3050bddd88640b"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b">element_count</a> (boost::multi_array&lt; T, K, A &gt; const &amp;a)</td></tr>
-<tr class="memdesc:a7edb455830e7fe6f7e3050bddd88640b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of elements in boost::multi_array&lt;&gt;  <a href="#a7edb455830e7fe6f7e3050bddd88640b">More...</a><br /></td></tr>
-<tr class="separator:a7edb455830e7fe6f7e3050bddd88640b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a633792477c42c18ff738276ae9e279"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
-<tr class="memitem:a3a633792477c42c18ff738276ae9e279"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a3a633792477c42c18ff738276ae9e279">nsamples</a> (boost::multi_array&lt; T, K, A &gt; const &amp;a)</td></tr>
-<tr class="memdesc:a3a633792477c42c18ff738276ae9e279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of samples in a boost::multi_array&lt;&gt;  <a href="#a3a633792477c42c18ff738276ae9e279">More...</a><br /></td></tr>
-<tr class="separator:a3a633792477c42c18ff738276ae9e279"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memTemplParams" colspan="2">template&lt;typename T , typename A &gt; </td></tr>
-<tr class="memitem:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc">element_count</a> (std::vector&lt; T, A &gt; const &amp;a)</td></tr>
-<tr class="memdesc:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of elements in a std::vector&lt;&gt;  <a href="#af29cfef4fa6a9abffc720b04a8b3c3cc">More...</a><br /></td></tr>
-<tr class="separator:af29cfef4fa6a9abffc720b04a8b3c3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename A &gt; </td></tr>
-<tr class="memitem:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memTemplItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw_1_1detail.html#a6b3fb3485cd7f759a39c958ec9f8871f">nsamples</a> (std::vector&lt; T, A &gt; const &amp;a)</td></tr>
-<tr class="memdesc:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of samples in a std::vector&lt;&gt;  <a href="#a6b3fb3485cd7f759a39c958ec9f8871f">More...</a><br /></td></tr>
-<tr class="separator:a6b3fb3485cd7f759a39c958ec9f8871f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/><h2 class="groupheader">Class Documentation</h2>
-<a name="structjb_1_1fftw_1_1detail_1_1container__traits" id="structjb_1_1fftw_1_1detail_1_1container__traits"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct jb::fftw::detail::container_traits</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="textblock"><h3>template&lt;typename T&gt;<br />
-struct jb::fftw::detail::container_traits&lt; T &gt;</h3>
-
-<p>Define traits for container-like types. </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00020">20</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
-</div><table class="fieldtable">
-<tr><th colspan="3">Class Members</th></tr>
-<tr><td class="fieldtype">
-<a class="anchor" id="a8e7356029c557277823a820d6aa90e60"></a>typedef value_type</td>
-<td class="fieldname">
-element_type</td>
-<td class="fielddoc">
-Define the type of the elements in the container. </td></tr>
-</table>
-
-</div>
-</div>
-<a name="structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4" id="structjb_1_1fftw_1_1detail_1_1container__traits_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_01_4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="textblock"><h3>template&lt;typename T, std::size_t K, typename A&gt;<br />
-struct jb::fftw::detail::container_traits&lt; boost::multi_array&lt; T, K, A &gt; &gt;</h3>
-
-<p>Define traits for boost::multi_array&lt;&gt; containers. </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00029">29</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
-</div><table class="fieldtable">
-<tr><th colspan="3">Class Members</th></tr>
-<tr><td class="fieldtype">
-<a class="anchor" id="a0666cef4725023dbee6a4e4ea772f203"></a>typedef multi_array&lt; T, K, A &gt;<br class="typebreak" />
-::element</td>
-<td class="fieldname">
-element_type</td>
-<td class="fielddoc">
-Define the type of the elements in the array. </td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a75b62fb246a15ac35cb6d1b5daaa4a39"></a>
 <div class="memitem">
@@ -252,99 +170,7 @@ Define the type of the elements in the array. </td></tr>
 
 <p>Definition at line <a class="el" href="plan_8cpp_source.html#l00010">10</a> of file <a class="el" href="plan_8cpp_source.html">plan.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="fftw_2plan_8hpp_source.html#l00305">jb::fftw::create_backward_plan()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00274">jb::fftw::create_forward_plan()</a>, and <a class="el" href="fftw_2plan_8hpp_source.html#l00148">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7edb455830e7fe6f7e3050bddd88640b"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , std::size_t K, typename A &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t jb::fftw::detail::element_count </td>
-          <td>(</td>
-          <td class="paramtype">boost::multi_array&lt; T, K, A &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>a</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Count the number of elements in boost::multi_array&lt;&gt; </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00052">52</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="fftw_2plan_8hpp_source.html#l00305">jb::fftw::create_backward_plan()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00274">jb::fftw::create_forward_plan()</a>, and <a class="el" href="fftw_2plan_8hpp_source.html#l00148">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af29cfef4fa6a9abffc720b04a8b3c3cc"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename A &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t jb::fftw::detail::element_count </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; T, A &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>a</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Count the number of elements in a std::vector&lt;&gt; </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00064">64</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3a633792477c42c18ff738276ae9e279"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , std::size_t K, typename A &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t jb::fftw::detail::nsamples </td>
-          <td>(</td>
-          <td class="paramtype">boost::multi_array&lt; T, K, A &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>a</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Count the number of samples in a boost::multi_array&lt;&gt; </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00058">58</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
-
-<p>Referenced by <a class="el" href="ut__time__delay__estimator_8cpp_source.html#l00011">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00305">jb::fftw::create_backward_plan()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00274">jb::fftw::create_forward_plan()</a>, <a class="el" href="create__random__timeseries_8hpp_source.html#l00013">jb::testing::create_random_timeseries()</a>, <a class="el" href="create__square__timeseries_8hpp_source.html#l00011">jb::testing::create_square_timeseries()</a>, and <a class="el" href="fftw_2plan_8hpp_source.html#l00148">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6b3fb3485cd7f759a39c958ec9f8871f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename A &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t jb::fftw::detail::nsamples </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; T, A &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>a</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Count the number of samples in a std::vector&lt;&gt; </p>
-
-<p>Definition at line <a class="el" href="fftw_2plan_8hpp_source.html#l00070">70</a> of file <a class="el" href="fftw_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Referenced by <a class="el" href="fftw_2plan_8hpp_source.html#l00263">jb::fftw::create_backward_plan()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00232">jb::fftw::create_forward_plan()</a>, and <a class="el" href="fftw_2plan_8hpp_source.html#l00106">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
 
 </div>
 </div>

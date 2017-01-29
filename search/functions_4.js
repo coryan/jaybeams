@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['element_5fcount',['element_count',['../namespacejb_1_1fftw_1_1detail.html#a7edb455830e7fe6f7e3050bddd88640b',1,'jb::fftw::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)'],['../namespacejb_1_1fftw_1_1detail.html#af29cfef4fa6a9abffc720b04a8b3c3cc',1,'jb::fftw::detail::element_count(std::vector&lt; T, A &gt; const &amp;a)']]],
+  ['element_5fcount',['element_count',['../namespacejb_1_1detail.html#a298ceb1d8c3d4102ff6b08005c5911c4',1,'jb::detail::element_count(container_type const &amp;a)'],['../namespacejb_1_1detail.html#aed6c23779f668fcb9955c65b06b2cbde',1,'jb::detail::element_count(boost::multi_array&lt; T, K, A &gt; const &amp;a)']]],
   ['empty_5fbid',['empty_bid',['../namespacejb_1_1itch5.html#a80eb7a8e0a75353b1e4e7cbe4e09b40a',1,'jb::itch5']]],
   ['empty_5fbid_5fprice',['empty_bid_price',['../namespacejb_1_1itch5.html#a60f21bf53e13c4ef05cd22eafff6b1a6',1,'jb::itch5']]],
   ['empty_5foffer',['empty_offer',['../namespacejb_1_1itch5.html#ad0abe06afe72c8725a5c996ba2a9da24',1,'jb::itch5']]],
@@ -10,7 +10,7 @@ var searchData=
   ['encode',['encode',['../structYAML_1_1convert_3_01jb_1_1cpu__set_01_4.html#ae6f147056708c3a4e63b3c9e7523a7bb',1,'YAML::convert&lt; jb::cpu_set &gt;::encode()'],['../structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13',1,'YAML::convert&lt; jb::severity_level &gt;::encode()']]],
   ['enqueue',['enqueue',['../classjb_1_1clfft_1_1plan.html#a4da81382f97d54598ad4e9b0d5b8ff61',1,'jb::clfft::plan']]],
   ['error_5fcode',['error_code',['../classjb_1_1clfft_1_1clfft__error.html#ac8ae3edd104d4a0219c8631671404aa0',1,'jb::clfft::clfft_error']]],
-  ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#a8b9006c09dde893ac18b7d1bc96dd818',1,'jb::fftw::time_delay_estimator']]],
+  ['estimate_5fdelay',['estimate_delay',['../classjb_1_1fftw_1_1time__delay__estimator.html#abb50a7bf5e1a176a90b80a3999fcf9d9',1,'jb::fftw::time_delay_estimator::estimate_delay()'],['../classjb_1_1fftw_1_1time__delay__estimator__many.html#a659e3b2419c8963c891b3173c0342774',1,'jb::fftw::time_delay_estimator_many::estimate_delay()']]],
   ['estimated_5fmean',['estimated_mean',['../classjb_1_1histogram.html#aa73371973ff3b372acfd5d3fbe8b9238',1,'jb::histogram']]],
   ['estimated_5fquantile',['estimated_quantile',['../classjb_1_1histogram.html#a6c02b97a76ebee1a0bfbf2953130f213',1,'jb::histogram']]],
   ['event_5frate_5festimator',['event_rate_estimator',['../classjb_1_1event__rate__estimator.html#a1453f5c2aeaa4d5018692af9d72fc383',1,'jb::event_rate_estimator']]],

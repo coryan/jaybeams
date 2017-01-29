@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>JayBeams: jb/testing/check_vector_close_enough.hpp File Reference</title>
+<title>JayBeams: jb::detail::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -48,8 +48,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -70,8 +70,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -90,37 +92,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d516de0236c3efdac4df1ada1be38080.html">jb</a></li><li class="navelem"><a class="el" href="dir_628811f2f9787230436964515e218c31.html">testing</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacejb.html">jb</a></li><li class="navelem"><a class="el" href="namespacejb_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="structjb_1_1detail_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.html">always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">check_vector_close_enough.hpp File Reference</div>  </div>
+<div class="title">jb::detail::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="check__complex__close__enough_8hpp_source.html">jb/testing/check_complex_close_enough.hpp</a>&gt;</code><br />
-</div>
-<p><a href="check__vector__close__enough_8hpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
-<tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacejb_1_1testing"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html">jb::testing</a></td></tr>
-<tr class="memdesc:namespacejb_1_1testing"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions and classes to simplify unit tests. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ab62c8da3cbf048661d16fcb64abf6162"><td class="memTemplParams" colspan="2">template&lt;typename vector &gt; </td></tr>
-<tr class="memitem:ab62c8da3cbf048661d16fcb64abf6162"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab62c8da3cbf048661d16fcb64abf6162">jb::testing::check_vector_close_enough</a> (vector const &amp;actual, vector const &amp;expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:ab62c8da3cbf048661d16fcb64abf6162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="namespacejb_1_1testing.html#ab62c8da3cbf048661d16fcb64abf6162">More...</a><br /></td></tr>
-<tr class="separator:ab62c8da3cbf048661d16fcb64abf6162"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
+
+<p>Determine if a aligned_vector timeseries type guarantees alignment suitable for SIMD optimizations.  
+ <a href="structjb_1_1detail_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for jb::detail::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="structjb_1_1detail_1_1always__aligned_3_01jb_1_1fftw_1_1aligned__vector_3_01T_01_4_01_4.png" usemap="#jb::detail::always_5Faligned_3C_20jb::fftw::aligned_5Fvector_3C_20T_20_3E_20_3E_map" alt=""/>
+  <map id="jb::detail::always_5Faligned_3C_20jb::fftw::aligned_5Fvector_3C_20T_20_3E_20_3E_map" name="jb::detail::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;_map">
+</map>
+ </div></div>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+struct jb::detail::always_aligned&lt; jb::fftw::aligned_vector&lt; T &gt; &gt;</h3>
+
+<p>Determine if a aligned_vector timeseries type guarantees alignment suitable for SIMD optimizations. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type stored by the aligned_vector timeseries </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="array__traits_8hpp_source.html#l00189">189</a> of file <a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>jb/detail/<a class="el" href="array__traits_8hpp_source.html">array_traits.hpp</a></li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

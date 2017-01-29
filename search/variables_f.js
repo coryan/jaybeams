@@ -6,6 +6,7 @@ var searchData=
   ['reader',['reader',['../classworker__config.html#ac98585011082a360a2545a50a559c9d0',1,'worker_config']]],
   ['reason',['reason',['../structjb_1_1itch5_1_1stock__trading__action__message.html#aa79c18c421554568a5d95edbd18f2abe',1,'jb::itch5::stock_trading_action_message']]],
   ['reconfigure_5fthread',['reconfigure_thread',['../classjb_1_1testing_1_1microbenchmark__config.html#a4a3498b767cf4d085398ab5f96f23f6c',1,'jb::testing::microbenchmark_config::reconfigure_thread()'],['../namespacejb_1_1testing_1_1defaults.html#a1392f1b39a93c8b6186154828d9568d9',1,'jb::testing::defaults::reconfigure_thread()']]],
+  ['record_5f',['record_',['../classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_00_01value__t_01_4.html#aaf7e2350dcb5b88c63e8c33c1e9c1e00',1,'jb::fftw::tde_result&lt; boost::multi_array&lt; T, K, A &gt;, value_t &gt;']]],
   ['recvts',['recvts',['../namespacejb_1_1itch5.html#af3335121ab7b869a65f26fac20f41a97',1,'jb::itch5::book_update']]],
   ['reg_5fsho_5faction',['reg_sho_action',['../structjb_1_1itch5_1_1reg__sho__restriction__message.html#a871ee476567dbe73e83625452a7d43dd',1,'jb::itch5::reg_sho_restriction_message']]],
   ['reporting_5finterval_5f',['reporting_interval_',['../classjb_1_1offline__feed__statistics.html#a6040d0b28f42ac8a6f4fd701aff4d157',1,'jb::offline_feed_statistics']]],

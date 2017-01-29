@@ -9,6 +9,7 @@ var searchData=
   ['allocator_2ehpp',['allocator.hpp',['../allocator_8hpp.html',1,'']]],
   ['array_5fbased_5forder_5fbook_2ecpp',['array_based_order_book.cpp',['../array__based__order__book_8cpp.html',1,'']]],
   ['array_5fbased_5forder_5fbook_2ehpp',['array_based_order_book.hpp',['../array__based__order__book_8hpp.html',1,'']]],
+  ['array_5ftraits_2ehpp',['array_traits.hpp',['../array__traits_8hpp.html',1,'']]],
   ['as_5fhhmmss_2ecpp',['as_hhmmss.cpp',['../as__hhmmss_8cpp.html',1,'']]],
   ['as_5fhhmmss_2ehpp',['as_hhmmss.hpp',['../as__hhmmss_8hpp.html',1,'']]],
   ['assert_5fthrow_2ecpp',['assert_throw.cpp',['../assert__throw_8cpp.html',1,'']]],

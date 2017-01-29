@@ -101,7 +101,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">create_triangle_timeseries.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &lt;<a class="el" href="array__traits_8hpp_source.html">jb/detail/array_traits.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="aligned__multi__array_8hpp_source.html">jb/fftw/aligned_multi_array.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="resize__if__applicable_8hpp_source.html">jb/testing/resize_if_applicable.hpp</a>&gt;</code><br />
+<code>#include &lt;boost/multi_array.hpp&gt;</code><br />
+</div>
 <p><a href="create__triangle__timeseries_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -119,6 +123,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a186ae9de4fcc643ef5629ab32335c822"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a186ae9de4fcc643ef5629ab32335c822">jb::testing::create_triangle_timeseries</a> (int nsamples, timeseries &amp;ts)</td></tr>
 <tr class="memdesc:a186ae9de4fcc643ef5629ab32335c822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a simple timeseries where the values look like a triangle.  <a href="namespacejb_1_1testing.html#a186ae9de4fcc643ef5629ab32335c822">More...</a><br /></td></tr>
 <tr class="separator:a186ae9de4fcc643ef5629ab32335c822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t K, typename A &gt; </td></tr>
+<tr class="memitem:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#aee811fb74397c8ed027a3d64e9d7f39c">jb::testing::create_triangle_timeseries</a> (int nsamples, boost::multi_array&lt; T, K, A &gt; &amp;ts)</td></tr>
+<tr class="memdesc:aee811fb74397c8ed027a3d64e9d7f39c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a family of timeseries where the values look like parallel triangles shifted by a constant value.  <a href="namespacejb_1_1testing.html#aee811fb74397c8ed027a3d64e9d7f39c">More...</a><br /></td></tr>
+<tr class="separator:aee811fb74397c8ed027a3d64e9d7f39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

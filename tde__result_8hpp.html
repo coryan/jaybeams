@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>JayBeams: jb/testing/check_multi_array_close_enough.hpp File Reference</title>
+<title>JayBeams: jb/fftw/tde_result.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -90,35 +90,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d516de0236c3efdac4df1ada1be38080.html">jb</a></li><li class="navelem"><a class="el" href="dir_628811f2f9787230436964515e218c31.html">testing</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d516de0236c3efdac4df1ada1be38080.html">jb</a></li><li class="navelem"><a class="el" href="dir_943f1b78df17416cb915e3c4b0afa101.html">fftw</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">check_multi_array_close_enough.hpp File Reference</div>  </div>
+<div class="title">tde_result.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="check__vector__close__enough_8hpp_source.html">jb/testing/check_vector_close_enough.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="array__traits_8hpp_source.html">jb/detail/array_traits.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="aligned__multi__array_8hpp_source.html">jb/fftw/aligned_multi_array.hpp</a>&gt;</code><br />
 </div>
-<p><a href="check__multi__array__close__enough_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="tde__result_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, K &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1tde__result.html">jb::fftw::tde_result&lt; container_t, value_t &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A time-delay estimator (TDE) is an algorithm to compare two families of timeseries and return the estimated delay of the first family vs.  <a href="classjb_1_1fftw_1_1tde__result.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 1 &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_011_01_4.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_00_01value__t_01_4.html">jb::fftw::tde_result&lt; boost::multi_array&lt; T, K, A &gt;, value_t &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles TDE result for a multi array type timeseries.  <a href="classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_00_01value__t_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_010_01_4.html">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, 0 &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper_3_01multi__array_00_010_01_4.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html">jb::testing::check_multi_array_close_enough_helper&lt; multi_array, K &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="structjb_1_1testing_1_1check__multi__array__close__enough__helper.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_011_00_01A_01_4_00_01value__t_01_4.html">jb::fftw::tde_result&lt; boost::multi_array&lt; T, 1, A &gt;, value_t &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles TDE result for a multi array type timeseries with dimensionality 1.  <a href="classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_011_00_01A_01_4_00_01value__t_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -126,16 +123,9 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb.html">jb</a></td></tr>
 <tr class="memdesc:namespacejb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level namespace for the JayBeams library. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacejb_1_1testing"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html">jb::testing</a></td></tr>
-<tr class="memdesc:namespacejb_1_1testing"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions and classes to simplify unit tests. <br /></td></tr>
+<tr class="memitem:namespacejb_1_1fftw"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1fftw.html">jb::fftw</a></td></tr>
+<tr class="memdesc:namespacejb_1_1fftw"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrappers for the FFTW3 library. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memTemplParams" colspan="2">template&lt;typename multi_array &gt; </td></tr>
-<tr class="memitem:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ab6c3190f9b9a712ef6d700deb5398b63">jb::testing::check_multi_array_close_enough</a> (multi_array const &amp;actual, multi_array const &amp;expected, int tol=1, int max_differences_printed=<a class="el" href="check__complex__close__enough_8hpp.html#a3a461ce7dc6947a8a452d94010ae48b9">JB_TESTING_MAX_DIFFERENCES_PRINTED</a>)</td></tr>
-<tr class="memdesc:ab6c3190f9b9a712ef6d700deb5398b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report (using Boost.Test functions) any differences between the elements in <em>actual</em> vs.  <a href="namespacejb_1_1testing.html#ab6c3190f9b9a712ef6d700deb5398b63">More...</a><br /></td></tr>
-<tr class="separator:ab6c3190f9b9a712ef6d700deb5398b63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
