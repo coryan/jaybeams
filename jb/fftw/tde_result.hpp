@@ -84,23 +84,29 @@ public:
   /// the last dimension is ignored
   /// size is reduced by the elements of the last dimension (nsamples)
   tde_result(array_type const& a)
-      : record_{jb::detail::array_shape(a)}
-      , size_{jb::detail::element_count(a) / jb::detail::nsamples(a)} {
+      : record_{jb::detail::array_shape(a)} {
   }
 
+  /// tde_result holds a multi array, we overload the subscription operator
+  /// to allow generic usage of the type.
   value_type& operator[](std::size_t pos) {
     return record_.data()[pos];
   }
+
+  /// tde_result value held by a const object.
+  /// tde_result holds a multi array, we overload the subscription operator
+  /// to allow generic usage of the type.
   value_type const& operator[](std::size_t pos) const {
     return record_.data()[pos];
   }
+
+  /// size is number of elements stored on the multi array record_
   std::size_t size() const {
-    return size_;
+    return jb::detail::element_count(record_);
   }
 
 private:
   record_type record_;
-  std::size_t size_;
 };
 
 /**

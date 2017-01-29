@@ -27,11 +27,15 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_2_dim_usage) {
   // create a test timeseries
   const int M = 5;
   const int P = 10;
-  const int Q = 15;
+  const int Q = 20;
   array_type a(boost::extents[M][P][Q]);
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = M * P
+  BOOST_CHECK_MESSAGE(
+      tde.size() == M * P, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   std::size_t counter = 0;
@@ -69,11 +73,15 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_2_dim_complex_usage) {
   // create a test timeseries
   const int M = 5;
   const int P = 10;
-  const int Q = 15;
+  const int Q = 20;
   array_type a(boost::extents[M][P][Q]);
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = M * P
+  BOOST_CHECK_MESSAGE(
+      tde.size() == M * P, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   std::size_t counter = 0;
@@ -113,11 +121,15 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_2_dim_complex_double_usage) {
   // create a test timeseries
   const int M = 5;
   const int P = 10;
-  const int Q = 15;
+  const int Q = 20;
   array_type a(boost::extents[M][P][Q]);
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = M * P
+  BOOST_CHECK_MESSAGE(
+      tde.size() == M * P, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   std::size_t counter = 0;
@@ -162,6 +174,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_1_dim_usage) {
   // create a test tde_result
   tde_result_type tde(a);
 
+  // check size of tde = M
+  BOOST_CHECK_MESSAGE(
+      tde.size() == M, "tde has an incorrect size=" << tde.size());
+
   // fill tde result ...
   std::size_t counter = 0;
   for (int i = 0; i != M; ++i) {
@@ -198,6 +214,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_multi_array_usage) {
   // create a test tde_result
   tde_result_type tde(a);
 
+  // check size of tde = q
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
+
   // fill tde result ...
   tde[0] = 10;
 
@@ -224,6 +244,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_array_usage) {
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = 1
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   tde[0] = 10;
@@ -252,6 +276,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_vector_usage) {
   // create a test tde_result
   tde_result_type tde(a);
 
+  // check size of tde = 1
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
+
   // fill tde result ...
   tde[0] = 10;
 
@@ -278,6 +306,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_deque_usage) {
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = 1
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   tde[0] = 10;
@@ -306,6 +338,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_forward_list_usage) {
   // create a test tde_result
   tde_result_type tde(a);
 
+  // check size of tde = 1
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
+
   // fill tde result ...
   tde[0] = 10;
 
@@ -331,6 +367,10 @@ BOOST_AUTO_TEST_CASE(fftw_tde_result_0_dim_list_usage) {
 
   // create a test tde_result
   tde_result_type tde(a);
+
+  // check size of tde = 1
+  BOOST_CHECK_MESSAGE(
+      tde.size() == 1, "tde has an incorrect size=" << tde.size());
 
   // fill tde result ...
   tde[0] = 10;
