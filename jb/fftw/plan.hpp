@@ -58,14 +58,14 @@ public:
   /**
    * type traits
    */
-  typedef typename jb::detail::array_traits<in_timeseries_type>::element_type
-      in_value_type;
-  typedef
-      typename jb::extract_value_type<in_value_type>::precision precision_type;
-  typedef ::jb::fftw::traits<precision_type> traits;
-  typedef typename traits::std_complex_type std_complex_type;
-  typedef typename traits::fftw_complex_type fftw_complex_type;
-  typedef typename traits::fftw_plan_type fftw_plan_type;
+  using in_value_type =
+      typename jb::detail::array_traits<in_timeseries_type>::element_type;
+  using precision_type =
+      typename jb::extract_value_type<in_value_type>::precision;
+  using traits = ::jb::fftw::traits<precision_type>;
+  using std_complex_type = typename traits::std_complex_type;
+  using fftw_complex_type = typename traits::fftw_complex_type;
+  using fftw_plan_type = typename traits::fftw_plan_type;
   //@}
 
   /// Create unusable, empty, or null plan
@@ -282,14 +282,14 @@ plan<in_array_type, out_array_type> create_backward_plan(
 template <typename in_timeseries_type, typename out_timeseries_type>
 struct plan<in_timeseries_type, out_timeseries_type>::check_constraints {
   check_constraints() {
-    typedef typename jb::detail::array_traits<in_timeseries_type>::element_type
-        in_value_type;
-    typedef typename jb::detail::array_traits<out_timeseries_type>::element_type
-        out_value_type;
-    typedef typename jb::extract_value_type<in_value_type>::precision
-        in_precision_type;
-    typedef typename jb::extract_value_type<out_value_type>::precision
-        out_precision_type;
+    using in_value_type =
+        typename jb::detail::array_traits<in_timeseries_type>::element_type;
+    using out_value_type =
+        typename jb::detail::array_traits<out_timeseries_type>::element_type;
+    using in_precision_type =
+        typename jb::extract_value_type<in_value_type>::precision;
+    using out_precision_type =
+        typename jb::extract_value_type<out_value_type>::precision;
     static_assert(
         std::is_same<in_precision_type, out_precision_type>::value,
         "Mismatched precision_type, both timeseries must have the same"
