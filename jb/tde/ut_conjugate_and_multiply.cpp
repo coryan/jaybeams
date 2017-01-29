@@ -1,7 +1,7 @@
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/tde/conjugate_and_multiply.hpp>
-#include <jb/testing/check_vector_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 
 #include <boost/compute/context.hpp>
@@ -52,7 +52,8 @@ void check_conjugate_and_multiply_sized(int asize, int bsize) {
   }
   done.wait();
 
-  jb::testing::check_vector_close_enough(actual, expected);
+  bool res = jb::testing::check_collection_close_enough(actual, expected, 3);
+  BOOST_CHECK_MESSAGE(res, "collections are not within tolerance=3");
 }
 
 template <typename precision_t>

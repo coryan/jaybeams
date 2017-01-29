@@ -1,5 +1,5 @@
 #include <jb/fftw/traits.hpp>
-#include <jb/testing/check_array_close_enough.hpp>
+#include <jb/testing/check_close_enough.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
@@ -10,8 +10,8 @@ template <typename precision_t>
 void test_fftw_traits() {
   int nsamples = 32768;
   int tol = nsamples;
-  typedef jb::fftw::traits<precision_t> tested;
-  typedef typename tested::fftw_complex_type fftw_complex_type;
+  using tested = jb::fftw::traits<precision_t>;
+  using fftw_complex_type = typename tested::fftw_complex_type;
 
   fftw_complex_type* in = static_cast<fftw_complex_type*>(
       tested::allocate(nsamples * sizeof(fftw_complex_type)));
@@ -28,7 +28,7 @@ void test_fftw_traits() {
     in[i + h][1] = 0;
   }
 
-  typedef typename tested::fftw_plan_type plan_type;
+  using plan_type = typename tested::fftw_plan_type;
   plan_type dir = tested::create_forward_plan(
       nsamples, in, tmp, FFTW_ESTIMATE | FFTW_UNALIGNED | FFTW_PRESERVE_INPUT);
   plan_type inv = tested::create_backward_plan(
@@ -40,7 +40,8 @@ void test_fftw_traits() {
     out[i][0] /= nsamples;
     out[i][1] /= nsamples;
   }
-  jb::testing::check_array_close_enough(nsamples, out, in, tol);
+  bool res = jb::testing::check_collection_close_enough(nsamples, out, in, tol);
+  BOOST_CHECK_MESSAGE(res, "collections are not within tolerance=" << tol);
 
   tested::destroy_plan(inv);
   tested::destroy_plan(dir);
