@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     git \
     lcov \
     libboost1.55-all-dev \
+    libbz2-dev \
     libclang-3.8-dev \
     libfftw3-dev \
     libtool \
