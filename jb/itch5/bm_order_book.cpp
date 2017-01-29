@@ -123,7 +123,8 @@ std::vector<operation> create_operations(
 
 template <typename order_book_side, typename book_config>
 std::function<void()> create_iteration(
-    int seed, int size, fixture_config const& cfg, book_config const& bkcfg) {
+    int seed, int size, fixture_config const& cfg,
+    book_config const& bkcfg) {
   auto generator = initialize_generator(seed);
   order_book_side bk(bkcfg);
   std::vector<operation> ops =
