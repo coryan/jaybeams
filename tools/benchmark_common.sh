@@ -13,6 +13,7 @@ The environmental conditions are printed on lines starting with #
 The results are on plain lines without a comment prefix
 
 Most of the system configuration is logged at the end of the results
+
 EOF
 }
 
@@ -40,7 +41,7 @@ EOF
     echo '#' >$LOG
     print_header | log $LOG
     cpu_governor_startup | log $LOG
-    full_rt_scheduling_startup | log $LOG
+#    full_rt_scheduling_startup | log $LOG
 }
 
 benchmark_teardown() {
@@ -54,12 +55,13 @@ benchmark_teardown() {
 # runs slower than expected.
 cpu_governor_startup() {
     # ... first find out if there is a cpupower command at all ...
-    if which cpupower>/dev/null && cpupower | grep -q ' driver: '; then
+    if which cpupower>/dev/null && cpupower frequency-info | grep -q ' driver: '; then
 	HAS_CPUPOWER=yes
     else
 	HAS_CPUPOWER=no
-	echo "No cpupower(1) command found or no cpupower driver."
-	echo "Benchmark will execute without changing the cpupower configuration."
+	echo "WARNING: No cpupower(1) command found or no cpupower driver."
+	echo "WARNING: Benchmark will execute without changing the cpupower configuration."
+        echo "WARNING: This can result in unpredictable output"
 	return 0
     fi
     # ... preserve the current CPU power management settings ...

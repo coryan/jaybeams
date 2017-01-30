@@ -105,7 +105,10 @@ examples = \
   tools/mold2inside \
   tools/moldheartbeat
 
-noinst_PROGRAMS = $(examples) $(benchmarks)
+noinst_PROGRAMS = $(examples) $(benchmarks) \
+  jb/testing/check_mt19937_initializer \
+  jb/testing/check_random_device
+
 
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
@@ -298,6 +301,7 @@ jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
+  jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp
@@ -1117,8 +1121,14 @@ jb_itch5_bm_order_book_CPPFLAGS =
 jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 ################################################################
-# testing unit tests
+# testing program and unit tests
 ################################################################
+
+jb_testing_check_mt19937_initializer_SOURCES = jb/testing/check_mt19937_initializer.cpp
+jb_testing_check_mt19937_initializer_LDADD = jb/libjb.a
+
+jb_testing_check_random_device_SOURCES = jb/testing/check_random_device.cpp
+jb_testing_check_random_device_LDADD = jb/libjb.a
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
