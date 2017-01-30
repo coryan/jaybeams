@@ -12,6 +12,8 @@ var searchData=
   ['init_2ehpp',['init.hpp',['../init_8hpp.html',1,'']]],
   ['initial_5f',['initial_',['../classjb_1_1tde_1_1generic__reduce.html#a4735b11012828b6841be3c100c1b8b8d',1,'jb::tde::generic_reduce']]],
   ['initialize_5fbody',['initialize_body',['../classjb_1_1tde_1_1reduce__sum.html#afc2473e2f61c37d77913801d9ec36885',1,'jb::tde::reduce_sum::initialize_body()'],['../classjb_1_1tde_1_1reducer__concept.html#ab65ad67e294981fd09710549565c043b',1,'jb::tde::reducer_concept::initialize_body()']]],
+  ['initialize_5fmersenne_5ftwister',['initialize_mersenne_twister',['../namespacejb_1_1testing.html#a36420c7ea1b7619e1f417aaadc0a3121',1,'jb::testing']]],
+  ['initialize_5fmersenne_5ftwister_2ehpp',['initialize_mersenne_twister.hpp',['../initialize__mersenne__twister_8hpp.html',1,'']]],
   ['input_5ftype',['input_type',['../classjb_1_1tde_1_1generic__reduce.html#ade938fecefdb40bdc19a85bb41f037f6',1,'jb::tde::generic_reduce']]],
   ['int_5fseconds',['int_seconds',['../classjb_1_1itch5_1_1seconds__field.html#a6c3ed9ab05879e633048bb1d210efcc4',1,'jb::itch5::seconds_field']]],
   ['integer_5frange_5fbinning',['integer_range_binning',['../classjb_1_1integer__range__binning.html',1,'jb']]],

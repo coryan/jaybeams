@@ -228,6 +228,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a39cfe14ddf5a1eff70f9be2c975140c2"><td class="memTemplItemLeft" align="right" valign="top">timeseries_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a39cfe14ddf5a1eff70f9be2c975140c2">delay_timeseries_zeroes</a> (timeseries_t const &amp;ts, duration_t delay, duration_t sampling_period)</td></tr>
 <tr class="memdesc:a39cfe14ddf5a1eff70f9be2c975140c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay a timeseries using zeroes for early values.  <a href="#a39cfe14ddf5a1eff70f9be2c975140c2">More...</a><br /></td></tr>
 <tr class="separator:a39cfe14ddf5a1eff70f9be2c975140c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36420c7ea1b7619e1f417aaadc0a3121"><td class="memTemplParams" colspan="2">template&lt;typename Generator &gt; </td></tr>
+<tr class="memitem:a36420c7ea1b7619e1f417aaadc0a3121"><td class="memTemplItemLeft" align="right" valign="top">Generator&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a36420c7ea1b7619e1f417aaadc0a3121">initialize_mersenne_twister</a> (int seed, std::string const &amp;token)</td></tr>
+<tr class="memdesc:a36420c7ea1b7619e1f417aaadc0a3121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a Mersenne-Twister based generator.  <a href="#a36420c7ea1b7619e1f417aaadc0a3121">More...</a><br /></td></tr>
+<tr class="separator:a36420c7ea1b7619e1f417aaadc0a3121"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1eba65c6a944932d1447f72b3c80bf1"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#af1eba65c6a944932d1447f72b3c80bf1">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structjb_1_1testing_1_1microbenchmark__base_1_1summary.html">microbenchmark_base::summary</a> const &amp;x)</td></tr>
 <tr class="memdesc:af1eba65c6a944932d1447f72b3c80bf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream the summary of a microbenchmark results in microseconds.  <a href="#af1eba65c6a944932d1447f72b3c80bf1">More...</a><br /></td></tr>
 <tr class="separator:af1eba65c6a944932d1447f72b3c80bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,6 +262,8 @@ Variables</h2></td></tr>
 <tr class="memitem:a0096e6d140099077625c171d9a8fe73a"><td class="memItemLeft" align="right" valign="top">char const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a0096e6d140099077625c171d9a8fe73a">linker</a> []</td></tr>
 <tr class="memdesc:a0096e6d140099077625c171d9a8fe73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The linker version.  <a href="#a0096e6d140099077625c171d9a8fe73a">More...</a><br /></td></tr>
 <tr class="separator:a0096e6d140099077625c171d9a8fe73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a792da23c733f027ea2f85429950cb6f0"><td class="memItemLeft" align="right" valign="top">char const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a792da23c733f027ea2f85429950cb6f0">default_initialization_marker</a> [] = &quot;__default__&quot;</td></tr>
+<tr class="separator:a792da23c733f027ea2f85429950cb6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Helper functions and classes to simplify unit tests. </p>
@@ -1117,6 +1123,59 @@ template&lt;typename value_type &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a36420c7ea1b7619e1f417aaadc0a3121"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Generator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Generator jb::testing::initialize_mersenne_twister </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>seed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>token</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize a Mersenne-Twister based generator. </p>
+<p>Often tests need to initialize a PRNG based on either a command-line argument (to make tests reproduceable), or from the std::random_device (to have good distribution properties in the PRGN). This is a fairly tedious initialization, so we have refactored it to a common function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seed</td><td>the command-line argument seed, 0 means initialize from std::random_device. </td></tr>
+    <tr><td class="paramname">token</td><td>the parameter to initialize std::random_device, if <b>default</b> then the random device is default initialized. The semantics of <em>token</em> are platform specific, but on Linux it is usually the device to read random numbers from (/dev/urandom or /dev/random). It is very rare to need /dev/random, specially in tests, where this function is most commonly used. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a Generator initialized as described above. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::exception</td><td>if the token is invalid on the platform.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Generator</td><td>an instantiation of std::mersenne_twister_generator&lt;&gt;, most likely std::mt19937 or std::mt19937_64. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="initialize__mersenne__twister_8hpp_source.html#l00038">38</a> of file <a class="el" href="initialize__mersenne__twister_8hpp_source.html">initialize_mersenne_twister.hpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af1eba65c6a944932d1447f72b3c80bf1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1479,6 +1538,22 @@ template&lt;typename timeseries &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a792da23c733f027ea2f85429950cb6f0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char const jb::testing::default_initialization_marker[] = &quot;__default__&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="initialize__mersenne__twister_8hpp_source.html#l00011">11</a> of file <a class="el" href="initialize__mersenne__twister_8hpp_source.html">initialize_mersenne_twister.hpp</a>.</p>
+
+<p>Referenced by <a class="el" href="check__random__device_8cpp_source.html#l00036">main()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a0096e6d140099077625c171d9a8fe73a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1504,7 +1579,7 @@ template&lt;typename timeseries &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux 2de558850ed2 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;&quot;&quot;(</span></div><div class="line"><span class="stringliteral">Linux c6a2f6283866 4.4.0-51-generic #72~14.04.1-Ubuntu SMP Thu Nov 24 19:22:30 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></div><div class="line"><span class="stringliteral">)&quot;&quot;&quot;</span></div></div><!-- fragment -->
 <p>The kernel version, release, machine hardware, etc. </p>
 
 <p>Definition at line <a class="el" href="compile__info_8cpp_source.html#l00003">3</a> of file <a class="el" href="compile__info_8cpp_source.html">compile_info.cpp</a>.</p>
