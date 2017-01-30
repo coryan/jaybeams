@@ -82,7 +82,7 @@ void call_iteration_teardown(Fixture&& fixture) {
  * };
  * @endcode
  *
- * To thest the bar() function you would create a Fixture class like
+ * To test the bar() function you would create a Fixture class like
  * this:
  *
  * @code
