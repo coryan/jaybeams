@@ -3,8 +3,12 @@
 
 #include <jb/detail/array_traits.hpp>
 #include <jb/fftw/plan.hpp>
-#include <jb/testing/check_close_enough.hpp>
+#include <jb/fftw/tde_result.hpp>
 #include <jb/complex_traits.hpp>
+
+/*
+#include <jb/testing/check_close_enough.hpp>
+*/
 
 namespace jb {
 namespace fftw {
@@ -88,7 +92,7 @@ public:
       , tmpa2out_(create_backward_plan(tmpa_, out_, planning_flags()))
       , nsamples_(jb::detail::nsamples(a))
       , num_timeseries_(jb::detail::element_count(a) / nsamples_) {
-    if (a.size() != b.size()) {
+    if (jb::detail::array_shape(a) != jb::detail::array_shape(b)) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
     }
   }
@@ -108,7 +112,8 @@ public:
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
-    if (a.size() != tmpa_.size() or b.size() != tmpa_.size()) {
+    if (jb::detail::element_count(a) != jb::detail::element_count(tmpa_) or
+        jb::detail::element_count(b) != jb::detail::element_count(tmpa_)) {
       throw std::invalid_argument(
           "size mismatch in time_delay_estimator<>::estimate_delay()");
     }
@@ -128,18 +133,17 @@ public:
 
     // ... finally we compute the estimated delay and its confidence
     // @todo issue #86: investigate use of SSE instructions
-    std::size_t k = 0;
     precision_type* it_out = out_.data();
     for (std::size_t i = 0; i != num_timeseries_; ++i) {
       precision_type max_val = std::numeric_limits<precision_type>::min();
       std::size_t tde_val = 0;
-      for (std::size_t j = 0; j != nsamples_; ++j, ++k, ++it_out) {
+      for (std::size_t j = 0; j != nsamples_; ++j, ++it_out) {
         if (max_val < *it_out) {
           max_val = *it_out;
           tde_val = j;
         }
       }
-      if (jb::testing::check_close_enough(sum2[i], precision_type{0}, 1)) {
+      if (sum2[i] < std::numeric_limits<precision_type>::epsilon()) {
         confidence[i] = std::numeric_limits<precision_type>::max();
       } else {
         confidence[i] = max_val / sum2[i];

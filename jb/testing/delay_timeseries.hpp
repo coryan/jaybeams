@@ -1,6 +1,8 @@
 #ifndef jb_testing_delay_timeseries_hpp
 #define jb_testing_delay_timeseries_hpp
 
+#include <jb/detail/array_traits.hpp>
+
 #include <cstddef>
 #include <cstdint>
 #include <utility>
@@ -56,15 +58,16 @@ struct extrapolate_periodic {
  */
 template <typename timeseries_t, typename duration_t,
           typename extrapolation_functor>
-typename timeseries_t::value_type extrapolate_timeseries(
+typename jb::detail::array_traits<timeseries_t>::element_type
+extrapolate_timeseries(
     timeseries_t const& ts, duration_t t, duration_t sampling_period,
     extrapolation_functor const& extrapolation) {
   auto ticks = t / sampling_period;
-  auto r = extrapolation(ticks, ts.size());
+  auto r = extrapolation(ticks, jb::detail::element_count(ts));
   if (r.first == -1) {
     return r.second;
   }
-  return ts.at(r.first);
+  return *(ts.data() + static_cast<std::size_t>(r.first));
 }
 
 /**
@@ -75,11 +78,16 @@ template <typename timeseries_t, typename duration_t,
 timeseries_t delay_timeseries(
     timeseries_t const& ts, duration_t delay, duration_t sampling_period,
     extrapolation_functor const& extrapolation) {
-  timeseries_t a(ts.size());
+  timeseries_t a(jb::detail::array_shape(ts));
 
-  for (std::size_t i = 0; i != a.size(); ++i) {
+  /// The values stored in the input timeseries ts
+  using element_type =
+      typename jb::detail::array_traits<timeseries_t>::element_type;
+
+  element_type* it_a = a.data();
+  for (std::size_t i = 0; i != jb::detail::element_count(a); ++i, ++it_a) {
     duration_t stamp = i * sampling_period - delay;
-    a[i] = extrapolate_timeseries(ts, stamp, sampling_period, extrapolation);
+    *it_a = extrapolate_timeseries(ts, stamp, sampling_period, extrapolation);
   }
   return std::move(a);
 }
@@ -90,9 +98,11 @@ timeseries_t delay_timeseries(
 template <typename timeseries_t, typename duration_t>
 timeseries_t delay_timeseries_periodic(
     timeseries_t const& ts, duration_t delay, duration_t sampling_period) {
+  /// The values stored in the input timeseries ts
+  using element_type =
+      typename jb::detail::array_traits<timeseries_t>::element_type;
   return delay_timeseries(
-      ts, delay, sampling_period,
-      extrapolate_periodic<typename timeseries_t::value_type>());
+      ts, delay, sampling_period, extrapolate_periodic<element_type>());
 }
 
 /**
@@ -101,9 +111,11 @@ timeseries_t delay_timeseries_periodic(
 template <typename timeseries_t, typename duration_t>
 timeseries_t delay_timeseries_zeroes(
     timeseries_t const& ts, duration_t delay, duration_t sampling_period) {
+  /// The values stored in the input timeseries ts
+  using element_type =
+      typename jb::detail::array_traits<timeseries_t>::element_type;
   return delay_timeseries(
-      ts, delay, sampling_period,
-      extrapolate_with_zeroes<typename timeseries_t::value_type>());
+      ts, delay, sampling_period, extrapolate_with_zeroes<element_type>());
 }
 
 } // namespace testing

@@ -58,7 +58,7 @@ if test "x$ax_want_boost_compute" = "xyes"; then
   else
     dnl seach the known paths for the Boost.Compute header
     ax_initial_searchdirs="/usr /usr/local /opt /opt/local"
-    ax_search_dirs=ax_initial_searchdirs
+    ax_search_dirs=$ax_initial_searchdirs
     for ax_path_i in $ax_initial_searchdirs; do
       found=`ls -dr1 $ax_path_i/boost-compute* 2>/dev/null`
       ax_search_dirs="$ax_search_dirs $found"
