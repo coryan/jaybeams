@@ -88,7 +88,7 @@ if test "x$ax_want_clfft" = "xyes"; then
     else
       dnl seach the known paths for the header and the libraries
       ax_initial_searchdirs="/usr /usr/local /opt /opt/local"
-      ax_search_dirs=ax_initial_searchdirs
+      ax_search_dirs=""
       for ax_path_i in $ax_initial_searchdirs; do
         found=`ls -dr1 $ax_path_i/clFFT* 2>/dev/null`
         ax_search_dirs="$ax_search_dirs $found"

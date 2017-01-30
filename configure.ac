@@ -58,6 +58,14 @@ AX_CXXFLAGS_WARN_ALL
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
   [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
 
+# ... enable static linking if the user requests it ...
+AX_CONFIG_FEATURE_DEFAULT_DISABLED
+AX_CONFIG_FEATURE(static-linking, [turns on/off static linking],
+                  HAVE_STATIC_LINKING,
+                  [Define if you want all programs to be statically linked],
+                  [enable_static_linking="yes"], [enable_static_linking="no"])
+AM_CONDITIONAL(STATIC_LINKING, [test "$enable_static_linking" = "yes"])
+
 # ... we need Boost with a version higher than 1.55 because Boost.Log ...
 AX_BOOST_BASE([1.55], [], [
     AC_MSG_ERROR([
@@ -100,6 +108,12 @@ AM_COND_IF([HAVE_OPENCL], [
     # have to disable warnings about them if we end up using both ...
     AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
        [AX_APPEND_FLAG(-Wno-deprecated-declarations, CXXFLAGS)], [])
+    AM_COND_IF([STATIC_LINKING], [
+      OPENCL_LIB="-Wl,--push-state,-Bdynamic,-lOpenCL,--pop-state"
+      CLFFT_LIB="-Wl,--push-state,-Bdynamic,-lclFFT,--pop-state"
+      AC_SUBST(OPENCL_LIB)
+      AC_SUBST(CLFFT_LIB)
+    ], [])
 ])
 
 
@@ -112,5 +126,17 @@ AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],
 # ... require FFTW3 by default, but allow the user to disable it ...
 AX_FFTW3([], [])
 AM_CONDITIONAL([USE_FFTW3], [test "x$ax_want_fftw3" = "xyes"])
+
+# ... libbz2 is a dependency for Boost.IOStreams when compiled statically ...
+AX_CHECK_LIBRARY(BZIP2, [bzlib.h], [bz2],
+  [BZIP2_LIBS=-lbz2 AC_SUBST(BZIP2_LIBS)],
+  [AC_MSG_ERROR([Unable to find bzip2 library])
+])
+
+# ... libz is a dependency for Boost.IOStreams when compiled statically ...
+AX_CHECK_LIBRARY(LIBZ, [zlib.h], [z],
+  [LIBZ_LIBS=-lz AC_SUBST(LIBZ_LIBS)],
+  [AC_MSG_ERROR([Unable to find libz library])
+])
 
 AC_OUTPUT

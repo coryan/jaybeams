@@ -7,6 +7,7 @@ RUN dnf update -y && dnf install -y \
     automake \
     boost \
     boost-devel \
+    bzip2-devel \
     clang \
     clinfo \
     cmake \
@@ -23,7 +24,8 @@ RUN dnf update -y && dnf install -y \
     pocl-devel \
     tar \
     wget \
-    yaml-cpp-devel
+    yaml-cpp-devel \
+    zlib-devel
 
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
@@ -57,4 +59,5 @@ RUN cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/
 WORKDIR /root
 RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
 RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build-pocl
+RUN dnf clean all
 
