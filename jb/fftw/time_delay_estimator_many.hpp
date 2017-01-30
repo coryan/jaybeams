@@ -88,7 +88,7 @@ public:
       , tmpa2out_(create_backward_plan(tmpa_, out_, planning_flags()))
       , nsamples_(jb::detail::nsamples(a))
       , num_timeseries_(jb::detail::element_count(a) / nsamples_) {
-    if (a.size() != b.size()) {
+    if (jb::detail::array_shape(a) != jb::detail::array_shape(b)) {
       throw std::invalid_argument("size mismatch in time_delay_estimator ctor");
     }
   }
@@ -108,7 +108,8 @@ public:
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
-    if (a.size() != tmpa_.size() or b.size() != tmpa_.size()) {
+    if (jb::detail::element_count(a) != jb::detail::element_count(tmpa_) or
+        jb::detail::element_count(b) != jb::detail::element_count(tmpa_)) {
       throw std::invalid_argument(
           "size mismatch in time_delay_estimator<>::estimate_delay()");
     }

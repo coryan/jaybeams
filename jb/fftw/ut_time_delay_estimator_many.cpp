@@ -1178,3 +1178,35 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
           confidence, expected_confidence, confidence_tol),
       "confidence is not within tolerance(" << confidence_tol << ")");
 }
+
+/**
+ * @test Verify thattime delay estimator handles errors
+ */
+BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_errors) {
+  int const nsamples = 1 << 15;
+  int const S = 20;
+  int const V = 4;
+
+  using array_type = jb::fftw::aligned_multi_array<float, 3>;
+  using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
+
+  array_type a(boost::extents[S][V][nsamples]);
+  array_type b(boost::extents[S - 1][V][nsamples]);
+  array_type c(boost::extents[S][V][nsamples]);
+
+  using confidence_type = typename tested_type::confidence_type;
+  using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
+
+  confidence_type confidence(a);
+  estimated_delay_type argmax(a);
+  sum2_type sum2(a);
+
+  // check contructor size exception
+  BOOST_CHECK_THROW(tested_type tested(a, b), std::exception);
+  // construct one...
+  tested_type tested2(a, c);
+  // check the TDE size exception
+  BOOST_CHECK_THROW(
+      tested2.estimate_delay(confidence, argmax, a, b, sum2), std::exception);
+}
