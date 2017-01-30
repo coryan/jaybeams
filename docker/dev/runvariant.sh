@@ -41,8 +41,10 @@ image=$( (cat $dockerfile; cat <<__EOF__
 ARG user
 ARG uid
 
-RUN grep -q Ubuntu /etc/lsb-release && apt-get update && apt-get install -y lshw sudo time || :
-RUN grep -q Fedora /etc/fedora-release && dnf update && dnf install -y lshw sudo time || :
+RUN grep -q Ubuntu /etc/lsb-release 2>/dev/null && \
+  apt-get update && apt-get install -y lshw sudo time || :
+RUN grep -q Fedora /etc/fedora-release 2>/dev/null && \
+  dnf update && dnf install -y lshw sudo time || :
 RUN echo \$user ALL=NOPASSWD: ALL >>/etc/sudoers
 
 WORKDIR /root
@@ -56,6 +58,6 @@ __EOF__
 
 echo "Created image $image, running it"
 
-sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
+exec sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
 
 
