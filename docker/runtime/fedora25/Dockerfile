@@ -1,4 +1,4 @@
-FROM fedora:24
+FROM fedora:25
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN dnf update -y && dnf install -y \
