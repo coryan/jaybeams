@@ -16,12 +16,15 @@ RUN dnf update -y && dnf install -y \
     findutils \
     gcc-c++ \
     git \
+    lshw \
     make \
     ocl-icd-devel \
     opencl-headers \
     patch \
     pocl-devel \
+    sudo \
     tar \
+    time \
     wget \
     yaml-cpp-devel \
     zlib-devel

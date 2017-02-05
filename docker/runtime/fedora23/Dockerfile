@@ -5,7 +5,10 @@ RUN dnf update -y && dnf install -y \
     boost \
     bzip2 \
     fftw \
+    lshw \
     ocl-icd \
+    sudo \
+    time \
     yaml-cpp \
     zlib
 

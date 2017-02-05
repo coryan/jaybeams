@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     g++-5 \
     gcc-5 \
     git \
+    lshw \
     lcov \
     libboost1.55-all-dev \
     libbz2-dev \
@@ -26,7 +27,9 @@ RUN apt-get update && apt-get install -y \
     ocl-icd-libopencl1 \
     ocl-icd-opencl-dev \
     opencl-headers \
+    sudo \
     tar \
+    time \
     wget \
     xz-utils \
     zlib1g-dev
