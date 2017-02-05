@@ -13,10 +13,7 @@ boost::compute::device jb::opencl::device_selector(config const& cfg) {
     return detail::best_device(
         [](device const& d) { return d.type() & device::gpu; }, "GPU");
   }
-  if (cfg.device_name() == "") {
-    return detail::best_device([](device const& d) { return true; }, "ANY");
-  }
-  if (cfg.device_name() == "SYSTEM:DEFAULT") {
+  if (cfg.device_name() == "" or cfg.device_name() == "SYSTEM:DEFAULT") {
     return boost::compute::system::default_device();
   }
   return boost::compute::system::find_device(cfg.device_name());
