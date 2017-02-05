@@ -57,7 +57,15 @@ void check_copy_to_host_async_sized(int dsize, int hsize) {
   auto done = jb::opencl::copy_to_host_async(
       dev.begin(), dev.end(), actual.begin(), dnqueue,
       boost::compute::wait_list(upload.get_event()));
+  BOOST_REQUIRE(done.valid());
+  BOOST_REQUIRE_NE(hsize, 0);
   done.wait();
+  BOOST_REQUIRE_EQUAL(
+      upload.get_event().status(),
+      boost::compute::event::execution_status::complete);
+  BOOST_REQUIRE_EQUAL(
+      done.get_event().status(),
+      boost::compute::event::execution_status::complete);
   BOOST_REQUIRE_EQUAL(done.get() - actual.begin(), std::size_t(dsize));
   // ... resize the receiving buffer based on the returned iterator ...
   actual.resize(done.get() - actual.begin());
