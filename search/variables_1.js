@@ -14,7 +14,7 @@ var searchData=
   ['buffer_5f',['buffer_',['../classjb_1_1itch5_1_1mold__udp__channel.html#ac96d8fd67e0ceecca3f2a660a7cd2c10',1,'jb::itch5::mold_udp_channel::buffer_()'],['../classjb_1_1itch5_1_1short__string__field.html#a2f29574911a52df5c1a56a13797ed2d2',1,'jb::itch5::short_string_field::buffer_()']]],
   ['buffer_5fsize',['buffer_size',['../classjb_1_1itch5_1_1short__string__field.html#a9bfeb695574700d4c4676b959981b2f5',1,'jb::itch5::short_string_field']]],
   ['buflen',['buflen',['../classjb_1_1itch5_1_1mold__udp__channel.html#abf7b8f1746b142742a6a292deb720033',1,'jb::itch5::mold_udp_channel']]],
-  ['buy',['BUY',['../namespacejb_1_1itch5_1_1testing.html#a9e05fe4b32df8fba5a590cc032ef6284',1,'jb::itch5::testing']]],
+  ['buy',['BUY',['../namespacejb_1_1itch5_1_1testing.html#a61a0aeda2e55cbd5c45d2ae3d81728c7',1,'jb::itch5::testing']]],
   ['buy_5f',['buy_',['../classjb_1_1itch5_1_1order__book.html#af67128c650d06bf79ba50f65fb930c07',1,'jb::itch5::order_book']]],
   ['buy_5fsell_5findicator',['buy_sell_indicator',['../structjb_1_1itch5_1_1add__order__message.html#a2cd0f14aa71ff23a88984c33a86797db',1,'jb::itch5::add_order_message::buy_sell_indicator()'],['../namespacejb_1_1itch5.html#a958413e1f0d9a566969fb559b477dab6',1,'jb::itch5::book_update::buy_sell_indicator()'],['../namespacejb_1_1itch5.html#a4e1645273ae60e3c74c340533a49ac29',1,'jb::itch5::order_data::buy_sell_indicator()'],['../structjb_1_1itch5_1_1trade__message.html#adc48f48859b9bb63f02dba79435259b2',1,'jb::itch5::trade_message::buy_sell_indicator()']]]
 ];

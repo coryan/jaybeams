@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['readme_2emd',['README.md',['../jb_2itch5_2README_8md.html',1,'']]],
-  ['readme_2emd',['README.md',['../tools_2README_8md.html',1,'']]],
+  ['readme_2emd',['README.md',['../jb_2itch5_2README_8md.html',1,'(Global Namespace)'],['../tools_2README_8md.html',1,'(Global Namespace)']]],
   ['reconfigure_5fthread_2ecpp',['reconfigure_thread.cpp',['../reconfigure__thread_8cpp.html',1,'']]],
   ['reconfigure_5fthread_2ehpp',['reconfigure_thread.hpp',['../reconfigure__thread_8hpp.html',1,'']]],
   ['reducer_5fconcept_2edox',['reducer_concept.dox',['../reducer__concept_8dox.html',1,'']]],
