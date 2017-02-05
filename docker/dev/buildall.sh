@@ -2,7 +2,7 @@
 
 tag=$(date +%Y%m%d%H%M)
 bindir=$(dirname $0)
-for target in fedora23 fedora24 ubuntu14.04 ubuntu16.04 ubuntu16.10; do
+for target in fedora{23,24,25} ubuntu{14.04,16.04,16.10}; do
     echo ================================================================
     echo
     echo Building ${target?} $(date)
