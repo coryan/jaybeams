@@ -19,12 +19,15 @@ RUN apt-get update && apt-get install -y \
     libfftw3-dev \
     libyaml-cpp-dev \
     llvm \
+    lshw \
     make \
     ocl-icd-libopencl1 \
     ocl-icd-opencl-dev \
     opencl-headers \
     pkg-config \
+    sudo \
     tar \
+    time \
     wget \
     xz-utils \
     zlib1g-dev

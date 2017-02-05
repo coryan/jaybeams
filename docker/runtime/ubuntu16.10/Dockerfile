@@ -32,7 +32,10 @@ RUN apt-get update && apt-get install -y \
     libclfft2 \
     libfftw3-3 \
     libyaml-cpp0.5v5 \
+    lshw \
     ocl-icd-libopencl1 \
+    sudo \
+    time \
     zlib1g
 
 RUN apt-get clean
