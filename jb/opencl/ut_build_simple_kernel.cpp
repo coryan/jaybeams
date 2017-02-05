@@ -15,6 +15,7 @@ __kernel void add_float(
   }
 }
 
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
 __kernel void add_double(
     __global double *dst, __global double const *src,
     unsigned int const N) {
@@ -41,6 +42,7 @@ __kernel void add_float(
  */
 BOOST_AUTO_TEST_CASE(build_simple_kernel) {
   boost::compute::device device = jb::opencl::device_selector();
+  BOOST_TEST_MESSAGE("Running with device=" << device.name());
   boost::compute::context context(device);
 
   BOOST_CHECK_NO_THROW(
@@ -73,6 +75,7 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
  */
 BOOST_AUTO_TEST_CASE(build_simple_program) {
   boost::compute::device device = jb::opencl::device_selector();
+  BOOST_TEST_MESSAGE("Running with device=" << device.name());
   boost::compute::context context(device);
 
   boost::compute::program program;
