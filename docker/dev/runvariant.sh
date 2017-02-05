@@ -37,27 +37,24 @@ if [ "x$USER" = "x" -o "x$UID" = "x" ]; then
     exit 1
 fi
 
-image=$( (cat $dockerfile; cat <<__EOF__
+variant=$(basename $(dirname $dockerfile))
+
+image=$(
+    (cat <<__EOF__
+FROM coryan/jaybeamsdev-${variant?}:latest
 ARG user
 ARG uid
-
-RUN grep -q Ubuntu /etc/lsb-release 2>/dev/null && \
-  apt-get update && apt-get install -y lshw sudo time || :
-RUN grep -q Fedora /etc/fedora-release 2>/dev/null && \
-  dnf update && dnf install -y lshw sudo time || :
-RUN echo \$user ALL=NOPASSWD: ALL >>/etc/sudoers
+VOLUME /home/\$user/jaybeams
 
 WORKDIR /root
 RUN useradd -m -u \$uid \$user
-VOLUME /home/\$user/jaybeams
+RUN echo \$user ALL=NOPASSWD: ALL >>/etc/sudoers
 
 USER \$user
 WORKDIR /home/\$user/jaybeams
 __EOF__
-) | sudo docker build -q --build-arg user=$USER --build-arg uid=$UID -)
+    ) | sudo docker build -q --build-arg user=$USER --build-arg uid=$UID - )
 
 echo "Created image $image, running it"
 
 exec sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
-
-
