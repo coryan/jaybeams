@@ -1,3 +1,4 @@
 sut:
-  build: .
-  command: ../test-image.sh
+  build: ..
+  dockerfile: ubuntu14.04/Dockerfile
+  command: /root/test-image.sh

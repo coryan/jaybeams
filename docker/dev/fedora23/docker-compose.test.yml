@@ -1,3 +1,4 @@
 sut:
-  build: .
-  command: ../test-image.sh
+  build: ..
+  dockerfile: fedora23/Dockerfile
+  command: /root/test-image.sh
