@@ -132,12 +132,3 @@ BOOST_AUTO_TEST_CASE(conjugate_and_multiply_float_error) {
   BOOST_CHECK_THROW(
       check_conjugate_and_multiply_mismatched<float>(), std::exception);
 }
-
-/**
- * @test Verify that jb::tde::conjugate_and_multiply() detects
- * mismatched arrays.
- */
-BOOST_AUTO_TEST_CASE(conjugate_and_multiply_double_error) {
-  BOOST_CHECK_THROW(
-      check_conjugate_and_multiply_mismatched<double>(), std::exception);
-}
