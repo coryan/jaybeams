@@ -83,3 +83,4 @@ WORKDIR /root
 RUN /bin/rm -fr /var/tmp/build-skye /var/tmp/install-autoconf-archive
 RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build-pocl
 
+COPY test-image.sh /root/test-image.sh
