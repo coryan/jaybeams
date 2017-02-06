@@ -9,7 +9,17 @@ if [ $# -ge 1 ]; then
 fi
 
 bindir=`dirname $0`
-. ${bindir?}/../../tools/benchmark_common.sh
+for path in ${bindir?}/../../tools ${bindir?}; do
+    if [ -r ${path?}/benchmark_common.sh ]; then
+	. ${path?}/benchmark_common.sh
+	benchmark_common_loaded=yes
+	break
+    fi
+done
+if [ "x${benchmark_common_loaded}" = "x" ]; then
+    echo "Cannot load benchmark_common.sh"
+    exit 1
+fi
 
 # ... configure the system to run a benchmark and select where to send
 # output ...
