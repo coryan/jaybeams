@@ -65,6 +65,4 @@ RUN /bin/rm -fr /var/tmp/build-clFFT /var/tmp/build-boost-compute /var/tmp/build
 RUN dnf clean all
 
 COPY test-image.sh /root/test-image.sh
-
 CMD ["bash", "/root/test-image.sh"]
-
