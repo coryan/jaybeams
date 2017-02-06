@@ -15,9 +15,8 @@ __kernel void add_float(
   }
 }
 
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-__kernel void add_double(
-    __global double *dst, __global double const *src,
+__kernel void add_int(
+    __global int *dst, __global int const *src,
     unsigned int const N) {
   int row = get_global_id(0);
   if (row < N) {
@@ -47,7 +46,7 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
 
   BOOST_CHECK_NO_THROW(
       jb::opencl::build_simple_kernel(
-          context, device, valid_program, "add_double"));
+          context, device, valid_program, "add_int"));
   BOOST_CHECK_NO_THROW(
       jb::opencl::build_simple_kernel(
           context, device, valid_program, "add_float"));
@@ -58,7 +57,7 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
 
   std::istringstream is(valid_program);
   BOOST_CHECK_NO_THROW(
-      jb::opencl::build_simple_kernel(context, device, is, "add_double"));
+      jb::opencl::build_simple_kernel(context, device, is, "add_int"));
   is.str(valid_program);
   is.clear();
   BOOST_CHECK_NO_THROW(
@@ -83,7 +82,7 @@ BOOST_AUTO_TEST_CASE(build_simple_program) {
       program =
           jb::opencl::build_simple_program(context, device, valid_program));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
-  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_int"));
 
   BOOST_CHECK_THROW(
       jb::opencl::build_simple_program(context, device, invalid_program),
@@ -93,7 +92,7 @@ BOOST_AUTO_TEST_CASE(build_simple_program) {
   BOOST_CHECK_NO_THROW(
       program = jb::opencl::build_simple_program(context, device, is));
   BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_float"));
-  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_double"));
+  BOOST_CHECK_NO_THROW(boost::compute::kernel(program, "add_int"));
 
   is.str(invalid_program);
   is.clear();
