@@ -19,7 +19,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.10 COMPILER=g++ CXXFLAGS=-g CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-g CONFIGUREFLAGS=""
 
     - os: linux
       compiler: gcc
