@@ -14,6 +14,15 @@ namespace {
 template <typename precision_t>
 void check_conjugate_and_multiply_sized(int asize, int bsize) {
   boost::compute::device device = jb::opencl::device_selector();
+  if (std::is_same<double, precision_t>::value) {
+    if (not device.supports_extension("cl_khr_fp64")) {
+      BOOST_TEST_MESSAGE(
+          "Test disabled, device (" << device.name()
+                                    << ") does not support cl_khr_fp64, i.e., "
+                                       "double precision floating point");
+      return;
+    }
+  }
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
 
