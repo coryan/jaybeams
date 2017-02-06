@@ -66,4 +66,5 @@ RUN dnf clean all
 
 COPY test-image.sh /root/test-image.sh
 
+CMD ["bash", "/root/test-image.sh"]
 
