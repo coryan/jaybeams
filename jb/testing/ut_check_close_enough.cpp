@@ -101,10 +101,20 @@ BOOST_AUTO_TEST_CASE(check_close_enough_float_vector) {
 
 /**
  * @test check_close_enough functionality for vector of float type
+ *
+ * TODO(#93) cleanup after boost-1.58.0 is no longer supported.
  */
+#if BOOST_VERSION <= 105800
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(
+    check_close_enough_float_vector_failure, JB_TESTING_MAX_DIFFERENCES_PRINTED)
+
+BOOST_AUTO_TEST_CASE(check_close_enough_float_vector_failure)
+#else
 BOOST_AUTO_TEST_CASE(
     check_close_enough_float_vector_failure,
-    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED)) {
+    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED))
+#endif // BOOST_VERSION <= 105800
+{
   using namespace jb::testing;
   using value_type = float;
   using test_type = std::vector<value_type>;
@@ -124,10 +134,21 @@ BOOST_AUTO_TEST_CASE(
 /**
  * @test check_close_enough functionality for multi_array of 3 dimension
  * complex double type
+ *
+ * TODO(#93) cleanup after boost-1.58.0 is no longer supported.
  */
+#if BOOST_VERSION <= 105800
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(
+    check_close_enough_complex_double_multi_array,
+    JB_TESTING_MAX_DIFFERENCES_PRINTED)
+
+BOOST_AUTO_TEST_CASE(check_close_enough_complex_double_multi_array)
+#else
 BOOST_AUTO_TEST_CASE(
     check_close_enough_complex_double_multi_array,
-    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED)) {
+    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED))
+#endif // BOOST_VERSION <= 105800
+{
   using namespace jb::testing;
   using value_type = double;
   using complex_type = std::complex<value_type>;
