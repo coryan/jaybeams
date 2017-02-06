@@ -8,6 +8,6 @@ git clone --depth=2 https://github.com/coryan/jaybeams.git
 cd jaybeams
 ./bootstrap
 ./configure
-make -j 4 check
+make check
 
 exit 0
