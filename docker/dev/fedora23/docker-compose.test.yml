@@ -1,4 +1,0 @@
-sut:
-  build: ..
-  dockerfile: fedora23/Dockerfile
-  command: /root/test-image.sh
