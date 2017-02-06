@@ -92,6 +92,10 @@ benchmarks = \
   jb/bm_clocks \
   jb/itch5/bm_order_book
 
+bin_SCRIPTS = \
+  tools/benchmark_common.sh \
+  jb/itch5/bm_order_book_generate.sh
+
 examples = \
   examples/configuration
 
