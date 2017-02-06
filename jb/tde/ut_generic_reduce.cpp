@@ -84,12 +84,22 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
   boost::compute::device device =
       jb::opencl::device_selector(jb::opencl::config());
   BOOST_TEST_MESSAGE("Running on device = " << device.name());
+  using scalar_type = typename jb::extract_value_type<value_type>::precision;
+  if (std::is_same<double, scalar_type>::value) {
+    if (not device.supports_extension("cl_khr_fp64")) {
+      BOOST_TEST_MESSAGE(
+          "Test disabled, device (" << device.name()
+                                    << ") does not support cl_khr_fp64, i.e., "
+                                       "double precision floating point");
+      return;
+    }
+  }
+
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
 
   unsigned int seed = std::random_device()();
   BOOST_TEST_MESSAGE("SEED = " << seed);
-  using scalar_type = typename jb::extract_value_type<value_type>::precision;
   auto generator = create_random_generator<scalar_type>(seed);
 
   std::vector<value_type> asrc;
@@ -226,6 +236,6 @@ BOOST_AUTO_TEST_CASE(generic_reduce_complex_double_PRIMES) {
 BOOST_AUTO_TEST_CASE(generic_reduce_complex_execute_error) {
   std::size_t const size = 1024;
   BOOST_CHECK_THROW(
-      check_generic_reduce_sized<std::complex<double>>(size, 2 * size),
+      check_generic_reduce_sized<std::complex<float>>(size, 2 * size),
       std::exception);
 }
