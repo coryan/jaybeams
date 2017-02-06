@@ -49,6 +49,7 @@ VOLUME /home/\$user/jaybeams
 WORKDIR /root
 RUN useradd -m -u \$uid \$user
 RUN echo \$user ALL=NOPASSWD: ALL >>/etc/sudoers
+RUN chown \$user /home/\$user
 
 USER \$user
 WORKDIR /home/\$user/jaybeams
