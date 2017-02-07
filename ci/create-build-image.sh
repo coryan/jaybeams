@@ -9,8 +9,7 @@ if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
 fi
 
 # TODO() this is just to run less builds during debugging ...
-if [ "x${TRAVIS_BRANCH}" != "xcreate-docker-on-travis" -o \
-			 "$IMAGE" != "coryan/jaybeamsdev-fedora25" ]; then
+if [ "x${TRAVIS_BRANCH}" != "xcreate-docker-on-travis" ]; then
     echo "DEBUG: only branch create-docker-on-travis create images"
     exit 0
 fi
