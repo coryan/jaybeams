@@ -10,7 +10,7 @@ if [ "x${tag}" = "x" ]; then
 fi
 
 bindir=$(dirname $0)
-for target in fedora{23,24,25} ubuntu{14.04,16.04,16.10}; do
+for target in fedora{24,25} ubuntu{14.04,16.04}; do
     echo ================================================================
     echo
     echo Pushing ${target?} $(date)
