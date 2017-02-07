@@ -65,7 +65,7 @@ after_success:
     (cd doc/html ; git push https://${GH_TOKEN?}@${REPO_REF?} gh-pages) ;
     fi
   # Create the build image, the script detects if the conditions are not suitable ...
-  - docker login -u ${DOCKER_USER?} -p ${DOCKER_PASSWD?}
+  - docker login -u ${DOCKER_USER?} -p ${DOCKER_PASSWORD?}
   - ci/create-build-image.sh
 
 notifications:
