@@ -32,7 +32,7 @@ script:
   - uname -a
   - REPO=`git config remote.origin.url`
   - REPO_REF=${REPO/https:\/\/}
-  - docker build --help
+  - docker --version
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
   - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
@@ -40,6 +40,10 @@ script:
   - if [ "x${CHECK_STYLE}" = "xyes" ]; then
     docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && make check-style" ;
     fi
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install docker-engine
 
 install:
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
