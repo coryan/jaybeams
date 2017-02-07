@@ -2,8 +2,6 @@
 
 set -e
 
-env
-
 # TODO() add -a "x${TRAVIS_BRANCH}" = "xmaster"
 if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     echo "Testing PR, image creation disabled."
