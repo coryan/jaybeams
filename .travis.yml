@@ -64,9 +64,8 @@ after_success:
     docker run --rm -it --env GIT_NAME="${GIT_NAME?}" --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
     (cd doc/html ; git push https://${GH_TOKEN?}@${REPO_REF?} gh-pages) ;
     fi
-  - if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" -a "x${TRAVIS_BRANCH}" = "xcreate-docker-on-travis" -a "$IMAGE" = "coryan/jaybeamsdev-fedora25" ]; then
-    docker build -t ${IMAGE}:tip docker/dev/fedora25 ;
-    fi
+  # Create the build image, the script detects if the conditions are not suitable ...
+  - ci/create-build-image.sh
 
 notifications:
   email: false
