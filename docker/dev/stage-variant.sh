@@ -64,3 +64,9 @@ echo "Created image $image, running it"
 sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams \
      --env CXX=g++ --env CXXFLAGS="-g -O0" --env VARIANT=${variant?} --env USER=${USER?} \
      ${image?} docker/dev/stage-variant-helper.sh
+
+cp docker/runtime/${variant?}/Dockerfile staging/${variant?}
+sudo docker build -t coryan/jaybeams-runtime-${variant?}:tip staging/${variant?}
+
+exit 0
+

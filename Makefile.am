@@ -100,6 +100,7 @@ examples = \
   examples/configuration
 
 bin_PROGRAMS = $(benchmarks) \
+  jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
   tools/itch5inside \
@@ -327,6 +328,10 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
 	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::gitrev[] = R"""(' >>$@; \
+	git rev-parse HEAD >>$@ 2>/dev/null; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
 
@@ -1133,6 +1138,9 @@ jb_testing_check_mt19937_initializer_LDADD = jb/libjb.a
 
 jb_testing_check_random_device_SOURCES = jb/testing/check_random_device.cpp
 jb_testing_check_random_device_LDADD = jb/libjb.a
+
+jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
+jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
