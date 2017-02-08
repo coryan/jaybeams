@@ -2,6 +2,7 @@ FROM fedora:25
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN dnf makecache && dnf install -y \
+    binutils \
     boost \
     bzip2 \
     fftw \
