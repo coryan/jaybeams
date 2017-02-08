@@ -9,8 +9,8 @@ if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
 fi
 
 # TODO() this is just to run less builds during debugging ...
-if [ "x${TRAVIS_BRANCH}" != "xcreate-docker-on-travis" ]; then
-    echo "DEBUG: only branch create-docker-on-travis create images"
+if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
+    echo "DEBUG: only create images on master branch."
     exit 0
 fi
 
