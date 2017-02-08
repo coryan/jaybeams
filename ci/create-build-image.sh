@@ -28,7 +28,7 @@ variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 # Determine now old is the image, if it is old enough, we re-create
 # from scratch every time ...
 now=$(date +%s)
-image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE}:latest) +%s)
+image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
 # By default we reuse the source image as a cache.  This is why we do
@@ -50,7 +50,7 @@ if [ ${id_tip?} != ${id_latest?} ]; then
     # label so we can keep a history of used images in the registry
     tag=$(date +%Y%m%d%H%M)
     echo "${IMAGE?} has changed, pushing to registry."
-    echo "tip = ${id_tip?}"
+    echo "tip    = ${id_tip?}"
     echo "latest = ${id_latest?}"
     # ... label the image with the new tag ...
     docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
