@@ -30,6 +30,9 @@ AC_PROG_CXX
 # ... make sure we know how to create static libraries ...
 AC_PROG_RANLIB
 
+# ... on Fedora the default ARFLAGS/AR_FLAGS produce warnings ...
+m4_divert_text([DEFAULTS], [: "${ARFLAGS=cr} ${AR_FLAGS=cr}"])
+
 # ... check if there is a clang-format installed, allow the user to
 # override the default by setting the CLANG_FORMAT environment
 # variable ...
