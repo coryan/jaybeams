@@ -154,8 +154,8 @@ print_environment() {
     elif which dpkg >/dev/null 2>/dev/null; then
         echo
         echo "dynamic libraries provided by the following packages"
-        for lib in $(ldd $1 | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
-                   $(ldd $1 | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
+        for lib in $(ldd ${program?} | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
+                   $(ldd ${program?} | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
             echo ${lib?} ': ' $(dpkg -S ${lib?})
             pkg=$(dpkg -S ${lib?} | cut -d: -f1)
             echo ${lib?} ': ' ${pkg?} $(apt-cache show ${pkg?} | grep Version:)
