@@ -12,10 +12,10 @@ int main(int argc, char* argv[]) try {
   std::cout << "\n\ngitrev: " << jb::testing::gitrev;
 #ifdef __GLIBCPP__
   std::cout << "\n\nlibstdc++ GLIBCPP: " << __GLIBCPP__;
-#endif // __GLIBCPP__  
+#endif // __GLIBCPP__
 #ifdef __GLIBCXX__
   std::cout << "\n\nlibstdc++ GLIBCXX: " << __GLIBCXX__;
-#endif // __GLIBCPP__  
+#endif // __GLIBCXX__
 #ifdef _GXX_ABI_VERSION
   std::cout << "\n\nlibstdc++ GXX_ABI_VERSION: " << _GXX_ABI_VERSION;
 #endif // _GXX_ABI_VERSION
@@ -31,4 +31,3 @@ int main(int argc, char* argv[]) try {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
-
