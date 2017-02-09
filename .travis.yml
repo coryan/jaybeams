@@ -40,6 +40,10 @@ script:
     docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && make check-style" ;
     fi
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install docker-engine
+
 install:
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
 
@@ -59,6 +63,8 @@ after_success:
     docker run --rm -it --env GIT_NAME="${GIT_NAME?}" --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
     (cd doc/html ; git push https://${GH_TOKEN?}@${REPO_REF?} gh-pages) ;
     fi
+  # Create the build image, the script detects if the conditions are not suitable ...
+  - ci/create-build-image.sh
 
 notifications:
   email: false
