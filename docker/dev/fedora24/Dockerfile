@@ -63,3 +63,16 @@ RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
     cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
 
 WORKDIR /root
+
+# Boost has deprecated a few headers, warns about it, and other parts of Boost still
+# use them:
+#   https://svn.boost.org/trac/boost/ticket/11860
+#   https://github.com/boostorg/iostreams/pull/24
+#
+# Until 1.62.0 or so is released, we simply remove the wawrnings from Boost.
+# I could just remove them all:
+#    RUN find /usr/include/boost/ -type f -exec sed -i '/pragma message.*deprecated/d' {} \;
+# but I have chosen to be more surgical about it:
+RUN sed -i '/pragma message.*deprecated/d' \
+  /usr/include/boost/type_traits/detail/template_arity_spec.hpp \
+  /usr/include/boost/type_traits/detail/bool_trait_def.hpp
