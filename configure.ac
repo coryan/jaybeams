@@ -145,4 +145,10 @@ AX_CHECK_LIBRARY(LIBZ, [zlib.h], [z],
   [AC_MSG_ERROR([Unable to find libz library])
 ])
 
+# ... turn all warnings into errors.  We want clean builds because
+# warnings are a good way to detect portability problems.  Set this at
+# the end, because some of the library detection builds fail otherwise
+# ...
+AX_CHECK_COMPILE_FLAG([-Werror], [AX_APPEND_FLAG(-Werror, CXXFLAGS)] [])
+
 AC_OUTPUT
