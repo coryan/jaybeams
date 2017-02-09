@@ -16,6 +16,9 @@ extern char const compiler_flags[];
 /// The linker version
 extern char const linker[];
 
+/// The git revision at compile time
+extern char const gitrev[];
+
 } // namespace testing
 } // namespace jb
 

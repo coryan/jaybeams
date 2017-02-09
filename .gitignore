@@ -50,3 +50,6 @@ build/
 
 # Generated documentation goes here
 doc/html/
+
+# Staging, temporary place to test the install rules.
+staging/
