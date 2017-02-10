@@ -3,7 +3,7 @@
 # exit on the first error ...
 set -e
 
-iterations=1000
+iterations=35000
 if [ $# -ge 1 ]; then
     iterations=$1
 fi
