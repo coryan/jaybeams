@@ -94,7 +94,8 @@ benchmarks = \
 
 bin_SCRIPTS = \
   tools/benchmark_common.sh \
-  jb/itch5/bm_order_book_generate.sh
+  jb/itch5/bm_order_book_generate.sh \
+  jb/itch5/bm_order_book_analyze.R
 
 examples = \
   examples/configuration
