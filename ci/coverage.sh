@@ -1,19 +1,20 @@
 #!/bin/bash
 
 # Exit on the first error
-set -ev
+set -e
 
-# Get all the converage information
-lcov --directory . --capture --output-file coverage.info
+if [ "x$TRAVIS_PULL_REQUEST" != "xfalse" ]; then
+    echo "Code coverage disabled in pull requests"
+    exit 0
+fi
 
-# Remove coverage information about template code in system libraries,
-# as well as any coverage information for unit tests.
-lcov --remove coverage.info \
-     '/usr/include/*' '/usr/local/*' \
-     'jb/ut_*' 'jb/*/ut_*' 'jb/testing/check_*' \
-     --output-file coverage.info
+if [ "x${COVERAGE}" != "xyes" ]; then
+    echo "Code coverage not enabled, this is not a code coverage build"
+    exit 0
+fi
 
-# Show the code coverage results in the Travis CI log
-lcov --list coverage.info
+docker run --rm -it -v $PWD:$PWD --workdir $PWD ${IMAGE?} ci/coverage-lcov.sh
+# Push results to coveralls ...
+coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
 
 exit 0
