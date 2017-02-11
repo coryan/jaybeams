@@ -26,6 +26,9 @@ variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 # ... that determines the name of the image we want to build ...
 IMAGE=coryan/jaybeams-runtime-${variant?}
 
+# ... make sure the image is available ...
+docker pull ${IMAGE?}:latest
+
 # Determine now old is the image, if it is old enough, we re-create
 # from scratch every time ...
 now=$(date +%s)

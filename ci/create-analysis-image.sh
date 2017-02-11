@@ -2,17 +2,15 @@
 
 set -e
 
-# TODO() add -a "x${TRAVIS_BRANCH}" = "xmaster"
 if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     echo "Testing PR, image creation disabled."
     exit 0
 fi
 
-# TODO() this is just to run less builds during debugging ...
-if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
-    echo "DEBUG: only create images on master branch."
-    exit 0
-fi
+#if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
+#    echo "DEBUG: only create images on master branch."
+#    exit 0
+#fi
 
 if [ -z "${DOCKER_USER?}" ]; then
     echo "DOCKER_USER not set, docker autobuilds disabled."
@@ -32,6 +30,9 @@ fi
 
 # ... that determines the name of the image we want to build ...
 IMAGE=coryan/jaybeams-analysis
+
+# ... make sure the image is available ...
+docker pull ${IMAGE?}:latest
 
 # Determine now old is the image, if it is old enough, we re-create
 # from scratch every time ...
