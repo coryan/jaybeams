@@ -61,12 +61,12 @@ if [ ${id_tip?} != ${id_latest?} ]; then
     # ... label the image with the new tag ...
     docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
     # ... upload the image with that tag ...
-    docker image push ${IMAGE?}:${tag?}
+#    docker image push ${IMAGE?}:${tag?}
     # ... if that succeeds then rename :latest and push it.  The
     # second push should take almost no time, as the layers should all
     # be uploaded already ...
     docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
-    docker image push ${IMAGE?}:latest
+#    docker image push ${IMAGE?}:latest
 else
     echo "No changes in ${IMAGE?}, not pushing to registry."
 fi
