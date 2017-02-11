@@ -2,13 +2,11 @@
 
 set -e
 
-# TODO() add -a "x${TRAVIS_BRANCH}" = "xmaster"
 if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     echo "Testing PR, image creation disabled."
     exit 0
 fi
 
-# TODO() this is just to run less builds during debugging ...
 if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     echo "DEBUG: only create images on master branch."
     exit 0
