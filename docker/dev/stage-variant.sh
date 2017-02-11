@@ -18,7 +18,12 @@ fi
 echo "This script may prompt you for your sudo password to connect to the docker daemon"
 
 dockerfile=$1
-if [ -d $dockerfile -a -f $dockerfile/Dockerfile ]; then
+if [ -z "$dockerfile" ]; then
+    echo "Missing docker directory (or Dockerfile) argument"
+    exit 1
+fi
+
+if [ -d ${dockerfile?} -a -f ${dockerfile?}/Dockerfile ]; then
     dockerfile=$dockerfile/Dockerfile
 fi
 
@@ -66,7 +71,9 @@ sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams \
      ${image?} docker/dev/stage-variant-helper.sh
 
 cp docker/runtime/${variant?}/Dockerfile staging/${variant?}
-sudo docker build -t coryan/jaybeams-runtime-${variant?}:tip staging/${variant?}
+sudo docker build -t coryan/jaybeams-runtime-${variant?}:latest staging/${variant?}
+cp docker/analysis/Dockerfile staging/${variant?}/Dockerfile.analysis
+sudo docker build -t coryan/jaybeams-analysis:latest -f staging/Dockerfile.analysis staging/${variant?}
 
 exit 0
 
