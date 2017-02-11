@@ -73,7 +73,7 @@ sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams \
 cp docker/runtime/${variant?}/Dockerfile staging/${variant?}
 sudo docker build -t coryan/jaybeams-runtime-${variant?}:latest staging/${variant?}
 cp docker/analysis/Dockerfile staging/${variant?}/Dockerfile.analysis
-sudo docker build -t coryan/jaybeams-analysis:latest -f staging/Dockerfile.analysis staging/${variant?}
+sudo docker build -t coryan/jaybeams-analysis:latest -f staging/${variant?}/Dockerfile.analysis staging/${variant?}
 
 exit 0
 

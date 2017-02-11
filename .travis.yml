@@ -29,12 +29,12 @@ services:
   - docker
 
 script:
-  - uname -a
+  - cat /proc/cpuinfo
   - REPO=`git config remote.origin.url`
   - REPO_REF=${REPO/https:\/\/}
   - docker pull ${IMAGE?}
   - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
+  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} --prefix=$PWD/staging && make -j 2 check && make install"
   - cat test-suite.log || echo "Could not print test logs"
   - if [ "x${CHECK_STYLE}" = "xyes" ]; then
     docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && make check-style" ;
@@ -65,6 +65,8 @@ after_success:
     fi
   # Create the build image, the script detects if the conditions are not suitable ...
   - ci/create-build-image.sh
+  # ... create the runtime images, the script detects if the conditions are not suitable ...
+  - ci/create-runtime-image.sh
 
 notifications:
   email: false
