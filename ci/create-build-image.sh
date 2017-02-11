@@ -7,10 +7,10 @@ if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     exit 0
 fi
 
-#if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
-#    echo "DEBUG: only create images on master branch."
-#    exit 0
-#fi
+if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
+    echo "DEBUG: only create images on master branch."
+    exit 0
+fi
 
 if [ -z "${DOCKER_USER?}" ]; then
     echo "DOCKER_USER not set, docker autobuilds disabled."
@@ -54,12 +54,12 @@ if [ ${id_tip?} != ${id_latest?} ]; then
     # ... label the image with the new tag ...
     docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
     # ... upload the image with that tag ...
-#    docker image push ${IMAGE?}:${tag?}
+    docker image push ${IMAGE?}:${tag?}
     # ... if that succeeds then rename :latest and push it.  The
     # second push should take almost no time, as the layers should all
     # be uploaded already ...
     docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
-#    docker image push ${IMAGE?}:latest
+    docker image push ${IMAGE?}:latest
 else
     echo "No changes in ${IMAGE?}, not pushing to registry."
 fi
