@@ -43,6 +43,12 @@ if [ ${age_days?} -ge 30 ]; then
 fi
 
 # Build a new docker image
+echo PWD = $PWD
+ls -l
+ls -ld staging
+id
+echo $USER
+echo $UID
 cp docker/runtime/${variant?}/Dockerfile staging
 docker image build ${caching?} -t ${IMAGE?}:tip staging
 
