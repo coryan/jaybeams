@@ -28,11 +28,20 @@ matrix:
 services:
   - docker
 
+# This is the main section of the automated build ...
 script:
+  # ... first download the docker image with the development environment ...
   - docker pull ${IMAGE?}
+  # ... print out its Id for historic purposes ...
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} --prefix=$PWD/staging && make -j 2 check && mkdir staging && make install"
-  - cat test-suite.log || echo "Could not print test logs"
+  # ... run the build inside the docker image, use the current user id ...
+  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env
+  CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
+  # ... print out the test results, that way any errors can be
+  # debugged, this is *not* part of the build script because we want
+  # this output regardless of the sucess or failure of the script ...
+  - cat build/test-suite.log || echo "Could not print test logs"
+  # ... if configured, run the style checker phase ...
   - ci/check-style.sh
 
 before_install:
