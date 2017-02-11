@@ -35,8 +35,7 @@ script:
   # ... print out its Id for historic purposes ...
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}
   # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env
-  CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
+  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be
   # debugged, this is *not* part of the build script because we want
   # this output regardless of the sucess or failure of the script ...
