@@ -19,17 +19,18 @@ fi
 
 docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
-# Extract the variant from the IMAGE environment variable (it is set in .travis.yml)
+# Extract the variant from the IMAGE environment variable (it is set
+# in .travis.yml) ...
 IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
 variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 
-# Determine now old is the image, if it is old enough, we re-create
-# from scratch every time ...
+# ... determine now old is the image, if it is old enough, we
+# re-create from scratch every time ...
 now=$(date +%s)
 image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
-# By default we reuse the source image as a cache.  This is why we do
+# ... by default we reuse the source image as a cache.  This is why we do
 # not use --squash btw, it would remove the opportunity for caching ...
 caching="--cache-from=${IMAGE?}:latest"
 if [ ${age_days?} -ge 30 ]; then

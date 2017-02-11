@@ -44,13 +44,9 @@ fi
 
 # Build a new docker image
 echo PWD = $PWD
-ls -l
-ls -ld staging
-id
-echo $USER
-echo $UID
-cp docker/runtime/${variant?}/Dockerfile staging
-docker image build ${caching?} -t ${IMAGE?}:tip staging
+ls -ld build/staging
+cp docker/runtime/${variant?}/Dockerfile build/staging
+docker image build ${caching?} -t ${IMAGE?}:tip build/staging
 
 # Compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)

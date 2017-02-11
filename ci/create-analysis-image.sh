@@ -19,7 +19,8 @@ fi
 
 docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
-# Extract the variant from the IMAGE environment variable (it is set in .travis.yml)
+# Extract the variant from the IMAGE environment variable (it is set
+# in .travis.yml) ...
 IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
 variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 
@@ -34,29 +35,31 @@ IMAGE=coryan/jaybeams-analysis
 # ... make sure the image is available ...
 docker pull ${IMAGE?}:latest
 
-# Determine now old is the image, if it is old enough, we re-create
+# ... determine now old is the image, if it is old enough, we re-create
 # from scratch every time ...
 now=$(date +%s)
 image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
-# By default we reuse the source image as a cache.  This is why we do
+# ... by default we reuse the source image as a cache.  This is why we do
 # not use --squash btw, it would remove the opportunity for caching ...
 caching="--cache-from=${IMAGE?}:latest"
 if [ ${age_days?} -ge 30 ]; then
     caching="--no-cache"
 fi
 
-# Build a new docker image
-cp docker/analysis/Dockerfile staging/Dockerfile.analysis
-docker image build ${caching?} -t ${IMAGE?}:tip -f staging/Dockerfile.analysis staging
+# ... build a new docker image ..
+cp docker/analysis/Dockerfile build/staging/Dockerfile.analysis
+docker image build ${caching?} -t ${IMAGE?}:tip \
+       -f build/staging/Dockerfile.analysis build/staging
 
-# Compare the ids of the :tip and :latest ...
+# ... compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
 id_latest=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:latest)
 if [ ${id_tip?} != ${id_latest?} ]; then
-    # They are different, we need to push them.  Create a permanent
-    # label so we can keep a history of used images in the registry
+    # ... they are different, we need to push them.  Create a
+    # permanent label so we can keep a history of used images in the
+    # registry ...
     tag=$(date +%Y%m%d%H%M)
     echo "${IMAGE?} has changed, pushing to registry."
     echo "tip    = ${id_tip?}"
