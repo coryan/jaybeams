@@ -29,11 +29,9 @@ services:
   - docker
 
 script:
-  - REPO=`git config remote.origin.url`
-  - REPO_REF=${REPO/https:\/\/}
   - docker pull ${IMAGE?}
-  - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} --prefix=$PWD/staging && make -j 2 check && make install"
+  - docker image inspect -f '{{ .Id }}' ${IMAGE?}
+  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} --prefix=$PWD/staging && make -j 2 check && mkdir staging && make install"
   - cat test-suite.log || echo "Could not print test logs"
   - ci/check-style.sh
 
@@ -49,14 +47,9 @@ after_success:
   - cd ${TRAVIS_BUILD_DIR?}
   # ... if this is a code coverage build we upload the coverage results ...
   - ci/coverage.sh
-  # ... if this is a documentation build we generate the docs ...
-  - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
   # ... create the Doxygen documentation inside the docker container,
   # and then push it using the host ...
-  - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${GENDOCS}" = "xyes" ]; then
-    docker run --rm -it --env GIT_NAME="${GIT_NAME?}" --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    (cd doc/html ; git push https://${GH_TOKEN?}@${REPO_REF?} gh-pages) ;
-    fi
+  - ci/gendocs.sh
   # Create the build image, the script detects if the conditions are not suitable ...
   - ci/create-build-image.sh
   # ... create the runtime images, the script detects if the conditions are not suitable ...
