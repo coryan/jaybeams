@@ -22,7 +22,7 @@ find_program() {
 }
 
 print_header() {
-    timestamp=`date -u`
+    timestamp=$(date -u)
     cat <<EOF
 Starting $basename at $timestamp
 This file contains both environmental conditions and results
@@ -45,7 +45,7 @@ Use the companion 'benchmark_teardown.sh' script to restore system
 settings to typical defaults.  All changes are logged in case you
 need to manually restore them.
 EOF
-    basename=`basename $0 .sh`
+    basename=$(basename $0 .sh)
     LOG=$basename.$$.results.csv
     TMPERR=/tmp/${basename}.$$.err
     TMPOUT=/tmp/${basename}.$$.out
@@ -58,7 +58,7 @@ EOF
     echo '#' >$LOG
     print_header | log $LOG
     cpu_governor_startup | log $LOG
-#    full_rt_scheduling_startup | log $LOG
+    full_rt_scheduling_startup | log $LOG
 }
 
 benchmark_teardown() {
@@ -71,28 +71,57 @@ benchmark_teardown() {
 # often stays in low power settings for too long and the benchmark
 # runs slower than expected.
 cpu_governor_startup() {
-    # ... first find out if there is a cpupower command at all ...
-    if which cpupower>/dev/null 2>/dev/null && cpupower frequency-info | grep -q ' driver: '; then
-	HAS_CPUPOWER=yes
+    # ... first find out if there is a command to change the CPU
+    # frequency scaling governor ...
+    if which cpupower>/dev/null 2>/dev/null; then
+        echo "cpupower(1) command is present"
+        if cpupower frequency-info | grep -q ' driver: '; then
+            HAS_CPUPOWER=yes
+            CPUPOWERINFO_CMD="cpupower frequency-info"
+            CPUPOWERSET_CMD="cpupower frequency-set"
+        else
+            echo "WARNING: no cpupower driver (maybe a virtual machine?)"
+            HAS_CPUPOWER=no
+        fi
+    elif which cpufreq-info >/dev/null 2>/dev/null; then
+        echo "cpufreq-info(1) and cpufreq-set(1) are present"
+        if cpufreq-info | grep -q '  driver: '; then
+            HAS_CPUPOWER=yes
+            CPUPOWERINFO_CMD=cpufreq-info
+            CPUPOWERSET_CMD=cpufreq-set
+        else
+            echo "WARNING: no cpupower driver (maybe a virtual machine?)"
+	    HAS_CPUPOWER=yes
+        fi
     else
 	HAS_CPUPOWER=no
+    fi
+
+    if [ "x${HAS_CPUPOWER}" = "xno" ]; then
 	echo "WARNING: No cpupower(1) command found or no cpupower driver."
 	echo "WARNING: Benchmark will execute without changing the cpupower configuration."
         echo "WARNING: This can result in unpredictable output"
 	return 0
     fi
+
     # ... preserve the current CPU power management settings ...
-    old_governor=`cpupower frequency-info -p | grep 'The governor ".*" may decide' | cut -f2,2 -d'"' `
+    if ${CPUPOWERINFO_CMD?} -p | grep -q 'The governor'; then
+        old_governor=$(${CPUPOWERINFO_CMD?} -p | \
+                           grep 'The governor ".*" may decide' | \
+                           cut -f2,2 -d'"' )
+    else
+        old_governor=$(${CPUPOWERINFO_CMD?} -p | cut -f3,3 -d' ')
+    fi
     # ... restore the cpu power governor at the end of the benchmark ...
     trap "/bin/rm -f $TMPERR $TMPOUT; cpu_governor_teardown $old_governor" 0
     # ... change the cpu power governor ...
     echo
     echo "Change the CPU power management governor to 'performance':"
-    sudo cpupower frequency-set -g performance
+    sudo ${CPUPOWERSET_CMD?} -g performance
     # ... print out the settings after the change
     echo
     echo "Current CPU settings:"
-    sudo cpupower frequency-info
+    sudo ${CPUPOWERINFO_CMD?}
 }
 
 cpu_governor_teardown() {
@@ -107,7 +136,7 @@ cpu_governor_teardown() {
 	    gov="ondemand"
 	fi
 	echo "Restoring cpupower governor to $gov"
-	sudo cpupower frequency-set -g $gov
+	sudo ${CPUPOWERSET_CMD?} -g $gov
     fi
 }
 

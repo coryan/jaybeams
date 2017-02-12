@@ -24,6 +24,7 @@ RUN echo "tryCatch({\n\
   require(ggplot2)\n\
   require(reshape2)\n\
   require(pwr)\n\
+  require(parallel)\n\
   require(methods)\n\
   require(svglite)\n\
 }, error = function(e) { print('ERROR'); print(e); q('no', 1) },\n\

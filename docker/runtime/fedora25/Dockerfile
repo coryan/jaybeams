@@ -7,6 +7,7 @@ RUN dnf makecache && dnf install -y \
     bzip2 \
     fftw \
     gawk \
+    kernel-tools \
     lshw \
     ocl-icd \
     procps-ng \
