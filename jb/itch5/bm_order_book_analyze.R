@@ -137,7 +137,7 @@ clock.ghz <- 3
 ## are interested in, anything larger is great,
 ## smaller is too small to care ...
 min.delta <- 1.0 / (clock.ghz * 1000.0) * test.iterations
-print(paste0("Minimum desired effect: ", min.delta))
+print(paste0("Minimum desired effect: ", round(min.delta, 2)))
 
 min.samples <- 5000
 desired.delta <- min.delta
@@ -209,20 +209,22 @@ if (data.mw$p.value >= desired.significance) {
         " both the 'array' and 'map' based",
         " order books have the same performance cannot be rejected",
         " at the desired significance (alpha=",
-        desired.significance, " p-value=", round(data.mw$p.value, 4),
+        desired.significance, ", p-value=", round(data.mw$p.value, 4),
         " is greater than alpha).",
         "  Therefore we treat both as having the same performance."))
 } else {
+    interval <- paste0(round(data.mw$conf.int, 2), collapse=',')
     print(paste0(
         "Using the Mann-Whitney U test, the null hypothesis that",
         " both the 'array' and 'map' based",
         " order books have the same performance is rejected",
         " at the desired significance (alpha=",
-        desired.significance, " p-value=", round(data.mw$p.value, 4),
+        desired.significance, ", p-value=", round(data.mw$p.value, 4),
         " is smaller than alpha).",
         "  The effect is quantified using the Hodges-Lehmann estimator,",
         " which is compatible with the Mann-Whitney U test, with a value",
-        " of ", round(data.mw$estimate, 2), " microseconds"))
+        " of ", round(data.mw$estimate, 2), " microseconds in the",
+        " confidence interval=[", interval, "]"))
 }
 
 q(save='no')
