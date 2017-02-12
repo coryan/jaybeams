@@ -58,7 +58,7 @@ EOF
     echo '#' >$LOG
     print_header | log $LOG
     cpu_governor_startup | log $LOG
-#    full_rt_scheduling_startup | log $LOG
+    full_rt_scheduling_startup | log $LOG
 }
 
 benchmark_teardown() {
