@@ -4,6 +4,7 @@ MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 RUN apt-get update && apt-get install -y \
     binutils \
     coreutils \
+    cpufrequtils \
     debianutils \
     libboost-atomic1.58.0 \
     libboost-chrono1.58.0 \

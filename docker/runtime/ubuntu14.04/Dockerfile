@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
     apt-get update && apt-get install -y \
       binutils \
       coreutils \
+      cpufrequtils \
       debianutils \
       libboost-atomic1.55.0 \
       libboost-chrono1.55.0 \
