@@ -74,10 +74,13 @@ max.acf.map <- max(abs(tail(acf(data.map.ts, plot=FALSE)$acf, -1)))
 print(paste0("max.acf.array=", round(max.acf.array, 4)))
 print(paste0("max.acf.map=", round(max.acf.map, 4)))
 
-if (max.acf.array >= 0.01) {
+## ... we set the maximum allowed auto-correlation to 5% ...
+max.autocorrelation <- 0.05
+
+if (max.acf.array >= max.autocorrelation) {
 	stop("Some evidence of auto-correlation in array data max-acf=", round(max.acf.array, 4))
 }
-if (max.acf.map >= 0.01) {
+if (max.acf.map >= max.autocorrelation) {
 	stop("Some evidence of auto-correlation in array data max-acf=", round(max.acf.map, 4))
 }
 
