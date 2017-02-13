@@ -4,8 +4,25 @@ log() {
     awk '{print "#", $0}' >>$1
 }
 
+find_program() {
+    bindir=$1
+    bin=$2
+    program=${bindir?}/${bin?}
+    if [ -x ${program?}  ]; then
+	echo $program
+	return 0
+    fi
+    program=$(find ./jb -name ${bin})
+    if [ "x${program}" != "x" -a -x ${program} ]; then
+	echo $program
+	return 0
+    fi
+    echo "Cannot find program ${bin} in the typical locations, aborting"
+    exit 1
+}
+
 print_header() {
-    timestamp=`date -u`
+    timestamp=$(date -u)
     cat <<EOF
 Starting $basename at $timestamp
 This file contains both environmental conditions and results
@@ -28,7 +45,7 @@ Use the companion 'benchmark_teardown.sh' script to restore system
 settings to typical defaults.  All changes are logged in case you
 need to manually restore them.
 EOF
-    basename=`basename $0 .sh`
+    basename=$(basename $0 .sh)
     LOG=$basename.$$.results.csv
     TMPERR=/tmp/${basename}.$$.err
     TMPOUT=/tmp/${basename}.$$.out
@@ -41,7 +58,7 @@ EOF
     echo '#' >$LOG
     print_header | log $LOG
     cpu_governor_startup | log $LOG
-#    full_rt_scheduling_startup | log $LOG
+    full_rt_scheduling_startup | log $LOG
 }
 
 benchmark_teardown() {
@@ -54,28 +71,57 @@ benchmark_teardown() {
 # often stays in low power settings for too long and the benchmark
 # runs slower than expected.
 cpu_governor_startup() {
-    # ... first find out if there is a cpupower command at all ...
-    if which cpupower>/dev/null && cpupower frequency-info | grep -q ' driver: '; then
-	HAS_CPUPOWER=yes
+    # ... first find out if there is a command to change the CPU
+    # frequency scaling governor ...
+    if which cpupower>/dev/null 2>/dev/null; then
+        echo "cpupower(1) command is present"
+        if cpupower frequency-info | grep -q ' driver: '; then
+            HAS_CPUPOWER=yes
+            CPUPOWERINFO_CMD="cpupower frequency-info"
+            CPUPOWERSET_CMD="cpupower frequency-set"
+        else
+            echo "WARNING: no cpupower driver (maybe a virtual machine?)"
+            HAS_CPUPOWER=no
+        fi
+    elif which cpufreq-info >/dev/null 2>/dev/null; then
+        echo "cpufreq-info(1) and cpufreq-set(1) are present"
+        if cpufreq-info | grep -q '  driver: '; then
+            HAS_CPUPOWER=yes
+            CPUPOWERINFO_CMD=cpufreq-info
+            CPUPOWERSET_CMD=cpufreq-set
+        else
+            echo "WARNING: no cpupower driver (maybe a virtual machine?)"
+	    HAS_CPUPOWER=yes
+        fi
     else
 	HAS_CPUPOWER=no
+    fi
+
+    if [ "x${HAS_CPUPOWER}" = "xno" ]; then
 	echo "WARNING: No cpupower(1) command found or no cpupower driver."
 	echo "WARNING: Benchmark will execute without changing the cpupower configuration."
         echo "WARNING: This can result in unpredictable output"
 	return 0
     fi
+
     # ... preserve the current CPU power management settings ...
-    old_governor=`cpupower frequency-info -p | grep 'The governor ".*" may decide' | cut -f2,2 -d'"' `
+    if ${CPUPOWERINFO_CMD?} -p | grep -q 'The governor'; then
+        old_governor=$(${CPUPOWERINFO_CMD?} -p | \
+                           grep 'The governor ".*" may decide' | \
+                           cut -f2,2 -d'"' )
+    else
+        old_governor=$(${CPUPOWERINFO_CMD?} -p | cut -f3,3 -d' ')
+    fi
     # ... restore the cpu power governor at the end of the benchmark ...
     trap "/bin/rm -f $TMPERR $TMPOUT; cpu_governor_teardown $old_governor" 0
     # ... change the cpu power governor ...
     echo
     echo "Change the CPU power management governor to 'performance':"
-    sudo cpupower frequency-set -g performance
+    sudo ${CPUPOWERSET_CMD?} -g performance
     # ... print out the settings after the change
     echo
     echo "Current CPU settings:"
-    sudo cpupower frequency-info
+    sudo ${CPUPOWERINFO_CMD?}
 }
 
 cpu_governor_teardown() {
@@ -90,52 +136,55 @@ cpu_governor_teardown() {
 	    gov="ondemand"
 	fi
 	echo "Restoring cpupower governor to $gov"
-	sudo cpupower frequency-set -g $gov
+	sudo ${CPUPOWERSET_CMD?} -g $gov
     fi
 }
 
 # Print out the relevant (and some potentially irrelevant)
 # environmental conditions
 print_environment() {
+    # capture the directory where the driver script is running from
+    bindir=$1
     # capture the name of the program
-    program=$1
+    program=$2
 
     # ... in general this prints out metadata about the test from the
     # high-level stuff down towards the hardware ...
-    # ... print out the current git revision ...
-    echo
-    echo
-    echo "Last revision commited to git"
-    git rev-parse HEAD
+    if which git>/dev/null 2>/dev/null; then
+	# ... if git is available, print out the current git revision ...
+	echo
+	echo
+	echo "Last revision commited to git"
+	git rev-parse HEAD
 
-    echo
-    echo "Current git status"
-    git status
+	echo
+	echo "Current git status"
+	git status
+    fi
 
     # ... print out compilation details ...
+    cmd=$(find_program ${bindir?} show_compile_info)
     echo
-    echo "Compilation details"
-    cat jb/testing/compile_info.cpp || \
-        echo "cannot find compile_info.cpp file"
+    ${cmd?}
 
     # ... print out the libraries linked against the program ...
     echo
     echo "dynamically loaded libraries in the program"
-    ldd $1
+    ldd ${program?}
 
     # ... print out the rpms that provided these libraries ...
-    if which rpm>/dev/null; then
+    if which rpm>/dev/null 2>/dev/null; then
         echo
         echo "dynamic libraries provided by the following packages"
-        for lib in $(ldd $1 | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
-                   $(ldd $1 | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
+        for lib in $(ldd ${program?} | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
+                   $(ldd ${program?} | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
             echo ${lib?} ': ' $(rpm -q --whatprovides ${lib?})
         done
-    elif which dpkg >/dev/null; then
+    elif which dpkg >/dev/null 2>/dev/null; then
         echo
         echo "dynamic libraries provided by the following packages"
-        for lib in $(ldd $1 | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
-                   $(ldd $1 | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
+        for lib in $(ldd ${program?} | grep '=>' | grep -v linux-vdso | awk '{print $3}') \
+                   $(ldd ${program?} | grep ld-linux | grep -v linux-vdso | awk '{print $1}'); do
             echo ${lib?} ': ' $(dpkg -S ${lib?})
             pkg=$(dpkg -S ${lib?} | cut -d: -f1)
             echo ${lib?} ': ' ${pkg?} $(apt-cache show ${pkg?} | grep Version:)
@@ -148,11 +197,13 @@ print_environment() {
     # ... print out the C++ library information ...
     echo
     echo "libstdc++ version"
-    lib=$(ldd $1 | grep libstdc++.so | awk '{print $3}' 2>&1)
+    lib=$(ldd ${program} | grep libstdc++.so | awk '{print $3}' 2>&1)
     if [ "x${lib?}" = "x" ]; then
         echo "  not using libstdc++"
-    else
+    elif which strings >/dev/null 2>/dev/null; then
         strings ${lib?} | egrep '(GLIBCXX|GLIBCPP)_[0-9]' | tail -2
+    else
+	echo "  cannot determine libstdc++ version"
     fi
 
     # ... print out the C library information ...
@@ -162,8 +213,8 @@ print_environment() {
 
     # ... another way to print the C library info ...
     echo
-    echo "glibc version"
-    `ldd /usr/bin/env | grep libc.so | awk '{print $3}'` --version || \
+    echo "glibc version via libc.so --version"
+    $(ldd /usr/bin/env | grep libc.so | awk '{print $3}') --version || \
         echo "failed to get libc.so information"
 
     # ... print out the kernel version and other details, skip the
@@ -173,9 +224,11 @@ print_environment() {
     uname -s -r -v -m -p -i -o
 
     # ... print out the available memory ...
-    echo
-    echo "Memory and swap information"
-    free
+    if which free >/dev/null 2>/dev/null; then
+	echo
+	echo "Memory and swap information"
+	free
+    fi
 
     # ... print out how many CPUs (or cores or whatevers) ...
     echo
@@ -183,13 +236,25 @@ print_environment() {
     egrep ^processor /proc/cpuinfo 
 
     # ... print out the details of hardware, including CPU, memory, etc ...
-    echo
-    echo "Hardware details:"
-    sudo lshw -sanitize
+    if which lshw >/dev/null 2>/dev/null; then
+	echo
+	echo "Hardware details:"
+	sudo lshw -sanitize
+    fi
 }
 
 # Print out the summary results in Markdown format
 summary_as_markdown() {
+    if which awk >/dev/null 2>/dev/null; then
+	/bin/true
+    else
+	return
+    fi
+    if which sed >/dev/null 2>/dev/null; then
+	/bin/true
+    else
+	return
+    fi
     cat <<EOF
 | test case | size | min | p25 | p50 | p75 | p90 | p99 | p99.9 | max |  N |
 |-----------|------|-----|-----|-----|-----|-----|-----|-------|-----|----|
@@ -218,10 +283,10 @@ require_full_rt_scheduling() {
 
 full_rt_scheduling_startup() {
     echo "Disabling RT scheduling limits, RT processes can take 100% of the CPU"
-    echo -1 | sudo tee /proc/sys/kernel/sched_rt_runtime_us > /dev/null
+    echo -1 | sudo tee /proc/sys/kernel/sched_rt_runtime_us > /dev/null 2>/dev/null
 }
 
 full_rt_scheduling_teardown() {
     echo "Restore RT scheduling limits, RT processses limited to 95% of the CPU"
-    echo 950000 | sudo tee /proc/sys/kernel/sched_rt_runtime_us >/dev/null
+    echo 950000 | sudo tee /proc/sys/kernel/sched_rt_runtime_us >/dev/null 2>/dev/null
 }

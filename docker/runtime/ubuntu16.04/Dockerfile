@@ -2,6 +2,10 @@ FROM ubuntu:16.04
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN apt-get update && apt-get install -y \
+    binutils \
+    coreutils \
+    cpufrequtils \
+    debianutils \
     libboost-atomic1.58.0 \
     libboost-chrono1.58.0 \
     libboost-context1.58.0 \
@@ -32,9 +36,13 @@ RUN apt-get update && apt-get install -y \
     libfftw3-3 \
     libyaml-cpp0.5v5 \
     lshw \
+    mawk \
+    procps \
     ocl-icd-libopencl1 \
     sudo \
     time \
-    zlib1g
+    zlib1g && apt-get clean
 
-RUN apt-get clean
+COPY bin /opt/jaybeams/bin/
+COPY lib /opt/jaybeams/lib/
+COPY include /opt/jaybeams/include/

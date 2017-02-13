@@ -10,12 +10,13 @@ if [ "x${tag}" = "x" ]; then
 fi
 
 bindir=$(dirname $0)
-for target in fedora23 fedora24 ubuntu14.04 ubuntu16.04 ubuntu16.10; do
+for target in fedora{24,25} ubuntu{14.04,16.04}; do
     echo ================================================================
     echo
     echo Pushing ${target?} $(date)
     echo
     echo ================================================================
     sudo docker tag coryan/jaybeamsdev-${target?}:${tag?} coryan/jaybeamsdev-${target?}:latest
-    sudo docker push coryan/jaybeamsdev-${target?}
+    sudo docker push coryan/jaybeamsdev-${target?}:${tag?}
+    sudo docker push coryan/jaybeamsdev-${target?}:latest
 done

@@ -19,18 +19,23 @@ fi
 
 docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
-# Extract the variant from the IMAGE environment variable (it is set
-# in .travis.yml) ...
+# Extract the variant from the IMAGE environment variable (it is set in .travis.yml)
 IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
 variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 
-# ... determine now old is the image, if it is old enough, we
-# re-create from scratch every time ...
+# ... that determines the name of the image we want to build ...
+IMAGE=coryan/jaybeams-runtime-${variant?}
+
+# ... make sure the image is available ...
+docker pull ${IMAGE?}:latest
+
+# Determine now old is the image, if it is old enough, we re-create
+# from scratch every time ...
 now=$(date +%s)
 image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
-# ... by default we reuse the source image as a cache.  This is why we do
+# By default we reuse the source image as a cache.  This is why we do
 # not use --squash btw, it would remove the opportunity for caching ...
 caching="--cache-from=${IMAGE?}:latest"
 if [ ${age_days?} -ge 30 ]; then
@@ -38,8 +43,10 @@ if [ ${age_days?} -ge 30 ]; then
 fi
 
 # Build a new docker image
-docker image build ${caching?} -t ${IMAGE?}:tip \
-       -f docker/dev/${variant?}/Dockerfile docker/dev
+echo PWD = $PWD
+ls -ld build/staging
+cp docker/runtime/${variant?}/Dockerfile build/staging
+docker image build ${caching?} -t ${IMAGE?}:tip build/staging
 
 # Compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
