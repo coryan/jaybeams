@@ -1,4 +1,0 @@
-sut:
-  build: ..
-  dockerfile: ubuntu14.04/Dockerfile
-  command: /root/test-image.sh
