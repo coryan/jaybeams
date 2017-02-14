@@ -324,7 +324,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::compiler_flags[] = R"""(' >>$@; \
-	echo $(CXXFLAGS) >>$@; \
+	echo $(AM_CXXFLAGS) $(CXXFLAGS) >>$@; \
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
