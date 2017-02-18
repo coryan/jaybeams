@@ -20,5 +20,10 @@ boost::compute::device jb::opencl::device_selector(config const& cfg) {
 }
 
 boost::compute::device jb::opencl::device_selector() {
-  return jb::opencl::device_selector(jb::opencl::config());
+  auto device = jb::opencl::device_selector(jb::opencl::config());
+  if (device.name().substr(0, 8) == "AMD SUMO") {
+    // TODO(#124) - fix this when we have a better workaround ...
+    device = device_selector(jb::opencl::config().device_name("BESTGPU"));
+  }
+  return device;
 }
