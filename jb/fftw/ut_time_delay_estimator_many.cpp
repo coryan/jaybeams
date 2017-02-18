@@ -1209,4 +1209,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_errors) {
   // check the TDE size exception
   BOOST_CHECK_THROW(
       tested2.estimate_delay(confidence, argmax, a, b, sum2), std::exception);
+  BOOST_CHECK_THROW(
+      tested2.estimate_delay(confidence, argmax, b, c, sum2), std::exception);
 }

@@ -108,10 +108,10 @@ public:
     // Validate the input sizes.  For some types of timeseries the
     // alignment may be different too, but we only use the alignment
     // when the type of timeseries guarantees to always be aligned.
-    if (jb::detail::element_count(a) != jb::detail::element_count(tmpa_) or
-        jb::detail::element_count(b) != jb::detail::element_count(tmpa_)) {
+    if (jb::detail::array_shape(a) != jb::detail::array_shape(tmpa_) or
+        jb::detail::array_shape(b) != jb::detail::array_shape(tmpb_)) {
       throw std::invalid_argument(
-          "size mismatch in time_delay_estimator<>::estimate_delay()");
+          "shape mismatch in time_delay_estimator<>::estimate_delay()");
     }
     // First we apply the Fourier transform to both inputs ...
     a2tmpa_.execute(a, tmpa_);
