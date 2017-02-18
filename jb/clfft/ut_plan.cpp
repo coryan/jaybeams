@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_default) {
  * @test Verify that we use move copy constructor and assignment on plans.
  */
 BOOST_AUTO_TEST_CASE(clfft_plan_move) {
-  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_basic) {
   // a good guess to the maximum error:
   int const tol = 1 << 8;
 
-  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(clfft_plan_error) {
   using outvector = boost::compute::vector<std::complex<float>>;
 
   std::size_t const size = 1 << 8;
-  boost::compute::device device = boost::compute::system::default_device();
+  boost::compute::device device = jb::opencl::device_selector();
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   jb::clfft::init init;
