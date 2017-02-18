@@ -31,7 +31,6 @@ RUN dnf makecache && dnf install -y \
       zlib-devel && \
     dnf clean all
 
-
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
     tar -xf skye-0.3.2.tar.gz && \

@@ -94,23 +94,61 @@ BOOST_AUTO_TEST_CASE(check_close_enough_float_vector) {
   test_type a(nsamples, num_a);
   value_type num_b = num_a + std::numeric_limits<value_type>::epsilon();
   test_type b(nsamples, num_b);
-  value_type num_c =
-      num_a +
-      (value_type)(10 * tol) * std::numeric_limits<value_type>::epsilon();
-  test_type c(nsamples, num_c);
   BOOST_CHECK_MESSAGE(
       check_collection_close_enough(a, b, tol),
       "a and b are not within tolerance=" << tol);
+}
+
+/**
+ * @test check_close_enough functionality for vector of float type
+ *
+ * TODO(#93) cleanup after boost-1.58.0 is no longer supported.
+ */
+#if BOOST_VERSION <= 105800
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(
+    check_close_enough_float_vector_failure, JB_TESTING_MAX_DIFFERENCES_PRINTED)
+
+BOOST_AUTO_TEST_CASE(check_close_enough_float_vector_failure)
+#else
+BOOST_AUTO_TEST_CASE(
+    check_close_enough_float_vector_failure,
+    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED))
+#endif // BOOST_VERSION <= 105800
+{
+  using namespace jb::testing;
+  using value_type = float;
+  using test_type = std::vector<value_type>;
+  int tol = 3;
+  int nsamples = 20;
+  value_type num_a = 10.00;
+  test_type a(nsamples, num_a);
+  value_type num_b =
+      num_a +
+      (value_type)(10 * tol) * std::numeric_limits<value_type>::epsilon();
+  test_type b(nsamples, num_b);
   BOOST_CHECK_MESSAGE(
-      not check_collection_close_enough(a, c, tol),
+      not check_collection_close_enough(a, b, tol),
       "a and c are within tolerance=" << tol);
 }
 
 /**
  * @test check_close_enough functionality for multi_array of 3 dimension
  * complex double type
+ *
+ * TODO(#93) cleanup after boost-1.58.0 is no longer supported.
  */
-BOOST_AUTO_TEST_CASE(check_close_enough_complex_double_multi_array) {
+#if BOOST_VERSION <= 105800
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(
+    check_close_enough_complex_double_multi_array,
+    JB_TESTING_MAX_DIFFERENCES_PRINTED)
+
+BOOST_AUTO_TEST_CASE(check_close_enough_complex_double_multi_array)
+#else
+BOOST_AUTO_TEST_CASE(
+    check_close_enough_complex_double_multi_array,
+    *boost::unit_test::expected_failures(JB_TESTING_MAX_DIFFERENCES_PRINTED))
+#endif // BOOST_VERSION <= 105800
+{
   using namespace jb::testing;
   using value_type = double;
   using complex_type = std::complex<value_type>;
@@ -123,7 +161,7 @@ BOOST_AUTO_TEST_CASE(check_close_enough_complex_double_multi_array) {
   complex_type com_eps = {std::numeric_limits<value_type>::epsilon(),
                           std::numeric_limits<value_type>::epsilon()};
   complex_type num_b = num_a + com_eps;
-  complex_type num_c = num_a + (value_type)(10 * tol) * com_eps;
+  complex_type num_c = num_a + 10.0 * tol * com_eps;
 
   test_type a(boost::extents[S][V][nsamples]);
   test_type b(boost::extents[S][V][nsamples]);

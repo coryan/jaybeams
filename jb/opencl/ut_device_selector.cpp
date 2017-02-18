@@ -24,12 +24,11 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_by_name) {
  */
 BOOST_AUTO_TEST_CASE(opencl_device_selector_empty) {
   auto actual = jb::opencl::device_selector(jb::opencl::config());
+  auto expected = boost::compute::system::default_device();
   BOOST_TEST_MESSAGE("Default selector picked " << actual.name());
 
-  for (auto const& d : boost::compute::system::devices()) {
-    BOOST_TEST_MESSAGE("checking compute unit count for " << d.name());
-    BOOST_CHECK_GE(actual.compute_units(), d.compute_units());
-  }
+  BOOST_CHECK_EQUAL(expected.id(), actual.id());
+  BOOST_CHECK_EQUAL(expected.name(), actual.name());
 }
 
 /**
@@ -86,11 +85,18 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_no_config) {
   auto actual = jb::opencl::device_selector();
   auto expected = jb::opencl::device_selector(jb::opencl::config());
 
-  BOOST_CHECK_EQUAL(expected.id(), actual.id());
-  BOOST_CHECK_EQUAL(expected.name(), actual.name());
   BOOST_TEST_MESSAGE(
       "Default device name=" << actual.name() << ", id=" << actual.id()
                              << ", type=" << actual.type());
+  if (expected.name().substr(0, 8) == "AMD SUMO") {
+    // TODO(#124) - the AMD SUMO devices do not work for us, so they
+    // are mostly disabled for the empty config (used in tests) ...
+    BOOST_CHECK_NE(expected.id(), actual.id());
+    BOOST_CHECK_NE(expected.name(), actual.name());
+  } else {
+    BOOST_CHECK_EQUAL(expected.id(), actual.id());
+    BOOST_CHECK_EQUAL(expected.name(), actual.name());
+  }
 }
 
 /**

@@ -13,15 +13,19 @@ boost::compute::device jb::opencl::device_selector(config const& cfg) {
     return detail::best_device(
         [](device const& d) { return d.type() & device::gpu; }, "GPU");
   }
-  if (cfg.device_name() == "") {
-    return detail::best_device([](device const& d) { return true; }, "ANY");
-  }
-  if (cfg.device_name() == "SYSTEM:DEFAULT") {
+  if (cfg.device_name() == "" or cfg.device_name() == "SYSTEM:DEFAULT") {
     return boost::compute::system::default_device();
   }
   return boost::compute::system::find_device(cfg.device_name());
 }
 
 boost::compute::device jb::opencl::device_selector() {
-  return jb::opencl::device_selector(jb::opencl::config());
+  auto device = jb::opencl::device_selector(jb::opencl::config());
+  if (device.name().substr(0, 8) == "AMD SUMO") {
+    // LCOV_EXCL_START
+    // TODO(#124) - fix this when we have a better workaround ...
+    device = device_selector(jb::opencl::config().device_name("BESTGPU"));
+    // LCOV_EXCL_STOP
+  }
+  return device;
 }
