@@ -7,11 +7,11 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
 
     - os: linux
       compiler: gcc
