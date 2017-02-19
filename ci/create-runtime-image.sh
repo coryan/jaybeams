@@ -2,6 +2,11 @@
 
 set -e
 
+if [ "x${CREATE_RUNTIME_IMAGE}" != "xyes" ]; then
+    echo "Runtime image creation not enabled on this build."
+    exit 0
+fi
+
 if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     echo "Testing PR, image creation disabled."
     exit 0
