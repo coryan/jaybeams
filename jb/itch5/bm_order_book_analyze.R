@@ -30,6 +30,9 @@ data$idx <- ave(data$microseconds, data$book_type, FUN=seq_along)
 print("Summary of data:")
 print(summary(data))
 
+print("Summary by order book type:")
+print(aggregate(microseconds ~ book_type, data=data, FUN=summary))
+
 # ... just visualize the data as a density function ...
 ggplot(data=data, aes(x=microseconds, color=book_type)) +
     theme(legend.position="bottom") + facet_grid(book_type ~ .) + stat_density()
@@ -51,7 +54,11 @@ ggsave(width=svg.w, heigh=svg.h, filename='data.plot.png')
 print(paste0(
     "Examine the data.plot.* files, observe if there are any",
     " obvious correlations in the data"))
+print("")
+
 ## ... but really it is not, lots of auto-correlation ...
+print("Checking for independence of samples...")
+print("  (or more precisely lack of auto-correlation in the samples)")
 data.array.ts <- ts(subset(data, book_type == 'array')$microseconds)
 data.map.ts <- ts(subset(data, book_type == 'map')$microseconds)
 
@@ -74,11 +81,13 @@ dev.off()
 max.acf.array <- max(abs(tail(acf(data.array.ts, plot=FALSE)$acf, -1)))
 max.acf.map <- max(abs(tail(acf(data.map.ts, plot=FALSE)$acf, -1)))
 
-print(paste0("max.acf.array=", round(max.acf.array, 4)))
-print(paste0("max.acf.map=", round(max.acf.map, 4)))
-
 ## ... we set the maximum allowed auto-correlation to 5% ...
 max.autocorrelation <- 0.05
+
+print(paste0("  we will reject data with auto-correlation factors >= ",
+             max.autocorrelation))
+print(paste0("  array max.acf= ", round(max.acf.array, 4)))
+print(paste0("  map   max.acf= ", round(max.acf.map, 4)))
 
 if (max.acf.array >= max.autocorrelation) {
     stop("Some evidence of auto-correlation in array data max-acf=",
@@ -88,6 +97,8 @@ if (max.acf.map >= max.autocorrelation) {
     stop("Some evidence of auto-correlation in array data max-acf=",
          round(max.acf.map, 4))
 }
+
+print("PASSED: the samples do not exhibit excessive auto-correlation")
 
 ##
 ## Power analysis, validate the data had enough samples
@@ -102,41 +113,46 @@ print("Estimating standard deviation on the 'array' data ...")
 core.count <- detectCores()
 b.array <- boot(data=subset(data, book_type == 'array'), R=10000,
                 statistic=sd.estimator, parallel="multicore", ncpus=core.count)
-gc()
+ci.array <- boot.ci(b.array, type=c('perc', 'norm', 'basic'))
+print(ci.array)
 
 print("Estimating standard deviation on the 'map' data ...")
 b.map <- boot(data=subset(data, book_type == 'map'), R=10000,
               statistic=sd.estimator, parallel="multicore", ncpus=core.count)
-gc()
-
-png(width=png.w, height=png.h, filename='boot.sd.png')
-par(mfrow=c(2,1))
-plot(b.array)
-plot(b.map)
-dev.off()
-
-svg(width=svg.w, height=svg.h, filename='boot.sd.svg')
-par(mfrow=c(2,1))
-plot(b.array)
-plot(b.map)
-dev.off()
-
-ci.array <- boot.ci(b.array, type=c('perc', 'norm', 'basic'))
 ci.map <- boot.ci(b.map, type=c('perc', 'norm', 'basic'))
+print(ci.map)
+
+png(width=png.w, height=png.h, filename='boot.array.sd.png')
+plot(b.array)
+dev.off()
+png(width=png.w, height=png.h, filename='boot.map.sd.png')
+plot(b.map)
+dev.off()
+
+svg(width=svg.w, height=svg.h, filename='boot.array.sd.svg')
+plot(b.array)
+dev.off()
+svg(width=svg.w, height=svg.h, filename='boot.map.sd.svg')
+plot(b.map)
+dev.off()
 
 estimated.sd <- ceiling(max(ci.map$percent[[4]], ci.array$percent[[4]],
             ci.map$basic[[4]], ci.array$basic[[4]],
             ci.map$normal[[3]], ci.array$normal[[3]]))
 
 print(paste0("Estimated standard deviation: ", round(estimated.sd, 2)))
-            
+
+##
+## Perform power analysis
+##
+print("Performing power analysis to determine if sample size is large enough")
+
 test.iterations <- 20000
 clock.ghz <- 3
 ## ... this is the minimum effect size that we
 ## are interested in, anything larger is great,
 ## smaller is too small to care ...
 min.delta <- 1.0 / (clock.ghz * 1000.0) * test.iterations
-print(paste0("Minimum desired effect: ", round(min.delta, 2)))
 
 min.samples <- 5000
 desired.delta <- min.delta
@@ -155,6 +171,10 @@ required.nsamples <-
     1000 * ceiling(nonparametric.extra.cost *
                    required.pwr.object$n / 1000)
 
+print(paste0(
+    "Required samples to detect an effect of ", round(10 * desired.delta, 2),
+    " microseconds is ", required.nsamples))
+
 if (required.nsamples > length(data.array.ts)) {
     stop("Not enough samples in 'array' data to detect expected effect (",
          10 * desired.delta, ") should be >=", required.nsamples,
@@ -167,6 +187,8 @@ if (required.nsamples > length(data.map.ts)) {
          " actual=", length(map.map.ts))
 }
 
+print("PASSED: The samples have the minimum required power")
+
 ## ... give out a warning if the power level is not enough to detect
 ## minimum effects, though we expect much higher than the minimum ...
 desired.pwr.object <- power.t.test(
@@ -175,6 +197,10 @@ desired.pwr.object <- power.t.test(
 desired.nsamples <-
     1000 * ceiling(nonparametric.extra.cost *
                    desired.pwr.object$n / 1000)
+
+print(paste0(
+    "Required samples to detect an effect of ", round(desired.delta, 2),
+    " microseconds is ", desired.nsamples))
 
 if (desired.nsamples > length(data.array.ts)) {
     warning("Not enough samples in 'array' data to detect minimum effect (",
@@ -200,30 +226,39 @@ if (abs(estimated.delta) < desired.delta) {
          " minimum effect=", desired.delta)
 }
 
-print(names(data.mw))
+print(paste0(
+    "PASSED: the estimated effect (", round(estimated.delta, 2),
+    ") is large enough to be considered"))
+
+print(paste0(
+    "We use the Mann-Whitney U test to determine if the results",
+    " are statistically significant at the alpha=",
+    round(desired.significance, 2), " level."))
 
 if (data.mw$p.value >= desired.significance) {
     print(paste0(
-        "Using the Mann-Whitney U test, the null hypothesis that",
+        "The test p-value (", round(data.mw$p.value, 4),
+        ") is larger than the desired significance level of",
+        " alpha=", round(desired.significance, 4), "."))
+    print(paste0(
+        "Therefore we CANNOT REJECT the null hypothesis that",
         " both the 'array' and 'map' based",
-        " order books have the same performance cannot be rejected",
-        " at the desired significance (alpha=",
-        desired.significance, ", p-value=", round(data.mw$p.value, 4),
-        " is greater than alpha).",
-        "  Therefore we treat both as having the same performance."))
+        " order books have the same performance."))
 } else {
     interval <- paste0(round(data.mw$conf.int, 2), collapse=',')
     print(paste0(
-        "Using the Mann-Whitney U test, the null hypothesis that",
+        "The test p-value (", round(data.mw$p.value, 4),
+        ") is smaller than the desired significance level of",
+        " alpha=", round(desired.significance, 4), "."))
+    print(paste0(
+        "Therefore we REJECT the null hypothesis that",
         " both the 'array' and 'map' based",
-        " order books have the same performance is rejected",
-        " at the desired significance (alpha=",
-        desired.significance, ", p-value=", round(data.mw$p.value, 4),
-        " is smaller than alpha).",
-        "  The effect is quantified using the Hodges-Lehmann estimator,",
-        " which is compatible with the Mann-Whitney U test, with a value",
-        " of ", round(data.mw$estimate, 2), " microseconds in the",
-        " confidence interval=[", interval, "]"))
+        " order books have the same performance."))
+    print(paste0(
+        "The effect is quantified using the Hodges-Lehmann estimator,",
+        " which is compatible with the Mann-Whitney U test, the estimator",
+        " value is ", round(data.mw$estimate, 2), " microseconds with a",
+        " 95% confidence interval of [", interval, "]"))
 }
 
 q(save='no')
