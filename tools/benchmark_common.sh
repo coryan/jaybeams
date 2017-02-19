@@ -91,7 +91,7 @@ cpu_governor_startup() {
             CPUPOWERSET_CMD=cpufreq-set
         else
             echo "WARNING: no cpupower driver (maybe a virtual machine?)"
-	    HAS_CPUPOWER=yes
+	    HAS_CPUPOWER=no
         fi
     else
 	HAS_CPUPOWER=no
