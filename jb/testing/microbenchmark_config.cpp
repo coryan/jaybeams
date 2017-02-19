@@ -38,6 +38,10 @@ namespace defaults {
 #define JB_DEFAULTS_microbenchmark_size 0
 #endif
 
+#ifndef JB_DEFAULTS_microbenchmark_timeseries
+#define JB_DEFAULTS_microbenchmark_timeseries 1
+#endif
+
 #ifndef JB_DEFAULTS_microbenchmark_verbose
 #define JB_DEFAULTS_microbenchmark_verbose false
 #endif
@@ -49,6 +53,7 @@ namespace defaults {
 int warmup_iterations = JB_DEFAULTS_microbenchmark_warmup_iterations;
 int iterations = JB_DEFAULTS_microbenchmark_iterations;
 int size = JB_DEFAULTS_microbenchmark_size;
+int timeseries = JB_DEFAULTS_microbenchmark_timeseries;
 bool verbose = JB_DEFAULTS_microbenchmark_verbose;
 bool reconfigure_thread = JB_DEFAULTS_microbenchmark_reconfigure_thread;
 
@@ -67,6 +72,10 @@ microbenchmark_config::microbenchmark_config()
           desc("size").help(
               "If set (and not zero) control the size of the test."),
           this, defaults::size)
+    , timeseries(
+          desc("timeseries")
+              .help("Controls the number of timeseries of the test."),
+          this, defaults::timeseries)
     , verbose(
           desc("verbose").help(
               "If true, dump the results of every test to stdout for"
