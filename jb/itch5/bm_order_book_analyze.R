@@ -95,8 +95,7 @@ if (max.acf.map >= max.autocorrelation) {
 
 ## ... use bootstraping to estimate the standard deviation ...
 sd.estimator <- function(D,i) {
-    b=D[i,];
-    return(sd(b$microseconds));
+    return(sd(D[i,'microseconds']));
 }
 
 print("Estimating standard deviation on the 'array' data ...")

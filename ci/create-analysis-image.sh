@@ -2,6 +2,11 @@
 
 set -e
 
+if [ "x${CREATE_ANALYSIS_IMAGE}" != "xyes" ]; then
+    echo "Analysis image creation not enabled on this build."
+    exit 0
+fi
+
 if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
     echo "Testing PR, image creation disabled."
     exit 0
