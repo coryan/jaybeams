@@ -1,5 +1,5 @@
-#ifndef jb_testing_tde_square_sum_hpp
-#define jb_testing_tde_square_sum_hpp
+#ifndef jb_testing_sum_square_hpp
+#define jb_testing_sum_square_hpp
 
 #include <jb/fftw/tde_result.hpp>
 
@@ -41,4 +41,4 @@ auto sum_square(container_t const& ts) {
 } // namespace testing
 } // namespace jb
 
-#endif // jb_testing_tde_square_sum_hpp
+#endif // jb_testing_sum_square_hpp
