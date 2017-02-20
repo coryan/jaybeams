@@ -131,7 +131,7 @@ if (max.acf.array >= max.autocorrelation |
     warning("Some evidence of auto-correlation in ",
          "the samples max.acf.array=",
          round(max.acf.array, 4),
-         ", max.acf.array=",
+         ", max.acf.map=",
          round(max.acf.map, 4))
 } else {
     cat("PASSED: the samples do not exhibit high auto-correlation")
