@@ -204,3 +204,52 @@ int main(int argc, char* argv[]) try {
   std::cerr << "unknown exception raised" << std::endl;
   return 1;
 }
+
+namespace {
+namespace defaults {
+
+#ifndef JB_FFTW_DEFAULT_bm_time_delay_estimator_many_test_case
+#define JB_FFTW_DEFAULT_bm_time_delay_estimator_many_test_case                 \
+  "float:aligned:many"
+#endif // JB_FFTW_DEFAULT_bm_time_delay_estimator_many_test_case
+
+#ifndef JB_FFTW_DEFAULT_bm_time_delay_estimator_many_n_timeseries
+#define JB_FFTW_DEFAULT_bm_time_delay_estimator_many_n_timeseries 1
+#endif // JB_FFTW_DEFAULT_bm_time_delay_estimator_many_n_timeseries
+
+std::string const test_case =
+    JB_FFTW_DEFAULT_bm_time_delay_estimator_many_test_case;
+int constexpr n_timeseries =
+    JB_FFTW_DEFAULT_bm_time_delay_estimator_many_n_timeseries;
+
+} // namespace defaults
+
+config::config()
+    : log(desc("log", "logging"), this)
+    , microbenchmark(
+          desc("microbenchmark", "microbenchmark"), this,
+          jb::testing::microbenchmark_config().test_case(defaults::test_case))
+    , n_timeseries(
+          desc("ntimeseries")
+              .help(
+                  "Number of timeseries as argument to compute TDE. "
+                  "If microbenchmark.test_case is *:single, the fixture "
+                  "executes this many calls "
+                  " to compute TDE passing a container with one time series as "
+                  "argument every time. "
+                  "If it is *:many, the fixture uses a 2-dimension array "
+                  "containing this "
+                  "many time series as argument to a one time compute TDE."),
+          this, defaults::n_timeseries) {
+}
+
+void config::validate() const {
+  log().validate();
+  if (n_timeseries() < 1) {
+    std::ostringstream os;
+    os << "n_timeseries must be > 0 (" << n_timeseries() << ")";
+    throw jb::usage(os.str(), 1);
+  }
+}
+
+} // anonymous namespace
