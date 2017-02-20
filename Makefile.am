@@ -696,10 +696,12 @@ jb_fftw_bm_time_delay_estimator_LDFLAGS = \
 jb_fftw_bm_time_delay_estimator_many_SOURCES = jb/fftw/bm_time_delay_estimator_many.cpp
 jb_fftw_bm_time_delay_estimator_many_CPPFLAGS =
 jb_fftw_bm_time_delay_estimator_many_LDADD = \
-  $(FFTW3_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
-  jb/libjb.a
+  jb/libjb.a \
+  $(FFTW3_LIBS)
+jb_fftw_bm_time_delay_estimator_many_LDFLAGS = \
+  $(FFTW3_LDFLAGS)
 
 ################################################################
 # Conditionally enable the OpenCL components
