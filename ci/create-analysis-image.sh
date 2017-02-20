@@ -51,8 +51,8 @@ cp docker/analysis/Dockerfile build/staging/Dockerfile.analysis
 sudo docker image build ${caching?} -t ${IMAGE?}:tip \
        -f build/staging/Dockerfile.analysis build/staging
 
-if [ -z "${DOCKER_USER?}" ]; then
-    echo "DOCKER_USER not set, docker autobuilds disabled."
+if [ -z "${DOCKER_USER}" -o -z "${DOCKER_PASSWORD}" ]; then
+    echo "DOCKER_USER / DOCKER_PASSWORD not set, docker push disabled."
     exit 0
 fi
 
