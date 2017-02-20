@@ -110,86 +110,80 @@ private:
 };
 
 template <typename vector_type>
-void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
+void benchmark_test_case(config const& cfg) {
   using benchmark = jb::testing::microbenchmark<fixture<vector_type>>;
-  benchmark bm(cfg);
-  auto r = bm.run(cfg.timeseries());
+  benchmark bm(cfg.microbenchmark());
+  auto r = bm.run(cfg.n_timeseries());
   bm.typical_output(r);
 }
 
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
-  jb::testing::microbenchmark_config cfg;
-  cfg.test_case("float:aligned").process_cmdline(argc, argv);
+  config cfg;
+  cfg.process_cmdline(argc, argv);
 
-  std::cout << "Configuration for test\n" << cfg << std::endl;
+  // initialize the logging framework ...
+  jb::log::init(cfg.log());
+  if (cfg.microbenchmark().verbose()) {
+    JB_LOG(info) << "Configuration for test\n" << cfg << "\n";
+  }
 
-  // check if it is 2 dimensional
-  bool dim_2 = cfg.timeseries() > 1;
-
-  if (cfg.test_case() == "float:aligned") {
-    if (dim_2) {
-      benchmark_test_case<jb::fftw::aligned_multi_array<float, 2>>(cfg);
-    } else {
-      benchmark_test_case<jb::fftw::aligned_vector<float>>(cfg);
-    }
-  } else if (cfg.test_case() == "double:aligned") {
-    if (dim_2) {
-      benchmark_test_case<jb::fftw::aligned_multi_array<double, 2>>(cfg);
-    } else {
-      benchmark_test_case<jb::fftw::aligned_vector<double>>(cfg);
-    }
-  } else if (cfg.test_case() == "float:unaligned") {
-    if (dim_2) {
-      benchmark_test_case<boost::multi_array<float, 2>>(cfg);
-    } else {
-      benchmark_test_case<std::vector<float>>(cfg);
-    }
-  } else if (cfg.test_case() == "double:unaligned") {
-    if (dim_2) {
-      benchmark_test_case<boost::multi_array<double, 2>>(cfg);
-    } else {
-      benchmark_test_case<std::vector<double>>(cfg);
-    }
-  } else if (cfg.test_case() == "complex:float:aligned") {
-    if (dim_2) {
-      benchmark_test_case<
-          jb::fftw::aligned_multi_array<std::complex<float>, 2>>(cfg);
-    } else {
-      benchmark_test_case<jb::fftw::aligned_vector<std::complex<float>>>(cfg);
-    }
-  } else if (cfg.test_case() == "complex:double:aligned") {
-    if (dim_2) {
-      benchmark_test_case<
-          jb::fftw::aligned_multi_array<std::complex<double>, 2>>(cfg);
-    } else {
-      benchmark_test_case<jb::fftw::aligned_vector<std::complex<double>>>(cfg);
-    }
-  } else if (cfg.test_case() == "complex:float:unaligned") {
-    if (dim_2) {
-      benchmark_test_case<boost::multi_array<std::complex<float>, 2>>(cfg);
-    } else {
-      benchmark_test_case<std::vector<std::complex<float>>>(cfg);
-    }
-  } else if (cfg.test_case() == "complex:double:unaligned") {
-    if (dim_2) {
-      benchmark_test_case<boost::multi_array<std::complex<double>, 2>>(cfg);
-    } else {
-      benchmark_test_case<std::vector<std::complex<double>>>(cfg);
-    }
+  std::string test_case = cfg.microbenchmark().test_case();
+  if (test_case == "float:aligned:many") {
+    benchmark_test_case<jb::fftw::aligned_multi_array<float, 2>>(cfg);
+  } else if (test_case == "float:aligned:single") {
+    benchmark_test_case<jb::fftw::aligned_vector<float>>(cfg);
+  } else if (test_case == "double:aligned:many") {
+    benchmark_test_case<jb::fftw::aligned_multi_array<double, 2>>(cfg);
+  } else if (test_case == "double:aligned:single") {
+    benchmark_test_case<jb::fftw::aligned_vector<double>>(cfg);
+  } else if (test_case == "float:unaligned:many") {
+    benchmark_test_case<boost::multi_array<float, 2>>(cfg);
+  } else if (test_case == "float:unaligned:single") {
+    benchmark_test_case<std::vector<float>>(cfg);
+  } else if (test_case == "double:unaligned:many") {
+    benchmark_test_case<boost::multi_array<double, 2>>(cfg);
+  } else if (test_case == "double:unaligned:single") {
+    benchmark_test_case<std::vector<double>>(cfg);
+  } else if (test_case == "complex:float:aligned:many") {
+    benchmark_test_case<jb::fftw::aligned_multi_array<std::complex<float>, 2>>(
+        cfg);
+  } else if (test_case == "complex:float:aligned:single") {
+    benchmark_test_case<jb::fftw::aligned_vector<std::complex<float>>>(cfg);
+  } else if (test_case == "complex:double:aligned:many") {
+    benchmark_test_case<jb::fftw::aligned_multi_array<std::complex<double>, 2>>(
+        cfg);
+  } else if (test_case == "complex:double:aligned:single") {
+    benchmark_test_case<jb::fftw::aligned_vector<std::complex<double>>>(cfg);
+  } else if (test_case == "complex:float:unaligned:many") {
+    benchmark_test_case<boost::multi_array<std::complex<float>, 2>>(cfg);
+  } else if (test_case == "complex:float:unaligned:single") {
+    benchmark_test_case<std::vector<std::complex<float>>>(cfg);
+  } else if (test_case == "complex:double:unaligned:many") {
+    benchmark_test_case<boost::multi_array<std::complex<double>, 2>>(cfg);
+  } else if (test_case == "complex:double:unaligned:single") {
+    benchmark_test_case<std::vector<std::complex<double>>>(cfg);
   } else {
     std::ostringstream os;
-    os << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
+    os << "Unknown test case (" << test_case << ")" << std::endl;
     os << " --test-case must be one of"
-       << ": float:aligned"
-       << ", double:aligned"
-       << ", float:unaligned"
-       << ", double:aligned"
-       << ", complex:float:aligned"
-       << ", complex:double:aligned"
-       << ", complex:float:unaligned"
-       << ", complex:double:unaligned" << std::endl;
+       << ": float:aligned:many"
+       << ", double:aligned:many"
+       << ", float:unaligned:many"
+       << ", double:aligned:many"
+       << ", complex:float:aligned:many"
+       << ", complex:double:aligned:many"
+       << ", complex:float:unaligned:many"
+       << ", complex:double:unaligned:many"
+       << ", float:aligned:single"
+       << ", double:aligned:single"
+       << ", float:unaligned:single"
+       << ", double:aligned:single"
+       << ", complex:float:aligned:single"
+       << ", complex:double:aligned:single"
+       << ", complex:float:unaligned:single"
+       << ", complex:double:unaligned:single" << std::endl;
     throw jb::usage(os.str(), 1);
   }
 
