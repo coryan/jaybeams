@@ -7,6 +7,7 @@ if (length(args) < 3) {
 data.filename <- args[1]
 figures.path <- args[2]
 report.name <- args[3]
+script.root.dir <- getwd()
 rm(args)
 
 script.dirname <- function() {
@@ -21,7 +22,7 @@ script.dirname <- function() {
 local({
     ## fall back on '/' if baseurl is not specified
     baseurl = servr:::jekyll_config('.', 'baseurl', '/')
-    knitr::opts_knit$set(base.url = baseurl)
+    knitr::opts_knit$set(base.url = baseurl, root.dir = script.root.dir)
     ## fall back on 'kramdown' if markdown engine is not specified
     markdown = servr:::jekyll_config('.', 'markdown', 'kramdown')
 
