@@ -1,4 +1,3 @@
-#include <jb/fftw/tde_result.hpp>
 #include <jb/fftw/time_delay_estimator_many.hpp>
 #include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
