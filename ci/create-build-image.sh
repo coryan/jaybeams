@@ -17,13 +17,6 @@ if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     exit 0
 fi
 
-if [ -z "${DOCKER_USER?}" ]; then
-    echo "DOCKER_USER not set, docker autobuilds disabled."
-    exit 0
-fi
-
-docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
-
 # Extract the variant from the IMAGE environment variable (it is set
 # in .travis.yml) ...
 IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
@@ -45,6 +38,13 @@ fi
 # Build a new docker image
 docker image build ${caching?} -t ${IMAGE?}:tip \
        -f docker/dev/${variant?}/Dockerfile docker/dev
+
+if [ -z "${DOCKER_USER?}" ]; then
+    echo "DOCKER_USER not set, docker autobuilds disabled."
+    exit 0
+fi
+
+docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
 # Compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
