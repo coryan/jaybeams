@@ -7,6 +7,7 @@ library(boot)
 library(ggplot2)
 library(parallel)
 library(pwr)
+library(knitr)
 # We also create some constants that make the graphs look pretty:
 golden.ratio <- (1+sqrt(5))/2
 svg.w <- 8.0
@@ -38,7 +39,8 @@ We also annotate the data with a sequence number, so we can plot the
 sequence of values:
 
 ```{r}
-data$idx <- ave(data$microseconds, data$book_type, FUN=seq_along)
+data$idx <- ave(
+    data$microseconds, data$book_type, FUN=seq_along)
 ```
 
 At this point I am curious as to how the data looks like, and probably
@@ -131,7 +133,7 @@ if (max.acf.map >= max.autocorrelation) {
 cat("PASSED: the samples do not exhibit high auto-correlation")
 ```
 
-### Power Analysis: validate the data had enough samples
+### Power Analysis: Estimate Standard Deviation
 
 Use bootstraping to estimate the standard deviation, we are going to
 need a function to execute in the bootstrapping procedure:
@@ -176,6 +178,8 @@ estimated.sd <- ceiling(max(
     ci.map$normal[[3]], ci.array$normal[[3]]))
 cat(estimated.sd)
 ```
+
+### Power Analysis: Determine Required Number of Samples
 
 We need to determine if the sample size was large enough given the
 estimated standard deviation, the expected effect size, and the
@@ -241,7 +245,7 @@ detect the minimum effect we simply generate warnings:
 required.pwr.object <- power.t.test(
     delta=10 * min.delta, sd=estimated.sd,
     sig.level=desired.significance, power=desired.power)
-cat(required.pwr.object)
+print(required.pwr.object)
 ```
 
 We are going to round the number of iterations to the next higher
@@ -285,9 +289,10 @@ desired.pwr.object <- power.t.test(
 desired.nsamples <- max(
     min.samples, 1000 * ceiling(nonparametric.extra.cost *
                                 desired.pwr.object$n / 1000))
+print(desired.pwr.object)
 ```
 
-That is, we need at least `r round(desired.nsamples, 2)`
+That is, we need at least `r as.integer(desired.nsamples)`
 samples to detect the minimum interesting effect of `r min.delta`
 microseconds.
 Notice that our tests have `r length(data.array.ts)` samples.
@@ -296,13 +301,15 @@ Notice that our tests have `r length(data.array.ts)` samples.
 if (desired.nsamples > length(data.array.ts)) {
     warning("Not enough samples in 'array' data to",
             " detect the minimum interesting effect (",
-            min.delta, ") should be >=", desired.nsamples,
+            round(min.delta, 2), ") should be >= ",
+            desired.nsamples,
             " actual=", length(data.array.ts))
 }
 if (required.nsamples > length(data.map.ts)) {
     warning("Not enough samples in 'map' data to",
             " detect the minimum interating effect (",
-            min.delta, ") should be >=", desired.nsamples,
+            round(min.delta, 2), ") should be >= ",
+            desired.nsamples,
             " actual=", length(data.map.ts))
 }
 cat("PASSED: The samples have the minimum required power")
