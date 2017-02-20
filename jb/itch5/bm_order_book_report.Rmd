@@ -313,7 +313,7 @@ if (desired.nsamples > length(data.array.ts) |
             round(min.delta, 2), ") should be >= ",
             desired.nsamples,
             " map-actual=", length(data.map.ts),
-            " array-actual=", length(array.map.ts))
+            " array-actual=", length(data.array.ts))
 } else {
     cat("PASSED: The samples have the minimum required power")
 }
