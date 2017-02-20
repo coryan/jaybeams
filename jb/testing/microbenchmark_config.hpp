@@ -23,7 +23,6 @@ public:
   jb::config_attribute<microbenchmark_config, int> warmup_iterations;
   jb::config_attribute<microbenchmark_config, int> iterations;
   jb::config_attribute<microbenchmark_config, int> size;
-  jb::config_attribute<microbenchmark_config, int> timeseries;
   jb::config_attribute<microbenchmark_config, bool> verbose;
   jb::config_attribute<microbenchmark_config, std::string> test_case;
   jb::config_attribute<microbenchmark_config, bool> reconfigure_thread;
