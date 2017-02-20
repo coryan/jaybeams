@@ -4,11 +4,26 @@
 #include <jb/testing/delay_timeseries.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/testing/sum_square.hpp>
+#include <jb/log.hpp>
 
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
+
+/**
+ * This benchmark is implemented to evaluate the performance of
+ * time_delay_estimator_many.
+ *
+ * time_delay_estimator_many was implemented under the assumption that FFTW will
+ * perform
+ * better if we pass a multi array container with n time series in one call,
+ * than having
+ * to call the library n times passing a container (like vector) with one time
+ * series each
+ * time
+ */
 
 namespace {
 
