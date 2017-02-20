@@ -2,8 +2,8 @@
 
 set -e
 
-if [ "x${CREATE_BUILD_IMAGE}" != "xyes" ]; then
-    echo "Build image creation not enabled on this build."
+if [ "x${CREATE_ANALYSIS_IMAGE}" != "xyes" ]; then
+    echo "Analysis image creation not enabled on this build."
     exit 0
 fi
 
@@ -29,8 +29,19 @@ docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
 variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 
-# ... determine now old is the image, if it is old enough, we
-# re-create from scratch every time ...
+if [ "${variant?}" != "ubuntu16.04" ]; then
+    echo "We only need to create the analysis image for Ubuntu 16.04"
+    exit 0
+fi
+
+# ... that determines the name of the image we want to build ...
+IMAGE=coryan/jaybeams-analysis
+
+# ... make sure the image is available ...
+docker pull ${IMAGE?}:latest
+
+# ... determine now old is the image, if it is old enough, we re-create
+# from scratch every time ...
 now=$(date +%s)
 image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
@@ -42,16 +53,18 @@ if [ ${age_days?} -ge 30 ]; then
     caching="--no-cache"
 fi
 
-# Build a new docker image
+# ... build a new docker image ..
+cp docker/analysis/Dockerfile build/staging/Dockerfile.analysis
 docker image build ${caching?} -t ${IMAGE?}:tip \
-       -f docker/dev/${variant?}/Dockerfile docker/dev
+       -f build/staging/Dockerfile.analysis build/staging
 
-# Compare the ids of the :tip and :latest ...
+# ... compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
 id_latest=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:latest)
 if [ ${id_tip?} != ${id_latest?} ]; then
-    # They are different, we need to push them.  Create a permanent
-    # label so we can keep a history of used images in the registry
+    # ... they are different, we need to push them.  Create a
+    # permanent label so we can keep a history of used images in the
+    # registry ...
     tag=$(date +%Y%m%d%H%M)
     echo "${IMAGE?} has changed, pushing to registry."
     echo "tip    = ${id_tip?}"

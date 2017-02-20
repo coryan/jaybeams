@@ -2,7 +2,6 @@ ARG user=developer
 ARG cxx=g++
 ARG cxxflags=""
 
-WORKDIR /
 RUN useradd -m $user
 USER $user
 WORKDIR /home/$user

@@ -27,7 +27,6 @@ boost::compute::program jb::opencl::build_simple_program(
   try {
     program.build();
   } catch (boost::compute::opencl_error const& ex) {
-    std::string results;
     JB_LOG(error) << "errors building program: " << ex.what() << "\n"
                   << program.build_log() << "\n";
     throw;

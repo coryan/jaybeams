@@ -1,15 +1,14 @@
-#include <jb/fftw/tde_result.hpp>
+#include <jb/fftw/aligned_vector.hpp>
 #include <jb/fftw/time_delay_estimator_many.hpp>
 #include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
-#include <jb/testing/tde_square_sum.hpp>
+#include <jb/testing/sum_square.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <chrono>
 #include <complex>
-#include <vector>
 
 /**
  * @test Verify that FTE handles a timeseries filled with 0
@@ -19,7 +18,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -55,7 +54,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
       }
       sum2[count] = float(0);
       expected_argmax[count] = static_cast<std::size_t>(0);
-      expected_confidence[count] = std::numeric_limits<float>::max();
+      expected_confidence[count] = float(0);
     }
   }
 
@@ -83,7 +82,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -163,7 +162,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -231,7 +231,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -296,7 +297,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -352,16 +354,17 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
 
 /**
  * @test Verify that we can create and use a simple time delay estimator based
- * on std::vector timeseries with float values.
+ * on jb::fftw::aligned_vector timeseries with float values.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<float>;
+  using array_type = jb::fftw::aligned_vector<float>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -420,7 +423,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -488,7 +491,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -553,7 +556,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -614,11 +617,11 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<double>;
+  using array_type = jb::fftw::aligned_vector<double>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -677,7 +680,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -745,7 +749,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -810,7 +815,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -871,11 +877,12 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  // using float, requires higher tolerance
+  int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<std::complex<float>>;
+  using array_type = jb::fftw::aligned_vector<std::complex<float>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -933,7 +940,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_double) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -1001,7 +1008,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -1066,7 +1073,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -1127,11 +1134,11 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 3;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<std::complex<double>>;
+  using array_type = jb::fftw::aligned_vector<std::complex<double>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -1211,4 +1218,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_errors) {
   // check the TDE size exception
   BOOST_CHECK_THROW(
       tested2.estimate_delay(confidence, argmax, a, b, sum2), std::exception);
+  BOOST_CHECK_THROW(
+      tested2.estimate_delay(confidence, argmax, b, c, sum2), std::exception);
 }

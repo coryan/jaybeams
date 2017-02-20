@@ -20,14 +20,13 @@
 #include <jb/itch5/array_based_order_book.hpp>
 #include <jb/itch5/map_based_order_book.hpp>
 #include <jb/itch5/price_levels.hpp>
+#include <jb/testing/initialize_mersenne_twister.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/histogram.hpp>
 #include <jb/integer_range_binning.hpp>
 #include <jb/log.hpp>
 
-#include <algorithm>
 #include <functional>
-#include <random>
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
@@ -106,7 +105,10 @@ struct operation {
  *   and initialized with the output from std::random_device if it is
  *   zero.
  */
-std::mt19937_64 initialize_generator(int seed);
+std::mt19937_64 initialize_generator(int seed) {
+  return jb::testing::initialize_mersenne_twister<std::mt19937_64>(
+      seed, jb::testing::default_initialization_marker);
+}
 
 /**
  * Create a sequence of operations.
@@ -123,8 +125,8 @@ std::vector<operation> create_operations(
 
 template <typename order_book_side, typename book_config>
 std::function<void()> create_iteration(
-    int seed, int size, fixture_config const& cfg, book_config const& bkcfg) {
-  auto generator = initialize_generator(seed);
+    std::mt19937_64& generator, int size, fixture_config const& cfg,
+    book_config const& bkcfg) {
   order_book_side bk(bkcfg);
   std::vector<operation> ops =
       create_operations(generator, size, cfg, bk.is_ascending());
@@ -169,18 +171,17 @@ public:
       : size_(size)
       , cfg_(cfg)
       , bkcfg_(bkcfg)
-      , seed_(seed)
-      , generator_(initialize_generator(seed_)) {
+      , generator_(initialize_generator(seed)) {
   }
 
   void iteration_setup() {
     std::uniform_int_distribution<> side(0, 1);
     if (side(generator_)) {
       iteration_ = create_iteration<typename order_book::buys_t>(
-          seed_, size_, cfg_, bkcfg_);
+          generator_, size_, cfg_, bkcfg_);
     } else {
       iteration_ = create_iteration<typename order_book::sells_t>(
-          seed_, size_, cfg_, bkcfg_);
+          generator_, size_, cfg_, bkcfg_);
     }
   }
 
@@ -198,9 +199,6 @@ private:
 
   /// The configuration for the book side
   book_config bkcfg_;
-
-  /// The seed to initialize the generator for each iteration
-  int seed_;
 
   /// The PRNG, initialized based on the seed parameter
   std::mt19937_64 generator_;
@@ -499,59 +497,6 @@ void config::validate() const {
   array_book().validate();
   map_book().validate();
   fixture().validate();
-}
-
-std::mt19937_64 initialize_generator(int seed) {
-  // ... the operations are generated based on a PRNG, we use one of
-  // the standard generators from the C++ library ...
-  std::mt19937_64 generator;
-
-  if (seed != 0) {
-    // ... the user wants a repeatable (but not well randomized) test,
-    // this is useful when comparing micro-optimizations to see if
-    // anything has changed, or when measuring the performance of the
-    // microbenchmark framework itself ...
-    //
-    // BTW, I am aware (see [1]) of the deficiencies in initializing a
-    // Mersenne-Twister with only 32 bits of seed, in this case I am
-    // not looking for a statistically unbiased, nor a
-    // cryptographically strong PRNG.  We just want something that can
-    // be easily controlled from the command line....
-    //
-    // [1]: http://www.pcg-random.org/posts/cpp-seeding-surprises.html
-    //
-    generator.seed(seed);
-  } else {
-    // ... in this case we make every effort to initialize from a good
-    // source of entropy.  There are no guarantees that
-    // std::random_device is a good source of entropy, but for the
-    // platforms JayBeams uses it is ...
-    std::random_device rd;
-    // ... the mt19937 will call the SeedSeq generate() function N*K
-    // times, where:
-    //   N = generator.state_size
-    //   K = ceil(generator.word_size / 32)
-    // details in:
-    //   http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
-    // so we populate the SeedSeq with that many words, tedious as
-    // that is.  The SeedSeq will do complicated math to mix the input
-    // and ensure all the bits are distributed across as much of the
-    // space as possible, even with a single word of input.  But it is
-    // better to start that seed_seq with more entropy ...
-    //
-    // [2]: http://www.pcg-random.org/posts/cpps-random_device.html
-    //
-    auto S = generator.state_size * (generator.word_size / 32);
-    std::vector<unsigned int> seeds(S);
-    std::generate(seeds.begin(), seeds.end(), [&rd]() { return rd(); });
-    // ... std::seed_seq is an implementation of the SeedSeq concept,
-    // which cleverly remixes its input in case we got numbers in a
-    // small range ...
-    std::seed_seq seq(seeds.begin(), seeds.end());
-    // ... and then use the std::seed_seq to fill the generator ...
-    generator.seed(seq);
-  }
-  return generator;
 }
 
 std::vector<operation> create_operations_without_validation(

@@ -30,6 +30,12 @@ AC_PROG_CXX
 # ... make sure we know how to create static libraries ...
 AC_PROG_RANLIB
 
+# ... on Fedora the default ARFLAGS/AR_FLAGS produce warnings ...
+ARFLAGS=cr
+AR_FLAGS=cr
+AC_SUBST(ARFLAGS)
+AC_SUBST(AR_FLAGS)
+
 # ... check if there is a clang-format installed, allow the user to
 # override the default by setting the CLANG_FORMAT environment
 # variable ...
@@ -56,7 +62,7 @@ AX_CXXFLAGS_WARN_ALL
 
 # ... avoid spurious warnings from clang ...
 AX_CHECK_COMPILE_FLAG([-Qunused-arguments],
-  [AX_APPEND_FLAG(-Qunused-arguments, CXXFLAGS)], [])
+  [AX_APPEND_FLAG(-Qunused-arguments, AM_CXXFLAGS)], [])
 
 # ... enable static linking if the user requests it ...
 AX_CONFIG_FEATURE_DEFAULT_DISABLED
@@ -104,10 +110,6 @@ AM_COND_IF([HAVE_OPENCL], [
     AX_BOOST_COMPUTE([], [
         AC_MSG_ERROR([Unable to find Boost.Compute library.])
     ])
-    # ... Boost.Compute uses deprecated features of OpenCL 1.1, so we
-    # have to disable warnings about them if we end up using both ...
-    AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
-       [AX_APPEND_FLAG(-Wno-deprecated-declarations, CXXFLAGS)], [])
     AM_COND_IF([STATIC_LINKING], [
       OPENCL_LIB="-Wl,--push-state,-Bdynamic,-lOpenCL,--pop-state"
       CLFFT_LIB="-Wl,--push-state,-Bdynamic,-lclFFT,--pop-state"
@@ -138,5 +140,88 @@ AX_CHECK_LIBRARY(LIBZ, [zlib.h], [z],
   [LIBZ_LIBS=-lz AC_SUBST(LIBZ_LIBS)],
   [AC_MSG_ERROR([Unable to find libz library])
 ])
+
+# ... turn all warnings into errors.  We want clean builds because
+# warnings are a good way to detect portability problems.  Set this at
+# the end, because some of the library detection builds fail otherwise
+# ...
+AX_CHECK_COMPILE_FLAG([-Werror], [AX_APPEND_FLAG(-Werror, AM_CXXFLAGS)] [])
+
+# ... monkey patch the -Wno-* flags depending on what warnings are
+# triggered by Boost.Compute ...
+AC_LANG_PUSH(C++)
+CPPFLAGS_SAVED="$CPPFLAGS"
+LDFLAGS_SAVE="$LDFLAGS"
+
+CPPFLAGS="$CPPFLAGS $OPENCL_CPPFLAGS $BOOST_COMPUTE_CPPFLAGS $AM_CXXFLAGS"
+export CPPFLAGS
+LDFLAGS="$LDFLAGS $OPENCL_LDFLAGS $OPENCL_LIB"
+export LDFLAGS
+
+AC_MSG_CHECKING([for deprecated-declarations warning in Boost.Compute])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+      @%:@include <boost/compute.hpp>
+      @%:@include <vector>
+    ]], [[
+      namespace bc = boost::compute;
+      std::vector<bc::platform> platforms = bc::system::platforms();
+    ]]
+  )], [
+    # ... success, nothing to do ...
+    AC_MSG_RESULT(none)
+  ], [
+    # ... failure, most likely the -Wno-deprecated-declarations flag.
+    # Boost.Compute triggers this flag because it uses OpenCL 1.1
+    # constructs that are deprecated ...
+    AC_MSG_RESULT(yes)
+    AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations],
+       [AX_APPEND_FLAG(-Wno-deprecated-declarations, AM_CXXFLAGS)], [])
+  ] )
+
+CPPFLAGS="$CPPFLAGS_SAVED $OPENCL_CPPFLAGS $BOOST_COMPUTE_CPPFLAGS $AM_CXXFLAGS"
+AC_MSG_CHECKING([for ignored-attributes warning in Boost.Compute])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+      @%:@include <boost/compute.hpp>
+      @%:@include <vector>
+    ]], [[
+      namespace bc = boost::compute;
+      std::vector<bc::ulong_> things(16);
+      (void)things.size();
+    ]]
+  )], [
+    # ... success, nothing to do ...
+    AC_MSG_RESULT(none)
+  ], [
+    # ... failure, most likely compiling with Mesa, which sets
+    # alignment attributes in the aliases for cl_ulong and similar
+    # types, but those aliases are ignored when used as template
+    # parameters ...
+    AC_MSG_RESULT(yes)
+    AX_CHECK_COMPILE_FLAG([-Wno-ignored-attributes],
+       [AX_APPEND_FLAG(-Wno-ignored-attributes, AM_CXXFLAGS)], [])
+  ] )
+
+# ... check the final result ...
+AC_MSG_CHECKING([for clean build with Boost.Compute])
+CPPFLAGS="$CPPFLAGS_SAVED $OPENCL_CPPFLAGS $BOOST_COMPUTE_CPPFLAGS $AM_CXXFLAGS"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+      @%:@include <boost/compute.hpp>
+      @%:@include <vector>
+    ]], [[
+      namespace bc = boost::compute;
+      std::vector<bc::platform> platforms = bc::system::platforms();
+      std::vector<boost::compute::ulong_> things(16);
+      (void)things.size();
+    ]]
+  )], [
+    # ... success, nothing to do ...
+    AC_MSG_RESULT(yes)
+  ], [
+    # ... we need to change the configuration ...
+    AC_MSG_ERROR([Cannot compile Boost.Compute with all warnings enabled])
+  ] )
+CPPFLAGS="$CPPFLAGS_SAVED"
+LDFLAGS="$LDFLAGS_SAVED"
+AC_LANG_POP([C++])
 
 AC_OUTPUT

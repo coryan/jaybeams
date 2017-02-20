@@ -63,10 +63,10 @@ template <typename value_t, typename std::enable_if<std::is_floating_point<
 bool check_close_enough(value_t num_a, value_t num_b, int tol) {
   using value_type = value_t;
   value_type const eps = tol * std::numeric_limits<value_type>::epsilon();
-  if (std::abs(num_a) < eps) {
-    return std::abs(num_b) < eps;
+  if (std::abs(num_a) <= eps) {
+    return std::abs(num_b) <= eps;
   }
-  return std::abs((num_a - num_b) / num_b) < eps;
+  return std::abs((num_a - num_b) / num_b) <= eps;
 }
 
 /**
@@ -247,7 +247,7 @@ bool check_collection_close_enough(
     }
     if (++count <= max_differences_printed) {
       auto error = relative_error(a[i], b[i]);
-      BOOST_TEST_MESSAGE(
+      BOOST_ERROR(
           "in item i=" << i << " difference higher than tolerance=" << tol
                        << ", actual[i]=" << format(a[i]) << ", expected[i]="
                        << format(b[i]) << ", error=" << error);
@@ -288,7 +288,7 @@ bool check_collection_close_enough(
     }
     if (++count <= max_differences_printed) {
       auto error = relative_error(a.data()[i], b.data()[i]);
-      BOOST_TEST_MESSAGE(
+      BOOST_ERROR(
           "in item i=" << i << " difference higher than tolerance=" << tol
                        << ", actual[i]=" << format(a.data()[i])
                        << ", expected[i]=" << format(b.data()[i])
@@ -325,7 +325,7 @@ bool check_collection_close_enough(
     }
     if (++count <= max_differences_printed) {
       auto error = relative_error(a[i], b[i]);
-      BOOST_TEST_MESSAGE(
+      BOOST_ERROR(
           "in item i=" << i << " difference higher than tolerance=" << tol
                        << ", a[i]=" << format(a[i]) << ", b[i]=" << format(b[i])
                        << ", error=" << error);

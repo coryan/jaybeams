@@ -1,12 +1,10 @@
 # JayBeams uses a non-recursive make, this is the only Makefile.
 
-instdir = $(prefix)/lib
+instdir = $(prefix)
 
-inst_LIBRARIES = \
+lib_LIBRARIES = \
   jb/libjb.a \
-  jb/libjb_itch5.a
-
-noinst_LIBRARIES = \
+  jb/libjb_itch5.a \
   jb/libjb_testing.a \
   jb/libjb_itch5_testing.a
 
@@ -94,8 +92,16 @@ benchmarks = \
   jb/bm_clocks \
   jb/itch5/bm_order_book
 
+bin_SCRIPTS = \
+  tools/benchmark_common.sh \
+  jb/itch5/bm_order_book_generate.sh \
+  jb/itch5/bm_order_book_analyze.R
+
 examples = \
-  examples/configuration \
+  examples/configuration
+
+bin_PROGRAMS = $(benchmarks) \
+  jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
   tools/itch5inside \
@@ -105,7 +111,10 @@ examples = \
   tools/mold2inside \
   tools/moldheartbeat
 
-noinst_PROGRAMS = $(examples) $(benchmarks)
+noinst_PROGRAMS = $(examples) \
+  jb/testing/check_mt19937_initializer \
+  jb/testing/check_random_device
+
 
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
@@ -196,7 +205,7 @@ endif !FOUND_CLANG_FORMAT
 ################################################################
 
 if USE_FFTW3
-inst_LIBRARIES += jb/libjb_fftw.a
+lib_LIBRARIES += jb/libjb_fftw.a
 unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_allocator \
   jb/fftw/ut_cast_multi_array \
@@ -294,15 +303,16 @@ jb_libjb_testing_a_SOURCES = \
   jb/testing/microbenchmark_base.cpp \
   jb/testing/microbenchmark_config.cpp
 
-jb_libjb_testing_a_HEADERS = \
+nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/check_close_enough.hpp \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
+  jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp \
-  jb/testing/tde_square_sum.hpp
+  jb/testing/sum_square.hpp
 
 jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
@@ -316,11 +326,15 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::compiler_flags[] = R"""(' >>$@; \
-	echo $(CXXFLAGS) >>$@; \
+	echo $(AM_CXXFLAGS) $(CXXFLAGS) >>$@; \
 	echo ')""";' >> $@; \
 	echo '' >>$@; \
 	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
 	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::gitrev[] = R"""(' >>$@; \
+	git rev-parse HEAD >>$@ 2>/dev/null; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
 
@@ -332,7 +346,7 @@ jb_libjb_itch5_testing_adir = $(includedir)
 jb_libjb_itch5_testing_a_SOURCES = \
   jb/itch5/testing/data.cpp \
   jb/itch5/testing/messages.cpp
-jb_libjb_itch5_testing_a_HEADERS = \
+nobase_jb_libjb_itch5_testing_a_HEADERS = \
   jb/itch5/testing/data.hpp \
   jb/itch5/testing/messages.hpp
 
@@ -341,8 +355,6 @@ jb_libjb_itch5_testing_a_HEADERS = \
 ################################################################
 
 jb_libjb_itch5_adir = $(includedir)
-nobase_jb_libjb_itch5_a_HEADERS =
-
 jb_libjb_itch5_a_SOURCES = \
   jb/itch5/add_order_message.cpp \
   jb/itch5/add_order_mpid_message.cpp \
@@ -373,7 +385,7 @@ jb_libjb_itch5_a_SOURCES = \
   jb/itch5/timestamp.cpp \
   jb/itch5/trade_message.cpp
 
-jb_libjb_itch5_a_HEADERS = \
+nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
   jb/itch5/add_order_mpid_message.hpp \
   jb/itch5/array_based_order_book.hpp \
@@ -433,7 +445,7 @@ jb_libjb_itch5_a_HEADERS = \
 jb_libjb_fftw_adir = $(includedir)
 jb_libjb_fftw_a_SOURCES = \
   jb/fftw/plan.cpp
-jb_libjb_fftw_a_HEADERS = \
+nobase_jb_libjb_fftw_a_HEADERS = \
   jb/fftw/aligned_multi_array.hpp \
   jb/fftw/aligned_vector.hpp \
   jb/fftw/allocator.hpp \
@@ -445,12 +457,12 @@ jb_libjb_fftw_a_HEADERS = \
   jb/fftw/traits.hpp
 
 ################################################################
-# jb/libjb_fftw.a
+# jb/libjb_tde.a
 ################################################################
 
 jb_libjb_tde_adir = $(includedir)
 jb_libjb_tde_a_SOURCES =
-jb_libjb_tde_a_HEADERS =
+nobase_jb_libjb_tde_a_HEADERS =
 
 ################################################################
 # examples
@@ -684,17 +696,19 @@ jb_fftw_bm_time_delay_estimator_LDFLAGS = \
 jb_fftw_bm_time_delay_estimator_many_SOURCES = jb/fftw/bm_time_delay_estimator_many.cpp
 jb_fftw_bm_time_delay_estimator_many_CPPFLAGS =
 jb_fftw_bm_time_delay_estimator_many_LDADD = \
-  $(FFTW3_LIBS) \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
-  jb/libjb.a
+  jb/libjb.a \
+  $(FFTW3_LIBS)
+jb_fftw_bm_time_delay_estimator_many_LDFLAGS = \
+  $(FFTW3_LDFLAGS)
 
 ################################################################
 # Conditionally enable the OpenCL components
 ################################################################
 if HAVE_OPENCL
 
-inst_LIBRARIES += jb/libjb_opencl.a
+lib_LIBRARIES += jb/libjb_opencl.a
 jb_opencl_unit_tests = \
   jb/opencl/ut_build_simple_kernel \
   jb/opencl/ut_copy_to_host_async \
@@ -713,7 +727,7 @@ jb_ut_opencl_ldadd = \
 jb_ut_opencl_ldflags = \
   $(OPENCL_LDFLAGS)
 
-inst_LIBRARIES += jb/libjb_clfft.a
+lib_LIBRARIES += jb/libjb_clfft.a
 jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
@@ -727,7 +741,7 @@ jb_ut_clfft_ldflags = \
   $(CLFFT_LDFLAGS) \
   $(jb_ut_opencl_ldflags)
 
-inst_LIBRARIES += jb/libjb_tde.a
+lib_LIBRARIES += jb/libjb_tde.a
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
   jb/tde/ut_generic_reduce \
@@ -750,7 +764,9 @@ check_PROGRAMS += \
   $(jb_tde_unit_tests)
 
 noinst_PROGRAMS += \
-  $(jb_opencl_examples) \
+  $(jb_opencl_examples)
+
+bin_PROGRAMS += \
   $(jb_opencl_benchmarks) \
   $(jb_clfft_benchmarks) \
   $(jb_tde_benchmarks)
@@ -764,7 +780,7 @@ jb_libjb_opencl_a_SOURCES = \
   jb/opencl/build_simple_kernel.cpp \
   jb/opencl/config.cpp \
   jb/opencl/device_selector.cpp
-jb_libjb_opencl_a_HEADERS = \
+nobase_jb_libjb_opencl_a_HEADERS = \
   jb/opencl/build_simple_kernel.hpp \
   jb/opencl/config.hpp \
   jb/opencl/device_selector.hpp
@@ -808,7 +824,7 @@ jb_libjb_clfft_adir = $(includedir)
 jb_libjb_clfft_a_SOURCES = \
   jb/clfft/error.cpp \
   jb/clfft/init.cpp
-jb_libjb_clfft_a_HEADERS = \
+nobase_jb_libjb_clfft_a_HEADERS = \
   jb/clfft/error.hpp \
   jb/clfft/init.hpp \
   jb/clfft/plan.hpp
@@ -843,7 +859,7 @@ jb_clfft_bm_single_fft_LDADD = \
 jb_libjb_tde_a_SOURCES += \
   jb/tde/conjugate_and_multiply_kernel.cpp \
   jb/tde/generic_reduce_program.cpp
-jb_libjb_tde_a_HEADERS += \
+nobase_jb_libjb_tde_a_HEADERS += \
   jb/tde/conjugate_and_multiply_kernel.hpp \
   jb/tde/generic_reduce_program.hpp
 
@@ -1127,8 +1143,17 @@ jb_itch5_bm_order_book_CPPFLAGS =
 jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 ################################################################
-# testing unit tests
+# testing program and unit tests
 ################################################################
+
+jb_testing_check_mt19937_initializer_SOURCES = jb/testing/check_mt19937_initializer.cpp
+jb_testing_check_mt19937_initializer_LDADD = jb/libjb.a
+
+jb_testing_check_random_device_SOURCES = jb/testing/check_random_device.cpp
+jb_testing_check_random_device_LDADD = jb/libjb.a
+
+jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
+jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough

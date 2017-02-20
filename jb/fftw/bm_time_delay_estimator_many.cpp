@@ -3,7 +3,7 @@
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
 #include <jb/testing/microbenchmark.hpp>
-#include <jb/testing/tde_square_sum.hpp>
+#include <jb/testing/sum_square.hpp>
 
 #include <chrono>
 #include <iostream>

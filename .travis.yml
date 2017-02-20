@@ -7,59 +7,63 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora23 COMPILER=clang++ CXXFLAGS=-g GENDOCS=yes CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O0 -g" CONFIGUREFLAGS="" 
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.10 COMPILER=g++ CXXFLAGS=-g CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-ubuntu14.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
 
 services:
   - docker
 
+# This is the main section of the automated build ...
 script:
-  - uname -a
-  - REPO=`git config remote.origin.url`
-  - REPO_REF=${REPO/https:\/\/}
-  - docker build --help
+  # ... first download the docker image with the development environment ...
   - docker pull ${IMAGE?}
-  - /usr/bin/env ${COMPILER?} --version
-  - docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ./bootstrap && ./configure ${CONFIGUREFLAGS} && make -j 2 check"
-  - cat test-suite.log || echo "Could not print test logs"
-  - if [ "x${CHECK_STYLE}" = "xyes" ]; then
-    docker run --rm -it --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && make check-style" ;
-    fi
+  # ... print out its Id for historic purposes ...
+  - docker image inspect -f '{{ .Id }}' ${IMAGE?}
+  # ... run the build inside the docker image, use the current user id ...
+  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
+  # ... print out the test results, that way any errors can be
+  # debugged, this is *not* part of the build script because we want
+  # this output regardless of the sucess or failure of the script ...
+  - cat build/test-suite.log || echo "Could not print test logs"
+  # ... if configured, run the style checker phase ...
+  - ci/check-style.sh
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install docker-engine
 
 install:
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
 
 after_success:
-  # We take some additional action on successful builds ...
   - cd ${TRAVIS_BUILD_DIR?}
-  # ... if this is a code coverage build we upload the coverage results ...
-  - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${COVERAGE}" = "xyes" ]; then
-    docker run --rm -it -v $PWD:$PWD ${IMAGE?} /bin/sh -c "cd $PWD && ci/coverage.sh" ;
-    coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info ;
-    fi
-  # ... if this is a documentation build we generate the docs ...
-  - if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then GENDOCS=no ; fi
+  # ... on the right builds, collect coverage data, and push it to
+  # coveralls.io ...
+  - ci/coverage.sh
   # ... create the Doxygen documentation inside the docker container,
-  # and then push it using the host ...
-  - if [ "x$TRAVIS_PULL_REQUEST" = "xfalse" -a "x${GENDOCS}" = "xyes" ]; then
-    docker run --rm -it --env GIT_NAME="${GIT_NAME?}" --env GIT_EMAIL=${GIT_EMAIL?} -v $PWD:/home/${USER?}/jaybeams ${IMAGE?} /bin/sh -c "cd /home/${USER?}/jaybeams && ci/gendocs.sh" ;
-    (cd doc/html ; git push https://${GH_TOKEN?}@${REPO_REF?} gh-pages) ;
-    fi
+  # and push it to github ...
+  - ci/gendocs.sh
+  # ... on the right builds, create the build image and push to docker ...
+  - ci/create-build-image.sh
+  # ... on the right builds, create the runtime image and push to docker ...
+  - ci/create-runtime-image.sh
+  # ... on the right builds, create the analysis image and push to docker ...
+  - ci/create-analysis-image.sh
 
 notifications:
   email: false

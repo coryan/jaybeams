@@ -1,3 +1,5 @@
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+
 /// Compile with -DTYPENAME_MACRO=float2 or -DTYPENAME_MACRO=double2
 typedef TYPENAME_MACRO T;
 
