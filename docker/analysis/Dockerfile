@@ -42,3 +42,4 @@ q('no', 0)\n\
 " >/tmp/test-packages.R && Rscript /tmp/test-packages.R
 
 COPY bin/*.R /opt/jaybeams/bin/
+COPY bin/*.Rmd /opt/jaybeams/bin/
