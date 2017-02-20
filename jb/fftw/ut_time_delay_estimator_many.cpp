@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
       }
       sum2[count] = float(0);
       expected_argmax[count] = static_cast<std::size_t>(0);
-      expected_confidence[count] = std::numeric_limits<float>::max();
+      expected_confidence[count] = float(0);
     }
   }
 

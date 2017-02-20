@@ -144,7 +144,7 @@ public:
         }
       }
       if (sum2[i] < std::numeric_limits<precision_type>::epsilon()) {
-        confidence[i] = std::numeric_limits<precision_type>::max();
+        confidence[i] = precision_type(0);
       } else {
         confidence[i] = max_val / sum2[i];
       }
