@@ -39,11 +39,6 @@ local({
     if (!dir.exists(dirname(report.name))) {
         dir.create(dirname(report.name), recursive=TRUE)
     }
-    report.md <- paste0(report.name, '.md')
-    knitr::knit(report.input, report.md, quiet = TRUE, encoding = 'UTF-8',
+    knitr::knit(report.input, report.name, quiet = TRUE, encoding = 'UTF-8',
                 envir = .GlobalEnv)
-#    name.html <- paste0(report.name, '.html')
-#    knitr::render_html()
-#    knitr::knit(report.input, report.html, quiet = TRUE, encoding = 'UTF-8',
-#                envir = .GlobalEnv)
 })
