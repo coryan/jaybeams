@@ -1,0 +1,387 @@
+## Results for `r basename(data.filename)`
+
+
+```{r include=FALSE}
+# First we need to load the libraries that we need for this analysis:
+library(boot)
+library(ggplot2)
+library(parallel)
+library(pwr)
+# We also create some constants that make the graphs look pretty:
+golden.ratio <- (1+sqrt(5))/2
+svg.w <- 8.0
+svg.h <- svg.w / golden.ratio
+png.w <- 960
+png.h <- round(png.w / golden.ratio)
+# We do not want the output to be too wide, because it looks wrong in
+# the rendered web pages:
+options(width=60, digits=4)
+```
+
+We load the file, which has a well-known name, into a `data.frame`
+structure:
+
+```{r}
+data <- read.csv(
+    file=data.filename, header=FALSE, comment.char='#',
+    col.names=c('book_type', 'nanoseconds'))
+```
+
+The raw data is in nanoseconds, I prefer microseconds because they are
+easier to think about:
+
+```{r}
+data$microseconds <- data$nanoseconds / 1000.0
+```
+
+We also annotate the data with a sequence number, so we can plot the
+sequence of values:
+
+```{r}
+data$idx <- ave(data$microseconds, data$book_type, FUN=seq_along)
+```
+
+At this point I am curious as to how the data looks like, and probably
+you too, first just the usual summary:
+
+```{r summary.table}
+data.summary <- aggregate(
+    microseconds ~ book_type, data=data, FUN=summary)
+kable(cbind(
+    as.character(data.summary$book_type),
+    data.summary$microseconds))
+```
+
+Then we visualize the density functions, if the data had extreme tails
+or other artifacts we would rejects it:
+
+```{r fig.height=svg.h, fig.width=svg.w, dev='svg'}
+ggplot(data=data, aes(x=microseconds, color=book_type)) +
+    theme(legend.position="bottom") +
+    facet_grid(book_type ~ .) + stat_density()
+```
+
+We also examine the boxplots of the data:
+
+```{r fig.height=svg.h, fig.width=svg.w, dev='svg'}
+ggplot(data=data,
+       aes(y=microseconds, x=book_type, color=book_type)) +
+    theme(legend.position="bottom") + geom_boxplot()
+```
+
+### Check Assumptions: Validate the Data is Independent
+
+I inspect the data in case there are obvious problems with
+independence of the samples:
+
+```{r fig.height=svg.h, fig.width=svg.w, dev='png'}
+ggplot(data=data,
+       aes(x=idx, y=microseconds, color=book_type)) +
+    theme(legend.position="bottom") +
+    facet_grid(book_type ~ .) + geom_point()
+```
+
+I would like an analytical test to validate the samples are
+indepedent,
+a visual inspection of the data may help me detect obvious problems,
+but I may miss more subtle issues.
+For this part of the analysis it is easier to separate the data by
+book type, so we create two timeseries for them:
+
+```{r}
+data.array.ts <- ts(
+    subset(data, book_type == 'array')$microseconds)
+data.map.ts <- ts(
+    subset(data, book_type == 'map')$microseconds)
+```
+
+Plot the correlograms:
+
+```{r fig.height=svg.h, fig.width=svg.w, dev='svg'}
+par(mfrow=c(2,1))
+acf(data.array.ts)
+acf(data.map.ts)
+```
+
+Compute the auto-correlation factors, ignore the first value, because
+it is the auto-correlation at lag 0, which is always 1.0:
+
+```{r}
+max.acf.array <- max(abs(
+    tail(acf(data.array.ts, plot=FALSE)$acf, -1)))
+max.acf.map <- max(abs(
+    tail(acf(data.map.ts, plot=FALSE)$acf, -1)))
+```
+
+I think any value higher than $$0.05$$ indicates that the samples are
+not truly independent:
+
+```{r}
+max.autocorrelation <- 0.05
+if (max.acf.array >= max.autocorrelation) {
+    stop("Some evidence of auto-correlation in ",
+         "array samples max-acf=",
+         round(max.acf.array, 4))
+}
+if (max.acf.map >= max.autocorrelation) {
+    stop("Some evidence of auto-correlation in ",
+         "map samples max-acf=",
+         round(max.acf.map, 4))
+}
+cat("PASSED: the samples do not exhibit high auto-correlation")
+```
+
+### Power Analysis: validate the data had enough samples
+
+Use bootstraping to estimate the standard deviation, we are going to
+need a function to execute in the bootstrapping procedure:
+
+```{r}
+sd.estimator <- function(D,i) {
+    return(sd(D[i,'microseconds']));
+}
+```
+
+Because this can be slow, we use all available cores:
+
+```{r fig.height=svg.h, fig.width=svg.w, dev='png'}
+core.count <- detectCores()
+b.array <- boot(
+    data=subset(data, book_type == 'array'), R=10000,
+    statistic=sd.estimator,
+    parallel="multicore", ncpus=core.count)
+plot(b.array)
+ci.array <- boot.ci(
+    b.array, type=c('perc', 'norm', 'basic'))
+
+b.map <- boot(
+    data=subset(data, book_type == 'map'), R=10000,
+    statistic=sd.estimator,
+    parallel="multicore", ncpus=core.count)
+plot(b.map)
+ci.map <- boot.ci(
+    b.map, type=c('perc', 'norm', 'basic'))
+```
+
+We need to verify that the estimated statistic roughly follows a
+normal distribution, otherwise the bootstrapping procedure would
+require a lot more memory than we have available:
+The Q-Q plots look reasonable, so we can estimate the standard
+deviation using a simple procedure:
+
+```{r}
+estimated.sd <- ceiling(max(
+    ci.map$percent[[4]], ci.array$percent[[4]],
+    ci.map$basic[[4]], ci.array$basic[[4]],
+    ci.map$normal[[3]], ci.array$normal[[3]]))
+cat(estimated.sd)
+```
+
+We need to determine if the sample size was large enough given the
+estimated standard deviation, the expected effect size, and the
+statistical test we are planning to use.
+
+The is the minimum effect size that we could be interested in is based
+on saving at least one cycle per operation in the classes we are
+measuring.
+
+The test executes 20,000 iterations:
+
+```{r}
+test.iterations <- 20000
+```
+
+and we assume that the clock cycle is approximately 3Ghz:
+
+```{r}
+clock.ghz <- 3
+```
+
+We can use this to compute the minimum interesting effect:
+
+```{r}
+min.delta <- 1.0 / (clock.ghz * 1000.0) * test.iterations
+cat(min.delta)
+```
+
+That is, any result smaller than `r min.delta` microseconds would not
+be interesting and should be rejected.
+We need a few more details to compute the minimum number of samples,
+first, the desired significance of any results, which we set to:
+
+```{r}
+desired.significance <- 0.01
+```
+
+Then, the desired statistical power of the test, which we set to:
+
+```{r}
+desired.power <- 0.95
+```
+
+We are going to use a non-parametric test, which has a 15% overhead
+above the t-test:
+
+```{r}
+nonparametric.extra.cost <- 1.15
+```
+
+In any case, we will require at least 5000 iterations, because it is
+relatively fast to run that many:
+
+```{r}
+min.samples <- 5000
+```
+
+If we do not have enough power to detect 10 times the minimum effect
+we abort the analysis, while if we do not have enough samples to
+detect the minimum effect we simply generate warnings:
+
+```{r}
+required.pwr.object <- power.t.test(
+    delta=10 * min.delta, sd=estimated.sd,
+    sig.level=desired.significance, power=desired.power)
+cat(required.pwr.object)
+```
+
+We are going to round the number of iterations to the next higher
+multiple of 1000, because it is easier to type, say, and reason about
+nice round numbers:
+
+
+```{r}
+required.nsamples <- max(
+    min.samples, 1000 * ceiling(nonparametric.extra.cost *
+                                required.pwr.object$n / 1000))
+cat(required.nsamples)
+```
+
+That is, we need `r required.nsamples` samples to detect an effect of 
+`r round(10 * min.delta, 2)` microseconds at the desired significance
+and power levels.
+
+```{r}
+if (required.nsamples > length(data.array.ts)) {
+    stop("Not enough samples in 'array' data to",
+         " detect expected effect (",
+         10 * min.delta,
+         ") should be >=", required.nsamples,
+         " actual=", length(array.map.ts))
+}
+if (required.nsamples > length(data.map.ts)) {
+    stop("Not enough samples in 'map' data to",
+         " detect expected effect (",
+         10 * min.delta,
+         ") should be >=", required.nsamples,
+         " actual=", length(map.map.ts))
+}
+```
+
+
+```{r}
+desired.pwr.object <- power.t.test(
+    delta=min.delta, sd=estimated.sd,
+    sig.level=desired.significance, power=desired.power)
+desired.nsamples <- max(
+    min.samples, 1000 * ceiling(nonparametric.extra.cost *
+                                desired.pwr.object$n / 1000))
+```
+
+That is, we need at least `r round(desired.nsamples, 2)`
+samples to detect the minimum interesting effect of `r min.delta`
+microseconds.
+Notice that our tests have `r length(data.array.ts)` samples.
+
+```{r}
+if (desired.nsamples > length(data.array.ts)) {
+    warning("Not enough samples in 'array' data to",
+            " detect the minimum interesting effect (",
+            min.delta, ") should be >=", desired.nsamples,
+            " actual=", length(data.array.ts))
+}
+if (required.nsamples > length(data.map.ts)) {
+    warning("Not enough samples in 'map' data to",
+            " detect the minimum interating effect (",
+            min.delta, ") should be >=", desired.nsamples,
+            " actual=", length(data.map.ts))
+}
+cat("PASSED: The samples have the minimum required power")
+```
+
+### Run the Statistical Test
+
+We are going to use the
+[Mann-Whitney U test](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test)
+to analyze the results:
+
+```{r}
+data.mw <- wilcox.test(
+    microseconds ~ book_type, data=data, conf.int=TRUE)
+estimated.delta <- data.mw$estimate
+```
+
+The estimated effect is `r estimated.delta` microseconds, if this
+number is too small we need to stop the analysis:
+
+```{r}
+if (abs(estimated.delta) < min.delta) {
+    stop("The estimated effect is too small to",
+         " draw any conclusions.",
+         " Estimated effect=", estimated.delta,
+         " minimum effect=", min.delta)
+}
+cat("PASSED: the estimated effect (",
+    round(estimated.delta, 2),
+    ") is large enough.")
+```
+
+Finally, the p-value determines if we can reject the null hypothesis
+at the desired significance.
+In our case, failure to reject means that we do not have enough
+evidence to assert that the `array_based_order_book` is faster or
+slower than `map_based_order_book`.
+If we do reject the null hypothesis then we can use the
+[Hodges-Lehmann estimator](
+https://en.wikipedia.org/wiki/Hodges%E2%80%93Lehmann_estimator)
+to size the difference in performance,
+aka the *effect* of our code changes.
+
+```{r}
+if (data.mw$p.value >= desired.significance) {
+    cat("The test p-value (", round(data.mw$p.value, 4),
+        ") is larger than the desired\n",
+        "significance level of alpha=",
+        round(desired.significance, 4), "\n", sep="")
+    cat("Therefore we CANNOT REJECT the null hypothesis",
+        " that both the 'array'\n",
+        "and 'map' based order books have the same",
+        " performance.\n", sep="")
+} else {
+    interval <- paste0(
+        round(data.mw$conf.int, 2), collapse=',')
+    cat("The test p-value (", round(data.mw$p.value, 4),
+        ") is smaller than the desired\n",
+        "significance level of alpha=",
+        round(desired.significance, 4), "\n", sep="")
+    cat("Therefore we REJECT the null hypothesis that",
+        " both the\n",
+        " 'array' and 'map' based order books have\n",
+        "the same performance.\n", sep="")
+    cat("The effect is quantified using the Hodges-Lehmann\n",
+        "estimator, which is compatible with the\n",
+        "Mann-Whitney U test, the estimator value\n",
+        "is ", round(data.mw$estimate, 2),
+        " microseconds with a 95% confidence\n",
+        "interval of [", interval, "]\n", sep="")
+}
+```
+
+### Mini-Colophon
+
+This report was generated using [`knitr`](https://yihui.name/knitr/)
+the details of the R environment are:
+
+```{r}
+library(devtools)
+devtools::session_info()
+```
