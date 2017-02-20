@@ -117,16 +117,17 @@ private:
 template <typename T, typename A>
 class fixture<boost::multi_array<T, 2, A>> {
 public:
-  fixture(int timeseries)
-      : fixture(nsamples, timeseries) {
+  fixture(int n_timeseries)
+      : fixture(nsamples, n_timeseries) {
   }
-  fixture(int size, int timeseries)
-      : a_(boost::extents[timeseries][size])
-      , b_(boost::extents[timeseries][size])
+  fixture(int size, int n_timeseries)
+      : a_(boost::extents[n_timeseries][size])
+      , b_(boost::extents[n_timeseries][size])
       , estimator_(a_, b_)
       , confidence_(a_)
       , tde_(a_)
       , sum2_(a_) {
+    // creates a family of n_timeseries time series of size samples each
     jb::testing::create_triangle_timeseries(size, a_);
     b_ = jb::testing::delay_timeseries_periodic(
         a_, expected_delay, sampling_period);
