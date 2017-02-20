@@ -25,7 +25,7 @@ variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 # ... determine now old is the image, if it is old enough, we
 # re-create from scratch every time ...
 now=$(date +%s)
-image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
+image_creation=$(date --date=$(sudo docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
 # ... by default we reuse the source image as a cache.  This is why we do
@@ -36,7 +36,7 @@ if [ ${age_days?} -ge 30 ]; then
 fi
 
 # Build a new docker image
-docker image build ${caching?} -t ${IMAGE?}:tip \
+sudo docker image build ${caching?} -t ${IMAGE?}:tip \
        -f docker/dev/${variant?}/Dockerfile docker/dev
 
 if [ -z "${DOCKER_USER?}" ]; then
@@ -44,7 +44,7 @@ if [ -z "${DOCKER_USER?}" ]; then
     exit 0
 fi
 
-docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
+sudo docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
 # Compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
@@ -57,14 +57,14 @@ if [ ${id_tip?} != ${id_latest?} ]; then
     echo "tip    = ${id_tip?}"
     echo "latest = ${id_latest?}"
     # ... label the image with the new tag ...
-    docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
+    sudo docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
     # ... upload the image with that tag ...
-    docker image push ${IMAGE?}:${tag?}
+    sudo docker image push ${IMAGE?}:${tag?}
     # ... if that succeeds then rename :latest and push it.  The
     # second push should take almost no time, as the layers should all
     # be uploaded already ...
-    docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
-    docker image push ${IMAGE?}:latest
+    sudo docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
+    sudo docker image push ${IMAGE?}:latest
 else
     echo "No changes in ${IMAGE?}, not pushing to registry."
 fi

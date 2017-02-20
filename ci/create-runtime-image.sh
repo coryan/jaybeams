@@ -26,12 +26,12 @@ variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
 IMAGE=coryan/jaybeams-runtime-${variant?}
 
 # ... make sure the image is available ...
-docker pull ${IMAGE?}:latest
+sudo docker pull ${IMAGE?}:latest
 
 # Determine now old is the image, if it is old enough, we re-create
 # from scratch every time ...
 now=$(date +%s)
-image_creation=$(date --date=$(docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
+image_creation=$(date --date=$(sudo docker inspect -f '{{ .Created }}' ${IMAGE?}:latest) +%s)
 age_days=$(( (now - image_creation) / 86400 ))
 
 # By default we reuse the source image as a cache.  This is why we do
@@ -43,14 +43,14 @@ fi
 
 # Build a new docker image
 cp docker/runtime/${variant?}/Dockerfile build/staging
-docker image build ${caching?} -t ${IMAGE?}:tip build/staging
+sudo docker image build ${caching?} -t ${IMAGE?}:tip build/staging
 
 if [ -z "${DOCKER_USER?}" ]; then
     echo "DOCKER_USER not set, docker autobuilds disabled."
     exit 0
 fi
 
-docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
+sudo docker login -u "${DOCKER_USER?}" -p "${DOCKER_PASSWORD?}"
 
 # Compare the ids of the :tip and :latest ...
 id_tip=$(sudo docker inspect -f '{{ .Id }}' ${IMAGE?}:tip)
@@ -63,14 +63,14 @@ if [ ${id_tip?} != ${id_latest?} ]; then
     echo "tip    = ${id_tip?}"
     echo "latest = ${id_latest?}"
     # ... label the image with the new tag ...
-    docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
+    sudo docker image tag ${IMAGE?}:tip ${IMAGE?}:${tag?}
     # ... upload the image with that tag ...
-    docker image push ${IMAGE?}:${tag?}
+    sudo docker image push ${IMAGE?}:${tag?}
     # ... if that succeeds then rename :latest and push it.  The
     # second push should take almost no time, as the layers should all
     # be uploaded already ...
-    docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
-    docker image push ${IMAGE?}:latest
+    sudo docker image tag ${IMAGE?}:${tag?} ${IMAGE?}:latest
+    sudo docker image push ${IMAGE?}:latest
 else
     echo "No changes in ${IMAGE?}, not pushing to registry."
 fi
