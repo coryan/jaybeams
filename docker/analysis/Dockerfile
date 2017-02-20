@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
       curl \
       libcairo-dev \
       libcurl4-openssl-dev \
+      libssl-dev \
       r-base \
       r-base-dev \
       r-cran-boot \
@@ -14,7 +15,8 @@ RUN apt-get update && apt-get install -y \
       r-recommended && \
     apt-get clean
 
-RUN echo 'install.packages(c("DescTools", "pwr", "svglite"), \
+RUN echo 'install.packages(c("DescTools", "devtools", "knitr", \
+    "pwr", "svglite"), \
     repos="http://cran.us.r-project.org", clean=TRUE)' > /tmp/packages.R && \
   Rscript /tmp/packages.R && rm /tmp/packages.R
 
@@ -27,6 +29,9 @@ RUN echo "tryCatch({\n\
   require(parallel)\n\
   require(methods)\n\
   require(svglite)\n\
+  require(devtools)\n\
+  require(knitr)\n\
+  require(servr)\n\
 }, error = function(e) { print('ERROR'); print(e); q('no', 1) },\n\
    warning = function(w) { print('WARNING'); print(w); q('no', 1) }\n\
 )\n\
