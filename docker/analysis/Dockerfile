@@ -15,8 +15,11 @@ RUN apt-get update && apt-get install -y \
       r-recommended && \
     apt-get clean
 
-RUN echo 'install.packages(c("DescTools", "devtools", "knitr", \
-    "pwr", "svglite"), \
+RUN echo 'install.packages(c("devtools"), \
+    repos="http://cran.us.r-project.org", clean=TRUE)' > /tmp/packages.R && \
+  Rscript /tmp/packages.R && rm /tmp/packages.R
+
+RUN echo 'install.packages(c("DescTools", "knitr", "pwr", "svglite", "servr"), \
     repos="http://cran.us.r-project.org", clean=TRUE)' > /tmp/packages.R && \
   Rscript /tmp/packages.R && rm /tmp/packages.R
 
