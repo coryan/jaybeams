@@ -315,7 +315,8 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
-  jb/testing/microbenchmark_config.hpp
+  jb/testing/microbenchmark_config.hpp \
+  jb/testing/microbenchmark_group_main.hpp
 
 jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
