@@ -221,18 +221,27 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
+
 benchmarks += jb/fftw/bm_time_delay_estimator
+
 examples += examples/fftw_correlation_no_wrappers
+
+bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
+
 AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
+
 LDFLAGS += $(FFTW3_LDFLAGS)
+
 jb_ut_fftw_ldadd = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   $(FFTW3_LIBS) \
   $(jb_ut_ldadd)
+
 jb_ut_fftw_ldflags = \
   $(FFTW3_LDFLAGS) \
   $(jb_ut_ldflags)
+
 else
 jb_ut_fftw_ldadd =
 jb_ut_fftw_ldflags =
