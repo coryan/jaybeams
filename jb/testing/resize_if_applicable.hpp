@@ -40,7 +40,6 @@ public:
  * @param ts timeseries are any container representation (e.g. vector, deque),
  *   boost::multi_array, c-like array, etc
  * @param newsize size to resize the timeseries if possible
- * @param std::true_type type to represent the bool value true
  * @tparam timeseries type of the timeseries collection representation
  */
 template <typename timeseries>
@@ -54,7 +53,6 @@ void resize_if_applicable(timeseries& ts, std::size_t newsize, std::true_type) {
  * @param ts timeseries are any container representation (e.g. vector, deque),
  *   boost::multi_array, c-like array, etc
  * @param newsize size to resize the timeseries if possible
- * @param std::true_type type to represent the bool value false
  * @tparam timeseries type of the timeseries collection representation
  */
 template <typename timeseries>

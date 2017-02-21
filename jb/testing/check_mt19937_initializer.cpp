@@ -1,5 +1,7 @@
 /**
- * @file Generate some output from std::random_device.
+ * @file
+ *
+ * Generate some output from std::random_device.
  *
  * I am interested in examining the output from std::random_device to
  * evaluate its statistical strength.

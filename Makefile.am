@@ -222,7 +222,8 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
 
-benchmarks += jb/fftw/bm_time_delay_estimator
+benchmarks += jb/fftw/bm_time_delay_estimator \
+  jb/fftw/bm_time_delay_estimator_many
 
 examples += examples/fftw_correlation_no_wrappers
 
@@ -325,7 +326,8 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp \
-  jb/testing/microbenchmark_group_main.hpp
+  jb/testing/microbenchmark_group_main.hpp \
+  jb/testing/sum_square.hpp
 
 jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
@@ -704,6 +706,16 @@ jb_fftw_bm_time_delay_estimator_LDADD = \
   jb/libjb.a \
   $(FFTW3_LIBS)
 jb_fftw_bm_time_delay_estimator_LDFLAGS = \
+  $(FFTW3_LDFLAGS)
+
+jb_fftw_bm_time_delay_estimator_many_SOURCES = jb/fftw/bm_time_delay_estimator_many.cpp
+jb_fftw_bm_time_delay_estimator_many_CPPFLAGS =
+jb_fftw_bm_time_delay_estimator_many_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_fftw.a \
+  jb/libjb.a \
+  $(FFTW3_LIBS)
+jb_fftw_bm_time_delay_estimator_many_LDFLAGS = \
   $(FFTW3_LDFLAGS)
 
 ################################################################

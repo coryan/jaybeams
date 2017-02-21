@@ -1,13 +1,14 @@
-#include <jb/fftw/tde_result.hpp>
+#include <jb/fftw/aligned_vector.hpp>
 #include <jb/fftw/time_delay_estimator_many.hpp>
+#include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
+#include <jb/testing/sum_square.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <chrono>
 #include <complex>
-#include <vector>
 
 /**
  * @test Verify that FTE handles a timeseries filled with 0
@@ -17,7 +18,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -25,6 +26,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -36,9 +38,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
-  sum2_type sum2(b);
+  sum2_type sum2(a);
 
   // construct the tested FTE
   tested_type tested(a, b);
@@ -53,7 +54,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
       }
       sum2[count] = float(0);
       expected_argmax[count] = static_cast<std::size_t>(0);
-      expected_confidence[count] = std::numeric_limits<float>::max();
+      expected_confidence[count] = float(0);
     }
   }
 
@@ -81,7 +82,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -89,6 +90,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -100,9 +102,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
-  sum2_type sum2(b);
+  sum2_type sum2(a);
 
   // construct the tested FTE
   tested_type tested(a, b);
@@ -114,14 +115,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   int count = 0;
   for (int i = 0; i != S; ++i) {
     for (int j = 0; j != V; ++j, ++count) {
-      float acc_sum2 = 0;
       for (int k = 0; k != nsamples; ++k) {
         a[i][j][k] = b[i][j][k];
-        acc_sum2 += a[i][j][k] * a[i][j][k];
       }
-      sum2[count] = acc_sum2;
     }
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -161,6 +162,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -169,6 +171,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -180,9 +183,8 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
   // sum of square value of timeseries
-  sum2_type sum2(b);
+  sum2_type sum2(a);
 
   // construct the tested FTE
   tested_type tested(a, b);
@@ -194,16 +196,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   int count = 0;
   for (int i = 0; i != S; ++i) {
     for (int j = 0; j != V; ++j, ++count) {
-      float acc_sum2 = 0;
       for (int k = 0; k != nsamples; ++k) {
         a[i][j][k] = b[i][j][(k + delay) % nsamples];
-        acc_sum2 += a[i][j][k] * a[i][j][k];
       }
-      sum2[count] = acc_sum2;
       expected_argmax[count] = static_cast<std::size_t>(delay);
       expected_confidence[count] = static_cast<float>(nsamples);
     }
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -229,6 +231,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -237,6 +240,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][nsamples]);
   array_type b(boost::extents[S][nsamples]);
@@ -248,8 +252,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
-  sum2_type sum2(b);
+  sum2_type sum2(a);
 
   // construct the tested FTE
   tested_type tested(a, b);
@@ -260,16 +263,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   // a = delay shift timeseries b
   int count = 0;
   for (int i = 0; i != S; ++i) {
-    float acc_sum2 = 0;
     for (int k = 0; k != nsamples; ++k) {
       a[i][k] = b[i][(k + delay) % nsamples];
-      acc_sum2 += a[i][k] * a[i][k];
     }
-    sum2[count] = acc_sum2;
     expected_argmax[count] = static_cast<std::size_t>(delay);
     expected_confidence[count] = static_cast<float>(nsamples);
     count++;
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -294,6 +297,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -302,6 +306,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[nsamples]);
   array_type b(boost::extents[nsamples]);
@@ -313,7 +318,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -323,14 +327,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  float acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = acc_sum2;
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<float>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -350,19 +354,21 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_float) {
 
 /**
  * @test Verify that we can create and use a simple time delay estimator based
- * on std::vector timeseries with float values.
+ * on jb::fftw::aligned_vector timeseries with float values.
  */
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<float>;
+  using array_type = jb::fftw::aligned_vector<float>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(nsamples);
   array_type b(nsamples);
@@ -374,7 +380,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, float>;
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -384,14 +389,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_float) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  float acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = acc_sum2;
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<float>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -418,7 +423,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -426,6 +431,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][V][nsamples]);
   array_type b(boost::extents[S][V][nsamples]);
@@ -437,7 +443,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, double>;
   // sum of square value of timeseries
   sum2_type sum2(b);
 
@@ -451,16 +456,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_double) {
   int count = 0;
   for (int i = 0; i != S; ++i) {
     for (int j = 0; j != V; ++j, ++count) {
-      double acc_sum2 = 0;
       for (int k = 0; k != nsamples; ++k) {
         a[i][j][k] = b[i][j][(k + delay) % nsamples];
-        acc_sum2 += a[i][j][k] * a[i][j][k];
       }
-      sum2[count] = acc_sum2;
       expected_argmax[count] = static_cast<std::size_t>(delay);
       expected_confidence[count] = static_cast<double>(nsamples);
     }
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -486,7 +491,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -494,6 +499,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[S][nsamples]);
   array_type b(boost::extents[S][nsamples]);
@@ -505,7 +511,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -517,16 +522,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
   // a = delay shift timeseries b
   int count = 0;
   for (int i = 0; i != S; ++i) {
-    double acc_sum2 = 0;
     for (int k = 0; k != nsamples; ++k) {
       a[i][k] = b[i][(k + delay) % nsamples];
-      acc_sum2 += a[i][k] * a[i][k];
     }
-    sum2[count] = acc_sum2;
     expected_argmax[count] = static_cast<std::size_t>(delay);
     expected_confidence[count] = static_cast<double>(nsamples);
     count++;
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -551,7 +556,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -559,6 +564,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(boost::extents[nsamples]);
   array_type b(boost::extents[nsamples]);
@@ -570,7 +576,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -580,14 +585,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  double acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = acc_sum2;
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<double>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -612,14 +617,15 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<double>;
+  using array_type = jb::fftw::aligned_vector<double>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
+  using sum2_type = typename tested_type::sum2_type;
 
   array_type a(nsamples);
   array_type b(nsamples);
@@ -631,7 +637,6 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   // expected argmax result to compare within tolerance tol
   estimated_delay_type expected_argmax(a);
 
-  using sum2_type = jb::fftw::tde_result<array_type, double>;
   sum2_type sum2(b);
 
   // construct the tested FTE
@@ -641,14 +646,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_double) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  double acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = acc_sum2;
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<double>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -675,6 +680,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -708,16 +714,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   int count = 0;
   for (int i = 0; i != S; ++i) {
     for (int j = 0; j != V; ++j, ++count) {
-      std::complex<float> acc_sum2 = 0;
       for (int k = 0; k != nsamples; ++k) {
         a[i][j][k] = b[i][j][(k + delay) % nsamples];
-        acc_sum2 += a[i][j][k] * a[i][j][k];
       }
-      sum2[count] = std::abs(acc_sum2);
       expected_argmax[count] = static_cast<std::size_t>(delay);
       expected_confidence[count] = static_cast<float>(nsamples);
     }
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -743,6 +749,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -774,16 +781,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   // a = delay shift timeseries b
   int count = 0;
   for (int i = 0; i != S; ++i) {
-    std::complex<float> acc_sum2 = 0;
     for (int k = 0; k != nsamples; ++k) {
       a[i][k] = b[i][(k + delay) % nsamples];
-      acc_sum2 += a[i][k] * a[i][k];
     }
-    sum2[count] = std::abs(acc_sum2);
     expected_argmax[count] = static_cast<std::size_t>(delay);
     expected_confidence[count] = static_cast<float>(nsamples);
     count++;
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -808,6 +815,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
@@ -837,14 +845,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  std::complex<float> acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = std::abs(acc_sum2);
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<float>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -869,11 +877,12 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
+  // using float, requires higher tolerance
   int const argmax_tol = 2;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<std::complex<float>>;
+  using array_type = jb::fftw::aligned_vector<std::complex<float>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -897,14 +906,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  std::complex<float> acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = std::abs(acc_sum2);
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<float>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -931,7 +940,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_double) {
   int const S = 20;
   int const V = 4;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -964,16 +973,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_double) {
   int count = 0;
   for (int i = 0; i != S; ++i) {
     for (int j = 0; j != V; ++j, ++count) {
-      std::complex<double> acc_sum2 = 0;
       for (int k = 0; k != nsamples; ++k) {
         a[i][j][k] = b[i][j][(k + delay) % nsamples];
-        acc_sum2 += a[i][j][k] * a[i][j][k];
       }
-      sum2[count] = std::abs(acc_sum2);
       expected_argmax[count] = static_cast<std::size_t>(delay);
       expected_confidence[count] = static_cast<double>(nsamples);
     }
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -999,7 +1008,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -1030,16 +1039,16 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
   // a = delay shift timeseries b
   int count = 0;
   for (int i = 0; i != S; ++i) {
-    std::complex<double> acc_sum2 = 0;
     for (int k = 0; k != nsamples; ++k) {
       a[i][k] = b[i][(k + delay) % nsamples];
-      acc_sum2 += a[i][k] * a[i][k];
     }
-    sum2[count] = std::abs(acc_sum2);
     expected_argmax[count] = static_cast<std::size_t>(delay);
     expected_confidence[count] = static_cast<double>(nsamples);
     count++;
   }
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -1064,7 +1073,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -1093,14 +1102,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  std::complex<double> acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = std::abs(acc_sum2);
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<double>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
@@ -1125,11 +1134,11 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_double) {
 BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
-  int const argmax_tol = 2;
+  int const argmax_tol = 1;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
-  using array_type = std::vector<std::complex<double>>;
+  using array_type = jb::fftw::aligned_vector<std::complex<double>>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
   using confidence_type = typename tested_type::confidence_type;
   using estimated_delay_type = typename tested_type::estimated_delay_type;
@@ -1154,14 +1163,14 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_double) {
   jb::testing::create_triangle_timeseries(nsamples, b);
 
   // a = delay shift timeseries b
-  std::complex<double> acc_sum2 = 0;
   for (int k = 0; k != nsamples; ++k) {
     a[k] = b[(k + delay) % nsamples];
-    acc_sum2 += a[k] * a[k];
   }
-  sum2[0] = std::abs(acc_sum2);
   expected_argmax[0] = static_cast<std::size_t>(delay);
   expected_confidence[0] = static_cast<double>(nsamples);
+
+  // get the square sum
+  sum2 = jb::testing::sum_square(a);
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
