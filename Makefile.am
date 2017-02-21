@@ -120,12 +120,16 @@ noinst_PROGRAMS = $(examples) \
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
 
-AM_CXXFLAGS = \
+AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_CXXFLAGS += \
+  $(PTHREAD_CFLAGS)
+
+AM_CPPFLAGS = @AM_CPPFLAGS@
+AM_CPPFLAGS += \
   -DJB_SYSCONFDIR=\"$(sysconfdir)\" \
   -DJB_BINDIR=\"$(bindir)\" \
   $(YAML_CPP_CPPFLAGS) \
-  $(BOOST_CPPFLAGS) \
-  $(PTHREAD_CFLAGS)
+  $(BOOST_CPPFLAGS)
 
 LDFLAGS = \
   $(YAML_CPP_LDFLAGS) \
@@ -219,7 +223,7 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_traits
 benchmarks += jb/fftw/bm_time_delay_estimator
 examples += examples/fftw_correlation_no_wrappers
-AM_CXXFLAGS += $(FFTW3_CPPFLAGS)
+AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
 LDFLAGS += $(FFTW3_LDFLAGS)
 jb_ut_fftw_ldadd = \
   jb/libjb_testing.a \

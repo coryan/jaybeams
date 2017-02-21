@@ -494,6 +494,7 @@ config::config()
 
 void config::validate() const {
   log().validate();
+  microbenchmark().validate();
   array_book().validate();
   map_book().validate();
   fixture().validate();
