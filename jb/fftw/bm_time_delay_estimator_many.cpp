@@ -295,6 +295,7 @@ config::config()
 
 void config::validate() const {
   log().validate();
+  microbenchmark().validate();
   if (n_timeseries() < 1) {
     std::ostringstream os;
     os << "n_timeseries must be > 0 (" << n_timeseries() << ")";
