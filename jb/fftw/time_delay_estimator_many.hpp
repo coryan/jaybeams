@@ -3,8 +3,12 @@
 
 #include <jb/detail/array_traits.hpp>
 #include <jb/fftw/plan.hpp>
-#include <jb/testing/check_close_enough.hpp>
+#include <jb/fftw/tde_result.hpp>
 #include <jb/complex_traits.hpp>
+
+/*
+#include <jb/testing/check_close_enough.hpp>
+*/
 
 namespace jb {
 namespace fftw {
@@ -129,19 +133,18 @@ public:
 
     // ... finally we compute the estimated delay and its confidence
     // @todo issue #86: investigate use of SSE instructions
-    std::size_t k = 0;
     precision_type* it_out = out_.data();
     for (std::size_t i = 0; i != num_timeseries_; ++i) {
       precision_type max_val = std::numeric_limits<precision_type>::min();
       std::size_t tde_val = 0;
-      for (std::size_t j = 0; j != nsamples_; ++j, ++k, ++it_out) {
+      for (std::size_t j = 0; j != nsamples_; ++j, ++it_out) {
         if (max_val < *it_out) {
           max_val = *it_out;
           tde_val = j;
         }
       }
-      if (jb::testing::check_close_enough(sum2[i], precision_type{0}, 1)) {
-        confidence[i] = std::numeric_limits<precision_type>::max();
+      if (sum2[i] < std::numeric_limits<precision_type>::epsilon()) {
+        confidence[i] = precision_type(0);
       } else {
         confidence[i] = max_val / sum2[i];
       }
