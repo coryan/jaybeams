@@ -11,12 +11,12 @@ changing the code.
 
 ### All headers shoudl be self-contained.
 
-One should be able to `#include` a header and compile it without
+One should be able to `#``include` a header and compile it without
 requiring any additional headers before or after.
 
-### The #define Guard
+### The `#`define Guard
 
-All headers should include a `#ifndef/#define/#endif` guard.
+All headers should include a `#``ifndef/``#``define/``#``endif` guard.
 The guard must be the first line in the header.
 The name of the guard is constructed by the full path of the header
 file from the root of JayBeams, replacing both slashes (`/`) and
