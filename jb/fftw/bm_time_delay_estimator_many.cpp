@@ -22,13 +22,15 @@
 
 namespace {
 
-// We expect delays to be around 1250 microseconds, max delays are
-// around 6,000, so we need at least a 3*6000 ~ 18,000 microsecond
-// baseline.  Rounded up to a power of 2 that is 32768.  Sampling
-// every 16 microseconds that is 32768 / 16.
+// These magic numbers are motivated by observed delays between two market
+// feeds.  They assume that delay is normally around 1,250 microseconds, but
+// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
+// delays we need samples that cover at least 18,000 microseconds, assuming
+// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
+// with sample sizes that are powers of 2, so we use 4096 samples.
 std::chrono::microseconds const expected_delay(1250);
-std::chrono::microseconds const sampling_period(16);
-int nsamples = 32768 / 16;
+std::chrono::microseconds const sampling_period(10);
+int const nsamples = 4096;
 
 /**
  * Configuration parameters for bm_time_delay_estimator_many.
