@@ -1,7 +1,7 @@
-#ifndef jb_tde_generic_reduce_hpp
-#define jb_tde_generic_reduce_hpp
+#ifndef jb_opencl_generic_reduce_hpp
+#define jb_opencl_generic_reduce_hpp
 
-#include <jb/tde/generic_reduce_program.hpp>
+#include <jb/opencl/generic_reduce_program.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 #include <jb/p2ceil.hpp>
@@ -11,7 +11,7 @@
 #include <boost/compute/memory/local_buffer.hpp>
 
 namespace jb {
-namespace tde {
+namespace opencl {
 
 /**
  * Implement a generic reducer for OpenCL.
@@ -29,7 +29,7 @@ namespace tde {
  * TODO(coryan) this class is work in progress, it is not fully implemented
  *
  * @tparam reducer a class derived from generic_reduce<reducer,...>.
- * Please see jb::tde::reducer_concept for details.
+ * Please see jb::opencl::reducer_concept for details.
  * @tparam input_type_t the host type that represents the input
  * @tparam output_type_t the host type that represents the output
  */
@@ -273,7 +273,7 @@ private:
   boost::compute::vector<output_type> pong_;
 };
 
-} // namespace tde
+} // namespace opencl
 } // namespace jb
 
-#endif // jb_tde_generic_reduce_hpp
+#endif // jb_opencl_generic_reduce_hpp

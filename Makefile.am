@@ -729,7 +729,8 @@ jb_opencl_unit_tests = \
   jb/opencl/ut_build_simple_kernel \
   jb/opencl/ut_copy_to_host_async \
   jb/opencl/ut_config \
-  jb/opencl/ut_device_selector
+  jb/opencl/ut_device_selector \
+  jb/opencl/ut_generic_reduce
 jb_opencl_examples = \
   jb/opencl/show_device
 jb_opencl_benchmarks = \
@@ -760,7 +761,6 @@ jb_ut_clfft_ldflags = \
 lib_LIBRARIES += jb/libjb_tde.a
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
-  jb/tde/ut_generic_reduce \
   jb/tde/ut_reduce_argmax_real
 jb_tde_benchmarks = \
   jb/tde/bm_reduce_argmax_real
@@ -795,11 +795,20 @@ jb_libjb_opencl_adir = $(includedir)
 jb_libjb_opencl_a_SOURCES = \
   jb/opencl/build_simple_kernel.cpp \
   jb/opencl/config.cpp \
-  jb/opencl/device_selector.cpp
+  jb/opencl/device_selector.cpp \
+  jb/opencl/generic_reduce_program.cpp
 nobase_jb_libjb_opencl_a_HEADERS = \
   jb/opencl/build_simple_kernel.hpp \
   jb/opencl/config.hpp \
-  jb/opencl/device_selector.hpp
+  jb/opencl/device_selector.hpp \
+  jb/opencl/generic_reduce_program.hpp
+
+jb/opencl/generic_reduce_program.cpp: jb/opencl/generic_reduce_program.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/opencl/generic_reduce_program.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::opencl::generic_reduce_program_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
 
 jb_opencl_ut_build_simple_kernel_SOURCES = jb/opencl/ut_build_simple_kernel.cpp
 jb_opencl_ut_build_simple_kernel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_build_simple_kernel
@@ -820,6 +829,11 @@ jb_opencl_ut_device_selector_SOURCES = jb/opencl/ut_device_selector.cpp
 jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_device_selector
 jb_opencl_ut_device_selector_LDFLAGS = $(jb_opencl_ldflags)
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_ldadd)
+
+jb_opencl_ut_generic_reduce_SOURCES = jb/opencl/ut_generic_reduce.cpp
+jb_opencl_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_generic_reduce
+jb_opencl_ut_generic_reduce_LDFLAGS = $(jb_ut_opencl_ldflags)
+jb_opencl_ut_generic_reduce_LDADD = $(jb_ut_opencl_ldadd)
 
 jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
 jb_opencl_show_device_LDADD = jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
@@ -873,11 +887,9 @@ jb_clfft_bm_single_fft_LDADD = \
 #
 
 jb_libjb_tde_a_SOURCES += \
-  jb/tde/conjugate_and_multiply_kernel.cpp \
-  jb/tde/generic_reduce_program.cpp
+  jb/tde/conjugate_and_multiply_kernel.cpp
 nobase_jb_libjb_tde_a_HEADERS += \
-  jb/tde/conjugate_and_multiply_kernel.hpp \
-  jb/tde/generic_reduce_program.hpp
+  jb/tde/conjugate_and_multiply_kernel.hpp
 
 jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.cl Makefile
 	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
@@ -893,13 +905,6 @@ jb/tde/reduce_argmax_real_kernel.cpp: jb/tde/reduce_argmax_real_kernel.cl Makefi
 	cat $< >>$@; \
 	echo ')""";' >> $@
 
-jb/tde/generic_reduce_program.cpp: jb/tde/generic_reduce_program.cl Makefile
-	$(AM_V_GEN)echo '#include <jb/tde/generic_reduce_program.hpp>' >$@; \
-	echo '' >>$@; \
-	echo 'char const jb::tde::generic_reduce_program_source[] = R"""(' >>$@; \
-	cat $< >>$@; \
-	echo ')""";' >> $@
-
 jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
 jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
 jb_tde_ut_conjugate_and_multiply_LDFLAGS = $(jb_ut_tde_ldflags)
@@ -909,11 +914,6 @@ jb_tde_ut_reduce_argmax_real_SOURCES = jb/tde/ut_reduce_argmax_real.cpp
 jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_reduce_argmax_real
 jb_tde_ut_reduce_argmax_real_LDFLAGS = $(jb_ut_tde_ldflags)
 jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_ldadd)
-
-jb_tde_ut_generic_reduce_SOURCES = jb/tde/ut_generic_reduce.cpp
-jb_tde_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_generic_reduce
-jb_tde_ut_generic_reduce_LDFLAGS = $(jb_ut_tde_ldflags)
-jb_tde_ut_generic_reduce_LDADD = $(jb_ut_tde_ldadd)
 
 jb_tde_bm_reduce_argmax_real_SOURCES = jb/tde/bm_reduce_argmax_real.cpp
 jb_tde_bm_reduce_argmax_real_CPPFLAGS =

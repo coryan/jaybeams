@@ -1,7 +1,7 @@
 #include <jb/opencl/config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
-#include <jb/tde/generic_reduce.hpp>
+#include <jb/opencl/generic_reduce.hpp>
 #include <jb/testing/check_close_enough.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 #include <jb/complex_traits.hpp>
@@ -16,14 +16,16 @@
 #include <random>
 #include <sstream>
 
-namespace jb {
-namespace tde {
+namespace {
 
+/**
+ * A reducer to test.
+ */
 template <typename T>
-class reduce_sum : public generic_reduce<reduce_sum<T>, T, T> {
+class reduce_sum : public jb::opencl::generic_reduce<reduce_sum<T>, T, T> {
 public:
   reduce_sum(std::size_t size, boost::compute::command_queue const& queue)
-      : generic_reduce<reduce_sum<T>, T, T>(size, queue) {
+      : jb::opencl::generic_reduce<reduce_sum<T>, T, T>(size, queue) {
   }
 
   /// @returns the body of the initialization function
@@ -44,8 +46,7 @@ public:
   }
 };
 
-} // namespace tde
-} // namespace jb
+} // anonymous namespace
 
 namespace {
 
@@ -114,7 +115,7 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
     JB_LOG(trace) << "    " << i << " " << acpy[i] << " " << asrc[i];
   }
 
-  jb::tde::reduce_sum<value_type> reducer(size, queue);
+  reduce_sum<value_type> reducer(size, queue);
   auto done = reducer.execute(a);
   done.wait();
 
