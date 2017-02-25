@@ -315,7 +315,8 @@ jb_libjb_testing_adir = $(includedir)
 jb_libjb_testing_a_SOURCES = \
   jb/testing/compile_info.cpp \
   jb/testing/microbenchmark_base.cpp \
-  jb/testing/microbenchmark_config.cpp
+  jb/testing/microbenchmark_config.cpp \
+  jb/testing/microbenchmark_group_main.cpp
 
 nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/check_close_enough.hpp \

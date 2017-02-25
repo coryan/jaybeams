@@ -13,6 +13,10 @@
 namespace jb {
 namespace testing {
 
+namespace detail {
+int report_exception_at_exit();
+} //namespace detail
+
 /**
  * Define a representation for a group of microbenchmarks.
  *
@@ -90,16 +94,36 @@ int microbenchmark_group_main(
   testcase->second(cfg);
   // ... exit with a success status ...
   return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
 } catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
+  return detail::report_exception_at_exit();
 }
+
+/**
+ * Overload microbenchmark_group_main for jb::testing::microbenchmark_config.
+ *
+ * A common idiom in complex benchmarks is to create multiple
+ * testcases that exercise different implementations, different
+ * template instantiations, or otherwise vary the test in a
+ * non-trivial way.
+ *
+ * In such cases the main() function follows a well understood
+ * pattern:
+ *   - Initialize the benchmark configuration.
+ *   - Find which testcase is requested.
+ *   - Call a function for that testcase.
+ *
+ * @return the exit status for the program
+ * @param argc the number of arguments in @a argv
+ * @param argv the command-line arguments
+ * @param testcases a group of microbenchmarks, executes the one
+ * selected via the --microbenchmark.test-case command-line
+ * argument.
+ * @throws nothing, all exceptions are captured and printed to
+ * stderr before the program exits.
+ */
+int microbenchmark_group_main(
+    int argc, char* argv[],
+    microbenchmark_group<microbenchmark_config> const& testcases);
 
 } // namespace testing
 } // namespace jb
