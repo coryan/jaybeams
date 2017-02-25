@@ -1,7 +1,5 @@
 /**
  * A microbenchmark for different instantiations of jb::time_delay_estimator.
- *
- * This program
  */
 #include <jb/fftw/time_delay_estimator.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
