@@ -80,10 +80,9 @@ std::function<double()> create_random_generator<double>(unsigned int seed) {
 }
 
 template <typename value_type>
-void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
+void check_generic_reduce_sized(std::size_t size, std::size_t subset_size) {
   BOOST_TEST_MESSAGE("Testing with size = " << size);
-  boost::compute::device device =
-      jb::opencl::device_selector(jb::opencl::config());
+  boost::compute::device device = jb::opencl::device_selector();
   BOOST_TEST_MESSAGE("Running on device = " << device.name());
   using scalar_type = typename jb::extract_value_type<value_type>::precision;
   if (std::is_same<double, scalar_type>::value) {
@@ -106,21 +105,21 @@ void check_generic_reduce_sized(std::size_t size, std::size_t mismatch_size) {
   std::vector<value_type> asrc;
   jb::testing::create_random_timeseries(generator, size, asrc);
 
-  boost::compute::vector<value_type> a(mismatch_size, context);
+  boost::compute::vector<value_type> a(size, context);
 
-  boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
-  std::vector<value_type> acpy(mismatch_size);
-  boost::compute::copy(a.begin(), a.end(), acpy.begin(), queue);
+  boost::compute::copy(asrc.begin(), asrc.begin() + size, a.begin(), queue);
+  std::vector<value_type> acpy(size);
+  boost::compute::copy(a.begin(), a.begin() + size, acpy.begin(), queue);
   for (std::size_t i = 0; i != acpy.size(); ++i) {
     JB_LOG(trace) << "    " << i << " " << acpy[i] << " " << asrc[i];
   }
 
   reduce_sum<value_type> reducer(size, queue);
-  auto done = reducer.execute(a);
+  auto done = reducer.execute(a.begin(), a.begin() + subset_size);
   done.wait();
 
   value_type expected =
-      std::accumulate(asrc.begin(), asrc.end(), value_type(0));
+      std::accumulate(asrc.begin(), asrc.begin() + subset_size, value_type(0));
   value_type actual = *done.get();
   BOOST_CHECK_MESSAGE(
       jb::testing::check_close_enough(actual, expected, size),
@@ -189,20 +188,6 @@ BOOST_AUTO_TEST_CASE(generic_reduce_int_PRIMES) {
   check_generic_reduce<int>(size);
 }
 
-#if 0
-/**
- * @test Make sure the jb::tde::generic_reduce() works as
- * expected for something around a billion
- */
-BOOST_AUTO_TEST_CASE(generic_reduce_int_MAX) {
-  boost::compute::device device = jb::opencl::device_selector();
-  auto max_mem = device.max_memory_alloc_size();
-  std::size_t const size = max_mem / sizeof(int);
-  BOOST_TEST_MESSAGE("max_mem=" << max_mem << " sizeof(int)=" << sizeof(int));
-  check_generic_reduce<int>(size);
-}
-#endif /* 0 */
-
 /**
  * @test Make sure the jb::tde::generic_reduce() works as
  * expected for a number without a lot of powers of 2
@@ -231,12 +216,11 @@ BOOST_AUTO_TEST_CASE(generic_reduce_complex_double_PRIMES) {
 }
 
 /**
- * @test Improve code coverage, test that invalid inputs in execute()
- * are detected.
+ * @test Make sure the jb::tde::generic_reduce() works as
+ * expected when used with a subset of the input.
  */
-BOOST_AUTO_TEST_CASE(generic_reduce_complex_execute_error) {
-  std::size_t const size = 1024;
-  BOOST_CHECK_THROW(
-      check_generic_reduce_sized<std::complex<float>>(size, 2 * size),
-      std::exception);
+BOOST_AUTO_TEST_CASE(generic_reduce_double_subset) {
+  std::size_t const size = 1000000;
+  std::size_t const subset_size = size / 2;
+  check_generic_reduce_sized<double>(size, subset_size);
 }
