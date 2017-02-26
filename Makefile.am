@@ -735,6 +735,7 @@ jb_opencl_examples = \
   jb/opencl/show_device
 jb_opencl_benchmarks = \
   jb/opencl/bm_copy_buffer \
+  jb/opencl/bm_generic_reduce \
   jb/opencl/bm_launch_kernel
 
 jb_ut_opencl_ldadd = \
@@ -841,6 +842,10 @@ jb_opencl_show_device_LDADD = jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
 jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
 jb_opencl_bm_copy_buffer_LDFLAGS = $(jb_opencl_ldflags)
 jb_opencl_bm_copy_buffer_LDADD = jb/libjb_testing.a jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
+
+jb_opencl_bm_generic_reduce_SOURCES = jb/opencl/bm_generic_reduce.cpp
+jb_opencl_bm_generic_reduce_LDFLAGS = $(jb_opencl_ldflags)
+jb_opencl_bm_generic_reduce_LDADD = jb/libjb_testing.a jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
 
 jb_opencl_bm_launch_kernel_SOURCES = jb/opencl/bm_launch_kernel.cpp
 jb_opencl_bm_launch_kernel_LDFLAGS =   $(jb_opencl_ldflags)
