@@ -43,13 +43,14 @@ public:
       , queue(q) {
   }
 
-  void run() {
+  int run() {
     boost::compute::wait_list wait;
     for (int i = 0; i != chain_length; ++i) {
       auto event = queue.enqueue_task(kernel, wait);
       wait = boost::compute::wait_list(event);
     }
     wait.wait();
+    return chain_length;
   }
 
 private:

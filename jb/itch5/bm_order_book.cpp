@@ -186,8 +186,9 @@ public:
   }
 
   /// Run an iteration of the test ...
-  void run() {
+  int run() {
     iteration_();
+    return size_;
   }
 
 private:

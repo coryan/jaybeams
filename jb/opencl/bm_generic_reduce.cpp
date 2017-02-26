@@ -83,8 +83,7 @@ template <typename T>
 class boost_fixture {
 public:
   boost_fixture(
-      boost::compute::context& context,
-      boost::compute::command_queue& q)
+      boost::compute::context& context, boost::compute::command_queue& q)
       : boost_fixture(1024, context, q) {
   }
   boost_fixture(
@@ -105,12 +104,13 @@ public:
   void iteration_setup() {
   }
 
-  void run() {
+  int run() {
     boost::compute::copy(host_.begin(), host_.end(), device_.begin(), queue_);
     float result = 0;
     boost::compute::reduce(
         device_.begin(), device_.end(), &result, boost::compute::min<T>(),
         queue_);
+    return static_cast<int>(host_.size());
   }
 
 private:

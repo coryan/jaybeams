@@ -70,13 +70,14 @@ public:
   }
 
   /// Run a single iteration of the estimation
-  void run() {
+  int run() {
     // ... perform the estimation ...
     auto e = estimator.estimate_delay(a, b);
     // ... we could ignore the value, but just in case ...
     if (not e.first) {
       throw std::runtime_error("estimation failed");
     }
+    return static_cast<int>(a.size());
   }
 
 private:

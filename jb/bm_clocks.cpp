@@ -29,7 +29,7 @@ public:
   fixture(std::string const& clock_name);
   fixture(int size, std::string const& clock_name);
 
-  void run();
+  int run();
 
 private:
   std::unique_ptr<wrapped_clock_base> wrapped_clock_;
@@ -145,8 +145,9 @@ fixture::fixture(int size, std::string const& clock_name) {
   }
 }
 
-void fixture::run() {
+int fixture::run() {
   wrapped_clock_->run();
+  return 0;
 }
 
 } // anonymous namespace

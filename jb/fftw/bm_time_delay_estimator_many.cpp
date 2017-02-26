@@ -90,10 +90,11 @@ public:
     }
   }
 
-  void run() {
+  int run() {
     for (int i = 0; i != n_ts_; ++i) {
       estimator_.estimate_delay(confidence_, tde_, va_[i], vb_[i], sum2_);
     }
+    return static_cast<int>(n_ts_ * va_.size());
   }
 
   using vector_timeseries_type = typename std::vector<timeseries_type>;
@@ -146,8 +147,9 @@ public:
     sum2_ = jb::testing::sum_square(a_);
   }
 
-  void run() {
+  int run() {
     estimator_.estimate_delay(confidence_, tde_, a_, b_, sum2_);
+    return static_cast<int>(a_.shape()[0] * a_.shape()[1]);
   }
 
   using timeseries_type = boost::multi_array<T, 2, A>;

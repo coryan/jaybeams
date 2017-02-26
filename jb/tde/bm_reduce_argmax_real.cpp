@@ -92,12 +92,13 @@ public:
     boost::compute::copy(host.begin(), host.end(), dev.begin(), queue);
   }
 
-  void run() {
+  int run() {
     if (use_gpu) {
       unused += gpu_argmax(dev, queue);
     } else {
       unused += cpu_argmax(host);
     }
+    return static_cast<int>(host.size());
   }
 
   std::size_t dummy() const {

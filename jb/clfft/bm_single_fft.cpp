@@ -42,10 +42,11 @@ public:
       , fft(jb::clfft::create_forward_plan_1d(out, in, context, queue)) {
   }
 
-  void run() {
+  int run() {
     boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
     fft.enqueue(out, in, queue).wait();
     boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
+    return static_cast<int>(src.size());
   }
 
 private:
@@ -60,7 +61,7 @@ private:
 };
 
 template <>
-void fixture<true>::run() {
+int fixture<true>::run() {
   using namespace boost::compute;
   auto upload_done = copy_async(src.begin(), src.end(), in.begin(), queue);
   auto fft_done =
@@ -68,6 +69,7 @@ void fixture<true>::run() {
   auto download_done = jb::opencl::copy_to_host_async(
       out.begin(), out.end(), dst.begin(), queue, wait_list(fft_done));
   download_done.wait();
+  return static_cast<int>(src.size());
 }
 
 template <bool pipelined>

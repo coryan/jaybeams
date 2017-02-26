@@ -71,8 +71,9 @@ public:
     }
   }
 
-  void run() {
+  int run() {
     boost::compute::copy(start, end, dev.begin(), queue);
+    return static_cast<int>(dev.size());
   }
 
 private:
@@ -85,8 +86,9 @@ private:
 
 /// Implement the download case
 template <>
-void fixture<false>::run() {
+int fixture<false>::run() {
   boost::compute::copy(dev.begin(), dev.end(), start, queue);
+  return static_cast<int>(dev.size());
 }
 
 template <bool upload>
