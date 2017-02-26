@@ -27,8 +27,15 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_empty) {
   auto expected = boost::compute::system::default_device();
   BOOST_TEST_MESSAGE("Default selector picked " << actual.name());
 
-  BOOST_CHECK_EQUAL(expected.id(), actual.id());
-  BOOST_CHECK_EQUAL(expected.name(), actual.name());
+  if (expected.name().substr(0, 8) == "AMD SUMO") {
+    // AMD SUMO works so poorly that the device_selector() is
+    // hardcoded to ignore it ...
+    BOOST_CHECK_NE(expected.id(), actual.id());
+    BOOST_CHECK_NE(expected.name(), actual.name());
+  } else {
+    BOOST_CHECK_EQUAL(expected.id(), actual.id());
+    BOOST_CHECK_EQUAL(expected.name(), actual.name());
+  }
 }
 
 /**
