@@ -117,7 +117,8 @@ public:
       , queue_(q)
       , generator_(
             jb::testing::initialize_mersenne_twister<std::mt19937_64>(
-                0, jb::testing::default_initialization_marker)) {
+                0, jb::testing::default_initialization_marker))
+      , avoid_optimization_(0) {
     int counter = 0;
     for (auto& i : host_) {
       i = size + 1 - ++counter;
@@ -131,12 +132,18 @@ public:
         JB_OPENCL_bm_generic_reduce_minimum_size, host_.size() - 1)(generator_);
   }
 
+  /// Return the value accumulated through all iterations
+  T avoid_optimization() const {
+    return avoid_optimization_;
+  }
+
 protected:
   std::vector<T> host_;
   boost::compute::vector<T> device_;
   boost::compute::command_queue queue_;
   std::mt19937_64 generator_;
   int iteration_size_;
+  T avoid_optimization_;
 };
 
 /**
@@ -169,6 +176,8 @@ public:
     boost::compute::reduce(
         this->device_.begin(), end, &result, boost::compute::min<T>(),
         this->queue_);
+    this->queue_.finish();
+    this->avoid_optimization_ += result;
     // ... return the iteration size ...
     return this->iteration_size_;
   }
@@ -205,12 +214,40 @@ public:
         this->device_.begin(), this->device_.begin() + this->iteration_size_,
         boost::compute::wait_list(end.get_event()));
     result.wait();
+    this->avoid_optimization_ += *result.get();
     // ... return the iteration size ...
     return this->iteration_size_;
   }
 
 private:
   reduce_min<T> reducer_;
+};
+
+/**
+ * A fixture to benchmark the boost::compute::reduce function.
+ */
+template <typename T>
+class std_fixture : public base_fixture<T> {
+public:
+  /// Constructor for default size
+  std_fixture(
+      boost::compute::context& context, boost::compute::command_queue& q)
+      : std_fixture(1024, context, q) {
+  }
+
+  /// Constructor with known size
+  std_fixture(
+      int size, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : base_fixture<T>(size, context, q) {
+  }
+
+  int run() {
+    auto iterator = std::min_element(
+        this->host_.begin(), this->host_.begin() + this->iteration_size_);
+    this->avoid_optimization_ += *iterator;
+    return this->iteration_size_;
+  }
 };
 
 /**
@@ -240,6 +277,8 @@ jb::testing::microbenchmark_group<config> create_testcases() {
       {"boost:double", test_case<boost_fixture<double>>()},
       {"generic_reduce:float", test_case<generic_reduce_fixture<float>>()},
       {"generic_reduce:double", test_case<generic_reduce_fixture<double>>()},
+      {"std:float", test_case<std_fixture<float>>()},
+      {"std:double", test_case<std_fixture<double>>()},
   };
 }
 } // anonymous namespace
