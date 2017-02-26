@@ -15,7 +15,7 @@ namespace testing {
 
 namespace detail {
 int report_exception_at_exit();
-} //namespace detail
+} // namespace detail
 
 /**
  * Define a representation for a group of microbenchmarks.

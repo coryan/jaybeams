@@ -1,13 +1,13 @@
-#define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION Y
 #include <jb/opencl/config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/generic_reduce.hpp>
+#include <jb/testing/initialize_mersenne_twister.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/testing/microbenchmark_group_main.hpp>
 #include <jb/complex_traits.hpp>
 
-#include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
+#include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include <vector>
@@ -33,17 +33,21 @@ public:
   jb::config_attribute<config, jb::opencl::config> opencl;
 };
 
-template<typename T>
+template <typename T>
 struct opencl_type_traits {};
 
-template<>
+template <>
 struct opencl_type_traits<double> {
-  static char const* macro_prefix() { return "DBL_"; }
+  static char const* macro_prefix() {
+    return "DBL_";
+  }
 };
 
-template<>
+template <>
 struct opencl_type_traits<float> {
-  static char const* macro_prefix() { return "FLT_"; }
+  static char const* macro_prefix() {
+    return "FLT_";
+  }
 };
 
 /**
@@ -79,7 +83,8 @@ template <typename T>
 class boost_fixture {
 public:
   boost_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
+      boost::compute::context& context,
+      boost::compute::command_queue& q)
       : boost_fixture(1024, context, q) {
   }
   boost_fixture(
@@ -87,21 +92,24 @@ public:
       boost::compute::command_queue& q)
       : host_(size)
       , device_(size, context)
-      , queue_(q) {
+      , queue_(q)
+      , generator_(
+            jb::testing::initialize_mersenne_twister<std::mt19937_64>(
+                0, jb::testing::default_initialization_marker)) {
+    int counter = 0;
+    for (auto& i : host_) {
+      i = size + 1 - ++counter;
+    }
   }
 
   void iteration_setup() {
-    int counter = 0;
-    for (auto & i : host_) {
-      i = ++counter;
-    }
   }
 
   void run() {
     boost::compute::copy(host_.begin(), host_.end(), device_.begin(), queue_);
     float result = 0;
     boost::compute::reduce(
-        device_.begin(), device_.end(), &result, boost::compute::plus<T>(),
+        device_.begin(), device_.end(), &result, boost::compute::min<T>(),
         queue_);
   }
 
@@ -109,6 +117,7 @@ private:
   std::vector<T> host_;
   boost::compute::vector<T> device_;
   boost::compute::command_queue queue_;
+  std::mt19937_64 generator_;
 };
 
 /**
@@ -122,7 +131,7 @@ std::function<void(config const&)> boost_test() {
     boost::compute::command_queue queue(context, device);
 
     std::cerr << "device=" << device.name() << std::endl;
-    
+
     using benchmark = jb::testing::microbenchmark<boost_fixture<T>>;
     benchmark bm(cfg.microbenchmark());
 
@@ -133,8 +142,8 @@ std::function<void(config const&)> boost_test() {
 
 /// A table with all the microbenchmark cases
 jb::testing::microbenchmark_group<config> testcases{
-  {"boost:float", boost_test<float>()},
-  {"boost:double", boost_test<double>()},
+    {"boost:float", boost_test<float>()},
+    {"boost:double", boost_test<double>()},
 };
 
 } // anonymous namespace
