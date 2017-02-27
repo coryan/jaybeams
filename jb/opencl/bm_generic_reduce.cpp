@@ -187,6 +187,46 @@ public:
  * A fixture to benchmark the boost::compute::reduce function.
  */
 template <typename T>
+class boost_async_fixture : public base_fixture<T> {
+public:
+  /// Constructor for default size
+  boost_async_fixture(
+      boost::compute::context& context, boost::compute::command_queue& q)
+      : boost_async_fixture(1024, context, q) {
+  }
+
+  /// Constructor with known size
+  boost_async_fixture(
+      int size, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : base_fixture<T>(size, context, q) {
+  }
+
+  int run() {
+    // ... copy the first iteration_size_ elements to the device ...
+    auto end = boost::compute::copy_async(
+        this->host_.begin(), this->host_.begin() + this->iteration_size_,
+        this->device_.begin(), this->queue_);
+    // ... enqueue a barrier to only start the reduction once the copy
+    // has completed ...
+    this->queue_.enqueue_barrier();
+    // ... run a reduction on the device to pick the minimum value
+    // across those elements ...
+    T result = 0;
+    boost::compute::reduce(
+        this->device_.begin(), this->device_.begin() + this->iteration_size_,
+        &result, boost::compute::min<T>(), this->queue_);
+    this->queue_.finish();
+    this->avoid_optimization_ += result;
+    // ... return the iteration size ...
+    return this->iteration_size_;
+  }
+};
+
+/**
+ * A fixture to benchmark the boost::compute::reduce function.
+ */
+template <typename T>
 class generic_reduce_fixture : public base_fixture<T> {
 public:
   /// Constructor for default size
@@ -275,6 +315,8 @@ jb::testing::microbenchmark_group<config> create_testcases() {
   return jb::testing::microbenchmark_group<config>{
       {"boost:float", test_case<boost_fixture<float>>()},
       {"boost:double", test_case<boost_fixture<double>>()},
+      {"boost_async:float", test_case<boost_async_fixture<float>>()},
+      {"boost_async:double", test_case<boost_async_fixture<double>>()},
       {"generic_reduce:float", test_case<generic_reduce_fixture<float>>()},
       {"generic_reduce:double", test_case<generic_reduce_fixture<double>>()},
       {"std:float", test_case<std_fixture<float>>()},
