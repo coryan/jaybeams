@@ -87,8 +87,17 @@ kable(models.coef)
 
 ```{r}
 models.residuals <- ldply(models, function(x) mean(x$residuals))
-names(models.coef) <- c(
+names(models.residuals) <- c(
     'reduction', 'copy', 'mean(residuals)')
+kable(models.residuals, digits=15)
+```
+
+```{r}
+library(lmtest)
+models.dwtest <- ldply(models, function(x) lmtest::dwtest(x)$p.value)
+names(models.dwtest) <- c(
+    'reduction', 'copy', 'dw.test.p.value')
+kable(models.dwtest)
 ```
 
 Something interesting is happening with small sizes, let's zoom there:
