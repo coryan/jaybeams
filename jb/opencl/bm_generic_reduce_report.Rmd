@@ -1,0 +1,104 @@
+## Report for `r basename(data.filename)`
+
+
+```{r include=FALSE}
+# First we need to load the libraries that we need for this analysis:
+library(boot)
+library(ggplot2)
+library(parallel)
+library(pwr)
+library(knitr)
+# We also create some constants that make the graphs look pretty:
+golden.ratio <- (1 + sqrt(5.0)) / 2
+# ... the desired width and height, in inches ...
+svg.w <- 8.0
+svg.h <- svg.w / golden.ratio
+# ... same thing, but in pixels ...
+png.w <- 960
+png.h <- round(png.w / golden.ratio)
+# We do not want the output to be too wide, because it looks wrong in
+# the rendered web pages:
+options(width=60, digits=4)
+
+# We want to stop on the first error, because it is easy to miss them otherwise
+knitr::opts_chunk$set(error=FALSE, fig.height=svg.h, fig.width=svg.w)
+```
+
+We load the file, which has a well-known name, into a `data.frame`
+structure:
+
+```{r}
+data <- read.csv(
+    file=data.filename, header=FALSE, comment.char='#',
+    col.names=c('reduction', 'size', 'nanoseconds'))
+```
+
+The raw data is in nanoseconds, I prefer microseconds because they are
+easier to think about:
+
+```{r}
+data$microseconds <- data$nanoseconds / 1000.0
+```
+
+Also breakdown the precision and library:
+
+```{r}
+data$precision <- factor(sapply(data$reduction, FUN=function(x) strsplit(as.character(x), split=':')[[1]][[2]]))
+data$lib <- factor(sapply(data$reduction, FUN=function(x) strsplit(as.character(x), split=':')[[1]][[1]]))
+```
+
+At this point I am curious as to how the data looks like, and probably
+you too, first just the usual summary:
+
+```{r summary.table}
+data.summary <- aggregate(
+    microseconds ~ reduction, data=data, FUN=summary)
+kable(cbind(
+    as.character(data.summary$reduction),
+    data.summary$microseconds))
+```
+
+Let's look at the raw data:
+
+```{r dev='svg'}
+ggplot(data=data, aes(x=size, y=microseconds, color=reduction)) +
+    theme(legend.position="bottom") +
+    facet_grid(. ~ precision) +
+    geom_point(alpha=0.02) + stat_smooth()
+```
+
+Ugh, some of the outliers make it hard to see the results, let's fix
+that:
+
+```{r dev='png'}
+y.max <- ceiling(quantile(data$microseconds, probs=0.999) / 1000) * 1000
+ggplot(data=data, aes(x=size, y=microseconds, color=reduction)) +
+    theme(legend.position="bottom") +
+    ylim(0, y.max) + facet_grid(. ~ precision) +
+    geom_point(alpha=0.02) + stat_smooth()
+```
+
+Something interesting is happening with small sizes, let's zoom there:
+
+```{r dev='png'}
+d <- subset(data, size <= 2**12)
+y.max <- ceiling(quantile(d$microseconds, probs=0.999) / 1000) * 1000
+cutoffs <- data.frame(cutoff=2**seq(7, 12))
+ggplot(data=d, aes(x=size, y=microseconds, color=reduction)) +
+    theme(legend.position="bottom") +
+    ylim(0, y.max) + facet_grid(lib ~ precision) +
+    geom_vline(data=cutoffs, aes(xintercept=cutoff), color="blue") +
+    geom_point(alpha=0.3)
+```
+
+Build a linear model for each reduction:
+
+```{r}
+library(plyr)
+models <- dlply(subset(data, size >= 2**11),
+    'reduction', function(df) lm(microseconds ~ size, data=df))
+data.coef <- arrange(ldply(models, coef), size)
+names(data.coef) <- c('reduction', 'startup (us)', 'cost-per-element (us)')
+kable(data.coef)
+```
+
