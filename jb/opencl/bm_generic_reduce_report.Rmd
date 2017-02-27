@@ -30,7 +30,7 @@ structure:
 ```{r}
 data <- read.csv(
     file=data.filename, header=FALSE, comment.char='#',
-    col.names=c('reduction', 'size', 'nanoseconds'))
+    col.names=c('copy', 'lib', 'precision', 'reduction', 'size', 'nanoseconds'))
 ```
 
 The raw data is in nanoseconds, I prefer microseconds because they are
@@ -40,21 +40,15 @@ easier to think about:
 data$microseconds <- data$nanoseconds / 1000.0
 ```
 
-Also breakdown the precision and library:
-
-```{r}
-data$precision <- factor(sapply(data$reduction, FUN=function(x) strsplit(as.character(x), split=':')[[1]][[2]]))
-data$lib <- factor(sapply(data$reduction, FUN=function(x) strsplit(as.character(x), split=':')[[1]][[1]]))
-```
-
 At this point I am curious as to how the data looks like, and probably
 you too, first just the usual summary:
 
 ```{r summary.table}
 data.summary <- aggregate(
-    microseconds ~ reduction, data=data, FUN=summary)
+    microseconds ~ reduction + copy, data=data, FUN=summary)
 kable(cbind(
     as.character(data.summary$reduction),
+    as.character(data.summary$copy),
     data.summary$microseconds))
 ```
 
@@ -63,19 +57,38 @@ Let's look at the raw data:
 ```{r dev='svg'}
 ggplot(data=data, aes(x=size, y=microseconds, color=reduction)) +
     theme(legend.position="bottom") +
-    facet_grid(. ~ precision) +
+    facet_grid(copy ~ precision) +
     geom_point(alpha=0.02) + stat_smooth()
 ```
 
 Ugh, some of the outliers make it hard to see the results, let's fix
-that:
+that, also remove some weirdness (see later) for small sizes:
 
 ```{r dev='png'}
 y.max <- ceiling(quantile(data$microseconds, probs=0.999) / 1000) * 1000
-ggplot(data=data, aes(x=size, y=microseconds, color=reduction)) +
+data.regular <- subset(data, size >= 2**11)
+ggplot(data=data.regular, aes(x=size, y=microseconds, color=lib)) +
     theme(legend.position="bottom") +
-    ylim(0, y.max) + facet_grid(. ~ precision) +
-    geom_point(alpha=0.02) + stat_smooth()
+    ylim(0, y.max) + facet_grid(copy ~ precision) +
+    geom_point(alpha=0.01) + geom_smooth(method="lm")
+```
+
+Build a linear model for each reduction, with and without copying:
+
+```{r}
+library(plyr)
+models <- dlply(data.regular,
+    c('reduction', 'copy'), function(df) lm(nanoseconds ~ size, data=df))
+models.coef <- arrange(ldply(models, coef), size)
+names(models.coef) <- c(
+    'reduction', 'copy', 'startup (ns)', 'cost-per-element (ns)')
+kable(models.coef)
+```
+
+```{r}
+models.residuals <- ldply(models, function(x) mean(x$residuals))
+names(models.coef) <- c(
+    'reduction', 'copy', 'mean(residuals)')
 ```
 
 Something interesting is happening with small sizes, let's zoom there:
@@ -84,21 +97,9 @@ Something interesting is happening with small sizes, let's zoom there:
 d <- subset(data, size <= 2**12)
 y.max <- ceiling(quantile(d$microseconds, probs=0.999) / 1000) * 1000
 cutoffs <- data.frame(cutoff=2**seq(7, 12))
-ggplot(data=d, aes(x=size, y=microseconds, color=reduction)) +
+ggplot(data=d, aes(x=size, y=microseconds, color=lib)) +
     theme(legend.position="bottom") +
-    ylim(0, y.max) + facet_grid(lib ~ precision) +
+    ylim(0, y.max) + facet_grid(copy ~ precision) +
     geom_vline(data=cutoffs, aes(xintercept=cutoff), color="blue") +
     geom_point(alpha=0.3)
 ```
-
-Build a linear model for each reduction:
-
-```{r}
-library(plyr)
-models <- dlply(subset(data, size >= 2**11),
-    'reduction', function(df) lm(microseconds ~ size, data=df))
-data.coef <- arrange(ldply(models, coef), size)
-names(data.coef) <- c('reduction', 'startup (us)', 'cost-per-element (us)')
-kable(data.coef)
-```
-

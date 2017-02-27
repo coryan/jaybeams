@@ -3,7 +3,7 @@
 # exit on the first error ...
 set -e
 
-iterations=50000
+iterations=10000
 if [ $# -ge 1 ]; then
     iterations=$1
 fi
@@ -35,24 +35,48 @@ echo "Capturing system configuration... patience..."
 print_environment ${bindir?} ${program?} | log $LOG
 
 # ... create the baseline data for the order book benchmark ...
-for test in {std,boost_async,boost,generic_reduce}:{float,double}; do
-    if which uptime >/dev/null 2>/dev/null; then
-	load=$(uptime)
-    else
-	load=$(/bin/echo -n "(raw) " ; cat /proc/loadavg)
-    fi
-    echo "Running testcase ${test?}, current load ${load?}"
-    echo | log $LOG
-    echo "Running testcase ${test?}, current load ${load?}" | log $LOG
-    /usr/bin/time ${program?} \
-                  --microbenchmark.verbose=true \
-                  --microbenchmark.prefix=${test?}, \
-                  --microbenchmark.iterations=${iterations?} \
-                  --microbenchmark.size=10000000 \
-                  --microbenchmark.test-case=${test?} \
-		  >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
-    cat $TMPERR | log $LOG
-    cat $TMPOUT >>$LOG
+for lib in std boost_async boost generic_reduce; do
+    for precision in float double; do
+        for copy in true false; do
+            test="${lib}:${precision}"
+            prefix=copy,${lib},${precision},${test}
+            if [ $copy != "true" ]; then
+                prefix=nocopy,${lib},${precision},${test}
+            fi
+            if which uptime >/dev/null 2>/dev/null; then
+	        load=$(uptime)
+            else
+	        load=$(/bin/echo -n "(raw) " ; cat /proc/loadavg)
+            fi
+            echo "Running testcase ${prefix?} (small), current load ${load?}"
+            echo | log $LOG
+            echo "Running testcase ${prefix?}, current load ${load?}" | log $LOG
+            /usr/bin/time ${program?} \
+                          --microbenchmark.verbose=true \
+                          --microbenchmark.prefix=${prefix?}, \
+                          --microbenchmark.iterations=${iterations?} \
+                          --microbenchmark.size=200000 \
+                          --microbenchmark.test-case=${test?} \
+                          --copy-data=${copy?} \
+		          >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
+            cat $TMPERR | log $LOG
+            cat $TMPOUT >>$LOG
+
+            echo "Running testcase ${prefix?} (large), current load ${load?}"
+            echo | log $LOG
+            echo "Running testcase ${prefix?}, current load ${load?}" | log $LOG
+            /usr/bin/time ${program?} \
+                          --microbenchmark.verbose=true \
+                          --microbenchmark.prefix=${prefix?}, \
+                          --microbenchmark.iterations=${iterations?} \
+                          --microbenchmark.size=5000000 \
+                          --microbenchmark.test-case=${test?} \
+                          --copy-data=${copy?} \
+		          >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
+            cat $TMPERR | log $LOG
+            cat $TMPOUT >>$LOG
+        done
+    done
 done
 
 # ... teardown the benchmark configuration changes ...

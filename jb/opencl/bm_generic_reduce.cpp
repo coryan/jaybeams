@@ -30,6 +30,8 @@ public:
       microbenchmark;
   jb::config_attribute<config, jb::log::config> log;
   jb::config_attribute<config, jb::opencl::config> opencl;
+  jb::config_attribute<config, bool> randomize_size;
+  jb::config_attribute<config, bool> copy_data;
 };
 
 /// Return a table with all the testcases ..
@@ -42,12 +44,34 @@ int main(int argc, char* argv[]) {
 }
 
 namespace {
+std::string randomize_size_help() {
+  std::ostringstream os;
+  os << "If true, the size is randomized in each iteration."
+     << "  This is useful when trying to build regression models,"
+     << " but not when trying to fine tune algorithms."
+     << "  The random distributes uniformly "
+     << "between " << JB_OPENCL_bm_generic_reduce_minimum_size
+     << " and the configured size of the test.";
+  return os.str();
+}
+
 config::config()
     : microbenchmark(
           desc("microbenchmark", "microbenchmark"), this,
           jb::testing::microbenchmark_config().test_case("float:boost"))
     , log(desc("log", "log"), this)
-    , opencl(desc("opencl"), this) {
+    , opencl(desc("opencl"), this)
+    , randomize_size(
+          desc("randomize-size").help(randomize_size_help()), this, true)
+    , copy_data(
+          desc("copy-data")
+              .help(
+                  "If set, the test copies fresh data to the OpenCL device"
+                  " on each iteration.  Effectively that tests copy + "
+                  "reduction."
+                  " Disabling this flag tests reduction assuming the data is"
+                  " already on the device."),
+          this, true) {
 }
 
 template <typename T>
@@ -104,13 +128,14 @@ class base_fixture {
 public:
   /// Constructor for default size
   base_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
-      : base_fixture(1024, context, q) {
+      config const& cfg, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : base_fixture(cfg, context, q) {
   }
 
   /// Constructor with known size
   base_fixture(
-      int size, boost::compute::context& context,
+      int size, config const& cfg, boost::compute::context& context,
       boost::compute::command_queue& q)
       : host_(size)
       , device_(size, context)
@@ -118,18 +143,24 @@ public:
       , generator_(
             jb::testing::initialize_mersenne_twister<std::mt19937_64>(
                 0, jb::testing::default_initialization_marker))
-      , avoid_optimization_(0) {
+      , avoid_optimization_(0)
+      , cfg_(cfg) {
     int counter = 0;
     for (auto& i : host_) {
       i = size + 1 - ++counter;
     }
+    boost::compute::copy(host_.begin(), host_.end(), device_.begin(), queue_);
+    queue_.finish();
   }
 
   /// Run each iteration with a random size, part of testing the
   void iteration_setup() {
-    // ... pick a random size to execute the test at ...
-    iteration_size_ = std::uniform_int_distribution<>(
-        JB_OPENCL_bm_generic_reduce_minimum_size, host_.size() - 1)(generator_);
+    if (cfg_.randomize_size()) {
+      // ... pick a random size to execute the test at ...
+      iteration_size_ = std::uniform_int_distribution<>(
+          JB_OPENCL_bm_generic_reduce_minimum_size,
+          host_.size() - 1)(generator_);
+    }
   }
 
   /// Return the value accumulated through all iterations
@@ -144,6 +175,7 @@ protected:
   std::mt19937_64 generator_;
   int iteration_size_;
   T avoid_optimization_;
+  config cfg_;
 };
 
 /**
@@ -154,28 +186,31 @@ class boost_fixture : public base_fixture<T> {
 public:
   /// Constructor for default size
   boost_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
-      : boost_fixture(1024, context, q) {
+      config const& cfg, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : boost_fixture(1024, cfg, context, q) {
   }
 
   /// Constructor with known size
   boost_fixture(
-      int size, boost::compute::context& context,
+      int size, config const& cfg, boost::compute::context& context,
       boost::compute::command_queue& q)
-      : base_fixture<T>(size, context, q) {
+      : base_fixture<T>(size, cfg, context, q) {
   }
 
   int run() {
-    // ... copy the first iteration_size_ elements to the device ...
-    auto end = boost::compute::copy(
-        this->host_.begin(), this->host_.begin() + this->iteration_size_,
-        this->device_.begin(), this->queue_);
+    if (this->cfg_.copy_data()) {
+      // ... copy the first iteration_size_ elements to the device ...
+      (void)boost::compute::copy(
+          this->host_.begin(), this->host_.begin() + this->iteration_size_,
+          this->device_.begin(), this->queue_);
+    }
     // ... run a reduction on the device to pick the minimum value
     // across those elements ...
     T result = 0;
     boost::compute::reduce(
-        this->device_.begin(), end, &result, boost::compute::min<T>(),
-        this->queue_);
+        this->device_.begin(), this->device_.begin() + this->iteration_size_,
+        &result, boost::compute::min<T>(), this->queue_);
     this->queue_.finish();
     this->avoid_optimization_ += result;
     // ... return the iteration size ...
@@ -191,25 +226,28 @@ class boost_async_fixture : public base_fixture<T> {
 public:
   /// Constructor for default size
   boost_async_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
-      : boost_async_fixture(1024, context, q) {
+      config const& cfg, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : boost_async_fixture(1024, cfg, context, q) {
   }
 
   /// Constructor with known size
   boost_async_fixture(
-      int size, boost::compute::context& context,
+      int size, config const& cfg, boost::compute::context& context,
       boost::compute::command_queue& q)
-      : base_fixture<T>(size, context, q) {
+      : base_fixture<T>(size, cfg, context, q) {
   }
 
   int run() {
     // ... copy the first iteration_size_ elements to the device ...
-    auto end = boost::compute::copy_async(
-        this->host_.begin(), this->host_.begin() + this->iteration_size_,
-        this->device_.begin(), this->queue_);
-    // ... enqueue a barrier to only start the reduction once the copy
-    // has completed ...
-    this->queue_.enqueue_barrier();
+    if (this->cfg_.copy_data()) {
+      auto end = boost::compute::copy_async(
+          this->host_.begin(), this->host_.begin() + this->iteration_size_,
+          this->device_.begin(), this->queue_);
+      // ... enqueue a barrier to only start the reduction once the copy
+      // has completed ...
+      this->queue_.enqueue_barrier();
+    }
     // ... run a reduction on the device to pick the minimum value
     // across those elements ...
     T result = 0;
@@ -231,28 +269,33 @@ class generic_reduce_fixture : public base_fixture<T> {
 public:
   /// Constructor for default size
   generic_reduce_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
-      : generic_reduce_fixture(1024, context, q) {
+      config const& cfg, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : generic_reduce_fixture(1024, cfg, context, q) {
   }
 
   /// Constructor with known size
   generic_reduce_fixture(
-      int size, boost::compute::context& context,
+      int size, config const& cfg, boost::compute::context& context,
       boost::compute::command_queue& q)
-      : base_fixture<T>(size, context, q)
+      : base_fixture<T>(size, cfg, context, q)
       , reducer_(size, q) {
   }
 
   int run() {
-    // ... copy the first iteration_size_ elements to the device ...
-    auto end = boost::compute::copy_async(
-        this->host_.begin(), this->host_.begin() + this->iteration_size_,
-        this->device_.begin(), this->queue_);
+    boost::compute::wait_list wl;
+    if (this->cfg_.copy_data()) {
+      // ... copy the first iteration_size_ elements to the device ...
+      auto end = boost::compute::copy_async(
+          this->host_.begin(), this->host_.begin() + this->iteration_size_,
+          this->device_.begin(), this->queue_);
+      wl = boost::compute::wait_list(end.get_event());
+    }
     // ... run a reduction on the device to pick the minimum value
     // across those elements ...
     auto result = reducer_.execute(
         this->device_.begin(), this->device_.begin() + this->iteration_size_,
-        boost::compute::wait_list(end.get_event()));
+        wl);
     result.wait();
     this->avoid_optimization_ += *result.get();
     // ... return the iteration size ...
@@ -271,15 +314,16 @@ class std_fixture : public base_fixture<T> {
 public:
   /// Constructor for default size
   std_fixture(
-      boost::compute::context& context, boost::compute::command_queue& q)
-      : std_fixture(1024, context, q) {
+      config const& cfg, boost::compute::context& context,
+      boost::compute::command_queue& q)
+      : std_fixture(1024, cfg, context, q) {
   }
 
   /// Constructor with known size
   std_fixture(
-      int size, boost::compute::context& context,
+      int size, config const& cfg, boost::compute::context& context,
       boost::compute::command_queue& q)
-      : base_fixture<T>(size, context, q) {
+      : base_fixture<T>(size, cfg, context, q) {
   }
 
   int run() {
@@ -305,7 +349,7 @@ std::function<void(config const&)> test_case() {
     using benchmark = jb::testing::microbenchmark<fixture_type>;
     benchmark bm(cfg.microbenchmark());
 
-    auto r = bm.run(context, queue);
+    auto r = bm.run(cfg, context, queue);
     bm.typical_output(r);
   };
 }
