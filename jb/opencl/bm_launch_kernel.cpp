@@ -58,8 +58,13 @@ private:
   boost::compute::kernel kernel;
   boost::compute::command_queue queue;
 };
+} // anonymous namespace
 
-void benchmark_test_case(config const& cfg) {
+int main(int argc, char* argv[]) try {
+  config cfg;
+  cfg.process_cmdline(argc, argv);
+  std::cerr << "Configuration for test\n" << cfg << std::endl;
+
   boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
@@ -68,16 +73,6 @@ void benchmark_test_case(config const& cfg) {
 
   auto r = bm.run(context, queue);
   bm.typical_output(r);
-}
-
-} // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.process_cmdline(argc, argv);
-  std::cerr << "Configuration for test\n" << cfg << std::endl;
-
-  benchmark_test_case(cfg);
 
   return 0;
 } catch (jb::usage const& ex) {
