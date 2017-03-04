@@ -21,7 +21,7 @@ int microbenchmark_group_main(
   if (testcase == testcases.end()) {
     std::ostringstream os;
     os << "Unknown test case (" << cfg.test_case() << ")\n";
-    os << " --microbenchmark.test-case must be one of:";
+    os << " --test-case must be one of:";
     for (auto const& i : testcases) {
       os << "  " << i.first << "\n";
     }
