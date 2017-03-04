@@ -1,5 +1,5 @@
-#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/testing/microbenchmark_group_main.hpp>
 #include <jb/complex_traits.hpp>

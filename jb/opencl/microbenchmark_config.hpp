@@ -22,7 +22,6 @@ public:
   jb::config_attribute<microbenchmark_config, jb::opencl::config> opencl;
 };
 
-
 } // namespace opencl
 } // namespace jb
 

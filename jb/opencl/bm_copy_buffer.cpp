@@ -1,6 +1,6 @@
-#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/testing/microbenchmark_group_main.hpp>
 

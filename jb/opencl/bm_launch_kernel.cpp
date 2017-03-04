@@ -1,6 +1,6 @@
 #include <jb/opencl/build_simple_kernel.hpp>
-#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
 #include <boost/compute/algorithm/copy.hpp>
