@@ -1,10 +1,17 @@
+/**
+ * This benchmark evaluates the performance of time_delay_estimator_many.
+ *
+ * It validates the assumption that FFTW performs better with an array of
+ * timeseries vs. being called multiple times with a one timeseries
+ * container each time.
+ */
 #include <jb/detail/array_traits.hpp>
 #include <jb/fftw/time_delay_estimator_many.hpp>
 #include <jb/testing/create_triangle_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 #include <jb/testing/sum_square.hpp>
-#include <jb/log.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -12,26 +19,8 @@
 #include <string>
 #include <vector>
 
-/**
- * This benchmark evaluates the performance of time_delay_estimator_many.
- *
- * It validates the assumption that FFTW performs better with an array of
- * timeseries vs.
- * being called multiple times with a one timeseries container each time.
- */
-
+/// Helper types and functions to benchmark jb::fftw::time_delay_estimator.
 namespace {
-
-// These magic numbers are motivated by observed delays between two market
-// feeds.  They assume that delay is normally around 1,250 microseconds, but
-// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
-// delays we need samples that cover at least 18,000 microseconds, assuming
-// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
-// with sample sizes that are powers of 2, so we use 4096 samples.
-std::chrono::microseconds const expected_delay(1250);
-std::chrono::microseconds const sampling_period(10);
-int const nsamples = 4096;
-
 /**
  * Configuration parameters for bm_time_delay_estimator_many.
  *
@@ -50,6 +39,27 @@ public:
       microbenchmark;
   jb::config_attribute<config, int> n_timeseries;
 };
+
+/// Create all the test cases.
+jb::testing::microbenchmark_group<config> create_testcases();
+} // anonymous namespace
+
+int main(int argc, char* argv[]) {
+  // Simply call the generic microbenchmark for a group of testcases ...
+  return jb::testing::microbenchmark_group_main<config>(
+      argc, argv, create_testcases());
+}
+
+namespace {
+// These magic numbers are motivated by observed delays between two market
+// feeds.  They assume that delay is normally around 1,250 microseconds, but
+// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
+// delays we need samples that cover at least 18,000 microseconds, assuming
+// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
+// with sample sizes that are powers of 2, so we use 4096 samples.
+std::chrono::microseconds const expected_delay(1250);
+std::chrono::microseconds const sampling_period(10);
+int const nsamples = 4096;
 
 /**
  * Fixture for container like implementation (vector).
@@ -167,97 +177,57 @@ private:
   sum2_type sum2_;
 };
 
+/**
+ * Create a test case for the given timeseries type.
+ *
+ * Returns a (type erased) functor to run the microbenchmark for the
+ * give timeseries type.
+ *
+ * @tparam vector_type typically an instantiation of
+ * boost::multi_array<> or something similar.
+ */
 template <typename vector_type>
-void benchmark_test_case(config const& cfg) {
-  using benchmark = jb::testing::microbenchmark<fixture<vector_type>>;
-  benchmark bm(cfg.microbenchmark());
-  auto r = bm.run(cfg.n_timeseries());
-  bm.typical_output(r);
+std::function<void(config const&)> test_case() {
+  return [](config const& cfg) {
+    using benchmark = jb::testing::microbenchmark<fixture<vector_type>>;
+    benchmark bm(cfg.microbenchmark());
+    auto r = bm.run(cfg.n_timeseries());
+    bm.typical_output(r);
+  };
 }
 
-} // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.process_cmdline(argc, argv);
-
-  // initialize the logging framework ...
-  jb::log::init(cfg.log());
-  if (cfg.microbenchmark().verbose()) {
-    JB_LOG(info) << "Configuration for test\n" << cfg << "\n";
-  }
-
-  std::string test_case = cfg.microbenchmark().test_case();
-  if (test_case == "float:aligned:many") {
-    benchmark_test_case<jb::fftw::aligned_multi_array<float, 2>>(cfg);
-  } else if (test_case == "float:aligned:single") {
-    benchmark_test_case<jb::fftw::aligned_vector<float>>(cfg);
-  } else if (test_case == "double:aligned:many") {
-    benchmark_test_case<jb::fftw::aligned_multi_array<double, 2>>(cfg);
-  } else if (test_case == "double:aligned:single") {
-    benchmark_test_case<jb::fftw::aligned_vector<double>>(cfg);
-  } else if (test_case == "float:unaligned:many") {
-    benchmark_test_case<boost::multi_array<float, 2>>(cfg);
-  } else if (test_case == "float:unaligned:single") {
-    benchmark_test_case<std::vector<float>>(cfg);
-  } else if (test_case == "double:unaligned:many") {
-    benchmark_test_case<boost::multi_array<double, 2>>(cfg);
-  } else if (test_case == "double:unaligned:single") {
-    benchmark_test_case<std::vector<double>>(cfg);
-  } else if (test_case == "complex:float:aligned:many") {
-    benchmark_test_case<jb::fftw::aligned_multi_array<std::complex<float>, 2>>(
-        cfg);
-  } else if (test_case == "complex:float:aligned:single") {
-    benchmark_test_case<jb::fftw::aligned_vector<std::complex<float>>>(cfg);
-  } else if (test_case == "complex:double:aligned:many") {
-    benchmark_test_case<jb::fftw::aligned_multi_array<std::complex<double>, 2>>(
-        cfg);
-  } else if (test_case == "complex:double:aligned:single") {
-    benchmark_test_case<jb::fftw::aligned_vector<std::complex<double>>>(cfg);
-  } else if (test_case == "complex:float:unaligned:many") {
-    benchmark_test_case<boost::multi_array<std::complex<float>, 2>>(cfg);
-  } else if (test_case == "complex:float:unaligned:single") {
-    benchmark_test_case<std::vector<std::complex<float>>>(cfg);
-  } else if (test_case == "complex:double:unaligned:many") {
-    benchmark_test_case<boost::multi_array<std::complex<double>, 2>>(cfg);
-  } else if (test_case == "complex:double:unaligned:single") {
-    benchmark_test_case<std::vector<std::complex<double>>>(cfg);
-  } else {
-    std::ostringstream os;
-    os << "Unknown test case (" << test_case << ")" << std::endl;
-    os << " --test-case must be one of"
-       << ": float:aligned:many"
-       << ", double:aligned:many"
-       << ", float:unaligned:many"
-       << ", double:aligned:many"
-       << ", complex:float:aligned:many"
-       << ", complex:double:aligned:many"
-       << ", complex:float:unaligned:many"
-       << ", complex:double:unaligned:many"
-       << ", float:aligned:single"
-       << ", double:aligned:single"
-       << ", float:unaligned:single"
-       << ", double:aligned:single"
-       << ", complex:float:aligned:single"
-       << ", complex:double:aligned:single"
-       << ", complex:float:unaligned:single"
-       << ", complex:double:unaligned:single" << std::endl;
-    throw jb::usage(os.str(), 1);
-  }
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
+// Return the group of testcases
+jb::testing::microbenchmark_group<config> create_testcases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"float:aligned:many",
+       test_case<jb::fftw::aligned_multi_array<float, 2>>()},
+      {"float:aligned:single", test_case<jb::fftw::aligned_vector<float>>()},
+      {"double:aligned:many",
+       test_case<jb::fftw::aligned_multi_array<double, 2>>()},
+      {"double:aligned:single", test_case<jb::fftw::aligned_vector<double>>()},
+      {"float:unaligned:many", test_case<boost::multi_array<float, 2>>()},
+      {"float:unaligned:single", test_case<std::vector<float>>()},
+      {"double:unaligned:many", test_case<boost::multi_array<double, 2>>()},
+      {"double:unaligned:single", test_case<std::vector<double>>()},
+      {"complex:float:aligned:many",
+       test_case<jb::fftw::aligned_multi_array<std::complex<float>, 2>>()},
+      {"complex:float:aligned:single",
+       test_case<jb::fftw::aligned_vector<std::complex<float>>>()},
+      {"complex:double:aligned:many",
+       test_case<jb::fftw::aligned_multi_array<std::complex<double>, 2>>()},
+      {"complex:double:aligned:single",
+       test_case<jb::fftw::aligned_vector<std::complex<double>>>()},
+      {"complex:float:unaligned:many",
+       test_case<boost::multi_array<std::complex<float>, 2>>()},
+      {"complex:float:unaligned:single",
+       test_case<std::vector<std::complex<float>>>()},
+      {"complex:double:unaligned:many",
+       test_case<boost::multi_array<std::complex<double>, 2>>()},
+      {"complex:double:unaligned:single",
+       test_case<std::vector<std::complex<double>>>()},
+  };
 }
 
-namespace {
 namespace defaults {
 
 #ifndef JB_FFTW_DEFAULT_bm_time_delay_estimator_many_test_case

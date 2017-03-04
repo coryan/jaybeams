@@ -1,7 +1,7 @@
-#include <jb/opencl/config.hpp>
 #include <jb/opencl/device_selector.hpp>
-#include <jb/testing/create_random_timeseries.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 #include <jb/complex_traits.hpp>
 
 #include <boost/compute/algorithm/max_element.hpp>
@@ -9,23 +9,24 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/types/complex.hpp>
 #include <iostream>
-#include <random>
 #include <stdexcept>
 #include <string>
 
+/// Functions and types to benchmark the argmax reduction based on
+/// Boost.Compute
 namespace {
+using config = jb::opencl::microbenchmark_config;
 
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
+/// Return a table with all the testcases ..
+jb::testing::microbenchmark_group<config> create_testcases();
+} // anonymous namespace
 
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+int main(int argc, char* argv[]) {
+  auto testcases = create_testcases();
+  return jb::testing::microbenchmark_group_main<config>(argc, argv, testcases);
+}
 
+namespace {
 constexpr int default_size() {
   return 32768;
 }
@@ -69,12 +70,22 @@ std::size_t cpu_argmax(std::vector<T> const& host) {
       host.begin(), std::max_element(host.begin(), host.end(), less_real));
 }
 
-template <typename value_type, bool use_gpu = false>
+/**
+ * The benchmark fixture.
+ *
+ * @tparam value_type the values stored in the vector.
+ * @tparam use_gpu if true, the computation is executed using
+ * Boost.Compute, and presumably OpenCL in the GPU.
+ */
+template <typename value_type, bool use_gpu>
 class fixture {
 public:
+  /// Constructor
   fixture(boost::compute::context& context, boost::compute::command_queue& q)
       : fixture(default_size(), context, q) {
   }
+
+  /// Constructor with a size
   fixture(
       int size, boost::compute::context& context,
       boost::compute::command_queue& q)
@@ -82,14 +93,12 @@ public:
       , host(size)
       , queue(q)
       , unused(0) {
-    typedef typename jb::extract_value_type<value_type>::precision precision_t;
-    unsigned int seed = std::random_device()();
-    std::mt19937 gen(seed);
-    std::uniform_real_distribution<precision_t> dis(-1000, 1000);
-    auto generator = [&gen, &dis]() { return dis(gen); };
-    std::cerr << "SEED = " << seed << std::endl;
-    jb::testing::create_random_timeseries(generator, size, host);
+    int counter = 0;
+    for (auto& v : host) {
+      v = value_type(++counter);
+    }
     boost::compute::copy(host.begin(), host.end(), dev.begin(), queue);
+    queue.finish();
   }
 
   int run() {
@@ -101,6 +110,7 @@ public:
     return static_cast<int>(host.size());
   }
 
+  /// Disable aggressive optimizations
   std::size_t dummy() const {
     return unused;
   }
@@ -112,68 +122,36 @@ private:
   std::size_t unused;
 };
 
+/**
+ * Create one of the test-cases for the microbenchmark.
+ */
 template <typename value_type, bool use_gpu>
-void benchmark_test_case(config const& cfg) {
-  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
-  boost::compute::context context(device);
-  boost::compute::command_queue queue(context, device);
-  typedef jb::testing::microbenchmark<fixture<value_type, use_gpu>> benchmark;
-  benchmark bm(cfg.benchmark());
+std::function<void(config const&)> benchmark_test_case() {
+  return [](config const& cfg) {
+    boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
 
-  auto r = bm.run(context, queue);
-  bm.typical_output(r);
+    using benchmark = jb::testing::microbenchmark<fixture<value_type, use_gpu>>;
+    benchmark bm(cfg.microbenchmark());
+
+    auto r = bm.run(context, queue);
+    bm.typical_output(r);
+  };
 }
 
+/// A table with all the microbenchmark cases
+jb::testing::microbenchmark_group<config> create_testcases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"gpu:complex:float", benchmark_test_case<std::complex<float>, true>()},
+      {"gpu:complex:double", benchmark_test_case<std::complex<double>, true>()},
+      {"cpu:complex:float", benchmark_test_case<std::complex<float>, false>()},
+      {"cpu:complex:double",
+       benchmark_test_case<std::complex<double>, false>()},
+      {"gpu:float", benchmark_test_case<float, true>()},
+      {"gpu:double", benchmark_test_case<double, true>()},
+      {"cpu:float", benchmark_test_case<float, false>()},
+      {"cpu:double", benchmark_test_case<double, false>()},
+  };
+}
 } // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.benchmark(
-         jb::testing::microbenchmark_config().test_case("gpu:complex:float"))
-      .process_cmdline(argc, argv);
-
-  std::cerr << "Configuration for test\n" << cfg << std::endl;
-
-  auto test_case = cfg.benchmark().test_case();
-  if (test_case == "gpu:complex:float") {
-    benchmark_test_case<std::complex<float>, true>(cfg);
-  } else if (test_case == "gpu:complex:double") {
-    benchmark_test_case<std::complex<double>, true>(cfg);
-  } else if (test_case == "cpu:complex:float") {
-    benchmark_test_case<std::complex<float>, false>(cfg);
-  } else if (test_case == "cpu:complex:double") {
-    benchmark_test_case<std::complex<double>, false>(cfg);
-  } else if (test_case == "gpu:float") {
-    benchmark_test_case<float, true>(cfg);
-  } else if (test_case == "gpu:double") {
-    benchmark_test_case<double, true>(cfg);
-  } else if (test_case == "cpu:float") {
-    benchmark_test_case<float, false>(cfg);
-  } else if (test_case == "cpu:double") {
-    benchmark_test_case<double, false>(cfg);
-  } else {
-    std::ostringstream os;
-    os << "Unknown test case (" << test_case << ")" << std::endl;
-    os << " --test-case must be one of"
-       << ": gpu:complex:float"
-       << ", gpu:complex:double"
-       << ", cpu:complex:float"
-       << ", cpu:complex:double"
-       << ", gpu:float"
-       << ", gpu:double"
-       << ", cpu:float"
-       << ", cpu:double" << std::endl;
-    throw jb::usage(os.str(), 1);
-  }
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
-}
