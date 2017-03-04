@@ -12,18 +12,8 @@
 #include <stdexcept>
 #include <string>
 
+/// Helper types and functions to benchmark jb::fftw::time_delay_estimator.
 namespace {
-
-// These magic numbers are motivated by observed delays between two market
-// feeds.  They assume that delay is normally around 1,250 microseconds, but
-// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
-// delays we need samples that cover at least 18,000 microseconds, assuming
-// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
-// with sample sizes that are powers of 2, so we use 2048 samples.
-std::chrono::microseconds const expected_delay(1250);
-std::chrono::microseconds const sampling_period(10);
-int const nsamples = 2048;
-
 /// Configuration parameters for bm_time_delay_estimator
 class config : public jb::config_object {
 public:
@@ -36,6 +26,27 @@ public:
   jb::config_attribute<config, jb::testing::microbenchmark_config>
       microbenchmark;
 };
+
+/// Create all the test cases.
+jb::testing::microbenchmark_group<config> create_testcases();
+} // anonymous namespace
+
+int main(int argc, char* argv[]) {
+  // Simply call the generic microbenchmark for a group of testcases ...
+  return jb::testing::microbenchmark_group_main<config>(
+      argc, argv, create_testcases());
+}
+
+namespace {
+// These magic numbers are motivated by observed delays between two market
+// feeds.  They assume that delay is normally around 1,250 microseconds, but
+// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
+// delays we need samples that cover at least 18,000 microseconds, assuming
+// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
+// with sample sizes that are powers of 2, so we use 2048 samples.
+std::chrono::microseconds const expected_delay(1250);
+std::chrono::microseconds const sampling_period(10);
+int const nsamples = 2048;
 
 /**
  * The fixture for this microbenchmark.
@@ -111,28 +122,24 @@ std::function<void(config const&)> test_case() {
   };
 }
 
-/// A table with all the microbenchmark cases.
-jb::testing::microbenchmark_group<config> testcases{
-    {"float:aligned", test_case<jb::fftw::aligned_vector<float>>()},
-    {"double:aligned", test_case<jb::fftw::aligned_vector<double>>()},
-    {"float:unaligned", test_case<std::vector<float>>()},
-    {"double:unaligned", test_case<std::vector<double>>()},
-    {"complex:float:aligned",
-     test_case<jb::fftw::aligned_vector<std::complex<float>>>()},
-    {"complex:double:aligned",
-     test_case<jb::fftw::aligned_vector<std::complex<double>>>()},
-    {"complex:float:unaligned", test_case<std::vector<std::complex<float>>>()},
-    {"complex:double:unaligned",
-     test_case<std::vector<std::complex<double>>>()},
-};
-} // anonymous namespace
-
-int main(int argc, char* argv[]) {
-  // Simply call the generic microbenchmark for a group of testcases ...
-  return jb::testing::microbenchmark_group_main<config>(argc, argv, testcases);
+// Return the group of testcases
+jb::testing::microbenchmark_group<config> create_testcases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"float:aligned", test_case<jb::fftw::aligned_vector<float>>()},
+      {"double:aligned", test_case<jb::fftw::aligned_vector<double>>()},
+      {"float:unaligned", test_case<std::vector<float>>()},
+      {"double:unaligned", test_case<std::vector<double>>()},
+      {"complex:float:aligned",
+       test_case<jb::fftw::aligned_vector<std::complex<float>>>()},
+      {"complex:double:aligned",
+       test_case<jb::fftw::aligned_vector<std::complex<double>>>()},
+      {"complex:float:unaligned",
+       test_case<std::vector<std::complex<float>>>()},
+      {"complex:double:unaligned",
+       test_case<std::vector<std::complex<double>>>()},
+  };
 }
 
-namespace {
 namespace defaults {
 #ifndef JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case
 #define JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case "float:aligned"
