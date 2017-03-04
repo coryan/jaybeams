@@ -1,7 +1,7 @@
 #include <jb/clfft/plan.hpp>
-#include <jb/opencl/config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
 #include <boost/compute/command_queue.hpp>
@@ -11,17 +11,7 @@
 #include <string>
 
 namespace {
-
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
-
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+using config = jb::opencl::microbenchmark_config;
 
 int nsamples = 2048;
 
@@ -79,7 +69,7 @@ void benchmark_test_case(config const& cfg) {
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   typedef jb::testing::microbenchmark<fixture<pipelined>> benchmark;
-  benchmark bm(cfg.benchmark());
+  benchmark bm(cfg.microbenchmark());
 
   auto r = bm.run(context, queue);
   bm.typical_output(r);
@@ -89,13 +79,13 @@ void benchmark_test_case(config const& cfg) {
 
 int main(int argc, char* argv[]) try {
   config cfg;
-  cfg.benchmark(
+  cfg.microbenchmark(
          jb::testing::microbenchmark_config().test_case("complex:float:async"))
       .process_cmdline(argc, argv);
 
   std::cout << "Configuration for test\n" << cfg << std::endl;
 
-  auto test_case = cfg.benchmark().test_case();
+  auto test_case = cfg.microbenchmark().test_case();
   if (test_case == "complex:float:async") {
     benchmark_test_case<true>(cfg);
   } else if (test_case == "complex:float:sync") {

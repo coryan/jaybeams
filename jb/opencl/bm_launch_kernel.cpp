@@ -1,5 +1,5 @@
 #include <jb/opencl/build_simple_kernel.hpp>
-#include <jb/opencl/config.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
@@ -11,17 +11,7 @@
 #include <string>
 
 namespace {
-
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
-
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+using config = jb::opencl::microbenchmark_config;
 
 char const source[] = R"""(
 __kernel void empty() {
@@ -69,7 +59,7 @@ int main(int argc, char* argv[]) try {
   boost::compute::context context(device);
   boost::compute::command_queue queue(context, device);
   typedef jb::testing::microbenchmark<fixture> benchmark;
-  benchmark bm(cfg.benchmark());
+  benchmark bm(cfg.microbenchmark());
 
   auto r = bm.run(context, queue);
   bm.typical_output(r);

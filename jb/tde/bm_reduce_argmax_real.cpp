@@ -1,9 +1,8 @@
-#include <jb/opencl/config.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
 #include <jb/testing/microbenchmark_group_main.hpp>
 #include <jb/complex_traits.hpp>
-#include <jb/log.hpp>
 
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -16,16 +15,7 @@
 /// Functions and types to benchmark the argmax reduction based on
 /// Boost.Compute
 namespace {
-class config : public jb::config_object {
-public:
-  config();
-  config_object_constructors(config);
-
-  jb::config_attribute<config, jb::testing::microbenchmark_config>
-      microbenchmark;
-  jb::config_attribute<config, jb::log::config> log;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+using config = jb::opencl::microbenchmark_config;
 
 /// Return a table with all the testcases ..
 jb::testing::microbenchmark_group<config> create_testcases();
@@ -37,14 +27,6 @@ int main(int argc, char* argv[]) {
 }
 
 namespace {
-config::config()
-    : microbenchmark(
-          desc("microbenchmark", "microbenchmark"), this,
-          jb::testing::microbenchmark_config().test_case("gpu:float"))
-    , log(desc("log", "log"), this)
-    , opencl(desc("opencl", "opencl"), this) {
-}
-
 constexpr int default_size() {
   return 32768;
 }

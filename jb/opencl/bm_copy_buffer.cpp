@@ -1,4 +1,4 @@
-#include <jb/opencl/config.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/testing/microbenchmark.hpp>
@@ -14,21 +14,7 @@
 #include <unistd.h>
 
 namespace {
-class config : public jb::config_object {
-public:
-  config()
-      : microbenchmark(
-            desc("microbenchmark"), this,
-            jb::testing::microbenchmark_config().test_case("upload:aligned"))
-      , log(desc("log", "log"), this)
-      , opencl(desc("opencl"), this) {
-  }
-
-  jb::config_attribute<config, jb::testing::microbenchmark_config>
-      microbenchmark;
-  jb::config_attribute<config, jb::log::config> log;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+using config = jb::opencl::microbenchmark_config;
 
 /// Create all the testcases
 jb::testing::microbenchmark_group<config> create_test_cases();

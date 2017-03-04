@@ -1,4 +1,4 @@
-#include <jb/opencl/config.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/generic_reduce.hpp>
 #include <jb/testing/initialize_mersenne_twister.hpp>
@@ -21,15 +21,11 @@ namespace {
 /**
  * The configuration class for this benchmark.
  */
-class config : public jb::config_object {
+class config : public jb::opencl::microbenchmark_config {
 public:
   config();
   config_object_constructors(config);
 
-  jb::config_attribute<config, jb::testing::microbenchmark_config>
-      microbenchmark;
-  jb::config_attribute<config, jb::log::config> log;
-  jb::config_attribute<config, jb::opencl::config> opencl;
   jb::config_attribute<config, bool> randomize_size;
   jb::config_attribute<config, bool> copy_data;
 };
@@ -56,11 +52,7 @@ std::string randomize_size_help() {
 }
 
 config::config()
-    : microbenchmark(
-          desc("microbenchmark", "microbenchmark"), this,
-          jb::testing::microbenchmark_config().test_case("float:boost"))
-    , log(desc("log", "log"), this)
-    , opencl(desc("opencl"), this)
+    : microbenchmark_config()
     , randomize_size(
           desc("randomize-size").help(randomize_size_help()), this, true)
     , copy_data(
