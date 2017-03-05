@@ -127,4 +127,12 @@ BOOST_AUTO_TEST_CASE(clfft_plan_error) {
   BOOST_CHECK_THROW(
       jb::clfft::create_forward_plan_1d(tmp, in, context, queue),
       std::invalid_argument);
+
+  outvector out(size, context);
+  BOOST_CHECK_THROW(
+      jb::clfft::create_forward_plan_1d(out, in, context, queue, 0),
+      std::invalid_argument);
+  BOOST_CHECK_THROW(
+      jb::clfft::create_forward_plan_1d(out, in, context, queue, 3),
+      std::invalid_argument);
 }
