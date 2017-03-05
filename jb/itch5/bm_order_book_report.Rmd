@@ -30,7 +30,7 @@ structure:
 ```{r}
 data <- read.csv(
     file=data.filename, header=FALSE, comment.char='#',
-    col.names=c('book_type', 'nanoseconds'))
+    col.names=c('book_type', 'size', 'nanoseconds'))
 ```
 
 The raw data is in nanoseconds, I prefer microseconds because they are

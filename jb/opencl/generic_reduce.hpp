@@ -1,7 +1,7 @@
-#ifndef jb_tde_generic_reduce_hpp
-#define jb_tde_generic_reduce_hpp
+#ifndef jb_opencl_generic_reduce_hpp
+#define jb_opencl_generic_reduce_hpp
 
-#include <jb/tde/generic_reduce_program.hpp>
+#include <jb/opencl/generic_reduce_program.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 #include <jb/p2ceil.hpp>
@@ -11,7 +11,7 @@
 #include <boost/compute/memory/local_buffer.hpp>
 
 namespace jb {
-namespace tde {
+namespace opencl {
 
 /**
  * Implement a generic reducer for OpenCL.
@@ -29,7 +29,7 @@ namespace tde {
  * TODO(coryan) this class is work in progress, it is not fully implemented
  *
  * @tparam reducer a class derived from generic_reduce<reducer,...>.
- * Please see jb::tde::reducer_concept for details.
+ * Please see jb::opencl::reducer_concept for details.
  * @tparam input_type_t the host type that represents the input
  * @tparam output_type_t the host type that represents the output
  */
@@ -63,11 +63,12 @@ public:
    * @param queue a command queue to communicate with a single OpenCL device
    */
   generic_reduce(std::size_t size, boost::compute::command_queue const& queue)
-      : size_(size)
-      , queue_(queue)
+      : queue_(queue)
       , program_(create_program(queue))
       , initial_(program_, "generic_transform_reduce_initial")
-      , intermediate_(program_, "generic_transform_reduce_intermediate") {
+      , intermediate_(program_, "generic_transform_reduce_intermediate")
+      , ping_(queue_.get_context())
+      , pong_(queue_.get_context()) {
     // ... size the first pass of the reduction.  We need to balance two
     // constraints:
     //   (a) We cannot use more memory than whatever the device
@@ -99,17 +100,6 @@ public:
     // threads can we effectively use, nless local scratch is tiny,
     // almost all of the time this would be max_workgroup_size ...
     effective_workgroup_size_ = std::min(scratch_size_, max_workgroup_size_);
-
-    // ... so in a single pass we will need this many workgroups to
-    // handle all the data ...
-    auto workgroups =
-        std::max(std::size_t(1), size_ / effective_workgroup_size_);
-
-    // ... a lot of that silly math was to size the output buffer ...
-    ping_ =
-        boost::compute::vector<output_type>(workgroups, queue_.get_context());
-    pong_ =
-        boost::compute::vector<output_type>(workgroups, queue_.get_context());
   }
 
   /**
@@ -123,34 +113,36 @@ public:
    * asynchronously (but waiting for each other), until the output has
    * been reduced to a vector with a single element.
    *
-   * @param src the device vector that will be reduced, the code
-   * assumes that the vector is initialized by the time all the events
-   * in @a wait have completed.
+   * @param begin the beginning of the range to be reduced.
+   * @param end the end of the range to be reduced.
    * @param wait a list of events to wait for before any work starts
    * on the device.
    *
-   * @returns a boost::compute::future<>, when ready, the future
-   * contains an iterator to the beginning of a vector with a single
-   * element.
+   * @returns a boost::compute::future<>, when said future is ready,
+   * it contains an iterator pointing to the result.  Calls to
+   * execute() invalidate this iterator.
    */
+  template <typename InputIterator>
   boost::compute::future<vector_iterator> execute(
-      boost::compute::vector<input_type> const& src,
+      InputIterator begin, InputIterator end,
       boost::compute::wait_list const& wait = boost::compute::wait_list()) {
-    if (src.size() != size_) {
-      throw std::invalid_argument("mismatched size");
-    }
+    auto size = std::distance(begin, end);
 
-    // First initialize how much work we can do in each workgroup ...
+    // ... initialize how much work we can do in each workgroup ...
     auto workgroup_size = effective_workgroup_size_;
     // ... that determines how manny workgroups we can work on ...
-    auto workgroups = size_ / workgroup_size;
+    auto workgroups = size / workgroup_size;
     if (workgroups == 0) {
       workgroups = 1;
     }
+    // ... resize the temporary buffers ...
+    ping_.resize(workgroups, queue_);
+    pong_.resize(workgroups, queue_);
+
     // ... with those values we can compute how many values will each
     // thread need to aggregate ...
     auto div = std::div(
-        static_cast<long long>(size_),
+        static_cast<long long>(size),
         static_cast<long long>(workgroups * workgroup_size));
     // ... that is "values-per-thread" ...
     auto VPT = div.quot + (div.rem != 0);
@@ -161,8 +153,8 @@ public:
     initial_.set_arg(arg++, ping_);
     initial_.set_arg(arg++, boost::compute::ulong_(VPT));
     initial_.set_arg(arg++, boost::compute::ulong_(workgroup_size));
-    initial_.set_arg(arg++, boost::compute::ulong_(size_));
-    initial_.set_arg(arg++, src);
+    initial_.set_arg(arg++, boost::compute::ulong_(size));
+    initial_.set_arg(arg++, begin.get_buffer());
     initial_.set_arg(
         arg++, boost::compute::local_buffer<output_type>(workgroup_size));
     // ... schedule that program to start ...
@@ -224,9 +216,31 @@ public:
     return boost::compute::make_future(ping_.begin(), event);
   }
 
+  /**
+   * Schedule a reduction for a full vector.
+   *
+   * See the other overload of this member function for details.
+   *
+   * @param src the vector to be reduced
+   * @param wait a wait list that must be completed before the
+   * reduction starts
+   * @returns a boost::compute::future<>, when said future is ready,
+   * it contains an iterator pointing to the result.  Calls to
+   * execute() invalidate this iterator.
+   */
+  boost::compute::future<vector_iterator> execute(
+      boost::compute::vector<input_type> const& src,
+      boost::compute::wait_list const& wait = boost::compute::wait_list()) {
+    return execute(src.begin(), src.end(), wait);
+  }
+
   static boost::compute::program
   create_program(boost::compute::command_queue const& queue) {
     std::ostringstream os;
+    auto device = queue.get_device();
+    if (device.supports_extension("cl_khr_fp64")) {
+      os << "#pragma OPENCL EXTENSION cl_khr_fp64 : enable\n\n";
+    }
     os << "typedef " << boost::compute::type_name<input_type_t>()
        << " reduce_input_t;\n";
     os << "typedef " << boost::compute::type_name<output_type_t>()
@@ -260,7 +274,7 @@ public:
   }
 
 private:
-  std::size_t size_;
+private:
   boost::compute::command_queue queue_;
   boost::compute::program program_;
   boost::compute::kernel initial_;
@@ -273,7 +287,7 @@ private:
   boost::compute::vector<output_type> pong_;
 };
 
-} // namespace tde
+} // namespace opencl
 } // namespace jb
 
-#endif // jb_tde_generic_reduce_hpp
+#endif // jb_opencl_generic_reduce_hpp

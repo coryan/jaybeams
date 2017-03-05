@@ -1,7 +1,8 @@
-#include <jb/opencl/config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -13,18 +14,21 @@
 #include <unistd.h>
 
 namespace {
+using config = jb::opencl::microbenchmark_config;
 
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
+/// Create all the testcases
+jb::testing::microbenchmark_group<config> create_test_cases();
 
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+} // anonymous namespace
 
+int main(int argc, char* argv[]) {
+  // Simply call the generic microbenchmark for a group of testcases
+  // ...
+  auto testcases = create_test_cases();
+  return jb::testing::microbenchmark_group_main<config>(argc, argv, testcases);
+}
+
+namespace {
 // By default use a single page, at least a typical page size
 int get_page_size() {
   return static_cast<int>(sysconf(_SC_PAGESIZE));
@@ -71,8 +75,9 @@ public:
     }
   }
 
-  void run() {
+  int run() {
     boost::compute::copy(start, end, dev.begin(), queue);
+    return static_cast<int>(dev.size());
   }
 
 private:
@@ -85,60 +90,36 @@ private:
 
 /// Implement the download case
 template <>
-void fixture<false>::run() {
+int fixture<false>::run() {
   boost::compute::copy(dev.begin(), dev.end(), start, queue);
+  return static_cast<int>(dev.size());
 }
 
 template <bool upload>
 void benchmark_test_case(config const& cfg, bool aligned) {
-  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
-  boost::compute::context context(device);
-  boost::compute::command_queue queue(context, device);
-  typedef jb::testing::microbenchmark<fixture<upload>> benchmark;
-  benchmark bm(cfg.benchmark());
+}
 
-  auto r = bm.run(context, queue, aligned);
-  bm.typical_output(r);
+template <bool upload, bool aligned>
+std::function<void(config const&)> test_case() {
+  return [](config const& cfg) {
+    boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+    typedef jb::testing::microbenchmark<fixture<upload>> benchmark;
+    benchmark bm(cfg.microbenchmark());
+
+    auto r = bm.run(context, queue, aligned);
+    bm.typical_output(r);
+  };
+}
+
+jb::testing::microbenchmark_group<config> create_test_cases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"upload:aligned", test_case<true, true>()},
+      {"upload:misaligned", test_case<true, false>()},
+      {"download:aligned", test_case<false, true>()},
+      {"download:misaligned", test_case<false, false>()},
+  };
 }
 
 } // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.benchmark(
-         jb::testing::microbenchmark_config().test_case("upload:aligned"))
-      .process_cmdline(argc, argv);
-
-  std::cerr << "Configuration for test\n" << cfg << std::endl;
-
-  auto test_case = cfg.benchmark().test_case();
-  if (test_case == "upload:aligned") {
-    benchmark_test_case<true>(cfg, true);
-  } else if (test_case == "upload:misaligned") {
-    benchmark_test_case<true>(cfg, false);
-  } else if (test_case == "download:aligned") {
-    benchmark_test_case<false>(cfg, true);
-  } else if (test_case == "download:misaligned") {
-    benchmark_test_case<false>(cfg, false);
-  } else {
-    std::ostringstream os;
-    os << "Unknown test case (" << test_case << ")" << std::endl;
-    os << " --test-case must be one of"
-       << ": upload:aligned"
-       << ", upload:misaligned"
-       << ", download:saligned"
-       << ", download:misaligned" << std::endl;
-    throw jb::usage(os.str(), 1);
-  }
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
-}

@@ -221,19 +221,28 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
   jb/fftw/ut_time_delay_estimator \
   jb/fftw/ut_time_delay_estimator_many \
   jb/fftw/ut_traits
+
 benchmarks += jb/fftw/bm_time_delay_estimator \
   jb/fftw/bm_time_delay_estimator_many
+
 examples += examples/fftw_correlation_no_wrappers
+
+bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
+
 AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
+
 LDFLAGS += $(FFTW3_LDFLAGS)
+
 jb_ut_fftw_ldadd = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
   $(FFTW3_LIBS) \
   $(jb_ut_ldadd)
+
 jb_ut_fftw_ldflags = \
   $(FFTW3_LDFLAGS) \
   $(jb_ut_ldflags)
+
 else
 jb_ut_fftw_ldadd =
 jb_ut_fftw_ldflags =
@@ -306,7 +315,8 @@ jb_libjb_testing_adir = $(includedir)
 jb_libjb_testing_a_SOURCES = \
   jb/testing/compile_info.cpp \
   jb/testing/microbenchmark_base.cpp \
-  jb/testing/microbenchmark_config.cpp
+  jb/testing/microbenchmark_config.cpp \
+  jb/testing/microbenchmark_group_main.cpp
 
 nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/check_close_enough.hpp \
@@ -317,6 +327,7 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
   jb/testing/microbenchmark_config.hpp \
+  jb/testing/microbenchmark_group_main.hpp \
   jb/testing/sum_square.hpp
 
 jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
@@ -713,16 +724,21 @@ jb_fftw_bm_time_delay_estimator_many_LDFLAGS = \
 ################################################################
 if HAVE_OPENCL
 
-lib_LIBRARIES += jb/libjb_opencl.a
+lib_LIBRARIES += \
+  jb/libjb_opencl.a \
+  jb/libjb_opencl_testing.a
+
 jb_opencl_unit_tests = \
   jb/opencl/ut_build_simple_kernel \
   jb/opencl/ut_copy_to_host_async \
   jb/opencl/ut_config \
-  jb/opencl/ut_device_selector
+  jb/opencl/ut_device_selector \
+  jb/opencl/ut_generic_reduce
 jb_opencl_examples = \
   jb/opencl/show_device
 jb_opencl_benchmarks = \
   jb/opencl/bm_copy_buffer \
+  jb/opencl/bm_generic_reduce \
   jb/opencl/bm_launch_kernel
 
 jb_ut_opencl_ldadd = \
@@ -749,7 +765,6 @@ jb_ut_clfft_ldflags = \
 lib_LIBRARIES += jb/libjb_tde.a
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
-  jb/tde/ut_generic_reduce \
   jb/tde/ut_reduce_argmax_real
 jb_tde_benchmarks = \
   jb/tde/bm_reduce_argmax_real
@@ -761,7 +776,8 @@ jb_ut_tde_ldflags = \
   $(jb_ut_clfft_ldflags)
 
 AM_CXXFLAGS += \
-  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
+  $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS \
+  $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
 
 check_PROGRAMS += \
   $(jb_opencl_unit_tests) \
@@ -784,11 +800,23 @@ jb_libjb_opencl_adir = $(includedir)
 jb_libjb_opencl_a_SOURCES = \
   jb/opencl/build_simple_kernel.cpp \
   jb/opencl/config.cpp \
-  jb/opencl/device_selector.cpp
+  jb/opencl/device_selector.cpp \
+  jb/opencl/generic_reduce_program.cpp
 nobase_jb_libjb_opencl_a_HEADERS = \
   jb/opencl/build_simple_kernel.hpp \
   jb/opencl/config.hpp \
-  jb/opencl/device_selector.hpp
+  jb/opencl/device_selector.hpp \
+  jb/opencl/generic_reduce_program.hpp
+
+jb/opencl/generic_reduce_program.cpp: jb/opencl/generic_reduce_program.cl Makefile
+	$(AM_V_GEN)echo '#include <jb/opencl/generic_reduce_program.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::opencl::generic_reduce_program_source[] = R"""(' >>$@; \
+	cat $< >>$@; \
+	echo ')""";' >> $@
+
+
+# Unit tests for jb/libjb_opencl.a
 
 jb_opencl_ut_build_simple_kernel_SOURCES = jb/opencl/ut_build_simple_kernel.cpp
 jb_opencl_ut_build_simple_kernel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_build_simple_kernel
@@ -810,16 +838,49 @@ jb_opencl_ut_device_selector_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_op
 jb_opencl_ut_device_selector_LDFLAGS = $(jb_opencl_ldflags)
 jb_opencl_ut_device_selector_LDADD = $(jb_ut_opencl_ldadd)
 
+jb_opencl_ut_generic_reduce_SOURCES = jb/opencl/ut_generic_reduce.cpp
+jb_opencl_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_opencl_ut_generic_reduce
+jb_opencl_ut_generic_reduce_LDFLAGS = $(jb_ut_opencl_ldflags)
+jb_opencl_ut_generic_reduce_LDADD = $(jb_ut_opencl_ldadd)
+
 jb_opencl_show_device_SOURCES = jb/opencl/show_device.cpp
 jb_opencl_show_device_LDADD = jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
 
 jb_opencl_bm_copy_buffer_SOURCES = jb/opencl/bm_copy_buffer.cpp
 jb_opencl_bm_copy_buffer_LDFLAGS = $(jb_opencl_ldflags)
-jb_opencl_bm_copy_buffer_LDADD = jb/libjb_testing.a jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
+jb_opencl_bm_copy_buffer_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_opencl_testing.a \
+  jb/libjb_opencl.a \
+  jb/libjb.a \
+  $(OPENCL_LIB)
+
+jb_opencl_bm_generic_reduce_SOURCES = jb/opencl/bm_generic_reduce.cpp
+jb_opencl_bm_generic_reduce_LDFLAGS = $(jb_opencl_ldflags)
+jb_opencl_bm_generic_reduce_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_opencl_testing.a \
+  jb/libjb_opencl.a \
+  jb/libjb.a \
+  $(OPENCL_LIB)
 
 jb_opencl_bm_launch_kernel_SOURCES = jb/opencl/bm_launch_kernel.cpp
 jb_opencl_bm_launch_kernel_LDFLAGS =   $(jb_opencl_ldflags)
-jb_opencl_bm_launch_kernel_LDADD = jb/libjb_testing.a jb/libjb_opencl.a jb/libjb.a $(OPENCL_LIB)
+jb_opencl_bm_launch_kernel_LDADD = \
+  jb/libjb_testing.a \
+  jb/libjb_opencl_testing.a \
+  jb/libjb_opencl.a \
+  jb/libjb.a \
+  $(OPENCL_LIB)
+
+#
+# jb/libjb_opencl_testing.a
+#
+jb_libjb_opencl_testing_adir = $(includedir)
+jb_libjb_opencl_testing_a_SOURCES = \
+  jb/opencl/microbenchmark_config.cpp
+nobase_jb_libjb_opencl_testing_a_HEADERS = \
+  jb/opencl/microbenchmark_config.hpp
 
 #
 # jb/libjb_clfft.a
@@ -852,6 +913,7 @@ jb_clfft_bm_single_fft_LDFLAGS = \
 jb_clfft_bm_single_fft_LDADD = \
   jb/libjb_testing.a \
   jb/libjb_clfft.a \
+  jb/libjb_opencl_testing.a \
   jb/libjb_opencl.a \
   jb/libjb.a \
   $(CLFFT_LIB) \
@@ -862,11 +924,9 @@ jb_clfft_bm_single_fft_LDADD = \
 #
 
 jb_libjb_tde_a_SOURCES += \
-  jb/tde/conjugate_and_multiply_kernel.cpp \
-  jb/tde/generic_reduce_program.cpp
+  jb/tde/conjugate_and_multiply_kernel.cpp
 nobase_jb_libjb_tde_a_HEADERS += \
-  jb/tde/conjugate_and_multiply_kernel.hpp \
-  jb/tde/generic_reduce_program.hpp
+  jb/tde/conjugate_and_multiply_kernel.hpp
 
 jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.cl Makefile
 	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
@@ -882,13 +942,6 @@ jb/tde/reduce_argmax_real_kernel.cpp: jb/tde/reduce_argmax_real_kernel.cl Makefi
 	cat $< >>$@; \
 	echo ')""";' >> $@
 
-jb/tde/generic_reduce_program.cpp: jb/tde/generic_reduce_program.cl Makefile
-	$(AM_V_GEN)echo '#include <jb/tde/generic_reduce_program.hpp>' >$@; \
-	echo '' >>$@; \
-	echo 'char const jb::tde::generic_reduce_program_source[] = R"""(' >>$@; \
-	cat $< >>$@; \
-	echo ')""";' >> $@
-
 jb_tde_ut_conjugate_and_multiply_SOURCES = jb/tde/ut_conjugate_and_multiply.cpp
 jb_tde_ut_conjugate_and_multiply_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_conjugate_and_multiply
 jb_tde_ut_conjugate_and_multiply_LDFLAGS = $(jb_ut_tde_ldflags)
@@ -899,17 +952,13 @@ jb_tde_ut_reduce_argmax_real_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_td
 jb_tde_ut_reduce_argmax_real_LDFLAGS = $(jb_ut_tde_ldflags)
 jb_tde_ut_reduce_argmax_real_LDADD = $(jb_ut_tde_ldadd)
 
-jb_tde_ut_generic_reduce_SOURCES = jb/tde/ut_generic_reduce.cpp
-jb_tde_ut_generic_reduce_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_tde_ut_generic_reduce
-jb_tde_ut_generic_reduce_LDFLAGS = $(jb_ut_tde_ldflags)
-jb_tde_ut_generic_reduce_LDADD = $(jb_ut_tde_ldadd)
-
 jb_tde_bm_reduce_argmax_real_SOURCES = jb/tde/bm_reduce_argmax_real.cpp
 jb_tde_bm_reduce_argmax_real_CPPFLAGS =
 jb_tde_bm_reduce_argmax_real_LDADD = \
   jb/libjb_testing.a \
   jb/libjb_tde.a \
   jb/libjb_clfft.a \
+  jb/libjb_opencl_testing.a \
   jb/libjb_opencl.a \
   jb/libjb.a \
   $(CLFFT_LIB) \

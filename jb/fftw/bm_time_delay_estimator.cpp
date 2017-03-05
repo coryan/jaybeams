@@ -1,46 +1,95 @@
+/**
+ * A microbenchmark for different instantiations of jb::time_delay_estimator.
+ */
 #include <jb/fftw/time_delay_estimator.hpp>
 #include <jb/testing/create_square_timeseries.hpp>
 #include <jb/testing/delay_timeseries.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
+/// Helper types and functions to benchmark jb::fftw::time_delay_estimator.
 namespace {
+/// Configuration parameters for bm_time_delay_estimator
+class config : public jb::config_object {
+public:
+  config();
+  config_object_constructors(config);
 
-// We expect delays to be around 1250 microseconds, max delays are
-// around 6,000, so we need at least a 3*6000 ~ 18,000 microsecond
-// baseline.  Rounded up to a power of 2 that is 32768.  Sampling
-// every 16 microseconds that is 32768 / 16.
+  void validate() const override;
+
+  jb::config_attribute<config, jb::log::config> log;
+  jb::config_attribute<config, jb::testing::microbenchmark_config>
+      microbenchmark;
+};
+
+/// Create all the test cases.
+jb::testing::microbenchmark_group<config> create_testcases();
+} // anonymous namespace
+
+int main(int argc, char* argv[]) {
+  // Simply call the generic microbenchmark for a group of testcases ...
+  return jb::testing::microbenchmark_group_main<config>(
+      argc, argv, create_testcases());
+}
+
+namespace {
+// These magic numbers are motivated by observed delays between two market
+// feeds.  They assume that delay is normally around 1,250 microseconds, but
+// can be as large as 6,000 microseconds.  To reliably detect the 6,000 usecs
+// delays we need samples that cover at least 18,000 microseconds, assuming
+// a sampling rate of 10 microseconds that is 1,800 samples, FFTs work well
+// with sample sizes that are powers of 2, so we use 2048 samples.
 std::chrono::microseconds const expected_delay(1250);
-std::chrono::microseconds const sampling_period(16);
-int nsamples = 32768 / 16;
+std::chrono::microseconds const sampling_period(10);
+int const nsamples = 2048;
 
+/**
+ * The fixture for this microbenchmark.
+ *
+ * Run the microbenchmark with an specific timeseries type (vector
+ * vs. aligned_vector, float vs. complex vs. double).
+ *
+ * @tparam timeseries_type the type of timeseries, typically an
+ * instance of std::vector<> or jb::fftw::aligned_vector<>.
+ */
 template <typename timeseries_type>
 class fixture {
 public:
+  /// Define the tested estimator type.
+  using tested = jb::fftw::time_delay_estimator<timeseries_type>;
+
+  /// Constructor with default size
   fixture()
       : fixture(nsamples) {
   }
+
+  /// Constructor with given size
   fixture(int size)
       : a(size)
       , b(size)
       , estimator(a, b) {
+    // Initialize the values in the timeseries.  The estimator is
+    // already initialized and ready to run ...
     jb::testing::create_square_timeseries(size, a);
     b = jb::testing::delay_timeseries_periodic(
         a, expected_delay, sampling_period);
   }
 
-  void run() {
+  /// Run a single iteration of the estimation
+  int run() {
+    // ... perform the estimation ...
     auto e = estimator.estimate_delay(a, b);
+    // ... we could ignore the value, but just in case ...
     if (not e.first) {
       throw std::runtime_error("estimation failed");
     }
+    return static_cast<int>(a.size());
   }
-
-  using tested = jb::fftw::time_delay_estimator<timeseries_type>;
 
 private:
   timeseries_type a;
@@ -48,62 +97,68 @@ private:
   tested estimator;
 };
 
-template <typename vector_type>
-void benchmark_test_case(jb::testing::microbenchmark_config const& cfg) {
-  using benchmark = jb::testing::microbenchmark<fixture<vector_type>>;
-  benchmark bm(cfg);
+/**
+ * Create a test case for the given timeseries type.
+ *
+ * Returns a (type erased) functor to run the microbenchmark for the
+ * give timeseries type.
+ *
+ * @tparam timeseries_type typically an instantiation of std::vector<>
+ * or jb::fftw::aligned_vector<>.
+ */
+template <typename timeseries_type>
+std::function<void(config const&)> test_case() {
+  return [](config const& cfg) {
+    // Create a microbenchmark with the right fixture, initialize from
+    // the configuration parameter ...
+    using benchmark = jb::testing::microbenchmark<fixture<timeseries_type>>;
+    benchmark bm(cfg.microbenchmark());
 
-  auto r = bm.run();
-  bm.typical_output(r);
+    // ... run the microbenchmark ...
+    auto r = bm.run();
+    // ... output in the most commonly used format for JayBeams
+    // microbenchmarks ...
+    bm.typical_output(r);
+  };
+}
+
+// Return the group of testcases
+jb::testing::microbenchmark_group<config> create_testcases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"float:aligned", test_case<jb::fftw::aligned_vector<float>>()},
+      {"double:aligned", test_case<jb::fftw::aligned_vector<double>>()},
+      {"float:unaligned", test_case<std::vector<float>>()},
+      {"double:unaligned", test_case<std::vector<double>>()},
+      {"complex:float:aligned",
+       test_case<jb::fftw::aligned_vector<std::complex<float>>>()},
+      {"complex:double:aligned",
+       test_case<jb::fftw::aligned_vector<std::complex<double>>>()},
+      {"complex:float:unaligned",
+       test_case<std::vector<std::complex<float>>>()},
+      {"complex:double:unaligned",
+       test_case<std::vector<std::complex<double>>>()},
+  };
+}
+
+namespace defaults {
+#ifndef JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case
+#define JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case "float:aligned"
+#endif // JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case
+
+std::string const test_case =
+    JB_FFTW_DEFAULT_fftw_bm_time_delay_estimator_test_case;
+} // namespace defaults
+
+config::config()
+    : log(desc("log", "logging"), this)
+    , microbenchmark(
+          desc("microbenchmark", "microbenchmark"), this,
+          jb::testing::microbenchmark_config().test_case(defaults::test_case)) {
+}
+
+void config::validate() const {
+  log().validate();
+  microbenchmark().validate();
 }
 
 } // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  jb::testing::microbenchmark_config cfg;
-  cfg.test_case("float:aligned").process_cmdline(argc, argv);
-
-  std::cout << "Configuration for test\n" << cfg << std::endl;
-
-  if (cfg.test_case() == "float:aligned") {
-    benchmark_test_case<jb::fftw::aligned_vector<float>>(cfg);
-  } else if (cfg.test_case() == "double:aligned") {
-    benchmark_test_case<jb::fftw::aligned_vector<double>>(cfg);
-  } else if (cfg.test_case() == "float:unaligned") {
-    benchmark_test_case<std::vector<float>>(cfg);
-  } else if (cfg.test_case() == "double:unaligned") {
-    benchmark_test_case<std::vector<double>>(cfg);
-  } else if (cfg.test_case() == "complex:float:aligned") {
-    benchmark_test_case<jb::fftw::aligned_vector<std::complex<float>>>(cfg);
-  } else if (cfg.test_case() == "complex:double:aligned") {
-    benchmark_test_case<jb::fftw::aligned_vector<std::complex<double>>>(cfg);
-  } else if (cfg.test_case() == "complex:float:unaligned") {
-    benchmark_test_case<std::vector<std::complex<float>>>(cfg);
-  } else if (cfg.test_case() == "complex:double:unaligned") {
-    benchmark_test_case<std::vector<std::complex<double>>>(cfg);
-  } else {
-    std::ostringstream os;
-    os << "Unknown test case (" << cfg.test_case() << ")" << std::endl;
-    os << " --test-case must be one of"
-       << ": float:aligned"
-       << ", double:aligned"
-       << ", float:unaligned"
-       << ", double:aligned"
-       << ", complex:float:aligned"
-       << ", complex:double:aligned"
-       << ", complex:float:unaligned"
-       << ", complex:double:unaligned" << std::endl;
-    throw jb::usage(os.str(), 1);
-  }
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
-}

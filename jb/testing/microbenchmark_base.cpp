@@ -19,10 +19,25 @@ void jb::testing::microbenchmark_base::typical_output(results const& r) const {
 
 void jb::testing::microbenchmark_base::write_results(
     std::ostream& os, results const& r) const {
-  using namespace std::chrono;
+  bool all_sizes_are_zero = true;
   for (auto const& v : r) {
-    os << config_.prefix() << duration_cast<nanoseconds>(v.second).count()
-       << "\n";
+    if (v.first != 0) {
+      all_sizes_are_zero = false;
+      break;
+    }
+  }
+
+  using namespace std::chrono;
+  if (all_sizes_are_zero) {
+    for (auto const& v : r) {
+      os << config_.prefix() << duration_cast<nanoseconds>(v.second).count()
+         << "\n";
+    }
+  } else {
+    for (auto const& v : r) {
+      os << config_.prefix() << v.first << ","
+         << duration_cast<nanoseconds>(v.second).count() << "\n";
+    }
   }
 }
 

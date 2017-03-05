@@ -1,8 +1,9 @@
 #include <jb/clfft/plan.hpp>
-#include <jb/opencl/config.hpp>
 #include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 
 #include <boost/compute/command_queue.hpp>
 #include <chrono>
@@ -10,21 +11,27 @@
 #include <stdexcept>
 #include <string>
 
+/// Helper types and functions for (trivial) benchmarks of clFFT.
 namespace {
+using config = jb::opencl::microbenchmark_config;
+jb::testing::microbenchmark_group<config> create_testcases();
+} // anonymous namespace
 
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
+int main(int argc, char* argv[]) {
+  auto testcases = create_testcases();
+  return jb::testing::microbenchmark_group_main(argc, argv, testcases);
+}
 
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+namespace {
+// By default test with around one million samples
+int nsamples = 1 << 20;
 
-int nsamples = 2048;
-
+/**
+ * The fixture for this benchmark.
+ *
+ * @tparam pipelined if true, the copy operations are pipelined with
+ * the computation operations.
+ */
 template <bool pipelined>
 class fixture {
 public:
@@ -42,10 +49,11 @@ public:
       , fft(jb::clfft::create_forward_plan_1d(out, in, context, queue)) {
   }
 
-  void run() {
+  int run() {
     boost::compute::copy(src.begin(), src.end(), in.begin(), queue);
     fft.enqueue(out, in, queue).wait();
     boost::compute::copy(out.begin(), out.end(), dst.begin(), queue);
+    return static_cast<int>(src.size());
   }
 
 private:
@@ -60,7 +68,7 @@ private:
 };
 
 template <>
-void fixture<true>::run() {
+int fixture<true>::run() {
   using namespace boost::compute;
   auto upload_done = copy_async(src.begin(), src.end(), in.begin(), queue);
   auto fft_done =
@@ -68,53 +76,29 @@ void fixture<true>::run() {
   auto download_done = jb::opencl::copy_to_host_async(
       out.begin(), out.end(), dst.begin(), queue, wait_list(fft_done));
   download_done.wait();
+  return static_cast<int>(src.size());
 }
 
 template <bool pipelined>
-void benchmark_test_case(config const& cfg) {
-  jb::clfft::init init;
-  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
-  boost::compute::context context(device);
-  boost::compute::command_queue queue(context, device);
-  typedef jb::testing::microbenchmark<fixture<pipelined>> benchmark;
-  benchmark bm(cfg.benchmark());
+std::function<void(config const&)> test_case() {
+  return [](config const& cfg) {
+    jb::clfft::init init;
+    boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+    typedef jb::testing::microbenchmark<fixture<pipelined>> benchmark;
+    benchmark bm(cfg.microbenchmark());
 
-  auto r = bm.run(context, queue);
-  bm.typical_output(r);
+    auto r = bm.run(context, queue);
+    bm.typical_output(r);
+  };
+}
+
+jb::testing::microbenchmark_group<config> create_testcases() {
+  return jb::testing::microbenchmark_group<config>{
+      {"complex:float:async", test_case<true>()},
+      {"complex:float:sync", test_case<false>()},
+  };
 }
 
 } // anonymous namespace
-
-int main(int argc, char* argv[]) try {
-  config cfg;
-  cfg.benchmark(
-         jb::testing::microbenchmark_config().test_case("complex:float:async"))
-      .process_cmdline(argc, argv);
-
-  std::cout << "Configuration for test\n" << cfg << std::endl;
-
-  auto test_case = cfg.benchmark().test_case();
-  if (test_case == "complex:float:async") {
-    benchmark_test_case<true>(cfg);
-  } else if (test_case == "complex:float:sync") {
-    benchmark_test_case<false>(cfg);
-  } else {
-    std::ostringstream os;
-    os << "Unknown test case (" << test_case << ")" << std::endl;
-    os << " --test-case must be one of"
-       << ": complex:float:async"
-       << ", complex:float:sync" << std::endl;
-    throw jb::usage(os.str(), 1);
-  }
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return ex.exit_status();
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
-}

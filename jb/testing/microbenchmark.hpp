@@ -121,7 +121,7 @@ void call_iteration_teardown(Fixture&& fixture) {
  *   Fixture(Args ...); // default constructor, used for the default sized test
  *   Fixture(int s, Args ...); // constructor for a test of size 's'
  *
- *   void run(); // run one iteration of the test
+ *   int run(); // run one iteration of the test, return the size used
  * };
  * @endcode
  */
@@ -176,7 +176,7 @@ private:
   results run_unsized(Args&&... args) {
     Fixture fixture(std::forward<Args>(args)...);
     results r;
-    run_base(fixture, r, 0);
+    run_base(fixture, r);
     return r;
   }
 
@@ -187,7 +187,7 @@ private:
   results run_unsized() {
     Fixture fixture;
     results r;
-    run_base(fixture, r, 0);
+    run_base(fixture, r);
     return r;
   }
 
@@ -216,7 +216,7 @@ private:
   template <typename... Args>
   void run_sized(int size, results& r, Args&&... args) {
     Fixture fixture(size, std::forward<Args>(args)...);
-    run_base(fixture, r, size);
+    run_base(fixture, r);
   }
 
   /**
@@ -228,18 +228,18 @@ private:
    *
    * @param fixture the object under test
    * @param r where to store the results of the test
-   * @param size the size of the test
    */
-  void run_base(Fixture& fixture, results& r, int size) {
+  void run_base(Fixture& fixture, results& r) {
     for (int i = 0; i != config_.warmup_iterations(); ++i) {
       (void)clock::now();
       detail::call_iteration_setup(fixture);
-      fixture.run();
+      (void)fixture.run();
+      (void)clock::now();
       detail::call_iteration_teardown(fixture);
     }
     r.reserve(r.size() + config_.iterations());
     for (int i = 0; i != config_.iterations(); ++i) {
-      run_iteration(fixture, r, size);
+      run_iteration(fixture, r);
     }
   }
 
@@ -248,12 +248,11 @@ private:
    *
    * @param fixture the object under test
    * @param r where to store the results of the test
-   * @param size the size of the test
    */
-  static void run_iteration(Fixture& fixture, results& r, int size) {
+  static void run_iteration(Fixture& fixture, results& r) {
     detail::call_iteration_setup(fixture);
     auto start = clock::now();
-    fixture.run();
+    int size = fixture.run();
     auto stop = clock::now();
 
     r.emplace_back(std::make_pair(size, stop - start));

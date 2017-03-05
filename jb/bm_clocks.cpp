@@ -1,4 +1,5 @@
 #include <jb/testing/microbenchmark.hpp>
+#include <jb/testing/microbenchmark_group_main.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -9,56 +10,13 @@
  * Convenience types and functions for benchmarking std::chrono clocks.
  */
 namespace {
-
-/**
- * Base class for the std::chrono clock wrapper.
- */
-class wrapped_clock_base {
-public:
-  virtual ~wrapped_clock_base() {
-  }
-
-  virtual void run() const = 0;
-};
-
-/**
- * The fixture tested by the microbenchmark.
- */
-class fixture {
-public:
-  fixture(std::string const& clock_name);
-  fixture(int size, std::string const& clock_name);
-
-  void run();
-
-private:
-  std::unique_ptr<wrapped_clock_base> wrapped_clock_;
-};
-
-typedef jb::testing::microbenchmark<fixture> benchmark;
-
+using config = jb::testing::microbenchmark_config;
+jb::testing::microbenchmark_group<config> create_testcases();
 } // anonymous namespace
 
-int main(int argc, char* argv[]) try {
-  jb::testing::microbenchmark_config cfg;
-  cfg.test_case("std::chrono::steady_clock").process_cmdline(argc, argv);
-
-  std::cout << "Configuration for test\n" << cfg << std::endl;
-
-  benchmark bm(cfg);
-  auto r = bm.run(cfg.test_case());
-  bm.typical_output(r);
-
-  return 0;
-} catch (jb::usage const& ex) {
-  std::cerr << "usage: " << ex.what() << std::endl;
-  return 1;
-} catch (std::exception const& ex) {
-  std::cerr << "standard exception raised: " << ex.what() << std::endl;
-  return 1;
-} catch (...) {
-  std::cerr << "unknown exception raised" << std::endl;
-  return 1;
+int main(int argc, char* argv[]) {
+  auto testcases = create_testcases();
+  return jb::testing::microbenchmark_group_main(argc, argv, testcases);
 }
 
 namespace {
@@ -77,76 +35,72 @@ int clock_repetitions = JB_DEFAULTS_clock_repetitions;
 } // namespace defaults
 
 /**
- * Wrap a std::chrono class in a polymorphic class.
+ * The fixture tested by the microbenchmark.
+ *
+ * @tparam clock_type the type of clock tested
  */
-template <typename clock>
-class wrapped_clock : public wrapped_clock_base {
+template <typename clock_type>
+class fixture {
 public:
-  wrapped_clock(int calls_per_iteration)
-      : calls_per_iteration_(calls_per_iteration) {
+  fixture()
+      : fixture(defaults::clock_repetitions) {
   }
 
-  virtual void run() const override {
+  fixture(int size)
+      : calls_per_iteration_(size) {
+  }
+
+  int run() {
     for (int i = 0; i != calls_per_iteration_; ++i) {
-      clock::now();
+      (void)clock_type::now();
     }
+    return calls_per_iteration_;
   }
 
 private:
   int calls_per_iteration_;
 };
 
-static std::uint64_t read_rdtscp() {
-  std::uint64_t hi, lo;
-  std::uint32_t aux;
-  __asm__ __volatile__("rdtscp\n" : "=a"(lo), "=d"(hi), "=c"(aux) : :);
-  return (hi << 32) + lo;
-}
-
-class wrapped_rdtscp : public wrapped_clock_base {
-public:
-  wrapped_rdtscp(int calls_per_iteration)
-      : calls_per_iteration_(calls_per_iteration) {
+/// Fake a std::chrono clock using rdtscp
+struct wrapped_rtdscp {
+  static std::uint64_t now() {
+    std::uint64_t hi, lo;
+    std::uint32_t aux;
+    __asm__ __volatile__("rdtscp\n" : "=a"(lo), "=d"(hi), "=c"(aux) : :);
+    return (hi << 32) + lo;
   }
-
-  virtual void run() const override {
-    for (int i = 0; i != calls_per_iteration_; ++i) {
-      (void)read_rdtscp();
-    }
-  }
-
-private:
-  int calls_per_iteration_;
 };
 
-fixture::fixture(std::string const& clock_name)
-    : fixture(defaults::clock_repetitions, clock_name) {
+/// Fake a std::chrono clock using rdtsc
+struct wrapped_rtdsc {
+  static std::uint64_t now() {
+    std::uint64_t hi, lo;
+    std::uint32_t aux;
+    __asm__ __volatile__("rdtsc\n" : "=a"(lo), "=d"(hi), "=c"(aux) : :);
+    return (hi << 32) + lo;
+  }
+};
+
+template <typename clock_type>
+std::function<void(config const&)> test_case() {
+  return [](config const& cfg) {
+    using benchmark = jb::testing::microbenchmark<fixture<clock_type>>;
+    benchmark bm(cfg);
+    auto r = bm.run();
+    bm.typical_output(r);
+  };
 }
 
-fixture::fixture(int size, std::string const& clock_name) {
+jb::testing::microbenchmark_group<config> create_testcases() {
   using namespace std::chrono;
-  if (clock_name == "std::chrono::steady_clock") {
-    wrapped_clock_.reset(new wrapped_clock<steady_clock>(size));
-  } else if (clock_name == "std::chrono::high_resolution_clock") {
-    wrapped_clock_.reset(new wrapped_clock<high_resolution_clock>(size));
-  } else if (clock_name == "std::chrono::system_clock") {
-    wrapped_clock_.reset(new wrapped_clock<system_clock>(size));
-  } else if (clock_name == "rdtscp") {
-    wrapped_clock_.reset(new wrapped_rdtscp(size));
-  } else {
-    std::ostringstream os;
-    os << "unknown value for --clock-name (" << clock_name << ")\n";
-    os << "value must be one of"
-       << ": std::chrono::steady_clock"
-       << ", std::chrono::high_resolution_clock"
-       << ", std::chrono::system_clock"
-       << ", rdtscp";
-    throw jb::usage(os.str(), 1);
-  }
-}
-
-void fixture::run() {
-  wrapped_clock_->run();
+  return jb::testing::microbenchmark_group<config>{
+      {"std::chrono::steady_clock", test_case<steady_clock>()},
+      {"std::chrono::high_resolution_clock",
+       test_case<high_resolution_clock>()},
+      {"std::chrono::system_clock_clock", test_case<system_clock>()},
+      {"rdtscp", test_case<wrapped_rtdscp>()},
+      {"rdtsc", test_case<wrapped_rtdsc>()},
+  };
 }
 
 } // anonymous namespace

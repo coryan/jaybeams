@@ -1,9 +1,9 @@
 // -*- c++ -*-
 namespace jb {
-namespace tde {
+namespace opencl {
 
 /**
- * The interface for reducers assumed by jb::tde::generic_reducer
+ * The interface for reducers assumed by jb::opencl::generic_reducer
  *
  * The generic reduce algorithm is implemented using the Curiously
  * Recurring Template Pattern (CRTP), the derived class must provide
@@ -90,5 +90,5 @@ public:
   }
 };
 
+} // namespace opencl
 } // namespace jb
-} // namespace tde

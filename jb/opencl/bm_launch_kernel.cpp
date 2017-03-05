@@ -1,6 +1,6 @@
 #include <jb/opencl/build_simple_kernel.hpp>
-#include <jb/opencl/config.hpp>
 #include <jb/opencl/device_selector.hpp>
+#include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
 
 #include <boost/compute/algorithm/copy.hpp>
@@ -11,17 +11,7 @@
 #include <string>
 
 namespace {
-
-class config : public jb::config_object {
-public:
-  config()
-      : benchmark(desc("benchmark"), this)
-      , opencl(desc("opencl"), this) {
-  }
-
-  jb::config_attribute<config, jb::testing::microbenchmark_config> benchmark;
-  jb::config_attribute<config, jb::opencl::config> opencl;
-};
+using config = jb::opencl::microbenchmark_config;
 
 char const source[] = R"""(
 __kernel void empty() {
@@ -43,13 +33,14 @@ public:
       , queue(q) {
   }
 
-  void run() {
+  int run() {
     boost::compute::wait_list wait;
     for (int i = 0; i != chain_length; ++i) {
       auto event = queue.enqueue_task(kernel, wait);
       wait = boost::compute::wait_list(event);
     }
     wait.wait();
+    return chain_length;
   }
 
 private:
@@ -57,18 +48,6 @@ private:
   boost::compute::kernel kernel;
   boost::compute::command_queue queue;
 };
-
-void benchmark_test_case(config const& cfg) {
-  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
-  boost::compute::context context(device);
-  boost::compute::command_queue queue(context, device);
-  typedef jb::testing::microbenchmark<fixture> benchmark;
-  benchmark bm(cfg.benchmark());
-
-  auto r = bm.run(context, queue);
-  bm.typical_output(r);
-}
-
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
@@ -76,7 +55,14 @@ int main(int argc, char* argv[]) try {
   cfg.process_cmdline(argc, argv);
   std::cerr << "Configuration for test\n" << cfg << std::endl;
 
-  benchmark_test_case(cfg);
+  boost::compute::device device = jb::opencl::device_selector(cfg.opencl());
+  boost::compute::context context(device);
+  boost::compute::command_queue queue(context, device);
+  typedef jb::testing::microbenchmark<fixture> benchmark;
+  benchmark bm(cfg.microbenchmark());
+
+  auto r = bm.run(context, queue);
+  bm.typical_output(r);
 
   return 0;
 } catch (jb::usage const& ex) {
