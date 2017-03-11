@@ -1,4 +1,3 @@
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/testing/create_random_timeseries.hpp>
 

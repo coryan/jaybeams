@@ -1,4 +1,3 @@
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/tde/conjugate_and_multiply.hpp>
 #include <jb/testing/check_close_enough.hpp>
@@ -58,9 +57,9 @@ void check_conjugate_and_multiply_sized(int asize, int bsize) {
     BOOST_CHECK_EQUAL(asize, 0);
     return;
   }
-  auto done = jb::opencl::copy_to_host_async(
-      out.begin(), out.end(), actual.begin(), queue,
-      boost::compute::wait_list(future.get_event()));
+  queue.enqueue_barrier(boost::compute::wait_list(future.get_event()));
+  auto done =
+      boost::compute::copy_async(out.begin(), out.end(), actual.begin(), queue);
 
   std::vector<std::complex<precision_t>> expected(asize);
   for (int i = 0; i != asize; ++i) {

@@ -1,4 +1,3 @@
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
@@ -77,6 +76,7 @@ public:
 
   int run() {
     boost::compute::copy(start, end, dev.begin(), queue);
+    queue.finish();
     return static_cast<int>(dev.size());
   }
 
@@ -92,11 +92,8 @@ private:
 template <>
 int fixture<false>::run() {
   boost::compute::copy(dev.begin(), dev.end(), start, queue);
+  queue.finish();
   return static_cast<int>(dev.size());
-}
-
-template <bool upload>
-void benchmark_test_case(config const& cfg, bool aligned) {
 }
 
 template <bool upload, bool aligned>

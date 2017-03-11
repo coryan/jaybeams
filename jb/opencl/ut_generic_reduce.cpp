@@ -1,5 +1,4 @@
 #include <jb/opencl/config.hpp>
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/generic_reduce.hpp>
 #include <jb/testing/check_close_enough.hpp>
