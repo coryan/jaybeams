@@ -18,9 +18,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 1;
-  // we use a very rough approximation to the confidence error here ...
-  int const confidence_tol = nsamples;
+  int const confidence_tol = 1;
 
   using array_type = jb::fftw::aligned_multi_array<float, 3>;
   using tested_type = jb::fftw::time_delay_estimator_many<array_type>;
@@ -60,18 +58,13 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_with_0) {
 
   // run the TDE...
   tested.estimate_delay(confidence, argmax, a, b, sum2);
-  // check argmax within delay +/- tol
-  BOOST_CHECK_MESSAGE(
-      jb::testing::check_collection_close_enough(
-          argmax, expected_argmax, argmax_tol),
-      "argmax is not within tolerance("
-          << argmax_tol << "), argmax[0]=" << argmax[0]
-          << ", expected_argmax[0]=" << expected_argmax[0]);
   // check confidence within nsamples +/- tol
   BOOST_CHECK_MESSAGE(
       jb::testing::check_collection_close_enough(
           confidence, expected_confidence, confidence_tol),
       "confidence is not within tolerance(" << confidence_tol << ")");
+  // we do not check the value of argmax because in this case it is
+  // meaningless, any value in the range is equally invalid.
 }
 
 /**
