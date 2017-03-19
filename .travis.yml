@@ -30,12 +30,8 @@ services:
 
 # This is the main section of the automated build ...
 script:
-  # ... first download the docker image with the development environment ...
-  - docker pull ${IMAGE?}
-  # ... print out its Id for historic purposes ...
-  - docker image inspect -f '{{ .Id }}' ${IMAGE?}
   # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
+  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?}:tip ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be
   # debugged, this is *not* part of the build script because we want
   # this output regardless of the sucess or failure of the script ...
@@ -48,7 +44,16 @@ before_install:
   - sudo apt-get install docker-engine
 
 install:
+  # Install coveralls-lcov for the code coverage builds only ...
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
+  # ... first download the current docker image with the development
+  # environment ... 
+  - docker pull ${IMAGE?}
+  - docker image inspect -f '{{ .Id }}' ${IMAGE?}:latest
+  # ... update the image using the latest Dockerfile, and possibly
+  # rebuild from scratch if the existing image is too old ...
+  - ci/create-build-image.sh
+  - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR?}
@@ -59,7 +64,7 @@ after_success:
   # and push it to github ...
   - ci/gendocs.sh
   # ... on the right builds, create the build image and push to docker ...
-  - ci/create-build-image.sh
+  - ci/upload-build-image.sh
   # ... on the right builds, create the runtime image and push to docker ...
   - ci/create-runtime-image.sh
   # ... on the right builds, create the analysis image and push to docker ...
