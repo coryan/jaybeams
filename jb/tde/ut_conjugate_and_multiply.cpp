@@ -50,6 +50,7 @@ void check_conjugate_and_multiply_sized(int asize, int bsize) {
 
   boost::compute::copy(asrc.begin(), asrc.end(), a.begin(), queue);
   boost::compute::copy(bsrc.begin(), bsrc.end(), b.begin(), queue);
+  BOOST_TEST_MESSAGE("copied data to device");
 
   auto future = jb::tde::conjugate_and_multiply(
       a.begin(), a.end(), b.begin(), b.end(), out.begin(), queue);
@@ -57,7 +58,12 @@ void check_conjugate_and_multiply_sized(int asize, int bsize) {
     BOOST_CHECK_EQUAL(asize, 0);
     return;
   }
-  queue.enqueue_barrier(boost::compute::wait_list(future.get_event()));
+  if (device.platform().name() == "Portable Computing Language") {
+    // Ugly hack to workaround a bug in the POCL library.
+    queue.finish();
+  } else {
+    queue.enqueue_barrier(boost::compute::wait_list(future.get_event()));
+  }
   auto done =
       boost::compute::copy_async(out.begin(), out.end(), actual.begin(), queue);
 
