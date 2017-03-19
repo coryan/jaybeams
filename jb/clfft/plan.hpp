@@ -237,9 +237,11 @@ private:
  * in execute() must have the same size as this parameter.
  * @param in the input data prototype.  The actual input in
  * execute() must have the same size as this parameter.
- * @param context a collection of devices in a single OpenCL platform.
- * @param queue a command queue associated with @a context to create
+ * @param ct a collection of devices in a single OpenCL platform.
+ * @param q a command queue associated with @a ct to create
  * and bake the plan.
+ * @param batch_size the number of timeseries in the input and output
+ * vectors.
  *
  * @returns a new plan that computes a DFT from a vector like @a in
  * into a vector like @a out.
@@ -265,10 +267,11 @@ plan<invector, outvector> create_forward_plan_1d(
  * in execute() must have the same size as this parameter.
  * @param in the input data prototype.  The actual input in
  * execute() must have the same size as this parameter.
- * @param context a collection of devices in a single OpenCL platform.
- * @param queue a command queue associated with @a context to create
+ * @param ct a collection of devices in a single OpenCL platform.
+ * @param q a command queue associated with @a ct to create
  * and bake the plan.
- * @param batch_size the number of timeseries in the vector.
+ * @param batch_size the number of timeseries in the input and output
+ * vectors.
  *
  * @returns a new plan that computes a DFT from a vector like @a in
  * into a vector like @a out.
