@@ -58,4 +58,4 @@ __EOF__
 
 echo "Created image $image, running it"
 
-exec sudo docker run --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash
+exec sudo docker run --cap-add=SYS_PTRACE --rm -it -v $PWD:/home/$USER/jaybeams $image /bin/bash

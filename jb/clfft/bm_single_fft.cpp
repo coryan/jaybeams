@@ -1,5 +1,4 @@
 #include <jb/clfft/plan.hpp>
-#include <jb/opencl/copy_to_host_async.hpp>
 #include <jb/opencl/device_selector.hpp>
 #include <jb/opencl/microbenchmark_config.hpp>
 #include <jb/testing/microbenchmark.hpp>
@@ -73,8 +72,8 @@ int fixture<true>::run() {
   auto upload_done = copy_async(src.begin(), src.end(), in.begin(), queue);
   auto fft_done =
       fft.enqueue(out, in, queue, wait_list(upload_done.get_event()));
-  auto download_done = jb::opencl::copy_to_host_async(
-      out.begin(), out.end(), dst.begin(), queue, wait_list(fft_done));
+  queue.enqueue_barrier();
+  auto download_done = copy_async(out.begin(), out.end(), dst.begin(), queue);
   download_done.wait();
   return static_cast<int>(src.size());
 }
