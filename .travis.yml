@@ -34,10 +34,6 @@ script:
   - docker pull ${IMAGE?}
   # ... print out its Id for historic purposes ...
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}
-  # ... [DEBUG] print out the networking details ...
-  - ifconfig -a || echo "no ifconfig"
-  - ip link show || echo "no ip link"
-  - iptables -L || echo "no iptables"
   # ... run the build inside the docker image, use the current user id ...
   - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?} ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be

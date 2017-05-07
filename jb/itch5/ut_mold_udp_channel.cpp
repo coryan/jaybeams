@@ -60,12 +60,11 @@ create_mold_udp_packet(std::uint64_t sequence_number, int message_count) {
 std::string select_localhost_address(boost::asio::io_service& io) {
   for (auto const& addr : {"::1", "127.0.0.1"}) {
     try {
-      BOOST_TEST_CHECKPOINT("Checking " << addr
-                            << " as the localhost address");
+      BOOST_TEST_CHECKPOINT("Checking " << addr << " as the localhost address");
       auto socket = jb::itch5::make_socket_udp_recv(io, addr, 40000, "");
-      BOOST_TEST_CHECKPOINT("Using " << addr << " as the localhost");
       return addr;
-    } catch(...) {}
+    } catch (...) {
+    }
   }
   BOOST_TEST_MESSAGE("No valid localhost address found, aborting");
   throw std::runtime_error("Cannot find valid IPv6 or IPv4 address");
@@ -109,34 +108,48 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
 
   boost::asio::io_service io;
   auto local = select_localhost_address(io);
+  BOOST_TEST_MESSAGE("Running test on " << local);
   jb::itch5::mold_udp_channel channel(io, adapter, local, 50000, "");
 
   udp::resolver resolver(io);
-  udp::endpoint endpoint = *resolver.resolve({udp::v6(), local, "50000"});
-  udp::socket socket(io, udp::endpoint(udp::v6(), 0));
+  udp::endpoint send_to;
+  udp::endpoint send_from;
+  auto d_address = boost::asio::ip::address::from_string(local);
+  if (d_address.is_v6()) {
+    BOOST_TEST_CHECKPOINT(
+        "Resolving dst/src IPv6 addresses for " << local << ":50000");
+    send_to = *resolver.resolve({udp::v6(), local, "50000"});
+    send_from = udp::endpoint(udp::v6(), 0);
+  } else {
+    BOOST_TEST_CHECKPOINT(
+        "Resolving dst/src IPv4 addresses for " << local << ":50000");
+    send_to = *resolver.resolve({udp::v4(), local, "50000"});
+    send_from = udp::endpoint(udp::v4(), 0);
+  }
+  udp::socket socket(io, send_from);
 
   auto packet = create_mold_udp_packet(0, 3);
-  socket.send_to(boost::asio::buffer(packet), endpoint);
+  socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
   handler.check_called().exactly(3);
 
   packet = create_mold_udp_packet(0, 3);
-  socket.send_to(boost::asio::buffer(packet), endpoint);
+  socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
   handler.check_called().exactly(6);
 
   packet = create_mold_udp_packet(9, 2);
-  socket.send_to(boost::asio::buffer(packet), endpoint);
+  socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
   handler.check_called().exactly(8);
 
   packet = create_mold_udp_packet(12, 1);
-  socket.send_to(boost::asio::buffer(packet), endpoint);
+  socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
   handler.check_called().exactly(9);
 
   packet = create_mold_udp_packet(13, 0);
-  socket.send_to(boost::asio::buffer(packet), endpoint);
+  socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
   handler.check_called().exactly(9);
 }
