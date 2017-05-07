@@ -1,3 +1,4 @@
+#include <jb/itch5/make_socket_udp_recv.hpp>
 #include <jb/itch5/mold_udp_channel.hpp>
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/itch5/testing/data.hpp>
@@ -40,6 +41,34 @@ create_mold_udp_packet(std::uint64_t sequence_number, int message_count) {
   }
   return std::vector<char>(packet, packet + packet_size);
 }
+
+/**
+ * Pick a localhost address that is valid on the testing host.
+ *
+ * In some testing hosts (notably travis-ci.org) the host does not
+ * support IPv6 addresses.  We need to determine, at run-time, a valid
+ * address to test the code.  A separate test
+ * (ut_make_socket_upd_recv) validates that the library works with any
+ * address and fails gracefully.  In this test we just want to move
+ * forward.
+ *
+ * @param io the Boost.ASIO io service
+ * @returns a string with the valid localhost address, typically ::1,
+ * but can be 127.0.0.1 if IPv6 is not functional
+ * @throws std::exception if no valid localhost address is found
+ */
+std::string select_localhost_address(boost::asio::io_service& io) {
+  for (auto const& addr : {"::1", "127.0.0.1"}) {
+    try {
+      BOOST_TEST_MESSAGE("Trying to use " << addr
+                         << " as the localhost address");
+      auto socket = jb::itch5::make_socket_udp_recv(io, addr, 40000, "");
+      return addr;
+    } catch(...) {}
+  }
+  BOOST_TEST_MESSAGE("No valid localhost address found, aborting");
+  throw std::runtime_error("Cannot find valid IPv6 or IPv4 address");
+}
 } // anonymous namespace
 
 namespace jb {
@@ -57,6 +86,7 @@ struct mold_udp_channel_tester {
         16);
   }
 };
+
 } // namespace itch5
 } // namespace jb
 
@@ -77,10 +107,11 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   using boost::asio::ip::udp;
 
   boost::asio::io_service io;
-  jb::itch5::mold_udp_channel channel(io, adapter, "::1", 50000, "");
+  auto local = select_localhost_address(io);
+  jb::itch5::mold_udp_channel channel(io, adapter, local, 50000, "");
 
   udp::resolver resolver(io);
-  udp::endpoint endpoint = *resolver.resolve({udp::v6(), "::1", "50000"});
+  udp::endpoint endpoint = *resolver.resolve({udp::v6(), local, "50000"});
   udp::socket socket(io, udp::endpoint(udp::v6(), 0));
 
   auto packet = create_mold_udp_packet(0, 3);
@@ -120,7 +151,8 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_coverage) {
   using boost::asio::ip::udp;
 
   boost::asio::io_service io;
-  jb::itch5::mold_udp_channel channel(io, adapter, "::1", 50000, "");
+  auto local = select_localhost_address(io);
+  jb::itch5::mold_udp_channel channel(io, adapter, local, 50000, "");
 
   jb::itch5::mold_udp_channel_tester::call_with_empty_packet(channel);
   jb::itch5::mold_udp_channel_tester::call_with_error_code(channel);
