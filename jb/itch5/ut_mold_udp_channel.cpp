@@ -60,9 +60,10 @@ create_mold_udp_packet(std::uint64_t sequence_number, int message_count) {
 std::string select_localhost_address(boost::asio::io_service& io) {
   for (auto const& addr : {"::1", "127.0.0.1"}) {
     try {
-      BOOST_TEST_MESSAGE("Trying to use " << addr
-                         << " as the localhost address");
+      BOOST_TEST_CHECKPOINT("Checking " << addr
+                            << " as the localhost address");
       auto socket = jb::itch5::make_socket_udp_recv(io, addr, 40000, "");
+      BOOST_TEST_CHECKPOINT("Using " << addr << " as the localhost");
       return addr;
     } catch(...) {}
   }
