@@ -15,7 +15,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O0 -g" VALGRIND=yes CONFIGUREFLAGS="" 
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O0 -g" VALGRIND=yes CONFIGUREFLAGS="--enable-valgrind-memcheck"
 
     - os: linux
       compiler: gcc
