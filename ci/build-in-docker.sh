@@ -14,8 +14,12 @@ cd build
 # parameters for this build ...
 ../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging
 
-# ... compile and run the tests, make sure the 
+# ... compile and run the tests ...
 make -j 2 check
+
+if [ "x${VALGRIND}" = "xyes" ]; then
+    make -j 2 check-valgrind-memcheck
+fi
 
 # ... verify that the installation rules at least work ...
 make install
