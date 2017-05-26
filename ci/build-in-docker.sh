@@ -12,7 +12,12 @@ cd build
 
 # ... create Makefile and other files using the configuration
 # parameters for this build ...
-../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging
+if [ "x${VALGRIND}" = "xyes" ]; then
+    valgrind --tool=memcheck --help >/dev/null 2>&1
+    echo "valgrind result = " $?
+fi
+
+../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging || cat config.log
 
 if [ "x${VALGRIND}" = "xyes" ]; then
     valgrind --tool=memcheck --help >/dev/null 2>&1 || echo "valgrind test failed"
