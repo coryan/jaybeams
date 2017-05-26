@@ -18,6 +18,7 @@ cd build
 make -j 2 check
 
 if [ "x${VALGRIND}" = "xyes" ]; then
+    valgrind --tool=memcheck --help
     make -j 2 check-valgrind-memcheck
 fi
 
