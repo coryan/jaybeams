@@ -31,11 +31,15 @@ services:
 # This is the main section of the automated build ...
 script:
   # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?}:tip ci/build-in-docker.sh
+  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --env VALGRIND="${VALGRIND}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?}:tip ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be
   # debugged, this is *not* part of the build script because we want
   # this output regardless of the sucess or failure of the script ...
   - cat build/test-suite.log || echo "Could not print test logs"
+  # ... print out the memcheck results, same rationale as printing the
+  # test results, except that missing the file is not reported,
+  # because not all builds create one ...
+  - cat build/test-suite-memcheck.log || :
   # ... if configured, run the style checker phase ...
   - ci/check-style.sh
 
