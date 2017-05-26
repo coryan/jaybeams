@@ -1,6 +1,7 @@
 #include <jb/fftw/allocator.hpp>
 #include <jb/fftw/plan.hpp>
 #include <jb/testing/check_close_enough.hpp>
+#include <valgrind/valgrind.h>
 
 #include <boost/test/unit_test.hpp>
 #include <vector>
@@ -59,5 +60,9 @@ BOOST_AUTO_TEST_CASE(fftw_allocator_float) {
  * @test Verify that we can use jb::fftw::allocator<>
  */
 BOOST_AUTO_TEST_CASE(fftw_allocator_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_real2complex<long double>();
 }

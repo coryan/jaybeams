@@ -181,7 +181,8 @@ jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
               0, cfg.max_processing_latency_nanoseconds()))
     , reporting_interval_(
           std::chrono::seconds(cfg.reporting_interval_seconds()))
-    , last_ts_(0) {
+    , last_ts_(0)
+    , last_report_ts_(0) {
 }
 
 void jb::offline_feed_statistics::print_csv_header(std::ostream& os) {

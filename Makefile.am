@@ -120,6 +120,8 @@ noinst_PROGRAMS = $(examples) \
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
 
+@VALGRIND_CHECK_RULES@
+
 AM_CXXFLAGS = @AM_CXXFLAGS@
 AM_CXXFLAGS += \
   $(PTHREAD_CFLAGS)

@@ -14,7 +14,7 @@ namespace {
 std::vector<char>
 create_mold_udp_packet(std::uint64_t sequence_number, int message_count) {
   std::size_t const max_packet_size = 1 << 16;
-  char packet[max_packet_size];
+  char packet[max_packet_size] = {0};
 
   jb::itch5::encoder<true, std::uint64_t>::w(
       max_packet_size, packet,

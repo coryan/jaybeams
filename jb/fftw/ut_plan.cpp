@@ -1,5 +1,6 @@
 #include <jb/fftw/plan.hpp>
 #include <jb/testing/check_close_enough.hpp>
+#include <valgrind/valgrind.h>
 
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
@@ -130,6 +131,10 @@ BOOST_AUTO_TEST_CASE(fftw_plan_error_float) {
  * @test Verify that we can create and operate a jb::fftw::plan<long double>
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_complex_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_complex2complex<long double>();
 }
 
@@ -137,6 +142,10 @@ BOOST_AUTO_TEST_CASE(fftw_plan_complex_long_double) {
  * @test Verify that we can create and operate a jb::fftw::plan<long double>
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_real2complex<long double>();
 }
 
@@ -144,5 +153,9 @@ BOOST_AUTO_TEST_CASE(fftw_plan_long_double) {
  * @test Verify jb::fftw::plan<long double> detects obvious errors
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_error_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_errors<long double>();
 }
