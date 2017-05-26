@@ -18,7 +18,10 @@ cd build
 make -j 2 check
 
 if [ "x${VALGRIND}" = "xyes" ]; then
-    valgrind --tool=memcheck --help
+    valgrind --tool=memcheck --help >/dev/null 2>&1 || echo "valgrind test failed"
+    valgrind --tool=memcheck --help >/dev/null 2>&1 && echo "valgrind test success"
+    grep -A 2 -B 2 -i valgrind config.log
+    uname -a
     make -j 2 check-valgrind-memcheck
 fi
 
