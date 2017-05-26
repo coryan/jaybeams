@@ -39,7 +39,7 @@ script:
   # ... print out the memcheck results, same rationale as printing the
   # test results, except that missing the file is not reported,
   # because not all builds create one ...
-  - cat build/test-suite-memcheck.log || :
+  - cat build/test-suite-memcheck.log || true
   # ... if configured, run the style checker phase ...
   - ci/check-style.sh
 

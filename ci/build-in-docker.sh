@@ -26,7 +26,7 @@ make install
 
 # ... this script runs as root inside the docker image, make sure the
 # user can write to the staging/ subdirectory ...
-chmod 777 staging || :
+chmod 777 staging || true
 
 exit 0
 
