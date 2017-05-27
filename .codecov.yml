@@ -1,0 +1,5 @@
+# Configure what files to ignore in code coverage analysis.
+ignore:
+  - "**/ut_*.cpp$"        # Unit tests
+  - "/jb/testing/"       # Test support code
+  - "/jb/itch5/testing/" # Test support code
