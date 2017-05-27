@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_float) {
   int const V = 4;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_float) {
   int const S = 20;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -674,7 +674,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_complex_float) {
   int const V = 4;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -743,7 +743,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_2_dim_tde_complex_float) {
   int const S = 20;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -809,7 +809,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_1_dim_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
@@ -871,7 +871,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_vector_tde_complex_float) {
   int const nsamples = 1 << 15;
   int const delay = 2500;
   // using float, requires higher tolerance
-  int const argmax_tol = 2;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
