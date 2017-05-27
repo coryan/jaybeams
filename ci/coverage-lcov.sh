@@ -8,6 +8,7 @@ lcov --directory . --capture --output-file coverage.info
 lcov --remove coverage.info \
      '/usr/include/*' '/usr/local/*' \
      'jb/ut_*' 'jb/*/ut_*' 'jb/testing/check_*' \
+     'valgrind/valgrind.h' \
      --output-file coverage.info
 
 # Show the code coverage results in the Travis CI log

@@ -3,3 +3,4 @@ ignore:
   - "**/ut_*.cpp$"        # Unit tests
   - "/jb/testing/"       # Test support code
   - "/jb/itch5/testing/" # Test support code
+  - "/valgrind/valgrind.h$" # Valgrind header file
