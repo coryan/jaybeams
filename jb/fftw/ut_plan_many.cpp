@@ -1,5 +1,6 @@
 #include <jb/fftw/plan.hpp>
 #include <jb/testing/check_close_enough.hpp>
+#include <valgrind/valgrind.h>
 
 #include <boost/multi_array.hpp>
 #include <boost/test/unit_test.hpp>
@@ -211,6 +212,10 @@ BOOST_AUTO_TEST_CASE(fftw_plan_many_complex_float) {
  * arrays of std::complex<long double> to arrays of std::complex<long double>.
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_many_complex_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_complex2complex<long double>();
 }
 
@@ -238,6 +243,10 @@ BOOST_AUTO_TEST_CASE(fftw_plan_many_error_float) {
  * long double.
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_many_error_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_errors<long double>();
 }
 
@@ -262,5 +271,9 @@ BOOST_AUTO_TEST_CASE(fftw_plan_many_float) {
  * arrays of long double to arrays of std::complex<long double> and vice-versa.
  */
 BOOST_AUTO_TEST_CASE(fftw_plan_many_long_double) {
+  if (RUNNING_ON_VALGRIND > 0) {
+    BOOST_TEST_MESSAGE("long double not supported by valgrind, skip test");
+    return;
+  }
   test_plan_real2complex<long double>();
 }

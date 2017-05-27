@@ -26,6 +26,7 @@ RUN dnf makecache && dnf install -y \
       sudo \
       tar \
       time \
+      valgrind \
       wget \
       yaml-cpp-devel \
       zlib-devel && \

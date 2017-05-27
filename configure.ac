@@ -36,6 +36,9 @@ AR_FLAGS=cr
 AC_SUBST(ARFLAGS)
 AC_SUBST(AR_FLAGS)
 
+# ... enable, if possible, valgrind checking ...
+AX_VALGRIND_CHECK
+
 # ... check if there is a clang-format installed, allow the user to
 # override the default by setting the CLANG_FORMAT environment
 # variable ...

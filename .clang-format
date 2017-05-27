@@ -21,6 +21,8 @@ IncludeCategories:
     Priority: 9
   - Regex:    '^<jb/'
     Priority: 10
+  - Regex:    '^<valgrind/'
+    Priority: 20
   - Regex:    '^<skye/'
     Priority: 30
   - Regex:    '^<boost/'
