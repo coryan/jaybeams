@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(fftw_time_delay_estimator_many_3_dim_tde_delay_0) {
   int const nsamples = 1 << 15;
   int const S = 20;
   int const V = 4;
-  int const argmax_tol = 1;
+  int const argmax_tol = 4;
   // we use a very rough approximation to the confidence error here ...
   int const confidence_tol = nsamples;
 
