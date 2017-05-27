@@ -5,6 +5,7 @@ instdir = $(prefix)
 lib_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_itch5.a \
+  jb/libjb_pitch2.a \
   jb/libjb_testing.a \
   jb/libjb_itch5_testing.a
 
@@ -78,6 +79,9 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_timestamp \
   jb/itch5/ut_trade_message
 
+jb_pitch2_unit_tests = \
+  jb/pitch2/ut_auction_update_message
+
 jb_testing_unit_tests = \
   jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
@@ -86,7 +90,7 @@ jb_testing_unit_tests = \
   jb/testing/ut_microbenchmark_config
 
 unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
-  $(jb_itch5_unit_tests)
+  $(jb_itch5_unit_tests) $(jb_pitch2_unit_tests)
 
 benchmarks = \
   jb/bm_clocks \
@@ -102,7 +106,7 @@ examples = \
   examples/configuration
 
 bin_PROGRAMS = $(benchmarks) \
-  jb/testing/show_compile_info \
+  jb/testing/show_compile_info  \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
   tools/itch5inside \
@@ -191,6 +195,12 @@ jb_ut_itch5_ldadd = \
   jb/libjb_itch5.a \
   $(jb_ut_ldadd)
 jb_ut_itch5_ldflags = \
+  $(jb_ut_ldflags)
+
+jb_ut_pitch2_ldadd = \
+  jb/libjb_pitch2.a \
+  $(jb_ut_ldadd)
+jb_ut_pitch2_ldflags = \
   $(jb_ut_ldflags)
 
 ################################################################
@@ -455,6 +465,16 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/timestamp.hpp \
   jb/itch5/trade_message.hpp \
   jb/itch5/unknown_message.hpp
+
+################################################################
+# jb/libjb_pitch2.a
+################################################################
+
+jb_libjb_pitch2_adir = $(includedir)
+jb_libjb_pitch2_a_SOURCES = \
+  jb/pitch2/auction_update_message.cpp
+jb_libjb_pitch2_a_HEADERS = \
+  jb/pitch2/auction_update_message.hpp
 
 ################################################################
 # jb/libjb_fftw.a
@@ -1191,6 +1211,15 @@ jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
 jb_itch5_bm_order_book_CPPFLAGS = 
 jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
+
+################################################################
+# pitch2 unit tests
+################################################################
+
+jb_pitch2_ut_auction_update_message_SOURCES = jb/pitch2/ut_auction_update_message.cpp
+jb_pitch2_ut_auction_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_auction_update_message
+jb_pitch2_ut_auction_update_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_auction_update_message_LDADD = $(jb_ut_pitch2_ldadd)
 
 ################################################################
 # testing program and unit tests
