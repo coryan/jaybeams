@@ -232,5 +232,5 @@ BOOST_AUTO_TEST_CASE(generic_reduce_double_subset) {
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_float_broken) {
   std::size_t const size = 1 << 18;
-  check_generic_reduce_sized<float, true>(size);
+  check_generic_reduce<float, true>(size);
 }
