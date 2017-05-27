@@ -34,16 +34,12 @@ void jb::config_object::load_overrides(
   char argv0[] = "undefined";
   jb::config_files_locations<> search(
       argc > 1 ? argv[0] : argv0, environment_variable_name);
-  try {
-    boost::filesystem::path full;
-    if (config_file_found(search, filename, full)) {
-      JB_LOG(debug) << "loading overrides from " << full;
-      std::ifstream is(full.string());
-      load_overrides(argc, argv, is);
-      return;
-    }
-  } catch (std::runtime_error const& ex) {
-    JB_LOG(warning) << "fail to load overrides " << ex.what();
+  boost::filesystem::path full;
+  if (config_file_found(search, filename, full)) {
+    JB_LOG(debug) << "loading overrides from " << full;
+    std::ifstream is(full.string());
+    load_overrides(argc, argv, is);
+    return;
   }
   process_cmdline(argc, argv);
 }
@@ -53,16 +49,12 @@ void jb::config_object::load_overrides(
 
   char argv0[] = "undefined";
   jb::config_files_locations<> search(argc > 1 ? argv[0] : argv0);
-  try {
-    boost::filesystem::path full;
-    if (config_file_found(search, filename, full)) {
-      JB_LOG(debug) << "loading overrides from " << full;
-      std::ifstream is(full.string());
-      load_overrides(argc, argv, is);
-      return;
-    }
-  } catch (std::runtime_error const& ex) {
-    JB_LOG(warning) << "fail to load overrides " << ex.what();
+  boost::filesystem::path full;
+  if (config_file_found(search, filename, full)) {
+    JB_LOG(debug) << "loading overrides from " << full;
+    std::ifstream is(full.string());
+    load_overrides(argc, argv, is);
+    return;
   }
   process_cmdline(argc, argv);
 }

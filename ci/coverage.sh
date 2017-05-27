@@ -17,4 +17,8 @@ docker run --rm -it -v $PWD:$PWD --workdir $PWD ${IMAGE?} ci/coverage-lcov.sh
 # Push results to coveralls ...
 coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
 
+if [ "x${CODECOV_TOKEN}" != "x" ]; then
+    bash <(curl -s https://codecov.io/bash)
+fi
+
 exit 0
