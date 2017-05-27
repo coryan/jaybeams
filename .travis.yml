@@ -15,7 +15,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O0 -g" CONFIGUREFLAGS=""
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g -fsanitize=address" CONFIGUREFLAGS="--without-opencl"
 
     - os: linux
       compiler: gcc
