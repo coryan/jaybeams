@@ -21,10 +21,12 @@ namespace {
  * A reducer to drive the test.
  */
 template <typename T, bool introduce_error = false>
-class reduce_sum : public jb::opencl::generic_reduce<reduce_sum<T>, T, T> {
+class reduce_sum
+    : public jb::opencl::generic_reduce<reduce_sum<T, introduce_error>, T, T> {
 public:
   reduce_sum(std::size_t size, boost::compute::command_queue const& queue)
-      : jb::opencl::generic_reduce<reduce_sum<T>, T, T>(size, queue) {
+      : jb::opencl::generic_reduce<reduce_sum<T, introduce_error>, T, T>(
+            size, queue) {
   }
 
   /// @returns the body of the initialization function
@@ -232,5 +234,5 @@ BOOST_AUTO_TEST_CASE(generic_reduce_double_subset) {
  */
 BOOST_AUTO_TEST_CASE(generic_reduce_float_broken) {
   std::size_t const size = 1 << 18;
-  check_generic_reduce<float, true>(size);
+  BOOST_CHECK_THROW((check_generic_reduce<float, true>(size)), std::exception);
 }
