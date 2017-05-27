@@ -123,3 +123,20 @@ BOOST_AUTO_TEST_CASE(launch_thread_errors) {
   t.join();
   BOOST_CHECK_EQUAL(cnt, 0);
 }
+
+/**
+ * @test Improve coverage, handle unknown exceptions.
+ */
+BOOST_AUTO_TEST_CASE(launch_thread_unknown_exception) {
+  jb::thread_config cfg;
+
+  BOOST_TEST_MESSAGE("main id=" << std::this_thread::get_id());
+  int cnt = 0;
+  std::thread t;
+  jb::launch_thread(t, cfg, [&cnt]() {
+    BOOST_TEST_MESSAGE("id=" << std::this_thread::get_id());
+    ++cnt;
+    throw "not a std::exception";
+  });
+  t.join();
+}
