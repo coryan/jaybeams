@@ -18,17 +18,22 @@
 namespace {
 
 /**
- * A reducer to test.
+ * A reducer to drive the test.
  */
-template <typename T>
-class reduce_sum : public jb::opencl::generic_reduce<reduce_sum<T>, T, T> {
+template <typename T, bool introduce_error = false>
+class reduce_sum
+    : public jb::opencl::generic_reduce<reduce_sum<T, introduce_error>, T, T> {
 public:
   reduce_sum(std::size_t size, boost::compute::command_queue const& queue)
-      : jb::opencl::generic_reduce<reduce_sum<T>, T, T>(size, queue) {
+      : jb::opencl::generic_reduce<reduce_sum<T, introduce_error>, T, T>(
+            size, queue) {
   }
 
   /// @returns the body of the initialization function
   static std::string initialize_body(char const* lhs) {
+    if (introduce_error) {
+      return std::string("*") + lhs + " = ; /* bad syntax error */";
+    }
     return std::string("*") + lhs + " = 0;";
   }
 
@@ -78,7 +83,7 @@ std::function<double()> create_random_generator<double>(unsigned int seed) {
   return [state]() { return state->second(state->first); };
 }
 
-template <typename value_type>
+template <typename value_type, bool introduce_error = false>
 void check_generic_reduce_sized(std::size_t size, std::size_t subset_size) {
   BOOST_TEST_MESSAGE("Testing with size = " << size);
   boost::compute::device device = jb::opencl::device_selector();
@@ -113,7 +118,7 @@ void check_generic_reduce_sized(std::size_t size, std::size_t subset_size) {
     JB_LOG(trace) << "    " << i << " " << acpy[i] << " " << asrc[i];
   }
 
-  reduce_sum<value_type> reducer(size, queue);
+  reduce_sum<value_type, introduce_error> reducer(size, queue);
   auto done = reducer.execute(a.begin(), a.begin() + subset_size);
   done.wait();
 
@@ -127,9 +132,9 @@ void check_generic_reduce_sized(std::size_t size, std::size_t subset_size) {
           << " delta=" << (actual - expected));
 }
 
-template <typename value_type>
+template <typename value_type, bool introduce_error = false>
 void check_generic_reduce(std::size_t size) {
-  check_generic_reduce_sized<value_type>(size, size);
+  check_generic_reduce_sized<value_type, introduce_error>(size, size);
 }
 
 } // anonymous namespace
@@ -222,4 +227,12 @@ BOOST_AUTO_TEST_CASE(generic_reduce_double_subset) {
   std::size_t const size = 1000000;
   std::size_t const subset_size = size / 2;
   check_generic_reduce_sized<double>(size, subset_size);
+}
+
+/**
+ * @test Improve code coverage, test case of broken code.
+ */
+BOOST_AUTO_TEST_CASE(generic_reduce_float_broken) {
+  std::size_t const size = 1 << 18;
+  BOOST_CHECK_THROW((check_generic_reduce<float, true>(size)), std::exception);
 }

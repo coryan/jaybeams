@@ -2,7 +2,8 @@
 
 [![Join the chat at https://gitter.im/jaybeams/Lobby](https://badges.gitter.im/jaybeams/Lobby.svg)](https://gitter.im/jaybeams/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/coryan/jaybeams.svg?branch=master)](https://travis-ci.org/coryan/jaybeams)
-[![Coverage Status](https://coveralls.io/repos/coryan/jaybeams/badge.svg?branch=master&service=github)](https://coveralls.io/github/coryan/jaybeams?branch=master)
+[![coveralls](https://coveralls.io/repos/coryan/jaybeams/badge.svg?branch=master&service=github)](https://coveralls.io/github/coryan/jaybeams?branch=master)
+[![codecov](https://codecov.io/gh/coryan/jaybeams/branch/master/graph/badge.svg)](https://codecov.io/gh/coryan/jaybeams)
 
 Another project to have fun coding.
 
