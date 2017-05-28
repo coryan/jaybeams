@@ -1,7 +1,6 @@
-#ifndef jb_pitch2_message_header_hpp
-#define jb_pitch2_message_header_hpp
+#ifndef jb_pitch2_time_message_hpp
+#define jb_pitch2_time_message_hpp
 
-#include <jb/fixed_string.hpp>
 #include <boost/endian/buffers.hpp>
 
 #include <iosfwd>
@@ -32,4 +31,4 @@ std::ostream& operator<<(std::ostream& os, time_message const& x);
 } // namespace pitch2
 } // namespace jb
 
-#endif // jb_pitch2_aution_update_message_hpp
+#endif // jb_pitch2_time_message_hpp

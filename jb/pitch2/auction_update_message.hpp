@@ -1,5 +1,5 @@
-#ifndef jb_pitch2_message_header_hpp
-#define jb_pitch2_message_header_hpp
+#ifndef jb_pitch2_auction_update_message_hpp
+#define jb_pitch2_auction_update_message_hpp
 
 #include <jb/fixed_string.hpp>
 #include <boost/endian/buffers.hpp>
