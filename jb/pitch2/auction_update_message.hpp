@@ -26,7 +26,7 @@ struct auction_update_message {
 
   boost::endian::little_uint8_buf_t length;
   boost::endian::little_uint8_buf_t message_type;
-  boost::endian::little_int32_buf_t time_offset;
+  boost::endian::little_uint32_buf_t time_offset;
   stock_symbol_type stock_symbol;
   boost::endian::little_uint8_buf_t auction_type;
   boost::endian::little_uint64_buf_t reference_price;

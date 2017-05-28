@@ -22,7 +22,7 @@ struct unit_clear_message {
 
   boost::endian::little_uint8_buf_t length;
   boost::endian::little_uint8_buf_t message_type;
-  boost::endian::little_int32_buf_t time_offset;
+  boost::endian::little_uint32_buf_t time_offset;
 };
 
 /// Streaming operator for jb::pitch2::unit_clear_message.

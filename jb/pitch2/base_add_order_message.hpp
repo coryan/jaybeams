@@ -32,7 +32,7 @@ struct base_add_order_message {
 
   boost::endian::little_uint8_buf_t length;
   boost::endian::little_uint8_buf_t message_type;
-  boost::endian::little_int32_buf_t time_offset;
+  boost::endian::little_uint32_buf_t time_offset;
   boost::endian::little_uint64_buf_t order_id;
   boost::endian::little_uint8_buf_t side_indicator;
   quantity_type quantity;
