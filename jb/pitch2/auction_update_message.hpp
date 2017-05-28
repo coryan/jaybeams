@@ -1,6 +1,7 @@
 #ifndef jb_pitch2_message_header_hpp
 #define jb_pitch2_message_header_hpp
 
+#include <jb/fixed_string.hpp>
 #include <boost/endian/buffers.hpp>
 
 #include <iosfwd>
@@ -16,7 +17,7 @@ struct auction_update_message {
   boost::endian::little_uint8_buf_t length;
   boost::endian::little_uint8_buf_t message_type;
   boost::endian::little_int32_buf_t time_offset;
-  char stock_symbol[8];
+  jb::fixed_string<8> stock_symbol;
   boost::endian::little_uint8_buf_t auction_type;
   boost::endian::little_uint64_buf_t reference_price;
   boost::endian::little_uint32_buf_t buy_shares;

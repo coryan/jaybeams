@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(decode_auction_update_message) {
   BOOST_CHECK_EQUAL(int(msg.length.value()), 47);
   BOOST_CHECK_EQUAL(int(msg.message_type.value()), 0x95);
   BOOST_CHECK_EQUAL(msg.time_offset.value(), 447000);
-  BOOST_CHECK_EQUAL(std::string(msg.stock_symbol, 5), "ZVZZT");
+  BOOST_CHECK_EQUAL(msg.stock_symbol, jb::fixed_string<8>("ZVZZT"));
   BOOST_CHECK_EQUAL(int(msg.auction_type.value()), 0x49);
   BOOST_CHECK_EQUAL(msg.reference_price.value(), 1025000);
   BOOST_CHECK_EQUAL(msg.buy_shares.value(), 75000);

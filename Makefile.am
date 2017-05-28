@@ -22,6 +22,7 @@ jb_unit_tests = \
   jb/ut_explicit_cuts_binning \
   jb/ut_fileio \
   jb/ut_filetype \
+  jb/ut_fixed_string \
   jb/ut_histogram \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
@@ -288,6 +289,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/feed_error.hpp \
   jb/fileio.hpp \
   jb/filetype.hpp \
+  jb/fixed_string.hpp \
   jb/histogram.hpp \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
@@ -607,6 +609,11 @@ jb_ut_filetype_SOURCES = jb/ut_filetype.cpp
 jb_ut_filetype_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_filetype
 jb_ut_filetype_LDFLAGS = $(jb_ut_ldflags)
 jb_ut_filetype_LDADD = $(jb_ut_ldadd)
+
+jb_ut_fixed_string_SOURCES = jb/ut_fixed_string.cpp
+jb_ut_fixed_string_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_fixed_string
+jb_ut_fixed_string_LDFLAGS = $(jb_ut_ldflags)
+jb_ut_fixed_string_LDADD = $(jb_ut_ldadd)
 
 jb_ut_histogram_SOURCES = jb/ut_histogram.cpp
 jb_ut_histogram_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram
