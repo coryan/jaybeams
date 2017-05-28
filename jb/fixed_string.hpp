@@ -18,7 +18,7 @@ namespace jb {
  * is, fixed-length alpha numeric fields.  While it is normally easy
  * to treat these fields as character strings, the fields may not be
  * NUL terminated.  In fact, several protocols define such fields as
- * left justified, padded with spaces. 
+ * left justified, padded with spaces.
  *
  * We want an in-memory representation that supports basic comparison
  * operations, streaming to std::ostream, and conversion to
@@ -35,11 +35,11 @@ class fixed_string
       public boost::less_than_comparable<
           fixed_string<wire_size_value>, char const*>,
       public boost::equality_comparable<
-  fixed_string<wire_size_value>, char const*>,
+          fixed_string<wire_size_value>, char const*>,
       public boost::less_than_comparable<
-  fixed_string<wire_size_value>, std::string>,
+          fixed_string<wire_size_value>, std::string>,
       public boost::equality_comparable<
-  fixed_string<wire_size_value>, std::string> {
+          fixed_string<wire_size_value>, std::string> {
 public:
   /// The size of the field on the wire
   constexpr static std::size_t wire_size = wire_size_value;
