@@ -42,4 +42,4 @@ std::ostream& operator<<(std::ostream& os, auction_update_message const& x);
 } // namespace pitch2
 } // namespace jb
 
-#endif // jb_pitch2_aution_update_message_hpp
+#endif // jb_pitch2_auction_update_message_hpp
