@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(expanded_add_order_message_basic) {
   BOOST_CHECK_EQUAL(sizeof(expanded_add_order_message), std::size_t(40));
 
   char const buf[] = u8"\x28"                           // Length (40)
-                     "\x23"                             // Message Type (35)
+                     "\x2F"                             // Message Type (47)
                      "\x18\xD2\x06\x00"                 // Time Offset (447,000)
                      "\x05\x40\x5B\x77\x8F\x56\x1D\x0B" // Order Id
                      "\x42"             // Side Indicator (66 'B' Buy)
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(expanded_add_order_message_basic) {
 
   std::memcpy(&msg, buf, sizeof(msg));
   BOOST_CHECK_EQUAL(int(msg.length.value()), 40);
-  BOOST_CHECK_EQUAL(int(msg.message_type.value()), 35);
+  BOOST_CHECK_EQUAL(int(msg.message_type.value()), 47);
   BOOST_CHECK_EQUAL(msg.time_offset.value(), 447000);
   BOOST_CHECK_EQUAL(msg.order_id.value(), 0x0B1D568F775B4005ULL);
   BOOST_CHECK_EQUAL(msg.side_indicator.value(), 0x42);
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(expanded_add_order_message_basic) {
   os << msg;
   BOOST_CHECK_EQUAL(
       os.str(), std::string(
-                    "length=40,message_type=35,time_offset=447000,"
+                    "length=40,message_type=47,time_offset=447000,"
                     "order_id=800891482924597253,side_indicator=B,"
                     "quantity=20000,symbol=ZVZZT   ,price=9050,add_flags=1,"
                     "participant_id=MPID"));

@@ -21,7 +21,7 @@ struct expanded_add_order_message
                                     jb::fixed_string<8>,
                                     boost::endian::little_uint64_buf_t> {
   /// Define the messsage type
-  constexpr static int type = 0x23;
+  constexpr static int type = 0x2F;
 
   /// The type for the participant_id field.
   using participant_type = jb::fixed_string<4>;
