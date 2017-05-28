@@ -4,11 +4,12 @@
 #include <type_traits>
 
 /**
- * @test Verify that jb::pitch::auction_update_message works as expected.
+ * @test Verify that jb::pitch2::auction_update_message works as expected.
  */
-BOOST_AUTO_TEST_CASE(decode_auction_update_message) {
+BOOST_AUTO_TEST_CASE(auction_update_message_basic) {
   using namespace jb::pitch2;
   BOOST_CHECK_EQUAL(true, std::is_pod<auction_update_message>::value);
+  BOOST_CHECK_EQUAL(sizeof(auction_update_message), std::size_t(47));
 
   char const buf[] =
       u8"\x2F"                           // Length (47)
