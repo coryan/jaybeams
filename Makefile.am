@@ -81,7 +81,8 @@ jb_itch5_unit_tests = \
   jb/itch5/ut_trade_message
 
 jb_pitch2_unit_tests = \
-  jb/pitch2/ut_auction_update_message
+  jb/pitch2/ut_auction_update_message \
+  jb/pitch2/ut_time_message
 
 jb_testing_unit_tests = \
   jb/testing/ut_check_close_enough \
@@ -474,9 +475,11 @@ nobase_jb_libjb_itch5_a_HEADERS = \
 
 jb_libjb_pitch2_adir = $(includedir)
 jb_libjb_pitch2_a_SOURCES = \
-  jb/pitch2/auction_update_message.cpp
+  jb/pitch2/auction_update_message.cpp \
+  jb/pitch2/time_message.cpp
 jb_libjb_pitch2_a_HEADERS = \
-  jb/pitch2/auction_update_message.hpp
+  jb/pitch2/auction_update_message.hpp \
+  jb/pitch2/time_message.hpp
 
 ################################################################
 # jb/libjb_fftw.a
@@ -1227,6 +1230,11 @@ jb_pitch2_ut_auction_update_message_SOURCES = jb/pitch2/ut_auction_update_messag
 jb_pitch2_ut_auction_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_auction_update_message
 jb_pitch2_ut_auction_update_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
 jb_pitch2_ut_auction_update_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_time_message_SOURCES = jb/pitch2/ut_time_message.cpp
+jb_pitch2_ut_time_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_time_message
+jb_pitch2_ut_time_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_time_message_LDADD = $(jb_ut_pitch2_ldadd)
 
 ################################################################
 # testing program and unit tests
