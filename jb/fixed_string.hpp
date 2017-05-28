@@ -30,16 +30,9 @@ namespace jb {
  */
 template <std::size_t wire_size_value>
 class fixed_string
-    : public boost::less_than_comparable<fixed_string<wire_size_value>>,
-      public boost::equality_comparable<fixed_string<wire_size_value>>,
-      public boost::less_than_comparable<fixed_string<wire_size_value>,
-                                         char const*>,
-      public boost::equality_comparable<fixed_string<wire_size_value>,
-                                        char const*>,
-      public boost::less_than_comparable<fixed_string<wire_size_value>,
-                                         std::string>,
-      public boost::equality_comparable<fixed_string<wire_size_value>,
-                                        std::string> {
+    : public boost::totally_ordered<fixed_string<wire_size_value>>,
+      public boost::totally_ordered<fixed_string<wire_size_value>,
+                                    std::string> {
 public:
   /// The size of the field on the wire
   constexpr static std::size_t wire_size = wire_size_value;
@@ -82,24 +75,14 @@ public:
     return std::strncmp(buffer_, rhs.buffer_, wire_size) < 0;
   }
 
-  /// compare vs a C string
-  bool operator==(char const* rhs) const {
-    return std::strncmp(buffer_, rhs, wire_size) == 0;
-  }
-
-  /// compare vs a C string
-  bool operator<(char const* rhs) const {
-    return std::strncmp(buffer_, rhs, wire_size) < 0;
-  }
-
   /// compare vs a std::string
   bool operator==(std::string const& rhs) const {
-    return *this == rhs.c_str();
+    return std::strncmp(buffer_, rhs.c_str(), wire_size) == 0;
   }
 
   /// compare vs a std::string
   bool operator<(std::string const& rhs) const {
-    return *this < rhs.c_str();
+    return std::strncmp(buffer_, rhs.c_str(), wire_size) < 0;
   }
   //@}
 

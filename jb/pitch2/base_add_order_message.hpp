@@ -4,9 +4,6 @@
 #include <jb/fixed_string.hpp>
 #include <boost/endian/buffers.hpp>
 
-#include <iosfwd>
-#include <utility>
-
 namespace jb {
 namespace pitch2 {
 
@@ -17,11 +14,21 @@ namespace pitch2 {
  * largely identical except for the width of some of the fields.  We
  * use this template class to represent the common structure of these
  * messages.
+ *
+ * @tparam quantity_t the type used for the quantity field.
+ * @tparam price_t the type used for the price field.
+ * @tparam symbol_t the type used for the symbol field.
  */
-template <typename quantity_type, typename price_type>
+template <typename quantity_t, typename symbol_t, typename price_t>
 struct base_add_order_message {
+  /// Capture the quantity_type template parameter as a trait
+  using quantity_type = quantity_t;
+
+  /// Capture the price_type template parameter as a trait
+  using price_type = price_t;
+
   /// The type for the symbol field.
-  using symbol_type = jb::fixed_string<6>;
+  using symbol_type = symbol_t;
 
   boost::endian::little_uint8_buf_t length;
   boost::endian::little_uint8_buf_t message_type;

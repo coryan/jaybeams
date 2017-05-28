@@ -18,6 +18,7 @@ namespace pitch2 {
  */
 struct short_add_order_message
     : public base_add_order_message<boost::endian::little_uint16_buf_t,
+                                    jb::fixed_string<6>,
                                     boost::endian::little_uint16_buf_t> {
   /// Define the messsage type
   constexpr static int type = 0x21;
