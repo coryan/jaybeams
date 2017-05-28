@@ -25,7 +25,7 @@ struct time_message {
   boost::endian::little_int32_buf_t time;
 };
 
-/// Streaming operator for jb::pitch::aution_update_message.
+/// Streaming operator for jb::pitch2::time_message.
 std::ostream& operator<<(std::ostream& os, time_message const& x);
 
 } // namespace pitch2

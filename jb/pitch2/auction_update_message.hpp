@@ -36,7 +36,7 @@ struct auction_update_message {
   boost::endian::little_uint64_buf_t auction_only_price;
 };
 
-/// Streaming operator for jb::pitch::aution_update_message.
+/// Streaming operator for jb::pitch2::auction_update_message.
 std::ostream& operator<<(std::ostream& os, auction_update_message const& x);
 
 } // namespace pitch2
