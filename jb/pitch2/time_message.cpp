@@ -13,4 +13,3 @@ std::ostream& operator<<(std::ostream& os, time_message const& x) {
 
 } // namespace pitch2
 } // namespace jb
-

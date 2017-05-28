@@ -11,10 +11,9 @@ BOOST_AUTO_TEST_CASE(time_message_basic) {
   BOOST_CHECK_EQUAL(true, std::is_pod<time_message>::value);
   BOOST_CHECK_EQUAL(sizeof(time_message), std::size_t(6));
 
-  char const buf[] =
-      u8"\x06"                           // Length (6)
-      "\x20"                             // Message Type (32)
-      "\x98\x85\x00\x00"                 // Time (34200 seconds)
+  char const buf[] = u8"\x06"           // Length (6)
+                     "\x20"             // Message Type (32)
+                     "\x98\x85\x00\x00" // Time (34200 seconds)
       ;
   time_message msg;
   BOOST_REQUIRE_EQUAL(sizeof(buf) - 1, sizeof(msg));

@@ -11,10 +11,9 @@ BOOST_AUTO_TEST_CASE(unit_clear_message_basic) {
   BOOST_CHECK_EQUAL(true, std::is_pod<unit_clear_message>::value);
   BOOST_CHECK_EQUAL(sizeof(unit_clear_message), std::size_t(6));
 
-  char const buf[] =
-      u8"\x06"                           // Length (6)
-      "\x97"                             // Message Type (0x97)
-      "\x18\xD2\x06\x00"                 // Time Offset (447,000 ns)
+  char const buf[] = u8"\x06"           // Length (6)
+                     "\x97"             // Message Type (0x97)
+                     "\x18\xD2\x06\x00" // Time Offset (447,000 ns)
       ;
   unit_clear_message msg;
   BOOST_REQUIRE_EQUAL(sizeof(buf) - 1, sizeof(msg));

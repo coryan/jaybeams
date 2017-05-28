@@ -32,14 +32,14 @@ template <std::size_t wire_size_value>
 class fixed_string
     : public boost::less_than_comparable<fixed_string<wire_size_value>>,
       public boost::equality_comparable<fixed_string<wire_size_value>>,
-      public boost::less_than_comparable<
-          fixed_string<wire_size_value>, char const*>,
-      public boost::equality_comparable<
-          fixed_string<wire_size_value>, char const*>,
-      public boost::less_than_comparable<
-          fixed_string<wire_size_value>, std::string>,
-      public boost::equality_comparable<
-          fixed_string<wire_size_value>, std::string> {
+      public boost::less_than_comparable<fixed_string<wire_size_value>,
+                                         char const*>,
+      public boost::equality_comparable<fixed_string<wire_size_value>,
+                                        char const*>,
+      public boost::less_than_comparable<fixed_string<wire_size_value>,
+                                         std::string>,
+      public boost::equality_comparable<fixed_string<wire_size_value>,
+                                        std::string> {
 public:
   /// The size of the field on the wire
   constexpr static std::size_t wire_size = wire_size_value;
@@ -118,8 +118,7 @@ private:
 
 /// Streaming operator for jb::mktdata::fixed_string<>
 template <std::size_t size>
-std::ostream&
-operator<<(std::ostream& os, fixed_string<size> const& x) {
+std::ostream& operator<<(std::ostream& os, fixed_string<size> const& x) {
   return os << x.str();
 }
 
@@ -131,7 +130,7 @@ std::size_t hash_value(fixed_string<size> const& x) {
 }
 
 /// Define the constexpr
-template<std::size_t size>
+template <std::size_t size>
 constexpr std::size_t fixed_string<size>::wire_size;
 
 } // namespace jb
