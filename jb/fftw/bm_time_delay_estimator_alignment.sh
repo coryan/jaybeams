@@ -8,7 +8,7 @@ if [ $# -ge 1 ]; then
     iterations=$1
 fi
 
-bindir=`dirname $0`
+bindir=$(dirname $0)
 for path in ${bindir?}/../../tools ${bindir?}; do
     if [ -r ${path?}/benchmark_common.sh ]; then
 	. ${path?}/benchmark_common.sh
@@ -50,7 +50,7 @@ for test in float:aligned float:unaligned; do
                   --microbenchmark.iterations=${iterations?} \
                   --microbenchmark.test-case=${test?} \
 		  >$TMPOUT 2>$TMPERR
-    cat $TMPERR | log $LOG
+    log $LOG <$TMPERR
     cat $TMPOUT >>$LOG
 done
 

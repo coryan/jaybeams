@@ -19,8 +19,8 @@ fi
 
 # Extract the variant from the IMAGE environment variable (it is set
 # in .travis.yml)
-IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
-variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
+IMAGE=${IMAGE/:*//}
+variant=${IMAGE#coryan/jaybeamsdev-}
 
 # ... that determines the name of the image we want to build ...
 IMAGE=coryan/jaybeams-runtime-${variant?}

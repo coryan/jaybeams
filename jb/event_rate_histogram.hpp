@@ -89,7 +89,8 @@ public:
       std::uint64_t max_expected_rate, duration_type measurement_period,
       duration_type sampling_period = duration_type(1))
       : rate_histogram(binning_strategy(0, max_expected_rate))
-      , rate_(measurement_period, sampling_period) {
+      , rate_(measurement_period, sampling_period)
+      , last_rate_(0) {
   }
 
   /// Record a new sample.

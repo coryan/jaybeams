@@ -49,7 +49,7 @@ void jb::yaml::merge(class_overrides& by_class, YAML::Node node) {
     JB_ASSERT_THROW(i.first);
     // ... found a key, check the format ...
     std::string key = i.first.as<std::string>();
-    if (key.find(":") != 0) {
+    if (key[0] != ':') {
       continue;
     }
     // ... try to insert into the map ...

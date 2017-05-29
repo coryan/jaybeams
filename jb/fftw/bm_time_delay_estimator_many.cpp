@@ -77,7 +77,7 @@ int const nsamples = 4096;
 template <typename timeseries_type>
 class fixture {
 public:
-  fixture(int n_timeseries)
+  explicit fixture(int n_timeseries)
       : fixture(nsamples, n_timeseries) {
   }
   fixture(int size, int n_timeseries)
@@ -140,7 +140,7 @@ private:
 template <typename T, typename A>
 class fixture<boost::multi_array<T, 2, A>> {
 public:
-  fixture(int n_timeseries)
+  explicit fixture(int n_timeseries)
       : fixture(nsamples, n_timeseries) {
   }
   fixture(int size, int n_timeseries)

@@ -8,7 +8,7 @@ if [ $# -ge 1 ]; then
     iterations=$1
 fi
 
-bindir=`dirname $0`
+bindir=$(dirname $0)
 for path in ${bindir?}/../../tools ${bindir?}; do
     if [ -r ${path?}/benchmark_common.sh ]; then
 	. ${path?}/benchmark_common.sh
@@ -59,7 +59,7 @@ for lib in std boost_async boost generic_reduce; do
                           --microbenchmark.test-case=${test?} \
                           --copy-data=${copy?} \
 		          >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
-            cat $TMPERR | log $LOG
+            log $LOG<${TMPERR}
             cat $TMPOUT >>$LOG
 
             echo "Running testcase ${prefix?} (large), current load ${load?}"
@@ -73,7 +73,7 @@ for lib in std boost_async boost generic_reduce; do
                           --microbenchmark.test-case=${test?} \
                           --copy-data=${copy?} \
 		          >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
-            cat $TMPERR | log $LOG
+            log $LOG<${TMPERR}
             cat $TMPOUT >>$LOG
         done
     done

@@ -52,7 +52,7 @@ template <typename compare_t>
 class map_based_book_side {
 public:
   /// Initializes an empty side order book
-  map_based_book_side(map_based_order_book::config const& cfg) {
+  explicit map_based_book_side(map_based_order_book::config const& cfg) {
   }
 
   /// @returns the best side price and quantity

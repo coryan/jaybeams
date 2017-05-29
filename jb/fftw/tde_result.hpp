@@ -38,7 +38,7 @@ class tde_result {
 public:
   using value_type = value_t;
   using record_type = value_type;
-  tde_result(container_t const& a)
+  explicit tde_result(container_t const& a)
       : value_{0} {
   }
 
@@ -83,7 +83,7 @@ public:
   /// constructor based on a multi_array of dimensionality K
   /// the last dimension is ignored
   /// size is reduced by the elements of the last dimension (nsamples)
-  tde_result(array_type const& a)
+  explicit tde_result(array_type const& a)
       : record_{jb::detail::array_shape(a)} {
   }
 
@@ -126,7 +126,7 @@ public:
   using record_type = value_type;
 
   /// constructor based on a array_type of dimensionaltity 1
-  tde_result(array_type const& a)
+  explicit tde_result(array_type const& a)
       : value_{0} {
   }
 

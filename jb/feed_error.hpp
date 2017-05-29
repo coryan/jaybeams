@@ -10,7 +10,7 @@ namespace jb {
  */
 class feed_error : public std::runtime_error {
 public:
-  feed_error(std::string const& msg)
+  explicit feed_error(std::string const& msg)
       : std::runtime_error("Feed error: " + msg) {
   }
 };

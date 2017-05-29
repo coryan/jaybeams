@@ -273,7 +273,7 @@ EOF
 }
 
 require_full_rt_scheduling() {
-    if cat /proc/sys/kernel/sched_rt_runtime_us | grep -q -- -1; then
+    if grep -q -- -1 /proc/sys/kernel/sched_rt_runtime_us; then
 	echo "System seems to be configured for benchmarking, good"
     else
 	echo "System does not seem to be configured for benchmarking, aborting"

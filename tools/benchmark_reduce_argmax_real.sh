@@ -4,7 +4,7 @@
 set -e
 
 # ... find the common functions for benchmarks and load them ...
-bindir=`dirname $0`
+bindir=$(dirname $0)
 source ${bindir?}/benchmark_common.sh
 
 # ... configure the system to run a benchmark and select where to send output ...
@@ -15,9 +15,9 @@ clinfo | log $LOG
 
 # ... run the benchmark at different sizes ...
 for test in gpu:float cpu:float gpu:complex:float cpu:complex:float; do
-    for size in 5000 `seq 10000 10000 100000` \
-                    `seq 200000 100000 500000`; do
-        load=`uptime`
+    for size in 5000 $(seq 10000 10000 100000) \
+                    $(seq 200000 100000 500000); do
+        load=$(uptime)
         echo "Running testcase $test at size=$size, current load $load"
         echo | log $LOG
         echo "Running testcase $test at size=$size, current load $load" | log $LOG
@@ -27,7 +27,7 @@ for test in gpu:float cpu:float gpu:complex:float cpu:complex:float; do
                       --benchmark.prefix="${test?},${size?}," \
                       --benchmark.test-case="${test?}" \
                       --benchmark.size=${size?} >$TMPOUT 2>$TMPERR
-        cat $TMPERR | log $LOG
+        log $LOG <${TMPERR}
         cat $TMPOUT >>$LOG
     done
 done

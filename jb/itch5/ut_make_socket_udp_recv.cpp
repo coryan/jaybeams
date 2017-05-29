@@ -19,7 +19,7 @@ namespace {
 
 /// A Mock Object for the socket class
 struct mock_socket {
-  mock_socket(boost::asio::io_service& io) {
+  explicit mock_socket(boost::asio::io_service& io) {
     constructor(io);
   }
 

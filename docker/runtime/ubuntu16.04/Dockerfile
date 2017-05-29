@@ -41,7 +41,9 @@ RUN apt-get update && apt-get install -y \
     ocl-icd-libopencl1 \
     sudo \
     time \
-    zlib1g && apt-get clean
+    zlib1g && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
 COPY bin /opt/jaybeams/bin/
 COPY lib /opt/jaybeams/lib/

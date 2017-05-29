@@ -65,7 +65,7 @@ bool operator==(simple const& lhs, simple const& rhs) {
 }
 
 bool operator!=(simple const& lhs, simple const& rhs) {
-  return !(lhs == rhs);
+  return not(lhs == rhs);
 }
 } // anonymous namespace
 

@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(cpu_set_istream) {
   {
     std::istringstream is("1");
     jb::cpu_set a;
-    a.set(1);
+    is >> a;
     BOOST_CHECK_EQUAL(a.count(), 1);
     BOOST_CHECK_EQUAL(a.status(1), true);
   }

@@ -185,7 +185,7 @@ public:
     attribute_base(attribute_descriptor const& d, config_object* container);
 
     template <typename container_type>
-    attribute_base(container_type*)
+    explicit attribute_base(container_type*)
         : descriptor_() {
     }
 

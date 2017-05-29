@@ -64,10 +64,10 @@ bool jb::default_validator::operator()(fs::path const& dir) {
 // This is an ugly mess of #ifdefs, but better here than sprinkled
 // around in the code.
 
-#if !defined(JB_DEFAULT_SYSCONFDIR)
+#ifndef JB_DEFAULT_SYSCONFDIR
 #define JB_DEFAULT_SYSCONFDIR "/etc"
 #endif // JB_DEFAULT_SYSCONFDIR
-#if !defined(JB_DEFAULT_BINDIR)
+#ifndef JB_DEFAULT_BINDIR
 #define JB_DEFAULT_BINDIR "/usr/bin"
 #endif // JB_DEFAULT_BINDIR
 

@@ -38,7 +38,7 @@ public:
   /**
    * Constructor based on an initializer list.
    */
-  explicit_cuts_binning(std::initializer_list<sample_type> const& il)
+  explicit explicit_cuts_binning(std::initializer_list<sample_type> const& il)
       : explicit_cuts_binning(il.begin(), il.end()) {
   }
 

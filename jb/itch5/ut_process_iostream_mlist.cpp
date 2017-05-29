@@ -77,8 +77,9 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
 
   int count = 0;
   handler.now.action([&is, &count]() {
-    if (++count == 5)
+    if (++count == 5) {
       is.setstate(std::ios::failbit);
+    }
     return 0;
   });
 

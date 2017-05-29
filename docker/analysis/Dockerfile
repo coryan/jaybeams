@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
       r-cran-plyr \
       r-cran-reshape2 \
       r-recommended && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN echo 'install.packages(c("devtools"), \
     repos="http://cran.us.r-project.org", clean=TRUE)' > /tmp/packages.R && \
