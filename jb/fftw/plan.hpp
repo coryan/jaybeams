@@ -104,8 +104,7 @@ public:
 
   /// Execute the plan for vectors
   void execute(in_timeseries_type const& in, out_timeseries_type& out) const {
-    using namespace detail;
-    check_plan_inputs(
+    detail::check_plan_inputs(
         jb::detail::element_count(in), jb::detail::element_count(out),
         jb::detail::nsamples(in), jb::detail::nsamples(out), __func__);
     execute_impl(fftw_cast(in), fftw_cast(out));
@@ -262,8 +261,7 @@ template <typename in_array_type, typename out_array_type>
 plan<in_array_type, out_array_type> create_backward_plan(
     in_array_type const& in, out_array_type& out,
     int flags = default_plan_flags) {
-  using namespace detail;
-  check_plan_inputs(
+  detail::check_plan_inputs(
       jb::detail::element_count(in), jb::detail::element_count(out),
       jb::detail::nsamples(in), jb::detail::nsamples(out), __func__);
   auto howmany = jb::detail::element_count(in) / jb::detail::nsamples(in);
