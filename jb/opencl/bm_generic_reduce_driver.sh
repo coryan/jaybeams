@@ -73,7 +73,7 @@ for lib in std boost_async boost generic_reduce; do
                           --microbenchmark.test-case=${test?} \
                           --copy-data=${copy?} \
 		          >$TMPOUT 2>$TMPERR || echo "   ignoring crash"
-            cat $TMPERR | log $LOG
+            log $LOG<${TMPERR}
             cat $TMPOUT >>$LOG
         done
     done

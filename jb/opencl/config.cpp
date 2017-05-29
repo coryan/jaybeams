@@ -4,7 +4,7 @@ namespace jb {
 namespace opencl {
 namespace defaults {
 
-#if !defined(JB_DEFAULT_device_name)
+#ifndef JB_DEFAULT_device_name
 #define JB_DEFAULT_device_name ""
 #endif // JB_DEFAULT_device_name
 
