@@ -58,7 +58,8 @@ BOOST_AUTO_TEST_CASE(explicit_cuts_binning_basic) {
  * @test Verify that jb::explicit_cuts_binning works with jb::histogram.
  */
 BOOST_AUTO_TEST_CASE(explicit_cuts_binning_histogram) {
-  tested_histogram h({10, 20, 30, 40, 50, 100, 150, 200});
+  tested_histogram h(
+      tested_histogram::binning_strategy{10, 20, 30, 40, 50, 100, 150, 200});
   BOOST_CHECK_THROW(h.estimated_mean(), std::invalid_argument);
 
   h.sample(0);
