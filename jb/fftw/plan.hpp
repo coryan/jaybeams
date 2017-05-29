@@ -205,7 +205,7 @@ private:
    *
    * @param p the raw FFTW plan
    */
-  plan(fftw_plan_type p)
+  explicit plan(fftw_plan_type p)
       : p_(p) {
   }
 

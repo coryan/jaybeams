@@ -26,7 +26,7 @@
 set -ev
 
 # ... find the common functions for benchmarks and load them ...
-bindir=`dirname $0`
+bindir=$(dirname $0)
 source ${bindir?}/benchmark_common.sh
 
 # ... pick a log file ...
@@ -34,12 +34,12 @@ bechmark_startup
 
 # ... run the benchmark for different test cases ...
 for test in double:aligned float:aligned double:unaligned float:unaligned; do
-    load=`uptime`
+    load=$(uptime)
     echo "Running testcase ${test}, current load $load"
     echo | log $LOG
     echo "Running testcase ${test}, current load $load" | log $LOG
     /usr/bin/time ./jb/fftw/bm_time_delay_estimator --test-case=${test} --iterations=1000000 >$TMPOUT 2>$TMPERR
-    cat $TMPERR | log $LOG
+    log $LOG <$TMPERR
     cat $TMPOUT >>$LOG
 done
 

@@ -19,8 +19,8 @@ fi
 
 # Extract the variant from the IMAGE environment variable (it is set
 # in .travis.yml) ...
-IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
-variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
+IMAGE=${IMAGE/:*//}
+variant=${IMAGE#coryan/jaybeamsdev-}
 
 if [ "${variant?}" != "ubuntu16.04" ]; then
     echo "We only need to create the analysis image for Ubuntu 16.04"

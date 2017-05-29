@@ -31,7 +31,8 @@ RUN apt-get update && apt-get install -y \
       wget \
       xz-utils \
       zlib1g-dev && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/tmp/install-autoconf-archive
 RUN wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.20.tar.xz && \

@@ -106,7 +106,7 @@ public:
   }
 
   bool operator!=(cpu_set const& rhs) const {
-    return !(*this == rhs);
+    return not (*this == rhs);
   }
   //@}
 

@@ -4,8 +4,8 @@ set -e
 
 # Extract the variant from the IMAGE environment variable (it is set
 # in .travis.yml) ...
-IMAGE=$(echo ${IMAGE?} | sed  -e 's/:.*//')
-variant=$(echo ${IMAGE?} | sed -e 's;coryan/jaybeamsdev-;;')
+IMAGE=${IMAGE/:*//}
+variant=${IMAGE#coryan/jaybeamsdev-}
 
 # ... determine now old is the image, if it is old enough, we
 # re-create from scratch every time ...

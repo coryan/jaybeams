@@ -4,7 +4,7 @@
 set -e
 
 # ... find the common functions for benchmarks and load them ...
-bindir=`dirname $0`
+bindir=$(dirname $0)
 source ${bindir?}/benchmark_common.sh
 
 # ... pick a log file ...
@@ -14,8 +14,8 @@ benchmark_startup
 clinfo | log $LOG
 
 # ... run the benchmark at different sizes ...
-for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
-    load=`uptime`
+for size in $(seq 1 10) $(seq 20 10 100) $(seq 200 100 1000); do
+    load=$(uptime)
     echo "Running test at size=$size, current load $load"
     echo | log $LOG
     echo "Running test at size=$size, current load $load" | log $LOG
@@ -25,7 +25,7 @@ for size in `seq 1 10` `seq 20 10 100` `seq 200 100 1000`; do
                   --benchmark.test-case="$size" \
                   --benchmark.prefix="launch_kernel,${size}," \
                   --benchmark.size=${size?} >$TMPOUT 2>$TMPERR
-    cat $TMPERR | log $LOG
+    log $LOG <$TMPERR
     cat $TMPOUT >>$LOG
 done
 

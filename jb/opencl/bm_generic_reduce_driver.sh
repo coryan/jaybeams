@@ -8,7 +8,7 @@ if [ $# -ge 1 ]; then
     iterations=$1
 fi
 
-bindir=`dirname $0`
+bindir=$(dirname $0)
 for path in ${bindir?}/../../tools ${bindir?}; do
     if [ -r ${path?}/benchmark_common.sh ]; then
 	. ${path?}/benchmark_common.sh

@@ -56,7 +56,7 @@ public:
     return true;
   }
   bool operator!=(allocator const& rhs) const {
-    return !(*this == rhs);
+    return not (*this == rhs);
   }
 };
 

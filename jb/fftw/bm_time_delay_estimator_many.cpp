@@ -77,7 +77,7 @@ int const nsamples = 4096;
 template <typename timeseries_type>
 class fixture {
 public:
-  fixture(int n_timeseries)
+  explicit fixture(int n_timeseries)
       : fixture(nsamples, n_timeseries) {
   }
   fixture(int size, int n_timeseries)
