@@ -39,7 +39,7 @@ typedef shared_functor<skye::mock_function<bool(fs::path const&)>>
 
 /// A convenience predicate to feed into whenp()
 struct s_eq {
-  s_eq(char const* s)
+  explicit s_eq(char const* s)
       : match(s) {
   }
   bool operator()(char const* t) const {

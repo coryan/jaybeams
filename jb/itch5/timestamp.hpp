@@ -64,7 +64,8 @@ struct encoder<validate, timestamp> {
   static void w(std::size_t size, void* buf, std::size_t offset, timestamp x) {
     check_offset<validate>("encoder<timestamp>", size, offset, 6);
     check_timestamp_range<validate>(x);
-    using namespace std::chrono;
+    using std::chrono::duration_cast;
+    using std::chrono::nanoseconds;
     std::uint64_t nanos = duration_cast<nanoseconds>(x.ts).count();
     std::uint16_t hi = nanos >> 32;
     std::uint32_t lo = nanos & 0xFFFFFFFF;

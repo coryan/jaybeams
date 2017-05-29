@@ -46,7 +46,7 @@ public:
       : fixture(defaults::clock_repetitions) {
   }
 
-  fixture(int size)
+  explicit fixture(int size)
       : calls_per_iteration_(size) {
   }
 

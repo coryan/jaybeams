@@ -24,7 +24,7 @@ public:
   /**
    * Constructor from a configuration
    */
-  microbenchmark_base(microbenchmark_config const& cfg)
+  explicit microbenchmark_base(microbenchmark_config const& cfg)
       : config_(cfg) {
   }
 
@@ -34,7 +34,7 @@ public:
   struct summary {
     summary() {
     }
-    summary(results const& arg);
+    explicit summary(results const& arg);
 
     duration min;
     duration p25;

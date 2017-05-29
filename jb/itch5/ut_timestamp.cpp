@@ -42,10 +42,8 @@ BOOST_AUTO_TEST_CASE(decode_timestamp_range) {
   using jb::itch5::decoder;
   char buffer[32];
   int values[] = {255, 255, 255, 255, 255, 255};
-  std::uint64_t expected = 0;
   for (int i = 0; i != 6; ++i) {
     buffer[i] = values[i];
-    expected = expected * 256 + values[i];
   }
 
   BOOST_CHECK_THROW(

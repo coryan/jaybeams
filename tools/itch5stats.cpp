@@ -25,7 +25,7 @@ public:
  */
 class itch5_stats_handler {
 public:
-  itch5_stats_handler(config const& cfg)
+  explicit itch5_stats_handler(config const& cfg)
       : stats_(cfg.stats()) {
   }
 

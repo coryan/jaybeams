@@ -69,7 +69,7 @@ public:
   }
 
   /// Constructor with given size
-  fixture(int size)
+  explicit fixture(int size)
       : a(size)
       , b(size)
       , estimator(a, b) {

@@ -509,7 +509,7 @@ inline bool operator==(book_update const& a, book_update const& b) {
 }
 
 inline bool operator!=(book_update const& a, book_update const& b) {
-  return !(a == b);
+  return not(a == b);
 }
 
 std::ostream& operator<<(std::ostream& os, book_update const& x) {
