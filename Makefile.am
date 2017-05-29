@@ -83,6 +83,7 @@ jb_itch5_unit_tests = \
 jb_pitch2_unit_tests = \
   jb/pitch2/ut_add_order_message \
   jb/pitch2/ut_auction_update_message \
+  jb/pitch2/ut_delete_order_message \
   jb/pitch2/ut_expanded_add_order_message \
   jb/pitch2/ut_modify_message \
   jb/pitch2/ut_order_executed_message \
@@ -485,6 +486,7 @@ jb_libjb_pitch2_adir = $(includedir)
 jb_libjb_pitch2_a_SOURCES = \
   jb/pitch2/add_order_message.cpp \
   jb/pitch2/auction_update_message.cpp \
+  jb/pitch2/delete_order_message.cpp \
   jb/pitch2/expanded_add_order_message.cpp \
   jb/pitch2/modify_message.cpp \
   jb/pitch2/order_executed_message.cpp \
@@ -498,6 +500,7 @@ jb_libjb_pitch2_a_HEADERS = \
   jb/pitch2/auction_update_message.hpp \
   jb/pitch2/base_add_order_message.hpp \
   jb/pitch2/base_add_order_message_streaming.hpp \
+  jb/pitch2/delete_order_message.hpp \
   jb/pitch2/expanded_add_order_message.hpp \
   jb/pitch2/modify_message.hpp \
   jb/pitch2/order_executed_message.hpp \
@@ -1261,6 +1264,11 @@ jb_pitch2_ut_auction_update_message_SOURCES = jb/pitch2/ut_auction_update_messag
 jb_pitch2_ut_auction_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_auction_update_message
 jb_pitch2_ut_auction_update_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
 jb_pitch2_ut_auction_update_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_delete_order_message_SOURCES = jb/pitch2/ut_delete_order_message.cpp
+jb_pitch2_ut_delete_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_delete_order_message
+jb_pitch2_ut_delete_order_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_delete_order_message_LDADD = $(jb_ut_pitch2_ldadd)
 
 jb_pitch2_ut_expanded_add_order_message_SOURCES = jb/pitch2/ut_expanded_add_order_message.cpp
 jb_pitch2_ut_expanded_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_expanded_add_order_message
