@@ -4,6 +4,8 @@
 [![Build Status](https://travis-ci.org/coryan/jaybeams.svg?branch=master)](https://travis-ci.org/coryan/jaybeams)
 [![coveralls](https://coveralls.io/repos/coryan/jaybeams/badge.svg?branch=master&service=github)](https://coveralls.io/github/coryan/jaybeams?branch=master)
 [![codecov](https://codecov.io/gh/coryan/jaybeams/branch/master/graph/badge.svg)](https://codecov.io/gh/coryan/jaybeams)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/79c4108849884f4cb71e70597089f9cf)](https://www.codacy.com/app/coryan/jaybeams?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryan/jaybeams&amp;utm_campaign=Badge_Grade)
+[![Documentation](https://img.shields.io/badge/documentation-master-brightgreen.svg)](http://coryan.github.io/jaybeams/)
 
 Another project to have fun coding.
 
