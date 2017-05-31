@@ -16,7 +16,7 @@ template <typename timeseries>
 void create_triangle_timeseries(int nsamples, timeseries& ts) {
   resize_if_applicable(ts, nsamples);
   using value_type = typename timeseries::value_type;
-  float p4 = nsamples / 4;
+  float p4 = nsamples / 4.0F;
   for (int i = 0; i != nsamples / 2; ++i) {
     ts[i] = value_type((i - p4) / p4);
     ts[i + nsamples / 2] = value_type((p4 - i) / p4);
