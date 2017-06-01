@@ -47,6 +47,10 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install docker-engine
 
+cache:
+  directories:
+    - coverity
+
 install:
   # Install coveralls-lcov for the code coverage builds only ...
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
@@ -58,6 +62,10 @@ install:
   # rebuild from scratch if the existing image is too old ...
   - ci/create-build-image.sh
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
+  # ... if necessary, download Coverity ...
+  - ci/coverity-install.sh
+  - ls -l coverity*
+  - ls -l .
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR?}
