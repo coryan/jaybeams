@@ -121,6 +121,10 @@ AM_COND_IF([HAVE_OPENCL], [
     ], [])
 ])
 
+# ... Beast (https://github.com/vinniefalco/Beast) for http ...
+AX_BEAST([], [
+        AC_MSG_ERROR([Unable to find Beast HTTP library.])
+])
 
 # ... YAML-CPP is a library to parse YAML files ...
 AX_CHECK_LIBRARY(YAML_CPP, [yaml-cpp/yaml.h], [yaml-cpp],

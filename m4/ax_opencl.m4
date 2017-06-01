@@ -105,6 +105,11 @@ if test "x$ax_want_opencl" = "xyes"; then
       OPENCL_LDFLAGS="-L$ax_opencl_lib_path"
     fi
 
+    dnl If the detected CPPFLAGS are a standard path then unset them
+    if test "x$OPENCL_CPPFLAGS" = "x-I/usr/include"; then
+       OPENCL_CPPFLAGS=""
+    fi
+
     dnl Save the CPPFLAGS and LDFLAGS.  We will modify them during
     dnl testing and eventually we want them to be restored
     CPPFLAGS_SAVED="$CPPFLAGS"
