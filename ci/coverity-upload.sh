@@ -2,17 +2,17 @@
 
 set -e
 
-tar zcf jaybeams.tgz -C build cov-int
-
-if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" ]; then
-    echo "Testing PR, image creation disabled."
+if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" -o "x${COVERITY}" != "xyes" ]; then
+    echo "Build is a pull request or COVERITY is not 'yes', aborting."
     exit 0
 fi
 
+ls -l
+ls -l build/cov-int
+tar zcf jaybeams.tgz -C build cov-int
+
 if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     echo "DEBUG: only create images on master branch."
-    ls -l
-    ls -l build/cov-int
     exit 0
 fi
 
