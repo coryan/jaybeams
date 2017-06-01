@@ -36,6 +36,7 @@ script:
     --env CXX=${COMPILER?}
     --env CXXFLAGS="${CXXFLAGS}"
     --env VALGRIND="${VALGRIND}"
+    --env COVERITY="${COVERITY}"
     --volume $PWD:$PWD
     --volume ${TRAVIS_BUILD_DIR?}/coverity:/opt/coverity
     --workdir $PWD
@@ -71,6 +72,8 @@ install:
   - ci/create-build-image.sh
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
   # ... if necessary, download Coverity ...
+  - ls -l ../coverity
+  - ls -l coverity
   - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
   - ls -l coverity
 
@@ -82,6 +85,8 @@ after_success:
   # ... create the Doxygen documentation inside the docker container,
   # and push it to github ...
   - ci/gendocs.sh
+  # ... upload the coverity results ...
+  - ci/coverity-upload.sh
   # ... on the right builds, create the build image and push to docker ...
   - ci/upload-build-image.sh
   # ... on the right builds, create the runtime image and push to docker ...
