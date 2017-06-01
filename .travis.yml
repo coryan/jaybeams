@@ -72,7 +72,6 @@ install:
   - ci/create-build-image.sh
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
   # ... if necessary, download Coverity ...
-  - ls -l ../coverity
   - ls -l coverity
   - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
   - ls -l coverity
