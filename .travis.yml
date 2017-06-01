@@ -31,14 +31,14 @@ services:
 # This is the main section of the automated build ...
 script:
   # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it \
-    --env CONFIGUREFLAGS=${CONFIGUREFLAGS} \
-    --env CXX=${COMPILER?} \
-    --env CXXFLAGS="${CXXFLAGS}" \
-    --env VALGRIND="${VALGRIND}" \
-    --volume $PWD:$PWD \
+  - docker run --rm -it
+    --env CONFIGUREFLAGS=${CONFIGUREFLAGS}
+    --env CXX=${COMPILER?}
+    --env CXXFLAGS="${CXXFLAGS}"
+    --env VALGRIND="${VALGRIND}"
+    --volume $PWD:$PWD
     --volume ${TRAVIS_BUILD_DIR?}/coverity:/opt/coverity
-    --workdir $PWD \
+    --workdir $PWD
     ${IMAGE?}:tip ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be
   # debugged, this is *not* part of the build script because we want
