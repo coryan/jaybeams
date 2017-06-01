@@ -15,7 +15,12 @@ cd build
 ../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging || cat config.log
 
 # ... compile and run the tests ...
-make -j 2 check
+if [ "x${COVERITY}" = "xyes" ]; then
+    export PATH=$PATH:/opt/cov-analysis-linux64-8.7.0/bin
+    cov-build --dir cov-int make -j 2 check
+else
+    make -j 2 check
+fi
 
 if [ "x${VALGRIND}" = "xyes" ]; then
     make -j 2 check-valgrind-memcheck

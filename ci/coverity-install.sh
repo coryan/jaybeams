@@ -2,6 +2,10 @@
 
 set -e
 
+cd ${TRAVIS_BUILD_DIR?}
+test -d coverity || mkdir coverity
+cd coverity
+
 wget -q https://scan.coverity.com/download/linux64 \
      --post-data "token=${COVERITY_TOKEN?}&project=jaybeams2&md5=1" \
      -O coverity_tool.md5
