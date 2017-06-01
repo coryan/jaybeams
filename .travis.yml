@@ -72,11 +72,7 @@ install:
   - ci/create-build-image.sh
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
   # ... if necessary, download Coverity ...
-  - ls -l coverity
   - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
-  - ls -l coverity
-  - ls -l coverity/cov-analysis-linux64-8.7.0 || echo "not found 1"
-  - ls -l coverity/cov-analysis-linux64-8.7.0/bin || echo "not found 2"
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR?}
