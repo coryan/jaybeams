@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -16,7 +16,8 @@ cd build
 
 # ... compile and run the tests ...
 if [ "x${COVERITY}" = "xyes" ]; then
-    export PATH=$PATH:/opt/cov-analysis-linux64-8.7.0/bin
+    PATH=$PATH:/opt/coverity/cov-analysis-linux64-8.7.0/bin
+    export PATH
     cov-build --dir cov-int make -j 2 check
 else
     make -j 2 check
