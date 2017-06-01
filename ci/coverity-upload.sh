@@ -9,9 +9,9 @@ fi
 
 curl --form token=${COVERITY_TOKEN?} \
   --form email=coryan@users.noreply.github.com \
-  --form file=@jaybeams-coverity-upload.tgz \
+  --form file=@build/jaybeams-coverity-upload.tgz \
   --form version=$(git rev-parse --short HEAD) \
-  --form description="Manual Build" \
+  --form description="Travis-CI Build, branch=${TRAVIS_BRANCH}" \
   https://scan.coverity.com/builds?project=jaybeams2
 
 exit 0
