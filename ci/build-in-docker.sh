@@ -15,10 +15,13 @@ cd build
 ../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging || cat config.log
 
 # ... compile and run the tests ...
-if [ "x${COVERITY}" = "xyes" ]; then
+if [ "x${COVERITY}" = "xyes" -o "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then
+    # ... coverity builds are slow, so we disable them for pull
+    # requests, where they cannot be uploaded anyway ...
     PATH=$PATH:/opt/coverity/cov-analysis-linux64-8.7.0/bin
     export PATH
     cov-build --dir cov-int make -j 2 check
+    tar zcf jaybeams-coverity-upload.tgz cov-int
 else
     make -j 2 check
 fi
