@@ -73,7 +73,7 @@ public:
   }
 
   /// Destructor, cleanup the plan.
-  ~plan() {
+  ~plan() noexcept(false) {
     check_constraints checker;
     if (d_ == ENDDIRECTION) {
       return;
