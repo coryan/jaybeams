@@ -15,7 +15,19 @@ cd build
 ../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging || cat config.log
 
 # ... compile and run the tests ...
-if [ "x${COVERITY}" = "xyes" -o "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then
+do_coverity=no
+if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then
+    # Always skip Coverity Scan builds for PR ...
+    :
+elif [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
+    # ... and for branches other than master ...
+    :
+elif [ "x${TRAVIS_EVENT_TYPE}" = "xcron" -a "x${COVERITY}" = "xyes" ]; then
+    # ... and really, only do them weekly ...
+    do_coverity=yes
+fi
+
+if [ "x$do_coverity" = "xyes" ]; then
     # ... coverity builds are slow, so we disable them for pull
     # requests, where they cannot be uploaded anyway ...
     PATH=$PATH:/opt/coverity/cov-analysis-linux64-8.7.0/bin
