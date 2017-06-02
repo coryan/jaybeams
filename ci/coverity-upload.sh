@@ -7,6 +7,11 @@ if [ "x${TRAVIS_PULL_REQUEST}" != "xfalse" -o "x${COVERITY}" != "xyes" ]; then
     exit 0
 fi
 
+if [ ! -r build/jaybeams-coverity-upload.tgz ]; then
+    echo "No coverity output, skipping upload."
+    exit 0
+fi
+
 curl --form token=${COVERITY_TOKEN?} \
   --form email=coryan@users.noreply.github.com \
   --form file=@build/jaybeams-coverity-upload.tgz \
