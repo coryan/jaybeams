@@ -13,7 +13,7 @@ namespace clfft {
 class init {
 public:
   init();
-  ~init();
+  ~init() noexcept(false);
 
   //@{
   /**

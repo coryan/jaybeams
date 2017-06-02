@@ -16,7 +16,7 @@ template <typename timeseries>
 void create_triangle_timeseries(int nsamples, timeseries& ts) {
   resize_if_applicable(ts, nsamples);
   using value_type = typename timeseries::value_type;
-  float p4 = nsamples / 4;
+  float p4 = nsamples / 4.0F;
   for (int i = 0; i != nsamples / 2; ++i) {
     ts[i] = value_type((i - p4) / p4);
     ts[i + nsamples / 2] = value_type((p4 - i) / p4);
@@ -39,7 +39,7 @@ void create_triangle_timeseries(int nsamples, boost::multi_array<T, K, A>& ts) {
   /// The values stored in the input timeseries
   using value_type = T;
   assert(jb::detail::nsamples(ts) == static_cast<std::size_t>(nsamples));
-  float p4 = nsamples / 4;
+  float p4 = nsamples / 4.0F;
   int num_timeseries = jb::detail::element_count(ts) / nsamples;
   // fill the first timeseries
   int count = 0;

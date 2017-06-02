@@ -4,6 +4,7 @@
 #include <jb/itch5/base_decoders.hpp>
 #include <jb/itch5/static_digits.hpp>
 
+#include <boost/io/ios_state.hpp>
 #include <boost/operators.hpp>
 
 #include <iomanip>
@@ -120,6 +121,7 @@ struct decoder<validate, price_field<wire_type_t, denom_v>> {
 template <typename wire_type_t, std::intmax_t denom_v>
 std::ostream&
 operator<<(std::ostream& os, price_field<wire_type_t, denom_v> const& x) {
+  boost::io::ios_flags_saver saver(os);
   auto d = std::div(x.as_integer(), x.denom);
   return os << d.quot << "." << std::setw(x.denom_digits - 1)
             << std::setfill('0') << d.rem;
