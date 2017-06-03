@@ -56,7 +56,7 @@ using response_type = beast::http::response<beast::http::string_body>;
 class connection : public std::enable_shared_from_this<connection> {
 public:
   /// Constructor
-  connection(socket_type&& sock);
+  explicit connection(socket_type&& sock);
 
   /// Asynchronously read a HTTP request for this connection.
   void run();
