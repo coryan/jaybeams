@@ -64,4 +64,11 @@ RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
     cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/ && \
     cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
 
+WORKDIR /var/tmp/build-beast-http
+RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
+    tar -xf v1.0.0-b30.tar.gz && \
+    cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
+    cmake . && make && cp -r include/beast /usr/include/beast/ && \
+    cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
+
 WORKDIR /root
