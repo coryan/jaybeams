@@ -7,6 +7,7 @@ RUN dnf makecache && dnf install -y \
       automake \
       boost \
       boost-devel \
+      boost-static \
       bzip2-devel \
       clang \
       clinfo \
@@ -21,6 +22,9 @@ RUN dnf makecache && dnf install -y \
       make \
       ocl-icd-devel \
       opencl-headers \
+      openssl \
+      openssl-devel \
+      openssl-static \
       patch \
       pocl-devel \
       sudo \
@@ -67,7 +71,7 @@ WORKDIR /var/tmp/build-beast-http
 RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
     tar -xf v1.0.0-b30.tar.gz && \
     cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
-    cmake . && make && cp -r include/beast /usr/include/beast/ && \
+    cmake . && make -j 2 && cp -r include/beast /usr/include/beast/ && \
     cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
 
 WORKDIR /root

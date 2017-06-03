@@ -68,7 +68,7 @@ WORKDIR /var/tmp/build-beast-http
 RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
     tar -xf v1.0.0-b30.tar.gz && \
     cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
-    cmake . && make && cp -r include/beast /usr/include/beast/ && \
+    cmake . && make -j 2 && cp -r include/beast /usr/include/beast/ && \
     cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
 
 WORKDIR /root
