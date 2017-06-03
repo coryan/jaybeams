@@ -102,6 +102,7 @@ examples = \
   examples/configuration
 
 bin_PROGRAMS = $(benchmarks) \
+  jb/mktsim/moldreplay \
   jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
@@ -778,7 +779,8 @@ jb_ut_tde_ldflags = \
 
 AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS \
-  $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS)
+  $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS) \
+  $(BEAST_CPPFLAGS)
 
 check_PROGRAMS += \
   $(jb_opencl_unit_tests) \
@@ -1191,6 +1193,13 @@ jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
 jb_itch5_bm_order_book_CPPFLAGS = 
 jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
+
+################################################################
+# other programs
+################################################################
+
+jb_mktsim_moldreplay_SOURCES = jb/mktsim/moldreplay.cpp
+jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a
 
 ################################################################
 # testing program and unit tests

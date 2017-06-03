@@ -111,6 +111,11 @@ if test "x$ax_want_clfft" = "xyes"; then
       CLFFT_LDFLAGS="-L$ax_clfft_lib_path"
     fi
 
+    dnl If the detected CPPFLAGS are a standard path then unset them
+    if test "x$CLFFT_CPPFLAGS" = "x-I/usr/include"; then
+       CLFFT_CPPFLAGS=""
+    fi
+
     dnl Save the CPPFLAGS and LDFLAGS.  We will modify them during
     dnl testing and eventually we want them to be restored
     CPPFLAGS_SAVED="$CPPFLAGS"
