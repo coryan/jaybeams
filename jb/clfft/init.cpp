@@ -7,7 +7,7 @@ jb::clfft::init::init() {
   jb::clfft::check_error_code(err, "clfftSetup");
 }
 
-jb::clfft::init::~init() {
+jb::clfft::init::~init() noexcept(false) {
   auto err = clfftTeardown();
   jb::clfft::check_error_code(err, "clfftTeardown");
 }

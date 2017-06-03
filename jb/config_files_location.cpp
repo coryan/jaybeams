@@ -74,13 +74,15 @@ bool jb::default_validator::operator()(fs::path const& dir) {
 char const* jb::sysconfdir() {
 #if defined(JB_SYSCONFDIR)
   return JB_SYSCONFDIR;
-#endif // JB_SYSCONFDIR
+#else
   return JB_DEFAULT_SYSCONFDIR;
+#endif // JB_SYSCONFDIR
 }
 
 char const* jb::bindir() {
 #if defined(JB_BINDIR)
   return JB_BINDIR;
-#endif // JB_BINDIR
+#else
   return JB_DEFAULT_BINDIR;
+#endif // JB_BINDIR
 }

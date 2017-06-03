@@ -135,6 +135,7 @@ public:
       , generator_(
             jb::testing::initialize_mersenne_twister<std::mt19937_64>(
                 0, jb::testing::default_initialization_marker))
+      , iteration_size_(0)
       , avoid_optimization_(0)
       , cfg_(cfg) {
     int counter = 0;

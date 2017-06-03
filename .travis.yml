@@ -11,7 +11,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 COVERITY=yes GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
 
     - os: linux
       compiler: gcc
@@ -31,7 +31,16 @@ services:
 # This is the main section of the automated build ...
 script:
   # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it --env CONFIGUREFLAGS=${CONFIGUREFLAGS} --env CXX=${COMPILER?} --env CXXFLAGS="${CXXFLAGS}" --env VALGRIND="${VALGRIND}" --volume $PWD:$PWD --workdir $PWD ${IMAGE?}:tip ci/build-in-docker.sh
+  - docker run --rm -it
+    --env CONFIGUREFLAGS=${CONFIGUREFLAGS}
+    --env CXX=${COMPILER?}
+    --env CXXFLAGS="${CXXFLAGS}"
+    --env VALGRIND="${VALGRIND}"
+    --env COVERITY="${COVERITY}"
+    --volume $PWD:$PWD
+    --volume ${TRAVIS_BUILD_DIR?}/coverity:/opt/coverity
+    --workdir $PWD
+    ${IMAGE?}:tip ci/build-in-docker.sh
   # ... print out the test results, that way any errors can be
   # debugged, this is *not* part of the build script because we want
   # this output regardless of the sucess or failure of the script ...
@@ -47,6 +56,10 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install docker-engine
 
+cache:
+  directories:
+    - coverity
+
 install:
   # Install coveralls-lcov for the code coverage builds only ...
   - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
@@ -58,6 +71,8 @@ install:
   # rebuild from scratch if the existing image is too old ...
   - ci/create-build-image.sh
   - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
+  # ... if necessary, download Coverity ...
+  - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR?}
@@ -67,6 +82,8 @@ after_success:
   # ... create the Doxygen documentation inside the docker container,
   # and push it to github ...
   - ci/gendocs.sh
+  # ... upload the coverity results ...
+  - ci/coverity-upload.sh
   # ... on the right builds, create the build image and push to docker ...
   - ci/upload-build-image.sh
   # ... on the right builds, create the runtime image and push to docker ...

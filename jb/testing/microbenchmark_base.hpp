@@ -32,7 +32,16 @@ public:
    * A simple object to contain the summary of the test results
    */
   struct summary {
-    summary() {
+    summary()
+        : min(0)
+        , p25(0)
+        , p50(0)
+        , p75(0)
+        , p90(0)
+        , p99(0)
+        , p99_9(0)
+        , max(0)
+        , n(0) {
     }
     explicit summary(results const& arg);
 

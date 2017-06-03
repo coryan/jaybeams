@@ -281,8 +281,8 @@ BOOST_AUTO_TEST_CASE(config_object_vector_empty) {
   std::istringstream is("");
   char argv0[] = "not_a_path";
   char argv1[] = "--vars.0.pos.x=2";
-  char* argv[] = {argv0, argv1};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   tested.load_overrides(argc, argv, is);
 
   BOOST_REQUIRE_EQUAL(tested.vars().size(), 1);
@@ -401,8 +401,8 @@ pos:
 
   config1 tested;
   char argv0[] = "not_a_path";
-  char* argv[] = {argv0};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
 
   tested.load_overrides(argc, argv, is);
 
@@ -436,8 +436,8 @@ pos:
   char argv3[] = "--list=3";
   char argv4[] = "--list=5";
   char argv5[] = "--list=7";
-  char* argv[] = {argv0, argv1, argv2, argv3, argv4, argv5};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, argv3, argv4, argv5, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
 
   tested.load_overrides(argc, argv, is);
 
@@ -455,8 +455,8 @@ BOOST_AUTO_TEST_CASE(config_object_usage) {
   config1 tested;
   char argv0[] = "binary";
   char argv1[] = "--help";
-  char* argv[] = {argv0, argv1};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   std::istringstream is("");
 
   BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), jb::usage);
@@ -470,8 +470,8 @@ BOOST_AUTO_TEST_CASE(config_object_invalid_option) {
   config1 tested;
   char argv0[] = "binary";
   char argv1[] = "--invalid-option";
-  char* argv[] = {argv0, argv1};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   std::istringstream is("");
 
   BOOST_CHECK_THROW(tested.load_overrides(argc, argv, is), std::exception);
@@ -524,8 +524,8 @@ foo:
   char argv0[] = "binary";
   char argv1[] = "--foo.first=42";
   char argv2[] = "--foo.second=43";
-  char* argv[] = {argv0, argv1, argv2};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   tested.load_overrides(argc, argv, is);
 
   BOOST_CHECK_EQUAL(tested.foo().first, 42);
@@ -590,8 +590,8 @@ baz:
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
-  char* argv[] = {argv0, argv1, argv2};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   config6 tested;
   tested.load_overrides(argc, argv, filename, "TEST_ROOT");
   BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
@@ -619,8 +619,8 @@ BOOST_AUTO_TEST_CASE(config_object_config_file_missing_with_env) {
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
-  char* argv[] = {argv0, argv1, argv2};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   config6 tested;
   tested.load_overrides(argc, argv, filename, "TEST_ROOT");
   BOOST_CHECK_EQUAL(tested.foo(), "");
@@ -666,8 +666,8 @@ baz:
   char argv0[] = "binary";
   char argv1[] = "--bar.x=42";
   char argv2[] = "--baz.y=24";
-  char* argv[] = {argv0, argv1, argv2};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   config6 tested;
   tested.load_overrides(argc, argv, filename);
   BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
@@ -685,8 +685,8 @@ BOOST_AUTO_TEST_CASE(config_object_config_file_missing) {
   char argv0[] = "binary";
   char argv1[] = "--foo=this is a long string";
   char argv2[] = "--baz.y=24";
-  char* argv[] = {argv0, argv1, argv2};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   config6 tested;
   tested.load_overrides(argc, argv, filename);
   BOOST_CHECK_EQUAL(tested.foo(), "this is a long string");
@@ -721,8 +721,8 @@ BOOST_AUTO_TEST_CASE(config_object_positional) {
   char argv1[] = "should-be-bar";
   char argv2[] = "should-be-baz";
   char argv3[] = "--foo=another";
-  char* argv[] = {argv0, argv1, argv2, argv3};
-  int argc = sizeof(argv) / sizeof(argv[0]);
+  char* argv[] = {argv0, argv1, argv2, argv3, nullptr};
+  int argc = sizeof(argv) / sizeof(argv[0]) - 1;
   config7 tested;
   tested.load_overrides(argc, argv, is);
   BOOST_CHECK_EQUAL(tested.foo(), "another");

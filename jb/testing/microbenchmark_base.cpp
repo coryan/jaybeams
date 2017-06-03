@@ -41,7 +41,8 @@ void jb::testing::microbenchmark_base::write_results(
   }
 }
 
-jb::testing::microbenchmark_base::summary::summary(results const& arg) {
+jb::testing::microbenchmark_base::summary::summary(results const& arg)
+    : summary() {
   results r = arg;
   auto cmp = [](result const& lhs, result const& rhs) {
     return lhs.second < rhs.second;
