@@ -359,7 +359,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@
 
 ################################################################
-# jb/libjb_ehs.a
+# jb/libjb_ehs.a and its unit tests
 ################################################################
 jb_libjb_ehs_adir = $(includedir)
 jb_libjb_ehs_a_SOURCES = \
@@ -367,6 +367,17 @@ jb_libjb_ehs_a_SOURCES = \
 nobase_jb_libjb_ehs_a_HEADERS = \
   jb/ehs/base_types.hpp \
   jb/ehs/request_dispatcher.hpp
+
+unit_tests += \
+  jb/ehs/ut_request_dispatcher
+
+jb_ut_ehs_ldadd = jb/libjb_ehs.a $(jb_ut_ldadd)
+jb_ut_ehs_ldflags = $(jb_ut_ldflags)
+
+jb_ehs_ut_request_dispatcher_SOURCES = jb/ehs/ut_request_dispatcher.cpp
+jb_ehs_ut_request_dispatcher_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ehs_ut_request_dispatcher
+jb_ehs_ut_request_dispatcher_LDFLAGS = $(jb_ut_ehs_ldflags)
+jb_ehs_ut_request_dispatcher_LDADD = $(jb_ut_ehs_ldadd)
 
 ################################################################
 # jb/libjb_itch5_testing.a
