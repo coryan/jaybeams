@@ -4,6 +4,7 @@ instdir = $(prefix)
 
 lib_LIBRARIES = \
   jb/libjb.a \
+  jb/libjb_ehs.a \
   jb/libjb_itch5.a \
   jb/libjb_testing.a \
   jb/libjb_itch5_testing.a
@@ -356,6 +357,16 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	git rev-parse HEAD >>$@ 2>/dev/null; \
 	echo ')""";' >> $@; \
 	echo '' >>$@
+
+################################################################
+# jb/libjb_ehs.a
+################################################################
+jb_libjb_ehs_adir = $(includedir)
+jb_libjb_ehs_a_SOURCES = \
+  jb/ehs/request_dispatcher.cpp
+nobase_jb_libjb_ehs_a_HEADERS = \
+  jb/ehs/base_types.hpp \
+  jb/ehs/request_dispatcher.hpp
 
 ################################################################
 # jb/libjb_itch5_testing.a
@@ -1199,7 +1210,7 @@ jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 ################################################################
 
 jb_mktsim_moldreplay_SOURCES = jb/mktsim/moldreplay.cpp
-jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a
+jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
 
 ################################################################
 # testing program and unit tests

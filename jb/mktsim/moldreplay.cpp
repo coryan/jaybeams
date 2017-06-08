@@ -6,6 +6,7 @@
  * This program replays a ITCH-5.x file via multicast, simulating the
  * behavior of a market data feed.
  */
+#include <jb/ehs/request_dispatcher.hpp>
 #include <jb/config_object.hpp>
 #include <jb/log.hpp>
 
@@ -19,10 +20,7 @@
 
 #include <atomic>
 #include <chrono>
-#include <functional>
 #include <iostream>
-#include <map>
-#include <mutex>
 #include <stdexcept>
 #include <thread>
 
@@ -50,47 +48,10 @@ public:
 using endpoint_type = boost::asio::ip::tcp::endpoint;
 using address_type = boost::asio::ip::address;
 using socket_type = boost::asio::ip::tcp::socket;
-using request_type = beast::http::request<beast::http::string_body>;
-using response_type = beast::http::response<beast::http::string_body>;
 
-/**
- * Define the interface for request handlers.
- *
- * The application will register one or more handlers with the control
- * server.  Each handler responds to the requests hitting a particular
- * path in the URL for the control server.
- */
-using request_handler =
-    std::function<void(request_type const&, response_type&)>;
-
-/**
- * Request dispatcher.
- */
-class request_dispatcher {
-public:
-  /// Constructor
-  request_dispatcher();
-
-  /**
-   * Add a new handler.
-   *
-   * @param path the path that this handler is responsible for.
-   * @param handler the handler called when a request hits a path.
-   *
-   * @throw std::runtime_error if the path already exists
-   */
-  void add_handler(
-      std::string const& path, request_handler&& handler);
-
-  /**
-   * Process a new request using the right handler.
-   */
-  response_type process(request_type const& request) const;
-
-private:
-  mutable std::mutex mu_;
-  std::map<std::string, request_handler> handlers_;
-};
+using jb::ehs::request_dispatcher;
+using jb::ehs::request_type;
+using jb::ehs::response_type;
 
 /**
  * Handle one connection to the control server.
@@ -161,8 +122,7 @@ public:
    * @param dispatcher the object to process requests
    */
   control_server(
-      boost::asio::io_service& io,
-      endpoint_type const& ep, 
+      boost::asio::io_service& io, endpoint_type const& ep,
       std::shared_ptr<request_dispatcher> dispatcher);
 
 private:
@@ -192,18 +152,18 @@ int main(int argc, char* argv[]) try {
   using address = boost::asio::ip::address;
   endpoint ep{address::from_string(cfg.control_host()), cfg.control_port()};
 
-  auto dispatcher = std::make_shared<request_dispatcher>();
+  auto dispatcher = std::make_shared<request_dispatcher>("moldreplay");
   dispatcher->add_handler("/", [](request_type const&, response_type& res) {
-      res.fields.insert("Content-type", "text/plain");
-      res.body = "Server running...\r\n";
-    });
-  dispatcher->add_handler("/config", [&cfg](
-      request_type const&, response_type& res) {
-      res.fields.insert("Content-type", "text/plain");
-      std::ostringstream os;
-      os << cfg << "\r\n";
-      res.body = os.str();
-    });
+    res.fields.insert("Content-type", "text/plain");
+    res.body = "Server running...\r\n";
+  });
+  dispatcher->add_handler(
+      "/config", [&cfg](request_type const&, response_type& res) {
+        res.fields.insert("Content-type", "text/plain");
+        std::ostringstream os;
+        os << cfg << "\r\n";
+        res.body = os.str();
+      });
   control_server server(io_service, ep, dispatcher);
 
   // ... run the program forever ...
@@ -274,66 +234,6 @@ void config::validate() const {
     throw jb::usage("Missing primary-destination argument (or setting).", 1);
   }
   log().validate();
-}
-
-request_dispatcher::request_dispatcher()
-    : mu_()
-    , handlers_() {
-}
-
-void request_dispatcher::add_handler(
-    std::string const& path, request_handler&& handler) {
-  std::lock_guard<std::mutex> guard(mu_);
-  auto inserted = handlers_.emplace(path, std::move(handler));
-  if (not inserted.second) {
-    throw std::runtime_error(std::string("duplicate handler path: ") + path);
-  }
-}
-
-response_type request_dispatcher::process(request_type const& req) const {
-  try {
-    bool found = false;
-    request_handler handler;
-    auto path = req.url;
-    {
-      std::lock_guard<std::mutex> guard(mu_);
-      auto location = handlers_.find(path);
-      if (location != handlers_.end()) {
-        found = true;
-        handler = location->second;
-      }
-    }
-    if (not found) {
-      response_type res;
-      res.status = 404;
-      res.reason = beast::http::reason_string(res.status);
-      res.version = req.version;
-      res.fields.insert("Server", "moldreplay_control_server");
-      res.fields.insert("Content-type", "text/plain");
-      res.body = std::string("path: " + path + " not found\r\n");
-      return res;
-    }
-    response_type res;
-    res.status = 200;
-    res.reason = beast::http::reason_string(res.status);
-    res.version = req.version;
-    res.fields.insert("Server", "moldreplay_control_server");
-    handler(req, res);
-    return res;
-  } catch (std::exception const& e) {
-    // ... if there is an exception preparing the response we try to
-    // send back at least a 500 error ...
-    JB_LOG(info) << "std::exception raised while sending response: "
-                 << e.what();
-    response_type res;
-    res.status = 500;
-    res.reason = beast::http::reason_string(res.status);
-    res.version = req.version;
-    res.fields.insert("Server", "moldreplay_control_server");
-    res.fields.insert("Content-type", "text/plain");
-    res.body = std::string{"An internal error occurred"};
-    return res;
-  }
 }
 
 connection::connection(
