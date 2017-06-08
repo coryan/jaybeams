@@ -19,7 +19,10 @@
 
 #include <atomic>
 #include <chrono>
+#include <functional>
 #include <iostream>
+#include <map>
+#include <mutex>
 #include <stdexcept>
 #include <thread>
 
@@ -51,12 +54,52 @@ using request_type = beast::http::request<beast::http::string_body>;
 using response_type = beast::http::response<beast::http::string_body>;
 
 /**
+ * Define the interface for request handlers.
+ *
+ * The application will register one or more handlers with the control
+ * server.  Each handler responds to the requests hitting a particular
+ * path in the URL for the control server.
+ */
+using request_handler =
+    std::function<void(request_type const&, response_type&)>;
+
+/**
+ * Request dispatcher.
+ */
+class request_dispatcher {
+public:
+  /// Constructor
+  request_dispatcher();
+
+  /**
+   * Add a new handler.
+   *
+   * @param path the path that this handler is responsible for.
+   * @param handler the handler called when a request hits a path.
+   *
+   * @throw std::runtime_error if the path already exists
+   */
+  void add_handler(
+      std::string const& path, request_handler&& handler);
+
+  /**
+   * Process a new request using the right handler.
+   */
+  response_type process(request_type const& request) const;
+
+private:
+  mutable std::mutex mu_;
+  std::map<std::string, request_handler> handlers_;
+};
+
+/**
  * Handle one connection to the control server.
  */
 class connection : public std::enable_shared_from_this<connection> {
 public:
   /// Constructor
-  explicit connection(socket_type&& sock);
+  explicit connection(
+      socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher);
 
   /// Asynchronously read a HTTP request for this connection.
   void run();
@@ -92,6 +135,7 @@ private:
 
 private:
   socket_type sock_;
+  std::shared_ptr<request_dispatcher> dispatcher_;
   boost::asio::io_service::strand strand_;
   int id_;
   beast::streambuf sb_;
@@ -108,8 +152,18 @@ private:
  */
 class control_server {
 public:
-  // Create a new control server
-  control_server(endpoint_type const& ep, boost::asio::io_service& io);
+  /**
+   * Create a new control server
+   *
+   * @param io Boost.ASIO service used to demux I/O events for this
+   * control server.
+   * @param ep the endpoint this control server listens on.
+   * @param dispatcher the object to process requests
+   */
+  control_server(
+      boost::asio::io_service& io,
+      endpoint_type const& ep, 
+      std::shared_ptr<request_dispatcher> dispatcher);
 
 private:
   /**
@@ -119,6 +173,7 @@ private:
 
 private:
   boost::asio::ip::tcp::acceptor acceptor_;
+  std::shared_ptr<request_dispatcher> dispatcher_;
   // Hold the results of an  asynchronous accept() operation.
   socket_type sock_;
 };
@@ -136,7 +191,20 @@ int main(int argc, char* argv[]) try {
   using endpoint = boost::asio::ip::tcp::endpoint;
   using address = boost::asio::ip::address;
   endpoint ep{address::from_string(cfg.control_host()), cfg.control_port()};
-  control_server server(ep, io_service);
+
+  auto dispatcher = std::make_shared<request_dispatcher>();
+  dispatcher->add_handler("/", [](request_type const&, response_type& res) {
+      res.fields.insert("Content-type", "text/plain");
+      res.body = "Server running...\r\n";
+    });
+  dispatcher->add_handler("/config", [&cfg](
+      request_type const&, response_type& res) {
+      res.fields.insert("Content-type", "text/plain");
+      std::ostringstream os;
+      os << cfg << "\r\n";
+      res.body = os.str();
+    });
+  control_server server(io_service, ep, dispatcher);
 
   // ... run the program forever ...
   io_service.run();
@@ -208,8 +276,70 @@ void config::validate() const {
   log().validate();
 }
 
-connection::connection(socket_type&& sock)
+request_dispatcher::request_dispatcher()
+    : mu_()
+    , handlers_() {
+}
+
+void request_dispatcher::add_handler(
+    std::string const& path, request_handler&& handler) {
+  std::lock_guard<std::mutex> guard(mu_);
+  auto inserted = handlers_.emplace(path, std::move(handler));
+  if (not inserted.second) {
+    throw std::runtime_error(std::string("duplicate handler path: ") + path);
+  }
+}
+
+response_type request_dispatcher::process(request_type const& req) const {
+  try {
+    bool found = false;
+    request_handler handler;
+    auto path = req.url;
+    {
+      std::lock_guard<std::mutex> guard(mu_);
+      auto location = handlers_.find(path);
+      if (location != handlers_.end()) {
+        found = true;
+        handler = location->second;
+      }
+    }
+    if (not found) {
+      response_type res;
+      res.status = 404;
+      res.reason = beast::http::reason_string(res.status);
+      res.version = req.version;
+      res.fields.insert("Server", "moldreplay_control_server");
+      res.fields.insert("Content-type", "text/plain");
+      res.body = std::string("path: " + path + " not found\r\n");
+      return res;
+    }
+    response_type res;
+    res.status = 200;
+    res.reason = beast::http::reason_string(res.status);
+    res.version = req.version;
+    res.fields.insert("Server", "moldreplay_control_server");
+    handler(req, res);
+    return res;
+  } catch (std::exception const& e) {
+    // ... if there is an exception preparing the response we try to
+    // send back at least a 500 error ...
+    JB_LOG(info) << "std::exception raised while sending response: "
+                 << e.what();
+    response_type res;
+    res.status = 500;
+    res.reason = beast::http::reason_string(res.status);
+    res.version = req.version;
+    res.fields.insert("Server", "moldreplay_control_server");
+    res.fields.insert("Content-type", "text/plain");
+    res.body = std::string{"An internal error occurred"};
+    return res;
+  }
+}
+
+connection::connection(
+    socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher)
     : sock_(std::move(sock))
+    , dispatcher_(dispatcher)
     , strand_(sock_.get_io_service())
     , id_(++idgen) {
 }
@@ -229,41 +359,14 @@ void connection::on_read(boost::system::error_code const& ec) {
     return;
   }
   // Prepare a response ...
-  try {
-    response_type res;
-    res.status = 200;
-    res.reason = beast::http::reason_string(res.status);
-    res.version = req_.version;
-    res.fields.insert("Server", "moldreplay_control_server");
-    res.fields.insert("Content-type", "text/plain");
-    res.body = "Yay!\r\n";
-    beast::http::prepare(res);
-    // ... send back the response ...
-    beast::http::async_write(
-        sock_, std::move(res),
-        [self = shared_from_this()](boost::system::error_code const& ec) {
-          self->on_write(ec);
-        });
-  } catch (std::exception const& e) {
-    // ... if there is an exception preparing the response we try to
-    // send back at least a 500 error ...
-    JB_LOG(info) << "std::exception raised while sending response: "
-                 << e.what();
-    response_type res;
-    res.status = 500;
-    res.reason = beast::http::reason_string(res.status);
-    res.version = req_.version;
-    res.fields.insert("Server", "moldreplay_control_server");
-    res.fields.insert("Content-type", "text/plain");
-    res.body = std::string{"An internal error occurred"};
-    beast::http::prepare(res);
-    // ... send back the response ...
-    beast::http::async_write(
-        sock_, std::move(res),
-        [self = shared_from_this()](boost::system::error_code const& ec) {
-          self->on_write(ec);
-        });
-  }
+  response_type res = dispatcher_->process(req_);
+  beast::http::prepare(res);
+  // ... and send it back ...
+  beast::http::async_write(
+      sock_, std::move(res),
+      [self = shared_from_this()](boost::system::error_code const& ec) {
+        self->on_write(ec);
+      });
 }
 
 void connection::on_write(boost::system::error_code const& ec) {
@@ -279,8 +382,10 @@ void connection::on_write(boost::system::error_code const& ec) {
 std::atomic<int> connection::idgen(0);
 
 control_server::control_server(
-    endpoint_type const& ep, boost::asio::io_service& io)
+    boost::asio::io_service& io, endpoint_type const& ep,
+    std::shared_ptr<request_dispatcher> dispatcher)
     : acceptor_(io)
+    , dispatcher_(dispatcher)
     , sock_(io) {
   acceptor_.open(ep.protocol());
   acceptor_.bind(ep);
@@ -309,7 +414,7 @@ void control_server::on_accept(boost::system::error_code const& ec) {
   });
   // ... create a new connection for the newly created socket and
   // schedule it ...
-  auto c = std::make_shared<connection>(std::move(sock));
+  auto c = std::make_shared<connection>(std::move(sock), dispatcher_);
   c->run();
 }
 
