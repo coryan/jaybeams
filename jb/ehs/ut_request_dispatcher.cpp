@@ -55,9 +55,10 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_base) {
 BOOST_AUTO_TEST_CASE(request_dispatcher_error) {
   using namespace jb::ehs;
   request_dispatcher tested("test");
-  tested.add_handler("/error", [](request_type const& req, response_type& res) {
+  auto thrower = [](request_type const& req, response_type& res) {
     throw std::runtime_error("bad stuff happens");
-  });
+  };
+  tested.add_handler("/error", thrower);
 
   request_type req;
   req.method = "GET";
@@ -70,4 +71,6 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_error) {
   BOOST_CHECK_EQUAL(res.status, 500);
   BOOST_CHECK_EQUAL(res.version, 11);
   BOOST_CHECK_EQUAL(res.fields["server"], "test");
+
+  BOOST_CHECK_THROW(tested.add_handler("/error", thrower), std::runtime_error);
 }
