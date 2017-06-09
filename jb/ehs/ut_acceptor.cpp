@@ -27,9 +27,7 @@ BOOST_AUTO_TEST_CASE(acceptor) {
 
   // ... run a separate thread with the io_service so we can write
   // synchronous code in the test, which is easier to follow ...
-  std::thread t([&io_service]() {
-      io_service.run();
-    });
+  std::thread t([&io_service]() { io_service.run(); });
 
   // ... get the local listening endpoint ...
   auto listen = acceptor.local_endpoint();
@@ -59,8 +57,8 @@ BOOST_AUTO_TEST_CASE(acceptor) {
   BOOST_CHECK_EQUAL(res.body, "OK\n");
 
   io_service.dispatch([&acceptor, &io_service] {
-      acceptor.shutdown();
-      io_service.stop();
-    });
+    acceptor.shutdown();
+    io_service.stop();
+  });
   t.join();
 }
