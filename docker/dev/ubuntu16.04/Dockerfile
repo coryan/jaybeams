@@ -3,6 +3,7 @@ MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       automake \
+      ca-certificates \
       clang \
       clang-format \
       cmake \
@@ -45,8 +46,7 @@ WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
     tar -xf skye-0.3.2.tar.gz && \
     (cd skye-0.3.2 && \
-      CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure \
-          --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
+      CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
       make check && \
       make install) && \
     /bin/rm -fr /var/tmp/build-skye
