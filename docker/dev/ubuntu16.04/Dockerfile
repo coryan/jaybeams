@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
       automake \
       ca-certificates \
       clang \
