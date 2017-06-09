@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       automake \
       clang \
       clang-format \
@@ -37,38 +37,42 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/tmp/install-autoconf-archive
 RUN wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.20.tar.xz && \
     tar -xf autoconf-archive-2016.03.20.tar.xz && \
-    cd autoconf-archive-2016.03.20 && ./configure --prefix=/usr && make && make install && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/install-autoconf-archive
+    (cd autoconf-archive-2016.03.20 && \
+      ./configure --prefix=/usr && make && make install) && \
+    /bin/rm -fr /var/tmp/install-autoconf-archive
 
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
     tar -xf skye-0.3.2.tar.gz && \
-    cd skye-0.3.2 && \
-    CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
-    make check && \
-    make install && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-skye
+    (cd skye-0.3.2 && \
+      CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure \
+          --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
+      make check && \
+      make install) && \
+    /bin/rm -fr /var/tmp/build-skye
 
 WORKDIR /var/tmp/build-pocl
 RUN wget -q http://portablecl.org/downloads/pocl-0.13.tar.gz && \
     tar -zxf pocl-0.13.tar.gz && \
-    cd pocl-0.13 && ./configure && make && make install && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-pocl
+    (cd pocl-0.13 && ./configure && make && make install) && \
+    /bin/rm -fr /var/tmp/build-pocl
 
 WORKDIR /var/tmp/build-boost-compute
 RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
     tar -xf boost-1.62.0.tar.gz && \
-    cd /var/tmp/build-boost-compute/compute-boost-1.62.0 && \
-    cmake . && make && make DESTDIR=staging install && \
-    cp -r staging/usr/local/include/compute/boost/compute.hpp /usr/include/boost/ && \
-    cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/ && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
+    (cd compute-boost-1.62.0 && \
+      cmake . && make && make DESTDIR=staging install && \
+      cp -r staging/usr/local/include/compute/boost/compute.hpp \
+          /usr/include/boost/ && \
+      cp -r staging/usr/local/include/compute/boost/compute/ \
+          /usr/include/boost/) && \
+    /bin/rm -fr /var/tmp/build-boost-compute
 
 WORKDIR /var/tmp/build-beast-http
 RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
     tar -xf v1.0.0-b30.tar.gz && \
-    cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
-    cmake . && make -j 2 && cp -r include/beast /usr/include/beast/ && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
+    (cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
+      cmake . && make -j 2 && cp -r include/beast /usr/include/beast/) && \
+    /bin/rm -fr /var/tmp/build-beast-http
 
 WORKDIR /root

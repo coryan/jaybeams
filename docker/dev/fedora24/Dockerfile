@@ -38,44 +38,48 @@ RUN dnf makecache && dnf install -y \
 WORKDIR /var/tmp/build-skye
 RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
     tar -xf skye-0.3.2.tar.gz && \
-    cd skye-0.3.2 && \
-    CXX=g++ CC=gcc ./configure && \
-    make check && \
-    make install && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-skye
+    (cd skye-0.3.2 && \
+      CXX=g++ CC=gcc ./configure && \
+      make check && \
+      make install) && \
+    /bin/rm -fr /var/tmp/build-skye
 
 WORKDIR /var/tmp/build-clFFT
 RUN wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz && \
     tar -xf v2.12.2.tar.gz && \
-    cd clFFT-2.12.2/src && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.12.2 . && \
-    make && \
-    make install && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-clFFT
+    (cd clFFT-2.12.2/src && \
+      cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.12.2 . && \
+      make && \
+      make install) && \
+    /bin/rm -fr /var/tmp/build-clFFT
 
 # ... use this to avoid setting LD_LIBRARY_PATH everywhere ...
-RUN echo /usr/local/clFFT-2.12.2/lib64 | tee /etc/ld.so.conf.d/clfft-2.12.2.conf && ldconfig
+RUN echo /usr/local/clFFT-2.12.2/lib64 | \
+    tee /etc/ld.so.conf.d/clfft-2.12.2.conf && \
+    ldconfig
 
 WORKDIR /var/tmp/build-boost-compute
 RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
     tar -xf boost-1.62.0.tar.gz && \
-    cd /var/tmp/build-boost-compute/compute-boost-1.62.0 && \
-    cmake . && make && make DESTDIR=staging install && \
-    cp -r staging/usr/local/include/compute/boost/compute.hpp /usr/include/boost/ && \
-    cp -r staging/usr/local/include/compute/boost/compute/ /usr/include/boost/ && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
+    (cd compute-boost-1.62.0 && \
+      cmake . && make && make DESTDIR=staging install && \
+      cp -r staging/usr/local/include/compute/boost/compute.hpp \
+          /usr/include/boost/ && \
+      cp -r staging/usr/local/include/compute/boost/compute/ \
+          /usr/include/boost/) && \
+    /bin/rm -fr /var/tmp/build-boost-compute
 
 WORKDIR /var/tmp/build-beast-http
 RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
     tar -xf v1.0.0-b30.tar.gz && \
-    cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
-    cmake . && make -j 2 && cp -r include/beast /usr/include/beast/ && \
-    cd /var/tmp && /bin/rm -fr /var/tmp/build-boost-compute
+    (cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
+      cmake . && make -j 2 && cp -r include/beast /usr/include/beast/) && \
+    /bin/rm -fr /var/tmp/build-beast-http
 
 WORKDIR /root
 
-# Boost has deprecated a few headers, warns about it, and other parts of Boost still
-# use them:
+# Boost has deprecated a few headers, warns about it, and other parts
+# of Boost still use them:
 #   https://svn.boost.org/trac/boost/ticket/11860
 #   https://github.com/boostorg/iostreams/pull/24
 #
