@@ -6,7 +6,7 @@
  * This program replays a ITCH-5.x file via multicast, simulating the
  * behavior of a market data feed.
  */
-#include <jb/ehs/request_dispatcher.hpp>
+#include <jb/ehs/connection.hpp>
 #include <jb/config_object.hpp>
 #include <jb/log.hpp>
 
@@ -16,9 +16,7 @@
 #include <boost/asio/ip/multicast.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/udp.hpp>
-#include <boost/asio/strand.hpp>
 
-#include <atomic>
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
@@ -52,58 +50,7 @@ using socket_type = boost::asio::ip::tcp::socket;
 using jb::ehs::request_dispatcher;
 using jb::ehs::request_type;
 using jb::ehs::response_type;
-
-/**
- * Handle one connection to the control server.
- */
-class connection : public std::enable_shared_from_this<connection> {
-public:
-  /// Constructor
-  explicit connection(
-      socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher);
-
-  /// Asynchronously read a HTTP request for this connection.
-  void run();
-
-  //@{
-  /**
-   * Control copy and assignment.
-   */
-  connection(connection&&) = default;
-  connection(connection const&) = default;
-  connection& operator=(connection&&) = delete;
-  connection& operator=(connection const&) = delete;
-  //@}
-
-private:
-  /**
-   * Handle a completed HTTP request read.
-   *
-   * Once a HTTP request has been received it needs to be parsed and a
-   * response sent back.  This function is called by the Beast
-   * framework when the read completes.
-   *
-   * @param ec the error code
-   */
-  void on_read(boost::system::error_code const& ec);
-
-  /**
-   * Handle a completed response write.
-   *
-   * @param ec indicate if writing the response resulted in an error.
-   */
-  void on_write(boost::system::error_code const& ec);
-
-private:
-  socket_type sock_;
-  std::shared_ptr<request_dispatcher> dispatcher_;
-  boost::asio::io_service::strand strand_;
-  int id_;
-  beast::streambuf sb_;
-  request_type req_;
-
-  static std::atomic<int> idgen;
-};
+using jb::ehs::connection;
 
 /**
  * Create a control server for the program.
@@ -235,51 +182,6 @@ void config::validate() const {
   }
   log().validate();
 }
-
-connection::connection(
-    socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher)
-    : sock_(std::move(sock))
-    , dispatcher_(dispatcher)
-    , strand_(sock_.get_io_service())
-    , id_(++idgen) {
-}
-
-void connection::run() {
-  beast::http::async_read(
-      sock_, sb_, req_,
-      strand_.wrap(
-          [self = shared_from_this()](boost::system::error_code const& ec) {
-            self->on_read(ec);
-          }));
-}
-
-void connection::on_read(boost::system::error_code const& ec) {
-  if (ec) {
-    JB_LOG(info) << "#" << id_ << " on_read: " << ec.message();
-    return;
-  }
-  // Prepare a response ...
-  response_type res = dispatcher_->process(req_);
-  beast::http::prepare(res);
-  // ... and send it back ...
-  beast::http::async_write(
-      sock_, std::move(res),
-      [self = shared_from_this()](boost::system::error_code const& ec) {
-        self->on_write(ec);
-      });
-}
-
-void connection::on_write(boost::system::error_code const& ec) {
-  if (ec) {
-    JB_LOG(info) << "#" << id_ << " on_read: " << ec.message();
-    return;
-  }
-  // Start a new asynchronous read for the next message ...
-  run();
-}
-
-// Define the generator for connection ids ...
-std::atomic<int> connection::idgen(0);
 
 control_server::control_server(
     boost::asio::io_service& io, endpoint_type const& ep,

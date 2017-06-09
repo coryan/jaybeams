@@ -363,9 +363,11 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 ################################################################
 jb_libjb_ehs_adir = $(includedir)
 jb_libjb_ehs_a_SOURCES = \
+  jb/ehs/connection.cpp \
   jb/ehs/request_dispatcher.cpp
 nobase_jb_libjb_ehs_a_HEADERS = \
   jb/ehs/base_types.hpp \
+  jb/ehs/connection.hpp \
   jb/ehs/request_dispatcher.hpp
 
 unit_tests += \
