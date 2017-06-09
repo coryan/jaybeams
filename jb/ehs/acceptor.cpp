@@ -22,6 +22,16 @@ acceptor::acceptor(
   JB_LOG(info) << "accepting connections on " << ep;
 }
 
+void acceptor::shutdown() {
+  boost::system::error_code ec;
+  acceptor_.close(ec);
+  if (ec) {
+    JB_LOG(info) << "shutdown: " << ec.message();
+  } else {
+    JB_LOG(info) << "shutdown acceptor successful";
+  }
+}
+
 void acceptor::on_accept(boost::system::error_code const& ec) {
   // Return when the acceptor is closed or there is an error ...
   if (not acceptor_.is_open()) {

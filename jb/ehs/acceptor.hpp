@@ -28,6 +28,14 @@ public:
       boost::asio::io_service& io, boost::asio::ip::tcp::endpoint const& ep,
       std::shared_ptr<request_dispatcher> dispatcher);
 
+  /// Return the local listening endpoint.
+  boost::asio::ip::tcp::endpoint local_endpoint() const {
+    return acceptor_.local_endpoint();
+  }
+
+  /// Gracefully shutdown the acceptor
+  void shutdown();
+
 private:
   /**
    * Handle a completed asynchronous accept() call.
