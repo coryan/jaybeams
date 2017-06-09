@@ -6,7 +6,7 @@
  * This program replays a ITCH-5.x file via multicast, simulating the
  * behavior of a market data feed.
  */
-#include <jb/ehs/connection.hpp>
+#include <jb/ehs/acceptor.hpp>
 #include <jb/config_object.hpp>
 #include <jb/log.hpp>
 
@@ -43,48 +43,6 @@ public:
   jb::config_attribute<config, jb::log::config> log;
 };
 
-using endpoint_type = boost::asio::ip::tcp::endpoint;
-using address_type = boost::asio::ip::address;
-using socket_type = boost::asio::ip::tcp::socket;
-
-using jb::ehs::request_dispatcher;
-using jb::ehs::request_type;
-using jb::ehs::response_type;
-using jb::ehs::connection;
-
-/**
- * Create a control server for the program.
- *
- * The program runs as a typical daemon, accepting HTTP requests to
- * start new replays, stop them, and show its current status.
- */
-class control_server {
-public:
-  /**
-   * Create a new control server
-   *
-   * @param io Boost.ASIO service used to demux I/O events for this
-   * control server.
-   * @param ep the endpoint this control server listens on.
-   * @param dispatcher the object to process requests
-   */
-  control_server(
-      boost::asio::io_service& io, endpoint_type const& ep,
-      std::shared_ptr<request_dispatcher> dispatcher);
-
-private:
-  /**
-   * Handle a completed asynchronous accept() call.
-   */
-  void on_accept(boost::system::error_code const& ec);
-
-private:
-  boost::asio::ip::tcp::acceptor acceptor_;
-  std::shared_ptr<request_dispatcher> dispatcher_;
-  // Hold the results of an  asynchronous accept() operation.
-  socket_type sock_;
-};
-
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
@@ -99,7 +57,11 @@ int main(int argc, char* argv[]) try {
   using address = boost::asio::ip::address;
   endpoint ep{address::from_string(cfg.control_host()), cfg.control_port()};
 
-  auto dispatcher = std::make_shared<request_dispatcher>("moldreplay");
+  // ... create a dispatcher to process the HTTP requests, register
+  // some basic handlers ...
+  using jb::ehs::request_type;
+  using jb::ehs::response_type;
+  auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("moldreplay");
   dispatcher->add_handler("/", [](request_type const&, response_type& res) {
     res.fields.insert("Content-type", "text/plain");
     res.body = "Server running...\r\n";
@@ -111,7 +73,11 @@ int main(int argc, char* argv[]) try {
         os << cfg << "\r\n";
         res.body = os.str();
       });
-  control_server server(io_service, ep, dispatcher);
+
+  // ... create an acceptor to handle incoming connections, if we wanted
+  // to, we could create multiple acceptors on different addresses
+  // pointing to the same dispatcher ...
+  jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
 
   // ... run the program forever ...
   io_service.run();
@@ -181,43 +147,6 @@ void config::validate() const {
     throw jb::usage("Missing primary-destination argument (or setting).", 1);
   }
   log().validate();
-}
-
-control_server::control_server(
-    boost::asio::io_service& io, endpoint_type const& ep,
-    std::shared_ptr<request_dispatcher> dispatcher)
-    : acceptor_(io)
-    , dispatcher_(dispatcher)
-    , sock_(io) {
-  acceptor_.open(ep.protocol());
-  acceptor_.bind(ep);
-  acceptor_.listen(boost::asio::socket_base::max_connections);
-  // ... schedule an asynchronous accept() operation into the new
-  // socket ...
-  acceptor_.async_accept(sock_, [this](boost::system::error_code const& ec) {
-    this->on_accept(ec);
-  });
-}
-
-void control_server::on_accept(boost::system::error_code const& ec) {
-  // Return when the acceptor is closed or there is an error ...
-  if (not acceptor_.is_open()) {
-    return;
-  }
-  if (ec) {
-    JB_LOG(info) << "accept: " << ec.message();
-    return;
-  }
-  // ... move the newly created socket to a stack variable so we can
-  // schedule a new asynchronous accept ...
-  socket_type sock(std::move(sock_));
-  acceptor_.async_accept(sock_, [this](boost::system::error_code const& ec) {
-    this->on_accept(ec);
-  });
-  // ... create a new connection for the newly created socket and
-  // schedule it ...
-  auto c = std::make_shared<connection>(std::move(sock), dispatcher_);
-  c->run();
 }
 
 } // anonymous namespace
