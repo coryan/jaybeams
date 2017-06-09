@@ -228,8 +228,6 @@ unit_tests += jb/fftw/ut_aligned_multi_array \
 benchmarks += jb/fftw/bm_time_delay_estimator \
   jb/fftw/bm_time_delay_estimator_many
 
-examples += examples/fftw_correlation_no_wrappers
-
 bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
 
 AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
@@ -489,10 +487,6 @@ nobase_jb_libjb_tde_a_HEADERS =
 
 examples_configuration_SOURCES = examples/configuration.cpp
 examples_configuration_LDADD = jb/libjb.a
-
-examples_fftw_correlation_no_wrappers_SOURCES = examples/fftw_correlation_no_wrappers.cpp
-examples_fftw_correlation_no_wrappers_LDFLAGS = $(FFTW3_LDFLAGS)
-examples_fftw_correlation_no_wrappers_LDADD = jb/libjb.a $(FFTW3_LIBS)
 
 tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
 tools_itch5bookdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
