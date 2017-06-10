@@ -18,16 +18,21 @@ cd build
 do_coverity=no
 if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then
     # Always skip Coverity Scan builds for PR ...
-    :
+    echo "This is a pull request, skipping coverity build"
 elif [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     # ... and for branches other than master ...
-    :
+    echo "Building on the ${TRAVIS_BRANCH} branch, skipping coverity build"
 elif [ "x${TRAVIS_EVENT_TYPE}" = "xcron" -a "x${COVERITY}" = "xyes" ]; then
     # ... and really, only do them weekly ...
+    echo "Enabling coverity build"
     do_coverity=yes
 fi
 
-if [ "x$do_coverity" = "xyes" ]; then
+echo "Travis event type: " ${TRAVIS_EVENT_TYPE}
+echo "Coverity: " ${COVERITY}
+echo "do coverity: " ${do_coverity}
+
+if [ "x${do_coverity}" = "xyes" ]; then
     # ... coverity builds are slow, so we disable them for pull
     # requests, where they cannot be uploaded anyway ...
     PATH=$PATH:/opt/coverity/cov-analysis-linux64-8.7.0/bin
