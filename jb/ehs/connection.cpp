@@ -41,13 +41,13 @@ void connection::on_read(boost::system::error_code const& ec) {
   // Prepare a response ...
   response_type res = dispatcher_->process(req_);
   beast::http::prepare(res);
-  // ... and send it back ...
-  beast::http::async_write(
-      sock_, std::move(res),
-      strand_.wrap(
-          [self = shared_from_this()](boost::system::error_code const& ec) {
-            self->on_write(ec);
-          }));
+  // ... create a copy that will survive until the lambda wrapping
+  // on_write() is called ...
+  auto ptr = std::make_shared<response_type>(std::move(res));
+  // ... and send that copy back ...
+  beast::http::async_write(sock_, *ptr, strand_.wrap([
+    ptr, self = shared_from_this()
+  ](boost::system::error_code const& ec) { self->on_write(ec); }));
 }
 
 void connection::on_write(boost::system::error_code const& ec) {

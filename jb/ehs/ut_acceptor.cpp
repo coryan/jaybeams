@@ -5,6 +5,18 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/test/unit_test.hpp>
 
+/// Wait for a connection close event in the dispatcher
+namespace {
+void wait_for_connection_close(
+    std::shared_ptr<jb::ehs::request_dispatcher> d, long last_count) {
+  // .. wait until the connection is closed ...
+  for (int c = 0; c != 10 and last_count == d->get_close_connection(); ++c) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(d->get_close_connection(), last_count + 1);
+}
+} // anonymous namespace
+
 /**
  * @test Verify that jb::ehs::connection + jb::ehs::acceptor work as expected.
  */
@@ -62,6 +74,7 @@ BOOST_AUTO_TEST_CASE(acceptor_base) {
   // ... closing the socket triggers more behaviors in the acceptor
   // and connector classes ...
   sock.close();
+  wait_for_connection_close(dispatcher, dispatcher->get_close_connection());
 
   // ... shutdown the acceptor and stop the io_service ...
   io_service.dispatch([&acceptor, &io_service] {
@@ -144,16 +157,6 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
 }
 
 namespace {
-/// Wait for a connection close event in the dispatcher
-void wait_for_connection_close(
-    std::shared_ptr<jb::ehs::request_dispatcher> d, long last_count) {
-  // .. wait until the connection is closed ...
-  for (int c = 0; c != 10 and last_count == d->get_close_connection(); ++c) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
-  BOOST_CHECK_EQUAL(d->get_close_connection(), last_count + 1);
-}
-
 /// Open and close a connection to @a ep
 void cycle_connection(
     std::shared_ptr<jb::ehs::request_dispatcher> d, boost::asio::io_service& io,
