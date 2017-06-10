@@ -7,7 +7,17 @@ namespace ehs {
 request_dispatcher::request_dispatcher(std::string const& server_name)
     : mu_()
     , handlers_()
-    , server_name_(server_name) {
+    , server_name_(server_name)
+    , open_connection_(0)
+    , close_connection_(0)
+    , read_ok_(0)
+    , read_error_(0)
+    , write_200_(0)
+    , write_300_(0)
+    , write_400_(0)
+    , write_500_(0)
+    , write_ok_(0)
+    , write_error_(0) {
 }
 
 void request_dispatcher::add_handler(

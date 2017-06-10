@@ -22,6 +22,9 @@ public:
   explicit connection(
       socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher);
 
+  /// Destructor
+  ~connection();
+
   /// Asynchronously read a HTTP request for this connection.
   void run();
 

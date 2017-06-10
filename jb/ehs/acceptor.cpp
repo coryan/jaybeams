@@ -19,7 +19,8 @@ acceptor::acceptor(
   acceptor_.async_accept(sock_, [this](boost::system::error_code const& ec) {
     this->on_accept(ec);
   });
-  JB_LOG(info) << "accepting connections on " << ep;
+  JB_LOG(info) << "accepting connections on " << ep << " [" << local_endpoint()
+               << "]";
 }
 
 void acceptor::shutdown() {

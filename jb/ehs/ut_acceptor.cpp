@@ -119,12 +119,19 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
   req.fields.replace("content-length", "1000000");
   beast::http::write(sock, req);
 
+  // ... fetch the number of closed connections ...
+  long c = dispatcher->get_close_connection();
+
   // ... and now close the socket before the long message is sent ...
   sock.close();
 
   // ... wait a few milliseconds for the server to detect the closed
   // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  while (c == dispatcher->get_close_connection()) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(c, 0);
+  BOOST_CHECK_EQUAL(dispatcher->get_close_connection(), 1);
 
   // ... shutdown the acceptor and stop the io_service ...
   io_service.dispatch([&acceptor, &io_service] {

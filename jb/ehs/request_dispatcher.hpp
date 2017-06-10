@@ -3,6 +3,7 @@
 
 #include <jb/ehs/base_types.hpp>
 
+#include <atomic>
 #include <functional>
 #include <map>
 #include <mutex>
@@ -58,6 +59,99 @@ public:
    */
   response_type process(request_type const& request) const;
 
+  //@{
+  /**
+   * Event counters.
+   *
+   * A series of functions to count interesting events.
+   * TODO(coryan) this should really be a separate class that can
+   * count any number of metrics, including maps, histograms, rates,
+   * etc.  Look at prometheus.io for inspiration.
+   */
+  /// Count a new connection opened
+  void count_open_connection() {
+    ++open_connection_;
+  }
+  /// Returns the count of open connections
+  long get_open_connection() const {
+    return open_connection_;
+  }
+  /// Count a new connection closed
+  void count_close_connection() {
+    ++close_connection_;
+  }
+  /// Get the count of close connections
+  long get_close_connection() const {
+    return close_connection_;
+  }
+
+  /// Count a successful read
+  void count_read_ok() {
+    ++read_ok_;
+  }
+  /// Get the count of successful reads
+  long get_read_ok() const {
+    return read_ok_;
+  }
+  /// Count a write errors
+  void count_read_error() {
+    ++read_error_;
+  }
+  /// Get the count write errors
+  long get_read_error() const {
+    return read_error_;
+  }
+
+  /// Count a write in the 200 range
+  void count_write_200() {
+    ++write_200_;
+  }
+  /// Get the count write in the 200 range
+  long get_write_200() const {
+    return write_200_;
+  }
+  /// Count a write in the 300 range
+  void count_write_300() {
+    ++write_300_;
+  }
+  /// Get the count write in the 300 range
+  long get_write_300() const {
+    return write_300_;
+  }
+  /// Count a write in the 400 range
+  void count_write_400() {
+    ++write_400_;
+  }
+  /// Get the count write in the 400 range
+  long get_write_400() const {
+    return write_400_;
+  }
+  /// Count a write in the 500 range
+  void count_write_500() {
+    ++write_500_;
+  }
+  /// Get the count write in the 500 range
+  long get_write_500() const {
+    return write_500_;
+  }
+  /// Count a write errors
+  void count_write_ok() {
+    ++write_ok_;
+  }
+  /// Get the count write errors
+  long get_write_ok() const {
+    return write_ok_;
+  }
+  /// Count a write errors
+  void count_write_error() {
+    ++write_error_;
+  }
+  /// Get the count write errors
+  long get_write_error() const {
+    return write_error_;
+  }
+  //@}
+
 private:
   /**
    * Create a 500 response.
@@ -95,6 +189,18 @@ private:
 
   /// The name of the server returned in all HTTP responses.
   std::string server_name_;
+
+  /// Multiple counters
+  std::atomic<long> open_connection_;
+  std::atomic<long> close_connection_;
+  std::atomic<long> read_ok_;
+  std::atomic<long> read_error_;
+  std::atomic<long> write_200_;
+  std::atomic<long> write_300_;
+  std::atomic<long> write_400_;
+  std::atomic<long> write_500_;
+  std::atomic<long> write_ok_;
+  std::atomic<long> write_error_;
 };
 
 } // namespace ehs
