@@ -24,20 +24,15 @@ acceptor::acceptor(
 }
 
 void acceptor::shutdown() {
-  boost::system::error_code ec;
-  acceptor_.close(ec);
-  if (ec) {
-    JB_LOG(info) << "shutdown: " << ec.message() << " [" << ec.category().name()
-                 << "/" << ec.value() << "]";
-  } else {
-    JB_LOG(info) << "shutdown: acceptor close successful";
-  }
+  acceptor_.close();
+  JB_LOG(info) << "shutdown: acceptor close successful";
 }
 
 void acceptor::on_accept(boost::system::error_code const& ec) {
-  // Return when the acceptor is closed, there is no more work to do
-  // in this case ...
   if (not acceptor_.is_open()) {
+    // The accept socket is closed, this is a normal condition, used
+    // to shutdown the application, so we simply return and do not
+    // schedule any additional work ...
     JB_LOG(info) << "on_accept: acceptor is not open";
     return;
   }
@@ -51,6 +46,12 @@ void acceptor::on_accept(boost::system::error_code const& ec) {
     c->run();
     dispatcher_->count_accept_ok();
   } else {
+    // ... this is a very rare condition, the acceptor is still open,
+    // but the accept() call failed, typically that would indicate a
+    // temporary error, such as running out of file descriptors.  We
+    // log the issue, increment the counters, and reschedule another
+    // async accept.  Unit testing this condition reliably is
+    // extremely hard, so the code is unreached in tests ...
     JB_LOG(info) << "on_accept: " << ec.message() << " ["
                  << ec.category().name() << "/" << ec.value() << "]";
     dispatcher_->count_accept_error();
