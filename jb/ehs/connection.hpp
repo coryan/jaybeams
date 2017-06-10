@@ -18,8 +18,13 @@ public:
   /// The type of socket used for the connection
   using socket_type = boost::asio::ip::tcp::socket;
 
-  /// Constructor
-  explicit connection(
+  /**
+   * Create a new connection.
+   *
+   * @param sock the underlying socket for this connection.
+   * @param dispatcher the handler for the connections.
+   */
+  connection(
       socket_type&& sock, std::shared_ptr<request_dispatcher> dispatcher);
 
   /// Destructor
