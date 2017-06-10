@@ -41,15 +41,6 @@ void connection::on_read(boost::system::error_code const& ec) {
   // Prepare a response ...
   response_type res = dispatcher_->process(req_);
   beast::http::prepare(res);
-  if (0 <= res.status and res.status < 300) {
-    dispatcher_->count_write_200();
-  } else if (res.status < 400) {
-    dispatcher_->count_write_300();
-  } else if (res.status < 500) {
-    dispatcher_->count_write_400();
-  } else {
-    dispatcher_->count_write_500();
-  }
   // ... and send it back ...
   beast::http::async_write(
       sock_, std::move(res),

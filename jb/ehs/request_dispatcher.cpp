@@ -12,12 +12,19 @@ request_dispatcher::request_dispatcher(std::string const& server_name)
     , close_connection_(0)
     , read_ok_(0)
     , read_error_(0)
+    , write_invalid_(0)
+    , write_100_(0)
     , write_200_(0)
     , write_300_(0)
     , write_400_(0)
     , write_500_(0)
     , write_ok_(0)
     , write_error_(0) {
+#ifndef ATOMIC_LONG_LOCK_FREE
+#error "Missing ATOMIC_LONG_LOCK_FREE required by C++11 standard"
+#endif // ATOMIC_LONG_LOCK_FREE
+  static_assert(
+      ATOMIC_LONG_LOCK_FREE == 2, "Class requires lock-free std::atomic<long>");
 }
 
 void request_dispatcher::add_handler(
@@ -29,7 +36,7 @@ void request_dispatcher::add_handler(
   }
 }
 
-response_type request_dispatcher::process(request_type const& req) const {
+response_type request_dispatcher::process(request_type const& req) {
   try {
     auto found = find_handler(req.url);
     if (not found.second) {
@@ -41,6 +48,7 @@ response_type request_dispatcher::process(request_type const& req) const {
     res.version = req.version;
     res.fields.insert("server", server_name_);
     found.first(req, res);
+    update_response_counter(res);
     return res;
   } catch (std::exception const& e) {
     // ... if there is an exception preparing the response we try to
@@ -51,8 +59,7 @@ response_type request_dispatcher::process(request_type const& req) const {
   }
 }
 
-response_type
-request_dispatcher::internal_error(request_type const& req) const {
+response_type request_dispatcher::internal_error(request_type const& req) {
   response_type res;
   res.status = 500;
   res.reason = beast::http::reason_string(res.status);
@@ -60,10 +67,11 @@ request_dispatcher::internal_error(request_type const& req) const {
   res.fields.insert("server", server_name_);
   res.fields.insert("content-type", "text/plain");
   res.body = std::string{"An internal error occurred"};
+  update_response_counter(res);
   return res;
 }
 
-response_type request_dispatcher::not_found(request_type const& req) const {
+response_type request_dispatcher::not_found(request_type const& req) {
   response_type res;
   res.status = 404;
   res.reason = beast::http::reason_string(res.status);
@@ -71,6 +79,7 @@ response_type request_dispatcher::not_found(request_type const& req) const {
   res.fields.insert("server", server_name_);
   res.fields.insert("content-type", "text/plain");
   res.body = std::string("path: " + req.url + " not found\r\n");
+  update_response_counter(res);
   return res;
 }
 
@@ -82,6 +91,26 @@ request_dispatcher::find_handler(std::string const& path) const {
     return std::make_pair(request_handler(), false);
   }
   return std::make_pair(location->second, true);
+}
+
+void request_dispatcher::update_response_counter(response_type const& res) {
+  // TODO(coryan) - this sound become a map of counter (or is that a
+  // counter map?) when we create counter classes for prometheus.io
+  if (res.status < 100) {
+    count_write_invalid();
+  } else if (res.status < 200) {
+    count_write_100();
+  } else if (res.status < 300) {
+    count_write_200();
+  } else if (res.status < 400) {
+    count_write_300();
+  } else if (res.status < 500) {
+    count_write_400();
+  } else if (res.status < 600) {
+    count_write_500();
+  } else {
+    count_write_invalid();
+  }
 }
 
 } // namespace ehs

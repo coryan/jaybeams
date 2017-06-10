@@ -57,7 +57,7 @@ public:
    * @param request the HTTP request to process
    * @returns a HTTP response to send back to the client.
    */
-  response_type process(request_type const& request) const;
+  response_type process(request_type const& request);
 
   //@{
   /**
@@ -102,43 +102,36 @@ public:
     return read_error_;
   }
 
-  /// Count a write in the 200 range
-  void count_write_200() {
-    ++write_200_;
+  /// Get count of responses with invalid codes (outside the [100,600) range).
+  long get_write_invalid() const {
+    return write_invalid_;
+  }
+
+  /// Get the count write in the 100 range
+  long get_write_100() const {
+    return write_100_;
   }
   /// Get the count write in the 200 range
   long get_write_200() const {
     return write_200_;
   }
-  /// Count a write in the 300 range
-  void count_write_300() {
-    ++write_300_;
-  }
   /// Get the count write in the 300 range
   long get_write_300() const {
     return write_300_;
-  }
-  /// Count a write in the 400 range
-  void count_write_400() {
-    ++write_400_;
   }
   /// Get the count write in the 400 range
   long get_write_400() const {
     return write_400_;
   }
-  /// Count a write in the 500 range
-  void count_write_500() {
-    ++write_500_;
-  }
   /// Get the count write in the 500 range
   long get_write_500() const {
     return write_500_;
   }
-  /// Count a write errors
+  /// Count a write successes
   void count_write_ok() {
     ++write_ok_;
   }
-  /// Get the count write errors
+  /// Get the count write successes
   long get_write_ok() const {
     return write_ok_;
   }
@@ -160,7 +153,7 @@ private:
    * @returns a 500 HTTP response formatted to match the version of
    * the @a request.
    */
-  response_type internal_error(request_type const& request) const;
+  response_type internal_error(request_type const& request);
 
   /**
    * Create a 404 response.
@@ -169,7 +162,7 @@ private:
    * @returns a 404 HTTP response formatted to match the version of
    * the @a request.
    */
-  response_type not_found(request_type const& request) const;
+  response_type not_found(request_type const& request);
 
   /**
    * Find the request handler for the given path.
@@ -179,6 +172,44 @@ private:
    * The boolean is set to false if the path was not found.
    */
   std::pair<request_handler, bool> find_handler(std::string const& path) const;
+
+  /**
+   * Update the response code counters based on @a res.
+   */
+  void update_response_counter(response_type const& res);
+
+  //@{
+  /**
+   * Internally updated event counters.
+   *
+   * These event counters are only updated internally, the clients of
+   * the class can query the counters, but not update them.
+   */
+  /// Count responses with invalid codes (outside the [100,600) range).
+  void count_write_invalid() {
+    ++write_invalid_;
+  }
+  /// Count a write in the 100 range
+  void count_write_100() {
+    ++write_100_;
+  }
+  /// Count a write in the 200 range
+  void count_write_200() {
+    ++write_200_;
+  }
+  /// Count a write in the 300 range
+  void count_write_300() {
+    ++write_300_;
+  }
+  /// Count a write in the 400 range
+  void count_write_400() {
+    ++write_400_;
+  }
+  /// Count a write in the 500 range
+  void count_write_500() {
+    ++write_500_;
+  }
+  //@}
 
 private:
   /// Protect the critical sections
@@ -195,6 +226,8 @@ private:
   std::atomic<long> close_connection_;
   std::atomic<long> read_ok_;
   std::atomic<long> read_error_;
+  std::atomic<long> write_invalid_;
+  std::atomic<long> write_100_;
   std::atomic<long> write_200_;
   std::atomic<long> write_300_;
   std::atomic<long> write_400_;
