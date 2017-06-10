@@ -145,8 +145,7 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
 namespace {
 /// Wait for a connection close event in the dispatcher
 void wait_for_connection_close(
-    std::shared_ptr<jb::ehs::request_dispatcher> d,
-    long last_count) {
+    std::shared_ptr<jb::ehs::request_dispatcher> d, long last_count) {
   // .. wait until the connection is closed ...
   for (int c = 0; c != 10 and last_count == d->get_close_connection(); ++c) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -156,10 +155,8 @@ void wait_for_connection_close(
 
 /// Open and close a connection to @a ep
 void cycle_connection(
-    std::shared_ptr<jb::ehs::request_dispatcher> d,
-    boost::asio::io_service& io,
-    boost::asio::ip::tcp::endpoint const& ep,
-    long expected_open_count,
+    std::shared_ptr<jb::ehs::request_dispatcher> d, boost::asio::io_service& io,
+    boost::asio::ip::tcp::endpoint const& ep, long expected_open_count,
     long expected_close_count) {
 
   // ... get the number of open connections so far ...
@@ -194,7 +191,7 @@ BOOST_AUTO_TEST_CASE(acceptor_multiple_connections) {
   // Let the operating system pick a listening address ...
   boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(), 0};
 
-  // ... create a dispatcher and a handler for / ...
+  // ... create a dispatcher, with no handlers ...
   auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("test");
   // ... create a IO service, and an acceptor in the default address ...
   boost::asio::io_service io_service;
@@ -227,7 +224,7 @@ BOOST_AUTO_TEST_CASE(connection_multiple_requests) {
   // Let the operating system pick a listening address ...
   boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(), 0};
 
-  // ... create a dispatcher and a handler for / ...
+  // ... create a dispatcher, with no handlers ...
   auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("test");
   // ... create a IO service, and an acceptor in the default address ...
   boost::asio::io_service io_service;
@@ -290,13 +287,88 @@ BOOST_AUTO_TEST_CASE(connection_multiple_requests) {
 }
 
 /**
+ * @test Verify that jb::ehs::connection handles errors during writes.
+ */
+BOOST_AUTO_TEST_CASE(connection_write_errors) {
+  // Let the operating system pick a listening address ...
+  boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(), 0};
+
+  // ... create a dispatcher and a handler for / ...
+  auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("test");
+  using jb::ehs::request_type;
+  using jb::ehs::response_type;
+  dispatcher->add_handler("/", [](request_type const&, response_type& res) {
+    res.fields.insert("Content-type", "text/plain");
+    res.body = "OK\n";
+  });
+  // ... create a IO service, and an acceptor in the default address,
+  // and two threads to process events in them ...
+  boost::asio::io_service io_service;
+  jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
+  std::thread t0([&io_service]() { io_service.run(); });
+  std::thread t1([&io_service]() { io_service.run(); });
+
+  // ... do all the stuff to connect to the service ...
+  auto listen = acceptor.local_endpoint();
+  boost::asio::io_service io;
+  boost::asio::ip::tcp::socket sock{io};
+  sock.connect(listen);
+
+  // ... this is a weird handler.  It closes the incoming socket as
+  // soon as it receives a request.  That should force an error during
+  // the write path ...
+  dispatcher->add_handler(
+      "/close-me",
+      [&sock, &io_service](request_type const&, response_type& res) {
+        // ... close the socket, that is evil ...
+        sock.close();
+        // ... create a largish message ...
+        res.fields.insert("Content-type", "text/plain");
+        std::string block("Good luck with that\n");
+        block.append(1000000, ' ');
+        res.body = std::move(block);
+      });
+
+  // ... send a request ...
+  request_type req;
+  req.method = "GET";
+  req.url = "/close-me";
+  req.version = 11;
+  req.fields.replace("host", "0.0.0.0");
+  req.fields.replace("user-agent", "acceptor_base");
+  beast::http::prepare(req);
+  beast::http::write(sock, req);
+
+  // ... try to receive the reply, but the socket will close while
+  // doing so ...
+  beast::streambuf sb;
+  response_type res;
+  boost::system::error_code ec;
+  beast::http::read(sock, sb, res, ec);
+
+  BOOST_CHECK(bool(ec));
+  BOOST_TEST_MESSAGE(
+      "While reading HTTP response got: " << ec.message() << " ["
+                                          << ec.category().name() << "/"
+                                          << ec.value() << "]");
+
+  // ... shutdown everything ...
+  io_service.dispatch([&acceptor, &io_service] {
+    acceptor.shutdown();
+    io_service.stop();
+  });
+  t0.join();
+  t1.join();
+}
+
+/**
  * @test Verify that jb::ehs::acceptor errors paths work.
  */
 BOOST_AUTO_TEST_CASE(acceptor_shutdown_errors) {
   // Let the operating system pick a listening address ...
   boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(), 0};
 
-  // ... create a dispatcher and a handler for / ...
+  // ... create a dispatcher, with no handlers ...
   auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("test");
   // ... create a IO service, and an acceptor in the default address ...
   boost::asio::io_service io_service;
