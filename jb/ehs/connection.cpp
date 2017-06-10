@@ -32,7 +32,8 @@ void connection::run() {
 
 void connection::on_read(boost::system::error_code const& ec) {
   if (ec) {
-    JB_LOG(info) << "#" << id_ << " on_read: " << ec.message();
+    JB_LOG(info) << "#" << id_ << " on_read: " << ec.message() << " ["
+                 << ec.category().name() << "/" << ec.value() << "]";
     dispatcher_->count_read_error();
     return;
   }
@@ -60,7 +61,8 @@ void connection::on_read(boost::system::error_code const& ec) {
 
 void connection::on_write(boost::system::error_code const& ec) {
   if (ec) {
-    JB_LOG(info) << "#" << id_ << " on_write: " << ec.message();
+    JB_LOG(info) << "#" << id_ << " on_write: " << ec.message() << " ["
+                 << ec.category().name() << "/" << ec.value() << "]";
     dispatcher_->count_write_error();
     return;
   }

@@ -27,7 +27,8 @@ void acceptor::shutdown() {
   boost::system::error_code ec;
   acceptor_.close(ec);
   if (ec) {
-    JB_LOG(info) << "shutdown: " << ec.message();
+    JB_LOG(info) << "shutdown: " << ec.message() << " [" << ec.category().name()
+                 << "/" << ec.value() << "]";
   } else {
     JB_LOG(info) << "shutdown acceptor successful";
   }
@@ -39,7 +40,8 @@ void acceptor::on_accept(boost::system::error_code const& ec) {
     return;
   }
   if (ec) {
-    JB_LOG(info) << "accept: " << ec.message();
+    JB_LOG(info) << "accept: " << ec.message() << " [" << ec.category().name()
+                 << "/" << ec.value() << "]";
     return;
   }
   // ... move the newly created socket to a stack variable so we can
