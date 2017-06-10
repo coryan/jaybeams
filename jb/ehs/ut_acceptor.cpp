@@ -307,7 +307,6 @@ BOOST_AUTO_TEST_CASE(connection_write_errors) {
   boost::asio::io_service io_service;
   jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
   std::thread t0([&io_service]() { io_service.run(); });
-  std::thread t1([&io_service]() { io_service.run(); });
 
   // ... do all the stuff to connect to the service ...
   auto listen = acceptor.local_endpoint();
@@ -366,7 +365,6 @@ BOOST_AUTO_TEST_CASE(connection_write_errors) {
     io_service.stop();
   });
   t0.join();
-  t1.join();
 }
 
 /**
@@ -381,9 +379,33 @@ BOOST_AUTO_TEST_CASE(acceptor_shutdown_errors) {
   // ... create a IO service, and an acceptor in the default address ...
   boost::asio::io_service io_service;
   jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
+  std::thread t([&io_service]() { io_service.run(); });
 
-  // ... close the acceptor twice, to trigger some of the error code
-  // paths ...
+  // ... get the local listening endpoint ...
+  auto listen = acceptor.local_endpoint();
+
+  // ... create a separate io service for the client side ...
+  boost::asio::io_service io;
+  // ... open and close a lot of connections, and then close the
+  // acceptor, that should eventually force a failure in the
+  // on_accept() callback ...
+  for (int i = 0; i != 200; ++i) {
+    boost::asio::ip::tcp::socket sock{io};
+    sock.connect(listen);
+    sock.close();
+  }
   acceptor.shutdown();
-  acceptor.shutdown();
+
+  // ... check the counters ...
+  for (int i = 0; i != 100 and dispatcher->get_accept_error() == 0; ++i) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_NE(dispatcher->get_accept_ok(), 0);
+  BOOST_CHECK_NE(dispatcher->get_accept_error(), 0);
+
+  // ... shutdown everything ...
+  io_service.dispatch([&io_service] {
+    io_service.stop();
+  });
+  t.join();
 }

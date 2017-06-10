@@ -19,7 +19,9 @@ request_dispatcher::request_dispatcher(std::string const& server_name)
     , write_400_(0)
     , write_500_(0)
     , write_ok_(0)
-    , write_error_(0) {
+    , write_error_(0)
+    , accept_ok_(0)
+    , accept_error_(0) {
 #ifndef ATOMIC_LONG_LOCK_FREE
 #error "Missing ATOMIC_LONG_LOCK_FREE required by C++11 standard"
 #endif // ATOMIC_LONG_LOCK_FREE

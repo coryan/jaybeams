@@ -55,7 +55,6 @@ void connection::on_write(boost::system::error_code const& ec) {
     JB_LOG(info) << "#" << id_ << " on_write: " << ec.message() << " ["
                  << ec.category().name() << "/" << ec.value() << "]";
     dispatcher_->count_write_error();
-    return;
   }
   // Start a new asynchronous read for the next message ...
   run();

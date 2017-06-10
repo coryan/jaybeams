@@ -143,6 +143,21 @@ public:
   long get_write_error() const {
     return write_error_;
   }
+
+  /// Count accept successes
+  void count_accept_ok() {
+    ++accept_ok_;
+  }
+  long get_accept_ok() const {
+    return accept_ok_;
+  }
+  /// Count accept errors
+  void count_accept_error() {
+    ++accept_error_;
+  }
+  long get_accept_error() const {
+    return accept_error_;
+  }
   //@}
 
 private:
@@ -234,6 +249,8 @@ private:
   std::atomic<long> write_500_;
   std::atomic<long> write_ok_;
   std::atomic<long> write_error_;
+  std::atomic<long> accept_ok_;
+  std::atomic<long> accept_error_;
 };
 
 } // namespace ehs
