@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
 
   // ... wait a few milliseconds for the server to detect the closed
   // connection ...
-  while (c == dispatcher->get_close_connection()) {
+  for (int i = 0; i != 10 and c == dispatcher->get_close_connection(); ++i) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
   BOOST_CHECK_EQUAL(c, 0);
@@ -142,6 +142,51 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
   t.join();
 }
 
+namespace {
+/// Wait for a connection close event in the dispatcher
+void wait_for_connection_close(
+    std::shared_ptr<jb::ehs::request_dispatcher> d,
+    long last_count) {
+  // .. wait until the connection is closed ...
+  for (int c = 0; c != 10 and last_count == d->get_close_connection(); ++c) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(d->get_close_connection(), last_count + 1);
+}
+
+/// Open and close a connection to @a ep
+void cycle_connection(
+    std::shared_ptr<jb::ehs::request_dispatcher> d,
+    boost::asio::io_service& io,
+    boost::asio::ip::tcp::endpoint const& ep,
+    long expected_open_count,
+    long expected_close_count) {
+
+  // ... get the number of open connections so far ...
+  auto open_count = d->get_open_connection();
+  BOOST_CHECK_EQUAL(open_count, expected_open_count);
+
+  // ... open a socket to send the HTTP request ...
+  boost::asio::ip::tcp::socket sock{io};
+  sock.connect(ep);
+
+  // ... wait until the connection is received ...
+  for (int c = 0; c != 10 and open_count == d->get_open_connection(); ++c) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(d->get_open_connection(), expected_open_count + 1);
+
+  // ... get the number of closed connections so far ...
+  auto close_count = d->get_close_connection();
+  BOOST_CHECK_EQUAL(close_count, expected_close_count);
+
+  // ... close the socket ...
+  sock.close();
+  wait_for_connection_close(d, close_count);
+}
+
+} // anonymous namespace
+
 /**
  * @test Verify that jb::ehs::acceptor accepts multiple connections.
  */
@@ -154,34 +199,25 @@ BOOST_AUTO_TEST_CASE(acceptor_multiple_connections) {
   // ... create a IO service, and an acceptor in the default address ...
   boost::asio::io_service io_service;
   jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
+  // ... run a separate thread with the io_service so we can write
+  // synchronous code in the test, which is easier to follow ...
+  std::thread t([&io_service]() { io_service.run(); });
 
   // ... get the local listening endpoint ...
   auto listen = acceptor.local_endpoint();
 
   // ... create a separate io service for the client side ...
   boost::asio::io_service io;
-  // ... open a socket to send the HTTP request ...
-  boost::asio::ip::tcp::socket sock{io};
-  sock.connect(listen);
-  // ... wait a few milliseconds for the server to detect the closed
-  // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  sock.close();
-  // ... wait a few milliseconds for the server to detect the closed
-  // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  cycle_connection(dispatcher, io, listen, 0, 0);
+  cycle_connection(dispatcher, io, listen, 1, 1);
 
-  // ... wait a few milliseconds for the server to detect the closed
-  // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  sock.connect(listen);
-  // ... wait a few milliseconds for the server to detect the closed
-  // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  sock.close();
-  // ... wait a few milliseconds for the server to detect the closed
-  // connection ...
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  // ... shutdown the acceptor and stop the io_service ...
+  io_service.dispatch([&acceptor, &io_service] {
+    acceptor.shutdown();
+    io_service.stop();
+  });
+  // ... wait for the acceptor thread ...
+  t.join();
 }
 
 /**
@@ -238,6 +274,12 @@ BOOST_AUTO_TEST_CASE(connection_multiple_requests) {
   BOOST_CHECK_EQUAL(res.version, 11);
   BOOST_CHECK_EQUAL(res.fields["server"], "test");
 
+  // ... closing the socket triggers more behaviors in the acceptor
+  // and connector classes ...
+  auto close_count = dispatcher->get_close_connection();
+  sock.close();
+  wait_for_connection_close(dispatcher, close_count);
+
   // ... shutdown the acceptor and stop the io_service ...
   io_service.dispatch([&acceptor, &io_service] {
     acceptor.shutdown();
@@ -245,10 +287,6 @@ BOOST_AUTO_TEST_CASE(connection_multiple_requests) {
   });
   // ... wait for the acceptor thread ...
   t.join();
-
-  // ... closing the socket triggers more behaviors in the acceptor
-  // and connector classes ...
-  sock.close();
 }
 
 /**
