@@ -147,3 +147,53 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_counter) {
   BOOST_CHECK_EQUAL(tested.get_write_400(), 1);
   BOOST_CHECK_EQUAL(tested.get_write_500(), 1);
 }
+
+/**
+ * @test Verify that jb::ehs::request_dispatcher counters work as expected.
+ */
+BOOST_AUTO_TEST_CASE(request_dispatcher_network_counter) {
+  using namespace jb::ehs;
+  request_dispatcher tested("test");
+  BOOST_CHECK_EQUAL(tested.get_accept_error(), 0);
+  tested.count_accept_error();
+  BOOST_CHECK_EQUAL(tested.get_accept_error(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_accept_ok(), 0);
+  tested.count_accept_ok();
+  BOOST_CHECK_EQUAL(tested.get_accept_ok(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_write_error(), 0);
+  tested.count_write_error();
+  BOOST_CHECK_EQUAL(tested.get_write_error(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_write_ok(), 0);
+  tested.count_write_ok();
+  BOOST_CHECK_EQUAL(tested.get_write_ok(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_read_error(), 0);
+  tested.count_read_error();
+  BOOST_CHECK_EQUAL(tested.get_read_error(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_read_ok(), 0);
+  tested.count_read_ok();
+  BOOST_CHECK_EQUAL(tested.get_read_ok(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_open_connection(), 0);
+  tested.count_open_connection();
+  BOOST_CHECK_EQUAL(tested.get_open_connection(), 1);
+
+  BOOST_CHECK_EQUAL(tested.get_close_connection(), 0);
+  tested.count_close_connection();
+  BOOST_CHECK_EQUAL(tested.get_close_connection(), 1);
+
+  // ... verify that no counters get accidentally updated by other
+  // calls ...
+  BOOST_CHECK_EQUAL(tested.get_open_connection(), 1);
+  BOOST_CHECK_EQUAL(tested.get_close_connection(), 1);
+  BOOST_CHECK_EQUAL(tested.get_read_ok(), 1);
+  BOOST_CHECK_EQUAL(tested.get_read_error(), 1);
+  BOOST_CHECK_EQUAL(tested.get_write_ok(), 1);
+  BOOST_CHECK_EQUAL(tested.get_write_error(), 1);
+  BOOST_CHECK_EQUAL(tested.get_accept_ok(), 1);
+  BOOST_CHECK_EQUAL(tested.get_accept_error(), 1);
+}
