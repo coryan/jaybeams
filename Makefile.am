@@ -8,98 +8,17 @@ lib_LIBRARIES = \
   jb/libjb_testing.a \
   jb/libjb_itch5_testing.a
 
-jb_unit_tests = \
-  jb/ut_as_hhmmss \
-  jb/ut_assert_throw \
-  jb/ut_book_depth_statistics \
-  jb/ut_config_files_location \
-  jb/ut_config_object \
-  jb/ut_config_object_vector \
-  jb/ut_cpu_set \
-  jb/ut_event_rate_estimator \
-  jb/ut_event_rate_histogram \
-  jb/ut_explicit_cuts_binning \
-  jb/ut_fileio \
-  jb/ut_filetype \
-  jb/ut_histogram \
-  jb/ut_histogram_summary \
-  jb/ut_integer_range_binning \
-  jb/ut_launch_thread \
-  jb/ut_logging \
-  jb/ut_merge_yaml \
-  jb/ut_offline_feed_statistics \
-  jb/ut_p2ceil \
-  jb/ut_severity_level \
-  jb/ut_strtonum \
-  jb/ut_thread_config
+# The unit tests are added (via +=) in the same section where we
+# define the sources and headers for each library
+unit_tests = 
 
-jb_itch5_unit_tests = \
-  jb/itch5/ut_add_order_message \
-  jb/itch5/ut_add_order_mpid_message \
-  jb/itch5/ut_array_based_order_book \
-  jb/itch5/ut_base_decoders \
-  jb/itch5/ut_base_encoders \
-  jb/itch5/ut_broken_trade_message \
-  jb/itch5/ut_char_list_field \
-  jb/itch5/ut_char_list_validator \
-  jb/itch5/ut_check_offset \
-  jb/itch5/ut_compute_book \
-  jb/itch5/ut_cross_trade_message \
-  jb/itch5/ut_cross_type \
-  jb/itch5/ut_generate_inside \
-  jb/itch5/ut_ipo_quoting_period_update_message \
-  jb/itch5/ut_make_socket_udp_recv \
-  jb/itch5/ut_map_based_order_book \
-  jb/itch5/ut_market_participant_position_message \
-  jb/itch5/ut_message_header \
-  jb/itch5/ut_mold_udp_pacer \
-  jb/itch5/ut_mold_udp_pacer_config \
-  jb/itch5/ut_mold_udp_channel \
-  jb/itch5/ut_mwcb_breach_message \
-  jb/itch5/ut_mwcb_decline_level_message \
-  jb/itch5/ut_net_order_imbalance_indicator_message \
-  jb/itch5/ut_order_book \
-  jb/itch5/ut_order_cancel_message \
-  jb/itch5/ut_order_delete_message \
-  jb/itch5/ut_order_executed_message \
-  jb/itch5/ut_order_executed_price_message \
-  jb/itch5/ut_order_replace_message \
-  jb/itch5/ut_price_field \
-  jb/itch5/ut_price_levels \
-  jb/itch5/ut_process_buffer_mlist \
-  jb/itch5/ut_process_iostream_mlist \
-  jb/itch5/ut_reg_sho_restriction_message \
-  jb/itch5/ut_seconds_field \
-  jb/itch5/ut_short_string_field \
-  jb/itch5/ut_static_digits \
-  jb/itch5/ut_stock_directory_message \
-  jb/itch5/ut_stock_trading_action_message \
-  jb/itch5/ut_system_event_message \
-  jb/itch5/ut_timestamp \
-  jb/itch5/ut_trade_message
+# ... same thing for the benchmarks ...
+benchmarks =
 
-jb_testing_unit_tests = \
-  jb/testing/ut_check_close_enough \
-  jb/testing/ut_create_square_timeseries \
-  jb/testing/ut_create_triangle_timeseries \
-  jb/testing/ut_delay_timeseries \
-  jb/testing/ut_microbenchmark_config
+# ... and the examples ...
+examples =
 
-unit_tests = $(jb_unit_tests) $(jb_testing_unit_tests) \
-  $(jb_itch5_unit_tests)
-
-benchmarks = \
-  jb/bm_clocks \
-  jb/itch5/bm_order_book
-
-bin_SCRIPTS = \
-  tools/benchmark_common.sh \
-  jb/itch5/bm_order_book_generate.sh \
-  jb/itch5/bm_order_book_analyze.R \
-  jb/itch5/bm_order_book_report.Rmd
-
-examples = \
-  examples/configuration
+bin_SCRIPTS = tools/benchmark_common.sh
 
 bin_PROGRAMS = $(benchmarks) \
   jb/mktsim/moldreplay \
@@ -116,7 +35,6 @@ bin_PROGRAMS = $(benchmarks) \
 noinst_PROGRAMS = $(examples) \
   jb/testing/check_mt19937_initializer \
   jb/testing/check_random_device
-
 
 check_PROGRAMS = $(unit_tests)
 TESTS = $(check_PROGRAMS)
@@ -181,19 +99,6 @@ jb_ut_ldadd = \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 jb_ut_ldflags =
 
-jb_ut_testing_ldadd = \
-  jb/libjb_testing.a \
-  $(jb_ut_ldadd)
-jb_ut_testing_ldflags = \
-  $(jb_ut_ldflags)
-
-jb_ut_itch5_ldadd = \
-  jb/libjb_itch5_testing.a \
-  jb/libjb_itch5.a \
-  $(jb_ut_ldadd)
-jb_ut_itch5_ldflags = \
-  $(jb_ut_ldflags)
-
 ################################################################
 # If CLANG_FORMAT was found, 
 ################################################################
@@ -207,48 +112,6 @@ check-style:
 	$(AM_V_at)echo "clang-format not found, cannot check style" && exit 1
 endif !FOUND_CLANG_FORMAT
 .PHONY: check-style
-
-################################################################
-# Optional FFTW stuff
-################################################################
-
-if USE_FFTW3
-lib_LIBRARIES += jb/libjb_fftw.a
-unit_tests += jb/fftw/ut_aligned_multi_array \
-  jb/fftw/ut_allocator \
-  jb/fftw/ut_cast_multi_array \
-  jb/fftw/ut_cast_vector \
-  jb/fftw/ut_plan \
-  jb/fftw/ut_plan_many \
-  jb/fftw/ut_tde_result \
-  jb/fftw/ut_time_delay_estimator \
-  jb/fftw/ut_time_delay_estimator_many \
-  jb/fftw/ut_traits
-
-benchmarks += jb/fftw/bm_time_delay_estimator \
-  jb/fftw/bm_time_delay_estimator_many
-
-bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
-
-AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
-
-LDFLAGS += $(FFTW3_LDFLAGS)
-
-jb_ut_fftw_ldadd = \
-  jb/libjb_testing.a \
-  jb/libjb_fftw.a \
-  $(FFTW3_LIBS) \
-  $(jb_ut_ldadd)
-
-jb_ut_fftw_ldflags = \
-  $(FFTW3_LDFLAGS) \
-  $(jb_ut_ldflags)
-
-else
-jb_ut_fftw_ldadd =
-jb_ut_fftw_ldflags =
-endif !USE_FFTW3
-
 
 ################################################################
 # jb/libjb.a
@@ -308,216 +171,44 @@ jb_libjb_a_SOURCES = \
   jb/severity_level.cpp \
   jb/thread_config.cpp
 
-################################################################
-# jb/libjb_testing.a
-################################################################
+unit_tests += \
+  jb/ut_as_hhmmss \
+  jb/ut_assert_throw \
+  jb/ut_book_depth_statistics \
+  jb/ut_config_files_location \
+  jb/ut_config_object \
+  jb/ut_config_object_vector \
+  jb/ut_cpu_set \
+  jb/ut_event_rate_estimator \
+  jb/ut_event_rate_histogram \
+  jb/ut_explicit_cuts_binning \
+  jb/ut_fileio \
+  jb/ut_filetype \
+  jb/ut_histogram \
+  jb/ut_histogram_summary \
+  jb/ut_integer_range_binning \
+  jb/ut_launch_thread \
+  jb/ut_logging \
+  jb/ut_merge_yaml \
+  jb/ut_offline_feed_statistics \
+  jb/ut_p2ceil \
+  jb/ut_severity_level \
+  jb/ut_strtonum \
+  jb/ut_thread_config
 
-jb_libjb_testing_adir = $(includedir)
-jb_libjb_testing_a_SOURCES = \
-  jb/testing/compile_info.cpp \
-  jb/testing/microbenchmark_base.cpp \
-  jb/testing/microbenchmark_config.cpp \
-  jb/testing/microbenchmark_group_main.cpp
+benchmarks += jb/bm_clocks
 
-nobase_jb_libjb_testing_a_HEADERS = \
-  jb/testing/check_close_enough.hpp \
-  jb/testing/create_square_timeseries.hpp \
-  jb/testing/create_triangle_timeseries.hpp \
-  jb/testing/delay_timeseries.hpp \
-  jb/testing/initialize_mersenne_twister.hpp \
-  jb/testing/microbenchmark.hpp \
-  jb/testing/microbenchmark_base.hpp \
-  jb/testing/microbenchmark_config.hpp \
-  jb/testing/microbenchmark_group_main.hpp \
-  jb/testing/sum_square.hpp
 
-jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
-	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
-	echo '' >>$@; \
-	echo 'char const jb::testing::uname_a[] = R"""(' >>$@; \
-	uname -a >>$@; \
-	echo ')""";' >> $@; \
-	echo '' >>$@; \
-	echo 'char const jb::testing::compiler[] = R"""(' >>$@; \
-	$(CXX) --version >>$@; \
-	echo ')""";' >> $@; \
-	echo '' >>$@; \
-	echo 'char const jb::testing::compiler_flags[] = R"""(' >>$@; \
-	echo $(AM_CXXFLAGS) $(CXXFLAGS) >>$@; \
-	echo ')""";' >> $@; \
-	echo '' >>$@; \
-	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
-	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
-	echo ')""";' >> $@; \
-	echo '' >>$@; \
-	echo 'char const jb::testing::gitrev[] = R"""(' >>$@; \
-	git rev-parse HEAD >>$@ 2>/dev/null; \
-	echo ')""";' >> $@; \
-	echo '' >>$@
+examples += examples/configuration
 
-################################################################
-# jb/libjb_itch5_testing.a
-################################################################
-
-jb_libjb_itch5_testing_adir = $(includedir)
-jb_libjb_itch5_testing_a_SOURCES = \
-  jb/itch5/testing/data.cpp \
-  jb/itch5/testing/messages.cpp
-nobase_jb_libjb_itch5_testing_a_HEADERS = \
-  jb/itch5/testing/data.hpp \
-  jb/itch5/testing/messages.hpp
-
-################################################################
-# jb/libjb_itch5.a
-################################################################
-
-jb_libjb_itch5_adir = $(includedir)
-jb_libjb_itch5_a_SOURCES = \
-  jb/itch5/add_order_message.cpp \
-  jb/itch5/add_order_mpid_message.cpp \
-  jb/itch5/array_based_order_book.cpp \
-  jb/itch5/base_decoders.cpp \
-  jb/itch5/broken_trade_message.cpp \
-  jb/itch5/char_list_validator.cpp \
-  jb/itch5/check_offset.cpp \
-  jb/itch5/cross_trade_message.cpp \
-  jb/itch5/ipo_quoting_period_update_message.cpp \
-  jb/itch5/market_participant_position_message.cpp \
-  jb/itch5/message_header.cpp \
-  jb/itch5/mold_udp_channel.cpp \
-  jb/itch5/mold_udp_pacer_config.cpp \
-  jb/itch5/mwcb_breach_message.cpp \
-  jb/itch5/mwcb_decline_level_message.cpp \
-  jb/itch5/net_order_imbalance_indicator_message.cpp \
-  jb/itch5/order_cancel_message.cpp \
-  jb/itch5/order_delete_message.cpp \
-  jb/itch5/order_executed_message.cpp \
-  jb/itch5/order_executed_price_message.cpp \
-  jb/itch5/order_replace_message.cpp \
-  jb/itch5/reg_sho_restriction_message.cpp \
-  jb/itch5/seconds_field.cpp \
-  jb/itch5/stock_directory_message.cpp \
-  jb/itch5/stock_trading_action_message.cpp \
-  jb/itch5/system_event_message.cpp \
-  jb/itch5/timestamp.cpp \
-  jb/itch5/trade_message.cpp
-
-nobase_jb_libjb_itch5_a_HEADERS = \
-  jb/itch5/add_order_message.hpp \
-  jb/itch5/add_order_mpid_message.hpp \
-  jb/itch5/array_based_order_book.hpp \
-  jb/itch5/base_decoders.hpp \
-  jb/itch5/base_encoders.hpp \
-  jb/itch5/broken_trade_message.hpp \
-  jb/itch5/char_list_field.hpp \
-  jb/itch5/char_list_validator.hpp \
-  jb/itch5/check_offset.hpp \
-  jb/itch5/compute_book.hpp \
-  jb/itch5/cross_trade_message.hpp \
-  jb/itch5/cross_type.hpp \
-  jb/itch5/decoder.hpp \
-  jb/itch5/generate_inside.hpp \
-  jb/itch5/quote_defaults.hpp \
-  jb/itch5/ipo_quoting_period_update_message.hpp \
-  jb/itch5/make_socket_udp_recv.hpp \
-  jb/itch5/map_based_order_book.hpp \
-  jb/itch5/market_participant_position_message.hpp \
-  jb/itch5/message_header.hpp \
-  jb/itch5/mold_udp_channel.hpp \
-  jb/itch5/mold_udp_pacer.hpp \
-  jb/itch5/mold_udp_pacer_config.hpp \
-  jb/itch5/mold_udp_protocol_constants.hpp \
-  jb/itch5/mpid_field.hpp \
-  jb/itch5/mwcb_breach_message.hpp \
-  jb/itch5/mwcb_decline_level_message.hpp \
-  jb/itch5/net_order_imbalance_indicator_message.hpp \
-  jb/itch5/order_book.hpp \
-  jb/itch5/order_cancel_message.hpp \
-  jb/itch5/order_delete_message.hpp \
-  jb/itch5/order_executed_message.hpp \
-  jb/itch5/order_executed_price_message.hpp \
-  jb/itch5/order_replace_message.hpp \
-  jb/itch5/price_field.hpp \
-  jb/itch5/price_levels.hpp \
-  jb/itch5/process_buffer_mlist.hpp \
-  jb/itch5/process_iostream_mlist.hpp \
-  jb/itch5/process_iostream.hpp \
-  jb/itch5/protocol_constants.hpp \
-  jb/itch5/reg_sho_restriction_message.hpp \
-  jb/itch5/seconds_field.hpp \
-  jb/itch5/short_string_field.hpp \
-  jb/itch5/static_digits.hpp \
-  jb/itch5/stock_directory_message.hpp \
-  jb/itch5/stock_field.hpp \
-  jb/itch5/stock_trading_action_message.hpp \
-  jb/itch5/system_event_message.hpp \
-  jb/itch5/timestamp.hpp \
-  jb/itch5/trade_message.hpp \
-  jb/itch5/unknown_message.hpp
-
-################################################################
-# jb/libjb_fftw.a
-################################################################
-
-jb_libjb_fftw_adir = $(includedir)
-jb_libjb_fftw_a_SOURCES = \
-  jb/fftw/plan.cpp
-nobase_jb_libjb_fftw_a_HEADERS = \
-  jb/fftw/aligned_multi_array.hpp \
-  jb/fftw/aligned_vector.hpp \
-  jb/fftw/allocator.hpp \
-  jb/fftw/cast.hpp \
-  jb/fftw/plan.hpp \
-  jb/fftw/tde_result.hpp \
-  jb/fftw/time_delay_estimator.hpp \
-  jb/fftw/time_delay_estimator_many.hpp \
-  jb/fftw/traits.hpp
-
-################################################################
-# jb/libjb_tde.a
-################################################################
-
-jb_libjb_tde_adir = $(includedir)
-jb_libjb_tde_a_SOURCES =
-nobase_jb_libjb_tde_a_HEADERS =
-
-################################################################
-# examples
-################################################################
+jb_ut_testing_ldadd = \
+  jb/libjb_testing.a \
+  $(jb_ut_ldadd)
+jb_ut_testing_ldflags = \
+  $(jb_ut_ldflags)
 
 examples_configuration_SOURCES = examples/configuration.cpp
 examples_configuration_LDADD = jb/libjb.a
-
-tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
-tools_itch5bookdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_itch5eventdepth_SOURCES = tools/itch5eventdepth.cpp
-tools_itch5eventdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_itch5inside_SOURCES = tools/itch5inside.cpp
-tools_itch5inside_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_itch5moldreplay_SOURCES = tools/itch5moldreplay.cpp
-tools_itch5moldreplay_LDFLAGS = $(BOOST_ASIO_LIB)
-tools_itch5moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_itch5stats_SOURCES = tools/itch5stats.cpp
-tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_itch5trades_SOURCES = tools/itch5trades.cpp
-tools_itch5trades_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_mold2inside_SOURCES = tools/mold2inside.cpp
-tools_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
-tools_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
-tools_moldheartbeat_LDFLAGS = $(BOOST_ASIO_LIBS)
-tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-################################################################
-# benchmarks and unit tests
-################################################################
 
 jb_bm_clocks_SOURCES = jb/bm_clocks.cpp
 jb_bm_clocks_CPPFLAGS =
@@ -639,8 +330,555 @@ jb_ut_thread_config_LDFLAGS = $(jb_ut_ldflags)
 jb_ut_thread_config_LDADD = $(jb_ut_ldadd)
 
 ################################################################
-# fftw unit tests
+# jb/libjb_testing.a
 ################################################################
+
+jb_libjb_testing_adir = $(includedir)
+jb_libjb_testing_a_SOURCES = \
+  jb/testing/compile_info.cpp \
+  jb/testing/microbenchmark_base.cpp \
+  jb/testing/microbenchmark_config.cpp \
+  jb/testing/microbenchmark_group_main.cpp
+
+nobase_jb_libjb_testing_a_HEADERS = \
+  jb/testing/check_close_enough.hpp \
+  jb/testing/create_square_timeseries.hpp \
+  jb/testing/create_triangle_timeseries.hpp \
+  jb/testing/delay_timeseries.hpp \
+  jb/testing/initialize_mersenne_twister.hpp \
+  jb/testing/microbenchmark.hpp \
+  jb/testing/microbenchmark_base.hpp \
+  jb/testing/microbenchmark_config.hpp \
+  jb/testing/microbenchmark_group_main.hpp \
+  jb/testing/sum_square.hpp
+
+jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
+	$(AM_V_GEN)echo '#include <jb/testing/compile_info.hpp>' >$@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::uname_a[] = R"""(' >>$@; \
+	uname -a >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::compiler[] = R"""(' >>$@; \
+	$(CXX) --version >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::compiler_flags[] = R"""(' >>$@; \
+	echo $(AM_CXXFLAGS) $(CXXFLAGS) >>$@; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::linker[] = R"""(' >>$@; \
+	$(CXX) -Wl,--version >>$@ 2>/dev/null; \
+	echo ')""";' >> $@; \
+	echo '' >>$@; \
+	echo 'char const jb::testing::gitrev[] = R"""(' >>$@; \
+	git rev-parse HEAD >>$@ 2>/dev/null; \
+	echo ')""";' >> $@; \
+	echo '' >>$@
+
+unit_tests += \
+  jb/testing/ut_check_close_enough \
+  jb/testing/ut_create_square_timeseries \
+  jb/testing/ut_create_triangle_timeseries \
+  jb/testing/ut_delay_timeseries \
+  jb/testing/ut_microbenchmark_config
+
+jb_testing_check_mt19937_initializer_SOURCES = jb/testing/check_mt19937_initializer.cpp
+jb_testing_check_mt19937_initializer_LDADD = jb/libjb.a
+
+jb_testing_check_random_device_SOURCES = jb/testing/check_random_device.cpp
+jb_testing_check_random_device_LDADD = jb/libjb.a
+
+jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
+jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
+
+jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
+jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
+jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_ldadd)
+
+jb_testing_ut_create_square_timeseries_SOURCES = jb/testing/ut_create_square_timeseries.cpp
+jb_testing_ut_create_square_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_square_timeseries
+jb_testing_ut_create_square_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
+jb_testing_ut_create_square_timeseries_LDADD = $(jb_ut_testing_ldadd)
+
+jb_testing_ut_create_triangle_timeseries_SOURCES = jb/testing/ut_create_triangle_timeseries.cpp
+jb_testing_ut_create_triangle_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_triangle_timeseries
+jb_testing_ut_create_triangle_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
+jb_testing_ut_create_triangle_timeseries_LDADD = $(jb_ut_testing_ldadd)
+
+jb_testing_ut_delay_timeseries_SOURCES = jb/testing/ut_delay_timeseries.cpp
+jb_testing_ut_delay_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_delay_timeseries
+jb_testing_ut_delay_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
+jb_testing_ut_delay_timeseries_LDADD = $(jb_ut_testing_ldadd)
+
+jb_testing_ut_microbenchmark_config_SOURCES = jb/testing/ut_microbenchmark_config.cpp
+jb_testing_ut_microbenchmark_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_microbenchmark_config
+jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
+jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
+
+################################################################
+# jb/libjb_itch5_testing.a
+################################################################
+
+jb_libjb_itch5_testing_adir = $(includedir)
+jb_libjb_itch5_testing_a_SOURCES = \
+  jb/itch5/testing/data.cpp \
+  jb/itch5/testing/messages.cpp
+nobase_jb_libjb_itch5_testing_a_HEADERS = \
+  jb/itch5/testing/data.hpp \
+  jb/itch5/testing/messages.hpp
+
+################################################################
+# jb/libjb_itch5.a
+################################################################
+
+jb_libjb_itch5_adir = $(includedir)
+jb_libjb_itch5_a_SOURCES = \
+  jb/itch5/add_order_message.cpp \
+  jb/itch5/add_order_mpid_message.cpp \
+  jb/itch5/array_based_order_book.cpp \
+  jb/itch5/base_decoders.cpp \
+  jb/itch5/broken_trade_message.cpp \
+  jb/itch5/char_list_validator.cpp \
+  jb/itch5/check_offset.cpp \
+  jb/itch5/cross_trade_message.cpp \
+  jb/itch5/ipo_quoting_period_update_message.cpp \
+  jb/itch5/market_participant_position_message.cpp \
+  jb/itch5/message_header.cpp \
+  jb/itch5/mold_udp_channel.cpp \
+  jb/itch5/mold_udp_pacer_config.cpp \
+  jb/itch5/mwcb_breach_message.cpp \
+  jb/itch5/mwcb_decline_level_message.cpp \
+  jb/itch5/net_order_imbalance_indicator_message.cpp \
+  jb/itch5/order_cancel_message.cpp \
+  jb/itch5/order_delete_message.cpp \
+  jb/itch5/order_executed_message.cpp \
+  jb/itch5/order_executed_price_message.cpp \
+  jb/itch5/order_replace_message.cpp \
+  jb/itch5/reg_sho_restriction_message.cpp \
+  jb/itch5/seconds_field.cpp \
+  jb/itch5/stock_directory_message.cpp \
+  jb/itch5/stock_trading_action_message.cpp \
+  jb/itch5/system_event_message.cpp \
+  jb/itch5/timestamp.cpp \
+  jb/itch5/trade_message.cpp
+
+nobase_jb_libjb_itch5_a_HEADERS = \
+  jb/itch5/add_order_message.hpp \
+  jb/itch5/add_order_mpid_message.hpp \
+  jb/itch5/array_based_order_book.hpp \
+  jb/itch5/base_decoders.hpp \
+  jb/itch5/base_encoders.hpp \
+  jb/itch5/broken_trade_message.hpp \
+  jb/itch5/char_list_field.hpp \
+  jb/itch5/char_list_validator.hpp \
+  jb/itch5/check_offset.hpp \
+  jb/itch5/compute_book.hpp \
+  jb/itch5/cross_trade_message.hpp \
+  jb/itch5/cross_type.hpp \
+  jb/itch5/decoder.hpp \
+  jb/itch5/generate_inside.hpp \
+  jb/itch5/quote_defaults.hpp \
+  jb/itch5/ipo_quoting_period_update_message.hpp \
+  jb/itch5/make_socket_udp_recv.hpp \
+  jb/itch5/map_based_order_book.hpp \
+  jb/itch5/market_participant_position_message.hpp \
+  jb/itch5/message_header.hpp \
+  jb/itch5/mold_udp_channel.hpp \
+  jb/itch5/mold_udp_pacer.hpp \
+  jb/itch5/mold_udp_pacer_config.hpp \
+  jb/itch5/mold_udp_protocol_constants.hpp \
+  jb/itch5/mpid_field.hpp \
+  jb/itch5/mwcb_breach_message.hpp \
+  jb/itch5/mwcb_decline_level_message.hpp \
+  jb/itch5/net_order_imbalance_indicator_message.hpp \
+  jb/itch5/order_book.hpp \
+  jb/itch5/order_cancel_message.hpp \
+  jb/itch5/order_delete_message.hpp \
+  jb/itch5/order_executed_message.hpp \
+  jb/itch5/order_executed_price_message.hpp \
+  jb/itch5/order_replace_message.hpp \
+  jb/itch5/price_field.hpp \
+  jb/itch5/price_levels.hpp \
+  jb/itch5/process_buffer_mlist.hpp \
+  jb/itch5/process_iostream_mlist.hpp \
+  jb/itch5/process_iostream.hpp \
+  jb/itch5/protocol_constants.hpp \
+  jb/itch5/reg_sho_restriction_message.hpp \
+  jb/itch5/seconds_field.hpp \
+  jb/itch5/short_string_field.hpp \
+  jb/itch5/static_digits.hpp \
+  jb/itch5/stock_directory_message.hpp \
+  jb/itch5/stock_field.hpp \
+  jb/itch5/stock_trading_action_message.hpp \
+  jb/itch5/system_event_message.hpp \
+  jb/itch5/timestamp.hpp \
+  jb/itch5/trade_message.hpp \
+  jb/itch5/unknown_message.hpp
+
+unit_tests += \
+  jb/itch5/ut_add_order_message \
+  jb/itch5/ut_add_order_mpid_message \
+  jb/itch5/ut_array_based_order_book \
+  jb/itch5/ut_base_decoders \
+  jb/itch5/ut_base_encoders \
+  jb/itch5/ut_broken_trade_message \
+  jb/itch5/ut_char_list_field \
+  jb/itch5/ut_char_list_validator \
+  jb/itch5/ut_check_offset \
+  jb/itch5/ut_compute_book \
+  jb/itch5/ut_cross_trade_message \
+  jb/itch5/ut_cross_type \
+  jb/itch5/ut_generate_inside \
+  jb/itch5/ut_ipo_quoting_period_update_message \
+  jb/itch5/ut_make_socket_udp_recv \
+  jb/itch5/ut_map_based_order_book \
+  jb/itch5/ut_market_participant_position_message \
+  jb/itch5/ut_message_header \
+  jb/itch5/ut_mold_udp_pacer \
+  jb/itch5/ut_mold_udp_pacer_config \
+  jb/itch5/ut_mold_udp_channel \
+  jb/itch5/ut_mwcb_breach_message \
+  jb/itch5/ut_mwcb_decline_level_message \
+  jb/itch5/ut_net_order_imbalance_indicator_message \
+  jb/itch5/ut_order_book \
+  jb/itch5/ut_order_cancel_message \
+  jb/itch5/ut_order_delete_message \
+  jb/itch5/ut_order_executed_message \
+  jb/itch5/ut_order_executed_price_message \
+  jb/itch5/ut_order_replace_message \
+  jb/itch5/ut_price_field \
+  jb/itch5/ut_price_levels \
+  jb/itch5/ut_process_buffer_mlist \
+  jb/itch5/ut_process_iostream_mlist \
+  jb/itch5/ut_reg_sho_restriction_message \
+  jb/itch5/ut_seconds_field \
+  jb/itch5/ut_short_string_field \
+  jb/itch5/ut_static_digits \
+  jb/itch5/ut_stock_directory_message \
+  jb/itch5/ut_stock_trading_action_message \
+  jb/itch5/ut_system_event_message \
+  jb/itch5/ut_timestamp \
+  jb/itch5/ut_trade_message
+
+benchmarks += jb/itch5/bm_order_book
+bin_SCRIPTS += \
+  jb/itch5/bm_order_book_generate.sh \
+  jb/itch5/bm_order_book_analyze.R \
+  jb/itch5/bm_order_book_report.Rmd
+
+jb_ut_itch5_ldadd = \
+  jb/libjb_itch5_testing.a \
+  jb/libjb_itch5.a \
+  $(jb_ut_ldadd)
+jb_ut_itch5_ldflags = \
+  $(jb_ut_ldflags)
+
+################################################################
+# examples
+################################################################
+
+tools_itch5bookdepth_SOURCES = tools/itch5bookdepth.cpp
+tools_itch5bookdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_itch5eventdepth_SOURCES = tools/itch5eventdepth.cpp
+tools_itch5eventdepth_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_itch5inside_SOURCES = tools/itch5inside.cpp
+tools_itch5inside_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_itch5moldreplay_SOURCES = tools/itch5moldreplay.cpp
+tools_itch5moldreplay_LDFLAGS = $(BOOST_ASIO_LIB)
+tools_itch5moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_itch5stats_SOURCES = tools/itch5stats.cpp
+tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_itch5trades_SOURCES = tools/itch5trades.cpp
+tools_itch5trades_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_mold2inside_SOURCES = tools/mold2inside.cpp
+tools_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
+tools_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
+tools_moldheartbeat_LDFLAGS = $(BOOST_ASIO_LIBS)
+tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
+jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
+jb_itch5_ut_add_order_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_add_order_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_add_order_mpid_message_SOURCES = jb/itch5/ut_add_order_mpid_message.cpp
+jb_itch5_ut_add_order_mpid_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_mpid_messag
+jb_itch5_ut_add_order_mpid_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_add_order_mpid_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_array_based_order_book_SOURCES = jb/itch5/ut_array_based_order_book.cpp
+jb_itch5_ut_array_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_array_based_order_book
+jb_itch5_ut_array_based_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_array_based_order_book_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_base_decoders_SOURCES = jb/itch5/ut_base_decoders.cpp
+jb_itch5_ut_base_decoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_decoders
+jb_itch5_ut_base_decoders_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_base_decoders_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_base_encoders_SOURCES = jb/itch5/ut_base_encoders.cpp
+jb_itch5_ut_base_encoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_encoders
+jb_itch5_ut_base_encoders_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_base_encoders_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_broken_trade_message_SOURCES = jb/itch5/ut_broken_trade_message.cpp
+jb_itch5_ut_broken_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_broken_trade_message
+jb_itch5_ut_broken_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_broken_trade_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_char_list_field_SOURCES = jb/itch5/ut_char_list_field.cpp
+jb_itch5_ut_char_list_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_field
+jb_itch5_ut_char_list_field_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_char_list_field_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_char_list_validator_SOURCES = jb/itch5/ut_char_list_validator.cpp
+jb_itch5_ut_char_list_validator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_validator
+jb_itch5_ut_char_list_validator_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_char_list_validator_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_check_offset_SOURCES = jb/itch5/ut_check_offset.cpp
+jb_itch5_ut_check_offset_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_check_offset
+jb_itch5_ut_check_offset_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
+jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
+jb_itch5_ut_compute_book_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
+jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
+jb_itch5_ut_cross_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_cross_type_SOURCES = jb/itch5/ut_cross_type.cpp
+jb_itch5_ut_cross_type_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_type
+jb_itch5_ut_cross_type_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_cross_type_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_generate_inside_SOURCES = jb/itch5/ut_generate_inside.cpp
+jb_itch5_ut_generate_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_generate_inside
+jb_itch5_ut_generate_inside_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_generate_inside_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_period_update_message.cpp
+jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
+jb_itch5_ut_ipo_quoting_period_update_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
+jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
+jb_itch5_ut_make_socket_udp_recv_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
+jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
+jb_itch5_ut_map_based_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_map_based_order_book_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_market_participant_position_message_SOURCES = jb/itch5/ut_market_participant_position_message.cpp
+jb_itch5_ut_market_participant_position_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_market_participant_position_message
+jb_itch5_ut_market_participant_position_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_message_header_SOURCES = jb/itch5/ut_message_header.cpp
+jb_itch5_ut_message_header_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_message_header
+jb_itch5_ut_message_header_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_mold_udp_channel_SOURCES = jb/itch5/ut_mold_udp_channel.cpp
+jb_itch5_ut_mold_udp_channel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_channel
+jb_itch5_ut_mold_udp_channel_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_mold_udp_channel_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
+jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer
+jb_itch5_ut_mold_udp_pacer_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_mold_udp_pacer_config_SOURCES = jb/itch5/ut_mold_udp_pacer_config.cpp
+jb_itch5_ut_mold_udp_pacer_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer_config
+jb_itch5_ut_mold_udp_pacer_config_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_mold_udp_pacer_config_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
+jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message
+jb_itch5_ut_mwcb_breach_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_mwcb_breach_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_mwcb_decline_level_message_SOURCES = jb/itch5/ut_mwcb_decline_level_message.cpp
+jb_itch5_ut_mwcb_decline_level_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_decline_level_message
+jb_itch5_ut_mwcb_decline_level_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_mwcb_decline_level_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_net_order_imbalance_indicator_message_SOURCES = jb/itch5/ut_net_order_imbalance_indicator_message.cpp
+jb_itch5_ut_net_order_imbalance_indicator_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_net_order_imbalance_indicator_message
+jb_itch5_ut_net_order_imbalance_indicator_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_book_SOURCES = jb/itch5/ut_order_book.cpp
+jb_itch5_ut_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book
+jb_itch5_ut_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_book_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_cancel_message_SOURCES = jb/itch5/ut_order_cancel_message.cpp
+jb_itch5_ut_order_cancel_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_cancel_message
+jb_itch5_ut_order_cancel_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_cancel_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_delete_message_SOURCES = jb/itch5/ut_order_delete_message.cpp
+jb_itch5_ut_order_delete_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_delete_message
+jb_itch5_ut_order_delete_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_delete_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_executed_message_SOURCES = jb/itch5/ut_order_executed_message.cpp
+jb_itch5_ut_order_executed_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_message
+jb_itch5_ut_order_executed_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_executed_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_executed_price_message_SOURCES = jb/itch5/ut_order_executed_price_message.cpp
+jb_itch5_ut_order_executed_price_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_price_message
+jb_itch5_ut_order_executed_price_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_executed_price_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_order_replace_message_SOURCES = jb/itch5/ut_order_replace_message.cpp
+jb_itch5_ut_order_replace_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_replace_message
+jb_itch5_ut_order_replace_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_order_replace_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
+jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
+jb_itch5_ut_price_field_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_price_levels_SOURCES = jb/itch5/ut_price_levels.cpp
+jb_itch5_ut_price_levels_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_levels
+jb_itch5_ut_price_levels_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_price_levels_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
+jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist
+jb_itch5_ut_process_buffer_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_process_buffer_mlist_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_process_iostream_mlist_SOURCES = jb/itch5/ut_process_iostream_mlist.cpp
+jb_itch5_ut_process_iostream_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_iostream_mlist
+jb_itch5_ut_process_iostream_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_process_iostream_mlist_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_reg_sho_restriction_message_SOURCES = jb/itch5/ut_reg_sho_restriction_message.cpp
+jb_itch5_ut_reg_sho_restriction_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_reg_sho_restriction_message
+jb_itch5_ut_reg_sho_restriction_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_reg_sho_restriction_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_seconds_field_SOURCES = jb/itch5/ut_seconds_field.cpp
+jb_itch5_ut_seconds_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_seconds_field
+jb_itch5_ut_seconds_field_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_seconds_field_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_short_string_field_SOURCES = jb/itch5/ut_short_string_field.cpp
+jb_itch5_ut_short_string_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_short_string_field
+jb_itch5_ut_short_string_field_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_short_string_field_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_static_digits_SOURCES = jb/itch5/ut_static_digits.cpp
+jb_itch5_ut_static_digits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_static_digits
+jb_itch5_ut_static_digits_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_static_digits_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_stock_directory_message_SOURCES = jb/itch5/ut_stock_directory_message.cpp
+jb_itch5_ut_stock_directory_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_directory_message
+jb_itch5_ut_stock_directory_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_stock_directory_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_stock_trading_action_message_SOURCES = jb/itch5/ut_stock_trading_action_message.cpp
+jb_itch5_ut_stock_trading_action_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_trading_action_message
+jb_itch5_ut_stock_trading_action_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_stock_trading_action_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_system_event_message_SOURCES = jb/itch5/ut_system_event_message.cpp
+jb_itch5_ut_system_event_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_system_event_message
+jb_itch5_ut_system_event_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_system_event_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_timestamp_SOURCES = jb/itch5/ut_timestamp.cpp
+jb_itch5_ut_timestamp_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_timestamp
+jb_itch5_ut_timestamp_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_timestamp_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
+jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
+jb_itch5_ut_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
+jb_itch5_bm_order_book_CPPFLAGS = 
+jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
+
+################################################################
+# Optional FFTW stuff
+################################################################
+
+if USE_FFTW3
+# jb/libjb_fftw.a
+lib_LIBRARIES += jb/libjb_fftw.a
+unit_tests += jb/fftw/ut_aligned_multi_array \
+  jb/fftw/ut_allocator \
+  jb/fftw/ut_cast_multi_array \
+  jb/fftw/ut_cast_vector \
+  jb/fftw/ut_plan \
+  jb/fftw/ut_plan_many \
+  jb/fftw/ut_tde_result \
+  jb/fftw/ut_time_delay_estimator \
+  jb/fftw/ut_time_delay_estimator_many \
+  jb/fftw/ut_traits
+
+benchmarks += jb/fftw/bm_time_delay_estimator \
+  jb/fftw/bm_time_delay_estimator_many
+
+bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
+
+AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
+
+LDFLAGS += $(FFTW3_LDFLAGS)
+
+jb_ut_fftw_ldadd = \
+  jb/libjb_testing.a \
+  jb/libjb_fftw.a \
+  $(FFTW3_LIBS) \
+  $(jb_ut_ldadd)
+
+jb_ut_fftw_ldflags = \
+  $(FFTW3_LDFLAGS) \
+  $(jb_ut_ldflags)
+
+else
+jb_ut_fftw_ldadd =
+jb_ut_fftw_ldflags =
+endif !USE_FFTW3
+
+jb_libjb_fftw_adir = $(includedir)
+jb_libjb_fftw_a_SOURCES = \
+  jb/fftw/plan.cpp
+nobase_jb_libjb_fftw_a_HEADERS = \
+  jb/fftw/aligned_multi_array.hpp \
+  jb/fftw/aligned_vector.hpp \
+  jb/fftw/allocator.hpp \
+  jb/fftw/cast.hpp \
+  jb/fftw/plan.hpp \
+  jb/fftw/tde_result.hpp \
+  jb/fftw/time_delay_estimator.hpp \
+  jb/fftw/time_delay_estimator_many.hpp \
+  jb/fftw/traits.hpp
 
 jb_fftw_ut_aligned_multi_array_SOURCES = jb/fftw/ut_aligned_multi_array.cpp
 jb_fftw_ut_aligned_multi_array_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_aligned_multi_array
@@ -692,10 +930,6 @@ jb_fftw_ut_traits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_fftw_ut_trait
 jb_fftw_ut_traits_LDFLAGS = $(jb_ut_fftw_ldflags)
 jb_fftw_ut_traits_LDADD = $(jb_ut_fftw_ldadd)
 
-################################################################
-# fftw benchmarks
-################################################################
-
 jb_fftw_bm_time_delay_estimator_SOURCES = jb/fftw/bm_time_delay_estimator.cpp
 jb_fftw_bm_time_delay_estimator_CPPFLAGS =
 jb_fftw_bm_time_delay_estimator_LDADD = \
@@ -719,8 +953,11 @@ jb_fftw_bm_time_delay_estimator_many_LDFLAGS = \
 ################################################################
 # Conditionally enable the OpenCL components
 ################################################################
-if HAVE_OPENCL
+jb_libjb_tde_adir = $(includedir)
+jb_libjb_tde_a_SOURCES =
+nobase_jb_libjb_tde_a_HEADERS =
 
+if HAVE_OPENCL
 lib_LIBRARIES += \
   jb/libjb_opencl.a \
   jb/libjb_opencl_testing.a
@@ -958,235 +1195,8 @@ jb_tde_bm_reduce_argmax_real_LDADD = \
 jb_tde_bm_reduce_argmax_real_LDFLAGS = \
   $(CLFFT_LDFLAGS) \
   $(OPENCL_LDFLAGS)
-
+else
 endif
-
-################################################################
-# itch5 unit tests
-################################################################
-
-jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
-jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
-jb_itch5_ut_add_order_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_add_order_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_add_order_mpid_message_SOURCES = jb/itch5/ut_add_order_mpid_message.cpp
-jb_itch5_ut_add_order_mpid_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_mpid_messag
-jb_itch5_ut_add_order_mpid_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_add_order_mpid_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_array_based_order_book_SOURCES = jb/itch5/ut_array_based_order_book.cpp
-jb_itch5_ut_array_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_array_based_order_book
-jb_itch5_ut_array_based_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_array_based_order_book_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_base_decoders_SOURCES = jb/itch5/ut_base_decoders.cpp
-jb_itch5_ut_base_decoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_decoders
-jb_itch5_ut_base_decoders_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_base_decoders_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_base_encoders_SOURCES = jb/itch5/ut_base_encoders.cpp
-jb_itch5_ut_base_encoders_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_base_encoders
-jb_itch5_ut_base_encoders_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_base_encoders_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_broken_trade_message_SOURCES = jb/itch5/ut_broken_trade_message.cpp
-jb_itch5_ut_broken_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_broken_trade_message
-jb_itch5_ut_broken_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_broken_trade_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_char_list_field_SOURCES = jb/itch5/ut_char_list_field.cpp
-jb_itch5_ut_char_list_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_field
-jb_itch5_ut_char_list_field_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_char_list_field_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_char_list_validator_SOURCES = jb/itch5/ut_char_list_validator.cpp
-jb_itch5_ut_char_list_validator_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_char_list_validator
-jb_itch5_ut_char_list_validator_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_char_list_validator_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_check_offset_SOURCES = jb/itch5/ut_check_offset.cpp
-jb_itch5_ut_check_offset_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_check_offset
-jb_itch5_ut_check_offset_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
-jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
-jb_itch5_ut_compute_book_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
-jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
-jb_itch5_ut_cross_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_cross_trade_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_cross_type_SOURCES = jb/itch5/ut_cross_type.cpp
-jb_itch5_ut_cross_type_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_type
-jb_itch5_ut_cross_type_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_cross_type_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_generate_inside_SOURCES = jb/itch5/ut_generate_inside.cpp
-jb_itch5_ut_generate_inside_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_generate_inside
-jb_itch5_ut_generate_inside_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_generate_inside_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_period_update_message.cpp
-jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
-jb_itch5_ut_ipo_quoting_period_update_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
-jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
-jb_itch5_ut_make_socket_udp_recv_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
-jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
-jb_itch5_ut_map_based_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_map_based_order_book_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_market_participant_position_message_SOURCES = jb/itch5/ut_market_participant_position_message.cpp
-jb_itch5_ut_market_participant_position_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_market_participant_position_message
-jb_itch5_ut_market_participant_position_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_market_participant_position_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_message_header_SOURCES = jb/itch5/ut_message_header.cpp
-jb_itch5_ut_message_header_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_message_header
-jb_itch5_ut_message_header_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_mold_udp_channel_SOURCES = jb/itch5/ut_mold_udp_channel.cpp
-jb_itch5_ut_mold_udp_channel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_channel
-jb_itch5_ut_mold_udp_channel_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_channel_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
-jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer
-jb_itch5_ut_mold_udp_pacer_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_mold_udp_pacer_config_SOURCES = jb/itch5/ut_mold_udp_pacer_config.cpp
-jb_itch5_ut_mold_udp_pacer_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer_config
-jb_itch5_ut_mold_udp_pacer_config_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_pacer_config_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
-jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message
-jb_itch5_ut_mwcb_breach_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mwcb_breach_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_mwcb_decline_level_message_SOURCES = jb/itch5/ut_mwcb_decline_level_message.cpp
-jb_itch5_ut_mwcb_decline_level_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_decline_level_message
-jb_itch5_ut_mwcb_decline_level_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mwcb_decline_level_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_net_order_imbalance_indicator_message_SOURCES = jb/itch5/ut_net_order_imbalance_indicator_message.cpp
-jb_itch5_ut_net_order_imbalance_indicator_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_net_order_imbalance_indicator_message
-jb_itch5_ut_net_order_imbalance_indicator_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_net_order_imbalance_indicator_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_book_SOURCES = jb/itch5/ut_order_book.cpp
-jb_itch5_ut_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_book
-jb_itch5_ut_order_book_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_book_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_cancel_message_SOURCES = jb/itch5/ut_order_cancel_message.cpp
-jb_itch5_ut_order_cancel_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_cancel_message
-jb_itch5_ut_order_cancel_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_cancel_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_delete_message_SOURCES = jb/itch5/ut_order_delete_message.cpp
-jb_itch5_ut_order_delete_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_delete_message
-jb_itch5_ut_order_delete_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_delete_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_executed_message_SOURCES = jb/itch5/ut_order_executed_message.cpp
-jb_itch5_ut_order_executed_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_message
-jb_itch5_ut_order_executed_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_executed_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_executed_price_message_SOURCES = jb/itch5/ut_order_executed_price_message.cpp
-jb_itch5_ut_order_executed_price_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_executed_price_message
-jb_itch5_ut_order_executed_price_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_executed_price_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_order_replace_message_SOURCES = jb/itch5/ut_order_replace_message.cpp
-jb_itch5_ut_order_replace_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_order_replace_message
-jb_itch5_ut_order_replace_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_order_replace_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_price_field_SOURCES = jb/itch5/ut_price_field.cpp
-jb_itch5_ut_price_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_field
-jb_itch5_ut_price_field_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_price_field_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_price_levels_SOURCES = jb/itch5/ut_price_levels.cpp
-jb_itch5_ut_price_levels_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_price_levels
-jb_itch5_ut_price_levels_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_price_levels_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
-jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist
-jb_itch5_ut_process_buffer_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_process_buffer_mlist_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_process_iostream_mlist_SOURCES = jb/itch5/ut_process_iostream_mlist.cpp
-jb_itch5_ut_process_iostream_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_iostream_mlist
-jb_itch5_ut_process_iostream_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_process_iostream_mlist_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_reg_sho_restriction_message_SOURCES = jb/itch5/ut_reg_sho_restriction_message.cpp
-jb_itch5_ut_reg_sho_restriction_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_reg_sho_restriction_message
-jb_itch5_ut_reg_sho_restriction_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_reg_sho_restriction_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_seconds_field_SOURCES = jb/itch5/ut_seconds_field.cpp
-jb_itch5_ut_seconds_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_seconds_field
-jb_itch5_ut_seconds_field_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_seconds_field_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_short_string_field_SOURCES = jb/itch5/ut_short_string_field.cpp
-jb_itch5_ut_short_string_field_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_short_string_field
-jb_itch5_ut_short_string_field_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_short_string_field_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_static_digits_SOURCES = jb/itch5/ut_static_digits.cpp
-jb_itch5_ut_static_digits_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_static_digits
-jb_itch5_ut_static_digits_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_static_digits_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_stock_directory_message_SOURCES = jb/itch5/ut_stock_directory_message.cpp
-jb_itch5_ut_stock_directory_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_directory_message
-jb_itch5_ut_stock_directory_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_stock_directory_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_stock_trading_action_message_SOURCES = jb/itch5/ut_stock_trading_action_message.cpp
-jb_itch5_ut_stock_trading_action_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_stock_trading_action_message
-jb_itch5_ut_stock_trading_action_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_stock_trading_action_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_system_event_message_SOURCES = jb/itch5/ut_system_event_message.cpp
-jb_itch5_ut_system_event_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_system_event_message
-jb_itch5_ut_system_event_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_system_event_message_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_timestamp_SOURCES = jb/itch5/ut_timestamp.cpp
-jb_itch5_ut_timestamp_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_timestamp
-jb_itch5_ut_timestamp_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_timestamp_LDADD = $(jb_ut_itch5_ldadd)
-
-jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
-jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
-jb_itch5_ut_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
-
-################################################################
-# itch5 benchmarks
-################################################################
-
-jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
-jb_itch5_bm_order_book_CPPFLAGS = 
-jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 ################################################################
 # other programs
@@ -1194,40 +1204,3 @@ jb_itch5_bm_order_book_LDADD = jb/libjb_itch5.a jb/libjb_testing.a jb/libjb.a
 
 jb_mktsim_moldreplay_SOURCES = jb/mktsim/moldreplay.cpp
 jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a
-
-################################################################
-# testing program and unit tests
-################################################################
-
-jb_testing_check_mt19937_initializer_SOURCES = jb/testing/check_mt19937_initializer.cpp
-jb_testing_check_mt19937_initializer_LDADD = jb/libjb.a
-
-jb_testing_check_random_device_SOURCES = jb/testing/check_random_device.cpp
-jb_testing_check_random_device_LDADD = jb/libjb.a
-
-jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
-jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
-
-jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
-jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
-jb_testing_ut_check_close_enough_LDADD = $(jb_ut_testing_ldadd)
-
-jb_testing_ut_create_square_timeseries_SOURCES = jb/testing/ut_create_square_timeseries.cpp
-jb_testing_ut_create_square_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_square_timeseries
-jb_testing_ut_create_square_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
-jb_testing_ut_create_square_timeseries_LDADD = $(jb_ut_testing_ldadd)
-
-jb_testing_ut_create_triangle_timeseries_SOURCES = jb/testing/ut_create_triangle_timeseries.cpp
-jb_testing_ut_create_triangle_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_create_triangle_timeseries
-jb_testing_ut_create_triangle_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
-jb_testing_ut_create_triangle_timeseries_LDADD = $(jb_ut_testing_ldadd)
-
-jb_testing_ut_delay_timeseries_SOURCES = jb/testing/ut_delay_timeseries.cpp
-jb_testing_ut_delay_timeseries_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_delay_timeseries
-jb_testing_ut_delay_timeseries_LDFLAGS = $(jb_ut_testing_ldflags)
-jb_testing_ut_delay_timeseries_LDADD = $(jb_ut_testing_ldadd)
-
-jb_testing_ut_microbenchmark_config_SOURCES = jb/testing/ut_microbenchmark_config.cpp
-jb_testing_ut_microbenchmark_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_microbenchmark_config
-jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
-jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
