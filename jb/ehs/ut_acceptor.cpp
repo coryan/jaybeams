@@ -132,6 +132,7 @@ BOOST_AUTO_TEST_CASE(connection_read_error) {
   }
   BOOST_CHECK_EQUAL(c, 0);
   BOOST_CHECK_EQUAL(dispatcher->get_close_connection(), 1);
+  BOOST_CHECK_EQUAL(dispatcher->get_read_error(), 1);
 
   // ... shutdown the acceptor and stop the io_service ...
   io_service.dispatch([&acceptor, &io_service] {
@@ -351,6 +352,13 @@ BOOST_AUTO_TEST_CASE(connection_write_errors) {
       "While reading HTTP response got: " << ec.message() << " ["
                                           << ec.category().name() << "/"
                                           << ec.value() << "]");
+
+  // ... wait until the dispatcher closes its connection ...
+  for (int c = 0; c != 10 and dispatcher->get_close_connection() == 0; ++c) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(dispatcher->get_close_connection(), 1);
+  BOOST_CHECK_EQUAL(dispatcher->get_write_error(), 1);
 
   // ... shutdown everything ...
   io_service.dispatch([&acceptor, &io_service] {
