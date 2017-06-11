@@ -43,6 +43,16 @@ public:
   jb::config_attribute<config, jb::log::config> log;
 };
 
+class replayer_control {
+public:
+  replayer_control();
+
+  std::string replay(std::string const& filename);
+  void stop_replay(std::string const& token);
+
+  void status(jb::ehs::response_type& res) const;
+};
+
 } // anonymous namespace
 
 int main(int argc, char* argv[]) try {
@@ -57,6 +67,10 @@ int main(int argc, char* argv[]) try {
   using address = boost::asio::ip::address;
   endpoint ep{address::from_string(cfg.control_host()), cfg.control_port()};
 
+  // ... create the replayer control, this is where the main work
+  // happens ...
+  auto replayer = std::make_shared<replayer_control>();
+
   // ... create a dispatcher to process the HTTP requests, register
   // some basic handlers ...
   using jb::ehs::request_type;
@@ -67,11 +81,31 @@ int main(int argc, char* argv[]) try {
     res.body = "Server running...\r\n";
   });
   dispatcher->add_handler(
-      "/config", [&cfg](request_type const&, response_type& res) {
+      "/config", [cfg](request_type const&, response_type& res) {
         res.fields.insert("Content-type", "text/plain");
         std::ostringstream os;
         os << cfg << "\r\n";
         res.body = os.str();
+      });
+  // ... we need to use a weak_ptr to avoid a cycle of shared_ptr ...
+  std::weak_ptr<jb::ehs::request_dispatcher> disp = dispatcher;
+  dispatcher->add_handler(
+      "/metrics", [disp](request_type const&, response_type& res) {
+        std::shared_ptr<jb::ehs::request_dispatcher> d(disp);
+        if (not d) {
+          res.status = 500;
+          res.reason = beast::http::reason_string(res.status);
+          res.body = std::string(
+              "An internal error occurred\r\n"
+              "Null request handler in /metrics\r\n");
+          return;
+        }
+        res.fields.replace("content-type", "text/plain; version=0.0.4");
+        d->append_metrics(res);
+      });
+  dispatcher->add_handler(
+      "/replay-status", [replayer](request_type const&, response_type& res) {
+        replayer->status(res);
       });
 
   // ... create an acceptor to handle incoming connections, if we wanted
@@ -99,12 +133,12 @@ namespace {
 /// Default values for the program configuration
 namespace defaults {
 std::string const primary_destination = "::1";
-std::string const secondary_destination = "";
-int const primary_port = 50000;
-int const secondary_port = 50001;
+std::string const secondary_destination = "127.0.0.1";
+int const primary_port = 12300;
+int const secondary_port = 12301;
 
 std::string control_host = "0.0.0.0";
-int const control_port = 40000;
+int const control_port = 23000;
 } // namespace defaults
 
 config::config()
@@ -147,6 +181,14 @@ void config::validate() const {
     throw jb::usage("Missing primary-destination argument (or setting).", 1);
   }
   log().validate();
+}
+
+replayer_control::replayer_control() {
+}
+
+void replayer_control::status(jb::ehs::response_type& res) const {
+  res.fields.replace("content-type", "text/plain");
+  res.body = "Nothing to see here folks\n";
 }
 
 } // anonymous namespace

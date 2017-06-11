@@ -160,6 +160,13 @@ public:
   }
   //@}
 
+  /**
+   * Append the internal metrics to the body of @a res.
+   *
+   * @param res a http response where we will append the metrics.
+   */
+  void append_metrics(response_type& res) const;
+
 private:
   /**
    * Create a 500 response.

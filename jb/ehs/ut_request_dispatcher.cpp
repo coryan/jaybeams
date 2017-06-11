@@ -197,3 +197,16 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_network_counter) {
   BOOST_CHECK_EQUAL(tested.get_accept_ok(), 1);
   BOOST_CHECK_EQUAL(tested.get_accept_error(), 1);
 }
+
+/**
+ * @test Verify that jb::ehs::request_dispatcher::append_metrics works
+ * as expected
+ */
+BOOST_AUTO_TEST_CASE(request_dispatcher_append_metrics) {
+  using namespace jb::ehs;
+  request_dispatcher tested("test");
+
+  response_type res;
+  tested.append_metrics(res);
+  BOOST_CHECK_NE(res.body, "");
+}

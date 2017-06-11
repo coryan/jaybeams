@@ -1,6 +1,8 @@
 #include "jb/ehs/request_dispatcher.hpp"
 #include <jb/log.hpp>
 
+#include <sstream>
+
 namespace jb {
 namespace ehs {
 
@@ -59,6 +61,52 @@ response_type request_dispatcher::process(request_type const& req) {
                  << e.what();
     return internal_error(req);
   }
+}
+
+void request_dispatcher::append_metrics(response_type& res) const {
+  std::ostringstream os;
+  os << "# HELP open_connection The number of HTTP connections opened\n"
+     << "# TYPE open_connection counter\n"
+     << "open_connection " << get_open_connection() << "\n"
+     << "\n"
+     << "# HELP close_connection The number of HTTP connections closed\n"
+     << "# TYPE close_connection counter\n"
+     << "close_connection " << get_close_connection() << "\n"
+     << "\n"
+     << "# HELP read_ok The number of HTTP request received successfully\n"
+     << "# TYPE read_ok counter\n"
+     << "read_ok " << get_read_ok() << "\n"
+     << "\n"
+     << "# HELP read_error The number of errors reading HTTP requests\n"
+     << "# TYPE read_error counter\n"
+     << "read_error " << get_read_error() << "\n"
+     << "\n"
+     << "# HELP response_by_code_range "
+     << "The number of HTTP responses within each response code range\n"
+     << "# TYPE response_by_code_range\n"
+     << "response_by_code_range{range=\"invalid\"} " << get_write_invalid()
+     << "\n"
+     << "response_by_code_range{range=\"100\"} " << get_write_100() << "\n"
+     << "response_by_code_range{range=\"200\"} " << get_write_200() << "\n"
+     << "response_by_code_range{range=\"300\"} " << get_write_300() << "\n"
+     << "response_by_code_range{range=\"400\"} " << get_write_400() << "\n"
+     << "response_by_code_range{range=\"500\"} " << get_write_500() << "\n"
+     << "\n"
+     << "# HELP write_ok The number of HTTP responses received successfully\n"
+     << "# TYPE write_ok counter\n"
+     << "write_ok " << get_write_ok() << "\n\n"
+     << "# HELP write_error The number of errors writing HTTP responses\n"
+     << "# TYPE write_error counter\n"
+     << "write_error " << get_write_error() << "\n"
+     << "\n"
+     << "# HELP accept_ok The number of HTTP connections accepted\n"
+     << "# TYPE accept_ok counter\n"
+     << "accept_ok " << get_accept_ok() << "\n\n"
+     << "# HELP accept_error The number of errors accepting HTTP connections\n"
+     << "# TYPE accept_error counter\n"
+     << "accept_error " << get_accept_error() << "\n"
+     << "\n";
+  res.body += os.str();
 }
 
 response_type request_dispatcher::internal_error(request_type const& req) {
