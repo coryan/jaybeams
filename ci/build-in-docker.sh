@@ -16,7 +16,7 @@ cd build
 
 # ... compile and run the tests ...
 do_coverity=no
-if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then
+if [ "x${TRAVIS_PULL_REQUEST}" = "xtrue" ]; then
     # Always skip Coverity Scan builds for PR ...
     echo "This is a pull request, skipping coverity build"
 elif [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
