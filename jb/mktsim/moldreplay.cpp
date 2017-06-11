@@ -7,7 +7,12 @@
  * behavior of a market data feed.
  */
 #include <jb/ehs/acceptor.hpp>
+#include <jb/itch5/mold_udp_pacer.hpp>
+#include <jb/itch5/process_iostream_mlist.hpp>
+#include <jb/as_hhmmss.hpp>
 #include <jb/config_object.hpp>
+#include <jb/fileio.hpp>
+#include <jb/launch_thread.hpp>
 #include <jb/log.hpp>
 
 #include <beast/http.hpp>
@@ -40,17 +45,77 @@ public:
   jb::config_attribute<config, int> secondary_port;
   jb::config_attribute<config, std::string> control_host;
   jb::config_attribute<config, unsigned short> control_port;
+  jb::config_attribute<config, std::string> input_file;
+  jb::config_attribute<config, jb::thread_config> replay_session;
+  jb::config_attribute<config, jb::itch5::mold_udp_pacer_config> pacer;
   jb::config_attribute<config, jb::log::config> log;
+};
+
+class session : public std::enable_shared_from_this<session> {
+public:
+  //@{
+  /**
+   * @name Type traits
+   */
+  typedef std::chrono::steady_clock::time_point time_point;
+  //@}
+
+  /// Create a new session to replay a ITCH-5.x file.
+  explicit session(config const& cfg);
+
+  /// Start running a new session
+  void start();
+
+  /// Stop a running session
+  void stop();
+
+  /// The last message count processed
+  std::uint32_t last_message_count() const {
+    return last_message_count_.load(std::memory_order_relaxed);
+  }
+
+  /// The offset of the last message processed
+  std::uint64_t last_message_offset() const {
+    return last_message_offset_.load(std::memory_order_relaxed);
+  }
+
+  /// Implement the callback for jb::itch5::process_iostream_mlist<>
+  void handle_unknown(
+      time_point const& recv_ts, jb::itch5::unknown_message const& msg);
+
+  /// Return the current timestamp for delay measurements
+  time_point now() const {
+    return std::chrono::steady_clock::now();
+  }
+
+private:
+  config cfg_;
+  std::atomic_bool stop_;
+  jb::itch5::mold_udp_pacer<> pacer_;
+  std::atomic<std::uint32_t> last_message_count_;
+  std::atomic<std::uint64_t> last_message_offset_;
 };
 
 class replayer_control {
 public:
-  replayer_control();
+  explicit replayer_control(config const& cfg);
 
-  std::string replay(std::string const& filename);
-  void stop_replay(std::string const& token);
+  enum class state { idle, starting, replaying, stopping };
 
   void status(jb::ehs::response_type& res) const;
+  void start(jb::ehs::request_type const& req, jb::ehs::response_type& res);
+  void stop(jb::ehs::request_type const& req, jb::ehs::response_type& res);
+
+private:
+  bool start_check();
+  void replay_done();
+
+private:
+  config cfg_;
+  mutable std::mutex mu_;
+  state current_state_;
+  std::thread session_thread_;
+  std::shared_ptr<session> session_;
 };
 
 } // anonymous namespace
@@ -69,7 +134,7 @@ int main(int argc, char* argv[]) try {
 
   // ... create the replayer control, this is where the main work
   // happens ...
-  auto replayer = std::make_shared<replayer_control>();
+  auto replayer = std::make_shared<replayer_control>(cfg);
 
   // ... create a dispatcher to process the HTTP requests, register
   // some basic handlers ...
@@ -106,6 +171,14 @@ int main(int argc, char* argv[]) try {
   dispatcher->add_handler(
       "/replay-status", [replayer](request_type const&, response_type& res) {
         replayer->status(res);
+      });
+  dispatcher->add_handler(
+      "/replay-start", [replayer](request_type const& req, response_type& res) {
+        replayer->start(req, res);
+      });
+  dispatcher->add_handler(
+      "/replay-stop", [replayer](request_type const& req, response_type& res) {
+        replayer->stop(req, res);
       });
 
   // ... create an acceptor to handle incoming connections, if we wanted
@@ -173,22 +246,177 @@ config::config()
     , control_port(
           desc("control-port").help("The port to receive control connections."),
           this, defaults::control_port)
+    , input_file(
+          desc("input-file").help("The file to replay when requested."), this)
+    , replay_session(
+          desc("replay-session", "thread-config")
+              .help("Configure the replay session threads."),
+          this, jb::thread_config().name("replay"))
+    , pacer(
+          desc("pacer", "mold-udp-pacer").help("Configure the ITCH-5.x pacer"),
+          this)
     , log(desc("log", "logging"), this) {
 }
 
 void config::validate() const {
   if (primary_destination() == "") {
-    throw jb::usage("Missing primary-destination argument (or setting).", 1);
+    throw jb::usage("Missing primary-destination argument or setting.", 1);
+  }
+  if (input_file() == "") {
+    throw jb::usage("Missing input-file argument or setting.", 1);
   }
   log().validate();
 }
 
-replayer_control::replayer_control() {
+session::session(config const& cfg)
+    : cfg_(cfg)
+    , stop_(false)
+    , pacer_(cfg.pacer()) {
+#ifndef ATOMIC_BOOL_LOCK_FREE
+#error "Missing ATOMIC_BOOL_LOCK_FREE required by C++11 standard"
+#endif // ATOMIC_BOOL_LOCK_FREE
+  static_assert(
+      ATOMIC_BOOL_LOCK_FREE == 2, "Class requires lock-free std::atomic<bool>");
+}
+
+void session::start() {
+  auto self = shared_from_this();
+
+  boost::iostreams::filtering_istream in;
+  jb::open_input_file(in, cfg_.input_file());
+  jb::itch5::process_iostream_mlist<session>(in, *self);
+}
+
+void session::stop() {
+  stop_.store(true, std::memory_order_release);
+}
+
+void session::handle_unknown(
+    time_point const& recv_ts, jb::itch5::unknown_message const& msg) {
+  if (stop_.load(std::memory_order_consume)) {
+    throw std::runtime_error("stopping replay thread");
+  }
+  last_message_count_.store(msg.count(), std::memory_order_relaxed);
+  last_message_offset_.store(msg.offset(), std::memory_order_relaxed);
+  // auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_);
+  // };
+  auto sink = [](auto buffers) {};
+  auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
+    // ... never sleep for more than 10 seconds, the feeds typically
+    // have large idle times early and waiting for hours to start
+    // doing anything interesting is kind of boring ...
+    if (d > std::chrono::seconds(10)) {
+      d = std::chrono::seconds(10);
+    }
+    std::this_thread::sleep_for(d);
+  };
+  pacer_.handle_message(recv_ts, msg, sink, sleeper);
+}
+
+replayer_control::replayer_control(config const& cfg)
+    : cfg_(cfg)
+    , mu_()
+    , current_state_(state::idle) {
 }
 
 void replayer_control::status(jb::ehs::response_type& res) const {
   res.fields.replace("content-type", "text/plain");
-  res.body = "Nothing to see here folks\n";
+
+  std::lock_guard<std::mutex> guard(mu_);
+  std::ostringstream os;
+  switch (current_state_) {
+  case state::idle:
+    res.body = "idle\nNothing to see here folks\n";
+    return;
+  case state::starting:
+    os << "starting\nMessages arriving shortly\n";
+    break;
+  case state::stopping:
+    os << "stopping\nMessages will stop flowing\n";
+    break;
+  case state::replaying:
+    os << "replaying\n";
+    break;
+  default:
+    res.status = 500;
+    res.reason = beast::http::reason_string(res.status);
+    res.body = "Unkown state\n";
+    return;
+  }
+  JB_ASSERT_THROW(session_.get() != 0);
+  os << "  last-count: " << session_->last_message_count() << "\n"
+     << "  last-offset: " << session_->last_message_offset() << "\n"
+     << "\n";
+  res.body = os.str();
+}
+
+void replayer_control::start(
+    jb::ehs::request_type const&, jb::ehs::response_type& res) {
+  std::lock_guard<std::mutex> guard(mu_);
+  if (current_state_ != state::idle) {
+    res.status = 400;
+    res.reason = beast::http::reason_string(res.status);
+    res.body = "request rejected, current status is not idle\n";
+    return;
+  }
+  // ... set the result before any computation, if there is a failure
+  // it will raise an exception and the caller sends back the error
+  // ...
+  res.status = 200;
+  res.body = "request succeeded, started new session\n";
+  auto s = std::make_shared<session>(cfg_);
+  // ... wait until this point to set the state to starting, if there
+  // are failures before we have not changed the state and can
+  // continue ...
+  current_state_ = state::starting;
+  jb::launch_thread(session_thread_, cfg_.replay_session(), [s, this]() {
+    // ... check if the session can start, maybe it was stopped
+    // before the thread started ...
+    if (not start_check()) {
+      return;
+    }
+    // ... run the session, without holding the mu_ lock ...
+    try {
+      s->start();
+    } catch (...) {
+    }
+    // ... reset the state to idle, even if an exception is raised
+    // ...
+    replay_done();
+  });
+  session_thread_.detach();
+  session_ = s;
+}
+
+void replayer_control::stop(
+    jb::ehs::request_type const&, jb::ehs::response_type& res) {
+  std::lock_guard<std::mutex> guard(mu_);
+  if (current_state_ != state::replaying and
+      current_state_ != state::starting) {
+    res.status = 400;
+    res.body = "request rejected, current status is not valid\n";
+    return;
+  }
+  current_state_ = state::stopping;
+  res.status = 200;
+  res.body = "request succeeded, stopping current session\n";
+  JB_ASSERT_THROW(session_.get() != 0);
+  session_->stop();
+}
+
+bool replayer_control::start_check() {
+  std::lock_guard<std::mutex> guard(mu_);
+  if (current_state_ != state::starting) {
+    return false;
+  }
+  current_state_ = state::replaying;
+  return true;
+}
+
+void replayer_control::replay_done() {
+  std::lock_guard<std::mutex> guard(mu_);
+  current_state_ = state::idle;
+  session_.reset();
 }
 
 } // anonymous namespace
