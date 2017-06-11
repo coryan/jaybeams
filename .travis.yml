@@ -37,6 +37,9 @@ script:
     --env CXXFLAGS="${CXXFLAGS}"
     --env VALGRIND="${VALGRIND}"
     --env COVERITY="${COVERITY}"
+    --env TRAVIS_BRANCH="${TRAVIS_BRANCH}"
+    --env TRAVIS_EVENT_TYPE="${TRAVIS_EVENT_TYPE}"
+    --env TRAVIS_PULL_REQUEST="${TRAVIS_PULL_REQUEST}"
     --volume $PWD:$PWD
     --volume ${TRAVIS_BUILD_DIR?}/coverity:/opt/coverity
     --workdir $PWD
