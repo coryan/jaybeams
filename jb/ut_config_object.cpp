@@ -332,7 +332,8 @@ public:
  */
 BOOST_AUTO_TEST_CASE(config_object_nested_by_class) {
   char const contents[] = R"""(# YAML overrides
-# This override applies to all objects of type config0, wherever they are found...
+# This override applies to all objects of type config0, wherever
+# they are found...
 :config0:
   x: -1
   y: -1
