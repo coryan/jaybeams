@@ -25,7 +25,8 @@ jb::cpu_set jb::cpu_set::parse(std::string const& value) {
   cpu_set tmp;
 
   std::string element;
-  for (std::istringstream is(value); is.good() and std::getline(is, element, ',');) {
+  for (std::istringstream is(value);
+       is.good() and std::getline(is, element, ',');) {
     std::istringstream el(element);
     if (not el.good()) {
       parse_error(value);
