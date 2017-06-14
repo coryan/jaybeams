@@ -1,8 +1,6 @@
 #include "jb/cpu_set.hpp"
 #include <jb/strtonum.hpp>
 
-#include <boost/tokenizer.hpp>
-
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -26,26 +24,29 @@ jb::cpu_set& jb::cpu_set::clear(int cpulo, int cpuhi) {
 jb::cpu_set jb::cpu_set::parse(std::string const& value) {
   cpu_set tmp;
 
-  typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
-  tokenizer tok(value, boost::char_separator<char>(","));
-  std::vector<std::string> range;
-  for (auto const& r : tok) {
-    tokenizer num(r, boost::char_separator<char>("-"));
-    range.assign(num.begin(), num.end());
-    if (range.size() == 1) {
+  std::string element;
+  for (std::istringstream is(value); is.good() and std::getline(is, element, ',');) {
+    std::istringstream el(element);
+    if (not el.good()) {
+      parse_error(value);
+    }
+    std::string lo, hi;
+    if (not std::getline(el, lo, '-')) {
+      parse_error(value);
+    }
+    if (el.eof()) {
       int cpu;
-      if (not jb::strtonum(range[0], cpu)) {
+      if (not jb::strtonum(lo, cpu)) {
         parse_error(value);
       }
       tmp.set(cpu);
-    } else if (range.size() == 2) {
-      int cpulo, cpuhi;
-      if (not jb::strtonum(range[0], cpulo)) {
-        parse_error(value);
-      }
-      if (not jb::strtonum(range[1], cpuhi)) {
-        parse_error(value);
-      }
+      continue;
+    }
+    if (not std::getline(el, hi, '-') or not el.eof()) {
+      parse_error(value);
+    }
+    int cpulo, cpuhi;
+    if (jb::strtonum(lo, cpulo) and jb::strtonum(hi, cpuhi)) {
       tmp.set(cpulo, cpuhi);
     } else {
       parse_error(value);
