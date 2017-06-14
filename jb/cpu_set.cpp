@@ -28,13 +28,8 @@ jb::cpu_set jb::cpu_set::parse(std::string const& value) {
   for (std::istringstream is(value);
        is.good() and std::getline(is, element, ',');) {
     std::istringstream el(element);
-    if (not el.good()) {
-      parse_error(value);
-    }
     std::string lo, hi;
-    if (not std::getline(el, lo, '-')) {
-      parse_error(value);
-    }
+    std::getline(el, lo, '-');
     if (el.eof()) {
       int cpu;
       if (not jb::strtonum(lo, cpu)) {
