@@ -118,7 +118,7 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
     };
   }
 
-  jb::itch5::compute_book<book_type_t> handler(cb, cfg_book);
+  jb::itch5::compute_book<book_type_t> handler(std::move(cb), cfg_book);
   try {
     jb::itch5::process_iostream(in, handler);
   } catch (abort_process_iostream const&) {
