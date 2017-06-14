@@ -61,7 +61,7 @@ public:
   //@}
 
   /// Create a new session to replay a ITCH-5.x file.
-  explicit session(config const& cfg);
+  session(config const& cfg);
 
   /// Start running a new session
   void start();
@@ -94,6 +94,12 @@ private:
   jb::itch5::mold_udp_pacer<> pacer_;
   std::atomic<std::uint32_t> last_message_count_;
   std::atomic<std::uint64_t> last_message_offset_;
+  boost::asio::io_service io_;
+  boost::asio::ip::udp::socket s0_;
+  boost::asio::ip::udp::endpoint ep0_;
+  boost::asio::ip::udp::socket s1_;
+  boost::asio::ip::udp::endpoint ep1_;
+  bool ep1_enabled_;
 };
 
 class replayer_control {
@@ -271,12 +277,43 @@ void config::validate() const {
 session::session(config const& cfg)
     : cfg_(cfg)
     , stop_(false)
-    , pacer_(cfg.pacer()) {
+    , pacer_(cfg.pacer())
+    , last_message_count_(0)
+    , last_message_offset_(0)
+    , io_()
+    , s0_(io_)
+    , ep0_()
+    , s1_(io_)
+    , ep1_()
+    , ep1_enabled_(false) {
 #ifndef ATOMIC_BOOL_LOCK_FREE
 #error "Missing ATOMIC_BOOL_LOCK_FREE required by C++11 standard"
 #endif // ATOMIC_BOOL_LOCK_FREE
   static_assert(
       ATOMIC_BOOL_LOCK_FREE == 2, "Class requires lock-free std::atomic<bool>");
+
+  auto address0 =
+      boost::asio::ip::address::from_string(cfg_.primary_destination());
+  boost::asio::ip::udp::endpoint ep0(address0, cfg_.primary_port());
+  boost::asio::ip::udp::socket s0(io_, ep0.protocol());
+  if (ep0.address().is_multicast()) {
+    s0.set_option(boost::asio::ip::multicast::enable_loopback(true));
+  }
+  s0_ = std::move(s0);
+  ep0_ = std::move(ep0);
+
+  if (cfg_.secondary_destination() != "") {
+    auto address1 =
+        boost::asio::ip::address::from_string(cfg_.secondary_destination());
+    boost::asio::ip::udp::endpoint ep1(address1, cfg_.secondary_port());
+    boost::asio::ip::udp::socket s1(io_, ep1.protocol());
+    if (ep1.address().is_multicast()) {
+      s1.set_option(boost::asio::ip::multicast::enable_loopback(true));
+    }
+    s1_ = std::move(s1);
+    ep1_ = std::move(ep1);
+    ep1_enabled_ = true;
+  }
 }
 
 void session::start() {
@@ -298,9 +335,12 @@ void session::handle_unknown(
   }
   last_message_count_.store(msg.count(), std::memory_order_relaxed);
   last_message_offset_.store(msg.offset(), std::memory_order_relaxed);
-  // auto sink = [this](auto buffers) { socket_.send_to(buffers, endpoint_);
-  // };
-  auto sink = [](auto buffers) {};
+  auto sink = [this](auto buffers) {
+    s0_.send_to(buffers, ep0_);
+    if (ep1_enabled_) {
+      s1_.send_to(buffers, ep1_);
+    }
+  };
   auto sleeper = [](jb::itch5::mold_udp_pacer<>::duration d) {
     // ... never sleep for more than 10 seconds, the feeds typically
     // have large idle times early and waiting for hours to start
