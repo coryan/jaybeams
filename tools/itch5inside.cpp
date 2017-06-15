@@ -78,7 +78,7 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
 
   using callback_type =
       typename jb::itch5::compute_book<book_type_t>::callback_type;
-  callback_type cb = [&stats, &out, stop_after](
+  callback_type cb = std::move([&stats, &out, stop_after](
       jb::itch5::message_header const& header,
       jb::itch5::order_book<book_type_t> const& updated_book,
       jb::itch5::book_update const& update) {
@@ -89,13 +89,13 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
     auto pl = std::chrono::steady_clock::now() - update.recvts;
     (void)jb::itch5::generate_inside(
         stats, out, header, updated_book, update, pl);
-  };
+  });
 
   if (cfg.enable_symbol_stats()) {
     // ... replace the calback with one that also records the stats
     // for each symbol ...
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
-    cb = [&stats, &out, &per_symbol, symcfg, stop_after](
+    cb = std::move([&stats, &out, &per_symbol, symcfg, stop_after](
         jb::itch5::message_header const& header,
         jb::itch5::order_book<book_type_t> const& updated_book,
         jb::itch5::book_update const& update) {
@@ -115,7 +115,7 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
         location = p.first;
       }
       location->second.sample(header.timestamp.ts, pl);
-    };
+    });
   }
 
   jb::itch5::compute_book<book_type_t> handler(std::move(cb), cfg_book);
