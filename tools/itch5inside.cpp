@@ -78,44 +78,46 @@ void run_inside(config const& cfg, cfg_book_t const& cfg_book) {
 
   using callback_type =
       typename jb::itch5::compute_book<book_type_t>::callback_type;
-  callback_type cb = std::move([&stats, &out, stop_after](
-      jb::itch5::message_header const& header,
-      jb::itch5::order_book<book_type_t> const& updated_book,
-      jb::itch5::book_update const& update) {
-    if (stop_after != std::chrono::seconds(0) and
-        stop_after <= header.timestamp.ts) {
-      throw abort_process_iostream{};
-    }
-    auto pl = std::chrono::steady_clock::now() - update.recvts;
-    (void)jb::itch5::generate_inside(
-        stats, out, header, updated_book, update, pl);
-  });
+  callback_type cb = std::move(
+      [&stats, &out, stop_after](
+          jb::itch5::message_header const& header,
+          jb::itch5::order_book<book_type_t> const& updated_book,
+          jb::itch5::book_update const& update) {
+        if (stop_after != std::chrono::seconds(0) and
+            stop_after <= header.timestamp.ts) {
+          throw abort_process_iostream{};
+        }
+        auto pl = std::chrono::steady_clock::now() - update.recvts;
+        (void)jb::itch5::generate_inside(
+            stats, out, header, updated_book, update, pl);
+      });
 
   if (cfg.enable_symbol_stats()) {
     // ... replace the calback with one that also records the stats
     // for each symbol ...
     jb::offline_feed_statistics::config symcfg(cfg.symbol_stats());
-    cb = std::move([&stats, &out, &per_symbol, symcfg, stop_after](
-        jb::itch5::message_header const& header,
-        jb::itch5::order_book<book_type_t> const& updated_book,
-        jb::itch5::book_update const& update) {
-      if (stop_after != std::chrono::seconds(0) and
-          stop_after <= header.timestamp.ts) {
-        throw abort_process_iostream{};
-      }
-      auto pl = std::chrono::steady_clock::now() - update.recvts;
-      if (not jb::itch5::generate_inside(
-              stats, out, header, updated_book, update, pl)) {
-        return;
-      }
-      auto location = per_symbol.find(update.stock);
-      if (location == per_symbol.end()) {
-        auto p = per_symbol.emplace(
-            update.stock, jb::offline_feed_statistics(symcfg));
-        location = p.first;
-      }
-      location->second.sample(header.timestamp.ts, pl);
-    });
+    cb = std::move(
+        [&stats, &out, &per_symbol, symcfg, stop_after](
+            jb::itch5::message_header const& header,
+            jb::itch5::order_book<book_type_t> const& updated_book,
+            jb::itch5::book_update const& update) {
+          if (stop_after != std::chrono::seconds(0) and
+              stop_after <= header.timestamp.ts) {
+            throw abort_process_iostream{};
+          }
+          auto pl = std::chrono::steady_clock::now() - update.recvts;
+          if (not jb::itch5::generate_inside(
+                  stats, out, header, updated_book, update, pl)) {
+            return;
+          }
+          auto location = per_symbol.find(update.stock);
+          if (location == per_symbol.end()) {
+            auto p = per_symbol.emplace(
+                update.stock, jb::offline_feed_statistics(symcfg));
+            location = p.first;
+          }
+          location->second.sample(header.timestamp.ts, pl);
+        });
   }
 
   jb::itch5::compute_book<book_type_t> handler(std::move(cb), cfg_book);
