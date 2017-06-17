@@ -22,7 +22,7 @@ examples =
 bin_SCRIPTS = tools/benchmark_common.sh
 
 bin_PROGRAMS = $(benchmarks) \
-  jb/mktsim/moldreplay \
+  jb/itch5/moldreplay \
   jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
@@ -640,6 +640,9 @@ tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
 tools_moldheartbeat_LDFLAGS = $(BOOST_ASIO_LIBS)
 tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a
 
+jb_itch5_moldreplay_SOURCES = jb/itch5/moldreplay.cpp
+jb_itch5_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
+
 jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
 jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
 jb_itch5_ut_add_order_message_LDFLAGS = $(jb_ut_itch5_ldflags)
@@ -1232,10 +1235,3 @@ jb_tde_bm_reduce_argmax_real_LDFLAGS = \
   $(OPENCL_LDFLAGS)
 else
 endif
-
-################################################################
-# other programs
-################################################################
-
-jb_mktsim_moldreplay_SOURCES = jb/mktsim/moldreplay.cpp
-jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
