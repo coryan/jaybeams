@@ -71,12 +71,13 @@ int main(int argc, char* argv[]) try {
 
   boost::asio::io_service io_service;
 
-  auto process_buffer = [](
-      std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
-      std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {};
+  auto process_buffer =
+      [](std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
+         std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {};
 
   auto primary = create_udp_channel(io_service, process_buffer, cfg.primary());
-  auto secondary = create_udp_channel(io_service, process_buffer, cfg.secondary());
+  auto secondary =
+      create_udp_channel(io_service, process_buffer, cfg.secondary());
 
   using endpoint = boost::asio::ip::tcp::endpoint;
   using address = boost::asio::ip::address;
@@ -151,9 +152,10 @@ config::config()
     , secondary(desc("secondary"), this)
     , control_host(
           desc("control-host")
-              .help("Where does the server listen for control connections."
-                    "Typically this is an address for the current host,"
-                    "for example: 'localhost', '0.0.0.0', or '::1'."),
+              .help(
+                  "Where does the server listen for control connections."
+                  "Typically this is an address for the current host,"
+                  "for example: 'localhost', '0.0.0.0', or '::1'."),
           this, defaults::control_host)
     , control_port(
           desc("control-port").help("The port to receive control connections."),
