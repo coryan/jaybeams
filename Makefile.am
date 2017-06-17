@@ -23,6 +23,7 @@ bin_SCRIPTS = tools/benchmark_common.sh
 
 bin_PROGRAMS = $(benchmarks) \
   jb/itch5/moldreplay \
+  jb/itch5/mold2inside \
   jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
@@ -30,7 +31,6 @@ bin_PROGRAMS = $(benchmarks) \
   tools/itch5moldreplay \
   tools/itch5stats \
   tools/itch5trades \
-  tools/mold2inside \
   tools/moldheartbeat
 
 noinst_PROGRAMS = $(examples) \
@@ -632,15 +632,16 @@ tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
 tools_itch5trades_SOURCES = tools/itch5trades.cpp
 tools_itch5trades_LDADD = jb/libjb_itch5.a jb/libjb.a
 
-tools_mold2inside_SOURCES = tools/mold2inside.cpp
-tools_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
-tools_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
-
 tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
 tools_moldheartbeat_LDFLAGS = $(BOOST_ASIO_LIBS)
 tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a
 
+jb_itch5_mold2inside_SOURCES = jb/itch5/mold2inside.cpp
+jb_itch5_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
+jb_itch5_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
+
 jb_itch5_moldreplay_SOURCES = jb/itch5/moldreplay.cpp
+jb_itch5_moldreplay_LDFLAGS = $(BOOST_ASIO_LIBS)
 jb_itch5_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
 
 jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
