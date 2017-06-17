@@ -7,6 +7,7 @@
  * normalized inside messages for the feed.
  */
 #include <jb/ehs/acceptor.hpp>
+#include <jb/itch5/array_based_order_book.hpp>
 #include <jb/itch5/generate_inside.hpp>
 #include <jb/itch5/mold_udp_channel.hpp>
 #include <jb/itch5/process_iostream.hpp>
@@ -32,6 +33,8 @@ public:
   jb::config_attribute<config, jb::itch5::udp_receiver_config> secondary;
   jb::config_attribute<config, std::string> control_host;
   jb::config_attribute<config, unsigned short> control_port;
+  using book_config = typename jb::itch5::array_based_order_book::config;
+  jb::config_attribute<config, book_config> book;
   jb::config_attribute<config, jb::log::config> log;
 };
 
@@ -69,15 +72,30 @@ int main(int argc, char* argv[]) try {
       argc, argv, std::string("moldfeedhandler.yaml"), "JB_ROOT");
   jb::log::init(cfg.log());
 
-  boost::asio::io_service io_service;
+  boost::asio::io_service io;
 
-  auto process_buffer =
-      [](std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
-         std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {};
+  using compute_book =
+      jb::itch5::compute_book<jb::itch5::array_based_order_book>;
+  using order_book = jb::itch5::order_book<jb::itch5::array_based_order_book>;
+  auto cb =
+      [](jb::itch5::message_header const& header,
+         order_book const& updated_book, jb::itch5::book_update const& update) {
+        std::cout << update.stock << " " << update.buy_sell_indicator << "\n";
+      };
 
-  auto primary = create_udp_channel(io_service, process_buffer, cfg.primary());
-  auto secondary =
-      create_udp_channel(io_service, process_buffer, cfg.secondary());
+  compute_book handler(std::move(cb), cfg.book());
+
+  auto process_buffer = [&handler](
+      std::chrono::steady_clock::time_point recv_ts, std::uint64_t msgcnt,
+      std::size_t msgoffset, char const* msgbuf, std::size_t msglen) {
+    jb::itch5::process_buffer_mlist<compute_book, KNOWN_ITCH5_MESSAGES>::
+        process(handler, recv_ts, msgcnt, msgoffset, msgbuf, msglen);
+  };
+
+  // TODO() - we need to refactor the mold_udp_channel class to
+  // support multiple input sockets and to handle out-of-order,
+  // duplicate, and gaps in the message stream.
+  auto primary = create_udp_channel(io, process_buffer, cfg.primary());
 
   using endpoint = boost::asio::ip::tcp::endpoint;
   using address = boost::asio::ip::address;
@@ -119,10 +137,12 @@ int main(int argc, char* argv[]) try {
   // ... create an acceptor to handle incoming connections, if we wanted
   // to, we could create multiple acceptors on different addresses
   // pointing to the same dispatcher ...
-  jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
+  jb::ehs::acceptor acceptor(io, ep, dispatcher);
 
   // ... run the program forever ...
-  io_service.run();
+  // TODO() - we should be able to gracefully terminate the program
+  // with a handler in the embedded http server, and/or with a signal
+  io.run();
 
   return 0;
 } catch (jb::usage const& u) {
@@ -160,6 +180,7 @@ config::config()
     , control_port(
           desc("control-port").help("The port to receive control connections."),
           this, defaults::control_port)
+    , book(desc("book", "order-book-config"), this)
     , log(desc("log", "logging"), this) {
 }
 
