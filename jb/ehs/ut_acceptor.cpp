@@ -315,7 +315,6 @@ BOOST_AUTO_TEST_CASE(connection_write_errors) {
   auto listen = acceptor.local_endpoint();
   boost::asio::io_service io;
   boost::asio::ip::tcp::socket sock{io};
-  sock.connect(listen);
 
   // ... this is a weird handler.  It closes the incoming socket as
   // soon as it receives a request.  That should force an error during
@@ -332,35 +331,47 @@ BOOST_AUTO_TEST_CASE(connection_write_errors) {
         res.body = std::move(block);
       });
 
-  // ... send a request ...
-  request_type req;
-  req.method = "GET";
-  req.url = "/close-me";
-  req.version = 11;
-  req.fields.replace("host", "0.0.0.0");
-  req.fields.replace("user-agent", "acceptor_base");
-  beast::http::prepare(req);
-  beast::http::write(sock, req);
+  // ... try multiple times, sometimes the on_read() callback is
+  // called before the on_write() callback ...
+  for (int i = 0; i != 10; ++i) {
+    BOOST_TEST_CHECKPOINT("Test attempt #" << i);
+    sock.connect(listen);
+    // ... send a request ...
+    request_type req;
+    req.method = "GET";
+    req.url = "/close-me";
+    req.version = 11;
+    req.fields.replace("host", "0.0.0.0");
+    req.fields.replace("user-agent", "acceptor_base");
+    beast::http::prepare(req);
+    beast::http::write(sock, req);
 
-  // ... try to receive the reply, but the socket will close while
-  // doing so ...
-  beast::streambuf sb;
-  response_type res;
-  boost::system::error_code ec;
-  beast::http::read(sock, sb, res, ec);
+    // ... try to receive the reply, but the socket will close while
+    // doing so ...
+    beast::streambuf sb;
+    response_type res;
+    boost::system::error_code ec;
+    beast::http::read(sock, sb, res, ec);
 
-  BOOST_CHECK(bool(ec));
-  BOOST_TEST_MESSAGE(
-      "While reading HTTP response got: " << ec.message() << " ["
-                                          << ec.category().name() << "/"
-                                          << ec.value() << "]");
+    BOOST_CHECK(bool(ec));
+    BOOST_TEST_MESSAGE(
+        "While reading HTTP response got: " << ec.message() << " ["
+                                            << ec.category().name() << "/"
+                                            << ec.value() << "]");
 
-  // ... wait until the dispatcher closes its connection ...
-  for (int c = 0; c != 10 and dispatcher->get_close_connection() == 0; ++c) {
+    // ... wait until the dispatcher closes its connection ...
+    for (int c = 0; c != 10 and dispatcher->get_write_error() == 0; ++c) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    if (dispatcher->get_write_error() != 0) {
+      break;
+    }
+  }
+  for (int c = 0; c != 100 and dispatcher->get_close_connection() == 0; ++c) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
-  BOOST_CHECK_EQUAL(dispatcher->get_close_connection(), 1);
-  BOOST_CHECK_EQUAL(dispatcher->get_write_error(), 1);
+  BOOST_CHECK_GE(dispatcher->get_write_error(), 1);
+  BOOST_CHECK_GE(dispatcher->get_close_connection(), 1);
 
   // ... shutdown everything ...
   io_service.dispatch([&acceptor, &io_service] {
