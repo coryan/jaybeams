@@ -13,6 +13,7 @@
 #include <jb/itch5/generate_inside.hpp>
 #include <jb/itch5/mold_udp_channel.hpp>
 #include <jb/itch5/process_iostream.hpp>
+#include <jb/itch5/udp_receiver_config.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
@@ -32,9 +33,7 @@ public:
 
   void validate() const override;
 
-  jb::config_attribute<config, int> multicast_port;
-  jb::config_attribute<config, std::string> listen_address;
-  jb::config_attribute<config, std::string> multicast_group;
+  jb::config_attribute<config, jb::itch5::udp_receiver_config> receiver;
   jb::config_attribute<config, std::string> output_file;
   jb::config_attribute<config, jb::log::config> log;
   jb::config_attribute<config, jb::offline_feed_statistics::config> stats;
@@ -120,8 +119,7 @@ int main(int argc, char* argv[]) try {
   };
 
   jb::itch5::mold_udp_channel channel(
-      io_service, process_buffer, cfg.multicast_group(), cfg.multicast_port(),
-      cfg.listen_address());
+      io_service, std::move(process_buffer), cfg.receiver());
 
   io_service.run();
 
@@ -145,8 +143,9 @@ int main(int argc, char* argv[]) try {
 
 namespace {
 
+namespace defaults {
 // Define the default per-symbol stats
-jb::offline_feed_statistics::config default_per_symbol_stats() {
+jb::offline_feed_statistics::config per_symbol_stats() {
   return jb::offline_feed_statistics::config()
       .reporting_interval_seconds(24 * 3600)     // effectively disable updates
       .max_processing_latency_nanoseconds(10000) // limit memory usage
@@ -157,44 +156,28 @@ jb::offline_feed_statistics::config default_per_symbol_stats() {
       ;
 }
 
-std::string default_listen_address() {
-  return "";
-}
-
-std::string default_multicast_group() {
-  return "::1";
-}
-
-int default_multicast_port() {
-  return 50000;
-}
+std::string const listen_address = "";
+std::string const receive_address = "::1";
+int const port = 50000;
+} // namespace defaults
 
 config::config()
-    : multicast_port(
-          desc("multicast-port").help("The multicast port to listen in."), this,
-          default_multicast_port())
-    , listen_address(
-          desc("listen-address")
-              .help(
-                  "The address to listen in, typically 0.0.0.0, "
-                  "::, or a specific "
-                  "NIC address."),
-          this, default_listen_address())
-    , multicast_group(
-          desc("multicast-group")
-              .help("The multicast group carrying the MOLD data."),
-          this, default_multicast_group())
+    : receiver(
+          desc("receiver"), this,
+          jb::itch5::udp_receiver_config()
+              .port(defaults::port)
+              .listen_address(defaults::listen_address)
+              .receive_address(defaults::receive_address))
     , output_file(
           desc("output-file")
-              .help(
-                  "The name of the file where to store the inside data."
-                  "  Files ending in .gz are automatically compressed."),
+              .help("The name of the file where to store the inside data."
+                    "  Files ending in .gz are automatically compressed."),
           this)
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "offline-feed-statistics"), this)
     , symbol_stats(
           desc("symbol-stats", "offline-feed-statistics"), this,
-          default_per_symbol_stats())
+          defaults::per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")
               .help(
@@ -205,6 +188,7 @@ config::config()
 }
 
 void config::validate() const {
+
   if (output_file() == "") {
     throw jb::usage(
         "Missing output-file setting."

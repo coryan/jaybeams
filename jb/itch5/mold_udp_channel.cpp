@@ -3,19 +3,28 @@
 #include <jb/itch5/base_decoders.hpp>
 #include <jb/itch5/make_socket_udp_recv.hpp>
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
+#include <jb/itch5/udp_receiver_config.hpp>
 #include <jb/log.hpp>
 
 #include <boost/asio/ip/multicast.hpp>
+
+#include <utility>
 
 namespace jb {
 namespace itch5 {
 
 mold_udp_channel::mold_udp_channel(
-    boost::asio::io_service& io, buffer_handler handler,
-    std::string const& receive_address, int port,
-    std::string const& listen_address)
-    : handler_(handler)
-    , socket_(make_socket_udp_recv<>(io, receive_address, port, listen_address))
+    boost::asio::io_service& io, buffer_handler const& handler,
+    udp_receiver_config const& cfg)
+    : mold_udp_channel(io, buffer_handler(handler), cfg) {
+}
+
+mold_udp_channel::mold_udp_channel(
+    boost::asio::io_service& io, buffer_handler&& handler,
+    udp_receiver_config const& cfg)
+    : handler_(std::move(handler))
+    , socket_(make_socket_udp_recv<>(
+          io, cfg.receive_address(), cfg.port(), cfg.listen_address()))
     , expected_sequence_number_(0)
     , message_offset_(0) {
   restart_async_receive_from();

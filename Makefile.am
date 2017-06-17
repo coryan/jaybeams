@@ -22,8 +22,9 @@ examples =
 bin_SCRIPTS = tools/benchmark_common.sh
 
 bin_PROGRAMS = $(benchmarks) \
-  jb/itch5/moldreplay \
   jb/itch5/mold2inside \
+  jb/itch5/moldfeedhandler \
+  jb/itch5/moldreplay \
   jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
@@ -496,7 +497,8 @@ jb_libjb_itch5_a_SOURCES = \
   jb/itch5/stock_trading_action_message.cpp \
   jb/itch5/system_event_message.cpp \
   jb/itch5/timestamp.cpp \
-  jb/itch5/trade_message.cpp
+  jb/itch5/trade_message.cpp \
+  jb/itch5/udp_receiver_config.cpp
 
 nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
@@ -549,6 +551,7 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/system_event_message.hpp \
   jb/itch5/timestamp.hpp \
   jb/itch5/trade_message.hpp \
+  jb/itch5/udp_receiver_config.hpp \
   jb/itch5/unknown_message.hpp
 
 unit_tests += \
@@ -643,6 +646,10 @@ jb_itch5_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
 jb_itch5_moldreplay_SOURCES = jb/itch5/moldreplay.cpp
 jb_itch5_moldreplay_LDFLAGS = $(BOOST_ASIO_LIBS)
 jb_itch5_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
+
+jb_itch5_moldfeedhandler_SOURCES = jb/itch5/moldfeedhandler.cpp
+jb_itch5_moldfeedhandler_LDFLAGS = $(BOOST_ASIO_LIBS)
+jb_itch5_moldfeedhandler_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
 
 jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
 jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
