@@ -211,7 +211,7 @@ namespace {
 
 /// Default values for the program configuration
 namespace defaults {
-std::string const primary_destination = "::1";
+std::string const primary_destination = "127.0.0.1";
 std::string const secondary_destination = "127.0.0.1";
 int const primary_port = 12300;
 int const secondary_port = 12301;
