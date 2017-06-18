@@ -75,7 +75,8 @@ AX_CONFIG_FEATURE(static-linking, [turns on/off static linking],
                   [enable_static_linking="yes"], [enable_static_linking="no"])
 AM_CONDITIONAL(STATIC_LINKING, [test "$enable_static_linking" = "yes"])
 
-# ... we need Boost with a version higher than 1.58 because Beast ...
+# ... we need Boost with a version higher than 1.58 because Beast and
+# Boost.Endian ...
 AX_BOOST_BASE([1.58], [], [
     AC_MSG_ERROR([
         unable to find a suitable Boost library, need version >= 1.58.
