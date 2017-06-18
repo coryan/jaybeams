@@ -1,6 +1,8 @@
 #ifndef jb_itch5_make_socket_udp_recv_hpp
 #define jb_itch5_make_socket_udp_recv_hpp
 
+#include <jb/itch5/udp_receiver_config.hpp>
+
 #include <boost/asio/ip/multicast.hpp>
 #include <boost/asio/ip/udp.hpp>
 
@@ -21,31 +23,20 @@ namespace itch5 {
  * @param io the Boost.ASIO io_service object that the socket is
  * managed by.
  *
- * @param receive_address the address to listen for messages on.  Can
- * be a unicast or multicast address.
- *
- * @param port the port for the socket
- *
- * @param listen_address the local address for the socket.  If this is
- * the empty string, the local address is guessed based on the
- * receive_address: (a) for IPv4 multicast groups simply use 0.0.0.0,
- * (b) for IPv6 multicast groups simply use ::1, (c) otherwise assume
- * the receive_address is a unicast address and try to use it as the
- * local address.
+ * @param cfg the configuration parameters for the socket.
  *
  */
 template <class socket_t = boost::asio::ip::udp::socket>
 socket_t make_socket_udp_recv(
-    boost::asio::io_service& io, std::string const& receive_address, int port,
-    std::string const& listen_address) {
-  auto r_address = boost::asio::ip::address::from_string(receive_address);
+    boost::asio::io_service& io, udp_receiver_config const& cfg) {
+  auto r_address = boost::asio::ip::address::from_string(cfg.address());
 
   boost::asio::ip::address local_address;
 
   // Automatically configure the best listening address ...
-  if (listen_address != "") {
+  if (cfg.local_address() != "") {
     // ... the user specified a listening address, use that ...
-    local_address = boost::asio::ip::address::from_string(listen_address);
+    local_address = boost::asio::ip::address::from_string(cfg.local_address());
   } else if (r_address.is_multicast()) {
     // ... pick a default based on the protocol for the listening
     // group ...
@@ -62,10 +53,11 @@ socket_t make_socket_udp_recv(
   }
 
   // ... the rest if fairly mechanical stuff ..
-  boost::asio::ip::udp::endpoint endpoint(local_address, port);
+  boost::asio::ip::udp::endpoint endpoint(local_address, cfg.port());
   socket_t socket(io);
   socket.open(endpoint.protocol());
-  socket.set_option(boost::asio::ip::udp::socket::reuse_address(true));
+  socket.set_option(
+      boost::asio::ip::udp::socket::reuse_address(cfg.reuse_address()));
   socket.bind(endpoint);
   if (r_address.is_multicast()) {
     socket.set_option(boost::asio::ip::multicast::join_group(r_address));

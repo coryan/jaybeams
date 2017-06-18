@@ -506,7 +506,9 @@ jb_libjb_itch5_a_SOURCES = \
   jb/itch5/system_event_message.cpp \
   jb/itch5/timestamp.cpp \
   jb/itch5/trade_message.cpp \
-  jb/itch5/udp_receiver_config.cpp
+  jb/itch5/udp_config_common.cpp \
+  jb/itch5/udp_receiver_config.cpp \
+  jb/itch5/udp_sender_config.cpp
 
 nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
@@ -559,7 +561,10 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/system_event_message.hpp \
   jb/itch5/timestamp.hpp \
   jb/itch5/trade_message.hpp \
+  jb/itch5/udp_config_common.hpp \
+  jb/itch5/udp_sender_config.hpp \
   jb/itch5/udp_receiver_config.hpp \
+  jb/itch5/udp_sender_config.hpp \
   jb/itch5/unknown_message.hpp
 
 unit_tests += \

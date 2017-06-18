@@ -156,8 +156,8 @@ jb::offline_feed_statistics::config per_symbol_stats() {
       ;
 }
 
-std::string const listen_address = "";
-std::string const receive_address = "::1";
+std::string const local_address = "";
+std::string const address = "::1";
 int const port = 50000;
 } // namespace defaults
 
@@ -166,8 +166,8 @@ config::config()
           desc("receiver"), this,
           jb::itch5::udp_receiver_config()
               .port(defaults::port)
-              .listen_address(defaults::listen_address)
-              .receive_address(defaults::receive_address))
+              .local_address(defaults::local_address)
+              .address(defaults::address))
     , output_file(
           desc("output-file")
               .help(

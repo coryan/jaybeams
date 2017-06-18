@@ -23,9 +23,7 @@ mold_udp_channel::mold_udp_channel(
     boost::asio::io_service& io, buffer_handler&& handler,
     udp_receiver_config const& cfg)
     : handler_(std::move(handler))
-    , socket_(
-          make_socket_udp_recv<>(
-              io, cfg.receive_address(), cfg.port(), cfg.listen_address()))
+    , socket_(make_socket_udp_recv<>(io, cfg))
     , expected_sequence_number_(0)
     , message_offset_(0) {
   restart_async_receive_from();

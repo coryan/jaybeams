@@ -8,7 +8,8 @@
  */
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_compile) {
   boost::asio::io_service io;
-  auto socket = jb::itch5::make_socket_udp_recv(io, "0.0.0.0", 50000, "");
+  jb::itch5::udp_receiver_config cfg;
+  auto socket = jb::itch5::make_socket_udp_recv(io, cfg.address("127.0.0.1"));
   BOOST_CHECK(socket.is_open());
 }
 
@@ -52,8 +53,8 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_basic) {
   boost::asio::io_service io;
 
   // A simple unicast socket on the default interface ...
-  mock_socket socket =
-      jb::itch5::make_socket_udp_recv<mock_socket>(io, "::1", 50000, "");
+  mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
+      io, jb::itch5::udp_receiver_config().address("::1").port(50000));
   socket.open.check_called().once();
   socket.bind.check_called().once();
   socket.set_option_join_group.check_called().never();
@@ -65,7 +66,7 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv4) {
 
   // Create a IPv4 multicast socket on the default interface ...
   mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
-      io, "239.128.1.1", 50000, "");
+      io, jb::itch5::udp_receiver_config().address("239.128.1.1").port(50000));
   socket.open.check_called().once();
   socket.bind.check_called().once().with(
       boost::asio::ip::udp::endpoint(boost::asio::ip::address_v4(), 50000));
@@ -77,8 +78,8 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv6) {
   boost::asio::io_service io;
 
   // Create a IPv6 multicast socket on the default interface ...
-  mock_socket socket =
-      jb::itch5::make_socket_udp_recv<mock_socket>(io, "ff05::", 50000, "");
+  mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
+      io, jb::itch5::udp_receiver_config().address("ff05::").port(50000));
   socket.open.check_called().once();
   socket.bind.check_called().once().with(
       boost::asio::ip::udp::endpoint(boost::asio::ip::address_v6(), 50000));
@@ -92,7 +93,10 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_listen_address) {
   // Create a multicast socket on an specific interface ...
   char const* interface = "2001:db8:ca2:2::1";
   mock_socket socket = jb::itch5::make_socket_udp_recv<mock_socket>(
-      io, "ff05::", 50000, interface);
+      io, jb::itch5::udp_receiver_config()
+              .address("ff05::")
+              .port(50000)
+              .local_address(interface));
   socket.open.check_called().once();
   socket.bind.check_called().once().with(
       boost::asio::ip::udp::endpoint(
