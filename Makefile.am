@@ -528,6 +528,7 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/quote_defaults.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
+  jb/itch5/make_socket_udp_send.hpp \
   jb/itch5/map_based_order_book.hpp \
   jb/itch5/market_participant_position_message.hpp \
   jb/itch5/message_header.hpp \
@@ -583,6 +584,7 @@ unit_tests += \
   jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
   jb/itch5/ut_make_socket_udp_recv \
+  jb/itch5/ut_make_socket_udp_send \
   jb/itch5/ut_map_based_order_book \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
@@ -848,6 +850,11 @@ jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
 jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
 jb_itch5_ut_make_socket_udp_recv_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_make_socket_udp_send_SOURCES = jb/itch5/ut_make_socket_udp_send.cpp
+jb_itch5_ut_make_socket_udp_send_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_send
+jb_itch5_ut_make_socket_udp_send_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_make_socket_udp_send_LDADD = $(jb_ut_itch5_ldadd)
 
 jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
 jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
