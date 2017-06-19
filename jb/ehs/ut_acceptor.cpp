@@ -73,9 +73,10 @@ BOOST_AUTO_TEST_CASE(acceptor_base) {
 
   // ... closing the socket triggers more behaviors in the acceptor
   // and connector classes ...
+  auto current = dispatcher->get_close_connection();
   sock.close();
   BOOST_TEST_CHECKPOINT("closing connection in acceptor_base");
-  wait_for_connection_close(dispatcher, dispatcher->get_close_connection());
+  wait_for_connection_close(dispatcher, current);
 
   // ... shutdown the acceptor and stop the io_service ...
   io_service.dispatch([&acceptor, &io_service] {
