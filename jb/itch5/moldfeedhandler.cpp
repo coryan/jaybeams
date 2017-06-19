@@ -70,16 +70,8 @@ using output_function = std::function<void(
 
 /// Create the output function for the file option.
 output_function create_output_file(config const& cfg) {
-  // ... if there is no file option, just return a trivial output
-  // function ...
-  if (cfg.output_file() == "") {
-    return
-        [](jb::itch5::message_header const&, order_book const&,
-           jb::itch5::book_update const&) {};
-  }
   // ... otherwise create an output iostream and use it ...
   auto out = std::make_shared<boost::iostreams::filtering_ostream>();
-  ;
   jb::open_output_file(*out, cfg.output_file());
   return [out](
       jb::itch5::message_header const& header, order_book const& updated_book,
@@ -193,7 +185,9 @@ output_function create_output_socket(
 output_function
 create_output_layer(boost::asio::io_service& io, config const& cfg) {
   std::vector<output_function> outs;
-  outs.push_back(create_output_file(cfg));
+  if (cfg.output_file() != "") {
+    outs.push_back(create_output_file(cfg));
+  }
   for (auto const& outcfg : cfg.output()) {
     if (outcfg.port() == 0 and outcfg.address() == "") {
       continue;
