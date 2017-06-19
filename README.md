@@ -51,3 +51,19 @@ JayBeams is named after a [WWII electronic warfare](https://en.wikipedia.org/wik
 The name was selected more or less at random from the Wikipedia list
 of such systems, and is not meant to represent anything in
 particular.  It sounds cool, in a Flash Gordon kind of way.
+
+## Licensing and Copyright Notice
+
+Copyright 2015-2017 Carlos O'Ryan
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
