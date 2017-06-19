@@ -432,9 +432,10 @@ config::config()
           this, defaults::control_port)
     , book(desc("book", "order-book-config"), this)
     , log(desc("log", "logging"), this) {
-  output({jb::itch5::udp_sender_config()
-              .address(defaults::output_address)
-              .port(defaults::output_port)});
+  output(
+      {jb::itch5::udp_sender_config()
+           .address(defaults::output_address)
+           .port(defaults::output_port)});
 }
 
 void config::validate() const {
