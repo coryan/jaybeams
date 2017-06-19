@@ -4,7 +4,9 @@ instdir = $(prefix)
 
 lib_LIBRARIES = \
   jb/libjb.a \
+  jb/libjb_ehs.a \
   jb/libjb_itch5.a \
+  jb/libjb_pitch2.a \
   jb/libjb_testing.a \
   jb/libjb_itch5_testing.a
 
@@ -21,7 +23,9 @@ examples =
 bin_SCRIPTS = tools/benchmark_common.sh
 
 bin_PROGRAMS = $(benchmarks) \
-  jb/mktsim/moldreplay \
+  jb/itch5/mold2inside \
+  jb/itch5/moldfeedhandler \
+  jb/itch5/moldreplay \
   jb/testing/show_compile_info \
   tools/itch5bookdepth \
   tools/itch5eventdepth \
@@ -29,7 +33,6 @@ bin_PROGRAMS = $(benchmarks) \
   tools/itch5moldreplay \
   tools/itch5stats \
   tools/itch5trades \
-  tools/mold2inside \
   tools/moldheartbeat
 
 noinst_PROGRAMS = $(examples) \
@@ -140,6 +143,7 @@ nobase_jb_libjb_a_HEADERS = \
   jb/feed_error.hpp \
   jb/fileio.hpp \
   jb/filetype.hpp \
+  jb/fixed_string.hpp \
   jb/histogram.hpp \
   jb/histogram_summary.hpp \
   jb/integer_range_binning.hpp \
@@ -184,6 +188,7 @@ unit_tests += \
   jb/ut_explicit_cuts_binning \
   jb/ut_fileio \
   jb/ut_filetype \
+  jb/ut_fixed_string \
   jb/ut_histogram \
   jb/ut_histogram_summary \
   jb/ut_integer_range_binning \
@@ -198,8 +203,42 @@ unit_tests += \
 
 benchmarks += jb/bm_clocks
 
-
 examples += examples/configuration
+
+################################################################
+# jb/libjb_ehs.a and its unit tests
+################################################################
+jb_libjb_ehs_adir = $(includedir)
+jb_libjb_ehs_a_SOURCES = \
+  jb/ehs/acceptor.cpp \
+  jb/ehs/connection.cpp \
+  jb/ehs/request_dispatcher.cpp
+nobase_jb_libjb_ehs_a_HEADERS = \
+  jb/ehs/acceptor.hpp \
+  jb/ehs/base_types.hpp \
+  jb/ehs/connection.hpp \
+  jb/ehs/request_dispatcher.hpp
+
+unit_tests += \
+  jb/ehs/ut_acceptor \
+  jb/ehs/ut_request_dispatcher
+
+jb_ut_ehs_ldadd = jb/libjb_ehs.a $(jb_ut_ldadd)
+jb_ut_ehs_ldflags = $(jb_ut_ldflags)
+
+jb_ehs_ut_acceptor_SOURCES = jb/ehs/ut_acceptor.cpp
+jb_ehs_ut_acceptor_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ehs_ut_acceptor
+jb_ehs_ut_acceptor_LDFLAGS = $(jb_ut_ehs_ldflags)
+jb_ehs_ut_acceptor_LDADD = $(jb_ut_ehs_ldadd)
+
+jb_ehs_ut_request_dispatcher_SOURCES = jb/ehs/ut_request_dispatcher.cpp
+jb_ehs_ut_request_dispatcher_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ehs_ut_request_dispatcher
+jb_ehs_ut_request_dispatcher_LDFLAGS = $(jb_ut_ehs_ldflags)
+jb_ehs_ut_request_dispatcher_LDADD = $(jb_ut_ehs_ldadd)
+
+################################################################
+# jb/libjb_itch5_testing.a
+################################################################
 
 jb_ut_testing_ldadd = \
   jb/libjb_testing.a \
@@ -273,6 +312,11 @@ jb_ut_filetype_SOURCES = jb/ut_filetype.cpp
 jb_ut_filetype_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_filetype
 jb_ut_filetype_LDFLAGS = $(jb_ut_ldflags)
 jb_ut_filetype_LDADD = $(jb_ut_ldadd)
+
+jb_ut_fixed_string_SOURCES = jb/ut_fixed_string.cpp
+jb_ut_fixed_string_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_fixed_string
+jb_ut_fixed_string_LDFLAGS = $(jb_ut_ldflags)
+jb_ut_fixed_string_LDADD = $(jb_ut_ldadd)
 
 jb_ut_histogram_SOURCES = jb/ut_histogram.cpp
 jb_ut_histogram_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_histogram
@@ -461,7 +505,10 @@ jb_libjb_itch5_a_SOURCES = \
   jb/itch5/stock_trading_action_message.cpp \
   jb/itch5/system_event_message.cpp \
   jb/itch5/timestamp.cpp \
-  jb/itch5/trade_message.cpp
+  jb/itch5/trade_message.cpp \
+  jb/itch5/udp_config_common.cpp \
+  jb/itch5/udp_receiver_config.cpp \
+  jb/itch5/udp_sender_config.cpp
 
 nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/add_order_message.hpp \
@@ -480,7 +527,9 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/generate_inside.hpp \
   jb/itch5/quote_defaults.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
+  jb/itch5/make_socket_udp_common.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
+  jb/itch5/make_socket_udp_send.hpp \
   jb/itch5/map_based_order_book.hpp \
   jb/itch5/market_participant_position_message.hpp \
   jb/itch5/message_header.hpp \
@@ -514,6 +563,9 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/system_event_message.hpp \
   jb/itch5/timestamp.hpp \
   jb/itch5/trade_message.hpp \
+  jb/itch5/udp_config_common.hpp \
+  jb/itch5/udp_sender_config.hpp \
+  jb/itch5/udp_receiver_config.hpp \
   jb/itch5/unknown_message.hpp
 
 unit_tests += \
@@ -531,7 +583,9 @@ unit_tests += \
   jb/itch5/ut_cross_type \
   jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
+  jb/itch5/ut_make_socket_udp_common \
   jb/itch5/ut_make_socket_udp_recv \
+  jb/itch5/ut_make_socket_udp_send \
   jb/itch5/ut_map_based_order_book \
   jb/itch5/ut_market_participant_position_message \
   jb/itch5/ut_message_header \
@@ -559,7 +613,8 @@ unit_tests += \
   jb/itch5/ut_stock_trading_action_message \
   jb/itch5/ut_system_event_message \
   jb/itch5/ut_timestamp \
-  jb/itch5/ut_trade_message
+  jb/itch5/ut_trade_message \
+  jb/itch5/ut_udp_receiver_config
 
 benchmarks += jb/itch5/bm_order_book
 bin_SCRIPTS += \
@@ -573,6 +628,116 @@ jb_ut_itch5_ldadd = \
   $(jb_ut_ldadd)
 jb_ut_itch5_ldflags = \
   $(jb_ut_ldflags)
+
+################################################################
+# jb/libjb_pitch2.a
+################################################################
+
+jb_libjb_pitch2_adir = $(includedir)
+jb_libjb_pitch2_a_SOURCES = \
+  jb/pitch2/add_order_message.cpp \
+  jb/pitch2/auction_update_message.cpp \
+  jb/pitch2/delete_order_message.cpp \
+  jb/pitch2/expanded_add_order_message.cpp \
+  jb/pitch2/modify_message.cpp \
+  jb/pitch2/order_executed_message.cpp \
+  jb/pitch2/order_executed_price_message.cpp \
+  jb/pitch2/reduce_size_message.cpp \
+  jb/pitch2/short_add_order_message.cpp \
+  jb/pitch2/time_message.cpp \
+  jb/pitch2/unit_clear_message.cpp
+jb_libjb_pitch2_a_HEADERS = \
+  jb/pitch2/add_order_message.hpp \
+  jb/pitch2/auction_update_message.hpp \
+  jb/pitch2/base_add_order_message.hpp \
+  jb/pitch2/base_add_order_message_streaming.hpp \
+  jb/pitch2/delete_order_message.hpp \
+  jb/pitch2/expanded_add_order_message.hpp \
+  jb/pitch2/modify_message.hpp \
+  jb/pitch2/order_executed_message.hpp \
+  jb/pitch2/order_executed_price_message.hpp \
+  jb/pitch2/reduce_size_message.hpp \
+  jb/pitch2/short_add_order_message.hpp \
+  jb/pitch2/time_message.hpp \
+  jb/pitch2/unit_clear_message.hpp
+
+unit_tests += \
+  jb/pitch2/ut_add_order_message \
+  jb/pitch2/ut_auction_update_message \
+  jb/pitch2/ut_delete_order_message \
+  jb/pitch2/ut_expanded_add_order_message \
+  jb/pitch2/ut_modify_message \
+  jb/pitch2/ut_order_executed_message \
+  jb/pitch2/ut_order_executed_price_message \
+  jb/pitch2/ut_reduce_size_message \
+  jb/pitch2/ut_short_add_order_message \
+  jb/pitch2/ut_time_message \
+  jb/pitch2/ut_unit_clear_message
+
+jb_ut_pitch2_ldadd = \
+  jb/libjb_pitch2.a \
+  $(jb_ut_ldadd)
+jb_ut_pitch2_ldflags = \
+  $(jb_ut_ldflags)
+
+#
+# pitch2 unit tests
+#
+
+jb_pitch2_ut_add_order_message_SOURCES = jb/pitch2/ut_add_order_message.cpp
+jb_pitch2_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_add_order_message
+jb_pitch2_ut_add_order_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_add_order_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_auction_update_message_SOURCES = jb/pitch2/ut_auction_update_message.cpp
+jb_pitch2_ut_auction_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_auction_update_message
+jb_pitch2_ut_auction_update_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_auction_update_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_delete_order_message_SOURCES = jb/pitch2/ut_delete_order_message.cpp
+jb_pitch2_ut_delete_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_delete_order_message
+jb_pitch2_ut_delete_order_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_delete_order_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_expanded_add_order_message_SOURCES = jb/pitch2/ut_expanded_add_order_message.cpp
+jb_pitch2_ut_expanded_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_expanded_add_order_message
+jb_pitch2_ut_expanded_add_order_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_expanded_add_order_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_modify_message_SOURCES = jb/pitch2/ut_modify_message.cpp
+jb_pitch2_ut_modify_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_modify_message
+jb_pitch2_ut_modify_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_modify_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_order_executed_message_SOURCES = jb/pitch2/ut_order_executed_message.cpp
+jb_pitch2_ut_order_executed_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_order_executed_message
+jb_pitch2_ut_order_executed_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_order_executed_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_order_executed_price_message_SOURCES = jb/pitch2/ut_order_executed_price_message.cpp
+jb_pitch2_ut_order_executed_price_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_order_executed_price_message
+jb_pitch2_ut_order_executed_price_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_order_executed_price_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_reduce_size_message_SOURCES = jb/pitch2/ut_reduce_size_message.cpp
+jb_pitch2_ut_reduce_size_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_reduce_size_message
+jb_pitch2_ut_reduce_size_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_reduce_size_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_short_add_order_message_SOURCES = jb/pitch2/ut_short_add_order_message.cpp
+jb_pitch2_ut_short_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_short_add_order_message
+jb_pitch2_ut_short_add_order_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_short_add_order_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_time_message_SOURCES = jb/pitch2/ut_time_message.cpp
+jb_pitch2_ut_time_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_time_message
+jb_pitch2_ut_time_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_time_message_LDADD = $(jb_ut_pitch2_ldadd)
+
+jb_pitch2_ut_unit_clear_message_SOURCES = jb/pitch2/ut_unit_clear_message.cpp
+jb_pitch2_ut_unit_clear_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_pitch2_ut_unit_clear_message
+jb_pitch2_ut_unit_clear_message_LDFLAGS = $(jb_ut_pitch2_ldflags)
+jb_pitch2_ut_unit_clear_message_LDADD = $(jb_ut_pitch2_ldadd)
 
 ################################################################
 # examples
@@ -597,13 +762,21 @@ tools_itch5stats_LDADD = jb/libjb_itch5.a jb/libjb.a
 tools_itch5trades_SOURCES = tools/itch5trades.cpp
 tools_itch5trades_LDADD = jb/libjb_itch5.a jb/libjb.a
 
-tools_mold2inside_SOURCES = tools/mold2inside.cpp
-tools_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
-tools_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
-
 tools_moldheartbeat_SOURCES = tools/moldheartbeat.cpp
 tools_moldheartbeat_LDFLAGS = $(BOOST_ASIO_LIBS)
 tools_moldheartbeat_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+jb_itch5_mold2inside_SOURCES = jb/itch5/mold2inside.cpp
+jb_itch5_mold2inside_LDFLAGS = $(BOOST_ASIO_LIBS)
+jb_itch5_mold2inside_LDADD = jb/libjb_itch5.a jb/libjb.a
+
+jb_itch5_moldreplay_SOURCES = jb/itch5/moldreplay.cpp
+jb_itch5_moldreplay_LDFLAGS = $(BOOST_ASIO_LIBS)
+jb_itch5_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
+
+jb_itch5_moldfeedhandler_SOURCES = jb/itch5/moldfeedhandler.cpp
+jb_itch5_moldfeedhandler_LDFLAGS = $(BOOST_ASIO_LIBS)
+jb_itch5_moldfeedhandler_LDADD = jb/libjb_itch5.a jb/libjb_ehs.a jb/libjb.a
 
 jb_itch5_ut_add_order_message_SOURCES = jb/itch5/ut_add_order_message.cpp
 jb_itch5_ut_add_order_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_add_order_message
@@ -675,10 +848,20 @@ jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_
 jb_itch5_ut_ipo_quoting_period_update_message_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_ldadd)
 
+jb_itch5_ut_make_socket_udp_common_SOURCES = jb/itch5/ut_make_socket_udp_common.cpp
+jb_itch5_ut_make_socket_udp_common_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_common
+jb_itch5_ut_make_socket_udp_common_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_make_socket_udp_common_LDADD = $(jb_ut_itch5_ldadd)
+
 jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
 jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
 jb_itch5_ut_make_socket_udp_recv_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_make_socket_udp_send_SOURCES = jb/itch5/ut_make_socket_udp_send.cpp
+jb_itch5_ut_make_socket_udp_send_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_send
+jb_itch5_ut_make_socket_udp_send_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_make_socket_udp_send_LDADD = $(jb_ut_itch5_ldadd)
 
 jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
 jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
@@ -819,6 +1002,11 @@ jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
 jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
 jb_itch5_ut_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_udp_receiver_config_SOURCES = jb/itch5/ut_udp_receiver_config.cpp
+jb_itch5_ut_udp_receiver_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_udp_receiver_config
+jb_itch5_ut_udp_receiver_config_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_udp_receiver_config_LDADD = $(jb_ut_itch5_ldadd)
 
 jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
 jb_itch5_bm_order_book_CPPFLAGS = 
@@ -1197,10 +1385,3 @@ jb_tde_bm_reduce_argmax_real_LDFLAGS = \
   $(OPENCL_LDFLAGS)
 else
 endif
-
-################################################################
-# other programs
-################################################################
-
-jb_mktsim_moldreplay_SOURCES = jb/mktsim/moldreplay.cpp
-jb_mktsim_moldreplay_LDADD = jb/libjb_itch5.a jb/libjb.a

@@ -4,3 +4,8 @@ ignore:
   - "/jb/testing/"       # Test support code
   - "/jb/itch5/testing/" # Test support code
   - "/valgrind/valgrind.h$" # Valgrind header file
+
+# We want 95% coverage before we declare success, and anything below
+# 85% is terrible ...
+coverage:
+  range: 85..95
