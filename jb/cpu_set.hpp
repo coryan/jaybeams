@@ -27,10 +27,10 @@ namespace jb {
  * The iostream operators (used for tests, and conversions everywhere)
  * use this format.
  *
- * TODO(JB-54) this is a portability problem.  Many platforms can
+ * TODO(#151) this is a portability problem.  Many platforms can
  * specify cpu affinity, but they all use different constructs for
  * it.
- * TODO(JB-54) we only support up to CPU_SETSIZE cpus, it is possible
+ * TODO(#152) we only support up to CPU_SETSIZE cpus, it is possible
  * to control more CPUs in Linux, but the application that has access
  * to more than 1024 cpus is rare indeed.
  */
