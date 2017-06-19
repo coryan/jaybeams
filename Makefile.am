@@ -613,7 +613,8 @@ unit_tests += \
   jb/itch5/ut_stock_trading_action_message \
   jb/itch5/ut_system_event_message \
   jb/itch5/ut_timestamp \
-  jb/itch5/ut_trade_message
+  jb/itch5/ut_trade_message \
+  jb/itch5/ut_udp_receiver_config
 
 benchmarks += jb/itch5/bm_order_book
 bin_SCRIPTS += \
@@ -1001,6 +1002,11 @@ jb_itch5_ut_trade_message_SOURCES = jb/itch5/ut_trade_message.cpp
 jb_itch5_ut_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_trade_message
 jb_itch5_ut_trade_message_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_trade_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_udp_receiver_config_SOURCES = jb/itch5/ut_udp_receiver_config.cpp
+jb_itch5_ut_udp_receiver_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_udp_receiver_config
+jb_itch5_ut_udp_receiver_config_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_udp_receiver_config_LDADD = $(jb_ut_itch5_ldadd)
 
 jb_itch5_bm_order_book_SOURCES = jb/itch5/bm_order_book.cpp
 jb_itch5_bm_order_book_CPPFLAGS = 
