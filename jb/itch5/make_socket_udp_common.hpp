@@ -16,7 +16,7 @@ namespace itch5 {
  * @tparam socket_t the type of socket to create.  The main reason to
  * change this type is for dependency injection during testing.
  *
- * @param socket the socket to configure.
+ * @param s the socket to configure.
  * @param cfg the socket configuration.
  */
 template <class socket_t = boost::asio::ip::udp::socket>
