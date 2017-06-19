@@ -14,11 +14,14 @@
 #include <jb/itch5/process_iostream.hpp>
 #include <jb/itch5/udp_receiver_config.hpp>
 #include <jb/itch5/udp_sender_config.hpp>
+#include <jb/mktdata/inside_levels_update.hpp>
 #include <jb/fileio.hpp>
 #include <jb/log.hpp>
 
+#include <ctime>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 #include <unordered_map>
 
 /**
@@ -89,15 +92,99 @@ output_function create_output_file(config const& cfg) {
   };
 }
 
+// TODO() - this value is cached, we need think about what happens for
+// programs that run 24x7 ...
+std::chrono::system_clock::time_point midnight() {
+  using std::chrono::system_clock;
+  // TODO - this should be ::localtime_r(), even though it is not part
+  // of the C++ standard it is part of POSIX and better for threaded
+  // environments ...
+  auto now = std::time(nullptr);
+  std::tm date = *std::localtime(&now);
+  date.tm_sec = 0;
+  date.tm_min = 0;
+  date.tm_hour = 0;
+  return system_clock::from_time_t(std::mktime(&date));
+}
+
+void send_inside_levels_update(
+    boost::asio::ip::udp::socket& socket,
+    boost::asio::ip::udp::endpoint const& destination,
+    std::chrono::system_clock::time_point const& midnight,
+    jb::itch5::message_header const& header, order_book const& updated_book,
+    jb::itch5::book_update const& update) {
+  // ... filter out messages that do not update the inside ...
+  if (update.buy_sell_indicator == u'B') {
+    if (updated_book.best_bid().first != update.px) {
+      return;
+    }
+  } else {
+    if (updated_book.best_offer().first != update.px) {
+      return;
+    }
+  }
+  // ... prepare the message to send ...
+  // TODO() - the number of levels should be based on the "levels()"
+  // configuration parameter
+  jb::mktdata::inside_levels_update<1> msg;
+  static_assert(
+      std::is_pod<decltype(msg)>::value, "Message type should be a POD type");
+  msg.message_type = jb::mktdata::inside_levels_update<1>::mtype;
+  // TODO() - add configuration to send sizeof(msg) - sizeof(msg.annotations)
+  msg.message_size = sizeof(msg);
+  // TODO() - actually create sequence numbers ...
+  msg.sequence_number = 0;
+  // TODO() - this should be configured, the configuration parameters
+  // should be the short strings (e.g. NASD-PITCH-5), and the feed
+  // identifier should be looked up.
+  msg.market.id = 0;
+  msg.feed.id = 0;
+  msg.feedhandler_ts.nanos =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(
+          std::chrono::system_clock::now() - midnight)
+          .count();
+  // TODO() - another configuration parameter
+  msg.source.id = 0;
+  msg.exchange_ts.nanos = header.timestamp.ts.count();
+  msg.feed_ts.nanos = header.timestamp.ts.count();
+  // TODO() - this should be based on the JayBeams security id.
+  msg.security.id = header.stock_locate;
+  msg.bid_qty[0] = updated_book.best_bid().second;
+  msg.bid_px[0] = updated_book.best_bid().first.as_integer();
+  msg.offer_qty[0] = updated_book.best_offer().second;
+  msg.offer_px[0] = updated_book.best_offer().first.as_integer();
+  // TODO() - this should be based on configuration parameters, and
+  // range checked ...
+  std::memcpy(msg.annotations.mic, "NASD", 4);
+  std::memcpy(msg.annotations.feed_name, "NASD-PITCH-5x", 13);
+  std::memcpy(msg.annotations.source_name, "NASD-PITCH-5x", 13);
+  // TODO() - NASDAQ data is mostly normalized, some NYSE securities
+  // have a different ticker in NASDAQ data vs. CQS and NYSE data.
+  std::memcpy(
+      msg.annotations.security_normalized, update.stock.c_str(),
+      update.stock.wire_size);
+  std::memcpy(
+      msg.annotations.security_feed, update.stock.c_str(),
+      update.stock.wire_size);
+  // TODO() - consider a non-blocking write for the socket
+  socket.send_to(
+      boost::asio::buffer(&msg, msg.message_size.value()), destination);
+  // TODO() - increment a counter to show that the socket was sent,
+  // different counters for success and failure ...
+}
+
 /// Create an output function for a single socket
 output_function create_output_socket(
     boost::asio::io_service& io, jb::itch5::udp_sender_config const& cfg) {
   auto s = jb::itch5::make_socket_udp_send<>(io, cfg);
   auto socket = std::make_shared<decltype(s)>(std::move(s));
-  return [socket, cfg](
-      jb::itch5::message_header const& header, order_book const& updated_book,
-      jb::itch5::book_update const& update) {
-    std::cout << "should send to " << cfg.address() << "\n";
+  auto const address = boost::asio::ip::address::from_string(cfg.address());
+  auto const destination = boost::asio::ip::udp::endpoint(address, cfg.port());
+  auto const mid = midnight();
+  return [socket, cfg, destination, mid](
+      jb::itch5::message_header const& h, order_book const& ub,
+      jb::itch5::book_update const& u) {
+    send_inside_levels_update(*socket, destination, mid, h, ub, u);
   };
 }
 
