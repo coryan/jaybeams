@@ -391,6 +391,8 @@ std::string const control_host = "0.0.0.0";
 int const control_port = 23100;
 std::string const mold_address = "127.0.0.1";
 unsigned short const mold_port = 12300;
+std::string const output_address = "127.0.0.1";
+unsigned short const output_port = 13000;
 } // namespace defaults
 
 config::config()
@@ -436,6 +438,9 @@ config::config()
           this, defaults::control_port)
     , book(desc("book", "order-book-config"), this)
     , log(desc("log", "logging"), this) {
+  output({jb::itch5::udp_sender_config()
+              .address(defaults::output_address)
+              .port(defaults::output_port)});
 }
 
 void config::validate() const {
@@ -454,14 +459,21 @@ void config::validate() const {
         1);
   }
   int cnt = 0;
+  int outputs = 0;
   for (auto const& outcfg : output()) {
     if ((outcfg.port() != 0 and outcfg.address() == "") or
         (outcfg.port() == 0 and outcfg.address() != "")) {
       std::ostringstream os;
       os << "Partially configured output socket #" << cnt << " ("
-         << outcfg.address() << " / " << outcfg.port();
+         << outcfg.address() << " / " << outcfg.port() << ")";
       throw jb::usage(os.str(), 1);
     }
+    if (outcfg.port() != 0 and outcfg.address() != "") {
+      ++outputs;
+    }
+  }
+  if (outputs == 0 and output_file() == "") {
+    throw jb::usage("No --output nor --output-file configured", 1);
   }
   log().validate();
 }
