@@ -583,6 +583,7 @@ unit_tests += \
   jb/itch5/ut_cross_type \
   jb/itch5/ut_generate_inside \
   jb/itch5/ut_ipo_quoting_period_update_message \
+  jb/itch5/ut_make_socket_udp_common \
   jb/itch5/ut_make_socket_udp_recv \
   jb/itch5/ut_make_socket_udp_send \
   jb/itch5/ut_map_based_order_book \
@@ -845,6 +846,11 @@ jb_itch5_ut_ipo_quoting_period_update_message_SOURCES = jb/itch5/ut_ipo_quoting_
 jb_itch5_ut_ipo_quoting_period_update_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_ipo_quoting_period_update_message
 jb_itch5_ut_ipo_quoting_period_update_message_LDFLAGS = $(jb_ut_itch5_ldflags)
 jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_ldadd)
+
+jb_itch5_ut_make_socket_udp_common_SOURCES = jb/itch5/ut_make_socket_udp_common.cpp
+jb_itch5_ut_make_socket_udp_common_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_common
+jb_itch5_ut_make_socket_udp_common_LDFLAGS = $(jb_ut_itch5_ldflags)
+jb_itch5_ut_make_socket_udp_common_LDADD = $(jb_ut_itch5_ldadd)
 
 jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
 jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
