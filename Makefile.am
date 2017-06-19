@@ -527,6 +527,7 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/generate_inside.hpp \
   jb/itch5/quote_defaults.hpp \
   jb/itch5/ipo_quoting_period_update_message.hpp \
+  jb/itch5/make_socket_udp_common.hpp \
   jb/itch5/make_socket_udp_recv.hpp \
   jb/itch5/make_socket_udp_send.hpp \
   jb/itch5/map_based_order_book.hpp \
@@ -565,7 +566,6 @@ nobase_jb_libjb_itch5_a_HEADERS = \
   jb/itch5/udp_config_common.hpp \
   jb/itch5/udp_sender_config.hpp \
   jb/itch5/udp_receiver_config.hpp \
-  jb/itch5/udp_sender_config.hpp \
   jb/itch5/unknown_message.hpp
 
 unit_tests += \
