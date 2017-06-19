@@ -3,6 +3,7 @@
 #include <jb/itch5/mold_udp_protocol_constants.hpp>
 #include <jb/itch5/testing/data.hpp>
 #include <jb/itch5/timestamp.hpp>
+#include <jb/itch5/udp_receiver_config.hpp>
 
 #include <skye/mock_function.hpp>
 #include <boost/test/unit_test.hpp>
@@ -61,7 +62,8 @@ std::string select_localhost_address(boost::asio::io_service& io) {
   for (auto const& addr : {"::1", "127.0.0.1"}) {
     try {
       BOOST_TEST_CHECKPOINT("Checking " << addr << " as the localhost address");
-      auto socket = jb::itch5::make_socket_udp_recv(io, addr, 40000, "");
+      auto socket = jb::itch5::make_socket_udp_recv(
+          io, jb::itch5::udp_receiver_config().address(addr).port(40000));
       return addr;
     } catch (...) {
     }
@@ -109,7 +111,9 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   boost::asio::io_service io;
   auto local = select_localhost_address(io);
   BOOST_TEST_MESSAGE("Running test on " << local);
-  jb::itch5::mold_udp_channel channel(io, adapter, local, 50000, "");
+
+  jb::itch5::mold_udp_channel channel(
+      io, adapter, jb::itch5::udp_receiver_config().port(50000).address(local));
 
   udp::resolver resolver(io);
   udp::endpoint send_to;
@@ -166,8 +170,16 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_coverage) {
 
   boost::asio::io_service io;
   auto local = select_localhost_address(io);
-  jb::itch5::mold_udp_channel channel(io, adapter, local, 50000, "");
+  jb::itch5::mold_udp_channel channel(
+      io, adapter, jb::itch5::udp_receiver_config().port(50000).address(local));
 
   jb::itch5::mold_udp_channel_tester::call_with_empty_packet(channel);
   jb::itch5::mold_udp_channel_tester::call_with_error_code(channel);
+
+  jb::itch5::mold_udp_channel::buffer_handler const handler(adapter);
+  jb::itch5::mold_udp_channel c2(
+      io, handler, jb::itch5::udp_receiver_config().port(50000).address(local));
+
+  jb::itch5::mold_udp_channel_tester::call_with_empty_packet(c2);
+  jb::itch5::mold_udp_channel_tester::call_with_error_code(c2);
 }

@@ -10,6 +10,8 @@
 namespace jb {
 namespace itch5 {
 
+class udp_receiver_config;
+
 /**
  * Create and manage a socket to receive MoldUDP64 packets.
  *
@@ -40,25 +42,30 @@ public:
       buffer_handler;
 
   /**
-   * Constructor, create a socket and register for IO notifications
+   * Constructor, create a socket and register for IO notifications.
    *
    * @param handler the callback to invoke to process any ITCH-5.0
    * messages received
    * @param io the Boost.ASIO IO service to register with for IO
    * notifications
-   * @param receive_address the IP address where the packets are
-   * recevied.  This can be either IPv4 or IPv6, and either a unicast
-   * or multicast address.  The class creates a socket of the right
-   * type.
-   * @param port the UDP port where the packets are received.
-   * @param listen_address if not empty, defines the network interface
-   * where the packets are received, for servers that have multiple
-   * NICs.
+   * @param cfg the configuration for the UDP receiver.
    */
   mold_udp_channel(
-      boost::asio::io_service& io, buffer_handler handler,
-      std::string const& receive_address, int port,
-      std::string const& listen_address);
+      boost::asio::io_service& io, buffer_handler const& handler,
+      udp_receiver_config const& cfg);
+
+  /**
+   * Constructor, create a socket and register for IO notifications.
+   *
+   * @param handler the callback to invoke to process any ITCH-5.0
+   * messages received
+   * @param io the Boost.ASIO IO service to register with for IO
+   * notifications
+   * @param cfg the configuration for the UDP receiver.
+   */
+  mold_udp_channel(
+      boost::asio::io_service& io, buffer_handler&& handler,
+      udp_receiver_config const& cfg);
 
 private:
   /**
