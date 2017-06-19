@@ -10,7 +10,7 @@ namespace {
 void wait_for_connection_close(
     std::shared_ptr<jb::ehs::request_dispatcher> d, long last_count) {
   // .. wait until the connection is closed ...
-  for (int c = 0; c != 10 and last_count == d->get_close_connection(); ++c) {
+  for (int c = 0; c != 100 and last_count == d->get_close_connection(); ++c) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
   BOOST_CHECK_EQUAL(d->get_close_connection(), last_count + 1);
@@ -74,6 +74,7 @@ BOOST_AUTO_TEST_CASE(acceptor_base) {
   // ... closing the socket triggers more behaviors in the acceptor
   // and connector classes ...
   sock.close();
+  BOOST_TEST_CHECKPOINT("closing connection in acceptor_base");
   wait_for_connection_close(dispatcher, dispatcher->get_close_connection());
 
   // ... shutdown the acceptor and stop the io_service ...
@@ -183,6 +184,7 @@ void cycle_connection(
 
   // ... close the socket ...
   sock.close();
+  BOOST_TEST_CHECKPOINT("closing connection in cycle_connection");
   wait_for_connection_close(d, close_count);
 }
 
@@ -279,6 +281,7 @@ BOOST_AUTO_TEST_CASE(connection_multiple_requests) {
   // and connector classes ...
   auto close_count = dispatcher->get_close_connection();
   sock.close();
+  BOOST_TEST_CHECKPOINT("closing connection in connection_multiple_requests");
   wait_for_connection_close(dispatcher, close_count);
 
   // ... shutdown the acceptor and stop the io_service ...
@@ -398,4 +401,38 @@ BOOST_AUTO_TEST_CASE(acceptor_double_shutdown) {
   acceptor.shutdown();
 
   BOOST_CHECK_EQUAL(dispatcher->get_accept_error(), 0);
+}
+
+/**
+ * @test Improve coverage forjb::ehs::acceptor.
+ */
+BOOST_AUTO_TEST_CASE(acceptor_on_accept_closed) {
+  // Let the operating system pick a listening address ...
+  boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(), 0};
+
+  // ... create a dispatcher, with no handlers ...
+  auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("test");
+  // ... create a IO service, and an acceptor in the default address ...
+  boost::asio::io_service io_service;
+
+  // ... the acceptor will register for the on_accept() callback ...
+  jb::ehs::acceptor acceptor(io_service, ep, dispatcher);
+
+  // ... close the acceptor before it has a chance to do anything ...
+  acceptor.shutdown();
+
+  // ... the thread will call on_accept() just because it is closed,
+  // and that will hit one more path ...
+  std::thread t([&io_service]() { io_service.run(); });
+
+  for (int c = 0; c != 100 and 0 == dispatcher->get_accept_closed(); ++c) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(dispatcher->get_accept_closed(), 1);
+  
+  // ... shutdown everything ...
+  io_service.dispatch([&acceptor, &io_service] {
+    io_service.stop();
+  });
+  t.join();
 }

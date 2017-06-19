@@ -34,6 +34,7 @@ void acceptor::on_accept(boost::system::error_code const& ec) {
     // to shutdown the application, so we simply return and do not
     // schedule any additional work ...
     JB_LOG(info) << "on_accept: acceptor is not open";
+    dispatcher_->count_accept_closed();
     return;
   }
   // ... move the newly created socket to a stack variable so we can

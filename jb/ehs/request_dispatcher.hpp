@@ -158,6 +158,14 @@ public:
   long get_accept_error() const {
     return accept_error_;
   }
+
+  /// Count accept requests on closed acceptors (rare)
+  void count_accept_closed() {
+    ++accept_closed_;
+  }
+  long get_accept_closed() const {
+    return accept_closed_;
+  }
   //@}
 
   /**
@@ -258,6 +266,7 @@ private:
   std::atomic<long> write_error_;
   std::atomic<long> accept_ok_;
   std::atomic<long> accept_error_;
+  std::atomic<long> accept_closed_;
 };
 
 } // namespace ehs

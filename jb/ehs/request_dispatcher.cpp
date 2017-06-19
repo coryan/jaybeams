@@ -23,7 +23,8 @@ request_dispatcher::request_dispatcher(std::string const& server_name)
     , write_ok_(0)
     , write_error_(0)
     , accept_ok_(0)
-    , accept_error_(0) {
+    , accept_error_(0)
+    , accept_closed_(0) {
 #ifndef ATOMIC_LONG_LOCK_FREE
 #error "Missing ATOMIC_LONG_LOCK_FREE required by C++11 standard"
 #endif // ATOMIC_LONG_LOCK_FREE
@@ -105,6 +106,10 @@ void request_dispatcher::append_metrics(response_type& res) const {
      << "# HELP accept_error The number of errors accepting HTTP connections\n"
      << "# TYPE accept_error counter\n"
      << "accept_error " << get_accept_error() << "\n"
+     << "# HELP accept_closed The number accept() attempts on a closed "
+        "acceptor\n"
+     << "# TYPE accept_closed counter\n"
+     << "accept_closed " << get_accept_closed() << "\n"
      << "\n";
   res.body += os.str();
 }
