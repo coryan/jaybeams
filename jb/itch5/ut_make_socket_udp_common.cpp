@@ -10,8 +10,7 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_basic) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
-  jb::itch5::make_socket_udp_common(
-      socket, jb::itch5::udp_config_common());
+  jb::itch5::make_socket_udp_common(socket, jb::itch5::udp_config_common());
   socket.set_option_debug.check_called().never();
   socket.set_option_do_not_route.check_called().once();
   socket.set_option_linger.check_called().never();
