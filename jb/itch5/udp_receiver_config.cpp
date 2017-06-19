@@ -36,6 +36,9 @@ udp_receiver_config::udp_receiver_config()
 
 void udp_receiver_config::validate() const {
   udp_config_common::validate();
+  if (address() == "" and port() == 0) {
+    return;
+  }
   auto a = boost::asio::ip::address::from_string(address());
   if (not a.is_multicast() and local_address() != "") {
     std::ostringstream os;
