@@ -429,10 +429,8 @@ BOOST_AUTO_TEST_CASE(acceptor_on_accept_closed) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
   BOOST_CHECK_EQUAL(dispatcher->get_accept_closed(), 1);
-  
+
   // ... shutdown everything ...
-  io_service.dispatch([&acceptor, &io_service] {
-    io_service.stop();
-  });
+  io_service.dispatch([&acceptor, &io_service] { io_service.stop(); });
   t.join();
 }
