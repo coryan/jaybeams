@@ -1,6 +1,7 @@
 #ifndef jb_itch5_make_socket_udp_recv_hpp
 #define jb_itch5_make_socket_udp_recv_hpp
 
+#include <jb/itch5/make_socket_udp_common.hpp>
 #include <jb/itch5/udp_receiver_config.hpp>
 
 #include <boost/asio/ip/multicast.hpp>
@@ -64,6 +65,7 @@ socket_t make_socket_udp_recv(
     socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
   }
 
+  make_socket_udp_common(socket, cfg);
   return socket;
 }
 
