@@ -19,6 +19,7 @@ instdir = $(prefix)
 lib_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_ehs.a \
+  jb/libjb_etcd.a \
   jb/libjb_itch5.a \
   jb/libjb_pitch2.a \
   jb/libjb_testing.a \
@@ -133,24 +134,24 @@ endif !FOUND_CLANG_FORMAT
 ################################################################
 
 # Define the variables to silently compile ProtoBuf files into cpp files.
-PROTOCCOMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
+PROTOC_COMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
 AM_V_PROTOC = $(am__v_PROTOC_$(V))
-am__v_PROTOC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_PROTOC_ = $(am__v_PROTOC_$(AM_DEFAULT_VERBOSITY))
 am__v_PROTOC_0 = @echo "  PROTOC  " $@;
 am__v_PROTOC_1 = 
 
 %.pb.cc %.pb.h: %.proto
-	$(AM_V_PROTOC)$(PROTOCCOMPILE) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
+	$(AM_V_PROTOC)$(PROTOC_COMPILE)	--cpp_out=$(builddir) $^
 
 # Define the variables to generate gRPC C++ files
-GRPCCOMPILE = $(PROTOC) --plugin=protoc-gen-grpc="$(GRPC_CPP_PLUGIN)" $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
-AM_V_GRPC = $(am__v_PROTOC_$(V))
-am__v_GRPC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+GRPC_COMPILE = $(PROTOC_COMPILE) --plugin=protoc-gen-grpc="$(GRPC_CPP_PLUGIN)"
+AM_V_GRPC = $(am__v_GRPC_$(V))
+am__v_GRPC_ = $(am__v_GRPC_$(AM_DEFAULT_VERBOSITY))
 am__v_GRPC_0 = @echo "  GRPC    " $@;
 am__v_GRPC_1 = 
 
 %.grpc.pb.cc %.grpc.pb.h: %.proto
-	$(AM_V_GRPC)$(GRPCCOMPILE) --grpc_out=$(builddir) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
+	$(AM_V_GRPC)$(GRPC_COMPILE) --grpc_out=$(builddir) --cpp_out=$(builddir) $^
 
 ################################################################
 # jb/libjb.a
@@ -502,17 +503,39 @@ jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 # TODO() - for the moment this is just a small test program to verify
 # the makefiles work
 ################################################################
+
+AM_PROTOCFLAGS = -I$(srcdir)/googleapis -I$(srcdir)/gogoproto -I$(srcdir)
+
+vpath %.proto $(srcdir)/googleapis $(srcdir)/gogoproto $(srcdir)
+
+jb_libjb_etcd_adir = $(includedir)
+jb_libjb_etcd_a_SOURCES = \
+  google/api/http.pb.cc \
+  google/api/annotations.pb.cc \
+  gogoproto/gogo.pb.cc \
+  etcd/mvcc/mvccpb/kv.pb.cc \
+  etcd/auth/authpb/auth.pb.cc \
+  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
+  etcd/etcdserver/etcdserverpb/rpc.pb.cc
+nobase_jb_libjb_etcd_a_HEADERS = \
+  google/api/http.pb.h \
+  google/api/annotations.pb.h \
+  gogoproto/gogo.pb.h \
+  etcd/mvcc/mvccpb/kv.pb.h \
+  etcd/auth/authpb/auth.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.pb.h
+
 noinst_PROGRAMS += \
   jb/etcd/test_client \
   jb/etcd/test_server
 
 dist_noinst_DATA = jb/etcd/test.proto
 
-jb_etcd_test_client_SOURCES = jb/etcd/test_client.cpp \
+jb_etcd_test_client_SOURCES = \
   jb/etcd/test.grpc.pb.cc \
-  jb/etcd/test.grpc.pb.h \
   jb/etcd/test.pb.cc \
-  jb/etcd/test.pb.h
+  jb/etcd/test_client.cpp
 jb_etcd_test_client_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
 jb_etcd_test_client_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_test_client_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
