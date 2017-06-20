@@ -2,7 +2,9 @@ FROM ubuntu:16.04
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
 RUN apt-get update && apt-get install -y \
+      autoconf \
       automake \
+      build-essential \
       ca-certificates \
       clang \
       clang-format \
@@ -12,12 +14,14 @@ RUN apt-get update && apt-get install -y \
       g++ \
       gcc \
       git \
+      golang \
       lcov \
       libboost-all-dev \
       libbz2-dev \
       libclang-dev \
       libclfft-dev \
       libfftw3-dev \
+      libtool \
       libyaml-cpp-dev \
       llvm \
       lshw \
@@ -29,6 +33,7 @@ RUN apt-get update && apt-get install -y \
       sudo \
       tar \
       time \
+      unzip \
       wget \
       xz-utils \
       zlib1g-dev && \
@@ -75,4 +80,14 @@ RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
       cmake . && make -j 2 && cp -r include/beast /usr/include/beast/) && \
     /bin/rm -fr /var/tmp/build-beast-http
 
+WORKDIR /var/tmp/build-grpc
+RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
+  (cd /var/tmp/build-grpc/grpc/ && \
+    git submodule update --init && \
+    make -j 2 && make install && \
+    cd /var/tmp/build-grpc/grpc/third_party/protobuf && \
+    make install) && \
+  /bin/rm -fr /var/tmp/build-grpc
+
 WORKDIR /root
+
