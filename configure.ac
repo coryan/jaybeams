@@ -89,6 +89,56 @@ AX_CONFIG_FEATURE(static-linking, [turns on/off static linking],
                   [enable_static_linking="yes"], [enable_static_linking="no"])
 AM_CONDITIONAL(STATIC_LINKING, [test "$enable_static_linking" = "yes"])
 
+# ... find out where the Protobuf and gRPC libraries can be found
+# using pkg-confg.  Avoid using PKG_CHECK_MODULES because we want
+# separate -I, -L, and -l flags ...
+PKG_PROG_PKG_CONFIG
+if $PKG_CONFIG --atleast-version=3.3 protobuf; then
+  PROTOBUF_LIBS=`$PKG_CONFIG --libs protobuf`
+  PROTOBUF_CPPFLAGS=`$PKG_CONFIG --cflags-only-I protobuf`
+  PROTOBUF_CFLAGS=`$PKG_CONFIG --cflags-only-other protobuf`
+else
+  AC_MSG_ERROR([Cannot find protobuf >= 3.3])
+fi
+AC_SUBST(PROTOBUF_LIBS)
+AC_SUBST(PROTOBUF_CPPFLAGS)
+AC_SUBST(PROTOBUF_CFLAGS)
+
+if $PKG_CONFIG --atleast-version=1.3.4 grpc++; then
+  GRPCPP_LIBS=`$PKG_CONFIG --libs grpc++`
+  GRPCPP_CPPFLAGS=`$PKG_CONFIG --cflags-only-I grpc++`
+  GRPCPP_CFLAGS=`$PKG_CONFIG --cflags-only-other grpc++`
+else
+  AC_MSG_ERROR([Cannot find grpc++ >= 1.3.4])
+fi
+AC_SUBST(GRPCPP_LIBS)
+AC_SUBST(GRPCPP_CPPFLAGS)
+AC_SUBST(GRPCPP_CFLAGS)
+
+AC_ARG_WITH([protoc],
+    [AS_HELP_STRING([--with-protoc=/protoc/full/path],
+        [Set the location of the protocol buffers compiler (protoc).
+         Defaults to looking on the PATH.])],
+    [PROTOC="$withval"],
+    [ AS_IF([test "x$PROTOC" == "x"],
+        [AC_PATH_PROG([PROTOC], [protoc], [no])])
+    ]
+)
+AS_IF([test "$PROTOC" == "no"],
+    [AC_MSG_ERROR([ProtoBuf compiler "protoc" not found.])])
+
+AC_ARG_WITH([grpc_cpp_plugin],
+    [AS_HELP_STRING([--with-grpc-cpp-plugin=/grpc_cpp_plugin/full/path],
+        [Set the location of the gRPC C++ plugin for protoc.
+         Defaults to looking on the PATH.])],
+    [GRPC_CPP_PLUGIN="$withval"],
+    [ AS_IF([test "x$GRPC_CPP_PLUGIN" == "x"],
+        [AC_PATH_PROG([GRPC_CPP_PLUGIN], [grpc_cpp_plugin], [no])])
+    ]
+)
+AS_IF([test "$GRPC_CPP_PLUGIN" == "no"],
+    [AC_MSG_ERROR([gRPC C++ plugin not found.])])
+
 # ... we need Boost with a version higher than 1.58 because Beast and
 # Boost.Endian ...
 AX_BOOST_BASE([1.58], [], [

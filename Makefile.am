@@ -69,9 +69,7 @@ AM_CPPFLAGS += \
   $(YAML_CPP_CPPFLAGS) \
   $(BOOST_CPPFLAGS)
 
-LDFLAGS = \
-  $(YAML_CPP_LDFLAGS) \
-  $(BOOST_LDFLAGS)
+LDFLAGS =
 
 if STATIC_LINKING
 LDFLAGS += -Wl,-Bstatic
@@ -129,6 +127,30 @@ check-style:
 	$(AM_V_at)echo "clang-format not found, cannot check style" && exit 1
 endif !FOUND_CLANG_FORMAT
 .PHONY: check-style
+
+################################################################
+# Special rules to compile protocol buffer files
+################################################################
+
+# Define the variables to silently compile ProtoBuf files into cpp files.
+PROTOCCOMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
+AM_V_PROTOC = $(am__v_PROTOC_$(V))
+am__v_PROTOC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_PROTOC_0 = @echo "  PROTOC  " $@;
+am__v_PROTOC_1 = 
+
+%.pb.cc %.pb.h: %.proto
+	$(AM_V_PROTOC)$(PROTOCCOMPILE) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
+
+# Define the variables to generate gRPC C++ files
+GRPCCOMPILE = $(PROTOC) --plugin=protoc-gen-grpc="$(GRPC_CPP_PLUGIN)" $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
+AM_V_GRPC = $(am__v_PROTOC_$(V))
+am__v_GRPC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_GRPC_0 = @echo "  GRPC    " $@;
+am__v_GRPC_1 = 
+
+%.grpc.pb.cc %.grpc.pb.h: %.proto
+	$(AM_V_GRPC)$(GRPCCOMPILE) --grpc_out=$(builddir) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
 
 ################################################################
 # jb/libjb.a
@@ -473,6 +495,36 @@ jb_testing_ut_microbenchmark_config_SOURCES = jb/testing/ut_microbenchmark_confi
 jb_testing_ut_microbenchmark_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_microbenchmark_config
 jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
 jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
+
+################################################################
+# jb/libjb_etcd.a
+#
+# TODO() - for the moment this is just a small test program to verify
+# the makefiles work
+################################################################
+noinst_PROGRAMS += \
+  jb/etcd/test_client \
+  jb/etcd/test_server
+
+dist_noinst_DATA = jb/etcd/test.proto
+
+jb_etcd_test_client_SOURCES = jb/etcd/test_client.cpp \
+  jb/etcd/test.grpc.pb.cc \
+  jb/etcd/test.grpc.pb.h \
+  jb/etcd/test.pb.cc \
+  jb/etcd/test.pb.h
+jb_etcd_test_client_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
+jb_etcd_test_client_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+jb_etcd_test_client_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+
+jb_etcd_test_server_SOURCES = jb/etcd/test_server.cpp \
+  jb/etcd/test.grpc.pb.cc \
+  jb/etcd/test.grpc.pb.h \
+  jb/etcd/test.pb.cc \
+  jb/etcd/test.pb.h
+jb_etcd_test_server_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
+jb_etcd_test_server_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+jb_etcd_test_server_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
 
 ################################################################
 # jb/libjb_itch5_testing.a
@@ -1051,16 +1103,13 @@ bin_SCRIPTS += jb/fftw/bm_time_delay_estimator_alignment.sh
 
 AM_CPPFLAGS += $(FFTW3_CPPFLAGS)
 
-LDFLAGS += $(FFTW3_LDFLAGS)
-
 jb_ut_fftw_ldadd = \
   jb/libjb_testing.a \
   jb/libjb_fftw.a \
-  $(FFTW3_LIBS) \
+  $(FFTW3_LDFLAGS) $(FFTW3_LIBS) \
   $(jb_ut_ldadd)
 
 jb_ut_fftw_ldflags = \
-  $(FFTW3_LDFLAGS) \
   $(jb_ut_ldflags)
 
 else
