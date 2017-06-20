@@ -18,6 +18,8 @@ RUN dnf makecache && dnf install -y \
       findutils \
       gcc-c++ \
       git \
+      golang \
+      libtool \
       lshw \
       make \
       ocl-icd-devel \
@@ -27,9 +29,11 @@ RUN dnf makecache && dnf install -y \
       openssl-static \
       patch \
       pocl-devel \
+      shtool \
       sudo \
       tar \
       time \
+      unzip \
       valgrind \
       wget \
       yaml-cpp-devel \
@@ -76,6 +80,25 @@ RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
     (cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
       cmake . && make -j 2 && cp -r include/beast /usr/include/beast/) && \
     /bin/rm -fr /var/tmp/build-beast-http
+
+#
+# This is awful, the distribution of gRPC is very Ubuntu specific.
+# We need to manually set the environment variables that select the C
+# and C++ compiler (as well as linkers).
+#
+WORKDIR /var/tmp/build-grpc
+RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
+  (cd /var/tmp/build-grpc/grpc/ && \
+    git submodule update --init && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make install && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make -C third_party/protobuf install && \
+    echo /usr/local/lib >/etc/ld.so.conf.d/local.conf && ldconfig && \
+    find /usr/local -type f -name '*.la' -exec rm -f {} \;) && \
+  /bin/rm -fr /var/tmp/build-grpc 
 
 WORKDIR /root
 
