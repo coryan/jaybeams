@@ -1,5 +1,5 @@
-#include <jb/etcd/test.pb.h>
 #include <jb/etcd/test.grpc.pb.h>
+#include <jb/etcd/test.pb.h>
 #include <jb/config_object.hpp>
 
 #include <grpc++/grpc++.h>
