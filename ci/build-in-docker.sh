@@ -10,6 +10,12 @@ set -e
 mkdir build
 cd build
 
+# ... the gRPC++ and Protobuf libraries are installed in /usr/local
+# and the pkg-config files for them are in /usr/local/lib/pkgconfig,
+# which is not the usual search path
+PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+export PKG_CONFIG_PATH
+
 # ... create Makefile and other files using the configuration
 # parameters for this build ...
 ../configure ${CONFIGUREFLAGS} --prefix=$PWD/staging || cat config.log
