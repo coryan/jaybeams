@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) try {
       etcdserverpb::Lease::NewStub(channel));
 
   std::chrono::seconds desired_TTL(1);
-  
+
   // ... request a new lease from etcd(1) ...
   etcdserverpb::LeaseGrantRequest req;
   // ... the TTL is is seconds, convert to the right units ...
@@ -73,8 +73,7 @@ int main(int argc, char* argv[]) try {
             << "    header.revision=" << resp.header().revision() << "\n"
             << "    header.raft_term=" << resp.header().raft_term() << "\n"
             << "  ID=" << std::hex << std::setw(16) << std::setfill('0')
-            << resp.id()
-            << "  TTL=" << std::dec << resp.ttl() << "s\n";
+            << resp.id() << "  TTL=" << std::dec << resp.ttl() << "s\n";
   auto actual_TTL = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::seconds(resp.ttl()));
 
@@ -111,8 +110,8 @@ int main(int argc, char* argv[]) try {
   }
   status = rdwr->Finish();
   if (not status.ok()) {
-    std::cerr << "rdwr->Finish() failed: " << status.error_message()
-              << "[" << status.error_code() << "]" << std::endl;
+    std::cerr << "rdwr->Finish() failed: " << status.error_message() << "["
+              << status.error_code() << "]" << std::endl;
     return 1;
   }
 
