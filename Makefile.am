@@ -527,27 +527,16 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   etcd/etcdserver/etcdserverpb/rpc.pb.h
 
 noinst_PROGRAMS += \
-  jb/etcd/test_client \
-  jb/etcd/test_server
+  jb/etcd/election_listener
 
-dist_noinst_DATA = jb/etcd/test.proto
+dist_noinst_DATA =
 
-jb_etcd_test_client_SOURCES = \
-  jb/etcd/test.grpc.pb.cc \
-  jb/etcd/test.pb.cc \
-  jb/etcd/test_client.cpp
-jb_etcd_test_client_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
-jb_etcd_test_client_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
-jb_etcd_test_client_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
-
-jb_etcd_test_server_SOURCES = jb/etcd/test_server.cpp \
-  jb/etcd/test.grpc.pb.cc \
-  jb/etcd/test.grpc.pb.h \
-  jb/etcd/test.pb.cc \
-  jb/etcd/test.pb.h
-jb_etcd_test_server_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
-jb_etcd_test_server_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
-jb_etcd_test_server_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+jb_etcd_election_listener_SOURCES = \
+  jb/etcd/election_listener.cpp
+jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
+jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+jb_etcd_election_listener_LDADD = \
+    jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
 
 ################################################################
 # jb/libjb_itch5_testing.a
