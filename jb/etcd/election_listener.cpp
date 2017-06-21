@@ -38,12 +38,15 @@ int main(int argc, char* argv[]) try {
   // ... the Watch API is all streaming, we need a ClientReaderWriter
   // to send and receive messages ...
   grpc::ClientContext context;
-  std::unique_ptr<grpc::ClientReaderWriter<etcdserverpb::WatchRequest,
-                                           etcdserverpb::WatchResponse>>
+  std::unique_ptr<grpc::ClientReaderWriter<
+      etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>>
       rdwr(stub->Watch(&context));
 
   etcdserverpb::WatchRequest req;
+  // ... wait for anything starting with "mold", need to make this a
+  // parameter of course ... TODO() -
   req.mutable_create_request()->set_key(std::string("mold"));
+  req.mutable_create_request()->set_range_end(std::string("mole"));
   req.mutable_create_request()->set_start_revision(0);
   req.mutable_create_request()->set_progress_notify(true);
   req.mutable_create_request()->set_prev_kv(true);
