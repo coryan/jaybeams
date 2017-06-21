@@ -11,15 +11,16 @@ namespace itch5 {
 /**
  * Represent the 'Market Category' field on a 'Stock Directory' message.
  */
-typedef char_list_field<u'Q', // NASDAQ Global Select Market
-                        u'G', // NASDAQ Global Market
-                        u'S', // NASDAQ Capital Market
-                        u'N', // New York Stock Exchange
-                        u'A', // NYSE MKT
-                        u'P', // NYSE ARCA
-                        u'Z', // BATS Z Exchange
-                        u' '  // Not available
-                        >
+typedef char_list_field<
+    u'Q', // NASDAQ Global Select Market
+    u'G', // NASDAQ Global Market
+    u'S', // NASDAQ Capital Market
+    u'N', // New York Stock Exchange
+    u'A', // NYSE MKT
+    u'P', // NYSE ARCA
+    u'Z', // BATS Z Exchange
+    u' '  // Not available
+    >
     market_category_t;
 
 /**
@@ -52,23 +53,24 @@ typedef char_list_field<u'Y', u'N'> roundlots_only_t;
  * Represent the 'Issue Classification' field on a 'Stock
  * Directory' message.
  */
-typedef char_list_field<u'A', // American Depositary Share
-                        u'B', // Bond
-                        u'C', // Common Stock
-                        u'F', // Depository Receipt
-                        u'I', // 144A
-                        u'L', // Limited Partnership
-                        u'N', // Notes
-                        u'O', // Ordinary Share
-                        u'P', // Preferred Stock
-                        u'Q', // Other Securities
-                        u'R', // Right
-                        u'S', // Shares of Beneficial Interest
-                        u'T', // Convertible Debenture
-                        u'U', // Unit
-                        u'V', // Units/Benif Int
-                        u'W'  // Warrant
-                        >
+typedef char_list_field<
+    u'A', // American Depositary Share
+    u'B', // Bond
+    u'C', // Common Stock
+    u'F', // Depository Receipt
+    u'I', // 144A
+    u'L', // Limited Partnership
+    u'N', // Notes
+    u'O', // Ordinary Share
+    u'P', // Preferred Stock
+    u'Q', // Other Securities
+    u'R', // Right
+    u'S', // Shares of Beneficial Interest
+    u'T', // Convertible Debenture
+    u'U', // Unit
+    u'V', // Units/Benif Int
+    u'W'  // Warrant
+    >
     issue_classification_t;
 
 /// A functor to validate the 'Issue Sub-Type' field.
@@ -86,9 +88,10 @@ typedef short_string_field<2, validate_issue_subtype> issue_subtype_t;
  * Represent the 'Authenticity' field on a 'Stock
  * Directory' message.
  */
-typedef char_list_field<u'P', // Production
-                        u'T'  // Test
-                        >
+typedef char_list_field<
+    u'P', // Production
+    u'T'  // Test
+    >
     authenticity_t;
 
 /**

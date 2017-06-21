@@ -58,8 +58,10 @@ bool check_close_enough(value_t num_a, value_t num_b, int tol) {
  * @param tol tolerance that the pair of numbers have to be within
  * @tparam value_t the type of the floating-point argument numbers
  */
-template <typename value_t, typename std::enable_if<std::is_floating_point<
-                                value_t>::value>::type* = nullptr>
+template <
+    typename value_t,
+    typename std::enable_if<std::is_floating_point<value_t>::value>::type* =
+        nullptr>
 bool check_close_enough(value_t num_a, value_t num_b, int tol) {
   using value_type = value_t;
   value_type const eps = tol * std::numeric_limits<value_type>::epsilon();

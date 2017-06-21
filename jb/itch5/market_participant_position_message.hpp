@@ -19,24 +19,26 @@ typedef char_list_field<u'Y', u'N'> primary_market_maker_t;
  * Represent the 'Market Maker Mode' field in a 'Market Participant
  * Position' message.
  */
-typedef char_list_field<u'N', // Normal
-                        u'P', // Passive
-                        u'S', // Syndicate
-                        u'R', // Pre-syndicate
-                        u'L'  // Penalty
-                        >
+typedef char_list_field<
+    u'N', // Normal
+    u'P', // Passive
+    u'S', // Syndicate
+    u'R', // Pre-syndicate
+    u'L'  // Penalty
+    >
     market_maker_mode_t;
 
 /**
  * Represent the 'Market Participant State' field in a 'Market Participant
  * Position' message.
  */
-typedef char_list_field<u'A', // Active
-                        u'E', // Excused/Withdrawn
-                        u'W', // Withdrawn
-                        u'S', // Suspended
-                        u'D'  // Deleted
-                        >
+typedef char_list_field<
+    u'A', // Active
+    u'E', // Excused/Withdrawn
+    u'W', // Withdrawn
+    u'S', // Suspended
+    u'D'  // Deleted
+    >
     market_participant_state_t;
 
 /**

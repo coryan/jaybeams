@@ -122,9 +122,8 @@ config::config()
           this)
     , destination(
           desc("destination")
-              .help(
-                  "The destination for the UDP messages. "
-                  "The destination can be a unicast or multicast address."),
+              .help("The destination for the UDP messages. "
+                    "The destination can be a unicast or multicast address."),
           this, default_multicast_group())
     , port(
           desc("port").help("The destination port for the UDP messages. "),

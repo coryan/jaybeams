@@ -203,10 +203,9 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
-  jb::itch5::mold_udp_pacer<mock_clock> p(
-      jb::itch5::mold_udp_pacer_config()
-          .maximum_delay_microseconds(1000)
-          .maximum_transmission_unit(1024));
+  jb::itch5::mold_udp_pacer<mock_clock> p(jb::itch5::mold_udp_pacer_config()
+                                              .maximum_delay_microseconds(1000)
+                                              .maximum_transmission_unit(1024));
 
   using namespace std::chrono;
   // simulate 2 messages every 10 usecs, of different sizes and types ...
@@ -263,10 +262,9 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
   // up to a millisecond ...
-  jb::itch5::mold_udp_pacer<mock_clock> p(
-      jb::itch5::mold_udp_pacer_config()
-          .maximum_delay_microseconds(1000)
-          .maximum_transmission_unit(1024));
+  jb::itch5::mold_udp_pacer<mock_clock> p(jb::itch5::mold_udp_pacer_config()
+                                              .maximum_delay_microseconds(1000)
+                                              .maximum_transmission_unit(1024));
 
   using namespace std::chrono;
   jb::itch5::timestamp ts{std::chrono::microseconds(5)};

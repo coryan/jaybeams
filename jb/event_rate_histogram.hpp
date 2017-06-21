@@ -62,8 +62,9 @@ namespace jb {
  * @tparam rate_counter_type The type used in the event rate
  *   counters.  Similar tradeofss as @a counter_type.
  */
-template <typename duration_type = std::chrono::microseconds,
-          typename counter_type = int, typename rate_counter_type = int>
+template <
+    typename duration_type = std::chrono::microseconds,
+    typename counter_type = int, typename rate_counter_type = int>
 class event_rate_histogram
     : private histogram<integer_range_binning<std::uint64_t>, counter_type> {
 public:

@@ -49,9 +49,8 @@ int maximum_transmission_unit = JB_ITCH5_DEFAULTS_maximum_transmission_unit;
 mold_udp_pacer_config::mold_udp_pacer_config()
     : maximum_delay_microseconds(
           desc("maximum-delay-microseconds")
-              .help(
-                  "Maximum time a MoldUDP packet is "
-                  "delayed before sending it."),
+              .help("Maximum time a MoldUDP packet is "
+                    "delayed before sending it."),
           this, defaults::maximum_delay_microseconds)
     , maximum_transmission_unit(
           desc("maximum-transmission-unit")

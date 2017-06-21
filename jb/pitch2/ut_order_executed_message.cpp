@@ -31,8 +31,7 @@ BOOST_AUTO_TEST_CASE(order_executed_message_basic) {
   std::ostringstream os;
   os << msg;
   BOOST_CHECK_EQUAL(
-      os.str(), std::string(
-                    "length=26,message_type=35,time_offset=447000"
-                    ",order_id=800891482924597253,executed_quantity=100"
-                    ",execution_id=806921579316"));
+      os.str(), std::string("length=26,message_type=35,time_offset=447000"
+                            ",order_id=800891482924597253,executed_quantity=100"
+                            ",execution_id=806921579316"));
 }

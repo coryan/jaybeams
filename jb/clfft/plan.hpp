@@ -159,9 +159,8 @@ private:
       throw std::invalid_argument("clfft::plan - 0 is not a valid batch size");
     }
     if (in.size() % batch_size != 0) {
-      throw std::invalid_argument(
-          "clfft::plan - the input / output sizes must"
-          " be multiples of the batch size");
+      throw std::invalid_argument("clfft::plan - the input / output sizes must"
+                                  " be multiples of the batch size");
     }
     // The number of dimension (or rank) of the FFT, all our FFTs are
     // in one dimension, hence the function names ...

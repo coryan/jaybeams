@@ -31,8 +31,8 @@ namespace jb {
 template <std::size_t wire_size_value>
 class fixed_string
     : public boost::totally_ordered<fixed_string<wire_size_value>>,
-      public boost::totally_ordered<fixed_string<wire_size_value>,
-                                    std::string> {
+      public boost::totally_ordered<
+          fixed_string<wire_size_value>, std::string> {
 public:
   /// The size of the field on the wire
   constexpr static std::size_t wire_size = wire_size_value;

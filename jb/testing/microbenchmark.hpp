@@ -32,8 +32,9 @@ void call_iteration_setup(Fixture&&, Args&&...) {
  *
  * @tparam Fixture the type of the Fixture
  */
-template <typename Fixture,
-          typename = decltype(std::declval<Fixture>().iteration_setup())>
+template <
+    typename Fixture,
+    typename = decltype(std::declval<Fixture>().iteration_setup())>
 void call_iteration_setup(Fixture&& fixture) {
   fixture.iteration_setup();
 }
@@ -59,8 +60,9 @@ void call_iteration_teardown(Fixture&&, Args&&...) {
  *
  * @tparam Fixture the type of the Fixture
  */
-template <typename Fixture,
-          typename = decltype(std::declval<Fixture>().iteration_teardown())>
+template <
+    typename Fixture,
+    typename = decltype(std::declval<Fixture>().iteration_teardown())>
 void call_iteration_teardown(Fixture&& fixture) {
   fixture.iteration_teardown();
 }

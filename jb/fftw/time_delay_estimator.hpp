@@ -11,8 +11,9 @@ namespace fftw {
 /**
  * A simple time delay estimator based on cross-correlation
  */
-template <typename timeseries_t,
-          template <typename T> class vector = jb::fftw::aligned_vector>
+template <
+    typename timeseries_t,
+    template <typename T> class vector = jb::fftw::aligned_vector>
 class time_delay_estimator {
 public:
   //@{

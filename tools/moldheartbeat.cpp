@@ -90,9 +90,8 @@ std::string default_destination() {
 config::config()
     : destination(
           desc("destination")
-              .help(
-                  "The destination for the UDP messages. "
-                  "The destination can be a unicast or multicast address."),
+              .help("The destination for the UDP messages. "
+                    "The destination can be a unicast or multicast address."),
           this, default_destination())
     , port(
           desc("port").help("The destination port for the UDP messages. "),

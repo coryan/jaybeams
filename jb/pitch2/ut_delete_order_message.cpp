@@ -27,7 +27,6 @@ BOOST_AUTO_TEST_CASE(delete_order_message_basic) {
   std::ostringstream os;
   os << msg;
   BOOST_CHECK_EQUAL(
-      os.str(), std::string(
-                    "length=14,message_type=41,time_offset=447000,"
-                    "order_id=800891482924597253"));
+      os.str(), std::string("length=14,message_type=41,time_offset=447000,"
+                            "order_id=800891482924597253"));
 }

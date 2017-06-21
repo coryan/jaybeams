@@ -140,10 +140,9 @@ config::config()
           this)
     , output_file(
           desc("output-file")
-              .help(
-                  "The name of the file where to store the statistics."
-                  "  By default output to stdout."
-                  "  Files ending in .gz are automatically compressed."),
+              .help("The name of the file where to store the statistics."
+                    "  By default output to stdout."
+                    "  Files ending in .gz are automatically compressed."),
           this, "stdout")
     , log(desc("log", "logging"), this)
     , stats(desc("stats", "book-depth-statistics"), this)
@@ -152,10 +151,9 @@ config::config()
           default_per_symbol_stats())
     , enable_symbol_stats(
           desc("enable-symbol-stats")
-              .help(
-                  "If set, enable per-symbol statistics."
-                  "  Collecting per-symbol statistics is expensive in both"
-                  " memory and execution time, enable only if needed."),
+              .help("If set, enable per-symbol statistics."
+                    "  Collecting per-symbol statistics is expensive in both"
+                    " memory and execution time, enable only if needed."),
           this, true) {
 }
 
