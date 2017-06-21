@@ -134,14 +134,22 @@ endif !FOUND_CLANG_FORMAT
 
 ################################################################
 # Special rules to compile protocol buffer files
+# TODO(#157) - this introduces a dependency on GNU Make.  We just
+# accept it as a given.
 ################################################################
 
-# Define the variables to silently compile ProtoBuf files into cpp files.
+# Define the variables to silently compile ProtoBuf files into cpp
+# files.
+AM_PROTOCFLAGS =
 PROTOC_COMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
 AM_V_PROTOC = $(am__v_PROTOC_$(V))
 am__v_PROTOC_ = $(am__v_PROTOC_$(AM_DEFAULT_VERBOSITY))
 am__v_PROTOC_0 = @echo "  PROTOC  " $@;
 am__v_PROTOC_1 = 
+
+# TODO(#158) - define the search path for protocol buffers
+JB_AM_PROTO_SEARCH_PATHS=$(srcdir)
+vpath %.proto $(JB_AM_PROTO_SEARCH_PATHS)
 
 %.pb.cc %.pb.h: %.proto
 	$(AM_V_PROTOC)$(PROTOC_COMPILE)	--cpp_out=$(builddir) $^
@@ -502,14 +510,15 @@ jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 
 ################################################################
 # jb/libjb_etcd.a
-#
-# TODO() - for the moment this is just a small test program to verify
-# the makefiles work
 ################################################################
 
-AM_PROTOCFLAGS = -I$(srcdir)/googleapis -I$(srcdir)/gogoproto -I$(srcdir)
 
-vpath %.proto $(srcdir)/googleapis $(srcdir)/gogoproto $(srcdir)
+# TODO(#158) - the settings of these flags carefully workaround the
+# layout structure expected by protoc(1) and the differences between
+# how googleapis and etcd layout their files and import their protos.
+AM_PROTOCFLAGS += -I$(srcdir)/googleapis -I$(srcdir)/gogoproto -I$(srcdir)
+JB_AM_PROTO_SEARCH_PATHS += $(srcdir)/googleapis $(srcdir)/gogoproto
+AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
 jb_libjb_etcd_a_SOURCES = \
@@ -532,14 +541,24 @@ nobase_jb_libjb_etcd_a_HEADERS = \
 noinst_PROGRAMS += \
   jb/etcd/election_listener
 
-dist_noinst_DATA =
+# TODO() - decide if the protobuf files should be included in the
+# distribution tarball ...
+nodist_noinst_DATA = \
+  googleapis/google/api/http.proto \
+  googleapis/google/api/annotations.proto \
+  gogoproto/gogoproto/gogo.proto \
+  etcd/mvcc/mvccpb/kv.proto \
+  etcd/auth/authpb/auth.proto \
+  etcd/etcdserver/etcdserverpb/rpc.proto
 
 jb_etcd_election_listener_SOURCES = \
   jb/etcd/election_listener.cpp
-jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
+jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
+  $(PROTOBUF_CPPFLAGS) -I$(builddir)/gogoproto -I$(builddir)/googleapis
 jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_election_listener_LDADD = \
     jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+jb/etcd/jb_etcd_election_listener-election_listener.$(OBJEXT): $(nobase_jb_libjb_etcd_a_HEADERS)
 
 ################################################################
 # jb/libjb_itch5_testing.a

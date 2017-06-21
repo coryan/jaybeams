@@ -44,6 +44,12 @@ AC_PROG_CXX
 # ... make sure we know how to create static libraries ...
 AC_PROG_RANLIB
 
+# ... TODO(#157) the generated Makefile uses GNU Make features, for
+# complicated reasons.  Make sure we can find it ...
+AX_CHECK_GNU_MAKE
+AS_IF([test "x$ifGNUmake" == "x"], [], [
+  AC_MSG_ERROR([Cannot find GNU Make, aborting.])])
+
 # ... on Fedora the default ARFLAGS/AR_FLAGS produce warnings ...
 ARFLAGS=cr
 AR_FLAGS=cr
@@ -217,6 +223,7 @@ AX_CHECK_LIBRARY(LIBZ, [zlib.h], [z],
 # warnings are a good way to detect portability problems.  Set this at
 # the end, because some of the library detection builds fail otherwise
 # ...
+# TODO() - use AC_LANG_WERROR() instead ?
 AX_CHECK_COMPILE_FLAG([-Werror], [AX_APPEND_FLAG(-Werror, AM_CXXFLAGS)] [])
 
 # ... monkey patch the -Wno-* flags depending on what warnings are
