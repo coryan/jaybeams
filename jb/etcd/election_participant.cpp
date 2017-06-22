@@ -1,3 +1,4 @@
+#include <jb/assert_throw.hpp>
 #include <jb/config_object.hpp>
 #include <jb/log.hpp>
 
@@ -5,6 +6,7 @@
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
+#include <mutex>
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
@@ -31,6 +33,35 @@ public:
   // TODO() - the magic number 5  should be a configurable parameter.
   static int constexpr keep_alives_per_ttl = 5;
 
+  /**
+   * The implicit state machine in the session.
+   *
+   * Sessions have a ver simple state machine:
+   * -# constructing: the initial state.  Transitions to @c connecting
+   * -# connecting: the session has obtained a lease id and is now
+   *    establishing a reader-writer stream to keep the lease alive.
+   *    Transitions to connected or shutting down.
+   * -# connected: the session is connected, in this state the session
+   *    sends period KeepAlive requests to renew the lease.
+   *    Transitions to shutting down.
+   * -# shuttingdown: the ssession is being shut down.  Any pending
+   *    KeepAlive requests are canceled, their responses, if any, are
+   *    received but trigger no further action.  The connection
+   *    half-closes the reader-writer stream.  When the reader-writer
+   *    stream is closed, a LeaseRevoke request is sent.  When that
+   *    request succeeds the CompletionQueue is shutdown, and the
+   *    object can be destructed.  Transitions to shutdown at the end
+   *    of that sequence.
+   * TODO() - consider more states for shutting down.
+   */
+  enum class state {
+    constructing,
+    connecting,
+    connected,
+    shuttingdown,
+    shutdown,
+  };
+
   template <typename duration_type>
   session(
       std::shared_ptr<grpc::Channel> etcd_service, duration_type desired_TTL)
@@ -40,13 +71,26 @@ public:
             true) {
   }
 
-  /// Shutdown the
-  void shutdown() {
-    // TODO() - the shutdown is more complicated, we first need to
-    // revoke the cancel the timers (if any), revoke the lease, or at
-    // least try to.  then finish the reader-writer stream, then
-    // shutdown the queue ...
-    queue_.Shutdown();
+  std::uint64_t lease_id() const {
+    return lease_id_;
+  }
+
+  /// Start the shutdown process ...
+  void initiate_shutdown() {
+    {
+      // ... new scope because we do not want to hold the mutex when
+      // calling WritesDone() ...
+      std::lock_guard<std::mutex> lock(mu_);
+      if (state_ == state::shuttingdown or state_ == state::shutdown) {
+        return;
+      }
+      // ... stop any new timers from being created ...
+      state_ = state::shuttingdown;
+      // ... cancel any outstanding timers ...
+      alarm_->Cancel();
+    }
+    // ... half-close the reader-writer stream ...
+    rdwr_->WritesDone(&tag_on_writes_done_);
   }
 
   void run() try {
@@ -59,8 +103,10 @@ public:
     // log ...
     void* tag = nullptr;
     bool ok = false;
-    while (queue_.Next(&tag, &ok) and ok) {
-      if (tag == nullptr) {
+    while (queue_.Next(&tag, &ok)) {
+      if (not ok or tag == nullptr) {
+        // TODO() - I think tag == nullptr should never happen,
+        // consider using JB_ASSERT()
         continue;
       }
       // ... tag must be a pointer to std::function<void()> see the
@@ -68,6 +114,10 @@ public:
       auto callback = static_cast<std::function<void()>*>(tag);
       (*callback)();
     }
+    // ... finally done, change the state ...
+    std::lock_guard<std::mutex> lock(mu_);
+    JB_ASSERT_THROW(state_ == state::shuttingdown);
+    state_ = state::shutdown;
   } catch (std::exception const& ex) {
     JB_LOG(info) << "Standard C++ exception in session::run(): " << ex.what();
   } catch (...) {
@@ -84,26 +134,27 @@ private:
   session(
       std::shared_ptr<grpc::Channel> etcd_service,
       std::chrono::milliseconds desired_TTL, bool)
-      : etcd_service_(etcd_service)
+      : mu_()
+      , state_(state::constructing)
+      , etcd_service_(etcd_service)
+      , lease_id_(0)
       , desired_TTL_(desired_TTL)
       , actual_TTL_(desired_TTL)
       , queue_()
       , stub_(etcdserverpb::Lease::NewStub(etcd_service_))
-      , lease_id_(0)
       , kactx_()
       , rdwr_()
       , alarm_()
       , ka_req_()
       , ka_res_()
+      , finish_status_()
       , tag_set_timer_(make_tag(&session::set_timer))
       , tag_on_timeout_(make_tag(&session::on_timeout))
       , tag_on_write_(make_tag(&session::on_write))
-      , tag_on_read_(make_tag(&session::on_read)) {
-    start();
-  }
-
-  void start() {
-    // ... request a new lease from etcd(1) ...
+      , tag_on_read_(make_tag(&session::on_read))
+      , tag_on_writes_done_(make_tag(&session::on_writes_done))
+      , tag_on_finish_(make_tag(&session::on_finish)) {
+    // ...request a new lease from etcd(1) ...
     etcdserverpb::LeaseGrantRequest req;
     // ... the TTL is is seconds, convert to the right units ...
     auto ttl_seconds =
@@ -125,6 +176,7 @@ private:
       // recover from this errors?  And if so, why?
       throw std::runtime_error(os.str());
     }
+
     // TODO() - probably need to retry until it succeeds, with some
     // kind of backoff, and yes, a really, really long timeout ...
     if (resp.error() != "") {
@@ -138,6 +190,7 @@ private:
          << "  error=" << resp.error();
       throw std::runtime_error(os.str());
     }
+
     JB_LOG(info) << "Lease granted\n"
                  << "    header.cluster_id=" << resp.header().cluster_id()
                  << "\n"
@@ -150,6 +203,10 @@ private:
     actual_TTL_ = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::seconds(resp.ttl()));
 
+    // ... no real need to grab a mutex here.  The object is not fully
+    // constructed, it should not be used by more than one thread ...
+    state_ = state::connecting;
+
     // ... create the reader-writer to send KeepAlive requests and
     // receive the corresponding responses, call set_timer() when done
     // the reader/writer is ready ...
@@ -158,6 +215,11 @@ private:
 
   /// Set a timer to start the next Write/Read cycle.
   void set_timer() {
+    // TODO() - need a mutex here ...
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+    state_ = state::connecting;
     // ... use the awkward grpc::Alarm interface to completion queues,
     // and once that is done, call on_timer().  I was tempted to set
     // the timer as soon as the write operation was scheduled, but the
@@ -196,21 +258,71 @@ private:
     set_timer();
   }
 
+  /// Handle the WritesDone() completion, schedule a Finish()
+  void on_writes_done() {
+    rdwr_->Finish(&finish_status_, &tag_on_finish_);
+  }
+
+  /// Handle the Finish() completion, schedule a LeaseRevoke()
+  void on_finish() {
+    if (not finish_status_.ok()) {
+      JB_LOG(info) << "on the session for lease=" << lease_id_
+                   << " the rdwr->Finish() op failed: "
+                   << finish_status_.error_message() << "["
+                   << finish_status_.error_code() << "]";
+    }
+
+    // ... here we just block, we could make this asynchronous, but
+    // really there is no reason to.  This is running in the session's
+    // thread, and there is no more use for the completion queue, no
+    // pending operations or anything ...
+    grpc::ClientContext context;
+    etcdserverpb::LeaseRevokeRequest req;
+    req.set_id(lease_id_);
+    etcdserverpb::LeaseRevokeResponse resp;
+    auto status = stub_->LeaseRevoke(&context, req, &resp);
+    if (not status.ok()) {
+      std::ostringstream os;
+      JB_LOG(info) << "stub->LeaseRevoke() failed for lease=" << lease_id_
+                   << ": " << status.error_message() << "["
+                   << status.error_code() << "]";
+    }
+    queue_.Shutdown();
+  }
+
   typedef void (session::*callback_member)();
   std::function<void()> make_tag(callback_member member) {
     return std::function<void()>([this, member]() { (this->*member)(); });
   }
 
 private:
+  /// The usual mutex thing.
+  std::mutex mu_;
+  /**
+   * Implement the state machine.
+   *
+   * See the documentation of the @c state enum for details of the
+   * transition table.
+   * TODO() - consider using one of the Boost.StateMachine classes.
+   */
+  state state_;
+
   std::shared_ptr<grpc::Channel> etcd_service_;
+
+  /// The lease is assigned by etcd during the constructor
+  std::uint64_t lease_id_;
+
+  /// The requested TTL value.
   std::chrono::milliseconds desired_TTL_;
+
+  /// etcd may tell us to use a longer (or shorter?) TTL.
   std::chrono::milliseconds actual_TTL_;
+
   // TODO() - I do not think the queue belongs in this object, seems
   // like it should be a parameter, if nothing else for dependency
   // injection ...
   grpc::CompletionQueue queue_;
   std::unique_ptr<etcdserverpb::Lease::Stub> stub_;
-  std::uint64_t lease_id_;
 
   /// The context for the asynchronous KeepAlive request.
   grpc::ClientContext kactx_;
@@ -226,6 +338,7 @@ private:
   std::unique_ptr<grpc::Alarm> alarm_;
   etcdserverpb::LeaseKeepAliveRequest ka_req_;
   etcdserverpb::LeaseKeepAliveResponse ka_res_;
+  grpc::Status finish_status_;
   //@}
 
   //@{
@@ -251,6 +364,8 @@ private:
   std::function<void()> tag_on_timeout_;
   std::function<void()> tag_on_write_;
   std::function<void()> tag_on_read_;
+  std::function<void()> tag_on_writes_done_;
+  std::function<void()> tag_on_finish_;
   //@}
 };
 
@@ -286,9 +401,9 @@ int main(int argc, char* argv[]) try {
   boost::asio::io_service io;
 
   // TODO() - do the signal thing
-  std::this_thread::sleep_for(std::chrono::minutes(1));
+  std::this_thread::sleep_for(std::chrono::seconds(15));
 
-  sess.shutdown();
+  sess.initiate_shutdown();
 
   t.join();
 
