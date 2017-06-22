@@ -6,9 +6,9 @@
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
-#include <mutex>
 #include <iomanip>
 #include <iostream>
+#include <mutex>
 #include <stdexcept>
 #include <thread>
 
@@ -283,9 +283,21 @@ private:
     auto status = stub_->LeaseRevoke(&context, req, &resp);
     if (not status.ok()) {
       std::ostringstream os;
-      JB_LOG(info) << "stub->LeaseRevoke() failed for lease=" << lease_id_
-                   << ": " << status.error_message() << "["
-                   << status.error_code() << "]";
+      JB_LOG(info) << "stub->LeaseRevoke() failed for lease=" << std::hex
+                   << std::setw(16) << std::setfill('0') << lease_id_ << ": "
+                   << status.error_message() << "[" << status.error_code()
+                   << "]";
+    } else {
+      JB_LOG(info) << "Lease Revoked\n"
+                   << "    header.cluster_id=" << resp.header().cluster_id()
+                   << "\n"
+                   << "    header.member_id=" << resp.header().member_id()
+                   << "\n"
+                   << "    header.revision=" << resp.header().revision() << "\n"
+                   << "    header.raft_term=" << resp.header().raft_term()
+                   << "\n"
+                   << "  id=" << std::hex << std::setw(16) << std::setfill('0')
+                   << lease_id_ << "\n";
     }
     queue_.Shutdown();
   }
@@ -396,15 +408,23 @@ int main(int argc, char* argv[]) try {
   // jb::thread_launcher.
   std::thread t([&sess]() { sess.run(); });
 
-  // ... use Boost.ASIO to wait for a signal, then terminate the
-  // session ...
+  // ... use Boost.ASIO to wait for a signal, then gracefully shutdown
+  // the session ...
   boost::asio::io_service io;
+  boost::asio::signal_set signals(io, SIGINT, SIGTERM);
+#if defined(SIGQUIT)
+  signals.add(SIGQUIT);
+#endif // defined(SIGQUIT)
+  signals.async_wait([&io](boost::system::error_code const& ec, int signo) {
+    JB_LOG(info) << "Boost.Asio loop terminated by signal [" << signo << "]\n";
+    io.stop();
+  });
 
-  // TODO() - do the signal thing
-  std::this_thread::sleep_for(std::chrono::seconds(15));
+  // ... run until the signal is delivered ...
+  io.run();
 
+  // ... gracefully terminate the session ...
   sess.initiate_shutdown();
-
   t.join();
 
   return 0;
