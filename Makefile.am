@@ -105,7 +105,7 @@ UT_CPPFLAGS = \
   $(CPPFLAGS)
 
 if STATIC_LINKING
-LIBS += -Wl,-Bdynamic
+LDFLAGS += -Wl,-Bdynamic
 else
 UT_CPPFLAGS += -DBOOST_TEST_DYN_LINK
 endif !STATIC_LINKING
@@ -556,7 +556,7 @@ jb_etcd_election_listener_SOURCES = \
   jb/etcd/election_listener.cpp
 jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
   $(PROTOBUF_CPPFLAGS) -I$(builddir)/gogoproto -I$(builddir)/googleapis
-jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+#jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_election_listener_LDADD = \
     jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
 jb/etcd/jb_etcd_election_listener-election_listener.$(OBJEXT): $(nobase_jb_libjb_etcd_a_HEADERS)
@@ -565,9 +565,9 @@ jb_etcd_election_participant_SOURCES = \
   jb/etcd/election_participant.cpp
 jb_etcd_election_participant_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
   $(PROTOBUF_CPPFLAGS) -I$(builddir)/gogoproto -I$(builddir)/googleapis
-jb_etcd_election_participant_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+#jb_etcd_election_participant_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_election_participant_LDADD = \
-    jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+    jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS) $(LIBS)
 jb/etcd/jb_etcd_election_participant-election_participant.$(OBJEXT): $(nobase_jb_libjb_etcd_a_HEADERS)
 
 ################################################################
