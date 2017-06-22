@@ -69,6 +69,19 @@ int main(int argc, char* argv[]) try {
               << "  canceled=" << r.canceled() << "\n"
               << "  compact_revision=" << r.compact_revision() << "\n"
               << "  cancel_reason=" << r.cancel_reason() << "\n";
+    int ecnt = 0;
+    for (auto const& event : r.events()) {
+      std::cout << "    Event #" << ecnt
+                << "      type=" << Event_EventType_Name(event.type()) << "\n"
+                << "      key=" << event.kv().key() << "\n"
+                << "      create_revision=" << event.kv().create_revision()
+                << "\n"
+                << "      mod_revision=" << event.kv().mod_revision() << "\n"
+                << "      version=" << event.kv().version() << "\n"
+                << "      value=" << event.kv().value() << "\n"
+                << "      lease=" << std::hex << event.kv().lease() << "\n";
+      ++ecnt;
+    }
     ++cnt;
   }
   auto status = rdwr->Finish();
