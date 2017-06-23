@@ -20,9 +20,9 @@ public:
   leader_election_participant(
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::string const& participant_value)
+      std::uint64_t lease_id, std::string const& participant_value)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name,
+            true, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value) {
     // ... block until this participant becomes the leader ...
     campaign();
@@ -33,9 +33,10 @@ public:
   leader_election_participant(
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::string const& participant_value, Functor const& elected_callback)
+      std::uint64_t lease_id, std::string const& participant_value,
+      Functor const& elected_callback)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name,
+            true, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value, std::move(elected_callback)) {
   }
 
@@ -44,9 +45,10 @@ public:
   leader_election_participant(
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::string const& participant_value, Functor&& elected_callback)
+      std::uint64_t lease_id, std::string const& participant_value,
+      Functor&& elected_callback)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name,
+            true, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value) {
     campaign(elected_callback);
   }
@@ -85,7 +87,7 @@ private:
   leader_election_participant(
       bool shared, std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::string const& participant_value);
+      std::uint64_t lease_id, std::string const& participant_value);
 
   /**
    * Runs the operations before starting the election campaign.
@@ -176,6 +178,12 @@ private:
       google::protobuf::Message const* res = nullptr,
       google::protobuf::Message const* req = nullptr) const;
 
+
+  /// Return the lease corresponding to this participant's session.
+  std::uint64_t lease_id() {
+    return lease_id_;
+  }
+
   // Compute the end of the range for a prefix search.
   static std::string prefix_end(std::string const& prefix);
 
@@ -188,8 +196,8 @@ private:
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
   std::shared_ptr<completion_queue> queue_;
-  session session_;
   std::string election_name_;
+  std::uint64_t lease_id_;
   std::string participant_value_;
   std::string election_prefix_;
   std::string participant_key_;

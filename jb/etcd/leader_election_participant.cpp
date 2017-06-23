@@ -17,15 +17,15 @@ namespace etcd {
 leader_election_participant::leader_election_participant(
     bool shared, std::shared_ptr<client_factory> client,
     std::string const& etcd_endpoint, std::string const& election_name,
-    std::string const& participant_value)
+    std::uint64_t lease_id, std::string const& participant_value)
     : client_(client)
     , channel_(client->create_channel(etcd_endpoint))
     , kv_client_(client_->create_kv(channel_))
     , watch_client_(client_->create_watch(channel_))
     , watcher_stream_()
     , queue_(std::make_shared<completion_queue>())
-    , session_(channel_, std::chrono::milliseconds(15000))
     , election_name_(election_name)
+    , lease_id_(lease_id)
     , participant_value_(participant_value)
     , election_prefix_(election_name + "/")
     , participant_key_([this]() {
@@ -35,7 +35,7 @@ leader_election_participant::leader_election_participant(
       // TODO() - document why there can be no accidental conflict with
       // another election running in the system.
       std::ostringstream os;
-      os << election_prefix_ << std::hex << session_.lease_id();
+      os << election_prefix_ << std::hex << this->lease_id_;
       return os.str();
     }())
     , pending_watches_(0)
@@ -107,7 +107,7 @@ void leader_election_participant::preamble() try {
   auto& on_success = *req.add_success()->mutable_request_put();
   on_success.set_key(key());
   on_success.set_value(value());
-  on_success.set_lease(session_.lease_id());
+  on_success.set_lease(lease_id());
   // ... if the key is there, we are going to fetch its current
   // value, there will be some fun action with that ...
   auto& on_failure = *req.add_failure()->mutable_request_range();
@@ -256,7 +256,7 @@ etcdserverpb::TxnResponse leader_election_participant::publish_value(
   auto& on_success = *req.add_success()->mutable_request_put();
   on_success.set_key(key());
   on_success.set_value(new_value);
-  on_success.set_lease(session_.lease_id());
+  on_success.set_lease(lease_id());
   *req.add_failure() = failure_op;
 
   return commit(req);
@@ -268,7 +268,7 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
   etcdserverpb::TxnResponse resp;
   auto status = kv_client_->Txn(&context, req, &resp);
   if (not status.ok()) {
-    throw error_grpc_status("commit/etcd::Txn", status, &resp, &req);
+    throw error_grpc_status("commit/etcd::Txn", status, nullptr, &req);
   }
   return resp;
 }
