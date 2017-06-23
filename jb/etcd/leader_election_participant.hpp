@@ -157,7 +157,9 @@ private:
       std::shared_ptr<watch_write_op> op, std::string const& watched_key,
       std::uint64_t watched_revision);
   /// Called when a Read() operation in the watcher stream completes.
-  void on_watch_read(std::shared_ptr<watch_read_op> op);
+  void on_watch_read(
+      std::shared_ptr<watch_read_op> op, std::string const& key,
+      std::uint64_t revision);
 
   /// Check if the election has finished, if so invoke the callbacks.
   void check_election_over_maybe();

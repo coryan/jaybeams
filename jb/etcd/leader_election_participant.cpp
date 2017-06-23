@@ -335,13 +335,38 @@ void leader_election_participant::on_range_request(
 void leader_election_participant::on_watch_write(
     std::shared_ptr<watch_write_op> op, std::string const& key,
     std::uint64_t revision) {
+  auto read = make_read_op<etcdserverpb::WatchResponse>([this, key, revision](
+      auto op) { this->on_watch_read(op, key, revision); });
+  watcher_stream_->Read(&read->response, op->tag());
 }
 
 void leader_election_participant::on_watch_read(
-    std::shared_ptr<watch_read_op> op) {
-  // TODO() - here we should check if the event is a DELETE, if so
-  // decrement the pending watchers counter.  If the counter becomes
-  // zero call "campaign_done_maybe()" ..
+    std::shared_ptr<watch_read_op> op, std::string const& key,
+    std::uint64_t revision) {
+  for (auto const& ev : op->response.events()) {
+    if (ev.type() != mvccpb::Event::DELETE) {
+      continue;
+    }
+    --pending_watches_;
+  }
+  if (op->response.canceled()) {
+    JB_LOG(info) << "Watcher unexpectedly canceled for key="
+                 << key << ", revision=" << revision
+                 << ", reason=" << op->response.cancel_reason();
+  }
+  if (op->response.compact_revision()) {
+    // TODO() - if I am reading the documentation correctly, this
+    // means the watcher was cancelled.  We need to worry about the
+    // case where the participant figures out the key to watch.  Then
+    // it goes to sleep, or gets reschedule, then the key is deleted
+    // and etcd compacted.  And then the client starts watching.  I am
+    // not sure this is a problem, but it might be.
+    JB_LOG(info) << "Watcher has compact_revision="
+                 << op->response.compact_revision() << ", key=" << key
+                 << ", revision=" << revision
+                 << ", reason=" << op->response.cancel_reason();
+    }
+  check_election_over_maybe();
 }
 
 void leader_election_participant::check_election_over_maybe() {
