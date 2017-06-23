@@ -65,6 +65,10 @@ UseTab: Never
 #  int *foo;
 PointerAlignment: Left
 
+# We want to treat files ending in _ut.cpp (unit tests), and _bm.cpp
+# (benchmarks) as the "main" include, so the header shows up first.
+IncludeIsMainRegex: '(_ut)?$'
+
 # Sort the includes by dependency order
 IncludeCategories:
   - Regex:    '^<jb/clfft/'

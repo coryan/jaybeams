@@ -522,6 +522,8 @@ AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
 jb_libjb_etcd_a_SOURCES = \
+  jb/etcd/completion_queue.cpp \
+  jb/etcd/session.cpp \
   google/api/http.pb.cc \
   google/api/annotations.pb.cc \
   gogoproto/gogo.pb.cc \
@@ -530,6 +532,8 @@ jb_libjb_etcd_a_SOURCES = \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
   etcd/etcdserver/etcdserverpb/rpc.pb.cc
 nobase_jb_libjb_etcd_a_HEADERS = \
+  jb/etcd/completion_queue.hpp \
+  jb/etcd/session.hpp \
   google/api/http.pb.h \
   google/api/annotations.pb.h \
   gogoproto/gogo.pb.h \
@@ -541,6 +545,18 @@ nobase_jb_libjb_etcd_a_HEADERS = \
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant
+
+unit_tests += \
+  jb/etcd/completion_queue_ut
+
+jb_etcd_ut_ldadd = jb/libjb_etcd.a $(jb_ut_ldadd) \
+    $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+jb_etcd_ut_ldflags = $(jb_ut_ldflags)
+
+jb_etcd_completion_queue_ut_SOURCES = jb/etcd/completion_queue_ut.cpp
+jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_completion_queue_ut
+jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 # TODO() - decide if the protobuf files should be included in the
 # distribution tarball ...
