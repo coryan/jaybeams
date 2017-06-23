@@ -522,7 +522,9 @@ AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
 jb_libjb_etcd_a_SOURCES = \
+  jb/etcd/client_factory.cpp \
   jb/etcd/completion_queue.cpp \
+  jb/etcd/leader_election_participant.cpp \
   jb/etcd/session.cpp \
   google/api/http.pb.cc \
   google/api/annotations.pb.cc \
@@ -532,7 +534,9 @@ jb_libjb_etcd_a_SOURCES = \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
   etcd/etcdserver/etcdserverpb/rpc.pb.cc
 nobase_jb_libjb_etcd_a_HEADERS = \
+  jb/etcd/client_factory.hpp \
   jb/etcd/completion_queue.hpp \
+  jb/etcd/leader_election_participant.hpp \
   jb/etcd/session.hpp \
   google/api/http.pb.h \
   google/api/annotations.pb.h \
@@ -545,7 +549,8 @@ nobase_jb_libjb_etcd_a_HEADERS = \
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
-  jb/etcd/session_client_ut
+  jb/etcd/session_client_ut \
+  jb/etcd/leader_election_participant_ut
 
 unit_tests += \
   jb/etcd/completion_queue_ut
@@ -553,6 +558,11 @@ unit_tests += \
 jb_etcd_ut_ldadd = jb/libjb_etcd.a $(jb_ut_ldadd) \
     $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
 jb_etcd_ut_ldflags = $(jb_ut_ldflags)
+
+jb_etcd_leader_election_participant_ut_SOURCES = jb/etcd/leader_election_participant_ut.cpp
+jb_etcd_leader_election_participant_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_leader_election_participant_ut
+jb_etcd_leader_election_participant_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_leader_election_participant_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 jb_etcd_completion_queue_ut_SOURCES = jb/etcd/completion_queue_ut.cpp
 jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_completion_queue_ut

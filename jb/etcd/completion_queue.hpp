@@ -51,7 +51,10 @@ struct async_op {
 template <typename R, typename Functor>
 std::shared_ptr<async_op<R>> make_async_op(Functor&& functor) {
   auto op = std::make_shared<async_op<R>>();
-  op->callback = std::move([op, functor]() { functor(std::move(op)); });
+  op->callback = std::move([op, functor]() {
+    auto callback = std::move(op->callback);
+    functor(std::move(op));
+  });
   return op;
 }
 
@@ -77,7 +80,10 @@ struct async_write_op {
 template <typename W, typename Functor>
 std::shared_ptr<async_write_op<W>> make_write_op(Functor&& functor) {
   auto op = std::make_shared<async_write_op<W>>();
-  op->callback = std::move([op, functor]() { functor(std::move(op)); });
+  op->callback = std::move([op, functor]() {
+    auto callback = std::move(op->callback);
+    functor(std::move(op));
+  });
   return op;
 }
 
@@ -103,7 +109,10 @@ struct async_read_op {
 template <typename R, typename Functor>
 std::shared_ptr<async_read_op<R>> make_read_op(Functor&& functor) {
   auto op = std::make_shared<async_read_op<R>>();
-  op->callback = std::move([op, functor]() { functor(std::move(op)); });
+  op->callback = std::move([op, functor]() {
+    auto callback = std::move(op->callback);
+    functor(std::move(op));
+  });
   return op;
 }
 
@@ -138,10 +147,9 @@ struct async_rdwr_stream {
   }
 
   grpc::ClientContext context;
-  grpc::Status status;
   std::function<void()> ready_callback;
-  using stream = grpc::ClientAsyncReaderWriter<W, R>;
-  std::unique_ptr<stream> rpc;
+  using client_type = grpc::ClientAsyncReaderWriter<W, R>;
+  std::unique_ptr<client_type> stream;
 
   using write_op = async_write_op<W>;
   using read_op = async_read_op<R>;
@@ -152,7 +160,11 @@ template <typename W, typename R, typename Functor>
 std::shared_ptr<async_rdwr_stream<W, R>>
 make_async_rdwr_stream(Functor&& functor) {
   auto stream = std::make_shared<async_rdwr_stream<W, R>>();
-  stream->ready_callback = std::move([stream, functor]() { functor(stream); });
+  stream->ready_callback = std::move([stream, functor]() {
+    auto callback = std::move(stream->ready_callback);
+    functor(stream);
+  });
+  return stream;
 }
 
 /**
