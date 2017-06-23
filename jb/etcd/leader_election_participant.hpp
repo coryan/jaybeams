@@ -180,7 +180,6 @@ private:
       google::protobuf::Message const* res = nullptr,
       google::protobuf::Message const* req = nullptr) const;
 
-
   /// Return the lease corresponding to this participant's session.
   std::uint64_t lease_id() {
     return lease_id_;

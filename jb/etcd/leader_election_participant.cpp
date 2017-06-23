@@ -113,8 +113,7 @@ void leader_election_participant::preamble() try {
   auto& on_failure = *req.add_failure()->mutable_request_range();
   on_failure.set_key(key());
 
-  // TODO() - I wish I could write resp = commit(), but protobufs
-  // lack move operators, they are
+  // ... execute the transaction in etcd ...
   etcdserverpb::TxnResponse resp = commit(req);
 
   // ... regardless of which branch of the test-and-set operation
@@ -125,7 +124,7 @@ void leader_election_participant::preamble() try {
     // ... the key already existed, possibly because a previous
     // instance of the program participated in the election and etcd
     // did not had time to expire the key.  We need to use the
-    // previous creation_revision and save our new particpant_value
+    // previous creation_revision and save our new participant_value
     // ...
     JB_ASSERT_THROW(resp.responses().size() == 1);
     JB_ASSERT_THROW(resp.responses()[0].response_range().kvs().size() == 1);
@@ -139,7 +138,21 @@ void leader_election_participant::preamble() try {
       etcdserverpb::RequestOp failure_op;
       auto& delete_op = *failure_op.mutable_request_delete_range();
       delete_op.set_key(key());
-      publish_value(value(), failure_op);
+      auto published = publish_value(value(), failure_op);
+      if (not published.succeeded()) {
+        // ... ugh, the publication failed.  We now have an
+        // inconsistent state with the server.  We think we own the
+        // code (and at least we own the lease!), but we were unable
+        // to publish the value.  We are going to raise an exception
+        // and abort the creation of the participant object ...
+        std::ostringstream os;
+        os << "Unexpected failure writing new value on existing key=" << key()
+           << "\n";
+        std::string print;
+        google::protobuf::TextFormat::PrintToString(published, &print);
+        os << "txn result=" << print << "\n";
+        throw std::runtime_error(os.str());
+      }
     }
   }
 } catch (std::exception const& ex) {
@@ -275,9 +288,7 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 
 void leader_election_participant::on_writes_done(
     std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
-  auto op = make_finish_op([this, &done](auto op) {
-      on_finish(op, done);
-  });
+  auto op = make_finish_op([this, &done](auto op) { on_finish(op, done); });
   watcher_stream_->Finish(&op->status, op->tag());
 }
 
@@ -288,27 +299,27 @@ void leader_election_participant::on_finish(
       throw error_grpc_status("on_finish", op->status);
     }
     done.set_value(true);
-  } catch(...) {
+  } catch (...) {
     try {
       done.set_exception(std::current_exception());
-    } catch(std::future_error const& ex) {
+    } catch (std::future_error const& ex) {
       JB_LOG(info) << "std::future_error raised while reporting "
                    << "exception in watcher stream closure."
                    << "  participant=" << key() << ", value=" << value()
                    << ", exception=" << ex.what();
-    } catch(std::exception const& ex) {
+    } catch (std::exception const& ex) {
       JB_LOG(info) << "std::exception raised while reporting "
                    << "exception in watcher stream closure."
                    << "  participant=" << key() << ", value=" << value()
                    << ", exception=" << ex.what();
-    } catch(...) {
+    } catch (...) {
       JB_LOG(info) << "std::exception raised while reporting "
                    << "exception in watcher stream closure."
                    << "  participant=" << key() << ", value=" << value();
     }
   }
 }
-  
+
 void leader_election_participant::on_range_request(
     std::shared_ptr<range_predecessor_op> op) {
   if (not op->status.ok()) {
@@ -350,8 +361,8 @@ void leader_election_participant::on_watch_read(
     --pending_watches_;
   }
   if (op->response.canceled()) {
-    JB_LOG(info) << "Watcher unexpectedly canceled for key="
-                 << key << ", revision=" << revision
+    JB_LOG(info) << "Watcher unexpectedly canceled for key=" << key
+                 << ", revision=" << revision
                  << ", reason=" << op->response.cancel_reason();
   }
   if (op->response.compact_revision()) {
@@ -365,7 +376,7 @@ void leader_election_participant::on_watch_read(
                  << op->response.compact_revision() << ", key=" << key
                  << ", revision=" << revision
                  << ", reason=" << op->response.cancel_reason();
-    }
+  }
   check_election_over_maybe();
 }
 
