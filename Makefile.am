@@ -555,6 +555,9 @@ noinst_PROGRAMS += \
 unit_tests += \
   jb/etcd/completion_queue_ut
 
+TESTS += \
+  jb/etcd/integration_tests.py
+
 jb_etcd_ut_ldadd = jb/libjb_etcd.a $(jb_ut_ldadd) \
     $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
 jb_etcd_ut_ldflags = $(jb_ut_ldflags)
