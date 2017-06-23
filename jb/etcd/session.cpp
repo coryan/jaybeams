@@ -88,14 +88,13 @@ void session::revoke() {
   auto status = stub_->LeaseRevoke(&context, req, &resp);
   if (not status.ok()) {
     std::ostringstream os;
-    os << "stub->LeaseRevoke() failed for lease=" << std::hex
-       << std::setw(16) << std::setfill('0') << lease_id_ << ": "
-       << status.error_message() << "[" << status.error_code() << "]";
+    os << "stub->LeaseRevoke() failed for lease=" << std::hex << std::setw(16)
+       << std::setfill('0') << lease_id_ << ": " << status.error_message()
+       << "[" << status.error_code() << "]";
     throw std::runtime_error(os.str());
   }
   JB_LOG(info) << "Lease Revoked\n"
-               << "    header.cluster_id=" << resp.header().cluster_id()
-               << "\n"
+               << "    header.cluster_id=" << resp.header().cluster_id() << "\n"
                << "    header.member_id=" << resp.header().member_id() << "\n"
                << "    header.revision=" << resp.header().revision() << "\n"
                << "    header.raft_term=" << resp.header().raft_term() << "\n"
