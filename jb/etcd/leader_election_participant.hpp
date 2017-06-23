@@ -95,6 +95,20 @@ private:
    */
   void preamble();
 
+  /**
+   * Gracefully shutdown a partially or fully constructed instance
+   *
+   * After the thread running the event loop is launched the
+   * destruction process for this class is complicated.  The thread
+   * must exit, or std::thread will call std::terminate because it was
+   * not joined.
+   * To terminate the thread we need to finish the completion queue
+   * loop.
+   * That requires terminating any pending operations, or the
+   * completion queue calls abort().
+   */
+  void shutdown();
+
   /// Block the calling thread until the participant has become the
   /// leader.
   void campaign();
@@ -122,15 +136,25 @@ private:
   /// Refactor code to perform a Txn() request.
   etcdserverpb::TxnResponse commit(etcdserverpb::TxnRequest const& req);
 
+  /// Called when the WritesDone() operation in the watcher stream completes.
+  void
+  on_writes_done(std::shared_ptr<writes_done_op> op, std::promise<bool>& done);
+
+  /// Called when the Finish() operation in the watcher stream completes.
+  void on_finish(std::shared_ptr<finish_op> op, std::promise<bool>& done);
+
   using range_predecessor_op = async_op<etcdserverpb::RangeResponse>;
+  /// Called when the Range() operation in the kv_client completes.
   void on_range_request(std::shared_ptr<range_predecessor_op> op);
 
   using watch_write_op = async_write_op<etcdserverpb::WatchRequest>;
   using watch_read_op = async_read_op<etcdserverpb::WatchResponse>;
 
+  /// Called when a Write() operation in the watcher stream completes.
   void on_watch_write(
       std::shared_ptr<watch_write_op> op, std::string const& watched_key,
       std::uint64_t watched_revision);
+  /// Called when a Read() operation in the watcher stream completes.
   void on_watch_read(std::shared_ptr<watch_read_op> op);
 
   /// Check if the election has finished, if so invoke the callbacks.

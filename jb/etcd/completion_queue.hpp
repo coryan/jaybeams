@@ -117,6 +117,61 @@ std::shared_ptr<async_read_op<R>> make_read_op(Functor&& functor) {
 }
 
 /**
+ * A wrapper to run an asynchronous WritesDone() operation.
+ *
+ * To close a bi-directional streaming RPC the application usually
+ * calls WritesDone() first.  This makes it easier to write such
+ * asynchronous operations.
+ */
+struct writes_done_op {
+  /// Return the correct tag to use in the completion queue
+  void* tag() {
+    return static_cast<void*>(&callback);
+  }
+
+  std::function<void()> callback;
+};
+
+/// Create an asyncrhonous WritesDone operation wrapper.
+template <typename Functor>
+std::shared_ptr<writes_done_op> make_writes_done_op(Functor&& functor) {
+  auto op = std::make_shared<writes_done_op>();
+  op->callback = std::move([op, functor]() {
+    auto callback = std::move(op->callback);
+    functor(std::move(op));
+  });
+  return op;
+}
+
+/**
+ * A wrapper to run an asynchronous Finish() operation.
+ *
+ * When the WritesDone() operation completes an application can close
+ * the a bi-direction streaming RPC using the Finish() operation.
+ * This makes it easier to write such asynchronous operations.
+ */
+struct finish_op {
+  /// Return the correct tag to use in the completion queue
+  void* tag() {
+    return static_cast<void*>(&callback);
+  }
+
+  grpc::Status status;
+  std::function<void()> callback;
+};
+
+/// Create an asynchronous Finish operation wrapper.
+template <typename Functor>
+std::shared_ptr<finish_op> make_finish_op(Functor&& functor) {
+  auto op = std::make_shared<finish_op>();
+  op->callback = std::move([op, functor]() {
+    auto callback = std::move(op->callback);
+    functor(std::move(op));
+  });
+  return op;
+}
+
+/**
  * A wrapper for asynchronous unary operations
  *
  * Consider a typical bi-directional streaming gRPC:

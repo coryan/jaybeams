@@ -54,8 +54,7 @@ leader_election_participant::leader_election_participant(
 }
 
 leader_election_participant::~leader_election_participant() {
-  queue_->shutdown();
-  completion_queue_loop_.join();
+  shutdown();
 }
 
 void leader_election_participant::resign() {
@@ -145,14 +144,29 @@ void leader_election_participant::preamble() try {
   }
 } catch (std::exception const& ex) {
   JB_LOG(info) << "Standard exception raised in preamble: " << ex.what();
-  queue_->shutdown();
-  completion_queue_loop_.join();
+  shutdown();
   throw;
 } catch (...) {
   JB_LOG(info) << "Unknown exception raised in preamble";
+  shutdown();
+  throw;
+}
+
+void leader_election_participant::shutdown() {
+  if (watcher_stream_) {
+    // The watcher stream was already created, we need to close it
+    // before shutting down the completion queue ...
+    std::promise<bool> watcher_stream_closed;
+    auto op = make_writes_done_op([this, &watcher_stream_closed](auto op) {
+      on_writes_done(op, watcher_stream_closed);
+    });
+    watcher_stream_->WritesDone(op->tag());
+    // ... block until it closes ...
+    watcher_stream_closed.get_future().get();
+    watcher_stream_.reset();
+  }
   queue_->shutdown();
   completion_queue_loop_.join();
-  throw;
 }
 
 void leader_election_participant::campaign() {
@@ -259,6 +273,42 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
   return resp;
 }
 
+void leader_election_participant::on_writes_done(
+    std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
+  auto op = make_finish_op([this, &done](auto op) {
+      on_finish(op, done);
+  });
+  watcher_stream_->Finish(&op->status, op->tag());
+}
+
+void leader_election_participant::on_finish(
+    std::shared_ptr<finish_op> op, std::promise<bool>& done) {
+  try {
+    if (not op->status.ok()) {
+      throw error_grpc_status("on_finish", op->status);
+    }
+    done.set_value(true);
+  } catch(...) {
+    try {
+      done.set_exception(std::current_exception());
+    } catch(std::future_error const& ex) {
+      JB_LOG(info) << "std::future_error raised while reporting "
+                   << "exception in watcher stream closure."
+                   << "  participant=" << key() << ", value=" << value()
+                   << ", exception=" << ex.what();
+    } catch(std::exception const& ex) {
+      JB_LOG(info) << "std::exception raised while reporting "
+                   << "exception in watcher stream closure."
+                   << "  participant=" << key() << ", value=" << value()
+                   << ", exception=" << ex.what();
+    } catch(...) {
+      JB_LOG(info) << "std::exception raised while reporting "
+                   << "exception in watcher stream closure."
+                   << "  participant=" << key() << ", value=" << value();
+    }
+  }
+}
+  
 void leader_election_participant::on_range_request(
     std::shared_ptr<range_predecessor_op> op) {
   if (not op->status.ok()) {
