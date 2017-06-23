@@ -8,6 +8,7 @@
 #include <chrono>
 #include <cstdint>
 #include <functional>
+#include <future>
 #include <memory>
 #include <mutex>
 
@@ -60,6 +61,17 @@ public:
   }
 
   /**
+   * Destroy a session, releasing any local resources.
+   *
+   * The destructor just ensures that local resources (threads, RPC
+   * streams, etc.) are released.  No attempt is made to release
+   * resources in etcd, such as the lease.  If the application wants
+   * to release the resources it should call revoke() and join any
+   * threads that have called run().
+   */
+  ~session() noexcept(false);
+
+  /**
    * The session's lease.
    *
    * The lease may expire or otherwise become invalid while the
@@ -80,6 +92,9 @@ public:
 
   /// The main thread
   void run();
+
+  /// Revoke the lease, implicitly initiates a shutdown if sucessful.
+  void revoke();
 
   /// TODO() - the completion queue should be an argument to the
   /// constructor ...
@@ -164,6 +179,7 @@ private:
   etcdserverpb::LeaseKeepAliveRequest ka_req_;
   etcdserverpb::LeaseKeepAliveResponse ka_res_;
   grpc::Status finish_status_;
+  std::promise<bool> shutdown_completed_;
   //@}
 
   //@{

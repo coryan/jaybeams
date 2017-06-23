@@ -1,4 +1,5 @@
 #include "jb/etcd/session.hpp"
+#include <jb/etcd/completion_queue.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -11,7 +12,15 @@ namespace etcd {
 
 int constexpr session::keep_alives_per_ttl;
 
+session::~session() noexcept(false) {
+  initiate_shutdown();
+  // ... just block, this can raise an exception if the shutdown
+  // failed ...
+  shutdown_completed_.get_future().get();
+}
+
 void session::initiate_shutdown() {
+  bool connected = false;
   {
     // ... new scope because we do not want to hold the mutex when
     // calling WritesDone() ...
@@ -19,13 +28,21 @@ void session::initiate_shutdown() {
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return;
     }
+    connected = (state_ == state::connected);
     // ... stop any new timers from being created ...
     state_ = state::shuttingdown;
     // ... cancel any outstanding timers ...
-    alarm_->Cancel();
+    if (alarm_) {
+      alarm_->Cancel();
+      alarm_.reset();
+    }
   }
   // ... half-close the reader-writer stream ...
-  rdwr_->WritesDone(&tag_on_writes_done_);
+  if (connected) {
+    rdwr_->WritesDone(&tag_on_writes_done_);
+  } else {
+    shutdown_completed_.set_value(true);
+  }
 }
 
 void session::run() try {
@@ -57,6 +74,34 @@ void session::run() try {
   JB_LOG(info) << "Standard C++ exception in session::run(): " << ex.what();
 } catch (...) {
   JB_LOG(info) << "Unknown exception in session::run()";
+}
+
+void session::revoke() {
+  // ... here we just block, we could make this asynchronous, but
+  // really there is no reason to.  This is running in the session's
+  // thread, and there is no more use for the completion queue, no
+  // pending operations or anything ...
+  grpc::ClientContext context;
+  etcdserverpb::LeaseRevokeRequest req;
+  req.set_id(lease_id_);
+  etcdserverpb::LeaseRevokeResponse resp;
+  auto status = stub_->LeaseRevoke(&context, req, &resp);
+  if (not status.ok()) {
+    std::ostringstream os;
+    os << "stub->LeaseRevoke() failed for lease=" << std::hex
+       << std::setw(16) << std::setfill('0') << lease_id_ << ": "
+       << status.error_message() << "[" << status.error_code() << "]";
+    throw std::runtime_error(os.str());
+  }
+  JB_LOG(info) << "Lease Revoked\n"
+               << "    header.cluster_id=" << resp.header().cluster_id()
+               << "\n"
+               << "    header.member_id=" << resp.header().member_id() << "\n"
+               << "    header.revision=" << resp.header().revision() << "\n"
+               << "    header.raft_term=" << resp.header().raft_term() << "\n"
+               << "  id=" << std::hex << std::setw(16) << std::setfill('0')
+               << lease_id_ << "\n";
+  initiate_shutdown();
 }
 
 session::session(
@@ -200,31 +245,7 @@ void session::on_finish() {
                  << finish_status_.error_message() << "["
                  << finish_status_.error_code() << "]";
   }
-
-  // ... here we just block, we could make this asynchronous, but
-  // really there is no reason to.  This is running in the session's
-  // thread, and there is no more use for the completion queue, no
-  // pending operations or anything ...
-  grpc::ClientContext context;
-  etcdserverpb::LeaseRevokeRequest req;
-  req.set_id(lease_id_);
-  etcdserverpb::LeaseRevokeResponse resp;
-  auto status = stub_->LeaseRevoke(&context, req, &resp);
-  if (not status.ok()) {
-    std::ostringstream os;
-    JB_LOG(info) << "stub->LeaseRevoke() failed for lease=" << std::hex
-                 << std::setw(16) << std::setfill('0') << lease_id_ << ": "
-                 << status.error_message() << "[" << status.error_code() << "]";
-  } else {
-    JB_LOG(info) << "Lease Revoked\n"
-                 << "    header.cluster_id=" << resp.header().cluster_id()
-                 << "\n"
-                 << "    header.member_id=" << resp.header().member_id() << "\n"
-                 << "    header.revision=" << resp.header().revision() << "\n"
-                 << "    header.raft_term=" << resp.header().raft_term() << "\n"
-                 << "  id=" << std::hex << std::setw(16) << std::setfill('0')
-                 << lease_id_ << "\n";
-  }
+  shutdown_completed_.set_value(true);
   queue_.Shutdown();
 }
 
