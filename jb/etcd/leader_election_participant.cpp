@@ -171,7 +171,7 @@ void leader_election_participant::shutdown() {
     // before shutting down the completion queue ...
     std::promise<bool> watcher_stream_closed;
     auto op = make_writes_done_op([this, &watcher_stream_closed](auto op) {
-      on_writes_done(op, watcher_stream_closed);
+      this->on_writes_done(op, watcher_stream_closed);
     });
     watcher_stream_->WritesDone(op->tag());
     // ... block until it closes ...
@@ -288,7 +288,8 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 
 void leader_election_participant::on_writes_done(
     std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
-  auto op = make_finish_op([this, &done](auto op) { on_finish(op, done); });
+  auto op =
+      make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
   watcher_stream_->Finish(&op->status, op->tag());
 }
 
