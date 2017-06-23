@@ -1,6 +1,7 @@
 FROM fedora:25
 MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
 
+#'
 RUN dnf makecache && dnf install -y \
       autoconf \
       autoconf-archive \
@@ -106,6 +107,9 @@ RUN wget -q https://github.com/coreos/etcd/releases/download/v3.2.1/etcd-v3.2.1-
   cp etcd-v3.2.1-linux-amd64/etcd /usr/bin && \
   cp etcd-v3.2.1-linux-amd64/etcdctl /usr/bin && \
   /bin/rm -fr /var/tmp/install-etcd
+# TODO() this should be installed in that first "dnf install", need to
+# debug the image first.
+RUN dnf makecache && dnf install -y python && dnf clean all
 
 # Boost has deprecated a few headers, warns about it, and other parts
 # of Boost still use them:
