@@ -11,4 +11,6 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   auto factory = std::make_shared<jb::etcd::client_factory>();
   jb::etcd::leader_election_participant tested(
       factory, "localhost:2379", "testing-election", "42");
+  BOOST_CHECK_EQUAL(tested.value(), "42");
+  BOOST_CHECK_EQUAL(tested.key().substr(0, 17), "testing-election/");
 }
