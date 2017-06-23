@@ -71,7 +71,6 @@ int main(int argc, char* argv[]) try {
   // election, it would be nice to handle the signal even if the
   // partipant has not won yet.  That would require some more
   // complicated threading, not going there yet ...
-  // at least allow a 
   boost::asio::io_service io;
   boost::asio::signal_set signals(io, SIGINT, SIGTERM);
 #if defined(SIGQUIT)
