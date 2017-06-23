@@ -100,7 +100,12 @@ RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
     find /usr/local -type f -name '*.la' -exec rm -f {} \;) && \
   /bin/rm -fr /var/tmp/build-grpc 
 
-WORKDIR /root
+WORKDIR /var/tmp/install-etcd
+RUN wget -q https://github.com/coreos/etcd/releases/download/v3.2.1/etcd-v3.2.1-linux-amd64.tar.gz && \
+  tar -xf etcd-v3.2.1-linux-amd64.tar.gz && \
+  cp etcd-v3.2.1-linux-amd64/etcd /usr/bin && \
+  cp etcd-v3.2.1-linux-amd64/etcdctl /usr/bin && \
+  /bin/rm -fr /var/tmp/install-etcd
 
 # Boost has deprecated a few headers, warns about it, and other parts
 # of Boost still use them:
@@ -114,3 +119,5 @@ WORKDIR /root
 RUN sed -i '/pragma message.*deprecated/d' \
   /usr/include/boost/type_traits/detail/template_arity_spec.hpp \
   /usr/include/boost/type_traits/detail/bool_trait_def.hpp
+
+WORKDIR /root

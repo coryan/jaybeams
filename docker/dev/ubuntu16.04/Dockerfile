@@ -89,5 +89,12 @@ RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
     make install) && \
   /bin/rm -fr /var/tmp/build-grpc
 
+WORKDIR /var/tmp/install-etcd
+RUN wget -q https://github.com/coreos/etcd/releases/download/v3.2.1/etcd-v3.2.1-linux-amd64.tar.gz && \
+  tar -xf etcd-v3.2.1-linux-amd64.tar.gz && \
+  cp etcd-v3.2.1-linux-amd64/etcd /usr/bin && \
+  cp etcd-v3.2.1-linux-amd64/etcdctl /usr/bin && \
+  /bin/rm -fr /var/tmp/install-etcd
+
 WORKDIR /root
 
