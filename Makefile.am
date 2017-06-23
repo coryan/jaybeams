@@ -544,7 +544,8 @@ nobase_jb_libjb_etcd_a_HEADERS = \
 
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
-  jb/etcd/election_participant
+  jb/etcd/election_participant \
+  jb/etcd/session_client_ut
 
 unit_tests += \
   jb/etcd/completion_queue_ut
@@ -557,6 +558,11 @@ jb_etcd_completion_queue_ut_SOURCES = jb/etcd/completion_queue_ut.cpp
 jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_completion_queue_ut
 jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_session_client_ut_SOURCES = jb/etcd/session_client_ut.cpp
+jb_etcd_session_client_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_client_ut
+jb_etcd_session_client_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_session_client_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 # TODO() - decide if the protobuf files should be included in the
 # distribution tarball ...

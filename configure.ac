@@ -111,9 +111,9 @@ AC_SUBST(PROTOBUF_CPPFLAGS)
 AC_SUBST(PROTOBUF_CFLAGS)
 
 if $PKG_CONFIG --atleast-version=1.3.4 grpc++; then
-  GRPCPP_LIBS=`$PKG_CONFIG --libs grpc++`
-  GRPCPP_CPPFLAGS=`$PKG_CONFIG --cflags-only-I grpc++`
-  GRPCPP_CFLAGS=`$PKG_CONFIG --cflags-only-other grpc++`
+  GRPCPP_LIBS=`$PKG_CONFIG --libs grpc++ grpc`
+  GRPCPP_CPPFLAGS=`$PKG_CONFIG --cflags-only-I grpc++ grpc`
+  GRPCPP_CFLAGS=`$PKG_CONFIG --cflags-only-other grpc++ grpc`
 else
   AC_MSG_ERROR([Cannot find grpc++ >= 1.3.4])
 fi

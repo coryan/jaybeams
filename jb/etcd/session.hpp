@@ -70,6 +70,11 @@ public:
     return lease_id_;
   }
 
+  state current_state() const {
+    std::lock_guard<std::mutex> guard(mu_);
+    return state_;
+  }
+
   /// Start the shutdown process ...
   void initiate_shutdown();
 
@@ -116,7 +121,8 @@ private:
 
 private:
   /// The usual mutex thing.
-  std::mutex mu_;
+  mutable std::mutex mu_;
+
   /**
    * Implement the state machine.
    *

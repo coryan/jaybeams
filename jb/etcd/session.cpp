@@ -142,11 +142,13 @@ session::session(
 
 /// Set a timer to start the next Write/Read cycle.
 void session::set_timer() {
-  // TODO() - need a mutex here ...
-  if (state_ == state::shuttingdown or state_ == state::shutdown) {
-    return;
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+    state_ = state::connected;
   }
-  state_ = state::connecting;
   // ... use the awkward grpc::Alarm interface to completion queues,
   // and once that is done, call on_timer().  I was tempted to set
   // the timer as soon as the write operation was scheduled, but the
