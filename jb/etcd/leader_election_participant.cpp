@@ -2,6 +2,7 @@
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
+#include <google/protobuf/text_format.h>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
@@ -17,17 +18,17 @@ leader_election_participant::leader_election_participant(
     bool shared, std::shared_ptr<client_factory> client,
     std::string const& etcd_endpoint, std::string const& election_name,
     std::string const& participant_value)
-  : client_(client)
-  , channel_(client->create_channel(etcd_endpoint))
-  , kv_client_(client_->create_kv(channel_))
-  , watch_client_(client_->create_watch(channel_))
-  , watcher_stream_()
-  , queue_(std::make_shared<completion_queue>())
-  , session_(channel_, std::chrono::milliseconds(15000))
-  , election_name_(election_name)
-  , participant_value_(participant_value)
-  , election_prefix_(election_name + "/")
-  , participant_key_([this]() {
+    : client_(client)
+    , channel_(client->create_channel(etcd_endpoint))
+    , kv_client_(client_->create_kv(channel_))
+    , watch_client_(client_->create_watch(channel_))
+    , watcher_stream_()
+    , queue_(std::make_shared<completion_queue>())
+    , session_(channel_, std::chrono::milliseconds(15000))
+    , election_name_(election_name)
+    , participant_value_(participant_value)
+    , election_prefix_(election_name + "/")
+    , participant_key_([this]() {
       // ... build the key using the session's lease.  The lease id is
       // unique, assigned by etcd, so each participant gets a different
       // key.  The use of an inline functor is because why not ...
@@ -37,13 +38,39 @@ leader_election_participant::leader_election_participant(
       os << election_prefix_ << std::hex << session_.lease_id();
       return os.str();
     }())
-  , pending_watches_(0)
-  , campaign_result_()
-  , campaign_callback_()
-  , completion_queue_loop_() {
-  // ... start the event loop ...
+    , pending_watches_(0)
+    , campaign_result_()
+    , campaign_callback_()
+    , completion_queue_loop_() {
+  // ... start the event loop, if an exception is raised we will need
+  // to shutdown the event loop and join the thread, otherwise the
+  // destructor of the fully initialized thread object
+  // (completion_event_loop_ or a temporary) will call std::terminate() ...
   completion_queue_loop_ = std::thread([this]() { run(); });
+  // ... this is just the initialization after all the member
+  // variables are set.  Moved to a function because the code gets too
+  // big otherwise ...
+  preamble();
+}
 
+leader_election_participant::~leader_election_participant() {
+  queue_->shutdown();
+  completion_queue_loop_.join();
+}
+
+void leader_election_participant::resign() {
+}
+
+void leader_election_participant::proclaim(std::string const& new_value) {
+  std::string copy(new_value);
+  etcdserverpb::RequestOp failure_op;
+  auto result = publish_value(copy, failure_op);
+  // TODO() - the failure_op should be a Get() and we need to decide
+  // what to do when this fails ...
+  copy.swap(participant_value_);
+}
+
+void leader_election_participant::preamble() try {
   // ... need to create the watcher stream, we do this here, and block
   // until it is done, because it would be a pain to manage the state
   // machine where the stream may or may not be setup and other
@@ -63,26 +90,7 @@ leader_election_participant::leader_election_participant(
   watch_client_->AsyncWatch(&op->context, *queue_, op->tag());
   // ... blocks until it is ready ...
   watcher_stream_ = watcher_stream_ready.get_future().get();
-    
-  // ... this is just the initialization after all the member
-  // variables are set.  Moved to a function because the code gets too
-  // big otherwise ...
-  preamble();
-}
 
-void leader_election_participant::resign() {
-}
-
-void leader_election_participant::proclaim(std::string const& new_value) {
-  std::string copy(new_value);
-  etcdserverpb::RequestOp failure_op;
-  auto result = publish_value(copy, failure_op);
-  // TODO() - the failure_op should be a Get() and we need to decide
-  // what to do when this fails ...
-  copy.swap(participant_value_);
-}
-
-void leader_election_participant::preamble() {
   // ... we need to create a node to represent this participant in
   // the leader election.  We do this with a test-and-set
   // operation.  The test is "does this key have creation_version ==
@@ -90,20 +98,20 @@ void leader_election_participant::preamble() {
   // because any key actually created would have a higher creation
   // version ...
   etcdserverpb::TxnRequest req;
-  auto cmp = *req.add_compare();
+  auto& cmp = *req.add_compare();
   cmp.set_key(key());
   cmp.set_result(etcdserverpb::Compare::EQUAL);
   cmp.set_target(etcdserverpb::Compare::CREATE);
   cmp.set_create_revision(0);
   // ... if the key is not there we are going to create it, and
   // store the "participant value" there ...
-  auto on_success = *req.add_success()->mutable_request_put();
+  auto& on_success = *req.add_success()->mutable_request_put();
   on_success.set_key(key());
   on_success.set_value(value());
   on_success.set_lease(session_.lease_id());
   // ... if the key is there, we are going to fetch its current
   // value, there will be some fun action with that ...
-  auto on_failure = *req.add_failure()->mutable_request_range();
+  auto& on_failure = *req.add_failure()->mutable_request_range();
   on_failure.set_key(key());
 
   // TODO() - I wish I could write resp = commit(), but protobufs
@@ -130,11 +138,21 @@ void leader_election_participant::preamble() {
       // ... too bad, need to publish again *and* we need to delete
       // the key if the publication fails ...
       etcdserverpb::RequestOp failure_op;
-      auto delete_op = *failure_op.mutable_request_delete_range();
+      auto& delete_op = *failure_op.mutable_request_delete_range();
       delete_op.set_key(key());
       publish_value(value(), failure_op);
     }
   }
+} catch (std::exception const& ex) {
+  JB_LOG(info) << "Standard exception raised in preamble: " << ex.what();
+  queue_->shutdown();
+  completion_queue_loop_.join();
+  throw;
+} catch (...) {
+  JB_LOG(info) << "Unknown exception raised in preamble";
+  queue_->shutdown();
+  completion_queue_loop_.join();
+  throw;
 }
 
 void leader_election_participant::campaign() {
@@ -216,12 +234,12 @@ void leader_election_participant::campaign_impl(
 etcdserverpb::TxnResponse leader_election_participant::publish_value(
     std::string const& new_value, etcdserverpb::RequestOp const& failure_op) {
   etcdserverpb::TxnRequest req;
-  auto cmp = *req.add_compare();
+  auto& cmp = *req.add_compare();
   cmp.set_key(key());
   cmp.set_result(etcdserverpb::Compare::EQUAL);
   cmp.set_target(etcdserverpb::Compare::CREATE);
   cmp.set_create_revision(participant_revision_);
-  auto on_success = *req.add_success()->mutable_request_put();
+  auto& on_success = *req.add_success()->mutable_request_put();
   on_success.set_key(key());
   on_success.set_value(new_value);
   on_success.set_lease(session_.lease_id());
@@ -236,7 +254,7 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
   etcdserverpb::TxnResponse resp;
   auto status = kv_client_->Txn(&context, req, &resp);
   if (not status.ok()) {
-    throw error_grpc_status("commit/etcd::Txn", status);
+    throw error_grpc_status("commit/etcd::Txn", status, &resp, &req);
   }
   return resp;
 }
@@ -244,7 +262,7 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 void leader_election_participant::on_range_request(
     std::shared_ptr<range_predecessor_op> op) {
   if (not op->status.ok()) {
-    throw error_grpc_status("on_range_request", op->status);
+    throw error_grpc_status("on_range_request", op->status, &op->response);
   }
   using etcdserverpb::WatchResponse;
   using etcdserverpb::WatchRequest;
@@ -252,13 +270,11 @@ void leader_election_participant::on_range_request(
     // ... we need to capture the key and revision of the result, so
     // we can then start a Watch starting from that revision ...
     ++pending_watches_;
-    
-    auto write = make_write_op<etcdserverpb::WatchRequest>(
-        [ this, key = kv.key(),
-          revision = op->response.header().revision() ](auto op) {
-          this->on_watch_write(op, key, revision);
-        });
-    auto create = *write->request.mutable_create_request();
+
+    auto write = make_write_op<etcdserverpb::WatchRequest>([
+      this, key = kv.key(), revision = op->response.header().revision()
+    ](auto op) { this->on_watch_write(op, key, revision); });
+    auto& create = *write->request.mutable_create_request();
     create.set_key(kv.key());
     create.set_start_revision(op->response.header().revision());
     watcher_stream_->Write(write->request, op->tag());
@@ -295,24 +311,24 @@ void leader_election_participant::run() {
   // if an exception is raised ..
   try {
     queue_->run();
-  } catch(...) {
+  } catch (...) {
     auto eptr = std::current_exception();
     log_thread_exit_exception(eptr);
     try {
       campaign_result_.set_exception(eptr);
-    } catch(std::future_error const& ex) {
+    } catch (std::future_error const& ex) {
       // ... this is normal, the campaign was already satisfied ...
       JB_LOG(debug) << "std::future_error raised while reporting "
                     << "exception at event loop exit."
                     << "  participant=" << key() << ", value=" << value()
                     << ", exception=" << ex.what();
-    } catch(std::exception const& ex) {
+    } catch (std::exception const& ex) {
       // ... this is not normal, report the exception ...
       JB_LOG(debug) << "Standard C++ exception raised while reporting "
                     << "exception at event loop exit."
                     << "  participant=" << key() << ", value=" << value()
                     << ", exception=" << ex.what();
-    } catch(...) {
+    } catch (...) {
       // ... this is not normal, report the exception ...
       JB_LOG(debug) << "Unknown exception raised while reporting "
                     << "exception at event loop exit."
@@ -320,7 +336,7 @@ void leader_election_participant::run() {
     }
   }
   // TODO() - maybe we should use make_ready_at_thread_exit() or some
-  // of 
+  // of
   make_callback();
 }
 
@@ -358,12 +374,24 @@ void leader_election_participant::log_thread_exit_exception(
 }
 
 std::runtime_error leader_election_participant::error_grpc_status(
-    char const* where, grpc::Status const& status) const {
+    char const* where, grpc::Status const& status,
+    google::protobuf::Message const* res,
+    google::protobuf::Message const* req) const {
   std::ostringstream os;
   os << "grpc error in " << where << " for election=" << election_name_
-     << ", participant=" << participant_key_ << ", value=" << participant_value_
+     << ", participant=" << key() << ", value=" << value()
      << ", revision=" << participant_revision_ << ": " << status.error_message()
      << "[" << status.error_code() << "]";
+  if (res != nullptr) {
+    std::string print;
+    google::protobuf::TextFormat::PrintToString(*res, &print);
+    os << ", response=" << print;
+  }
+  if (req != nullptr) {
+    std::string print;
+    google::protobuf::TextFormat::PrintToString(*req, &print);
+    os << ", request=" << print;
+  }
   return std::runtime_error(os.str());
 }
 
@@ -373,7 +401,7 @@ std::string leader_election_participant::prefix_end(std::string const& prefix) {
   // key that is one bit higher than the prefix ...
   std::string range_end = prefix;
   bool needs_append = true;
-  for (auto i = range_end.rend(); i != range_end.rbegin(); ++i) {
+  for (auto i = range_end.rbegin(); i != range_end.rend(); ++i) {
     if (std::uint8_t(*i) == 0xFF) {
       *i = 0x00;
       continue;
@@ -389,7 +417,6 @@ std::string leader_election_participant::prefix_end(std::string const& prefix) {
   }
   return range_end;
 }
-
 
 } // namespace etcd
 } // namespace jb

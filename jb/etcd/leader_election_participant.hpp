@@ -2,8 +2,8 @@
 #define jb_etcd_leader_election_participant_hpp
 
 #include <jb/etcd/client_factory.hpp>
-#include <jb/etcd/session.hpp>
 #include <jb/etcd/completion_queue.hpp>
+#include <jb/etcd/session.hpp>
 
 #include <atomic>
 #include <future>
@@ -35,8 +35,8 @@ public:
       std::string const& etcd_endpoint, std::string const& election_name,
       std::string const& participant_value, Functor const& elected_callback)
       : leader_election_participant(
-                                    true, client_factory, etcd_endpoint, election_name, participant_value,
-            std::move(elected_callback)) {
+            true, client_factory, etcd_endpoint, election_name,
+            participant_value, std::move(elected_callback)) {
   }
 
   /// Constructor, non-blocking, calls the callback when elected.
@@ -50,6 +50,19 @@ public:
             participant_value) {
     campaign(elected_callback);
   }
+
+  /**
+   * Terminate the internal threads and release local resources.
+   *
+   * The destructor makes sure the *local* resources are released,
+   * including connections to the etcd server, and internal threads.
+   * But it makes no attempt to resign from the election, or delete
+   * the keys in etcd, or to gracefully revoke the etcd leases.
+   *
+   * The application should call resign() to release the resources
+   * held in the etcd server.
+   */
+  ~leader_election_participant();
 
   /// Return the etcd key associated with this participant
   std::string const& key() const {
@@ -116,8 +129,8 @@ private:
   using watch_read_op = async_read_op<etcdserverpb::WatchResponse>;
 
   void on_watch_write(
-      std::shared_ptr<watch_write_op> op,
-      std::string const& watched_key, std::uint64_t watched_revision);
+      std::shared_ptr<watch_write_op> op, std::string const& watched_key,
+      std::uint64_t watched_revision);
   void on_watch_read(std::shared_ptr<watch_read_op> op);
 
   /// Check if the election has finished, if so invoke the callbacks.
@@ -134,8 +147,10 @@ private:
   void log_thread_exit_exception(std::exception_ptr eptr);
 
   /// Return an exception with the @a status details
-  std::runtime_error
-  error_grpc_status(char const* where, grpc::Status const& status) const;
+  std::runtime_error error_grpc_status(
+      char const* where, grpc::Status const& status,
+      google::protobuf::Message const* res = nullptr,
+      google::protobuf::Message const* req = nullptr) const;
 
   // Compute the end of the range for a prefix search.
   static std::string prefix_end(std::string const& prefix);
@@ -146,7 +161,7 @@ private:
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
   using watcher_stream_type = grpc::ClientAsyncReaderWriter<
-    etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
+      etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
   std::shared_ptr<completion_queue> queue_;
   session session_;
