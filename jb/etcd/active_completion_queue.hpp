@@ -54,6 +54,10 @@ public:
     return static_cast<grpc::CompletionQueue*>(*queue_);
   }
 
+  completion_queue& cq() {
+    return *queue_;
+  }
+
 private:
   /// A helper for the lambdas in the constructor
   std::shared_ptr<completion_queue> queue() {
