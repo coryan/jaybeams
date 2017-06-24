@@ -18,7 +18,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   {
     BOOST_TEST_CHECKPOINT("Session created and thread launched");
     jb::etcd::leader_election_participant tested(
-        factory, etcd_address, "testing-election", session.lease_id(), "42");
+        queue, factory, etcd_address, "testing-election", session.lease_id(),
+        "42");
     BOOST_CHECK_EQUAL(tested.value(), "42");
     BOOST_CHECK_EQUAL(tested.key().substr(0, 17), "testing-election/");
   }

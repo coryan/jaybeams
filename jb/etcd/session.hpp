@@ -77,7 +77,7 @@ public:
             queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
             lease_id, true) {
   }
-  
+
   /**
    * Destroy a session, releasing any local resources.
    *
@@ -154,7 +154,7 @@ private:
   void on_finish(std::shared_ptr<finish_op> op, std::promise<bool>& done);
 
   /// Convert the constructor argument to milliseconds.
-  template<typename duration_type>
+  template <typename duration_type>
   static std::chrono::milliseconds to_milliseconds(duration_type d) {
     return std::chrono::duration_cast<std::chrono::milliseconds>(d);
   }
@@ -181,6 +181,7 @@ private:
   std::shared_ptr<client_factory> client_;
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
+  grpc::ClientContext keep_alive_stream_context_;
   std::unique_ptr<ka_stream_type::client_type> keep_alive_stream_;
   std::shared_ptr<completion_queue> queue_;
 

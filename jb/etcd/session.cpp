@@ -49,6 +49,7 @@ session::session(
     , client_(client)
     , channel_(client_->create_channel(etcd_endpoint))
     , lease_client_(client_->create_lease(channel_))
+    , keep_alive_stream_context_()
     , keep_alive_stream_()
     , queue_(queue)
     , lease_id_(lease_id)
@@ -103,18 +104,23 @@ void session::preamble() {
   // ... no real need to grab a mutex here.  The object is not fully
   // constructed, it should not be used by more than one thread ...
   state_ = state::connecting;
-  
+
   // ... we want to block until the keep alive streaming RPC is setup,
   // this is (unfortunately) an asynchronous operation, so we have to
   // do some magic ...
-  std::promise<std::unique_ptr<ka_stream_type::client_type>> stream_ready;
+  std::promise<bool> stream_ready;
   auto op = make_async_rdwr_stream<
-      ka_stream_type::write_type, ka_stream_type::read_type>([&stream_ready](
-      auto op) { stream_ready.set_value(std::move(op->client)); });
+      ka_stream_type::write_type, ka_stream_type::read_type>(
+      [&stream_ready](auto op) { stream_ready.set_value(true); });
   // ... create the call and invoke the operation's callback when done ...
-  lease_client_->AsyncLeaseKeepAlive(&op->context, *queue_, op->tag());
+  keep_alive_stream_ = lease_client_->AsyncLeaseKeepAlive(
+      &keep_alive_stream_context_, *queue_, op->tag());
   // ... block until done ...
-  keep_alive_stream_ = stream_ready.get_future().get();
+  if (not stream_ready.get_future().get()) {
+    JB_LOG(error) << "  - stream not ready!!";
+  }
+
+  JB_LOG(info) << "stream connected lease=" << lease_id();
 
   state_ = state::connected;
   set_timer();
@@ -146,7 +152,6 @@ void session::shutdown() {
     keep_alive_stream_->WritesDone(op->tag());
     // ... block until it closes ...
     stream_closed.get_future().get();
-    keep_alive_stream_.reset();
   }
   std::lock_guard<std::mutex> lock(mu_);
   state_ = state::shutdown;
@@ -168,13 +173,17 @@ void session::set_timer() {
 
   auto deadline =
       std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
-  JB_ASSERT_THROW(current_timer_.get() == 0);
-  current_timer_ = queue_->make_deadline_timer(deadline, [this](auto op) {
-      this->on_timeout(op);
-    });
+  current_timer_ = queue_->make_deadline_timer(
+      deadline, [this](auto op) { this->on_timeout(op); });
 }
 
 void session::on_timeout(std::shared_ptr<deadline_timer> op) {
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+  }
   auto write = make_write_op<etcdserverpb::LeaseKeepAliveRequest>(
       [this](auto op) { this->on_write(op); });
   write->request.set_id(lease_id());
@@ -182,12 +191,24 @@ void session::on_timeout(std::shared_ptr<deadline_timer> op) {
 }
 
 void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+  }
   auto read = make_read_op<etcdserverpb::LeaseKeepAliveResponse>(
       [this](auto rd) { this->on_read(rd); });
   this->keep_alive_stream_->Read(&read->response, read->tag());
 }
 
 void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+  }
   // ... the KeepAliveResponse may have a new TTL value, that is the
   // etcd server may be telling us to backoff a little ...
   actual_TTL_ = std::chrono::seconds(op->response.ttl());
@@ -214,13 +235,11 @@ void session::on_finish(
     } catch (std::future_error const& ex) {
       JB_LOG(info) << "std::future_error raised while reporting "
                    << "exception in lease keep alive stream closure."
-                   << "  lease=" << lease_id()
-                   << ", exception=" << ex.what();
+                   << "  lease=" << lease_id() << ", exception=" << ex.what();
     } catch (std::exception const& ex) {
       JB_LOG(info) << "std::exception raised while reporting "
                    << "exception in lease keep alive stream closure."
-                   << "  lease=" << lease_id()
-                   << ", exception=" << ex.what();
+                   << "  lease=" << lease_id() << ", exception=" << ex.what();
     } catch (...) {
       JB_LOG(info) << "std::exception raised while reporting "
                    << "exception in lease keep alive stream closure."

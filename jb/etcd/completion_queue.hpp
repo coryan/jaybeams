@@ -73,17 +73,15 @@ struct async_write_op {
     return static_cast<void*>(&callback);
   }
 
-  grpc::ClientContext context;
-  grpc::Status status;
   std::function<void()> callback;
   W request;
 };
 
 /// Create an asynchronous write operation for the given functor
 template <typename W, typename Functor>
-std::shared_ptr<async_write_op<W>> make_write_op(Functor&& functor) {
+std::shared_ptr<async_write_op<W>> make_write_op(Functor&& f) {
   auto op = std::make_shared<async_write_op<W>>();
-  op->callback = std::move([op, functor]() {
+  op->callback = std::move([ op, functor = std::move(f) ]() {
     auto callback = std::move(op->callback);
     functor(std::move(op));
   });
@@ -102,17 +100,15 @@ struct async_read_op {
     return static_cast<void*>(&callback);
   }
 
-  grpc::ClientContext context;
-  grpc::Status status;
   std::function<void()> callback;
   R response;
 };
 
 /// Create an asynchronous read operation for the given functor.
 template <typename R, typename Functor>
-std::shared_ptr<async_read_op<R>> make_read_op(Functor&& functor) {
+std::shared_ptr<async_read_op<R>> make_read_op(Functor&& f) {
   auto op = std::make_shared<async_read_op<R>>();
-  op->callback = std::move([op, functor]() {
+  op->callback = std::move([ op, functor = std::move(f) ]() {
     auto callback = std::move(op->callback);
     functor(std::move(op));
   });
@@ -204,11 +200,9 @@ struct async_rdwr_stream {
     return static_cast<void*>(&ready_callback);
   }
 
-  grpc::ClientContext context;
   std::function<void()> ready_callback;
-  using client_type = grpc::ClientAsyncReaderWriter<W, R>;
-  std::unique_ptr<client_type> client;
 
+  using client_type = grpc::ClientAsyncReaderWriter<W, R>;
   using write_op = async_write_op<W>;
   using read_op = async_read_op<R>;
   using write_type = W;
@@ -239,15 +233,15 @@ struct deadline_timer {
       grpc::CompletionQueue* queue,
       std::chrono::system_clock::time_point deadline, Functor&& f) {
     std::shared_ptr<deadline_timer> op(new deadline_timer);
-    op->callback_ = std::move([op, functor = std::move(f)]() {
-        std::lock_guard<std::mutex> lock(op->mu_);
-        auto top = std::move(op);
-        auto callback = std::move(top->callback_);
-        if (top->canceled_) {
-          return;
-        }
-        top->canceled_ = true;
-        functor(top);
+    op->callback_ = std::move([ op, functor = std::move(f) ]() {
+      auto top = std::move(op);
+      std::lock_guard<std::mutex> lock(op->mu_);
+      auto callback = std::move(top->callback_);
+      if (top->canceled_) {
+        return;
+      }
+      top->canceled_ = true;
+      functor(top);
     });
     op->alarm_ = std::make_unique<grpc::Alarm>(
         queue, deadline, static_cast<void*>(&op->callback_));
@@ -269,8 +263,8 @@ struct deadline_timer {
 
 private:
   deadline_timer()
-    : mu_()
-    , canceled_(false) {
+      : mu_()
+      , canceled_(false) {
   }
 
 private:

@@ -18,11 +18,12 @@ class leader_election_participant {
 public:
   /// Constructor, blocks until this participant becomes the leader.
   leader_election_participant(
+      std::shared_ptr<completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name, lease_id,
+            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value) {
     // ... block until this participant becomes the leader ...
     campaign();
@@ -31,24 +32,26 @@ public:
   /// Constructor, non-blocking, calls the callback when elected.
   template <typename Functor>
   leader_election_participant(
+      std::shared_ptr<completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value,
       Functor const& elected_callback)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name, lease_id,
+            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value, std::move(elected_callback)) {
   }
 
   /// Constructor, non-blocking, calls the callback when elected.
   template <typename Functor>
   leader_election_participant(
+      std::shared_ptr<completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value,
       Functor&& elected_callback)
       : leader_election_participant(
-            true, client_factory, etcd_endpoint, election_name, lease_id,
+            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
             participant_value) {
     campaign(elected_callback);
   }
@@ -85,7 +88,8 @@ public:
 private:
   /// Refactor common code to public constructors ...
   leader_election_participant(
-      bool shared, std::shared_ptr<client_factory> client_factory,
+      bool, std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value);
 
@@ -193,6 +197,7 @@ private:
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
+  grpc::ClientContext watcher_stream_context_;
   using watcher_stream_type = grpc::ClientAsyncReaderWriter<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;

@@ -17,7 +17,7 @@ std::ostream& operator<<(std::ostream& os, session::state s) {
 /**
  * @test Verify that one can create and destroy a session.
  */
-BOOST_AUTO_TEST_CASE(completion_queue_basic) {
+BOOST_AUTO_TEST_CASE(session_basic) {
   std::string const address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
   auto queue = std::make_shared<jb::etcd::completion_queue>();
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_basic) {
 /**
  * @test Verify that one can create, run, and stop a completion queue.
  */
-BOOST_AUTO_TEST_CASE(completion_queue_normal) {
+BOOST_AUTO_TEST_CASE(session_normal) {
   std::string const address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
   auto queue = std::make_shared<jb::etcd::completion_queue>();
@@ -47,6 +47,29 @@ BOOST_AUTO_TEST_CASE(completion_queue_normal) {
   BOOST_CHECK_NE(session.lease_id(), 0);
   using state = jb::etcd::session::state;
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);
+
+  session.revoke();
+  BOOST_CHECK_EQUAL(session.current_state(), state::shutdown);
+  queue->shutdown();
+  t.join();
+}
+
+/**
+ * @test Verify that one can create, run, and stop a completion queue.
+ */
+BOOST_AUTO_TEST_CASE(session_long) {
+  std::string const address = "localhost:2379";
+  auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto queue = std::make_shared<jb::etcd::completion_queue>();
+  std::thread t([queue]() { queue->run(); });
+
+  jb::etcd::session session(queue, factory, address, std::chrono::seconds(1));
+  BOOST_CHECK_NE(session.lease_id(), 0);
+  using state = jb::etcd::session::state;
+  BOOST_CHECK_EQUAL(session.current_state(), state::connected);
+
+  // ... keep the session open for a while ...
+  std::this_thread::sleep_for(std::chrono::seconds(20));
 
   session.revoke();
   BOOST_CHECK_EQUAL(session.current_state(), state::shutdown);

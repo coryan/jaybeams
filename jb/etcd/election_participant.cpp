@@ -60,17 +60,35 @@ int main(int argc, char* argv[]) try {
   jb::etcd::session session(
       queue, factory, cfg.etcd_address(), std::chrono::seconds(10));
 
-  // ... the election participant, this blocks until the current
-  // process becomes the leader ...
-  jb::etcd::leader_election_participant tested(
-      factory, cfg.etcd_address(), cfg.election_name(), session.lease_id(),
-      cfg.value());
+  // ... a promise that tells us if this participant has been elected
+  // the leader ...
+  std::promise<bool> is_leader;
 
-  std::cout << "... this participant is currently the leader, published="
-            << tested.value() << " on key=" << tested.key() << std::endl;
+  // ... the election participant, set the is_leader promise when this
+  // participant is elected leader ...
+  jb::etcd::leader_election_participant participant(
+      queue, factory, cfg.etcd_address(), cfg.election_name(),
+      session.lease_id(), cfg.value(), [&is_leader](std::future<bool>& f) {
+        try {
+          std::cout << "... elected! ..." << std::endl;
+          is_leader.set_value(f.get());
+        } catch (...) {
+          is_leader.set_exception(std::current_exception());
+          std::cout << "... election failed ..." << std::endl;
+        }
+      });
+
+  auto status = is_leader.get_future().wait_for(std::chrono::seconds(0));
+  if (status != std::future_status::ready) {
+    std::cout << "Waiting until " << participant.key() << " becomes the leader"
+              << std::endl;
+  } else {
+    std::cout << "Participant " << participant.key() << " is the leader"
+              << std::endl;
+  }
 
   // ... use Boost.ASIO to wait for a signal, then gracefully shutdown
-  // the session ...
+  // the participant ...
   // TODO() - well, the code never gets here unless we win the
   // election, it would be nice to handle the signal even if the
   // partipant has not won yet.  That would require some more
@@ -87,6 +105,10 @@ int main(int argc, char* argv[]) try {
 
   // ... run until the signal is delivered ...
   io.run();
+
+  // ... resign as the leader, or abandon the attempt to become the
+  // leader if not elected yet ...
+  participant.resign();
 
   // ... request a lease revoke, cleaning up our resources in the etcd
   // service, if we fail to do so the resources will be cleaned up

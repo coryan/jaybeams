@@ -15,15 +15,17 @@ namespace etcd {
 // other constructors.  Each one of them kicks off the campaign is a
 // slightly different way ...
 leader_election_participant::leader_election_participant(
-    bool shared, std::shared_ptr<client_factory> client,
-    std::string const& etcd_endpoint, std::string const& election_name,
-    std::uint64_t lease_id, std::string const& participant_value)
+    bool shared, std::shared_ptr<completion_queue> queue,
+    std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+    std::string const& election_name, std::uint64_t lease_id,
+    std::string const& participant_value)
     : client_(client)
     , channel_(client->create_channel(etcd_endpoint))
     , kv_client_(client_->create_kv(channel_))
     , watch_client_(client_->create_watch(channel_))
+    , watcher_stream_context_()
     , watcher_stream_()
-    , queue_(std::make_shared<completion_queue>())
+    , queue_(queue)
     , election_name_(election_name)
     , lease_id_(lease_id)
     , participant_value_(participant_value)
@@ -82,13 +84,15 @@ void leader_election_participant::preamble() try {
           decltype(watcher_stream_),
           std::unique_ptr<watch_stream::client_type>>::value,
       "Mismatched async stream for Watcher");
-  std::promise<std::unique_ptr<watch_stream::client_type>> watcher_stream_ready;
-  auto op = make_async_rdwr_stream<W, R>([&watcher_stream_ready](auto op) {
-    watcher_stream_ready.set_value(std::move(op->client));
-  });
-  watch_client_->AsyncWatch(&op->context, *queue_, op->tag());
+  std::promise<bool> stream_ready;
+  auto op = make_async_rdwr_stream<W, R>(
+      [&stream_ready](auto op) { stream_ready.set_value(true); });
+  watcher_stream_ =
+      watch_client_->AsyncWatch(&watcher_stream_context_, *queue_, op->tag());
   // ... blocks until it is ready ...
-  watcher_stream_ = watcher_stream_ready.get_future().get();
+  if (not stream_ready.get_future().get()) {
+    JB_LOG(error) << "  - stream not ready!!";
+  }
 
   // ... we need to create a node to represent this participant in
   // the leader election.  We do this with a test-and-set
