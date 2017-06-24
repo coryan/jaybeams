@@ -1,5 +1,5 @@
 #include "jb/etcd/session.hpp"
-#include <jb/etcd/completion_queue.hpp>
+#include <jb/etcd/active_completion_queue.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -30,18 +30,12 @@ void session::revoke() {
   if (not status.ok()) {
     throw error_grpc_status("LeaseRevoke()", status, &resp);
   }
-  JB_LOG(info) << "Lease Revoked\n"
-               << "    header.cluster_id=" << resp.header().cluster_id() << "\n"
-               << "    header.member_id=" << resp.header().member_id() << "\n"
-               << "    header.revision=" << resp.header().revision() << "\n"
-               << "    header.raft_term=" << resp.header().raft_term() << "\n"
-               << "  id=" << std::hex << std::setw(16) << std::setfill('0')
-               << lease_id_ << "\n";
+  JB_LOG(info) << "Lease Revoked - lease=" << std::hex << lease_id();
   shutdown();
 }
 
 session::session(
-    std::shared_ptr<completion_queue> queue,
+    std::shared_ptr<active_completion_queue> queue,
     std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
     std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool)
     : mu_()
@@ -90,13 +84,8 @@ void session::preamble() try {
     throw std::runtime_error(os.str());
   }
 
-  JB_LOG(debug) << "Lease granted\n"
-                << "    cluster_id=" << resp.header().cluster_id() << "\n"
-                << "    member_id=" << resp.header().member_id() << "\n"
-                << "    revision=" << resp.header().revision() << "\n"
-                << "    raft_term=" << resp.header().raft_term() << "\n"
-                << "  ID=" << std::hex << std::setw(16) << std::setfill('0')
-                << resp.id() << "  TTL=" << std::dec << resp.ttl() << "s\n";
+  JB_LOG(info) << "Lease Granted - lease=" << std::hex << resp.id()
+               << "  TTL=" << std::dec << resp.ttl() << "s";
   lease_id_ = resp.id();
   actual_TTL_ = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::seconds(resp.ttl()));
@@ -181,7 +170,7 @@ void session::set_timer() {
 
   auto deadline =
       std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
-  current_timer_ = queue_->make_deadline_timer(
+  current_timer_ = queue_->cq().make_deadline_timer(
       deadline, [this](auto op) { this->on_timeout(op); });
 }
 

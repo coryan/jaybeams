@@ -15,7 +15,7 @@ namespace etcd {
 // other constructors.  Each one of them kicks off the campaign is a
 // slightly different way ...
 leader_election_participant::leader_election_participant(
-    bool shared, std::shared_ptr<completion_queue> queue,
+    bool shared, std::shared_ptr<active_completion_queue> queue,
     std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
     std::string const& election_name, std::uint64_t lease_id,
     std::string const& participant_value)
@@ -59,6 +59,7 @@ leader_election_participant::~leader_election_participant() noexcept(false) {
 }
 
 void leader_election_participant::resign() {
+  shutdown();
 }
 
 void leader_election_participant::proclaim(std::string const& new_value) {
@@ -66,7 +67,7 @@ void leader_election_participant::proclaim(std::string const& new_value) {
   etcdserverpb::RequestOp failure_op;
   auto result = publish_value(copy, failure_op);
   // TODO() - the failure_op should be a Get() and we need to decide
-  // what to do when this fails ...
+  // what to do when this fails, probably resign ...
   copy.swap(participant_value_);
 }
 

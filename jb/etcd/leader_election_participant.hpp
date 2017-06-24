@@ -1,8 +1,8 @@
 #ifndef jb_etcd_leader_election_participant_hpp
 #define jb_etcd_leader_election_participant_hpp
 
+#include <jb/etcd/active_completion_queue.hpp>
 #include <jb/etcd/client_factory.hpp>
-#include <jb/etcd/completion_queue.hpp>
 #include <jb/etcd/session.hpp>
 
 #include <atomic>
@@ -18,7 +18,7 @@ class leader_election_participant {
 public:
   /// Constructor, blocks until this participant becomes the leader.
   leader_election_participant(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value)
@@ -32,7 +32,7 @@ public:
   /// Constructor, non-blocking, calls the callback when elected.
   template <typename Functor>
   leader_election_participant(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value,
@@ -45,7 +45,7 @@ public:
   /// Constructor, non-blocking, calls the callback when elected.
   template <typename Functor>
   leader_election_participant(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value,
@@ -88,7 +88,7 @@ public:
 private:
   /// Refactor common code to public constructors ...
   leader_election_participant(
-      bool, std::shared_ptr<completion_queue> queue,
+      bool, std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
       std::uint64_t lease_id, std::string const& participant_value);
@@ -202,7 +202,7 @@ private:
   using watcher_stream_type = grpc::ClientAsyncReaderWriter<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
-  std::shared_ptr<completion_queue> queue_;
+  std::shared_ptr<active_completion_queue> queue_;
   std::string election_name_;
   std::uint64_t lease_id_;
   std::string participant_value_;

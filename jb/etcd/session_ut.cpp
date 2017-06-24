@@ -20,8 +20,7 @@ std::ostream& operator<<(std::ostream& os, session::state s) {
 BOOST_AUTO_TEST_CASE(session_basic) {
   std::string const address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
-  auto queue = std::make_shared<jb::etcd::completion_queue>();
-  std::thread t([queue]() { queue->run(); });
+  auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
   // We want to test that the destructor does not throw, so use a
   // smart pointer ...
@@ -29,9 +28,6 @@ BOOST_AUTO_TEST_CASE(session_basic) {
       queue, factory, address, std::chrono::seconds(5));
   BOOST_CHECK_NE(session->lease_id(), 0);
   BOOST_CHECK_NO_THROW(session.reset());
-
-  queue->shutdown();
-  t.join();
 }
 
 /**
@@ -40,8 +36,7 @@ BOOST_AUTO_TEST_CASE(session_basic) {
 BOOST_AUTO_TEST_CASE(session_normal) {
   std::string const address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
-  auto queue = std::make_shared<jb::etcd::completion_queue>();
-  std::thread t([queue]() { queue->run(); });
+  auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
   jb::etcd::session session(queue, factory, address, std::chrono::seconds(5));
   BOOST_CHECK_NE(session.lease_id(), 0);
@@ -50,8 +45,6 @@ BOOST_AUTO_TEST_CASE(session_normal) {
 
   session.revoke();
   BOOST_CHECK_EQUAL(session.current_state(), state::shutdown);
-  queue->shutdown();
-  t.join();
 }
 
 /**
@@ -60,8 +53,7 @@ BOOST_AUTO_TEST_CASE(session_normal) {
 BOOST_AUTO_TEST_CASE(session_long) {
   std::string const address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
-  auto queue = std::make_shared<jb::etcd::completion_queue>();
-  std::thread t([queue]() { queue->run(); });
+  auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
   jb::etcd::session session(queue, factory, address, std::chrono::seconds(1));
   BOOST_CHECK_NE(session.lease_id(), 0);
@@ -69,10 +61,8 @@ BOOST_AUTO_TEST_CASE(session_long) {
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);
 
   // ... keep the session open for a while ...
-  std::this_thread::sleep_for(std::chrono::seconds(20));
+  std::this_thread::sleep_for(std::chrono::seconds(5));
 
   session.revoke();
   BOOST_CHECK_EQUAL(session.current_state(), state::shutdown);
-  queue->shutdown();
-  t.join();
 }

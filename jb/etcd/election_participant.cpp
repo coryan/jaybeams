@@ -44,14 +44,12 @@ int main(int argc, char* argv[]) try {
   auto factory = std::make_shared<jb::etcd::client_factory>();
 
   // ... create an active completion queue ...
-  auto queue = std::make_shared<jb::etcd::completion_queue>();
-
   // ... to run multiple things asynchronously in gRPC++ we need a
   // completion queue.  Unfortunately cannot share this with
   // Boost.ASIO queue.  Which is a shame, so run a separate thread...
   // TODO() - the thread should be configurable, and use
   // jb::thread_launcher.
-  std::thread t([queue]() { queue->run(); });
+  auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
   // ... a session is the JayBeams abstraction to hold a etcd lease ...
   // TODO() - make the initial TTL configurable.
@@ -115,10 +113,6 @@ int main(int argc, char* argv[]) try {
   // when the lease expires, but this gives a faster response to other
   // participants in the protocol ...
   session.revoke();
-  // ... terminate the completion queue ...
-  queue->shutdown();
-  // ... and join its thread ...
-  t.join();
 
   return 0;
 } catch (jb::usage const& u) {

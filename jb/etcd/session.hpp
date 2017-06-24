@@ -1,8 +1,8 @@
 #ifndef jb_etcd_session_hpp
 #define jb_etcd_session_hpp
 
+#include <jb/etcd/active_completion_queue.hpp>
 #include <jb/etcd/client_factory.hpp>
-#include <jb/etcd/completion_queue.hpp>
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 
 #include <chrono>
@@ -53,7 +53,7 @@ public:
   /// Constructor
   template <typename duration_type>
   session(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
       duration_type desired_TTL)
       : session(
@@ -70,7 +70,7 @@ public:
    */
   template <typename duration_type>
   session(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
       std::uint64_t lease_id, duration_type desired_TTL)
       : session(
@@ -120,7 +120,7 @@ private:
    * testing ...
    */
   session(
-      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
       std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool);
 
@@ -183,7 +183,7 @@ private:
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
   grpc::ClientContext keep_alive_stream_context_;
   std::unique_ptr<ka_stream_type::client_type> keep_alive_stream_;
-  std::shared_ptr<completion_queue> queue_;
+  std::shared_ptr<active_completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor
   std::uint64_t lease_id_;
