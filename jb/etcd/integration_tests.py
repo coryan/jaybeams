@@ -43,22 +43,22 @@ class Test(unittest.TestCase):
     def test_session(self):
         try:
             text = subprocess.check_output(
-                ["jb/etcd/session_ut"],
+                ["jb/etcd/session_ut", "--log_level=all"],
                 stderr=subprocess.STDOUT)
             print text
         except subprocess.CalledProcessError as ex:
-            self.assertEqual(ex.returncode, 0)
             print ex.output
+            self.assertEqual(ex.returncode, 0)
 
     def test_leader_election_participant(self):
         try:
             text = subprocess.check_output(
-                ["jb/etcd/leader_election_participant_ut"],
+                ["jb/etcd/leader_election_participant_ut", "--log_level=all"],
                 stderr=subprocess.STDOUT)
             print text
         except subprocess.CalledProcessError as ex:
-            self.assertEqual(ex.returncode, 0)
             print ex.output
+            self.assertEqual(ex.returncode, 0)
             
 if __name__ == '__main__':
     unittest.main()
