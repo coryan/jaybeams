@@ -53,7 +53,7 @@ leader_election_participant::leader_election_participant(
   preamble();
 }
 
-leader_election_participant::~leader_election_participant() {
+leader_election_participant::~leader_election_participant() noexcept(false) {
   shutdown();
 }
 
@@ -84,7 +84,7 @@ void leader_election_participant::preamble() try {
       "Mismatched async stream for Watcher");
   std::promise<std::unique_ptr<watch_stream::client_type>> watcher_stream_ready;
   auto op = make_async_rdwr_stream<W, R>([&watcher_stream_ready](auto op) {
-    watcher_stream_ready.set_value(std::move(op->stream));
+    watcher_stream_ready.set_value(std::move(op->client));
   });
   watch_client_->AsyncWatch(&op->context, *queue_, op->tag());
   // ... blocks until it is ready ...

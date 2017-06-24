@@ -3,6 +3,7 @@
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
+#include <google/protobuf/text_format.h>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
@@ -13,67 +14,7 @@ namespace etcd {
 int constexpr session::keep_alives_per_ttl;
 
 session::~session() noexcept(false) {
-  initiate_shutdown();
-  // ... just block, this can raise an exception if the shutdown
-  // failed ...
-  shutdown_completed_.get_future().get();
-}
-
-void session::initiate_shutdown() {
-  bool connected = false;
-  {
-    // ... new scope because we do not want to hold the mutex when
-    // calling WritesDone() ...
-    std::lock_guard<std::mutex> lock(mu_);
-    if (state_ == state::shuttingdown or state_ == state::shutdown) {
-      return;
-    }
-    connected = (state_ == state::connected);
-    // ... stop any new timers from being created ...
-    state_ = state::shuttingdown;
-    // ... cancel any outstanding timers ...
-    if (alarm_) {
-      alarm_->Cancel();
-      alarm_.reset();
-    }
-  }
-  // ... half-close the reader-writer stream ...
-  if (connected) {
-    rdwr_->WritesDone(&tag_on_writes_done_);
-  } else {
-    shutdown_completed_.set_value(true);
-  }
-}
-
-void session::run() try {
-  // This function is wrapped in try/catch block because it runs in
-  // its own thread.  If we let exceptions scape the program would
-  // terminate.
-  // TODO() - maybe we should let the program terminate in that
-  // case, the application would lose the master election.  I
-  // believe that should be a matter of policy, so for the moment
-  // log ...
-  void* tag = nullptr;
-  bool ok = false;
-  while (queue_.Next(&tag, &ok)) {
-    if (not ok or tag == nullptr) {
-      // TODO() - I think tag == nullptr should never happen,
-      // consider using JB_ASSERT()
-      continue;
-    }
-    // ... tag must be a pointer to std::function<void()> see the
-    // comments for tag_set_timer_ and friends to understand why ...
-    auto callback = static_cast<std::function<void()>*>(tag);
-    (*callback)();
-  }
-  // ... finally done, change the state ...
-  std::lock_guard<std::mutex> lock(mu_);
-  JB_ASSERT_THROW(state_ == state::shuttingdown);
-  state_ = state::shutdown;
-} catch (std::exception const& ex) {
-  JB_LOG(info) << "Standard C++ exception in session::run(): " << ex.what();
-} catch (...) {
-  JB_LOG(info) << "Unknown exception in session::run()";
+  shutdown();
 }
 
 void session::revoke() {
@@ -85,13 +26,9 @@ void session::revoke() {
   etcdserverpb::LeaseRevokeRequest req;
   req.set_id(lease_id_);
   etcdserverpb::LeaseRevokeResponse resp;
-  auto status = stub_->LeaseRevoke(&context, req, &resp);
+  auto status = lease_client_->LeaseRevoke(&context, req, &resp);
   if (not status.ok()) {
-    std::ostringstream os;
-    os << "stub->LeaseRevoke() failed for lease=" << std::hex << std::setw(16)
-       << std::setfill('0') << lease_id_ << ": " << status.error_message()
-       << "[" << status.error_code() << "]";
-    throw std::runtime_error(os.str());
+    throw error_grpc_status("LeaseRevoke()", status, &resp);
   }
   JB_LOG(info) << "Lease Revoked\n"
                << "    header.cluster_id=" << resp.header().cluster_id() << "\n"
@@ -100,76 +37,65 @@ void session::revoke() {
                << "    header.raft_term=" << resp.header().raft_term() << "\n"
                << "  id=" << std::hex << std::setw(16) << std::setfill('0')
                << lease_id_ << "\n";
-  initiate_shutdown();
+  shutdown();
 }
 
 session::session(
-    std::shared_ptr<grpc::Channel> etcd_service,
-    std::chrono::milliseconds desired_TTL, bool)
+    std::shared_ptr<completion_queue> queue,
+    std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+    std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool)
     : mu_()
     , state_(state::constructing)
-    , etcd_service_(etcd_service)
-    , lease_id_(0)
+    , client_(client)
+    , channel_(client_->create_channel(etcd_endpoint))
+    , lease_client_(client_->create_lease(channel_))
+    , keep_alive_stream_()
+    , queue_(queue)
+    , lease_id_(lease_id)
     , desired_TTL_(desired_TTL)
-    , actual_TTL_(desired_TTL)
-    , queue_()
-    , stub_(etcdserverpb::Lease::NewStub(etcd_service_))
-    , kactx_()
-    , rdwr_()
-    , alarm_()
-    , ka_req_()
-    , ka_res_()
-    , finish_status_()
-    , tag_set_timer_(make_tag(&session::set_timer))
-    , tag_on_timeout_(make_tag(&session::on_timeout))
-    , tag_on_write_(make_tag(&session::on_write))
-    , tag_on_read_(make_tag(&session::on_read))
-    , tag_on_writes_done_(make_tag(&session::on_writes_done))
-    , tag_on_finish_(make_tag(&session::on_finish)) {
-  // ...request a new lease from etcd(1) ...
+    , actual_TTL_(desired_TTL) {
+  preamble();
+}
+
+void session::preamble() {
+  // ...request a new lease from the etcd server ...
   etcdserverpb::LeaseGrantRequest req;
   // ... the TTL is is seconds, convert to the right units ...
   auto ttl_seconds =
       std::chrono::duration_cast<std::chrono::seconds>(desired_TTL_);
   req.set_ttl(ttl_seconds.count());
-  // ... let the etcd(1) pick a lease ID ...
-  req.set_id(0);
+  req.set_id(lease_id_);
 
   // TODO() - I think we should set a timeout here ... no operation
   // should be allowed to block forever ...
   grpc::ClientContext context;
   etcdserverpb::LeaseGrantResponse resp;
-  auto status = stub_->LeaseGrant(&context, req, &resp);
+  auto status = lease_client_->LeaseGrant(&context, req, &resp);
   if (not status.ok()) {
-    std::ostringstream os;
-    os << "stub->LeaseGrant() failed: " << status.error_message() << "["
-       << status.error_code() << "]";
-    // TODO() - do we want to have more advanced policies on how to
-    // recover from this errors?  And if so, why?
-    throw std::runtime_error(os.str());
+    throw error_grpc_status("LeaseGrant()", status, &resp);
   }
 
   // TODO() - probably need to retry until it succeeds, with some
   // kind of backoff, and yes, a really, really long timeout ...
   if (resp.error() != "") {
     std::ostringstream os;
-    // TODO() - use the typical protobuf formatting here ...
-    os << "Lease grant request rejected\n"
-       << "    header.cluster_id=" << resp.header().cluster_id() << "\n"
-       << "    header.member_id=" << resp.header().member_id() << "\n"
-       << "    header.revision=" << resp.header().revision() << "\n"
-       << "    header.raft_term=" << resp.header().raft_term() << "\n"
-       << "  error=" << resp.error();
+    os << "Lease grant request rejected\n";
+    std::string print;
+    google::protobuf::TextFormat::PrintToString(req, &print);
+    os << "request=" << print;
+    print.clear();
+    google::protobuf::TextFormat::PrintToString(resp, &print);
+    os << "\nresponse=" << print;
     throw std::runtime_error(os.str());
   }
 
-  JB_LOG(info) << "Lease granted\n"
-               << "    header.cluster_id=" << resp.header().cluster_id() << "\n"
-               << "    header.member_id=" << resp.header().member_id() << "\n"
-               << "    header.revision=" << resp.header().revision() << "\n"
-               << "    header.raft_term=" << resp.header().raft_term() << "\n"
-               << "  ID=" << std::hex << std::setw(16) << std::setfill('0')
-               << resp.id() << "  TTL=" << std::dec << resp.ttl() << "s\n";
+  JB_LOG(debug) << "Lease granted\n"
+                << "    cluster_id=" << resp.header().cluster_id() << "\n"
+                << "    member_id=" << resp.header().member_id() << "\n"
+                << "    revision=" << resp.header().revision() << "\n"
+                << "    raft_term=" << resp.header().raft_term() << "\n"
+                << "  ID=" << std::hex << std::setw(16) << std::setfill('0')
+                << resp.id() << "  TTL=" << std::dec << resp.ttl() << "s\n";
   lease_id_ = resp.id();
   actual_TTL_ = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::seconds(resp.ttl()));
@@ -177,79 +103,146 @@ session::session(
   // ... no real need to grab a mutex here.  The object is not fully
   // constructed, it should not be used by more than one thread ...
   state_ = state::connecting;
+  
+  // ... we want to block until the keep alive streaming RPC is setup,
+  // this is (unfortunately) an asynchronous operation, so we have to
+  // do some magic ...
+  std::promise<std::unique_ptr<ka_stream_type::client_type>> stream_ready;
+  auto op = make_async_rdwr_stream<
+      ka_stream_type::write_type, ka_stream_type::read_type>([&stream_ready](
+      auto op) { stream_ready.set_value(std::move(op->client)); });
+  // ... create the call and invoke the operation's callback when done ...
+  lease_client_->AsyncLeaseKeepAlive(&op->context, *queue_, op->tag());
+  // ... block until done ...
+  keep_alive_stream_ = stream_ready.get_future().get();
 
-  // ... create the reader-writer to send KeepAlive requests and
-  // receive the corresponding responses, call set_timer() when done
-  // the reader/writer is ready ...
-  rdwr_ = stub_->AsyncLeaseKeepAlive(&kactx_, &queue_, &tag_set_timer_);
-}
-
-/// Set a timer to start the next Write/Read cycle.
-void session::set_timer() {
-  {
-    std::lock_guard<std::mutex> lock(mu_);
-    if (state_ == state::shuttingdown or state_ == state::shutdown) {
-      return;
-    }
-    state_ = state::connected;
-  }
-  // ... use the awkward grpc::Alarm interface to completion queues,
-  // and once that is done, call on_timer().  I was tempted to set
-  // the timer as soon as the write operation was scheduled, but the
-  // AsyncReaderWriter docs says you can only have one outstanding
-  // Write() request at a time.  If we started the timer there is no
-  // guarantee that the timer won't expire before the next
-  // response.  Notice that gRPC++ uses deadlines (not timeouts) for
-  // its timers, and that they are based on
-  // std::chrono::system_clock.  That clock is not guaranteed to be
-  // monotonic, so not a good choice in my opinion, meh ...
-  auto deadline =
-      std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
-  alarm_.reset(new grpc::Alarm(&queue_, deadline, &tag_on_timeout_));
-}
-
-/// Handle the timer expiration, Write() a KeepAlive request.
-void session::on_timeout() {
-  ka_req_.set_id(lease_id_);
-  rdwr_->Write(ka_req_, static_cast<void*>(&tag_on_write_));
-}
-
-/// Handle the Write() completion, schedule a new Read().
-void session::on_write() {
-  rdwr_->Read(&ka_res_, static_cast<void*>(&tag_on_read_));
-}
-
-/// Handle the Read() completion, schedule a new Timer().
-void session::on_read() {
-  // ... the KeepAliveResponse may have a new TTL value, that is the
-  // etcd server may be telling us to backoff a little ...
-  actual_TTL_ = std::chrono::seconds(ka_res_.ttl());
-  // TODO() - remove debugging log ...
-  JB_LOG(debug) << "reset timer to " << actual_TTL_.count() << "ms"
-                << ", received=" << ka_res_.ttl() << "s"
-                << ", desired=" << desired_TTL_.count() << "ms";
+  state_ = state::connected;
   set_timer();
 }
 
-/// Handle the WritesDone() completion, schedule a Finish()
-void session::on_writes_done() {
-  rdwr_->Finish(&finish_status_, &tag_on_finish_);
-}
-
-/// Handle the Finish() completion, schedule a LeaseRevoke()
-void session::on_finish() {
-  if (not finish_status_.ok()) {
-    JB_LOG(info) << "on the session for lease=" << lease_id_
-                 << " the rdwr->Finish() op failed: "
-                 << finish_status_.error_message() << "["
-                 << finish_status_.error_code() << "]";
+void session::shutdown() {
+  {
+    // This stops new timers (and therefore any other operations) from
+    // beign created ...
+    std::lock_guard<std::mutex> lock(mu_);
+    state_ = state::shuttingdown;
   }
-  shutdown_completed_.set_value(true);
-  queue_.Shutdown();
+  // ... stop any new timers from scheduling ...
+  if (current_timer_) {
+    current_timer_->cancel();
+    current_timer_.reset();
+  }
+  if (keep_alive_stream_) {
+    // The KeepAlive stream was already created, we need to close it
+    // before shutting down ...
+    std::promise<bool> stream_closed;
+    auto op = make_writes_done_op([this, &stream_closed](auto op) {
+      this->on_writes_done(op, stream_closed);
+    });
+    keep_alive_stream_->WritesDone(op->tag());
+    // ... block until it closes ...
+    stream_closed.get_future().get();
+    keep_alive_stream_.reset();
+  }
+  std::lock_guard<std::mutex> lock(mu_);
+  state_ = state::shutdown;
 }
 
-std::function<void()> session::make_tag(callback_member member) {
-  return std::function<void()>([this, member]() { (this->*member)(); });
+void session::set_timer() {
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ != state::connected) {
+      return;
+    }
+  }
+  // ... we are going to schedule a new timer, in general, we should
+  // only schedule a timer when there are no pending KeepAlive
+  // request/responses in the stream.  The AsyncReaderWriter docs says
+  // you can only have one outstanding Write() request at a time.  If
+  // we started the timer there is no guarantee that the timer won't
+  // expire before the next response.
+
+  auto deadline =
+      std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
+  JB_ASSERT_THROW(current_timer_.get() == 0);
+  current_timer_ = queue_->make_deadline_timer(deadline, [this](auto op) {
+      this->on_timeout(op);
+    });
+}
+
+void session::on_timeout(std::shared_ptr<deadline_timer> op) {
+  auto write = make_write_op<etcdserverpb::LeaseKeepAliveRequest>(
+      [this](auto op) { this->on_write(op); });
+  write->request.set_id(lease_id());
+  keep_alive_stream_->Write(write->request, op->tag());
+}
+
+void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
+  auto read = make_read_op<etcdserverpb::LeaseKeepAliveResponse>(
+      [this](auto rd) { this->on_read(rd); });
+  this->keep_alive_stream_->Read(&read->response, op->tag());
+}
+
+void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
+  // ... the KeepAliveResponse may have a new TTL value, that is the
+  // etcd server may be telling us to backoff a little ...
+  actual_TTL_ = std::chrono::seconds(op->response.ttl());
+  set_timer();
+}
+
+void session::on_writes_done(
+    std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
+  auto op =
+      make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
+  keep_alive_stream_->Finish(&op->status, op->tag());
+}
+
+void session::on_finish(
+    std::shared_ptr<finish_op> op, std::promise<bool>& done) {
+  try {
+    if (not op->status.ok()) {
+      throw error_grpc_status("on_finish", op->status);
+    }
+    done.set_value(true);
+  } catch (...) {
+    try {
+      done.set_exception(std::current_exception());
+    } catch (std::future_error const& ex) {
+      JB_LOG(info) << "std::future_error raised while reporting "
+                   << "exception in lease keep alive stream closure."
+                   << "  lease=" << lease_id()
+                   << ", exception=" << ex.what();
+    } catch (std::exception const& ex) {
+      JB_LOG(info) << "std::exception raised while reporting "
+                   << "exception in lease keep alive stream closure."
+                   << "  lease=" << lease_id()
+                   << ", exception=" << ex.what();
+    } catch (...) {
+      JB_LOG(info) << "std::exception raised while reporting "
+                   << "exception in lease keep alive stream closure."
+                   << "  lease=" << lease_id();
+    }
+  }
+}
+
+std::runtime_error session::error_grpc_status(
+    char const* where, grpc::Status const& status,
+    google::protobuf::Message const* res,
+    google::protobuf::Message const* req) const {
+  std::ostringstream os;
+  os << "grpc error in " << where << " for lease=" << lease_id() << ": "
+     << status.error_message() << "[" << status.error_code() << "]";
+  if (res != nullptr) {
+    std::string print;
+    google::protobuf::TextFormat::PrintToString(*res, &print);
+    os << ", response=" << print;
+  }
+  if (req != nullptr) {
+    std::string print;
+    google::protobuf::TextFormat::PrintToString(*req, &print);
+    os << ", request=" << print;
+  }
+  return std::runtime_error(os.str());
 }
 
 } // namespace etcd

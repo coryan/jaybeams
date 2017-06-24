@@ -1,9 +1,9 @@
 #ifndef jb_etcd_session_hpp
 #define jb_etcd_session_hpp
 
+#include <jb/etcd/client_factory.hpp>
+#include <jb/etcd/completion_queue.hpp>
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
-#include <grpc++/alarm.h>
-#include <grpc++/grpc++.h>
 
 #include <chrono>
 #include <cstdint>
@@ -53,13 +53,31 @@ public:
   /// Constructor
   template <typename duration_type>
   session(
-      std::shared_ptr<grpc::Channel> etcd_service, duration_type desired_TTL)
+      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
+      duration_type desired_TTL)
       : session(
-            etcd_service,
-            std::chrono::duration_cast<std::chrono::milliseconds>(desired_TTL),
+            queue, factory, etcd_endpoint, to_milliseconds(desired_TTL), 0,
             true) {
   }
 
+  /**
+   * Contructor with a previous lease.
+   *
+   * This could be useful for an application that saves its lease, shuts
+   * down, and quickly restarts.  I think it is a stretch, but so easy
+   * to implement that why not?
+   */
+  template <typename duration_type>
+  session(
+      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
+      std::uint64_t lease_id, duration_type desired_TTL)
+      : session(
+            queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
+            lease_id, true) {
+  }
+  
   /**
    * Destroy a session, releasing any local resources.
    *
@@ -87,20 +105,12 @@ public:
     return state_;
   }
 
-  /// Start the shutdown process ...
-  void initiate_shutdown();
-
-  /// The main thread
-  void run();
-
-  /// Revoke the lease, implicitly initiates a shutdown if sucessful.
+  /**
+   * Requests the least to be revoked.
+   *
+   * If successful, cancels all pending keep alive operations.
+   */
   void revoke();
-
-  /// TODO() - the completion queue should be an argument to the
-  /// constructor ...
-  grpc::CompletionQueue& queue() {
-    return queue_;
-  }
 
 private:
   /**
@@ -110,29 +120,50 @@ private:
    * testing ...
    */
   session(
-      std::shared_ptr<grpc::Channel> etcd_service,
-      std::chrono::milliseconds desired_TTL, bool);
+      std::shared_ptr<completion_queue> queue,
+      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
+      std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool);
+
+  /// Requests (or renews) the lease and setup the watcher stream.
+  void preamble();
+
+  /// Shutdown the local resources.
+  void shutdown();
 
   /// Set a timer to start the next Write/Read cycle.
   void set_timer();
 
-  /// Handle the timer expiration, Write() a KeepAlive request.
-  void on_timeout();
+  /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
+  void on_timeout(std::shared_ptr<deadline_timer> op);
 
-  /// Handle the Write() completion, schedule a new Read().
-  void on_write();
+  using ka_stream_type = async_rdwr_stream<
+      etcdserverpb::LeaseKeepAliveRequest,
+      etcdserverpb::LeaseKeepAliveResponse>;
+
+  /// Handle the Write() completion, schedule a new LeaseKeepAlive Read().
+  void on_write(std::shared_ptr<ka_stream_type::write_op> op);
 
   /// Handle the Read() completion, schedule a new Timer().
-  void on_read();
+  void on_read(std::shared_ptr<ka_stream_type::read_op> op);
 
   /// Handle the WritesDone() completion, schedule a Finish()
-  void on_writes_done();
+  void on_writes_done(
+      std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done);
 
-  /// Handle the Finish() completion, schedule a LeaseRevoke()
-  void on_finish();
+  /// Handle the Finish() completion.
+  void on_finish(std::shared_ptr<finish_op> op, std::promise<bool>& done);
 
-  typedef void (session::*callback_member)();
-  std::function<void()> make_tag(callback_member member);
+  /// Convert the constructor argument to milliseconds.
+  template<typename duration_type>
+  static std::chrono::milliseconds to_milliseconds(duration_type d) {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(d);
+  }
+
+  /// Convert status errors into a C++ exception
+  std::runtime_error error_grpc_status(
+      char const* where, grpc::Status const& status,
+      google::protobuf::Message const* res = nullptr,
+      google::protobuf::Message const* req = nullptr) const;
 
 private:
   /// The usual mutex thing.
@@ -147,7 +178,11 @@ private:
    */
   state state_;
 
-  std::shared_ptr<grpc::Channel> etcd_service_;
+  std::shared_ptr<client_factory> client_;
+  std::shared_ptr<grpc::Channel> channel_;
+  std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
+  std::unique_ptr<ka_stream_type::client_type> keep_alive_stream_;
+  std::shared_ptr<completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor
   std::uint64_t lease_id_;
@@ -158,56 +193,10 @@ private:
   /// etcd may tell us to use a longer (or shorter?) TTL.
   std::chrono::milliseconds actual_TTL_;
 
-  // TODO() - I do not think the queue belongs in this object, seems
-  // like it should be a parameter, if nothing else for dependency
-  // injection ...
-  grpc::CompletionQueue queue_;
-  std::unique_ptr<etcdserverpb::Lease::Stub> stub_;
+  /// The current timer, can be null when waiting for a KeepAlive response.
+  std::shared_ptr<deadline_timer> current_timer_;
 
-  /// The context for the asynchronous KeepAlive request.
-  grpc::ClientContext kactx_;
-  using ReaderWriter = grpc::ClientAsyncReaderWriter<
-      etcdserverpb::LeaseKeepAliveRequest,
-      etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<ReaderWriter> rdwr_;
-
-  //@{
-  /**
-   * Hold data for asynchronous operations.
-   */
-  std::unique_ptr<grpc::Alarm> alarm_;
-  etcdserverpb::LeaseKeepAliveRequest ka_req_;
-  etcdserverpb::LeaseKeepAliveResponse ka_res_;
-  grpc::Status finish_status_;
   std::promise<bool> shutdown_completed_;
-  //@}
-
-  //@{
-  /**
-   * Tags / callback for asynchronous operations.
-   *
-   * gRPC++ tags are awkward, they should have used realcallbacks, ala
-   * Boost.ASIO.  We need something that is convertible to and from a
-   * void*.  We could create an object for each asynchronous
-   * operation, but that is slow, and also extra weird.  Instead we
-   * create a number of member objects, one for each asynchronous
-   * operation.  Each member object is a std::function<void()>, which
-   * we can call from the completion queue loop.  The other
-   * alternatives I though about do not work:
-   *   - Pointer to member functions are not covertible to void*.
-   *   - A pointer to a lambda would not work, because we need to
-   *     capture at least the [this] pointer, and pointer to
-   *     lambdas with captures are *not* pointer to functions.
-   *   - Also the ponter to lambda would need to be stored
-   *     somewhere.
-   */
-  std::function<void()> tag_set_timer_;
-  std::function<void()> tag_on_timeout_;
-  std::function<void()> tag_on_write_;
-  std::function<void()> tag_on_read_;
-  std::function<void()> tag_on_writes_done_;
-  std::function<void()> tag_on_finish_;
-  //@}
 };
 
 } // namespace etcd

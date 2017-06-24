@@ -11,9 +11,10 @@
 BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   std::string const etcd_address = "localhost:2379";
   auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto queue = std::make_shared<jb::etcd::completion_queue>();
+  std::thread t([queue]() { queue->run(); });
   jb::etcd::session session(
-      factory->create_channel(etcd_address), std::chrono::milliseconds(15000));
-  std::thread t([&session] { session.run(); });
+      queue, factory, etcd_address, std::chrono::milliseconds(15000));
   {
     BOOST_TEST_CHECKPOINT("Session created and thread launched");
     jb::etcd::leader_election_participant tested(
@@ -23,5 +24,6 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   }
   BOOST_TEST_CHECKPOINT("Shutting down session");
   session.revoke();
+  queue->shutdown();
   t.join();
 }

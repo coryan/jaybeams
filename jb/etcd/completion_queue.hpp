@@ -3,6 +3,8 @@
 
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
+#include <atomic>
+#include <functional>
 #include <memory>
 
 namespace jb {
@@ -204,10 +206,12 @@ struct async_rdwr_stream {
   grpc::ClientContext context;
   std::function<void()> ready_callback;
   using client_type = grpc::ClientAsyncReaderWriter<W, R>;
-  std::unique_ptr<client_type> stream;
+  std::unique_ptr<client_type> client;
 
   using write_op = async_write_op<W>;
   using read_op = async_read_op<R>;
+  using write_type = W;
+  using read_type = R;
 };
 
 /// Create a read-write stream
@@ -231,8 +235,14 @@ struct deadline_timer {
     return static_cast<void*>(&callback);
   }
 
+  void cancel() {
+    canceled.store(true);
+    alarm->Cancel();
+  }
+
   std::unique_ptr<grpc::Alarm> alarm;
   std::function<void()> callback;
+  std::atomic<bool> canceled;
 };
 
 /**
@@ -259,12 +269,25 @@ public:
   /// Shutdown the completion queue loop.
   void shutdown();
 
-  /// Call the functor when the deadline timer expires
+  /**
+   * Call the functor when the deadline timer expires.
+   *
+   * Notice that system_clock is not guaranteed to be monotonic, which
+   * makes it a poor choice in some cases.  gRPC is not dealing with
+   * time intervals small enough to make a difference, so it is Okay,
+   * I guess.
+   */
   template <typename Functor>
   std::shared_ptr<deadline_timer> make_deadline_timer(
       std::chrono::system_clock::time_point deadline, Functor&& functor) {
     auto op = std::make_shared<deadline_timer>();
-    op->callback = std::move([op, functor]() { functor(std::move(op)); });
+    op->canceled.store(false);
+    op->callback = std::move([op, functor]() {
+        if (op->canceled.load()) {
+          return;
+        }
+        functor(std::move(op));
+    });
     op->alarm = std::make_unique<grpc::Alarm>(&queue_, deadline, op->tag());
     return op;
   }

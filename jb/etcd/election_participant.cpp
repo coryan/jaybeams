@@ -43,18 +43,22 @@ int main(int argc, char* argv[]) try {
   // controlled by a configuration parameter ...
   auto factory = std::make_shared<jb::etcd::client_factory>();
 
-  // ... a session is the JayBeams abstraction to hold a etcd lease ...
-  // TODO() - make the initial TTL configurable.
-  // TODO() - decide if storing the TTL in milliseconds makes any
-  // sense, after all etcd uses seconds ...
-  jb::etcd::session session(
-      factory->create_channel(cfg.etcd_address()), std::chrono::seconds(10));
+  // ... create an active completion queue ...
+  auto queue = std::make_shared<jb::etcd::completion_queue>();
+
   // ... to run multiple things asynchronously in gRPC++ we need a
   // completion queue.  Unfortunately cannot share this with
   // Boost.ASIO queue.  Which is a shame, so run a separate thread...
   // TODO() - the thread should be configurable, and use
   // jb::thread_launcher.
-  std::thread t([&session]() { session.run(); });
+  std::thread t([queue]() { queue->run(); });
+
+  // ... a session is the JayBeams abstraction to hold a etcd lease ...
+  // TODO() - make the initial TTL configurable.
+  // TODO() - decide if storing the TTL in milliseconds makes any
+  // sense, after all etcd uses seconds ...
+  jb::etcd::session session(
+      queue, factory, cfg.etcd_address(), std::chrono::seconds(10));
 
   // ... the election participant, this blocks until the current
   // process becomes the leader ...
@@ -84,8 +88,14 @@ int main(int argc, char* argv[]) try {
   // ... run until the signal is delivered ...
   io.run();
 
-  // ... gracefully terminate the session ...
-  session.initiate_shutdown();
+  // ... request a lease revoke, cleaning up our resources in the etcd
+  // service, if we fail to do so the resources will be cleaned up
+  // when the lease expires, but this gives a faster response to other
+  // participants in the protocol ...
+  session.revoke();
+  // ... terminate the completion queue ...
+  queue->shutdown();
+  // ... and join its thread ...
   t.join();
 
   return 0;

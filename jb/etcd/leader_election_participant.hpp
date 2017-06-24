@@ -64,7 +64,7 @@ public:
    * The application should call resign() to release the resources
    * held in the etcd server.
    */
-  ~leader_election_participant();
+  ~leader_election_participant() noexcept(false);
 
   /// Return the etcd key associated with this participant
   std::string const& key() const {
