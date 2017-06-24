@@ -17,42 +17,44 @@ namespace etcd {
 class leader_election_participant {
 public:
   /// Constructor, blocks until this participant becomes the leader.
+  template <typename duration_type>
   leader_election_participant(
       std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<client_factory> client_factory,
-      std::string const& etcd_endpoint, std::string const& election_name,
-      std::uint64_t lease_id, std::string const& participant_value)
+      std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+      std::string const& election_name, std::string const& participant_value,
+      duration_type d, std::uint64_t lease_id = 0)
       : leader_election_participant(
-            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
-            participant_value) {
+            true, queue, client, etcd_endpoint, election_name,
+            participant_value, std::make_shared<session>(
+                                   queue, client, etcd_endpoint, d, lease_id)) {
     // ... block until this participant becomes the leader ...
     campaign();
   }
 
   /// Constructor, non-blocking, calls the callback when elected.
-  template <typename Functor>
+  template <typename duration_type, typename Functor>
   leader_election_participant(
       std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::uint64_t lease_id, std::string const& participant_value,
-      Functor const& elected_callback)
+      std::string const& participant_value, Functor const& elected_callback,
+      duration_type d, std::uint64_t lease_id = 0)
       : leader_election_participant(
-            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
-            participant_value, std::move(elected_callback)) {
+            true, queue, client_factory, etcd_endpoint, election_name,
+            participant_value, std::move(elected_callback), d, lease_id) {
   }
 
   /// Constructor, non-blocking, calls the callback when elected.
-  template <typename Functor>
+  template <typename duration_type, typename Functor>
   leader_election_participant(
       std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<client_factory> client_factory,
-      std::string const& etcd_endpoint, std::string const& election_name,
-      std::uint64_t lease_id, std::string const& participant_value,
-      Functor&& elected_callback)
+      std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+      std::string const& election_name, std::string const& participant_value,
+      Functor&& elected_callback, duration_type d, std::uint64_t lease_id = 0)
       : leader_election_participant(
-            true, queue, client_factory, etcd_endpoint, election_name, lease_id,
-            participant_value) {
+            true, queue, client, etcd_endpoint, election_name,
+            participant_value, std::make_shared<session>(
+                                   queue, client, etcd_endpoint, d, lease_id)) {
     campaign(elected_callback);
   }
 
@@ -91,7 +93,7 @@ private:
       bool, std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> client_factory,
       std::string const& etcd_endpoint, std::string const& election_name,
-      std::uint64_t lease_id, std::string const& participant_value);
+      std::string const& participant_value, std::shared_ptr<session> session);
 
   /**
    * Runs the operations before starting the election campaign.
@@ -187,24 +189,24 @@ private:
 
   /// Return the lease corresponding to this participant's session.
   std::uint64_t lease_id() {
-    return lease_id_;
+    return session_->lease_id();
   }
 
   // Compute the end of the range for a prefix search.
   static std::string prefix_end(std::string const& prefix);
 
 private:
+  std::shared_ptr<active_completion_queue> queue_;
   std::shared_ptr<client_factory> client_;
   std::shared_ptr<grpc::Channel> channel_;
+  std::shared_ptr<session> session_;
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
   grpc::ClientContext watcher_stream_context_;
   using watcher_stream_type = grpc::ClientAsyncReaderWriter<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
-  std::shared_ptr<active_completion_queue> queue_;
   std::string election_name_;
-  std::uint64_t lease_id_;
   std::string participant_value_;
   std::string election_prefix_;
   std::string participant_key_;

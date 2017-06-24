@@ -57,8 +57,8 @@ public:
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
       duration_type desired_TTL)
       : session(
-            queue, factory, etcd_endpoint, to_milliseconds(desired_TTL), 0,
-            true) {
+            true, queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
+            0) {
   }
 
   /**
@@ -72,10 +72,10 @@ public:
   session(
       std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
-      std::uint64_t lease_id, duration_type desired_TTL)
+      duration_type desired_TTL, std::uint64_t lease_id)
       : session(
-            queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
-            lease_id, true) {
+            true, queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
+            lease_id) {
   }
 
   /**
@@ -120,9 +120,9 @@ private:
    * testing ...
    */
   session(
-      std::shared_ptr<active_completion_queue> queue,
+      bool, std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
-      std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool);
+      std::chrono::milliseconds desired_TTL, std::uint64_t lease_id);
 
   /// Requests (or renews) the lease and setup the watcher stream.
   void preamble();
@@ -189,6 +189,8 @@ private:
   std::uint64_t lease_id_;
 
   /// The requested TTL value.
+  // TODO() - decide if storing the TTL in milliseconds makes any
+  // sense, after all etcd uses seconds ...
   std::chrono::milliseconds desired_TTL_;
 
   /// etcd may tell us to use a longer (or shorter?) TTL.

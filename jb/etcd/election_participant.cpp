@@ -1,5 +1,4 @@
 #include <jb/etcd/leader_election_participant.hpp>
-#include <jb/etcd/session.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/config_object.hpp>
 #include <jb/log.hpp>
@@ -51,13 +50,6 @@ int main(int argc, char* argv[]) try {
   // jb::thread_launcher.
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
-  // ... a session is the JayBeams abstraction to hold a etcd lease ...
-  // TODO() - make the initial TTL configurable.
-  // TODO() - decide if storing the TTL in milliseconds makes any
-  // sense, after all etcd uses seconds ...
-  jb::etcd::session session(
-      queue, factory, cfg.etcd_address(), std::chrono::seconds(10));
-
   // ... a promise that tells us if this participant has been elected
   // the leader ...
   std::promise<bool> is_leader;
@@ -65,8 +57,8 @@ int main(int argc, char* argv[]) try {
   // ... the election participant, set the is_leader promise when this
   // participant is elected leader ...
   jb::etcd::leader_election_participant participant(
-      queue, factory, cfg.etcd_address(), cfg.election_name(),
-      session.lease_id(), cfg.value(), [&is_leader](std::future<bool>& f) {
+      queue, factory, cfg.etcd_address(), cfg.election_name(), cfg.value(),
+      [&is_leader](std::future<bool>& f) {
         try {
           std::cout << "... elected! ..." << std::endl;
           is_leader.set_value(f.get());
@@ -74,7 +66,9 @@ int main(int argc, char* argv[]) try {
           is_leader.set_exception(std::current_exception());
           std::cout << "... election failed ..." << std::endl;
         }
-      });
+      },
+      // TODO() - make the initial TTL configurable.
+      std::chrono::seconds(10));
 
   auto status = is_leader.get_future().wait_for(std::chrono::seconds(0));
   if (status != std::future_status::ready) {
@@ -107,12 +101,6 @@ int main(int argc, char* argv[]) try {
   // ... resign as the leader, or abandon the attempt to become the
   // leader if not elected yet ...
   participant.resign();
-
-  // ... request a lease revoke, cleaning up our resources in the etcd
-  // service, if we fail to do so the resources will be cleaned up
-  // when the lease expires, but this gives a faster response to other
-  // participants in the protocol ...
-  session.revoke();
 
   return 0;
 } catch (jb::usage const& u) {

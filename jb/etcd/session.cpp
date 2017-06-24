@@ -35,9 +35,9 @@ void session::revoke() {
 }
 
 session::session(
-    std::shared_ptr<active_completion_queue> queue,
+    bool, std::shared_ptr<active_completion_queue> queue,
     std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
-    std::chrono::milliseconds desired_TTL, std::uint64_t lease_id, bool)
+    std::chrono::milliseconds desired_TTL, std::uint64_t lease_id)
     : mu_()
     , state_(state::constructing)
     , client_(client)

@@ -17,17 +17,17 @@ namespace etcd {
 leader_election_participant::leader_election_participant(
     bool shared, std::shared_ptr<active_completion_queue> queue,
     std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
-    std::string const& election_name, std::uint64_t lease_id,
-    std::string const& participant_value)
-    : client_(client)
+    std::string const& election_name, std::string const& participant_value,
+    std::shared_ptr<session> session)
+    : queue_(queue)
+    , client_(client)
     , channel_(client->create_channel(etcd_endpoint))
+    , session_(session)
     , kv_client_(client_->create_kv(channel_))
     , watch_client_(client_->create_watch(channel_))
     , watcher_stream_context_()
     , watcher_stream_()
-    , queue_(queue)
     , election_name_(election_name)
-    , lease_id_(lease_id)
     , participant_value_(participant_value)
     , election_prefix_(election_name + "/")
     , participant_key_([this]() {
@@ -37,7 +37,7 @@ leader_election_participant::leader_election_participant(
       // TODO() - document why there can be no accidental conflict with
       // another election running in the system.
       std::ostringstream os;
-      os << election_prefix_ << std::hex << this->lease_id_;
+      os << election_prefix_ << std::hex << this->session_->lease_id();
       return os.str();
     }())
     , pending_watches_(0)
@@ -59,6 +59,7 @@ leader_election_participant::~leader_election_participant() noexcept(false) {
 }
 
 void leader_election_participant::resign() {
+  session_->revoke();
   shutdown();
 }
 
