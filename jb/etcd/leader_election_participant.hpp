@@ -156,10 +156,15 @@ private:
   using watch_write_op = async_write_op<etcdserverpb::WatchRequest>;
   using watch_read_op = async_read_op<etcdserverpb::WatchResponse>;
 
-  /// Called when a Write() operation in the watcher stream completes.
-  void on_watch_write(
+  /// Called when a Write() operation that creates a watcher completes.
+  void on_watch_create(
       std::shared_ptr<watch_write_op> op, std::string const& watched_key,
       std::uint64_t watched_revision);
+
+  /// Called when a Write() operation that cancels a watcher completes.
+  void
+  on_watch_cancel(std::shared_ptr<watch_write_op> op, std::uint64_t watched_id);
+
   /// Called when a Read() operation in the watcher stream completes.
   void on_watch_read(
       std::shared_ptr<watch_read_op> op, std::string const& key,
@@ -167,10 +172,6 @@ private:
 
   /// Check if the election has finished, if so invoke the callbacks.
   void check_election_over_maybe();
-
-  /// Run the completion queue event loop.  Called in a separate
-  /// thread ...
-  void run();
 
   // Invoke the callback, notice that the callback is invoked only once.
   void make_callback();
@@ -211,10 +212,14 @@ private:
 
   mutable std::mutex mu_;
   std::atomic<std::int64_t> pending_watches_;
+  std::atomic<std::int64_t> pending_writes_;
+  std::atomic<std::int64_t> pending_reads_;
+  std::atomic<std::int64_t> pending_range_requests_;
+  std::set<std::uint64_t> current_watches_;
   std::promise<bool> campaign_result_;
   std::function<void(std::future<bool>&)> campaign_callback_;
 
-  std::thread completion_queue_loop_;
+  std::promise<bool> range_request_done_;
 };
 
 } // namespace etcd

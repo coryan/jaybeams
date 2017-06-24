@@ -1,5 +1,6 @@
 #include "jb/etcd/leader_election_participant.hpp"
 #include <jb/etcd/session.hpp>
+#include <jb/log.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>
@@ -13,18 +14,22 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   auto factory = std::make_shared<jb::etcd::client_factory>();
   auto queue = std::make_shared<jb::etcd::completion_queue>();
   std::thread t([queue]() { queue->run(); });
+  BOOST_TEST_CHECKPOINT("queue created and thread requested");
   jb::etcd::session session(
       queue, factory, etcd_address, std::chrono::milliseconds(15000));
   {
-    BOOST_TEST_CHECKPOINT("Session created and thread launched");
+    BOOST_TEST_CHECKPOINT("session created");
     jb::etcd::leader_election_participant tested(
         queue, factory, etcd_address, "testing-election", session.lease_id(),
-        "42");
+        "42", [](std::future<bool>&) {});
+    BOOST_TEST_CHECKPOINT("participant object constructed");
     BOOST_CHECK_EQUAL(tested.value(), "42");
     BOOST_CHECK_EQUAL(tested.key().substr(0, 17), "testing-election/");
   }
-  BOOST_TEST_CHECKPOINT("Shutting down session");
+  BOOST_TEST_MESSAGE("destructed participant, revoking session lease");
   session.revoke();
+  BOOST_TEST_MESSAGE("shutting down queue");
   queue->shutdown();
+  BOOST_TEST_MESSAGE("joining thread");
   t.join();
 }
