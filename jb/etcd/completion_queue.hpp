@@ -4,6 +4,8 @@
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
 
+#include <atomic>
+#include <chrono>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -285,7 +287,12 @@ private:
  */
 class completion_queue {
 public:
+  /// Stop the loop periodically to check if we should shutdown.
+  // TODO() - the timeout should be configurable ...
+  static std::chrono::milliseconds constexpr loop_timeout{250};
+
   completion_queue();
+  ~completion_queue();
 
   /// The underlying completion queue
   grpc::CompletionQueue& raw() {
@@ -326,6 +333,7 @@ public:
 
 private:
   grpc::CompletionQueue queue_;
+  std::atomic<bool> shutdown_;
 };
 
 } // namespace etcd
