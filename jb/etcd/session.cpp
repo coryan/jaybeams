@@ -58,7 +58,7 @@ session::session(
   preamble();
 }
 
-void session::preamble() {
+void session::preamble() try {
   // ...request a new lease from the etcd server ...
   etcdserverpb::LeaseGrantRequest req;
   // ... the TTL is is seconds, convert to the right units ...
@@ -120,10 +120,18 @@ void session::preamble() {
     JB_LOG(error) << "  - stream not ready!!";
   }
 
-  JB_LOG(info) << "stream connected lease=" << lease_id();
+  JB_LOG(info) << "stream connected lease=" << std::hex << lease_id();
 
   state_ = state::connected;
   set_timer();
+} catch (std::exception const& ex) {
+  JB_LOG(info) << "Standard exception raised in preamble: " << ex.what();
+  shutdown();
+  throw;
+} catch (...) {
+  JB_LOG(info) << "Unknown exception raised in preamble";
+  shutdown();
+  throw;
 }
 
 void session::shutdown() {
