@@ -125,9 +125,13 @@ void session::shutdown() {
     // This stops new timers (and therefore any other operations) from
     // beign created ...
     std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
     state_ = state::shuttingdown;
+    // ... only one thread gets past this point ...
   }
-  // ... stop any new timers from scheduling ...
+  // ... cancel the outstanding timer, if any ...
   if (current_timer_) {
     current_timer_->cancel();
     current_timer_.reset();
@@ -174,13 +178,13 @@ void session::on_timeout(std::shared_ptr<deadline_timer> op) {
   auto write = make_write_op<etcdserverpb::LeaseKeepAliveRequest>(
       [this](auto op) { this->on_write(op); });
   write->request.set_id(lease_id());
-  keep_alive_stream_->Write(write->request, op->tag());
+  keep_alive_stream_->Write(write->request, write->tag());
 }
 
 void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
   auto read = make_read_op<etcdserverpb::LeaseKeepAliveResponse>(
       [this](auto rd) { this->on_read(rd); });
-  this->keep_alive_stream_->Read(&read->response, op->tag());
+  this->keep_alive_stream_->Read(&read->response, read->tag());
 }
 
 void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {

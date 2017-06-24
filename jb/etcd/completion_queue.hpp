@@ -3,9 +3,10 @@
 
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
-#include <atomic>
+
 #include <functional>
 #include <memory>
+#include <mutex>
 
 namespace jb {
 namespace etcd {
@@ -230,19 +231,53 @@ make_async_rdwr_stream(Functor&& functor) {
  * A wrapper for deadline timers.
  */
 struct deadline_timer {
-  /// Return the correct tag to use in the completion queue
-  void* tag() {
-    return static_cast<void*>(&callback);
+  deadline_timer(deadline_timer const&) = delete;
+  deadline_timer& operator=(deadline_timer const&) = delete;
+
+  template <typename Functor>
+  static std::shared_ptr<deadline_timer> make(
+      grpc::CompletionQueue* queue,
+      std::chrono::system_clock::time_point deadline, Functor&& f) {
+    std::shared_ptr<deadline_timer> op(new deadline_timer);
+    op->callback_ = std::move([op, functor = std::move(f)]() {
+        std::lock_guard<std::mutex> lock(op->mu_);
+        auto top = std::move(op);
+        auto callback = std::move(top->callback_);
+        if (top->canceled_) {
+          return;
+        }
+        top->canceled_ = true;
+        functor(top);
+    });
+    op->alarm_ = std::make_unique<grpc::Alarm>(
+        queue, deadline, static_cast<void*>(&op->callback_));
+    return op;
   }
 
+  // Safely cancel the timer, in the thread that cancels the timer we
+  // simply flag it as canceled.  We only change the state in the
+  // thread where the timer is fired, i.e., the thred running the
+  // completion queue loop.
   void cancel() {
-    canceled.store(true);
-    alarm->Cancel();
+    std::lock_guard<std::mutex> lock(mu_);
+    if (canceled_) {
+      return;
+    }
+    alarm_->Cancel();
+    canceled_ = true;
   }
 
-  std::unique_ptr<grpc::Alarm> alarm;
-  std::function<void()> callback;
-  std::atomic<bool> canceled;
+private:
+  deadline_timer()
+    : mu_()
+    , canceled_(false) {
+  }
+
+private:
+  std::mutex mu_;
+  bool canceled_;
+  std::function<void()> callback_;
+  std::unique_ptr<grpc::Alarm> alarm_;
 };
 
 /**
@@ -280,16 +315,7 @@ public:
   template <typename Functor>
   std::shared_ptr<deadline_timer> make_deadline_timer(
       std::chrono::system_clock::time_point deadline, Functor&& functor) {
-    auto op = std::make_shared<deadline_timer>();
-    op->canceled.store(false);
-    op->callback = std::move([op, functor]() {
-        if (op->canceled.load()) {
-          return;
-        }
-        functor(std::move(op));
-    });
-    op->alarm = std::make_unique<grpc::Alarm>(&queue_, deadline, op->tag());
-    return op;
+    return deadline_timer::make(&queue_, deadline, std::move(functor));
   }
 
   /// Call the functor N units of time from now.

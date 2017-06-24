@@ -11,7 +11,7 @@ void completion_queue::run() {
   void* tag = nullptr;
   bool ok = false;
   while (queue_.Next(&tag, &ok)) {
-    if (not ok or tag == nullptr) {
+    if (tag == nullptr) {
       // TODO() - I think tag == nullptr should never happen,
       // consider using JB_ASSERT()
       continue;
@@ -19,9 +19,7 @@ void completion_queue::run() {
     // ... tag must be a pointer to std::function<void()> see the
     // comments for tag_set_timer_ and friends to understand why ...
     auto callback = static_cast<std::function<void()>*>(tag);
-    if (callback and *callback) {
-      (*callback)();
-    }
+    (*callback)();
   }
 }
 
