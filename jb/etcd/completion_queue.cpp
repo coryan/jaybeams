@@ -43,8 +43,8 @@ void completion_queue::run() {
 
 void completion_queue::shutdown() {
   JB_LOG(trace) << "shutting down queue";
-  queue_.Shutdown();
   shutdown_.store(true);
+  queue_.Shutdown();
 }
 
 } // namespace etcd
