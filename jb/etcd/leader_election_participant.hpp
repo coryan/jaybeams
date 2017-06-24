@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <future>
+#include <condition_variable>
 
 namespace jb {
 namespace etcd {
@@ -59,18 +60,51 @@ public:
   }
 
   /**
-   * Terminate the internal threads and release local resources.
+   * Release local resources.
    *
    * The destructor makes sure the *local* resources are released,
-   * including connections to the etcd server, and internal threads.
-   * But it makes no attempt to resign from the election, or delete
-   * the keys in etcd, or to gracefully revoke the etcd leases.
+   * including connections to the etcd server, and pending
+   * operations.  It makes no attempt to resign from the election, or
+   * delete the keys in etcd, or to gracefully revoke the etcd leases.
    *
    * The application should call resign() to release the resources
-   * held in the etcd server.
+   * held in the etcd server *before* the destructor is called.
    */
   ~leader_election_participant() noexcept(false);
 
+  /**
+   * The implicit state machine in a leader election participant.
+   *
+   * -# constructing: the initial state.
+   * -# connecting: setting up bi-direction stream for watchers.
+   * -# testandtest:
+   * -# republish:
+   * -# published:
+   * -# querying: discover the previous participant in the election.
+   * -# campaigning: the previous participant is known and the
+   *    watchers are setup
+   * -# elected
+   * -# resigning
+   * -# shuttingdown
+   * -# shutdown
+   *
+   * TODO() - consider more states for shutting down.
+   */
+  enum class state {
+    constructing,
+    connecting,
+    testandset,
+    republish,
+    published,
+    querying,
+    campaigning,
+    elected,
+    resigning,
+    resigned,
+    shuttingdown,
+    shutdown,
+  };
+  
   /// Return the etcd key associated with this participant
   std::string const& key() const {
     return participant_key_;
@@ -178,9 +212,6 @@ private:
   // Invoke the callback, notice that the callback is invoked only once.
   void make_callback();
 
-  /// Log an exception caught when the event loop exits
-  void log_thread_exit_exception(std::exception_ptr eptr);
-
   /// Return an exception with the @a status details
   std::runtime_error error_grpc_status(
       char const* where, grpc::Status const& status,
@@ -191,6 +222,11 @@ private:
   std::uint64_t lease_id() {
     return session_->lease_id();
   }
+
+  void async_ops_block();
+  bool async_op_start(char const* msg);
+  bool async_op_start_shutdown(char const* msg);
+  void async_op_done(char const* msg);
 
   // Compute the end of the range for a prefix search.
   static std::string prefix_end(std::string const& prefix);
@@ -213,15 +249,13 @@ private:
   std::uint64_t participant_revision_;
 
   mutable std::mutex mu_;
-  std::atomic<std::int64_t> pending_watches_;
-  std::atomic<std::int64_t> pending_writes_;
-  std::atomic<std::int64_t> pending_reads_;
-  std::atomic<std::int64_t> pending_range_requests_;
+  std::condition_variable cv_;
+  state state_;
   std::set<std::uint64_t> current_watches_;
+  int pending_async_ops_;
+
   std::promise<bool> campaign_result_;
   std::function<void(std::future<bool>&)> campaign_callback_;
-
-  std::promise<bool> range_request_done_;
 };
 
 } // namespace etcd

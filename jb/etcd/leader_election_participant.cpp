@@ -40,14 +40,13 @@ leader_election_participant::leader_election_participant(
       os << election_prefix_ << std::hex << this->session_->lease_id();
       return os.str();
     }())
-    , pending_watches_(0)
-    , pending_writes_(0)
-    , pending_reads_(0)
-    , pending_range_requests_(0)
+    , mu_()
+    , cv_()
+    , state_(state::constructing)
     , current_watches_()
+    , pending_async_ops_(0)
     , campaign_result_()
-    , campaign_callback_()
-    , range_request_done_() {
+    , campaign_callback_() {
   // ... this is just the initialization after all the member
   // variables are set.  Moved to a function because the code gets too
   // big otherwise ...
@@ -59,8 +58,51 @@ leader_election_participant::~leader_election_participant() noexcept(false) {
 }
 
 void leader_election_participant::resign() {
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+    if (state_ != state::elected and state_ != state::campaigning) {
+      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                   << " unexpected state for resign()";
+      // TODO() - throw I would think
+      return;
+    }
+    state_ = state::resigning;
+  }
+  // ... this blocks until the lease is removed, at that point the
+  // etcd resources are all deleted, except for the watchers ...
   session_->revoke();
-  shutdown();
+  std::set<std::uint64_t> watches;
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ != state::resigning) {
+      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                   << " unexpected state for resign()/watches";
+      // TODO() - throw I would think
+      return;
+    }
+    watches = std::move(current_watches_);
+  }
+  // ... cancel all the watchers too ...
+  for (auto w : watches) {
+    JB_LOG(info) << "  cancel watch = " << w;
+    if (not async_op_start("cancel watch")) {
+      return;
+    }
+    auto write = make_write_op<etcdserverpb::WatchRequest>(
+        [this, w](auto op) { this->on_watch_cancel(op, w); });
+    auto& cancel = *write->request.mutable_cancel_request();
+    cancel.set_watch_id(w);
+    watcher_stream_->Write(write->request, write->tag());
+  }
+  async_ops_block();
+  // ... now we are really done with remote resources ...
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    state_ = state::resigned;
+  }
 }
 
 void leader_election_participant::proclaim(std::string const& new_value) {
@@ -85,18 +127,32 @@ void leader_election_participant::preamble() try {
           decltype(watcher_stream_),
           std::unique_ptr<watch_stream::client_type>>::value,
       "Mismatched async stream for Watcher");
+
+  // ... no real need to grab a mutex here.  The object is not fully
+  // constructed, it should not be used by more than one thread ...
+  state_ = state::connecting;
+
+  async_op_start("create stream");
   std::promise<bool> stream_ready;
-  auto op = make_async_rdwr_stream<W, R>(
-      [&stream_ready](auto op) { stream_ready.set_value(true); });
+  auto op = make_async_rdwr_stream<W, R>([this, &stream_ready](auto op) {
+    stream_ready.set_value(true);
+    async_op_done("on_ create stream ");
+  });
   watcher_stream_ =
       watch_client_->AsyncWatch(&watcher_stream_context_, *queue_, op->tag());
   // ... blocks until it is ready ...
   if (not stream_ready.get_future().get()) {
-    JB_LOG(error) << "  stream not ready, key=" << key() << " ***";
+    JB_LOG(error) << key() << " " << int(state_) << " " << pending_async_ops_
+                  << "  stream not ready ****";
   } else {
-    JB_LOG(error) << "  watcher stream ready, key=" << key();
+    JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                 << "  stream ready";
   }
 
+  // ... transition state ...
+  state_ = state::testandset;
+
+  
   // ... we need to create a node to represent this participant in
   // the leader election.  We do this with a test-and-set
   // operation.  The test is "does this key have creation_version ==
@@ -140,6 +196,7 @@ void leader_election_participant::preamble() try {
     // ... if the value is the same, we can avoid a round-trip
     // request to the server ...
     if (kv.value() != value()) {
+      state_ = state::republish;
       // ... too bad, need to publish again *and* we need to delete
       // the key if the publication fails ...
       etcdserverpb::RequestOp failure_op;
@@ -147,6 +204,7 @@ void leader_election_participant::preamble() try {
       delete_op.set_key(key());
       auto published = publish_value(value(), failure_op);
       if (not published.succeeded()) {
+        state_ = state::shutdown;
         // ... ugh, the publication failed.  We now have an
         // inconsistent state with the server.  We think we own the
         // code (and at least we own the lease!), but we were unable
@@ -161,50 +219,54 @@ void leader_election_participant::preamble() try {
         throw std::runtime_error(os.str());
       }
     }
+    state_ = state::published;
   }
 } catch (std::exception const& ex) {
-  JB_LOG(info) << "Standard exception raised in preamble: " << ex.what();
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " std::exception raised in preamble: " << ex.what();
   shutdown();
   throw;
 } catch (...) {
-  JB_LOG(info) << "Unknown exception raised in preamble";
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " unknown exception raised in preamble";
   shutdown();
   throw;
 }
 
 void leader_election_participant::shutdown() {
-  JB_LOG(info) << "  shutdown " << key() << ", pr=" << pending_reads_
-               << ", pw=" << pending_writes_
-               << ", prr=" << pending_range_requests_;
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                   << "  dup shutdown";
+      return;
+    }
+    state_ = state::shuttingdown;
+  }
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  shutdown";
   // ... if there is a pending range request we need to block on it ...
-  range_request_done_.get_future().get();
+  async_ops_block();
   if (watcher_stream_) {
-    std::set<std::uint64_t> watches;
-    {
-      std::lock_guard<std::mutex> lock(mu_);
-      watches = std::move(current_watches_);
-    }
-    // ... cancel all the watchers before calling WritesDone() ...
-    for (auto w : watches) {
-      JB_LOG(info) << "  cancel watch = " << w;
-      auto write = make_write_op<etcdserverpb::WatchRequest>(
-          [this, w](auto op) { this->on_watch_cancel(op, w); });
-      auto& cancel = *write->request.mutable_cancel_request();
-      cancel.set_watch_id(w);
-      ++pending_writes_;
-      watcher_stream_->Write(write->request, write->tag());
-    }
     // The watcher stream was already created, we need to close it
     // before shutting down the completion queue ...
     std::promise<bool> stream_closed;
-    JB_LOG(info) << "  sending writes done key=" << key()
-                 << ", pr=" << pending_reads_ << ", pw=" << pending_writes_;
+    (void)async_op_start_shutdown("writes done");
     auto op = make_writes_done_op([this, &stream_closed](auto op) {
       this->on_writes_done(op, stream_closed);
     });
     watcher_stream_->WritesDone(op->tag());
     // ... block until it closes ...
     stream_closed.get_future().get();
+  }
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ != state::shuttingdown) {
+      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                   << "  weird transition on shutdown";
+      return;
+    }
+    state_ = state::shutdown;
   }
 }
 
@@ -243,6 +305,14 @@ void leader_election_participant::campaign_impl(
     JB_ASSERT_THROW(bool(campaign_callback_) == false);
     campaign_callback_ = std::move(callback);
   }
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ != state::published) {
+      // TODO() - signal the callback with an exception?
+      return;
+    }
+    state_ = state::querying;
+  }
   // ... we want to wait on a single key, waiting on more would
   // create thundering herd problems.  To win the election this
   // participant needs to have the smallest creation_revision
@@ -276,11 +346,9 @@ void leader_election_participant::campaign_impl(
 
   // ... we need to create an object to hold the client context,
   // status and result of the operation ...
-  ++pending_range_requests_;
-  JB_LOG(info) << " range request() key=" << key()
-               << ", rev=" << participant_revision_ << ", pr=" << pending_reads_
-               << ", pw=" << pending_writes_
-               << ", prr=" << pending_range_requests_;
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " range request(), rev=" << participant_revision_;
+  async_op_start("range request");
   auto op = make_async_op<etcdserverpb::RangeResponse>(
       [this](std::shared_ptr<range_predecessor_op> op) {
         this->on_range_request(op);
@@ -291,7 +359,8 @@ void leader_election_participant::campaign_impl(
 
 etcdserverpb::TxnResponse leader_election_participant::publish_value(
     std::string const& new_value, etcdserverpb::RequestOp const& failure_op) {
-  JB_LOG(info) << " publish_vale() key=" << key();
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " publish_value()";
   etcdserverpb::TxnRequest req;
   auto& cmp = *req.add_compare();
   cmp.set_key(key());
@@ -320,20 +389,24 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 
 void leader_election_participant::on_writes_done(
     std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
+  async_op_done("on_writes_done()");
+  (void)async_op_start_shutdown("finish");
   auto op =
       make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
   watcher_stream_->Finish(&op->status, op->tag());
-  JB_LOG(info) << "  writes done completed key=" << key()
-               << ", status=" << op->status.error_message() << " ["
-               << op->status.error_code() << "]"
-               << ", pr=" << pending_reads_ << ", pw=" << pending_writes_;
-  on_finish(op, done);
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  finish scheduled, status=" << op->status.error_message()
+               << " [" << op->status.error_code() << "]";
+  if (op->status.error_code() == 0) {
+    op->callback();
+  }
 }
 
 void leader_election_participant::on_finish(
     std::shared_ptr<finish_op> op, std::promise<bool>& done) {
-  JB_LOG(info) << "  finish completed key=" << key()
-               << ", pr=" << pending_reads_ << ", pw=" << pending_writes_;
+  async_op_done("on_finish()");
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  finish completed";
   try {
     if (not op->status.ok()) {
       throw error_grpc_status("on_finish", op->status);
@@ -362,9 +435,9 @@ void leader_election_participant::on_finish(
 
 void leader_election_participant::on_range_request(
     std::shared_ptr<range_predecessor_op> op) try {
-  JB_LOG(info) << " on_range_request() key=" << key()
-               << ", pr=" << pending_reads_ << ", pw=" << pending_writes_
-               << ", prr=" << pending_range_requests_;
+  async_op_done("on_range_request()");
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " on_range_request()";
   if (not op->status.ok()) {
     throw error_grpc_status("on_range_request", op->status, &op->response);
   }
@@ -374,46 +447,46 @@ void leader_election_participant::on_range_request(
   for (auto const& kv : op->response.kvs()) {
     // ... we need to capture the key and revision of the result, so
     // we can then start a Watch starting from that revision ...
-    ++pending_watches_;
 
-    JB_LOG(info) << "  create watcher ... ";
+    if (not async_op_start("create watch")) {
+      return;
+    }
+    JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                 << "  create watcher ... k=" << kv.key();
     auto write = make_write_op<etcdserverpb::WatchRequest>([
       this, key = kv.key(), revision = op->response.header().revision()
     ](auto op) { this->on_watch_create(op, key, revision); });
     auto& create = *write->request.mutable_create_request();
     create.set_key(kv.key());
     create.set_start_revision(op->response.header().revision());
-    ++pending_writes_;
     watcher_stream_->Write(write->request, write->tag());
   }
   check_election_over_maybe();
-  range_request_done_.set_value(true);
-  --pending_range_requests_;
 } catch (...) {
-  range_request_done_.set_exception(std::current_exception());
-  --pending_range_requests_;
 }
 
 void leader_election_participant::on_watch_create(
     std::shared_ptr<watch_write_op> op, std::string const& key,
     std::uint64_t revision) {
-  --pending_writes_;
+  async_op_done("on_watch_create()");
+  if (not async_op_start("read watch")) {
+    return;
+  }
   auto read = make_read_op<etcdserverpb::WatchResponse>([this, key, revision](
       auto op) { this->on_watch_read(op, key, revision); });
-  ++pending_reads_;
   watcher_stream_->Read(&read->response, op->tag());
 }
 
 void leader_election_participant::on_watch_cancel(
     std::shared_ptr<watch_write_op> op, std::uint64_t) {
   // ... there should be a Read() pending already ...
-  --pending_writes_;
+  async_op_done("on_watch_cancel()");
 }
 
 void leader_election_participant::on_watch_read(
     std::shared_ptr<watch_read_op> op, std::string const& key,
     std::uint64_t revision) {
-  --pending_reads_;
+  async_op_done("on_watch_read()");
   if (op->response.created()) {
     JB_LOG(info) << "  received new watcher=" << op->response.watch_id();
     std::lock_guard<std::mutex> lock(mu_);
@@ -425,7 +498,6 @@ void leader_election_participant::on_watch_read(
     if (ev.type() != mvccpb::Event::DELETE) {
       continue;
     }
-    --pending_watches_;
   }
   check_election_over_maybe();
   // ... unless the watcher was canceled we should continue to read
@@ -453,10 +525,18 @@ void leader_election_participant::on_watch_read(
     current_watches_.erase(op->response.watch_id());
     return;
   }
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+  }
   // ... the watcher was not canceled, so try reading again ...
+  if (not async_op_start("read watch / followup")) {
+    return;
+  }
   auto read = make_read_op<etcdserverpb::WatchResponse>([this, key, revision](
       auto op) { this->on_watch_read(op, key, revision); });
-  ++pending_reads_;
   watcher_stream_->Read(&read->response, op->tag());
 }
 
@@ -464,10 +544,14 @@ void leader_election_participant::check_election_over_maybe() {
   // ... check the atomic, do not worry about changes without a lock,
   // if it is positive then a future Read() will decrement it and we
   // will check again ...
-  if (pending_watches_.load() != 0) {
-    return;
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (not current_watches_.empty()) {
+      return;
+    }
   }
-  JB_LOG(info) << "  election is over key=" << key();
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << " election completed";
   campaign_result_.set_value(true);
   make_callback();
 }
@@ -478,33 +562,15 @@ void leader_election_participant::make_callback() {
     std::lock_guard<std::mutex> lock(mu_);
     callback = std::move(campaign_callback_);
     if (not callback) {
-      JB_LOG(info) << "  nothing to call back to key=" << key();
+      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                   << " no callback present";
       return;
     }
   }
   auto future = campaign_result_.get_future();
   callback(future);
-  JB_LOG(info) << "  called back key=" << key();
-}
-
-void leader_election_participant::log_thread_exit_exception(
-    std::exception_ptr eptr) {
-  try {
-    if (eptr) {
-      std::rethrow_exception(eptr);
-    } else {
-      JB_LOG(info) << "Exception raised at event loop exit,"
-                   << " but got null exception pointer."
-                   << "  participant=" << key() << ", value=" << value();
-    }
-  } catch (std::exception const& ex) {
-    JB_LOG(info) << "Standard C++ exception raised at event loop exit."
-                 << "  participant=" << key() << ", value=" << value()
-                 << ", exception=" << ex.what();
-  } catch (...) {
-    JB_LOG(info) << "Unknown C++ exception raised at event loop exit."
-                 << "  participant=" << key() << ", value=" << value();
-  }
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  made callback";
 }
 
 std::runtime_error leader_election_participant::error_grpc_status(
@@ -512,10 +578,10 @@ std::runtime_error leader_election_participant::error_grpc_status(
     google::protobuf::Message const* res,
     google::protobuf::Message const* req) const {
   std::ostringstream os;
-  os << "grpc error in " << where << " for election=" << election_name_
-     << ", participant=" << key() << ", value=" << value()
-     << ", revision=" << participant_revision_ << ": " << status.error_message()
-     << "[" << status.error_code() << "]";
+  os << key() << " " << int(state_) << " " << pending_async_ops_
+     << " grpc error in " << where << " for election=" << election_name_
+     << ", value=" << value() << ", revision=" << participant_revision_ << ": "
+     << status.error_message() << "[" << status.error_code() << "]";
   if (res != nullptr) {
     std::string print;
     google::protobuf::TextFormat::PrintToString(*res, &print);
@@ -527,6 +593,41 @@ std::runtime_error leader_election_participant::error_grpc_status(
     os << ", request=" << print;
   }
   return std::runtime_error(os.str());
+}
+
+void leader_election_participant::async_ops_block() {
+  std::unique_lock<std::mutex> lock(mu_);
+  cv_.wait(lock, [this]() { return pending_async_ops_ == 0; });
+}
+
+bool leader_election_participant::async_op_start(char const *msg) {
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "      " << msg;
+  std::unique_lock<std::mutex> lock(mu_);
+  if (state_ == state::shuttingdown or state_ == state::shutdown) {
+    return false;
+  }
+  ++pending_async_ops_;
+  return true;
+}
+
+bool leader_election_participant::async_op_start_shutdown(char const* msg) {
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "      " << msg << " during shutdown";
+  std::unique_lock<std::mutex> lock(mu_);
+  ++pending_async_ops_;
+  return true;
+}
+
+void leader_election_participant::async_op_done(char const* msg) {
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "      " << msg;
+  std::unique_lock<std::mutex> lock(mu_);
+  if (--pending_async_ops_ == 0) {
+    lock.unlock();
+    cv_.notify_one();
+    return;
+  }
 }
 
 std::string leader_election_participant::prefix_end(std::string const& prefix) {
