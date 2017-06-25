@@ -166,6 +166,27 @@ public:
   }
 
   /**
+   * Make an asynchronous call to Finish() and call the functor
+   * when it is completed.
+   */
+  template <typename W, typename R, typename Functor>
+  std::shared_ptr<detail::new_finish_op> async_finish(
+      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
+      std::string name, Functor&& f) {
+    using op_type = detail::new_finish_op;
+    auto op = std::make_shared<op_type>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto& op = dynamic_cast<op_type&>(bop);
+      functor(op, ok);
+    };
+    op->name = std::move(name);
+    void* tag = register_op("async_writes_done()", op);
+    stream->client->Finish(&op->status, tag);
+    return op;
+  }
+
+  /**
    * Call the functor when the deadline timer expires.
    *
    * Notice that system_clock is not guaranteed to be monotonic, which

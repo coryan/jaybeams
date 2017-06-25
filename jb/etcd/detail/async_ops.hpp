@@ -192,14 +192,6 @@ struct create_async_rdwr_stream : public base_async_op {
 };
 
 /**
- * A wrapper to run an asynchronous WritesDone() operation.
- *
- * Please see the documentation
- * jb::etcd::completion_queue::async_writes_done for details.
- */
-struct new_writes_done_op : public base_async_op {};
-
-/**
  * A wrapper to run an asynchronous Write() operation.
  *
  * Please see the documentation
@@ -219,6 +211,24 @@ struct new_write_op : public base_async_op {
 template <typename R>
 struct new_read_op : public base_async_op {
   R response;
+};
+
+/**
+ * A wrapper to run an asynchronous WritesDone() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_writes_done for details.
+ */
+struct new_writes_done_op : public base_async_op {};
+
+/**
+ * A wrapper to run an asynchronous Finish() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_finish for details.
+ */
+struct new_finish_op : public base_async_op {
+  grpc::Status status;
 };
 
 /**

@@ -244,19 +244,25 @@ void session::on_writes_done(
     done.set_value(ok);
     return;
   }
-  auto op =
-      make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
-  ka_stream_->client->Finish(&op->status, op->tag());
+
+  auto op = queue_->cq().async_finish(
+      ka_stream_, "session/ka_stream/finish",
+      [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
   JB_LOG(info) << std::hex << lease_id()
                << " finish scheduled, status=" << op->status.error_message()
                << " [" << op->status.error_code() << "]";
 }
 
 void session::on_finish(
-    std::shared_ptr<detail::finish_op> op, std::promise<bool>& done) {
+    detail::new_finish_op& op, bool ok, std::promise<bool>& done) {
+  if (not ok) {
+    // ... operation canceled, no sense in waiting anymore ...
+    done.set_value(false);
+    return;
+  }
   try {
-    if (not op->status.ok()) {
-      throw error_grpc_status("on_finish", op->status);
+    if (not op.status.ok()) {
+      throw error_grpc_status("on_finish", op.status);
     }
     done.set_value(true);
   } catch (...) {

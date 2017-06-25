@@ -154,8 +154,7 @@ private:
       std::promise<bool>& done);
 
   /// Handle the Finish() completion.
-  void
-  on_finish(std::shared_ptr<detail::finish_op> op, std::promise<bool>& done);
+  void on_finish(detail::new_finish_op& op, bool ok, std::promise<bool>& done);
 
   /// Convert the constructor argument to milliseconds.
   template <typename duration_type>
