@@ -8,37 +8,43 @@ import unittest
 
 class Test(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
-        wnull = open(os.devnull, 'w')
-        cls._etcd = subprocess.Popen(
-            ["/usr/bin/etcd"], stderr=wnull, stdout=wnull)
-        # try to setup a connection, if it fails all hope for the
-        # tests is lost.  The program takes a bit to start up, thus
-        # the disgusting Sleep() calls ...
-        sleep = 0.1
-        for i in range(0, 10):
+    def tryConnect(cls, sleep):
+        for _ in range(0, 10):
             sleep = sleep * 2
             time.sleep(1)
             try:
-                s = socket.create_connection(("localhost", "2379"), 0.5)
+                _ = socket.create_connection(("localhost", "2379"), 0.5)
                 print "etcd server is accepting connections"
-                return
-            except socket.timeout as to:
+                return True
+            except socket.timeout:
                 continue
-            except socket.error as ex:
+            except socket.error:
                 print " .. connecting"
-        print "cannot connect to etcd server"
+        return False
+
+    @classmethod
+    def setUpClass(cls):
+        if cls.tryConnect(0.01):
+            return
+        print "initial connection failed, starting new etcd server instance"
+        wnull = open(os.devnull, 'w')
+        cls._etcd = subprocess.Popen(
+            ["/usr/bin/etcd"], stderr=wnull, stdout=wnull)
+        if cls.tryConnect(0.05):
+           return 
+        raise SystemExit("cannot connect nor start+connect the etcd server")
 
     @classmethod
     def tearDownClass(cls):
-        cls._etcd.kill()
-        cls._etcd.wait()
-        cls._etcd = None
+        if hasattr(cls, '_etcd'):
+            cls._etcd.kill()
+            cls._etcd.wait()
+            cls._etcd = None
         
     @classmethod
     def __del__(cls):
-        if cls._etcd:
-            tearDownClass(cls)
+        if hasattr(cls, '_etcd'):
+            cls.tearDownClass()
 
     def test_session(self):
         try:
@@ -59,6 +65,6 @@ class Test(unittest.TestCase):
         except subprocess.CalledProcessError as ex:
             print ex.output
             self.assertEqual(ex.returncode, 0)
-            
+
 if __name__ == '__main__':
     unittest.main()
