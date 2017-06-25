@@ -130,12 +130,13 @@ void leader_election_participant::preamble() try {
   // constructed, it should not be used by more than one thread ...
   set_state("preamble()", state::connecting);
 
-  async_op_start("create stream");
+  async_op_start("create stream / preamble/lambda()");
   std::promise<bool> stream_ready;
   queue_->cq().async_create_rdwr_stream(
       watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
       "leader_election_participant/watch",
       [this, &stream_ready](auto stream, bool ok) {
+        async_op_done("create stream / preamble/lambda()");
         if (ok) {
           this->watcher_stream_ = std::move(stream);
         }
@@ -261,7 +262,30 @@ void leader_election_participant::shutdown() {
           this->on_writes_done(op, ok, stream_closed);
         });
     // ... block until it closes ...
-    stream_closed.get_future().get();
+    bool success = stream_closed.get_future().get();
+    if (success) {
+      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                   << "  writes done completed";
+    }
+    
+    std::promise<bool> stream_finished;
+    (void)async_op_start_shutdown("finish");
+    auto fop = queue_->cq().async_finish(
+        watcher_stream_, "leader_election_participant/shutdown/finish",
+        [this, &stream_finished](auto const& op, bool ok) {
+          this->on_finish(op, ok, stream_finished);
+        });
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  finish scheduled " << fop->status.error_message() << " ["
+                 << fop->status.error_code() << "]";
+    // ... block until it closes ...
+    auto fut = stream_finished.get_future();
+    // TODO() - this is a workaround, the finish() call does not seem
+    // to terminate for me ...
+    if (fut.wait_for(std::chrono::milliseconds(200)) ==
+        std::future_status::timeout) {
+      on_finish(*fop, false, stream_finished);
+    }
   }
   (void)set_state("shutdown()", state::shutdown);
 }
@@ -523,14 +547,7 @@ void leader_election_participant::on_writes_done(
     done.set_value(ok);
     return;
   }
-
-  (void)async_op_start_shutdown("finish");
-  auto op = queue_->cq().async_finish(
-      watcher_stream_, "leader_election_participant/watch_stream/finish",
-      [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  finish scheduled, status=" << op->status.error_message()
-               << " [" << op->status.error_code() << "]";
+  done.set_value(true);
 }
 
 void leader_election_participant::on_finish(
