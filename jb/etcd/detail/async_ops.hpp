@@ -17,10 +17,12 @@ namespace detail {
  * Base class for all asynchronous operations.
  */
 struct base_async_op {
-  base_async_op() {}
+  base_async_op() {
+  }
 
   /// Make sure full destructor of derived class is called.
-  virtual ~base_async_op() {}
+  virtual ~base_async_op() {
+  }
 
   /**
    * Callback for the completion queue.
@@ -76,7 +78,6 @@ struct async_op {
   std::unique_ptr<async_reader> rpc;
 };
 
-
 /**
  * A wrapper for asynchronous write operations on streaming RPCs.
  *
@@ -92,7 +93,6 @@ struct async_write_op {
   std::function<void(bool)> callback;
   W request;
 };
-
 
 /**
  * A wrapper for asynchronous read operations on streaming RPCs.
@@ -126,7 +126,6 @@ struct writes_done_op {
   std::function<void(bool)> callback;
 };
 
-
 /**
  * A wrapper to run an asynchronous Finish() operation.
  *
@@ -144,6 +143,53 @@ struct finish_op {
   std::function<void(bool)> callback;
 };
 
+/// Match an operation to create ClientAsyncReaderWriter to its
+/// signature - mismatch case.
+template <typename M>
+struct async_stream_create_requirements {
+  using matches = std::false_type;
+};
+
+/// Match an operation to create ClientAsyncReaderWriter to its
+/// signature - match case.
+template <typename W, typename R>
+struct async_stream_create_requirements<
+    std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>>(
+        grpc::ClientContext*, grpc::CompletionQueue*, void*)> {
+  using matches = std::true_type;
+
+  using write_type = W;
+  using read_type = R;
+};
+
+/**
+ * A wrapper around read-write RPC streams.
+ */
+template <typename W, typename R>
+struct new_async_rdwr_stream {
+  grpc::ClientContext context;
+  std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>> client;
+};
+
+/**
+ * A wrapper for a bi-directional streaming RPC client.
+ *
+ * Alternative name: a less awful grpc::ClientAsyncReaderWriter<W,R>.
+ *
+ * Please see the documentation of
+ * jb::etcd::completion_queue::async_create_rdwr_stream for details.
+ *
+ * @tparam W the type of the requests in the streaming RPC.
+ * @tparam R the type of the responses in the streaming RPC.
+ *
+ */
+template <typename W, typename R>
+struct create_async_rdwr_stream : public base_async_op {
+  create_async_rdwr_stream()
+      : stream(new new_async_rdwr_stream<W, R>) {
+  }
+  std::unique_ptr<new_async_rdwr_stream<W, R>> stream;
+};
 
 /**
  * A wrapper for deadline timers.
@@ -163,7 +209,6 @@ private:
   friend class ::jb::etcd::completion_queue;
   std::unique_ptr<grpc::Alarm> alarm_;
 };
-  
 
 } // namespace detail
 } // namespace etcd

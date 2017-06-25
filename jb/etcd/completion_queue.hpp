@@ -42,9 +42,64 @@ public:
   /// Shutdown the completion queue loop.
   void shutdown();
 
-  /// Create a new reader-writer asynchronous stream
-  template<typename R, typename W, typename Functor>
-  void async_create_rdwr_stream(Functor&& functor) {}
+  /**
+   * Create a new asynchronous read-write stream and call the functor
+   * when it is constructed and ready.
+   *
+   * Consider a typical bi-directional streaming gRPC:
+   *
+   * @code
+   * service Echo {
+   *    rpc Echo(stream Request) returns (stream Response) {}
+   * }
+   * @endcode
+   *
+   * When asynchronously creating the stream use:
+   *
+   * @code
+   * completion_queue queue = ...;
+   * std::unique_ptr<Echo::Stub> client = ...;
+   * auto op = queue.async_create_rdwr_stream(
+   *     "debug string", stub, Echo::Stub::AsyncEcho,
+   *     [](auto stream, bool ok) { });
+   * @endcode
+   *
+   * The jb::etcd::completion_queue will call the lambda expression you
+   * provided.  The @a ok flag indicates if the operation was canceled.
+   * The @a stream parameter will be of type:
+   *
+   * @code
+   * std::unique_ptr<new_async_rdwr_stream<Request, Response>>
+   * @endcode
+   *
+   * This function deduces the type of read-write stream to create
+   * based on the member function argument.  Typically it would be
+   * used as follows:
+   */
+  template <typename C, typename M, typename Functor>
+  void async_create_rdwr_stream(
+      std::string name, C* async_client, M C::*call, Functor&& f) {
+    using requirements = detail::async_stream_create_requirements<M>;
+    static_assert(
+        requirements::matches::value,
+        "The member function argument must meet its requirements."
+        "  Signature should match: "
+        "std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>>("
+        "grpc::ClientContext*,grpc::CompletionQueue*,void*)");
+    using write_type = typename requirements::write_type;
+    using read_type = typename requirements::read_type;
+
+    using op_type = detail::create_async_rdwr_stream<write_type, read_type>;
+    auto op = std::make_shared<op_type>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto& op = dynamic_cast<op_type&>(bop);
+      functor(std::move(op.stream), ok);
+    };
+    op->name = std::move(name);
+    void* tag = register_op("async_create_rdwr_stream()", op);
+    op->stream->client = (async_client->*call)(&op->stream->context, cq(), tag);
+  }
 
   /**
    * Call the functor when the deadline timer expires.
@@ -56,7 +111,8 @@ public:
    */
   template <typename Functor>
   std::shared_ptr<detail::deadline_timer> make_deadline_timer(
-      std::chrono::system_clock::time_point deadline, Functor&& f) {
+      std::chrono::system_clock::time_point deadline, std::string name,
+      Functor&& f) {
     auto op = std::make_shared<detail::deadline_timer>();
     op->callback = [functor = std::move(f)](
         detail::base_async_op & bop, bool ok) {
@@ -64,7 +120,7 @@ public:
       functor(op, ok);
     };
     op->deadline = deadline;
-    op->name = "timer"; // TODO() - get name from caller
+    op->name = std::move(name);
     void* tag = register_op("deadline_timer()", op);
     op->alarm_ = std::make_unique<grpc::Alarm>(cq(), deadline, tag);
     return op;
@@ -87,7 +143,7 @@ private:
   grpc::CompletionQueue* cq() {
     return &queue_;
   }
-  
+
   /// Save a newly created operation and return its gRPC tag.
   void*
   register_op(char const* where, std::shared_ptr<detail::base_async_op> op);
@@ -102,7 +158,7 @@ private:
   std::atomic<bool> shutdown_;
 };
 
-  /// Create an asynchronous operation for the given functor
+/// Create an asynchronous operation for the given functor
 template <typename R, typename Functor>
 std::shared_ptr<detail::async_op<R>> make_async_op(Functor&& functor) {
   auto op = std::make_shared<detail::async_op<R>>();
@@ -142,9 +198,9 @@ template <typename Functor>
 std::shared_ptr<detail::writes_done_op> make_writes_done_op(Functor&& functor) {
   auto op = std::make_shared<detail::writes_done_op>();
   op->callback = std::move([op, functor](bool ok) {
-      auto tmp = std::move(op);
-      functor(tmp);
-      (void)std::move(tmp->callback);
+    auto tmp = std::move(op);
+    functor(tmp);
+    (void)std::move(tmp->callback);
   });
   return op;
 }
@@ -159,7 +215,7 @@ std::shared_ptr<detail::finish_op> make_finish_op(Functor&& functor) {
   });
   return op;
 }
-  
+
 /// Create a read-write stream
 template <typename W, typename R, typename Functor>
 std::shared_ptr<async_rdwr_stream<W, R>>

@@ -43,8 +43,6 @@ session::session(
     , client_(client)
     , channel_(client_->create_channel(etcd_endpoint))
     , lease_client_(client_->create_lease(channel_))
-    , keep_alive_stream_context_()
-    , keep_alive_stream_()
     , queue_(queue)
     , lease_id_(lease_id)
     , desired_TTL_(desired_TTL)
@@ -98,19 +96,23 @@ void session::preamble() try {
   // this is (unfortunately) an asynchronous operation, so we have to
   // do some magic ...
   std::promise<bool> stream_ready;
-  auto op = make_async_rdwr_stream<
-      ka_stream_type::write_type, ka_stream_type::read_type>(
-      [&stream_ready](auto op) { stream_ready.set_value(true); });
-  // ... create the call and invoke the operation's callback when done ...
-  keep_alive_stream_ = lease_client_->AsyncLeaseKeepAlive(
-      &keep_alive_stream_context_, *queue_, op->tag());
+
+  queue_->cq().async_create_rdwr_stream(
+      "session/ka_stream", lease_client_.get(),
+      &etcdserverpb::Lease::Stub::AsyncLeaseKeepAlive,
+      [this, &stream_ready](auto stream, bool ok) {
+        if (ok) {
+          this->ka_stream_ = std::move(stream);
+        }
+        stream_ready.set_value(ok);
+      });
   // ... block until done ...
   if (not stream_ready.get_future().get()) {
     JB_LOG(error) << std::hex << lease_id() << " stream not ready!!";
+    throw std::runtime_error("cannot complete keep alive stream setup");
   }
 
   JB_LOG(info) << std::hex << lease_id() << " stream connected";
-
   state_ = state::connected;
   set_timer();
 } catch (std::exception const& ex) {
@@ -141,14 +143,14 @@ void session::shutdown() {
     current_timer_->cancel();
     current_timer_.reset();
   }
-  if (keep_alive_stream_) {
+  if (ka_stream_) {
     // The KeepAlive stream was already created, we need to close it
     // before shutting down ...
     std::promise<bool> stream_closed;
     auto op = make_writes_done_op([this, &stream_closed](auto op) {
       this->on_writes_done(op, stream_closed);
     });
-    keep_alive_stream_->WritesDone(op->tag());
+    ka_stream_->client->WritesDone(op->tag());
     // ... block until it closes ...
     stream_closed.get_future().get();
   }
@@ -173,7 +175,8 @@ void session::set_timer() {
   auto deadline =
       std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
   current_timer_ = queue_->cq().make_deadline_timer(
-      deadline, [this](auto const& op, bool ok) { this->on_timeout(op, ok); });
+      deadline, "TTL Refresh Timer",
+      [this](auto const& op, bool ok) { this->on_timeout(op, ok); });
 }
 
 void session::on_timeout(detail::deadline_timer const& op, bool ok) {
@@ -190,7 +193,7 @@ void session::on_timeout(detail::deadline_timer const& op, bool ok) {
   auto write = make_write_op<etcdserverpb::LeaseKeepAliveRequest>(
       [this](auto op) { this->on_write(op); });
   write->request.set_id(lease_id());
-  keep_alive_stream_->Write(write->request, write->tag());
+  ka_stream_->client->Write(write->request, write->tag());
 }
 
 void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
@@ -202,7 +205,7 @@ void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
   }
   auto read = make_read_op<etcdserverpb::LeaseKeepAliveResponse>(
       [this](auto rd) { this->on_read(rd); });
-  this->keep_alive_stream_->Read(&read->response, read->tag());
+  ka_stream_->client->Read(&read->response, read->tag());
 }
 
 void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
@@ -223,7 +226,7 @@ void session::on_writes_done(
     std::promise<bool>& done) {
   auto op =
       make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
-  keep_alive_stream_->Finish(&op->status, op->tag());
+  ka_stream_->client->Finish(&op->status, op->tag());
   JB_LOG(info) << std::hex << lease_id()
                << " finish scheduled, status=" << op->status.error_message()
                << " [" << op->status.error_code() << "]";

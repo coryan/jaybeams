@@ -183,8 +183,10 @@ private:
   std::shared_ptr<client_factory> client_;
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
-  grpc::ClientContext keep_alive_stream_context_;
-  std::unique_ptr<ka_stream_type::client_type> keep_alive_stream_;
+  using new_ka_stream_type = detail::new_async_rdwr_stream<
+      etcdserverpb::LeaseKeepAliveRequest,
+      etcdserverpb::LeaseKeepAliveResponse>;
+  std::unique_ptr<new_ka_stream_type> ka_stream_;
   std::shared_ptr<active_completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor

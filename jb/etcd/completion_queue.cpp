@@ -28,8 +28,7 @@ completion_queue::~completion_queue() {
       os << op.second->name << "\n";
     }
     JB_LOG(error) << " completion queue deleted while holding "
-                  << pending_ops_.size() << " pending operations: "
-                  << os.str();
+                  << pending_ops_.size() << " pending operations: " << os.str();
   }
 }
 
