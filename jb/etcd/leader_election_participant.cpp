@@ -513,7 +513,7 @@ void leader_election_participant::on_watch_read(
 }
 
 void leader_election_participant::on_writes_done(
-    detail::new_writes_done_op const& writes_done, bool ok,
+    detail::writes_done_op const& writes_done, bool ok,
     std::promise<bool>& done) {
   async_op_done("on_writes_done()");
   if (not ok) {
@@ -532,7 +532,7 @@ void leader_election_participant::on_writes_done(
 }
 
 void leader_election_participant::on_finish(
-    detail::new_finish_op const& op, bool ok, std::promise<bool>& done) {
+    detail::finish_op const& op, bool ok, std::promise<bool>& done) {
   async_op_done("on_finish()");
   if (not ok) {
     // ... operation canceled, no sense in waiting anymore ...

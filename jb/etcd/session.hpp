@@ -136,7 +136,7 @@ private:
   /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
   void on_timeout(detail::deadline_timer const& op, bool ok);
 
-  using ka_stream_type = detail::new_async_rdwr_stream<
+  using ka_stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
 
@@ -148,11 +148,10 @@ private:
 
   /// Handle the WritesDone() completion, schedule a Finish()
   void on_writes_done(
-      detail::new_writes_done_op& writes_done, bool ok,
-      std::promise<bool>& done);
+      detail::writes_done_op& writes_done, bool ok, std::promise<bool>& done);
 
   /// Handle the Finish() completion.
-  void on_finish(detail::new_finish_op& op, bool ok, std::promise<bool>& done);
+  void on_finish(detail::finish_op& op, bool ok, std::promise<bool>& done);
 
   /// Convert the constructor argument to milliseconds.
   template <typename duration_type>

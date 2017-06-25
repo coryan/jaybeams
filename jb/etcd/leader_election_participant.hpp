@@ -185,7 +185,7 @@ private:
   /// Called when the Range() operation in the kv_client completes.
   void on_range_request(std::shared_ptr<range_predecessor_op> op);
 
-  using watcher_stream_type = detail::new_async_rdwr_stream<
+  using watcher_stream_type = detail::async_rdwr_stream<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   using watch_write_op = watcher_stream_type::write_op;
   using watch_read_op = watcher_stream_type::read_op;
@@ -206,11 +206,11 @@ private:
 
   /// Called when the WritesDone() operation in the watcher stream completes.
   void on_writes_done(
-      detail::new_writes_done_op const& op, bool ok, std::promise<bool>& done);
+      detail::writes_done_op const& op, bool ok, std::promise<bool>& done);
 
   /// Called when the Finish() operation in the watcher stream completes.
   void
-  on_finish(detail::new_finish_op const& op, bool ok, std::promise<bool>& done);
+  on_finish(detail::finish_op const& op, bool ok, std::promise<bool>& done);
 
   /// Check if the election has finished, if so invoke the callbacks.
   void check_election_over_maybe();

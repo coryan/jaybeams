@@ -69,7 +69,7 @@ public:
    * The @a stream parameter will be of type:
    *
    * @code
-   * std::unique_ptr<new_async_rdwr_stream<Request, Response>>
+   * std::unique_ptr<async_rdwr_stream<Request, Response>>
    * @endcode
    *
    * This function deduces the type of read-write stream to create
@@ -106,10 +106,10 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::new_write_op<W>> async_write(
-      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream, W&& request,
+  std::shared_ptr<detail::write_op<W>> async_write(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream, W&& request,
       std::string name, Functor&& f) {
-    using op_type = detail::new_write_op<W>;
+    using op_type = detail::write_op<W>;
     auto op = std::make_shared<op_type>();
     op->request.Swap(&request);
     op->callback = [functor = std::move(f)](
@@ -128,10 +128,10 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::new_read_op<R>> async_read(
-      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
+  std::shared_ptr<detail::read_op<R>> async_read(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::new_read_op<R>;
+    using op_type = detail::read_op<R>;
     auto op = std::make_shared<op_type>();
     op->callback = [functor = std::move(f)](
         detail::base_async_op & bop, bool ok) {
@@ -149,10 +149,10 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::new_writes_done_op> async_writes_done(
-      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
+  std::shared_ptr<detail::writes_done_op> async_writes_done(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::new_writes_done_op;
+    using op_type = detail::writes_done_op;
     auto op = std::make_shared<op_type>();
     op->callback = [functor = std::move(f)](
         detail::base_async_op & bop, bool ok) {
@@ -170,10 +170,10 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::new_finish_op> async_finish(
-      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
+  std::shared_ptr<detail::finish_op> async_finish(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::new_finish_op;
+    using op_type = detail::finish_op;
     auto op = std::make_shared<op_type>();
     op->callback = [functor = std::move(f)](
         detail::base_async_op & bop, bool ok) {

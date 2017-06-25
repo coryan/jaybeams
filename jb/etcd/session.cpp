@@ -235,8 +235,7 @@ void session::on_read(ka_stream_type::read_op& op, bool ok) {
 }
 
 void session::on_writes_done(
-    detail::new_writes_done_op& writes_done, bool ok,
-    std::promise<bool>& done) {
+    detail::writes_done_op& writes_done, bool ok, std::promise<bool>& done) {
   if (not ok) {
     // ... operation aborted, just signal and return ...
     done.set_value(ok);
@@ -252,7 +251,7 @@ void session::on_writes_done(
 }
 
 void session::on_finish(
-    detail::new_finish_op& op, bool ok, std::promise<bool>& done) {
+    detail::finish_op& op, bool ok, std::promise<bool>& done) {
   if (not ok) {
     // ... operation canceled, no sense in waiting anymore ...
     done.set_value(false);
