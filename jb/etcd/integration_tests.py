@@ -36,7 +36,7 @@ class Test(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if hasattr(cls, '_etcd'):
+        if hasattr(cls, '_etcd') and cls._etcd is not None:
             cls._etcd.kill()
             cls._etcd.wait()
             cls._etcd = None
