@@ -470,12 +470,12 @@ void leader_election_participant::on_watch_cancel(
 }
 
 void leader_election_participant::on_watch_read(
-    watch_read_op const& op, bool ok, std::string const& key,
+    watch_read_op const& op, bool ok, std::string const& wkey,
     std::uint64_t revision) {
   async_op_done("on_watch_read()");
   if (not ok) {
     JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  watcher canceled key=" << key;
+                 << "  watcher canceled key=" << wkey;
     return;
   }
   if (op.response.created()) {
@@ -501,7 +501,8 @@ void leader_election_participant::on_watch_read(
   // ... unless the watcher was canceled we should continue to read
   // from it ...
   if (op.response.canceled()) {
-    JB_LOG(info) << "Watcher canceled for key=" << key
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << " watcher canceled for key=" << wkey
                  << ", revision=" << revision
                  << ", reason=" << op.response.cancel_reason()
                  << ", watch_id=" << op.response.watch_id();
@@ -515,8 +516,9 @@ void leader_election_participant::on_watch_read(
     // it goes to sleep, or gets reschedule, then the key is deleted
     // and etcd compacted.  And then the client starts watching.  I am
     // not sure this is a problem, but it might be.
-    JB_LOG(info) << "Watcher cancelled with compact_revision="
-                 << op.response.compact_revision() << ", key=" << key
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << " watcher cancelled with compact_revision="
+                 << op.response.compact_revision() << ", key=" << wkey
                  << ", revision=" << revision
                  << ", reason=" << op.response.cancel_reason()
                  << ", watch_id=" << op.response.watch_id();
@@ -536,8 +538,8 @@ void leader_election_participant::on_watch_read(
 
   queue_->cq().async_read(
       watcher_stream_, "leader_election_participant/on_watch_read/read",
-      [this, key, revision](auto op, bool ok) {
-        this->on_watch_read(op, ok, key, revision);
+      [this, wkey, revision](auto op, bool ok) {
+        this->on_watch_read(op, ok, wkey, revision);
       });
 }
 
