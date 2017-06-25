@@ -163,12 +163,37 @@ struct async_stream_create_requirements<
 };
 
 /**
+ * A wrapper to run an asynchronous Write() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_write for details.
+ */
+template <typename W>
+struct new_write_op : public base_async_op {
+  W request;
+};
+
+/**
+ * A wrapper to run an asynchronous Read() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_read for details.
+ */
+template <typename R>
+struct new_read_op : public base_async_op {
+  R response;
+};
+
+/**
  * A wrapper around read-write RPC streams.
  */
 template <typename W, typename R>
 struct new_async_rdwr_stream {
   grpc::ClientContext context;
   std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>> client;
+
+  using write_op = new_write_op<W>;
+  using read_op = new_read_op<R>;
 };
 
 /**
@@ -189,28 +214,9 @@ struct create_async_rdwr_stream : public base_async_op {
       : stream(new new_async_rdwr_stream<W, R>) {
   }
   std::unique_ptr<new_async_rdwr_stream<W, R>> stream;
-};
 
-/**
- * A wrapper to run an asynchronous Write() operation.
- *
- * Please see the documentation
- * jb::etcd::completion_queue::async_write for details.
- */
-template <typename W>
-struct new_write_op : public base_async_op {
-  W request;
-};
-
-/**
- * A wrapper to run an asynchronous Read() operation.
- *
- * Please see the documentation
- * jb::etcd::completion_queue::async_read for details.
- */
-template <typename R>
-struct new_read_op : public base_async_op {
-  R response;
+  using write_op = new_write_op<W>;
+  using read_op = new_read_op<R>;
 };
 
 /**

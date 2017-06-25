@@ -136,17 +136,15 @@ private:
   /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
   void on_timeout(detail::deadline_timer const& op, bool ok);
 
-  using ka_stream_type = async_rdwr_stream<
+  using ka_stream_type = detail::new_async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
 
   /// Handle the Write() completion, schedule a new LeaseKeepAlive Read().
-  void on_write(
-      detail::new_write_op<etcdserverpb::LeaseKeepAliveRequest>& op, bool ok);
+  void on_write(ka_stream_type::write_op& op, bool ok);
 
   /// Handle the Read() completion, schedule a new Timer().
-  void on_read(
-      detail::new_read_op<etcdserverpb::LeaseKeepAliveResponse>& op, bool ok);
+  void on_read(ka_stream_type::read_op& op, bool ok);
 
   /// Handle the WritesDone() completion, schedule a Finish()
   void on_writes_done(
@@ -184,10 +182,7 @@ private:
   std::shared_ptr<client_factory> client_;
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
-  using new_ka_stream_type = detail::new_async_rdwr_stream<
-      etcdserverpb::LeaseKeepAliveRequest,
-      etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<new_ka_stream_type> ka_stream_;
+  std::unique_ptr<ka_stream_type> ka_stream_;
   std::shared_ptr<active_completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor

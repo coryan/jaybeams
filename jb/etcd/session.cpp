@@ -198,8 +198,7 @@ void session::on_timeout(detail::deadline_timer const& op, bool ok) {
       [this](auto op, bool ok) { this->on_write(op, ok); });
 }
 
-void session::on_write(
-    detail::new_write_op<etcdserverpb::LeaseKeepAliveRequest>& op, bool ok) {
+void session::on_write(ka_stream_type::write_op& op, bool ok) {
   if (not ok) {
     // TODO() - consider logging or exceptions in this case (canceled
     // operation) ...
@@ -216,8 +215,7 @@ void session::on_write(
       [this](auto op, bool ok) { this->on_read(op, ok); });
 }
 
-void session::on_read(
-    detail::new_read_op<etcdserverpb::LeaseKeepAliveResponse>& op, bool ok) {
+void session::on_read(ka_stream_type::read_op& op, bool ok) {
   if (not ok) {
     // TODO() - consider logging or exceptions in this case (canceled
     // operation) ...
