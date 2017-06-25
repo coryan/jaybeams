@@ -136,7 +136,7 @@ void leader_election_participant::preamble() try {
       watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
       "leader_election_participant/watch",
       [this, &stream_ready](auto stream, bool ok) {
-        async_op_done("create stream / preamble/lambda()");
+        this->async_op_done("create stream / preamble/lambda()");
         if (ok) {
           this->watcher_stream_ = std::move(stream);
         }
@@ -267,7 +267,7 @@ void leader_election_participant::shutdown() {
       JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
                    << "  writes done completed";
     }
-    
+
     std::promise<bool> stream_finished;
     (void)async_op_start_shutdown("finish");
     auto fop = queue_->cq().async_finish(
