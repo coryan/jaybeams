@@ -346,10 +346,10 @@ void leader_election_participant::campaign_impl(
                << payload;
   (void)set_state("campaign_impl()", state::querying);
   async_op_start("range request");
-  auto op = make_async_op<etcdserverpb::RangeResponse>(
-      [this](auto op) { this->on_range_request(op); });
-  op->rpc = kv_client_->AsyncRange(&op->context, req, *queue_);
-  op->rpc->Finish(&op->response, &op->status, op->tag());
+  queue_->cq().async_rpc(
+      kv_client_.get(), &etcdserverpb::KV::Stub::AsyncRange, std::move(req),
+      "leader_election_participant/campaign/range",
+      [this](auto const& op, bool ok) { this->on_range_request(op, ok); });
 }
 
 etcdserverpb::TxnResponse leader_election_participant::publish_value(
@@ -385,13 +385,15 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 }
 
 void leader_election_participant::on_range_request(
-    std::shared_ptr<range_predecessor_op> op) try {
+    detail::async_op<
+        etcdserverpb::RangeRequest, etcdserverpb::RangeResponse> const& op,
+    bool ok) try {
   async_op_done("on_range_request()");
-  if (not op->status.ok()) {
-    throw error_grpc_status("on_range_request", op->status, &op->response);
+  if (not op.status.ok()) {
+    throw error_grpc_status("on_range_request", op.status, &op.response);
   }
 
-  for (auto const& kv : op->response.kvs()) {
+  for (auto const& kv : op.response.kvs()) {
     // ... we need to capture the key and revision of the result, so
     // we can then start a Watch starting from that revision ...
 
@@ -406,12 +408,12 @@ void leader_election_participant::on_range_request(
     etcdserverpb::WatchRequest req;
     auto& create = *req.mutable_create_request();
     create.set_key(kv.key());
-    create.set_start_revision(op->response.header().revision());
+    create.set_start_revision(op.response.header().revision() - 1);
 
     auto write = queue_->cq().async_write(
         watcher_stream_, std::move(req),
         "leader_election_participant/on_range_request/watch", [
-          this, key = kv.key(), revision = op->response.header().revision()
+          this, key = kv.key(), revision = op.response.header().revision()
         ](auto op, bool ok) { this->on_watch_create(op, ok, key, revision); });
   }
   check_election_over_maybe();

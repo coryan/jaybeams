@@ -181,9 +181,11 @@ private:
   /// Refactor code to perform a Txn() request.
   etcdserverpb::TxnResponse commit(etcdserverpb::TxnRequest const& req);
 
-  using range_predecessor_op = detail::async_op<etcdserverpb::RangeResponse>;
   /// Called when the Range() operation in the kv_client completes.
-  void on_range_request(std::shared_ptr<range_predecessor_op> op);
+  void on_range_request(
+      detail::async_op<
+          etcdserverpb::RangeRequest, etcdserverpb::RangeResponse> const& op,
+      bool ok);
 
   using watcher_stream_type = detail::async_rdwr_stream<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;

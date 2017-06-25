@@ -39,43 +39,39 @@ struct base_async_op {
   std::string name;
 };
 
+/// Determine the Request and Response parameter for an RPC based on
+/// the Stub signature  - mismatch case.
+template <typename M>
+struct async_op_requirements {
+  using matches = std::false_type;
+};
+
+/// Determine the Request and Response parameter for an RPC based on
+/// the Stub signature  - mismatch case.
+template <typename W, typename R>
+struct async_op_requirements<
+    std::unique_ptr<grpc::ClientAsyncResponseReader<R>>(
+        grpc::ClientContext*, W const&, grpc::CompletionQueue*)> {
+  using matches = std::true_type;
+
+  using request_type = W;
+  using response_type = R;
+};
+
 /**
- * A wrapper for asynchronous unary operations
+ * A wrapper for asynchronous unary operations.
  *
- * Consider a typical gRPC:
- *
- * service Echo {
- *    rpc Echo(Request) returns (Response) {}
- * }
- *
- * When making an asynchronous request use:
- *
- * @code
- * completion_queue queue = ...;
- * auto op = queue.make_async_op<Response>([](auto op) { .. stuff .. });
- * op.rpc = stub->Echo(&op->context, req, &queue);
- * op.rpc->Finish(&op->response, &op->status, op->tag());
- * @endcode
- *
- * The jb::etcd::completion_queue will call the lambda expression
- * with the results of the operation.
+ * Please see jb::etcd::completion_queue::async_rpc for details.
  *
  * @tparam R the type of the response in the RPC operation.
  */
-template <typename R>
-struct async_op {
-  using async_reader = grpc::ClientAsyncResponseReader<R>;
-
-  /// Return the correct tag to use in the completion queue
-  void* tag() {
-    return static_cast<void*>(&callback);
-  }
-
+template <typename W, typename R>
+struct async_op : public base_async_op {
   grpc::ClientContext context;
   grpc::Status status;
-  std::function<void(bool)> callback;
+  W request;
   R response;
-  std::unique_ptr<async_reader> rpc;
+  std::unique_ptr<grpc::ClientAsyncResponseReader<R>> rpc;
 };
 
 /// Match an operation to create ClientAsyncReaderWriter to its

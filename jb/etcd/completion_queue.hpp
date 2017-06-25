@@ -46,6 +46,69 @@ public:
    * Create a new asynchronous read-write stream and call the functor
    * when it is constructed and ready.
    *
+   *
+   * Consider a typical gRPC:
+   *
+   * @code
+   * service Echo {
+   *    rpc Echo(Request) returns (Response) {}
+   * }
+   * @endcode
+   *
+   * When making an asynchronous request use:
+   *
+   * @code
+   * completion_queue queue = ...;
+   * std::unique_ptr<Echo::Stub> client = ...;
+   * auto op = queue.async_rpc(
+   *     "debug string", stub, Echo::Stub::AsyncEcho,
+   *     [](auto op, bool ok) { });
+   * @endcode
+   *
+   * The jb::etcd::completion_queue will call the lambda expression you
+   * provided.  The @a ok flag indicates if the operation was canceled.
+   * The @a op parameter will be of type:
+   *
+   * @code
+   * async_op<EchoResponse> const&
+   * @endcode
+   *
+   * This function deduces the type of Request and Response parameter
+   * based on the member function argument.
+   */
+  template <typename C, typename M, typename W, typename Functor>
+  void async_rpc(
+      C* async_client, M C::*call, W&& request, std::string name, Functor&& f) {
+    using requirements = detail::async_op_requirements<M>;
+    static_assert(
+        requirements::matches::value,
+        "The member function signature does not match: "
+        "std::unique_ptr<grpc::ClientResponseReader<R>>("
+        "grpc::ClientContext*,W const&,grpc::CompletionQueue*)");
+    using request_type = typename requirements::request_type;
+    using response_type = typename requirements::response_type;
+    static_assert(
+        std::is_same<W, request_type>::value,
+        "Mismatch request parameter type vs. operation signature");
+
+    using op_type = detail::async_op<request_type, response_type>;
+    auto op = std::make_shared<op_type>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto const& op = dynamic_cast<op_type const&>(bop);
+      functor(op, ok);
+    };
+    op->name = std::move(name);
+    void* tag = register_op("async_create_rdwr_stream()", op);
+    op->request.Swap(&request);
+    op->rpc = (async_client->*call)(&op->context, op->request, cq());
+    op->rpc->Finish(&op->response, &op->status, tag);
+  }
+
+  /**
+   * Create a new asynchronous read-write stream and call the functor
+   * when it is constructed and ready.
+   *
    * Consider a typical bi-directional streaming gRPC:
    *
    * @code
@@ -82,8 +145,7 @@ public:
     using requirements = detail::async_stream_create_requirements<M>;
     static_assert(
         requirements::matches::value,
-        "The member function argument must meet its requirements."
-        "  Signature should match: "
+        "The member function signature does not match: "
         "std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>>("
         "grpc::ClientContext*,grpc::CompletionQueue*,void*)");
     using write_type = typename requirements::write_type;
@@ -242,18 +304,6 @@ private:
   grpc::CompletionQueue queue_;
   std::atomic<bool> shutdown_;
 };
-
-/// Create an asynchronous operation for the given functor
-template <typename R, typename Functor>
-std::shared_ptr<detail::async_op<R>> make_async_op(Functor&& functor) {
-  auto op = std::make_shared<detail::async_op<R>>();
-  op->callback = std::move([op, functor](bool ok) {
-    auto tmp = std::move(op);
-    functor(tmp);
-    (void)move(tmp->callback);
-  });
-  return op;
-}
 
 } // namespace etcd
 } // namespace jb
