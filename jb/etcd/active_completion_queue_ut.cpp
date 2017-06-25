@@ -20,12 +20,23 @@ BOOST_AUTO_TEST_CASE(active_completion_queue_basic) {
     BOOST_CHECK((grpc::CompletionQueue*)copy != nullptr);
   }
 
+  {
+    jb::etcd::active_completion_queue orig;
+    BOOST_CHECK((grpc::CompletionQueue*)orig != nullptr);
+    jb::etcd::active_completion_queue copy;
+    BOOST_CHECK((grpc::CompletionQueue*)copy != nullptr);
+
+    copy = std::move(orig);
+    BOOST_CHECK((grpc::CompletionQueue*)orig == nullptr);
+    BOOST_CHECK((grpc::CompletionQueue*)copy != nullptr);
+  }
+  
   auto cq = std::make_shared<jb::etcd::completion_queue>();
   std::thread t([cq]() { cq->run(); });
   BOOST_CHECK(t.joinable());
 
   {
-    jb::etcd::active_completion_queue owner(cq, std::move(t));
+    jb::etcd::active_completion_queue owner(std::move(cq), std::move(t));
     BOOST_CHECK((grpc::CompletionQueue*)owner != nullptr);
     BOOST_CHECK(not t.joinable());
   }

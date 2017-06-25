@@ -27,7 +27,8 @@ public:
 
   /// Constructor from existing queue and thread.  Assumes thread
   /// calls q->run().
-  active_completion_queue(std::shared_ptr<completion_queue> q, std::thread&& t)
+  active_completion_queue(
+      std::shared_ptr<completion_queue> q, std::thread&& t)
       : queue_(std::move(q))
       , thread_(std::move(t))
       , join_(&thread_)
@@ -35,22 +36,28 @@ public:
   }
 
   active_completion_queue(active_completion_queue&& rhs)
-      : queue_()
-      , thread_()
-      , join_(&thread_)
-      , shutdown_(queue()) {
-    *this = std::move(rhs);
+    : queue_(std::move(rhs.queue_))
+    , thread_(std::move(rhs.thread_))
+    , join_(&thread_)
+    , shutdown_(queue()) {
+      rhs.shutdown_.release();
   }
   active_completion_queue& operator=(active_completion_queue&& rhs) {
+    active_completion_queue tmp(std::move(*this));
     queue_ = std::move(rhs.queue_);
     thread_ = std::move(rhs.thread_);
-    shutdown_.queue = queue_;
+    shutdown_.queue = queue();
     return *this;
   }
   active_completion_queue(active_completion_queue const&) = delete;
   active_completion_queue& operator=(active_completion_queue const&) = delete;
 
+  ~active_completion_queue();
+
   operator grpc::CompletionQueue*() {
+    if (not queue_) {
+      return nullptr;
+    }
     return static_cast<grpc::CompletionQueue*>(*queue_);
   }
 
@@ -67,9 +74,12 @@ private:
   /// Shutdown a completion queue
   struct defer_shutdown {
     defer_shutdown(std::shared_ptr<completion_queue> q)
-        : queue(std::move(q)) {
+        : queue(q) {
     }
     ~defer_shutdown();
+    void release() {
+      queue.reset();
+    }
     std::shared_ptr<completion_queue> queue;
   };
 
@@ -79,6 +89,9 @@ private:
         : thread(t) {
     }
     ~defer_join();
+    void release() {
+      thread = nullptr;
+    }
     std::thread* thread;
   };
 
