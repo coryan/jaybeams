@@ -87,7 +87,8 @@ void leader_election_participant::resign() {
   }
   // ... cancel all the watchers too ...
   for (auto w : watches) {
-    JB_LOG(info) << "  cancel watch = " << w;
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  cancel watch = " << w;
     if (not async_op_start("cancel watch")) {
       return;
     }
@@ -473,7 +474,8 @@ void leader_election_participant::on_watch_read(
     std::uint64_t revision) {
   async_op_done("on_watch_read()");
   if (not ok) {
-    JB_LOG(info) << "  watcher canceled key=" << key;
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  watcher canceled key=" << key;
     return;
   }
   if (op.response.created()) {
@@ -481,7 +483,8 @@ void leader_election_participant::on_watch_read(
     std::lock_guard<std::mutex> lock(mu_);
     current_watches_.insert(op.response.watch_id());
   } else {
-    JB_LOG(info) << "  update for existing watcher=" << op.response.watch_id();
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  update for existing watcher=" << op.response.watch_id();
   }
   for (auto const& ev : op.response.events()) {
     // ... DELETE events indicate that the other participant's lease
