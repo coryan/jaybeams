@@ -98,9 +98,8 @@ void session::preamble() try {
   std::promise<bool> stream_ready;
 
   queue_->cq().async_create_rdwr_stream(
-      "session/ka_stream", lease_client_.get(),
-      &etcdserverpb::Lease::Stub::AsyncLeaseKeepAlive,
-      [this, &stream_ready](auto stream, bool ok) {
+      lease_client_.get(), &etcdserverpb::Lease::Stub::AsyncLeaseKeepAlive,
+      "session/ka_stream", [this, &stream_ready](auto stream, bool ok) {
         if (ok) {
           this->ka_stream_ = std::move(stream);
         }
@@ -148,7 +147,7 @@ void session::shutdown() {
     // before shutting down ...
     std::promise<bool> stream_closed;
     auto op = queue_->cq().async_writes_done(
-        "session/shutdown/writes_done", ka_stream_,
+        ka_stream_, "session/shutdown/writes_done",
         [this, &stream_closed](auto op, bool ok) {
           this->on_writes_done(op, ok, stream_closed);
         });
@@ -191,34 +190,49 @@ void session::on_timeout(detail::deadline_timer const& op, bool ok) {
       return;
     }
   }
-  auto write = make_write_op<etcdserverpb::LeaseKeepAliveRequest>(
-      [this](auto op) { this->on_write(op); });
-  write->request.set_id(lease_id());
-  ka_stream_->client->Write(write->request, write->tag());
+  etcdserverpb::LeaseKeepAliveRequest req;
+  req.set_id(lease_id());
+
+  (void)queue_->cq().async_write(
+      ka_stream_, std::move(req), "session/on_timeout/write",
+      [this](auto op, bool ok) { this->on_write(op, ok); });
 }
 
-void session::on_write(std::shared_ptr<ka_stream_type::write_op> op) {
+void session::on_write(
+    detail::new_write_op<etcdserverpb::LeaseKeepAliveRequest>& op, bool ok) {
+  if (not ok) {
+    // TODO() - consider logging or exceptions in this case (canceled
+    // operation) ...
+    return;
+  }
   {
     std::lock_guard<std::mutex> lock(mu_);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return;
     }
   }
-  auto read = make_read_op<etcdserverpb::LeaseKeepAliveResponse>(
-      [this](auto rd) { this->on_read(rd); });
-  ka_stream_->client->Read(&read->response, read->tag());
+  queue_->cq().async_read(
+      ka_stream_, "session/on_write/read",
+      [this](auto op, bool ok) { this->on_read(op, ok); });
 }
 
-void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
+void session::on_read(
+    detail::new_read_op<etcdserverpb::LeaseKeepAliveResponse>& op, bool ok) {
+  if (not ok) {
+    // TODO() - consider logging or exceptions in this case (canceled
+    // operation) ...
+    return;
+  }
   {
     std::lock_guard<std::mutex> lock(mu_);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return;
     }
   }
+
   // ... the KeepAliveResponse may have a new TTL value, that is the
   // etcd server may be telling us to backoff a little ...
-  actual_TTL_ = std::chrono::seconds(op->response.ttl());
+  actual_TTL_ = std::chrono::seconds(op.response.ttl());
   set_timer();
 }
 

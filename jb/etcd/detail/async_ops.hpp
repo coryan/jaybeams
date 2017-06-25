@@ -200,6 +200,28 @@ struct create_async_rdwr_stream : public base_async_op {
 struct new_writes_done_op : public base_async_op {};
 
 /**
+ * A wrapper to run an asynchronous Write() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_write for details.
+ */
+template <typename W>
+struct new_write_op : public base_async_op {
+  W request;
+};
+
+/**
+ * A wrapper to run an asynchronous Read() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_read for details.
+ */
+template <typename R>
+struct new_read_op : public base_async_op {
+  R response;
+};
+
+/**
  * A wrapper for deadline timers.
  */
 struct deadline_timer : public base_async_op {

@@ -141,10 +141,12 @@ private:
       etcdserverpb::LeaseKeepAliveResponse>;
 
   /// Handle the Write() completion, schedule a new LeaseKeepAlive Read().
-  void on_write(std::shared_ptr<ka_stream_type::write_op> op);
+  void on_write(
+      detail::new_write_op<etcdserverpb::LeaseKeepAliveRequest>& op, bool ok);
 
   /// Handle the Read() completion, schedule a new Timer().
-  void on_read(std::shared_ptr<ka_stream_type::read_op> op);
+  void on_read(
+      detail::new_read_op<etcdserverpb::LeaseKeepAliveResponse>& op, bool ok);
 
   /// Handle the WritesDone() completion, schedule a Finish()
   void on_writes_done(

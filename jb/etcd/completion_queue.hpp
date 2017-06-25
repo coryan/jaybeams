@@ -78,7 +78,7 @@ public:
    */
   template <typename C, typename M, typename Functor>
   void async_create_rdwr_stream(
-      std::string name, C* async_client, M C::*call, Functor&& f) {
+      C* async_client, M C::*call, std::string name, Functor&& f) {
     using requirements = detail::async_stream_create_requirements<M>;
     static_assert(
         requirements::matches::value,
@@ -102,14 +102,56 @@ public:
   }
 
   /**
+   * Make an asynchronous call to Write() and call the functor
+   * when it is completed.
+   */
+  template <typename W, typename R, typename Functor>
+  std::shared_ptr<detail::new_write_op<W>> async_write(
+      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream, W&& request,
+      std::string name, Functor&& f) {
+    using op_type = detail::new_write_op<W>;
+    auto op = std::make_shared<op_type>();
+    op->request.Swap(&request);
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto& op = dynamic_cast<op_type&>(bop);
+      functor(op, ok);
+    };
+    op->name = std::move(name);
+    void* tag = register_op("async_writes_done()", op);
+    stream->client->Write(op->request, tag);
+    return op;
+  }
+
+  /**
+   * Make an asynchronous call to Read() and call the functor
+   * when it is completed.
+   */
+  template <typename W, typename R, typename Functor>
+  std::shared_ptr<detail::new_read_op<R>> async_read(
+      std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
+      std::string name, Functor&& f) {
+    using op_type = detail::new_read_op<R>;
+    auto op = std::make_shared<op_type>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto& op = dynamic_cast<op_type&>(bop);
+      functor(op, ok);
+    };
+    op->name = std::move(name);
+    void* tag = register_op("async_writes_done()", op);
+    stream->client->Read(&op->response, tag);
+    return op;
+  }
+
+  /**
    * Make an asynchronous call to WritesDone() and call the functor
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
   std::shared_ptr<detail::new_writes_done_op> async_writes_done(
-      std::string name,
       std::unique_ptr<detail::new_async_rdwr_stream<W, R>>& stream,
-      Functor&& f) {
+      std::string name, Functor&& f) {
     using op_type = detail::new_writes_done_op;
     auto op = std::make_shared<op_type>();
     op->callback = [functor = std::move(f)](
@@ -122,7 +164,7 @@ public:
     stream->client->WritesDone(tag);
     return op;
   }
-  
+
   /**
    * Call the functor when the deadline timer expires.
    *
