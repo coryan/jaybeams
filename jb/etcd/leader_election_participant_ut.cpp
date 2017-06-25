@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   BOOST_TEST_CHECKPOINT("c::resign");
   participant_c.resign();
 
-  BOOST_CHECK_EQUAL(elected_c.get_future().get(), true);
+  BOOST_CHECK_EQUAL(future_c.get(), true);
 
   BOOST_TEST_CHECKPOINT("cleanup");
   election_session.revoke();
