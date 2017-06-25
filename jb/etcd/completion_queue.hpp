@@ -275,10 +275,10 @@ public:
 
   /// Call the functor N units of time from now.
   template <typename duration_type, typename Functor>
-  std::shared_ptr<detail::deadline_timer>
-  make_relative_timer(duration_type duration, Functor&& functor) {
+  std::shared_ptr<detail::deadline_timer> make_relative_timer(
+      duration_type duration, std::string name, Functor&& functor) {
     auto deadline = std::chrono::system_clock::now() + duration;
-    return make_deadline_timer(deadline, std::move(functor));
+    return make_deadline_timer(deadline, std::move(name), std::move(functor));
   }
 
   operator grpc::CompletionQueue*() {
