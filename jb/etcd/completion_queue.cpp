@@ -36,8 +36,8 @@ void completion_queue::run() {
     }
     // ... tag must be a pointer to std::function<void()> see the
     // comments for tag_set_timer_ and friends to understand why ...
-    auto callback = static_cast<std::function<void()>*>(tag);
-    (*callback)();
+    auto callback = static_cast<std::function<void(bool)>*>(tag);
+    (*callback)(ok);
   }
 }
 

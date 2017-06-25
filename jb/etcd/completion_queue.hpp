@@ -47,7 +47,7 @@ struct async_op {
 
   grpc::ClientContext context;
   grpc::Status status;
-  std::function<void()> callback;
+  std::function<void(bool)> callback;
   R response;
   std::unique_ptr<async_reader> rpc;
 };
@@ -56,9 +56,10 @@ struct async_op {
 template <typename R, typename Functor>
 std::shared_ptr<async_op<R>> make_async_op(Functor&& functor) {
   auto op = std::make_shared<async_op<R>>();
-  op->callback = std::move([op, functor]() {
-    auto callback = std::move(op->callback);
-    functor(std::move(op));
+  op->callback = std::move([op, functor](bool ok) {
+    auto tmp = std::move(op);
+    functor(tmp);
+    (void)move(tmp->callback);
   });
   return op;
 }
@@ -75,7 +76,7 @@ struct async_write_op {
     return static_cast<void*>(&callback);
   }
 
-  std::function<void()> callback;
+  std::function<void(bool)> callback;
   W request;
 };
 
@@ -83,9 +84,10 @@ struct async_write_op {
 template <typename W, typename Functor>
 std::shared_ptr<async_write_op<W>> make_write_op(Functor&& f) {
   auto op = std::make_shared<async_write_op<W>>();
-  op->callback = std::move([ op, functor = std::move(f) ]() {
-    auto callback = std::move(op->callback);
-    functor(std::move(op));
+  op->callback = std::move([ op, functor = std::move(f) ](bool ok) {
+    auto tmp = std::move(op);
+    functor(tmp);
+    (void)std::move(tmp->callback);
   });
   return op;
 }
@@ -102,7 +104,7 @@ struct async_read_op {
     return static_cast<void*>(&callback);
   }
 
-  std::function<void()> callback;
+  std::function<void(bool)> callback;
   R response;
 };
 
@@ -110,7 +112,7 @@ struct async_read_op {
 template <typename R, typename Functor>
 std::shared_ptr<async_read_op<R>> make_read_op(Functor&& f) {
   auto op = std::make_shared<async_read_op<R>>();
-  op->callback = std::move([ op, functor = std::move(f) ]() {
+  op->callback = std::move([ op, functor = std::move(f) ](bool ok) {
     auto callback = std::move(op->callback);
     functor(std::move(op));
   });
@@ -130,16 +132,17 @@ struct writes_done_op {
     return static_cast<void*>(&callback);
   }
 
-  std::function<void()> callback;
+  std::function<void(bool)> callback;
 };
 
 /// Create an asyncrhonous WritesDone operation wrapper.
 template <typename Functor>
 std::shared_ptr<writes_done_op> make_writes_done_op(Functor&& functor) {
   auto op = std::make_shared<writes_done_op>();
-  op->callback = std::move([op, functor]() {
-    auto callback = std::move(op->callback);
-    functor(std::move(op));
+  op->callback = std::move([op, functor](bool ok) {
+      auto tmp = std::move(op);
+      functor(tmp);
+      (void)std::move(tmp->callback);
   });
   return op;
 }
@@ -158,14 +161,14 @@ struct finish_op {
   }
 
   grpc::Status status;
-  std::function<void()> callback;
+  std::function<void(bool)> callback;
 };
 
 /// Create an asynchronous Finish operation wrapper.
 template <typename Functor>
 std::shared_ptr<finish_op> make_finish_op(Functor&& functor) {
   auto op = std::make_shared<finish_op>();
-  op->callback = std::move([op, functor]() {
+  op->callback = std::move([op, functor](bool ok) {
     auto callback = std::move(op->callback);
     functor(std::move(op));
   });
@@ -202,7 +205,7 @@ struct async_rdwr_stream {
     return static_cast<void*>(&ready_callback);
   }
 
-  std::function<void()> ready_callback;
+  std::function<void(bool)> ready_callback;
 
   using client_type = grpc::ClientAsyncReaderWriter<W, R>;
   using write_op = async_write_op<W>;
@@ -216,7 +219,7 @@ template <typename W, typename R, typename Functor>
 std::shared_ptr<async_rdwr_stream<W, R>>
 make_async_rdwr_stream(Functor&& functor) {
   auto stream = std::make_shared<async_rdwr_stream<W, R>>();
-  stream->ready_callback = std::move([stream, functor]() {
+  stream->ready_callback = std::move([stream, functor](bool ok) {
     auto callback = std::move(stream->ready_callback);
     functor(stream);
   });
@@ -235,7 +238,7 @@ struct deadline_timer {
       grpc::CompletionQueue* queue,
       std::chrono::system_clock::time_point deadline, Functor&& f) {
     std::shared_ptr<deadline_timer> op(new deadline_timer);
-    op->callback_ = std::move([ op, functor = std::move(f) ]() {
+    op->callback_ = std::move([ op, functor = std::move(f) ](bool ok) {
       auto top = std::move(op);
       std::lock_guard<std::mutex> lock(op->mu_);
       auto callback = std::move(top->callback_);
@@ -272,7 +275,7 @@ private:
 private:
   std::mutex mu_;
   bool canceled_;
-  std::function<void()> callback_;
+  std::function<void(bool)> callback_;
   std::unique_ptr<grpc::Alarm> alarm_;
 };
 
@@ -281,7 +284,7 @@ private:
  *
  * Alternative name: less_awful_completion_queue.  The
  * grpc::CompletionQueue is not much of an abstraction, nor is it
- * idiomatic in C++11 (and beyond).  This wrapper makes it easier to
+ * idiomatic in C++11 (and its successors).  This wrapper makes it easier to
  * write asynchronous operations that call functors (lambdas,
  * std::function<>, etc) when the operation completes.
  */

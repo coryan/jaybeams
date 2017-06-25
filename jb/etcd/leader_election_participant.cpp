@@ -403,7 +403,7 @@ void leader_election_participant::on_writes_done(
                << "  finish scheduled, status=" << op->status.error_message()
                << " [" << op->status.error_code() << "]";
   if (op->status.error_code() == 0) {
-    op->callback();
+    op->callback(false);
   }
 }
 
