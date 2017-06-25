@@ -37,7 +37,6 @@ leader_election_participant::leader_election_participant(
     , session_(session)
     , kv_client_(client_->create_kv(channel_))
     , watch_client_(client_->create_watch(channel_))
-    , watcher_stream_context_()
     , watcher_stream_()
     , election_name_(election_name)
     , participant_value_(participant_value)
@@ -92,11 +91,14 @@ void leader_election_participant::resign() {
     if (not async_op_start("cancel watch")) {
       return;
     }
-    auto write = make_write_op<etcdserverpb::WatchRequest>(
-        [this, w](auto op) { this->on_watch_cancel(op, w); });
-    auto& cancel = *write->request.mutable_cancel_request();
+    etcdserverpb::WatchRequest req;
+    auto& cancel = *req.mutable_cancel_request();
     cancel.set_watch_id(w);
-    watcher_stream_->Write(write->request, write->tag());
+
+    auto write = queue_->cq().async_write(
+        watcher_stream_, std::move(req),
+        "leader_election_participant/resign/cancel",
+        [this, w](auto op, bool ok) { this->on_watch_cancel(op, ok, w); });
   }
   async_ops_block();
   // ... now we are really done with remote resources ...
@@ -124,38 +126,27 @@ void leader_election_participant::proclaim(std::string const& new_value) {
 }
 
 void leader_election_participant::preamble() try {
-  // ... need to create the watcher stream, we do this here, and block
-  // until it is done, because it would be a pain to manage the state
-  // machine where the stream may or may not be setup and other
-  // operations are executing ...
-  using W = etcdserverpb::WatchRequest;
-  using R = etcdserverpb::WatchResponse;
-  using watch_stream = async_rdwr_stream<W, R>;
-  static_assert(
-      std::is_same<
-          decltype(watcher_stream_),
-          std::unique_ptr<watch_stream::client_type>>::value,
-      "Mismatched async stream for Watcher");
-
   // ... no real need to grab a mutex here.  The object is not fully
   // constructed, it should not be used by more than one thread ...
   set_state("preamble()", state::connecting);
 
   async_op_start("create stream");
   std::promise<bool> stream_ready;
-  auto op = make_async_rdwr_stream<W, R>([this, &stream_ready](auto op) {
-    this->async_op_done("create stream callback");
-    stream_ready.set_value(true);
-  });
-  watcher_stream_ =
-      watch_client_->AsyncWatch(&watcher_stream_context_, *queue_, op->tag());
+  queue_->cq().async_create_rdwr_stream(
+      watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
+      "leader_election_participant/watch",
+      [this, &stream_ready](auto stream, bool ok) {
+        if (ok) {
+          this->watcher_stream_ = std::move(stream);
+        }
+        stream_ready.set_value(ok);
+      });
+
   // ... blocks until it is ready ...
   if (not stream_ready.get_future().get()) {
     JB_LOG(error) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "  stream not ready ****";
-  } else {
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  stream ready";
+                  << "  stream not ready!!";
+    throw std::runtime_error("cannot complete watcher stream setup");
   }
 
   set_state("preamble()", state::testandset);
@@ -264,10 +255,11 @@ void leader_election_participant::shutdown() {
     // before shutting down the completion queue ...
     std::promise<bool> stream_closed;
     (void)async_op_start_shutdown("writes done");
-    auto op = make_writes_done_op([this, &stream_closed](auto op) {
-      this->on_writes_done(op, stream_closed);
-    });
-    watcher_stream_->WritesDone(op->tag());
+    auto op = queue_->cq().async_writes_done(
+        watcher_stream_, "leader_election_participant/shutdown/writes_done",
+        [this, &stream_closed](auto op, bool ok) {
+          this->on_writes_done(op, ok, stream_closed);
+        });
     // ... block until it closes ...
     stream_closed.get_future().get();
   }
@@ -392,30 +384,164 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
   return resp;
 }
 
+void leader_election_participant::on_range_request(
+    std::shared_ptr<range_predecessor_op> op) try {
+  async_op_done("on_range_request()");
+  if (not op->status.ok()) {
+    throw error_grpc_status("on_range_request", op->status, &op->response);
+  }
+
+  for (auto const& kv : op->response.kvs()) {
+    // ... we need to capture the key and revision of the result, so
+    // we can then start a Watch starting from that revision ...
+
+    if (not async_op_start("create watch")) {
+      return;
+    }
+    (void)set_state("on_range_request()", state::campaigning);
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  create watcher ... k=" << kv.key();
+    watched_keys_.insert(kv.key());
+
+    etcdserverpb::WatchRequest req;
+    auto& create = *req.mutable_create_request();
+    create.set_key(kv.key());
+    create.set_start_revision(op->response.header().revision());
+
+    auto write = queue_->cq().async_write(
+        watcher_stream_, std::move(req),
+        "leader_election_participant/on_range_request/watch", [
+          this, key = kv.key(), revision = op->response.header().revision()
+        ](auto op, bool ok) { this->on_watch_create(op, ok, key, revision); });
+  }
+  check_election_over_maybe();
+} catch (...) {
+}
+
+void leader_election_participant::on_watch_create(
+    watch_write_op const& op, bool ok, std::string const& key,
+    std::uint64_t revision) {
+  async_op_done("on_watch_create()");
+  if (not ok) {
+    return;
+  }
+  if (not async_op_start("read watch")) {
+    return;
+  }
+
+  queue_->cq().async_read(
+      watcher_stream_, "leader_election_participant/on_watch_create/read",
+      [this, key, revision](auto op, bool ok) {
+        this->on_watch_read(op, ok, key, revision);
+      });
+}
+
+void leader_election_participant::on_watch_cancel(
+    watch_write_op const& op, bool, std::uint64_t) {
+  // ... there should be a Read() pending already ...
+  async_op_done("on_watch_cancel()");
+}
+
+void leader_election_participant::on_watch_read(
+    watch_read_op const& op, bool ok, std::string const& key,
+    std::uint64_t revision) {
+  async_op_done("on_watch_read()");
+  if (not ok) {
+    JB_LOG(info) << "  watcher canceled key=" << key;
+    return;
+  }
+  if (op.response.created()) {
+    JB_LOG(info) << "  received new watcher=" << op.response.watch_id();
+    std::lock_guard<std::mutex> lock(mu_);
+    current_watches_.insert(op.response.watch_id());
+  } else {
+    JB_LOG(info) << "  update for existing watcher=" << op.response.watch_id();
+  }
+  for (auto const& ev : op.response.events()) {
+    // ... DELETE events indicate that the other participant's lease
+    // expired, or they actively resigned, other events are not of
+    // interest ...
+    if (ev.type() != mvccpb::Event::DELETE) {
+      continue;
+    }
+    // ... remove that key from the set of keys we are waiting to be
+    // deleted ...
+    watched_keys_.erase(ev.kv().key());
+  }
+  check_election_over_maybe();
+  // ... unless the watcher was canceled we should continue to read
+  // from it ...
+  if (op.response.canceled()) {
+    JB_LOG(info) << "Watcher canceled for key=" << key
+                 << ", revision=" << revision
+                 << ", reason=" << op.response.cancel_reason()
+                 << ", watch_id=" << op.response.watch_id();
+    current_watches_.erase(op.response.watch_id());
+    return;
+  }
+  if (op.response.compact_revision()) {
+    // TODO() - if I am reading the documentation correctly, this
+    // means the watcher was cancelled.  We need to worry about the
+    // case where the participant figures out the key to watch.  Then
+    // it goes to sleep, or gets reschedule, then the key is deleted
+    // and etcd compacted.  And then the client starts watching.  I am
+    // not sure this is a problem, but it might be.
+    JB_LOG(info) << "Watcher cancelled with compact_revision="
+                 << op.response.compact_revision() << ", key=" << key
+                 << ", revision=" << revision
+                 << ", reason=" << op.response.cancel_reason()
+                 << ", watch_id=" << op.response.watch_id();
+    current_watches_.erase(op.response.watch_id());
+    return;
+  }
+  {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (state_ == state::shuttingdown or state_ == state::shutdown) {
+      return;
+    }
+  }
+  // ... the watcher was not canceled, so try reading again ...
+  if (not async_op_start("read watch / followup")) {
+    return;
+  }
+
+  queue_->cq().async_read(
+      watcher_stream_, "leader_election_participant/on_watch_read/read",
+      [this, key, revision](auto op, bool ok) {
+        this->on_watch_read(op, ok, key, revision);
+      });
+}
+
 void leader_election_participant::on_writes_done(
-    std::shared_ptr<detail::writes_done_op> writes_done,
+    detail::new_writes_done_op const& writes_done, bool ok,
     std::promise<bool>& done) {
   async_op_done("on_writes_done()");
+  if (not ok) {
+    // ... operation aborted, just signal and return ...
+    done.set_value(ok);
+    return;
+  }
+
   (void)async_op_start_shutdown("finish");
-  auto op =
-      make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
-  watcher_stream_->Finish(&op->status, op->tag());
+  auto op = queue_->cq().async_finish(
+      watcher_stream_, "leader_election_participant/watch_stream/finish",
+      [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
   JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
                << "  finish scheduled, status=" << op->status.error_message()
                << " [" << op->status.error_code() << "]";
-  if (op->status.error_code() == 0) {
-    op->callback(false);
-  }
 }
 
 void leader_election_participant::on_finish(
-    std::shared_ptr<detail::finish_op> op, std::promise<bool>& done) {
+    detail::new_finish_op const& op, bool ok, std::promise<bool>& done) {
   async_op_done("on_finish()");
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  finish completed";
+  if (not ok) {
+    // ... operation canceled, no sense in waiting anymore ...
+    done.set_value(false);
+    return;
+  }
   try {
-    if (not op->status.ok()) {
-      throw error_grpc_status("on_finish", op->status);
+    if (not op.status.ok()) {
+      throw error_grpc_status("on_finish", op.status);
     }
     done.set_value(true);
   } catch (...) {
@@ -437,119 +563,6 @@ void leader_election_participant::on_finish(
                    << "  participant=" << key() << ", value=" << value();
     }
   }
-}
-
-void leader_election_participant::on_range_request(
-    std::shared_ptr<range_predecessor_op> op) try {
-  async_op_done("on_range_request()");
-  if (not op->status.ok()) {
-    throw error_grpc_status("on_range_request", op->status, &op->response);
-  }
-  using etcdserverpb::WatchResponse;
-  using etcdserverpb::WatchRequest;
-
-  for (auto const& kv : op->response.kvs()) {
-    // ... we need to capture the key and revision of the result, so
-    // we can then start a Watch starting from that revision ...
-
-    if (not async_op_start("create watch")) {
-      return;
-    }
-    (void)set_state("on_range_request()", state::campaigning);
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  create watcher ... k=" << kv.key();
-    watched_keys_.insert(kv.key());
-    auto write = make_write_op<etcdserverpb::WatchRequest>([
-      this, key = kv.key(), revision = op->response.header().revision()
-    ](auto op) { this->on_watch_create(op, key, revision); });
-    auto& create = *write->request.mutable_create_request();
-    create.set_key(kv.key());
-    create.set_start_revision(op->response.header().revision());
-    watcher_stream_->Write(write->request, write->tag());
-  }
-  check_election_over_maybe();
-} catch (...) {
-}
-
-void leader_election_participant::on_watch_create(
-    std::shared_ptr<watch_write_op> op, std::string const& key,
-    std::uint64_t revision) {
-  async_op_done("on_watch_create()");
-  if (not async_op_start("read watch")) {
-    return;
-  }
-  auto read = make_read_op<etcdserverpb::WatchResponse>([this, key, revision](
-      auto op) { this->on_watch_read(op, key, revision); });
-  watcher_stream_->Read(&read->response, op->tag());
-}
-
-void leader_election_participant::on_watch_cancel(
-    std::shared_ptr<watch_write_op> op, std::uint64_t) {
-  // ... there should be a Read() pending already ...
-  async_op_done("on_watch_cancel()");
-}
-
-void leader_election_participant::on_watch_read(
-    std::shared_ptr<watch_read_op> op, std::string const& key,
-    std::uint64_t revision) {
-  async_op_done("on_watch_read()");
-  if (op->response.created()) {
-    JB_LOG(info) << "  received new watcher=" << op->response.watch_id();
-    std::lock_guard<std::mutex> lock(mu_);
-    current_watches_.insert(op->response.watch_id());
-  } else {
-    JB_LOG(info) << "  update for existing watcher=" << op->response.watch_id();
-  }
-  for (auto const& ev : op->response.events()) {
-    // ... DELETE events indicate that the other participant's lease
-    // expired, or they actively resigned, other events are not of
-    // interest ...
-    if (ev.type() != mvccpb::Event::DELETE) {
-      continue;
-    }
-    // ... remove that key from the set of keys we are waiting to be
-    // deleted ...
-    watched_keys_.erase(ev.kv().key());
-  }
-  check_election_over_maybe();
-  // ... unless the watcher was canceled we should continue to read
-  // from it ...
-  if (op->response.canceled()) {
-    JB_LOG(info) << "Watcher canceled for key=" << key
-                 << ", revision=" << revision
-                 << ", reason=" << op->response.cancel_reason()
-                 << ", watch_id=" << op->response.watch_id();
-    current_watches_.erase(op->response.watch_id());
-    return;
-  }
-  if (op->response.compact_revision()) {
-    // TODO() - if I am reading the documentation correctly, this
-    // means the watcher was cancelled.  We need to worry about the
-    // case where the participant figures out the key to watch.  Then
-    // it goes to sleep, or gets reschedule, then the key is deleted
-    // and etcd compacted.  And then the client starts watching.  I am
-    // not sure this is a problem, but it might be.
-    JB_LOG(info) << "Watcher cancelled with compact_revision="
-                 << op->response.compact_revision() << ", key=" << key
-                 << ", revision=" << revision
-                 << ", reason=" << op->response.cancel_reason()
-                 << ", watch_id=" << op->response.watch_id();
-    current_watches_.erase(op->response.watch_id());
-    return;
-  }
-  {
-    std::lock_guard<std::mutex> lock(mu_);
-    if (state_ == state::shuttingdown or state_ == state::shutdown) {
-      return;
-    }
-  }
-  // ... the watcher was not canceled, so try reading again ...
-  if (not async_op_start("read watch / followup")) {
-    return;
-  }
-  auto read = make_read_op<etcdserverpb::WatchResponse>([this, key, revision](
-      auto op) { this->on_watch_read(op, key, revision); });
-  watcher_stream_->Read(&read->response, op->tag());
 }
 
 void leader_election_participant::check_election_over_maybe() {

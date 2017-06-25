@@ -181,36 +181,36 @@ private:
   /// Refactor code to perform a Txn() request.
   etcdserverpb::TxnResponse commit(etcdserverpb::TxnRequest const& req);
 
-  /// Called when the WritesDone() operation in the watcher stream completes.
-  void on_writes_done(
-      std::shared_ptr<detail::writes_done_op> op, std::promise<bool>& done);
-
-  /// Called when the Finish() operation in the watcher stream completes.
-  void
-  on_finish(std::shared_ptr<detail::finish_op> op, std::promise<bool>& done);
-
   using range_predecessor_op = detail::async_op<etcdserverpb::RangeResponse>;
   /// Called when the Range() operation in the kv_client completes.
   void on_range_request(std::shared_ptr<range_predecessor_op> op);
 
-  using watcher_stream_type = grpc::ClientAsyncReaderWriter<
+  using watcher_stream_type = detail::new_async_rdwr_stream<
       etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
-  using watch_write_op = detail::async_write_op<etcdserverpb::WatchRequest>;
-  using watch_read_op = detail::async_read_op<etcdserverpb::WatchResponse>;
+  using watch_write_op = watcher_stream_type::write_op;
+  using watch_read_op = watcher_stream_type::read_op;
 
   /// Called when a Write() operation that creates a watcher completes.
   void on_watch_create(
-      std::shared_ptr<watch_write_op> op, std::string const& watched_key,
+      watch_write_op const& op, bool ok, std::string const& watched_key,
       std::uint64_t watched_revision);
 
   /// Called when a Write() operation that cancels a watcher completes.
   void
-  on_watch_cancel(std::shared_ptr<watch_write_op> op, std::uint64_t watched_id);
+  on_watch_cancel(watch_write_op const& op, bool ok, std::uint64_t watched_id);
 
   /// Called when a Read() operation in the watcher stream completes.
   void on_watch_read(
-      std::shared_ptr<watch_read_op> op, std::string const& key,
+      watch_read_op const& op, bool ok, std::string const& key,
       std::uint64_t revision);
+
+  /// Called when the WritesDone() operation in the watcher stream completes.
+  void on_writes_done(
+      detail::new_writes_done_op const& op, bool ok, std::promise<bool>& done);
+
+  /// Called when the Finish() operation in the watcher stream completes.
+  void
+  on_finish(detail::new_finish_op const& op, bool ok, std::promise<bool>& done);
 
   /// Check if the election has finished, if so invoke the callbacks.
   void check_election_over_maybe();
@@ -246,7 +246,6 @@ private:
   std::shared_ptr<session> session_;
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
-  grpc::ClientContext watcher_stream_context_;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
   std::string election_name_;
   std::string participant_value_;
