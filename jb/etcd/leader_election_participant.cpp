@@ -144,7 +144,7 @@ void leader_election_participant::preamble() try {
   async_op_start("create stream");
   std::promise<bool> stream_ready;
   auto op = make_async_rdwr_stream<W, R>([this, &stream_ready](auto op) {
-    async_op_done("create stream callback");
+    this->async_op_done("create stream callback");
     stream_ready.set_value(true);
   });
   watcher_stream_ =
