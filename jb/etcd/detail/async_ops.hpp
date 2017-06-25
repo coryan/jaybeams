@@ -123,8 +123,8 @@ struct async_rdwr_stream {
   grpc::ClientContext context;
   std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>> client;
 
-  using write_op = write_op<W>;
-  using read_op = read_op<R>;
+  using write_op = ::jb::etcd::detail::write_op<W>;
+  using read_op = ::jb::etcd::detail::read_op<R>;
 };
 
 /**
@@ -146,8 +146,8 @@ struct create_async_rdwr_stream : public base_async_op {
   }
   std::unique_ptr<async_rdwr_stream<W, R>> stream;
 
-  using write_op = write_op<W>;
-  using read_op = read_op<R>;
+  using write_op = ::jb::etcd::detail::write_op<W>;
+  using read_op = ::jb::etcd::detail::read_op<R>;
 };
 
 /**
