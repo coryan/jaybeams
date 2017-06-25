@@ -64,17 +64,14 @@ void completion_queue::run() {
         pending_ops_.erase(i);
       }
     }
-    if (op) {
-      // ... it was there, now it is removed, and the lock is safely
-      // unreleased, call it ...
-      op->callback(*op, ok);
-    } else {
-      // TODO() - this is here while I refactor the code to move all
-      // async_op creation/destruction to this class (from free
-      // functions)...
-      auto callback = static_cast<std::function<void(bool)>*>(tag);
-      (*callback)(ok);
+    if (not op) {
+      JB_LOG(error) << "Unknown tag reported in asynchronous operation: "
+                    << std::hex << std::intptr_t(tag);
+      continue;
     }
+    // ... it was there, now it is removed, and the lock is safely
+    // unreleased, call it ...
+    op->callback(*op, ok);
   }
 }
 
