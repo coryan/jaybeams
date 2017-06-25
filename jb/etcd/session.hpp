@@ -134,7 +134,7 @@ private:
   void set_timer();
 
   /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
-  void on_timeout(std::shared_ptr<deadline_timer> op);
+  void on_timeout(std::shared_ptr<detail::deadline_timer> op);
 
   using ka_stream_type = async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
@@ -148,10 +148,12 @@ private:
 
   /// Handle the WritesDone() completion, schedule a Finish()
   void on_writes_done(
-      std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done);
+      std::shared_ptr<detail::writes_done_op> writes_done,
+      std::promise<bool>& done);
 
   /// Handle the Finish() completion.
-  void on_finish(std::shared_ptr<finish_op> op, std::promise<bool>& done);
+  void
+  on_finish(std::shared_ptr<detail::finish_op> op, std::promise<bool>& done);
 
   /// Convert the constructor argument to milliseconds.
   template <typename duration_type>
@@ -197,7 +199,7 @@ private:
   std::chrono::milliseconds actual_TTL_;
 
   /// The current timer, can be null when waiting for a KeepAlive response.
-  std::shared_ptr<deadline_timer> current_timer_;
+  std::shared_ptr<detail::deadline_timer> current_timer_;
 
   std::promise<bool> shutdown_completed_;
 };

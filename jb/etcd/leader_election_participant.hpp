@@ -182,18 +182,21 @@ private:
   etcdserverpb::TxnResponse commit(etcdserverpb::TxnRequest const& req);
 
   /// Called when the WritesDone() operation in the watcher stream completes.
-  void
-  on_writes_done(std::shared_ptr<writes_done_op> op, std::promise<bool>& done);
+  void on_writes_done(
+      std::shared_ptr<detail::writes_done_op> op, std::promise<bool>& done);
 
   /// Called when the Finish() operation in the watcher stream completes.
-  void on_finish(std::shared_ptr<finish_op> op, std::promise<bool>& done);
+  void
+  on_finish(std::shared_ptr<detail::finish_op> op, std::promise<bool>& done);
 
-  using range_predecessor_op = async_op<etcdserverpb::RangeResponse>;
+  using range_predecessor_op = detail::async_op<etcdserverpb::RangeResponse>;
   /// Called when the Range() operation in the kv_client completes.
   void on_range_request(std::shared_ptr<range_predecessor_op> op);
 
-  using watch_write_op = async_write_op<etcdserverpb::WatchRequest>;
-  using watch_read_op = async_read_op<etcdserverpb::WatchResponse>;
+  using watcher_stream_type = grpc::ClientAsyncReaderWriter<
+      etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
+  using watch_write_op = detail::async_write_op<etcdserverpb::WatchRequest>;
+  using watch_read_op = detail::async_read_op<etcdserverpb::WatchResponse>;
 
   /// Called when a Write() operation that creates a watcher completes.
   void on_watch_create(
@@ -244,8 +247,6 @@ private:
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
   grpc::ClientContext watcher_stream_context_;
-  using watcher_stream_type = grpc::ClientAsyncReaderWriter<
-      etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
   std::unique_ptr<watcher_stream_type> watcher_stream_;
   std::string election_name_;
   std::string participant_value_;

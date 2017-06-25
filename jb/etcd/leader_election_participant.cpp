@@ -393,7 +393,8 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
 }
 
 void leader_election_participant::on_writes_done(
-    std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
+    std::shared_ptr<detail::writes_done_op> writes_done,
+    std::promise<bool>& done) {
   async_op_done("on_writes_done()");
   (void)async_op_start_shutdown("finish");
   auto op =
@@ -408,7 +409,7 @@ void leader_election_participant::on_writes_done(
 }
 
 void leader_election_participant::on_finish(
-    std::shared_ptr<finish_op> op, std::promise<bool>& done) {
+    std::shared_ptr<detail::finish_op> op, std::promise<bool>& done) {
   async_op_done("on_finish()");
   JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
                << "  finish completed";

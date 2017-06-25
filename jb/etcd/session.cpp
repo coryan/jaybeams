@@ -176,7 +176,7 @@ void session::set_timer() {
       deadline, [this](auto op) { this->on_timeout(op); });
 }
 
-void session::on_timeout(std::shared_ptr<deadline_timer> op) {
+void session::on_timeout(std::shared_ptr<detail::deadline_timer> op) {
   {
     std::lock_guard<std::mutex> lock(mu_);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
@@ -215,7 +215,8 @@ void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
 }
 
 void session::on_writes_done(
-    std::shared_ptr<writes_done_op> writes_done, std::promise<bool>& done) {
+    std::shared_ptr<detail::writes_done_op> writes_done,
+    std::promise<bool>& done) {
   auto op =
       make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
   keep_alive_stream_->Finish(&op->status, op->tag());
@@ -225,7 +226,7 @@ void session::on_writes_done(
 }
 
 void session::on_finish(
-    std::shared_ptr<finish_op> op, std::promise<bool>& done) {
+    std::shared_ptr<detail::finish_op> op, std::promise<bool>& done) {
   try {
     if (not op->status.ok()) {
       throw error_grpc_status("on_finish", op->status);
