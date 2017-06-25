@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(active_completion_queue_basic) {
     BOOST_CHECK((grpc::CompletionQueue*)orig == nullptr);
     BOOST_CHECK((grpc::CompletionQueue*)copy != nullptr);
   }
-  
+
   auto cq = std::make_shared<jb::etcd::completion_queue>();
   std::thread t([cq]() { cq->run(); });
   BOOST_CHECK(t.joinable());

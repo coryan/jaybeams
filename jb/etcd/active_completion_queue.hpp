@@ -27,8 +27,7 @@ public:
 
   /// Constructor from existing queue and thread.  Assumes thread
   /// calls q->run().
-  active_completion_queue(
-      std::shared_ptr<completion_queue> q, std::thread&& t)
+  active_completion_queue(std::shared_ptr<completion_queue> q, std::thread&& t)
       : queue_(std::move(q))
       , thread_(std::move(t))
       , join_(&thread_)
@@ -36,11 +35,11 @@ public:
   }
 
   active_completion_queue(active_completion_queue&& rhs)
-    : queue_(std::move(rhs.queue_))
-    , thread_(std::move(rhs.thread_))
-    , join_(&thread_)
-    , shutdown_(queue()) {
-      rhs.shutdown_.release();
+      : queue_(std::move(rhs.queue_))
+      , thread_(std::move(rhs.thread_))
+      , join_(&thread_)
+      , shutdown_(queue()) {
+    rhs.shutdown_.release();
   }
   active_completion_queue& operator=(active_completion_queue&& rhs) {
     active_completion_queue tmp(std::move(*this));
