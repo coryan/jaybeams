@@ -30,7 +30,7 @@ void session::revoke() {
   if (not status.ok()) {
     throw error_grpc_status("LeaseRevoke()", status, &resp);
   }
-  JB_LOG(info) << "Lease Revoked - lease=" << std::hex << lease_id();
+  JB_LOG(info) << std::hex << lease_id() << " lease Revoked";
   shutdown();
 }
 
@@ -84,9 +84,9 @@ void session::preamble() try {
     throw std::runtime_error(os.str());
   }
 
-  JB_LOG(info) << "Lease Granted - lease=" << std::hex << resp.id()
-               << "  TTL=" << std::dec << resp.ttl() << "s";
   lease_id_ = resp.id();
+  JB_LOG(info) << std::hex << lease_id() << " - lease granted"
+               << "  TTL=" << std::dec << resp.ttl() << "s";
   actual_TTL_ = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::seconds(resp.ttl()));
 
@@ -106,19 +106,21 @@ void session::preamble() try {
       &keep_alive_stream_context_, *queue_, op->tag());
   // ... block until done ...
   if (not stream_ready.get_future().get()) {
-    JB_LOG(error) << "  - stream not ready!!";
+    JB_LOG(error) << std::hex << lease_id() << " stream not ready!!";
   }
 
-  JB_LOG(info) << "stream connected lease=" << std::hex << lease_id();
+  JB_LOG(info) << std::hex << lease_id() << " stream connected";
 
   state_ = state::connected;
   set_timer();
 } catch (std::exception const& ex) {
-  JB_LOG(info) << "Standard exception raised in preamble: " << ex.what();
+  JB_LOG(info) << std::hex << lease_id()
+               << " std::exception raised in preamble: " << ex.what();
   shutdown();
   throw;
 } catch (...) {
-  JB_LOG(info) << "Unknown exception raised in preamble";
+  JB_LOG(info) << std::hex << lease_id()
+               << " unknown exception raised in preamble";
   shutdown();
   throw;
 }
@@ -217,6 +219,9 @@ void session::on_writes_done(
   auto op =
       make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
   keep_alive_stream_->Finish(&op->status, op->tag());
+  JB_LOG(info) << std::hex << lease_id()
+               << " finish scheduled, status=" << op->status.error_message()
+               << " [" << op->status.error_code() << "]";
 }
 
 void session::on_finish(
@@ -230,17 +235,19 @@ void session::on_finish(
     try {
       done.set_exception(std::current_exception());
     } catch (std::future_error const& ex) {
-      JB_LOG(info) << "std::future_error raised while reporting "
-                   << "exception in lease keep alive stream closure."
-                   << "  lease=" << lease_id() << ", exception=" << ex.what();
+      JB_LOG(info) << std::hex << lease_id()
+                   << " std::future_error raised while reporting "
+                   << "exception in lease keep alive stream closure: "
+                   << ex.what();
     } catch (std::exception const& ex) {
-      JB_LOG(info) << "std::exception raised while reporting "
-                   << "exception in lease keep alive stream closure."
-                   << "  lease=" << lease_id() << ", exception=" << ex.what();
+      JB_LOG(info) << std::hex << lease_id()
+                   << " std::exception raised while reporting "
+                   << "exception in lease keep alive stream closure: "
+                   << ex.what();
     } catch (...) {
-      JB_LOG(info) << "std::exception raised while reporting "
-                   << "exception in lease keep alive stream closure."
-                   << "  lease=" << lease_id();
+      JB_LOG(info) << std::hex << lease_id()
+                   << " unknown exception raised while reporting "
+                   << "exception in lease keep alive stream closure.";
     }
   }
 }
