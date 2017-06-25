@@ -30,7 +30,7 @@ void session::revoke() {
   if (not status.ok()) {
     throw error_grpc_status("LeaseRevoke()", status, &resp);
   }
-  JB_LOG(info) << std::hex << lease_id() << " lease Revoked";
+  JB_LOG(trace) << std::hex << lease_id() << " lease Revoked";
   shutdown();
 }
 
@@ -83,8 +83,8 @@ void session::preamble() try {
   }
 
   lease_id_ = resp.id();
-  JB_LOG(info) << std::hex << lease_id() << " - lease granted"
-               << "  TTL=" << std::dec << resp.ttl() << "s";
+  JB_LOG(trace) << std::hex << lease_id() << " - lease granted"
+                << "  TTL=" << std::dec << resp.ttl() << "s";
   actual_TTL_ = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::seconds(resp.ttl()));
 
@@ -107,11 +107,11 @@ void session::preamble() try {
       });
   // ... block until done ...
   if (not stream_ready.get_future().get()) {
-    JB_LOG(error) << std::hex << lease_id() << " stream not ready!!";
+    JB_LOG(info) << std::hex << lease_id() << " stream not ready!!";
     throw std::runtime_error("cannot complete keep alive stream setup");
   }
 
-  JB_LOG(info) << std::hex << lease_id() << " stream connected";
+  JB_LOG(trace) << std::hex << lease_id() << " stream connected";
   state_ = state::connected;
   set_timer();
 } catch (std::exception const& ex) {
@@ -245,9 +245,9 @@ void session::on_writes_done(
   auto op = queue_->cq().async_finish(
       ka_stream_, "session/ka_stream/finish",
       [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
-  JB_LOG(info) << std::hex << lease_id()
-               << " finish scheduled, status=" << op->status.error_message()
-               << " [" << op->status.error_code() << "]";
+  JB_LOG(trace) << std::hex << lease_id()
+                << " finish scheduled, status=" << op->status.error_message()
+                << " [" << op->status.error_code() << "]";
 }
 
 void session::on_finish(

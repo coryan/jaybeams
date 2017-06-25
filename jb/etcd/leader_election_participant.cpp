@@ -78,17 +78,18 @@ void leader_election_participant::resign() {
   {
     std::lock_guard<std::mutex> lock(mu_);
     if (state_ != state::resigning) {
-      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                   << " unexpected state for resign()/watches";
-      // TODO() - throw I would think
-      return;
+      JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                    << " unexpected state for resign()/watches";
+      std::ostringstream os;
+      os << key() << " unexpected state " << str(state_) << " while resigning";
+      throw std::runtime_error(os.str());
     }
     watches = std::move(current_watches_);
   }
   // ... cancel all the watchers too ...
   for (auto w : watches) {
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  cancel watch = " << w;
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  cancel watch = " << w;
     if (not async_op_start("cancel watch")) {
       return;
     }
@@ -107,15 +108,15 @@ void leader_election_participant::resign() {
 }
 
 void leader_election_participant::proclaim(std::string const& new_value) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << " proclaim(" << new_value << ")";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << " proclaim(" << new_value << ")";
   std::string copy(new_value);
   etcdserverpb::RequestOp failure_op;
   auto result = publish_value(copy, failure_op);
   if (result.succeeded()) {
     copy.swap(participant_value_);
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << " proclaim(" << new_value << ") - success";
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << " proclaim(" << new_value << ") - success";
     return;
   }
   std::ostringstream os;
@@ -181,8 +182,8 @@ void leader_election_participant::preamble() try {
   {
     std::string tmp;
     google::protobuf::TextFormat::PrintToString(resp, &tmp);
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  commit() with resp=" << tmp;
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  commit() with resp=" << tmp;
   }
 
   // ... regardless of which branch of the test-and-set operation
@@ -212,8 +213,9 @@ void leader_election_participant::preamble() try {
       {
         std::string tmp;
         google::protobuf::TextFormat::PrintToString(published, &tmp);
-        JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                     << "  published_value() with resp=" << tmp;
+        JB_LOG(trace) << key() << " " << str(state_) << " "
+                      << pending_async_ops_
+                      << "  published_value() with resp=" << tmp;
       }
       if (not published.succeeded()) {
         // ... ugh, the publication failed.  We now have an
@@ -248,8 +250,8 @@ void leader_election_participant::shutdown() {
   if (not set_state("shutdown()", state::shuttingdown)) {
     return;
   }
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  shutdown";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "  shutdown";
   // ... if there is a pending range request we need to block on it ...
   async_ops_block();
   if (watcher_stream_) {
@@ -265,8 +267,8 @@ void leader_election_participant::shutdown() {
     // ... block until it closes ...
     bool success = stream_closed.get_future().get();
     if (success) {
-      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                   << "  writes done completed";
+      JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                    << "  writes done completed";
     }
 
     std::promise<bool> stream_finished;
@@ -276,15 +278,19 @@ void leader_election_participant::shutdown() {
         [this, &stream_finished](auto const& op, bool ok) {
           this->on_finish(op, ok, stream_finished);
         });
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  finish scheduled " << fop->status.error_message() << " ["
-                 << fop->status.error_code() << "]";
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  finish scheduled " << fop->status.error_message()
+                  << " [" << fop->status.error_code() << "]";
     // ... block until it closes ...
     auto fut = stream_finished.get_future();
     // TODO() - this is a workaround, the finish() call does not seem
     // to terminate for me ...
     if (fut.wait_for(std::chrono::milliseconds(200)) ==
         std::future_status::timeout) {
+      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                   << "  timeout on Finish() call, forcing a on_finish() "
+                   << fop->status.error_message() << " ["
+                   << fop->status.error_code() << "]";
       on_finish(*fop, false, stream_finished);
     }
   }
@@ -309,8 +315,8 @@ void leader_election_participant::campaign() {
   });
   // ... block until the promise is satisfied, notice that get()
   // raises the exception if that was the result ...
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  blocked running election";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "  blocked running election";
   if (elected.get_future().get() != true) {
     // ... we also raise if the campaign failed ...
     std::ostringstream os;
@@ -322,8 +328,8 @@ void leader_election_participant::campaign() {
 
 void leader_election_participant::campaign_impl(
     std::function<void(std::future<bool>&)>&& callback) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  kicking off campaign";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "  kicking off campaign";
   // First save the callback ...
   {
     std::lock_guard<std::mutex> lock(mu_);
@@ -366,9 +372,9 @@ void leader_election_participant::campaign_impl(
   // status and result of the operation ...
   std::string payload;
   google::protobuf::TextFormat::PrintToString(req, &payload);
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << " range request(), rev=" << participant_revision_ << "\n"
-               << payload;
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << " range request(), rev=" << participant_revision_ << "\n"
+                << payload;
   (void)set_state("campaign_impl()", state::querying);
   async_op_start("range request");
   queue_->cq().async_rpc(
@@ -379,8 +385,8 @@ void leader_election_participant::campaign_impl(
 
 etcdserverpb::TxnResponse leader_election_participant::publish_value(
     std::string const& new_value, etcdserverpb::RequestOp const& failure_op) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << " publish_value()";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << " publish_value()";
   etcdserverpb::TxnRequest req;
   auto& cmp = *req.add_compare();
   cmp.set_key(key());
@@ -426,8 +432,8 @@ void leader_election_participant::on_range_request(
       return;
     }
     (void)set_state("on_range_request()", state::campaigning);
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  create watcher ... k=" << kv.key();
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  create watcher ... k=" << kv.key();
     watched_keys_.insert(kv.key());
 
     etcdserverpb::WatchRequest req;
@@ -475,16 +481,16 @@ void leader_election_participant::on_watch_read(
   async_op_done("on_watch_read()");
   if (not ok) {
     JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  watcher canceled key=" << wkey;
+                 << "  watcher called with ok=false key=" << wkey;
     return;
   }
   if (op.response.created()) {
-    JB_LOG(info) << "  received new watcher=" << op.response.watch_id();
+    JB_LOG(trace) << "  received new watcher=" << op.response.watch_id();
     std::lock_guard<std::mutex> lock(mu_);
     current_watches_.insert(op.response.watch_id());
   } else {
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << "  update for existing watcher=" << op.response.watch_id();
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  update for existing watcher=" << op.response.watch_id();
   }
   for (auto const& ev : op.response.events()) {
     // ... DELETE events indicate that the other participant's lease
@@ -501,11 +507,11 @@ void leader_election_participant::on_watch_read(
   // ... unless the watcher was canceled we should continue to read
   // from it ...
   if (op.response.canceled()) {
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << " watcher canceled for key=" << wkey
-                 << ", revision=" << revision
-                 << ", reason=" << op.response.cancel_reason()
-                 << ", watch_id=" << op.response.watch_id();
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << " watcher canceled for key=" << wkey
+                  << ", revision=" << revision
+                  << ", reason=" << op.response.cancel_reason()
+                  << ", watch_id=" << op.response.watch_id();
     current_watches_.erase(op.response.watch_id());
     return;
   }
@@ -516,12 +522,12 @@ void leader_election_participant::on_watch_read(
     // it goes to sleep, or gets reschedule, then the key is deleted
     // and etcd compacted.  And then the client starts watching.  I am
     // not sure this is a problem, but it might be.
-    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-                 << " watcher cancelled with compact_revision="
-                 << op.response.compact_revision() << ", key=" << wkey
-                 << ", revision=" << revision
-                 << ", reason=" << op.response.cancel_reason()
-                 << ", watch_id=" << op.response.watch_id();
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << " watcher cancelled with compact_revision="
+                  << op.response.compact_revision() << ", key=" << wkey
+                  << ", revision=" << revision
+                  << ", reason=" << op.response.cancel_reason()
+                  << ", watch_id=" << op.response.watch_id();
     current_watches_.erase(op.response.watch_id());
     return;
   }
@@ -602,8 +608,8 @@ void leader_election_participant::check_election_over_maybe() {
       state_ = state::elected;
     }
   }
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << " election completed";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << " election completed";
   campaign_result_.set_value(true);
   make_callback();
 }
@@ -621,8 +627,8 @@ void leader_election_participant::make_callback() {
   }
   auto future = campaign_result_.get_future();
   callback(future);
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "  made callback";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "  made callback";
 }
 
 std::runtime_error leader_election_participant::error_grpc_status(
@@ -653,8 +659,8 @@ void leader_election_participant::async_ops_block() {
 }
 
 bool leader_election_participant::async_op_start(char const* msg) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "      " << msg;
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "      " << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
     return false;
@@ -664,16 +670,16 @@ bool leader_election_participant::async_op_start(char const* msg) {
 }
 
 bool leader_election_participant::async_op_start_shutdown(char const* msg) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "      " << msg << " during shutdown";
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "      " << msg << " during shutdown";
   std::unique_lock<std::mutex> lock(mu_);
   ++pending_async_ops_;
   return true;
 }
 
 void leader_election_participant::async_op_done(char const* msg) {
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "      " << msg;
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "      " << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (--pending_async_ops_ == 0) {
     lock.unlock();
@@ -684,8 +690,8 @@ void leader_election_participant::async_op_done(char const* msg) {
 
 bool leader_election_participant::set_state(char const* msg, state new_state) {
   std::lock_guard<std::mutex> lock(mu_);
-  JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
-               << "      " << msg << " " << str(new_state);
+  JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                << "      " << msg << " " << str(new_state);
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
     return false;
   }
