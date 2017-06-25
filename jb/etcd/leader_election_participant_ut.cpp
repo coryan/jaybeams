@@ -5,6 +5,22 @@
 #include <atomic>
 #include <thread>
 
+namespace std {
+// Introduce a streaming operator to satify Boost.Test needs.
+std::ostream& operator<<(std::ostream& os, std::future_status x) {
+  if (x == std::future_status::timeout) {
+    return os << "[timeout]";
+  }
+  if (x == std::future_status::deferred) {
+    return os << "[deferred]";
+  }
+  if (x == std::future_status::ready) {
+    return os << "[ready]";
+  }
+  return os << "[--invalid--]";
+}
+}
+
 /**
  * @test Verify that one can create, and delete a election participant.
  */
@@ -70,15 +86,49 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
       std::chrono::seconds(3));
   BOOST_CHECK_EQUAL(participant_b.value(), "session_b");
 
+  jb::etcd::session session_c(
+      queue, factory, etcd_address, std::chrono::milliseconds(3000));
+  BOOST_CHECK_NE(session_b.lease_id(), 0);
+  std::promise<bool> elected_c;
+  jb::etcd::leader_election_participant participant_c(
+      queue, factory, etcd_address, election_name, "session_c",
+      [&elected_c](std::future<bool>&) { elected_c.set_value(true); },
+      std::chrono::seconds(3));
+  BOOST_CHECK_EQUAL(participant_c.value(), "session_c");
+
   std::this_thread::sleep_for(std::chrono::seconds(5));
+
+  auto future_c = elected_c.get_future();
+  BOOST_CHECK_EQUAL(
+      std::future_status::timeout, future_c.wait_for(std::chrono::seconds(0)));
+  auto future_b = elected_b.get_future();
+  BOOST_CHECK_EQUAL(
+      std::future_status::timeout, future_b.wait_for(std::chrono::seconds(0)));
+
+  for (int i = 0; i != 2; ++i) {
+    BOOST_TEST_CHECKPOINT("iteration i=" << i);
+    BOOST_CHECK_NO_THROW(participant_a.proclaim("I am the best"));
+    BOOST_CHECK_NO_THROW(participant_b.proclaim("No you are not"));
+    BOOST_CHECK_NO_THROW(participant_c.proclaim("Both wrong"));
+  }
 
   BOOST_TEST_CHECKPOINT("a::resign");
   participant_a.resign();
 
-  BOOST_CHECK_EQUAL(elected_b.get_future().get(), true);
+  BOOST_CHECK_THROW(participant_a.proclaim("not dead yet"), std::exception);
+  try {
+    participant_a.proclaim("no really");
+  } catch (std::exception const& ex) {
+    BOOST_TEST_MESSAGE("exception value: " << ex.what());
+  }
 
   BOOST_TEST_CHECKPOINT("b::resign");
   participant_b.resign();
+
+  BOOST_TEST_CHECKPOINT("c::resign");
+  participant_c.resign();
+
+  BOOST_CHECK_EQUAL(elected_c.get_future().get(), true);
 
   BOOST_TEST_CHECKPOINT("cleanup");
   election_session.revoke();
