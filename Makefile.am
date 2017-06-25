@@ -522,8 +522,8 @@ AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
 jb_libjb_etcd_a_SOURCES = \
-  jb/etcd/client_factory.cpp \
   jb/etcd/active_completion_queue.cpp \
+  jb/etcd/client_factory.cpp \
   jb/etcd/completion_queue.cpp \
   jb/etcd/leader_election_participant.cpp \
   jb/etcd/session.cpp \
@@ -535,9 +535,10 @@ jb_libjb_etcd_a_SOURCES = \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
   etcd/etcdserver/etcdserverpb/rpc.pb.cc
 nobase_jb_libjb_etcd_a_HEADERS = \
-  jb/etcd/client_factory.hpp \
   jb/etcd/active_completion_queue.hpp \
+  jb/etcd/client_factory.hpp \
   jb/etcd/completion_queue.hpp \
+  jb/etcd/detail/async_ops.hpp \
   jb/etcd/leader_election_participant.hpp \
   jb/etcd/session.hpp \
   google/api/http.pb.h \
