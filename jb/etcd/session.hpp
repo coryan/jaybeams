@@ -148,7 +148,7 @@ private:
 
   /// Handle the WritesDone() completion, schedule a Finish()
   void on_writes_done(
-      std::shared_ptr<detail::writes_done_op> writes_done,
+      detail::new_writes_done_op& writes_done, bool ok,
       std::promise<bool>& done);
 
   /// Handle the Finish() completion.

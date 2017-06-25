@@ -147,10 +147,11 @@ void session::shutdown() {
     // The KeepAlive stream was already created, we need to close it
     // before shutting down ...
     std::promise<bool> stream_closed;
-    auto op = make_writes_done_op([this, &stream_closed](auto op) {
-      this->on_writes_done(op, stream_closed);
-    });
-    ka_stream_->client->WritesDone(op->tag());
+    auto op = queue_->cq().async_writes_done(
+        "session/shutdown/writes_done", ka_stream_,
+        [this, &stream_closed](auto op, bool ok) {
+          this->on_writes_done(op, ok, stream_closed);
+        });
     // ... block until it closes ...
     stream_closed.get_future().get();
   }
@@ -222,8 +223,13 @@ void session::on_read(std::shared_ptr<ka_stream_type::read_op> op) {
 }
 
 void session::on_writes_done(
-    std::shared_ptr<detail::writes_done_op> writes_done,
+    detail::new_writes_done_op& writes_done, bool ok,
     std::promise<bool>& done) {
+  if (not ok) {
+    // ... operation aborted, just signal and return ...
+    done.set_value(ok);
+    return;
+  }
   auto op =
       make_finish_op([this, &done](auto op) { this->on_finish(op, done); });
   ka_stream_->client->Finish(&op->status, op->tag());

@@ -192,6 +192,14 @@ struct create_async_rdwr_stream : public base_async_op {
 };
 
 /**
+ * A wrapper to run an asynchronous WritesDone() operation.
+ *
+ * Please see the documentation
+ * jb::etcd::completion_queue::async_writes_done for details.
+ */
+struct new_writes_done_op : public base_async_op {};
+
+/**
  * A wrapper for deadline timers.
  */
 struct deadline_timer : public base_async_op {
