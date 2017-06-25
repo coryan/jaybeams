@@ -243,7 +243,7 @@ public:
       functor(op, ok);
     };
     op->name = std::move(name);
-    void* tag = register_op("async_writes_done()", op);
+    void* tag = register_op("async_finish()", op);
     stream->client->Finish(&op->status, tag);
     return op;
   }
