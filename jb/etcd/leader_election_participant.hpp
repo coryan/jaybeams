@@ -100,7 +100,7 @@ public:
     republish,
     published,
     querying,
-    campainging,
+    campaigning,
     elected,
     resigning,
     resigned,
@@ -231,6 +231,8 @@ private:
   bool async_op_start_shutdown(char const* msg);
   void async_op_done(char const* msg);
 
+  bool set_state(char const* msg, state new_state);
+
   // Compute the end of the range for a prefix search.
   static std::string prefix_end(std::string const& prefix);
 
@@ -255,6 +257,7 @@ private:
   std::condition_variable cv_;
   state state_;
   std::set<std::uint64_t> current_watches_;
+  std::set<std::string> watched_keys_;
   int pending_async_ops_;
 
   std::promise<bool> campaign_result_;
