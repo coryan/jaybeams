@@ -8,6 +8,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 
 namespace jb {
 namespace etcd {
@@ -55,8 +56,18 @@ public:
    */
   template <typename Functor>
   std::shared_ptr<detail::deadline_timer> make_deadline_timer(
-      std::chrono::system_clock::time_point deadline, Functor&& functor) {
-    return detail::deadline_timer::make(&queue_, deadline, std::move(functor));
+      std::chrono::system_clock::time_point deadline, Functor&& f) {
+    auto op = std::make_shared<detail::deadline_timer>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      detail::deadline_timer& op = dynamic_cast<detail::deadline_timer&>(bop);
+      functor(op, ok);
+    };
+    op->deadline = deadline;
+    op->name = "timer"; // TODO() - get name from caller
+    void* tag = register_op("deadline_timer()", op);
+    op->alarm_ = std::make_unique<grpc::Alarm>(cq(), deadline, tag);
+    return op;
   }
 
   /// Call the functor N units of time from now.
@@ -72,6 +83,21 @@ public:
   }
 
 private:
+  /// The underlying completion queue pointer for the gRPC APIs.
+  grpc::CompletionQueue* cq() {
+    return &queue_;
+  }
+  
+  /// Save a newly created operation and return its gRPC tag.
+  void*
+  register_op(char const* where, std::shared_ptr<detail::base_async_op> op);
+
+private:
+  mutable std::mutex mu_;
+  using pending_ops_type =
+      std::unordered_map<std::intptr_t, std::shared_ptr<detail::base_async_op>>;
+  pending_ops_type pending_ops_;
+
   grpc::CompletionQueue queue_;
   std::atomic<bool> shutdown_;
 };

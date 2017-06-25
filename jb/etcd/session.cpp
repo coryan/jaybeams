@@ -173,10 +173,14 @@ void session::set_timer() {
   auto deadline =
       std::chrono::system_clock::now() + (actual_TTL_ / keep_alives_per_ttl);
   current_timer_ = queue_->cq().make_deadline_timer(
-      deadline, [this](auto op) { this->on_timeout(op); });
+      deadline, [this](auto const& op, bool ok) { this->on_timeout(op, ok); });
 }
 
-void session::on_timeout(std::shared_ptr<detail::deadline_timer> op) {
+void session::on_timeout(detail::deadline_timer const& op, bool ok) {
+  if (not ok) {
+    // ... this is a canceled timer ...
+    return;
+  }
   {
     std::lock_guard<std::mutex> lock(mu_);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {

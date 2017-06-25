@@ -134,7 +134,7 @@ private:
   void set_timer();
 
   /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
-  void on_timeout(std::shared_ptr<detail::deadline_timer> op);
+  void on_timeout(detail::deadline_timer const& op, bool ok);
 
   using ka_stream_type = async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,

@@ -4,9 +4,38 @@
 #include <grpc++/alarm.h>
 #include <grpc++/grpc++.h>
 
+#include <memory>
+
 namespace jb {
 namespace etcd {
+
+class completion_queue;
+
 namespace detail {
+
+/**
+ * Base class for all asynchronous operations.
+ */
+struct base_async_op {
+  base_async_op() {}
+
+  /// Make sure full destructor of derived class is called.
+  virtual ~base_async_op() {}
+
+  /**
+   * Callback for the completion queue.
+   *
+   * It seems more natural to use a virtual function, but the derived
+   * classes will just create a std::function<> to wrap the
+   * user-supplied functor, so this is actually less code and more
+   * efficient.
+   */
+  std::function<void(base_async_op&, bool)> callback;
+
+  /// For debugging
+  // TODO() - consider using a tag like a char const*
+  std::string name;
+};
 
 /**
  * A wrapper for asynchronous unary operations
@@ -119,53 +148,19 @@ struct finish_op {
 /**
  * A wrapper for deadline timers.
  */
-struct deadline_timer {
-  deadline_timer(deadline_timer const&) = delete;
-  deadline_timer& operator=(deadline_timer const&) = delete;
-
-  template <typename Functor>
-  static std::shared_ptr<deadline_timer> make(
-      grpc::CompletionQueue* queue,
-      std::chrono::system_clock::time_point deadline, Functor&& f) {
-    std::shared_ptr<deadline_timer> op(new deadline_timer);
-    op->callback_ = std::move([ op, functor = std::move(f) ](bool ok) {
-      auto top = std::move(op);
-      std::lock_guard<std::mutex> lock(op->mu_);
-      auto callback = std::move(top->callback_);
-      if (top->canceled_) {
-        return;
-      }
-      top->canceled_ = true;
-      functor(top);
-    });
-    op->alarm_ = std::make_unique<grpc::Alarm>(
-        queue, deadline, static_cast<void*>(&op->callback_));
-    return op;
-  }
-
+struct deadline_timer : public base_async_op {
   // Safely cancel the timer, in the thread that cancels the timer we
   // simply flag it as canceled.  We only change the state in the
   // thread where the timer is fired, i.e., the thred running the
   // completion queue loop.
   void cancel() {
-    std::lock_guard<std::mutex> lock(mu_);
-    if (canceled_) {
-      return;
-    }
     alarm_->Cancel();
-    canceled_ = true;
   }
 
-private:
-  deadline_timer()
-      : mu_()
-      , canceled_(false) {
-  }
+  std::chrono::system_clock::time_point deadline;
 
 private:
-  std::mutex mu_;
-  bool canceled_;
-  std::function<void(bool)> callback_;
+  friend class ::jb::etcd::completion_queue;
   std::unique_ptr<grpc::Alarm> alarm_;
 };
   
