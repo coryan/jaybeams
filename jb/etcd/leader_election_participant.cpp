@@ -63,12 +63,6 @@ void leader_election_participant::resign() {
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return;
     }
-    if (state_ != state::elected and state_ != state::campaigning) {
-      JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
-                   << " unexpected state for resign()";
-      // TODO() - throw I would think
-      return;
-    }
     state_ = state::resigning;
   }
   // ... this blocks until the lease is removed, at that point the
@@ -135,8 +129,8 @@ void leader_election_participant::preamble() try {
   async_op_start("create stream");
   std::promise<bool> stream_ready;
   auto op = make_async_rdwr_stream<W, R>([this, &stream_ready](auto op) {
+    async_op_done("create stream callback");
     stream_ready.set_value(true);
-    async_op_done("on_ create stream ");
   });
   watcher_stream_ =
       watch_client_->AsyncWatch(&watcher_stream_context_, *queue_, op->tag());
@@ -152,7 +146,6 @@ void leader_election_participant::preamble() try {
   // ... transition state ...
   state_ = state::testandset;
 
-  
   // ... we need to create a node to represent this participant in
   // the leader election.  We do this with a test-and-set
   // operation.  The test is "does this key have creation_version ==
@@ -178,6 +171,12 @@ void leader_election_participant::preamble() try {
 
   // ... execute the transaction in etcd ...
   etcdserverpb::TxnResponse resp = commit(req);
+  {
+    std::string tmp;
+    google::protobuf::TextFormat::PrintToString(resp, &tmp);
+    JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                 << "  commit() with resp=" << tmp;
+  }
 
   // ... regardless of which branch of the test-and-set operation
   // pass, we now have fetched the participant revision value ..
@@ -203,8 +202,13 @@ void leader_election_participant::preamble() try {
       auto& delete_op = *failure_op.mutable_request_delete_range();
       delete_op.set_key(key());
       auto published = publish_value(value(), failure_op);
+      {
+        std::string tmp;
+        google::protobuf::TextFormat::PrintToString(published, &tmp);
+        JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+                     << "  published_value() with resp=" << tmp;
+      }
       if (not published.succeeded()) {
-        state_ = state::shutdown;
         // ... ugh, the publication failed.  We now have an
         // inconsistent state with the server.  We think we own the
         // code (and at least we own the lease!), but we were unable
@@ -288,6 +292,8 @@ void leader_election_participant::campaign() {
   });
   // ... block until the promise is satisfied, notice that get()
   // raises the exception if that was the result ...
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  blocked running election";
   if (elected.get_future().get() != true) {
     // ... we also raise if the campaign failed ...
     std::ostringstream os;
@@ -299,19 +305,13 @@ void leader_election_participant::campaign() {
 
 void leader_election_participant::campaign_impl(
     std::function<void(std::future<bool>&)>&& callback) {
+  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
+               << "  kicking off campaign";
   // First save the callback ...
   {
     std::lock_guard<std::mutex> lock(mu_);
     JB_ASSERT_THROW(bool(campaign_callback_) == false);
     campaign_callback_ = std::move(callback);
-  }
-  {
-    std::lock_guard<std::mutex> lock(mu_);
-    if (state_ != state::published) {
-      // TODO() - signal the callback with an exception?
-      return;
-    }
-    state_ = state::querying;
   }
   // ... we want to wait on a single key, waiting on more would
   // create thundering herd problems.  To win the election this
@@ -348,6 +348,7 @@ void leader_election_participant::campaign_impl(
   // status and result of the operation ...
   JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
                << " range request(), rev=" << participant_revision_;
+  state_ = state::querying;
   async_op_start("range request");
   auto op = make_async_op<etcdserverpb::RangeResponse>(
       [this](std::shared_ptr<range_predecessor_op> op) {
@@ -436,8 +437,6 @@ void leader_election_participant::on_finish(
 void leader_election_participant::on_range_request(
     std::shared_ptr<range_predecessor_op> op) try {
   async_op_done("on_range_request()");
-  JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
-               << " on_range_request()";
   if (not op->status.ok()) {
     throw error_grpc_status("on_range_request", op->status, &op->response);
   }
@@ -451,6 +450,7 @@ void leader_election_participant::on_range_request(
     if (not async_op_start("create watch")) {
       return;
     }
+    state_ = state::campainging;
     JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
                  << "  create watcher ... k=" << kv.key();
     auto write = make_write_op<etcdserverpb::WatchRequest>([
@@ -550,6 +550,7 @@ void leader_election_participant::check_election_over_maybe() {
       return;
     }
   }
+  state_ = state::elected;
   JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
                << " election completed";
   campaign_result_.set_value(true);
@@ -600,7 +601,7 @@ void leader_election_participant::async_ops_block() {
   cv_.wait(lock, [this]() { return pending_async_ops_ == 0; });
 }
 
-bool leader_election_participant::async_op_start(char const *msg) {
+bool leader_election_participant::async_op_start(char const* msg) {
   JB_LOG(info) << key() << " " << int(state_) << " " << pending_async_ops_
                << "      " << msg;
   std::unique_lock<std::mutex> lock(mu_);

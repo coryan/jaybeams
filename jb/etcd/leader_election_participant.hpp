@@ -6,8 +6,8 @@
 #include <jb/etcd/session.hpp>
 
 #include <atomic>
-#include <future>
 #include <condition_variable>
+#include <future>
 
 namespace jb {
 namespace etcd {
@@ -75,6 +75,10 @@ public:
   /**
    * The implicit state machine in a leader election participant.
    *
+   * Most of the states are there for debugging, the state machine is
+   * implicit after all.  Only shuttingdown and shutdown are used to
+   * stop new async operations from starting.
+   *
    * -# constructing: the initial state.
    * -# connecting: setting up bi-direction stream for watchers.
    * -# testandtest:
@@ -88,7 +92,6 @@ public:
    * -# shuttingdown
    * -# shutdown
    *
-   * TODO() - consider more states for shutting down.
    */
   enum class state {
     constructing,
@@ -97,14 +100,14 @@ public:
     republish,
     published,
     querying,
-    campaigning,
+    campainging,
     elected,
     resigning,
     resigned,
     shuttingdown,
     shutdown,
   };
-  
+
   /// Return the etcd key associated with this participant
   std::string const& key() const {
     return participant_key_;

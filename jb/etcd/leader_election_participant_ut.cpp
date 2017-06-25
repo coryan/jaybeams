@@ -36,7 +36,6 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
   election_session.revoke();
 }
 
-#if 0
 /**
  * @test Verify that an election participant can become the leader.
  */
@@ -71,6 +70,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
       std::chrono::seconds(3));
   BOOST_CHECK_EQUAL(participant_b.value(), "session_b");
 
+  std::this_thread::sleep_for(std::chrono::seconds(5));
+
   BOOST_TEST_CHECKPOINT("a::resign");
   participant_a.resign();
 
@@ -82,4 +83,3 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   BOOST_TEST_CHECKPOINT("cleanup");
   election_session.revoke();
 }
-#endif
