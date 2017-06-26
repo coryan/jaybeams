@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_basic) {
  */
 BOOST_AUTO_TEST_CASE(completion_queue_error) {
   using namespace std::chrono_literals;
-  
+
   jb::etcd::completion_queue queue;
   std::thread t([&queue]() { queue.run(); });
 
