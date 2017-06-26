@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
         cls._etcd = subprocess.Popen(
             ["/usr/bin/etcd"], stderr=wnull, stdout=wnull)
         if cls.tryConnect(0.05):
-           return 
+           return
         raise SystemExit("cannot connect nor start+connect the etcd server")
 
     @classmethod
@@ -40,7 +40,7 @@ class Test(unittest.TestCase):
             cls._etcd.kill()
             cls._etcd.wait()
             cls._etcd = None
-        
+
     @classmethod
     def __del__(cls):
         if hasattr(cls, '_etcd'):
