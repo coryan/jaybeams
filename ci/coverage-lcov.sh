@@ -11,6 +11,7 @@ lcov --remove coverage.info \
      'jb/testing/check_*' \
      'jb/itch5/testing/*' \
      'valgrind/valgrind.h' \
+     '*.pb.h' \
      '*.pb.cc' \
      '/usr/include/*' \
      '/usr/local/*' \
