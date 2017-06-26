@@ -6,9 +6,14 @@ lcov --directory . --capture --output-file coverage.info
 # Remove coverage information about template code in system libraries,
 # as well as any coverage information for unit tests.
 lcov --remove coverage.info \
-     '/usr/include/*' '/usr/local/*' \
-     'jb/ut_*' 'jb/*/ut_*' 'jb/testing/check_*' \
+     'jb/ut_*' \
+     'jb/*/ut_*' \
+     'jb/testing/check_*' \
+     'jb/itch5/testing/*' \
      'valgrind/valgrind.h' \
+     '*.pb.cc' \
+     '/usr/include/*' \
+     '/usr/local/*' \
      --output-file coverage.info
 
 # Show the code coverage results in the Travis CI log
