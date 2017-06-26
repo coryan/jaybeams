@@ -50,6 +50,8 @@ bin_PROGRAMS = $(benchmarks) \
   tools/itch5trades \
   tools/moldheartbeat
 
+noinst_SCRIPTS =
+
 noinst_PROGRAMS = $(examples) \
   jb/testing/check_mt19937_initializer \
   jb/testing/check_random_device
@@ -555,9 +557,14 @@ noinst_PROGRAMS += \
   jb/etcd/leader_election_participant_ut \
   jb/etcd/session_ut
 
-check_PROGRAMS += \
+noinst_SCRIPTS += jb/etcd/integration_tests.py
+
+jb_etcd_unit_tests = \
   jb/etcd/active_completion_queue_ut \
   jb/etcd/completion_queue_ut
+
+check_PROGRAMS += $(jb_etcd_unit_tests)
+TESTS += $(jb_etcd_unit_tests)
 
 if HAVE_SANITIZER
 else
