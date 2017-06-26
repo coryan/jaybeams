@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
 
   std::atomic<int> cnt(0);
   auto op = queue.make_relative_timer(
-      20ms, "alarm-after", [&cnt](auto const& op, bool ok) { ++cnt; });
+      50ms, "alarm-after", [&cnt](auto const& op, bool ok) { ++cnt; });
   // ... also set an earlier alarm with an unused nullptr tag ...
   grpc::Alarm al1(cq, std::chrono::system_clock::now() + 10ms, nullptr);
   // ... and an alarm with a tag the queue does not know about ...
