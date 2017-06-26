@@ -72,7 +72,7 @@ private:
 
   /// Shutdown a completion queue
   struct defer_shutdown {
-    defer_shutdown(std::shared_ptr<completion_queue> q)
+    explicit defer_shutdown(std::shared_ptr<completion_queue> q)
         : queue(q) {
     }
     ~defer_shutdown();
@@ -84,7 +84,7 @@ private:
 
   /// Join a thread
   struct defer_join {
-    defer_join(std::thread* t)
+    explicit defer_join(std::thread* t)
         : thread(t) {
     }
     ~defer_join();
