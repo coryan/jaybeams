@@ -1,4 +1,5 @@
 #include "jb/etcd/completion_queue.hpp"
+#include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
 namespace jb {
@@ -87,12 +88,7 @@ void* completion_queue::register_op(
   auto key = reinterpret_cast<std::intptr_t>(tag);
   std::lock_guard<std::mutex> lock(mu_);
   auto r = pending_ops_.emplace(key, op);
-  if (r.second == false) {
-    std::ostringstream os;
-    os << where << " duplicate operation (" << std::hex << key << ") for "
-       << op->name;
-    throw std::runtime_error(os.str());
-  }
+  JB_ASSERT_THROW(r.second != false);
   return tag;
 }
 

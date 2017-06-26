@@ -36,3 +36,33 @@ BOOST_AUTO_TEST_CASE(completion_queue_basic) {
   queue.shutdown();
   t.join();
 }
+
+/**
+ * @test Make sure jb::etcd::completion_queue handles errors gracefully.
+ */
+BOOST_AUTO_TEST_CASE(completion_queue_error) {
+  using namespace std::chrono_literals;
+  
+  jb::etcd::completion_queue queue;
+  std::thread t([&queue]() { queue.run(); });
+
+  // ... manually create a timer with a null tag, that requires going
+  // around the API ...
+  grpc::CompletionQueue* cq = (grpc::CompletionQueue*)queue;
+
+  std::atomic<int> cnt(0);
+  auto op = queue.make_relative_timer(
+      20ms, "alarm-after", [&cnt](auto const& op, bool ok) { ++cnt; });
+  // ... also set an earlier alarm with an unused nullptr tag ...
+  grpc::Alarm al1(cq, std::chrono::system_clock::now() + 10ms, nullptr);
+  // ... and an alarm with a tag the queue does not know about ...
+  grpc::Alarm al2(cq, std::chrono::system_clock::now() + 10ms, (void*)&cnt);
+
+  for (int i = 0; i != 100 and cnt.load() == 0; ++i) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  BOOST_CHECK_EQUAL(cnt.load(), 1);
+
+  queue.shutdown();
+  t.join();
+}
