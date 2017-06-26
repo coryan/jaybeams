@@ -92,14 +92,8 @@ public:
         "Mismatch request parameter type vs. operation signature");
 
     using op_type = detail::async_op<request_type, response_type>;
-    auto op = std::make_shared<op_type>();
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      auto const& op = dynamic_cast<op_type const&>(bop);
-      functor(op, ok);
-    };
-    op->name = std::move(name);
-    void* tag = register_op("async_create_rdwr_stream()", op);
+    auto op = create_op<op_type>(std::move(name), std::move(f));
+    void* tag = register_op("async_rpc()", op);
     op->request.Swap(&request);
     op->rpc = (async_client->*call)(&op->context, op->request, cq());
     op->rpc->Finish(&op->response, &op->status, tag);
@@ -171,16 +165,9 @@ public:
   std::shared_ptr<detail::write_op<W>> async_write(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream, W&& request,
       std::string name, Functor&& f) {
-    using op_type = detail::write_op<W>;
-    auto op = std::make_shared<op_type>();
-    op->request.Swap(&request);
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      auto& op = dynamic_cast<op_type&>(bop);
-      functor(op, ok);
-    };
-    op->name = std::move(name);
+    auto op = create_op<detail::write_op<W>>(std::move(name), std::move(f));
     void* tag = register_op("async_writes_done()", op);
+    op->request.Swap(&request);
     stream->client->Write(op->request, tag);
     return op;
   }
@@ -193,14 +180,7 @@ public:
   std::shared_ptr<detail::read_op<R>> async_read(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::read_op<R>;
-    auto op = std::make_shared<op_type>();
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      auto& op = dynamic_cast<op_type&>(bop);
-      functor(op, ok);
-    };
-    op->name = std::move(name);
+    auto op = create_op<detail::read_op<R>>(std::move(name), std::move(f));
     void* tag = register_op("async_writes_done()", op);
     stream->client->Read(&op->response, tag);
     return op;
@@ -214,14 +194,7 @@ public:
   std::shared_ptr<detail::writes_done_op> async_writes_done(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::writes_done_op;
-    auto op = std::make_shared<op_type>();
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      auto& op = dynamic_cast<op_type&>(bop);
-      functor(op, ok);
-    };
-    op->name = std::move(name);
+    auto op = create_op<detail::writes_done_op>(std::move(name), std::move(f));
     void* tag = register_op("async_writes_done()", op);
     stream->client->WritesDone(tag);
     return op;
@@ -235,14 +208,7 @@ public:
   std::shared_ptr<detail::finish_op> async_finish(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
-    using op_type = detail::finish_op;
-    auto op = std::make_shared<op_type>();
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      auto& op = dynamic_cast<op_type&>(bop);
-      functor(op, ok);
-    };
-    op->name = std::move(name);
+    auto op = create_op<detail::finish_op>(std::move(name), std::move(f));
     void* tag = register_op("async_finish()", op);
     stream->client->Finish(&op->status, tag);
     return op;
@@ -260,15 +226,9 @@ public:
   std::shared_ptr<detail::deadline_timer> make_deadline_timer(
       std::chrono::system_clock::time_point deadline, std::string name,
       Functor&& f) {
-    auto op = std::make_shared<detail::deadline_timer>();
-    op->callback = [functor = std::move(f)](
-        detail::base_async_op & bop, bool ok) {
-      detail::deadline_timer& op = dynamic_cast<detail::deadline_timer&>(bop);
-      functor(op, ok);
-    };
-    op->deadline = deadline;
-    op->name = std::move(name);
+    auto op = create_op<detail::deadline_timer>(std::move(name), std::move(f));
     void* tag = register_op("deadline_timer()", op);
+    op->deadline = deadline;
     op->alarm_ = std::make_unique<grpc::Alarm>(cq(), deadline, tag);
     return op;
   }
@@ -289,6 +249,19 @@ private:
   /// The underlying completion queue pointer for the gRPC APIs.
   grpc::CompletionQueue* cq() {
     return &queue_;
+  }
+
+  /// Create an operation and do the common initialization
+  template <typename op_type, typename Functor>
+  std::shared_ptr<op_type> create_op(std::string name, Functor&& f) const {
+    auto op = std::make_shared<op_type>();
+    op->callback = [functor = std::move(f)](
+        detail::base_async_op & bop, bool ok) {
+      auto const& op = dynamic_cast<op_type const&>(bop);
+      functor(op, ok);
+    };
+    op->name = std::move(name);
+    return op;
   }
 
   /// Save a newly created operation and return its gRPC tag.

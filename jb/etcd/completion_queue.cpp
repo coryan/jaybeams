@@ -83,10 +83,11 @@ void* completion_queue::register_op(
   return tag;
 }
 
-std::shared_ptr<detail::base_async_op> completion_queue::unregister_op(void* tag) {
+std::shared_ptr<detail::base_async_op>
+completion_queue::unregister_op(void* tag) {
   std::lock_guard<std::mutex> lock(mu_);
   pending_ops_type::iterator i =
-    pending_ops_.find(reinterpret_cast<std::intptr_t>(tag));
+      pending_ops_.find(reinterpret_cast<std::intptr_t>(tag));
   if (i != pending_ops_.end()) {
     auto op = i->second;
     pending_ops_.erase(i);
