@@ -55,7 +55,7 @@ noinst_PROGRAMS = $(examples) \
   jb/testing/check_random_device
 
 check_PROGRAMS = $(unit_tests)
-TESTS = $(check_PROGRAMS)
+TESTS = $(unit_tests)
 
 @VALGRIND_CHECK_RULES@
 
@@ -555,12 +555,15 @@ noinst_PROGRAMS += \
   jb/etcd/leader_election_participant_ut \
   jb/etcd/session_ut
 
-unit_tests += \
+check_PROGRAMS += \
   jb/etcd/active_completion_queue_ut \
   jb/etcd/completion_queue_ut
 
+if HAVE_SANITIZER
+else
 TESTS += \
   jb/etcd/integration_tests.py
+endif !HAVE_SANITIZER
 
 jb_etcd_ut_ldadd = jb/libjb_etcd.a $(jb_ut_ldadd) \
     $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
@@ -1306,6 +1309,15 @@ jb_opencl_unit_tests = \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector \
   jb/opencl/ut_generic_reduce
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_opencl_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_opencl_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_opencl_examples = \
   jb/opencl/show_device
 jb_opencl_benchmarks = \
@@ -1324,6 +1336,15 @@ lib_LIBRARIES += jb/libjb_clfft.a
 jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_clfft_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_clfft_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_clfft_benchmarks = \
   jb/clfft/bm_single_fft
 jb_ut_clfft_ldadd = \
@@ -1335,9 +1356,19 @@ jb_ut_clfft_ldflags = \
   $(jb_ut_opencl_ldflags)
 
 lib_LIBRARIES += jb/libjb_tde.a
+
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
   jb/tde/ut_reduce_argmax_real
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_tde_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_tde_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_tde_benchmarks = \
   jb/tde/bm_reduce_argmax_real
 jb_ut_tde_ldadd = \
@@ -1351,11 +1382,6 @@ AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS \
   $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS) \
   $(BEAST_CPPFLAGS)
-
-check_PROGRAMS += \
-  $(jb_opencl_unit_tests) \
-  $(jb_clfft_unit_tests) \
-  $(jb_tde_unit_tests)
 
 noinst_PROGRAMS += \
   $(jb_opencl_examples)

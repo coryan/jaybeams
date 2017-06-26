@@ -95,6 +95,46 @@ AX_CONFIG_FEATURE(static-linking, [turns on/off static linking],
                   [enable_static_linking="yes"], [enable_static_linking="no"])
 AM_CONDITIONAL(STATIC_LINKING, [test "$enable_static_linking" = "yes"])
 
+# ... enable the AddressSantizer if the user requests it (and the
+# compiler supports it) ...
+AC_ARG_WITH([sanitizer],
+    [AS_HELP_STRING([--with-sanitizer=(address|undefined|memory|...)],
+        [Enable sanitized builds.  Some tests are disabled in these configs.])],
+    [SANITIZER="$withval"], [])
+
+AS_IF([test "x$SANITIZER" != "x"], [
+    AX_CHECK_COMPILE_FLAG([-fsanitize=$SANITIZER],
+        [AX_APPEND_FLAG(-fsanitize=$SANITIZER, AM_CXXFLAGS)
+         HAVE_SANITIZER=$SANITIZER
+         AC_SUBST(HAVE_SANITIZER)
+         AM_CONDITIONAL([HAVE_SANITIZER], [true])],
+        [AC_MSG_ERROR([Compiler does not support the $SANITIZER sanitizer.])]
+    )],
+    [AM_CONDITIONAL([HAVE_SANITIZER], [false])]
+)
+
+
+AS_IF([test "x$SANITIZER" == "xaddress"],
+    [HAVE_SANITIZER_ADDRESS=yes
+     AC_DEFINE(HAVE_SANTIZER_ADDRESS,,
+        [define if built with address sanitizer])
+     AC_SUBST(HAVE_SANITIZER_ADDRESS)], [])
+AS_IF([test "x$SANITIZER" == "xmemory"],
+    [HAVE_SANITIZER_MEMORY=yes
+     AC_DEFINE(HAVE_SANTIZER_MEMORY,,
+        [define if built with memory sanitizer])
+     AC_SUBST(HAVE_SANITIZER_MEMORY)], [])
+AS_IF([test "x$SANITIZER" == "xundefined"],
+    [HAVE_SANITIZER_UNDEFINED=yes
+     AC_DEFINE(HAVE_SANTIZER_UNDEFINE,,
+        [define if built with undefined behavior sanitizer])
+     AC_SUBST(HAVE_SANITIZER_UNDEFINED)], [])
+AS_IF([test "x$SANITIZER" == "xthread"],
+    [HAVE_SANITIZER_THREAD=yes
+     AC_DEFINE(HAVE_SANTIZER_THREAD,,
+        [define if built with thread sanitizer])
+     AC_SUBST(HAVE_SANITIZER_THREAD)], [])
+
 # ... find out where the Protobuf and gRPC libraries can be found
 # using pkg-confg.  Avoid using PKG_CHECK_MODULES because we want
 # separate -I, -L, and -l flags ...
