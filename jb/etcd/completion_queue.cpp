@@ -55,16 +55,7 @@ void completion_queue::run() {
     }
 
     // ... try to find the operation in our list of known operations ...
-    std::shared_ptr<detail::base_async_op> op;
-    {
-      std::lock_guard<std::mutex> lock(mu_);
-      pending_ops_type::iterator i =
-          pending_ops_.find(reinterpret_cast<std::intptr_t>(tag));
-      if (i != pending_ops_.end()) {
-        op = i->second;
-        pending_ops_.erase(i);
-      }
-    }
+    std::shared_ptr<detail::base_async_op> op = unregister_op(tag);
     if (not op) {
       JB_LOG(error) << "Unknown tag reported in asynchronous operation: "
                     << std::hex << std::intptr_t(tag);
@@ -90,6 +81,18 @@ void* completion_queue::register_op(
   auto r = pending_ops_.emplace(key, op);
   JB_ASSERT_THROW(r.second != false);
   return tag;
+}
+
+std::shared_ptr<detail::base_async_op> completion_queue::unregister_op(void* tag) {
+  std::lock_guard<std::mutex> lock(mu_);
+  pending_ops_type::iterator i =
+    pending_ops_.find(reinterpret_cast<std::intptr_t>(tag));
+  if (i != pending_ops_.end()) {
+    auto op = i->second;
+    pending_ops_.erase(i);
+    return op;
+  }
+  return std::shared_ptr<detail::base_async_op>();
 }
 
 } // namespace etcd

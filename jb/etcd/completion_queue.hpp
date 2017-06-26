@@ -295,6 +295,9 @@ private:
   void*
   register_op(char const* where, std::shared_ptr<detail::base_async_op> op);
 
+  /// Get an operation given its gRPC tag.
+  std::shared_ptr<detail::base_async_op> unregister_op(void* tag);
+
 private:
   mutable std::mutex mu_;
   using pending_ops_type =
