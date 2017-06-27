@@ -11,10 +11,12 @@ namespace etcd {
 
 /// Implementation for log_promise_errors()
 void log_promise_errors_impl(
-    std::exception_ptr eptr, std::string header, std::string where);
+    std::exception_ptr eptr, std::exception_ptr promise_exception,
+    std::string header, std::string where);
 
 std::string log_promise_errors_text(
-    std::exception_ptr eptr, std::string header, std::string where);
+    std::exception_ptr eptr, std::exception_ptr promise_exception,
+    std::string header, std::string where);
 
 /// Set a std::promise to an exception status and log errors if we
 /// cannot ...
@@ -24,7 +26,8 @@ void log_promise_errors(
     std::string where) try {
   p.set_exception(eptr);
 } catch (...) {
-  log_promise_errors_impl(eptr, std::move(header), std::move(where));
+  log_promise_errors_impl(
+      eptr, std::current_exception(), std::move(header), std::move(where));
 }
 
 } // namespace etcd
