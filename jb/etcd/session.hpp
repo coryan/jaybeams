@@ -2,7 +2,6 @@
 #define jb_etcd_session_hpp
 
 #include <jb/etcd/active_completion_queue.hpp>
-#include <jb/etcd/client_factory.hpp>
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 
 #include <chrono>
@@ -54,11 +53,8 @@ public:
   template <typename duration_type>
   session(
       std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
-      duration_type desired_TTL)
-      : session(
-            true, queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
-            0) {
+      std::shared_ptr<grpc::Channel> etcd_channel, duration_type desired_TTL)
+      : session(true, queue, etcd_channel, to_milliseconds(desired_TTL), 0) {
   }
 
   /**
@@ -71,11 +67,10 @@ public:
   template <typename duration_type>
   session(
       std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
-      duration_type desired_TTL, std::uint64_t lease_id)
+      std::shared_ptr<grpc::Channel> etcd_channel, duration_type desired_TTL,
+      std::uint64_t lease_id)
       : session(
-            true, queue, factory, etcd_endpoint, to_milliseconds(desired_TTL),
-            lease_id) {
+            true, queue, etcd_channel, to_milliseconds(desired_TTL), lease_id) {
   }
 
   /**
@@ -121,7 +116,7 @@ private:
    */
   session(
       bool, std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<client_factory> factory, std::string const& etcd_endpoint,
+      std::shared_ptr<grpc::Channel> etcd_channel,
       std::chrono::milliseconds desired_TTL, std::uint64_t lease_id);
 
   /// Requests (or renews) the lease and setup the watcher stream.
@@ -172,7 +167,6 @@ private:
    */
   state state_;
 
-  std::shared_ptr<client_factory> client_;
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
   std::unique_ptr<ka_stream_type> ka_stream_;

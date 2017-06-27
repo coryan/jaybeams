@@ -38,13 +38,12 @@ void session::revoke() {
 
 session::session(
     bool, std::shared_ptr<active_completion_queue> queue,
-    std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+    std::shared_ptr<grpc::Channel> etcd_channel,
     std::chrono::milliseconds desired_TTL, std::uint64_t lease_id)
     : mu_()
     , state_(state::constructing)
-    , client_(client)
-    , channel_(client_->create_channel(etcd_endpoint))
-    , lease_client_(client_->create_lease(channel_))
+    , channel_(etcd_channel)
+    , lease_client_(etcdserverpb::Lease::NewStub(channel_))
     , queue_(queue)
     , lease_id_(lease_id)
     , desired_TTL_(desired_TTL)

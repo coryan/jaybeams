@@ -40,7 +40,8 @@ int main(int argc, char* argv[]) try {
 
   // TODO() - use the default credentials when possible, should be
   // controlled by a configuration parameter ...
-  auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto etcd_channel = grpc::CreateChannel(
+      cfg.etcd_address(), grpc::InsecureChannelCredentials());
 
   // ... create an active completion queue ...
   // ... to run multiple things asynchronously in gRPC++ we need a
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) try {
   // ... the election participant, set the is_leader promise when this
   // participant is elected leader ...
   jb::etcd::leader_election_participant participant(
-      queue, factory, cfg.etcd_address(), cfg.election_name(), cfg.value(),
+      queue, etcd_channel, cfg.election_name(), cfg.value(),
       [&is_leader](std::future<bool>& f) {
         try {
           std::cout << "... elected! ..." << std::endl;

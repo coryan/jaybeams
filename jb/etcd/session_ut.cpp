@@ -19,13 +19,14 @@ std::ostream& operator<<(std::ostream& os, session::state s) {
  */
 BOOST_AUTO_TEST_CASE(session_basic) {
   std::string const address = "localhost:2379";
-  auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto etcd_channel =
+      grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
   // We want to test that the destructor does not throw, so use a
   // smart pointer ...
   auto session = std::make_unique<jb::etcd::session>(
-      queue, factory, address, std::chrono::seconds(5));
+      queue, etcd_channel, std::chrono::seconds(5));
   BOOST_CHECK_NE(session->lease_id(), 0);
   BOOST_CHECK_NO_THROW(session.reset());
 }
@@ -35,10 +36,11 @@ BOOST_AUTO_TEST_CASE(session_basic) {
  */
 BOOST_AUTO_TEST_CASE(session_normal) {
   std::string const address = "localhost:2379";
-  auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto etcd_channel =
+      grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
-  jb::etcd::session session(queue, factory, address, std::chrono::seconds(5));
+  jb::etcd::session session(queue, etcd_channel, std::chrono::seconds(5));
   BOOST_CHECK_NE(session.lease_id(), 0);
   using state = jb::etcd::session::state;
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);
@@ -52,10 +54,11 @@ BOOST_AUTO_TEST_CASE(session_normal) {
  */
 BOOST_AUTO_TEST_CASE(session_long) {
   std::string const address = "localhost:2379";
-  auto factory = std::make_shared<jb::etcd::client_factory>();
+  auto etcd_channel =
+      grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
-  jb::etcd::session session(queue, factory, address, std::chrono::seconds(1));
+  jb::etcd::session session(queue, etcd_channel, std::chrono::seconds(1));
   BOOST_CHECK_NE(session.lease_id(), 0);
   using state = jb::etcd::session::state;
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);

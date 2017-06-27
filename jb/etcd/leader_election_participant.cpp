@@ -30,15 +30,14 @@ static char const* str(leader_election_participant::state s) {
 // slightly different way ...
 leader_election_participant::leader_election_participant(
     bool shared, std::shared_ptr<active_completion_queue> queue,
-    std::shared_ptr<client_factory> client, std::string const& etcd_endpoint,
+    std::shared_ptr<grpc::Channel> etcd_channel,
     std::string const& election_name, std::string const& participant_value,
     std::shared_ptr<session> session)
     : queue_(queue)
-    , client_(client)
-    , channel_(client->create_channel(etcd_endpoint))
+    , channel_(etcd_channel)
     , session_(session)
-    , kv_client_(client_->create_kv(channel_))
-    , watch_client_(client_->create_watch(channel_))
+    , kv_client_(etcdserverpb::KV::NewStub(channel_))
+    , watch_client_(etcdserverpb::Watch::NewStub(channel_))
     , watcher_stream_()
     , election_name_(election_name)
     , participant_value_(participant_value)
