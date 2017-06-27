@@ -560,7 +560,6 @@ noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
   jb/etcd/leader_election_participant_ut \
-  jb/etcd/log_promise_errors_ut \
   jb/etcd/session_ut
 
 noinst_SCRIPTS += jb/etcd/integration_tests.py
@@ -568,7 +567,8 @@ noinst_SCRIPTS += jb/etcd/integration_tests.py
 jb_etcd_unit_tests = \
   jb/etcd/active_completion_queue_ut \
   jb/etcd/completion_queue_ut \
-  jb/etcd/grpc_errors_ut
+  jb/etcd/grpc_errors_ut \
+  jb/etcd/log_promise_errors_ut
 
 check_PROGRAMS += $(jb_etcd_unit_tests)
 TESTS += $(jb_etcd_unit_tests)
