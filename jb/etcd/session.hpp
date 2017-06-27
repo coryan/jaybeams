@@ -159,12 +159,6 @@ private:
     return std::chrono::duration_cast<std::chrono::milliseconds>(d);
   }
 
-  /// Convert status errors into a C++ exception
-  std::runtime_error error_grpc_status(
-      char const* where, grpc::Status const& status,
-      google::protobuf::Message const* res = nullptr,
-      google::protobuf::Message const* req = nullptr) const;
-
 private:
   /// The usual mutex thing.
   mutable std::mutex mu_;

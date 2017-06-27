@@ -1,5 +1,6 @@
 #include "jb/etcd/session.hpp"
 #include <jb/etcd/active_completion_queue.hpp>
+#include <jb/etcd/grpc_errors.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -27,9 +28,9 @@ void session::revoke() {
   req.set_id(lease_id_);
   etcdserverpb::LeaseRevokeResponse resp;
   auto status = lease_client_->LeaseRevoke(&context, req, &resp);
-  if (not status.ok()) {
-    throw error_grpc_status("LeaseRevoke()", status, &resp);
-  }
+  check_grpc_status(
+      status, "session::LeaseRevoke()", " lease_id=", lease_id(), ", response=",
+      jb::etcd::print_to_stream(resp));
   JB_LOG(trace) << std::hex << lease_id() << " lease Revoked";
   shutdown();
 }
@@ -64,21 +65,17 @@ void session::preamble() try {
   grpc::ClientContext context;
   etcdserverpb::LeaseGrantResponse resp;
   auto status = lease_client_->LeaseGrant(&context, req, &resp);
-  if (not status.ok()) {
-    throw error_grpc_status("LeaseGrant()", status, &resp);
-  }
+  check_grpc_status(
+      status, "session::LeaseGrant()", " request=", print_to_stream(req),
+      ", response=", print_to_stream(resp));
 
   // TODO() - probably need to retry until it succeeds, with some
   // kind of backoff, and yes, a really, really long timeout ...
   if (resp.error() != "") {
     std::ostringstream os;
-    os << "Lease grant request rejected\n";
-    std::string print;
-    google::protobuf::TextFormat::PrintToString(req, &print);
-    os << "request=" << print;
-    print.clear();
-    google::protobuf::TextFormat::PrintToString(resp, &print);
-    os << "\nresponse=" << print;
+    os << "Lease grant request rejected"
+       << "\n request=" << print_to_stream(req) << "\n response"
+       << print_to_stream(resp);
     throw std::runtime_error(os.str());
   }
 
@@ -258,9 +255,7 @@ void session::on_finish(
     return;
   }
   try {
-    if (not op.status.ok()) {
-      throw error_grpc_status("on_finish", op.status);
-    }
+    check_grpc_status(op.status, "session::on_finish()");
     done.set_value(true);
   } catch (...) {
     try {
@@ -281,26 +276,6 @@ void session::on_finish(
                    << "exception in lease keep alive stream closure.";
     }
   }
-}
-
-std::runtime_error session::error_grpc_status(
-    char const* where, grpc::Status const& status,
-    google::protobuf::Message const* res,
-    google::protobuf::Message const* req) const {
-  std::ostringstream os;
-  os << "grpc error in " << where << " for lease=" << lease_id() << ": "
-     << status.error_message() << "[" << status.error_code() << "]";
-  if (res != nullptr) {
-    std::string print;
-    google::protobuf::TextFormat::PrintToString(*res, &print);
-    os << ", response=" << print;
-  }
-  if (req != nullptr) {
-    std::string print;
-    google::protobuf::TextFormat::PrintToString(*req, &print);
-    os << ", request=" << print;
-  }
-  return std::runtime_error(os.str());
 }
 
 } // namespace etcd

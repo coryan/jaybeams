@@ -1,4 +1,5 @@
 #include "jb/etcd/leader_election_participant.hpp"
+#include <jb/etcd/grpc_errors.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -409,9 +410,9 @@ leader_election_participant::commit(etcdserverpb::TxnRequest const& req) {
   grpc::ClientContext context;
   etcdserverpb::TxnResponse resp;
   auto status = kv_client_->Txn(&context, req, &resp);
-  if (not status.ok()) {
-    throw error_grpc_status("commit/etcd::Txn", status, nullptr, &req);
-  }
+  check_grpc_status(
+      status, log_header("commit/etcd::Txn"), ", request=",
+      print_to_stream(req));
   return resp;
 }
 
@@ -420,9 +421,9 @@ void leader_election_participant::on_range_request(
         etcdserverpb::RangeRequest, etcdserverpb::RangeResponse> const& op,
     bool ok) try {
   async_op_done("on_range_request()");
-  if (not op.status.ok()) {
-    throw error_grpc_status("on_range_request", op.status, &op.response);
-  }
+  check_grpc_status(
+      op.status, log_header("on_range_request()"), ", response=",
+      print_to_stream(op.response));
 
   for (auto const& kv : op.response.kvs()) {
     // ... we need to capture the key and revision of the result, so
@@ -570,9 +571,7 @@ void leader_election_participant::on_finish(
     return;
   }
   try {
-    if (not op.status.ok()) {
-      throw error_grpc_status("on_finish", op.status);
-    }
+    check_grpc_status(op.status, log_header("on_finish()"));
     done.set_value(true);
   } catch (...) {
     try {
@@ -631,26 +630,10 @@ void leader_election_participant::make_callback() {
                 << "  made callback";
 }
 
-std::runtime_error leader_election_participant::error_grpc_status(
-    char const* where, grpc::Status const& status,
-    google::protobuf::Message const* res,
-    google::protobuf::Message const* req) const {
+std::string leader_election_participant::log_header(char const* loc) const {
   std::ostringstream os;
-  os << key() << " " << str(state_) << " " << pending_async_ops_
-     << " grpc error in " << where << " for election=" << election_name_
-     << ", value=" << value() << ", revision=" << participant_revision_ << ": "
-     << status.error_message() << "[" << status.error_code() << "]";
-  if (res != nullptr) {
-    std::string print;
-    google::protobuf::TextFormat::PrintToString(*res, &print);
-    os << ", response=" << print;
-  }
-  if (req != nullptr) {
-    std::string print;
-    google::protobuf::TextFormat::PrintToString(*req, &print);
-    os << ", request=" << print;
-  }
-  return std::runtime_error(os.str());
+  os << key() << " " << str(state_) << " " << pending_async_ops_ << loc;
+  return os.str();
 }
 
 void leader_election_participant::async_ops_block() {

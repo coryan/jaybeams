@@ -220,16 +220,13 @@ private:
   // Invoke the callback, notice that the callback is invoked only once.
   void make_callback();
 
-  /// Return an exception with the @a status details
-  std::runtime_error error_grpc_status(
-      char const* where, grpc::Status const& status,
-      google::protobuf::Message const* res = nullptr,
-      google::protobuf::Message const* req = nullptr) const;
-
   /// Return the lease corresponding to this participant's session.
   std::uint64_t lease_id() {
     return session_->lease_id();
   }
+
+  /// Return a nice header for all log and error messages.
+  std::string log_header(char const* loc) const;
 
   void async_ops_block();
   bool async_op_start(char const* msg);
