@@ -527,6 +527,7 @@ jb_libjb_etcd_a_SOURCES = \
   jb/etcd/active_completion_queue.cpp \
   jb/etcd/client_factory.cpp \
   jb/etcd/completion_queue.cpp \
+  jb/etcd/grpc_errors.cpp \
   jb/etcd/leader_election_participant.cpp \
   jb/etcd/session.cpp \
   google/api/http.pb.cc \
@@ -541,6 +542,7 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/client_factory.hpp \
   jb/etcd/completion_queue.hpp \
   jb/etcd/detail/async_ops.hpp \
+  jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
   jb/etcd/session.hpp \
   google/api/http.pb.h \
@@ -561,7 +563,8 @@ noinst_SCRIPTS += jb/etcd/integration_tests.py
 
 jb_etcd_unit_tests = \
   jb/etcd/active_completion_queue_ut \
-  jb/etcd/completion_queue_ut
+  jb/etcd/completion_queue_ut \
+  jb/etcd/grpc_errors_ut
 
 check_PROGRAMS += $(jb_etcd_unit_tests)
 TESTS += $(jb_etcd_unit_tests)
@@ -585,6 +588,11 @@ jb_etcd_completion_queue_ut_SOURCES = jb/etcd/completion_queue_ut.cpp
 jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_completion_queue_ut
 jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_grpc_errors_ut_SOURCES = jb/etcd/grpc_errors_ut.cpp
+jb_etcd_grpc_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_grpc_errors_ut
+jb_etcd_grpc_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_grpc_errors_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 jb_etcd_leader_election_participant_ut_SOURCES = jb/etcd/leader_election_participant_ut.cpp
 jb_etcd_leader_election_participant_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_leader_election_participant_ut
