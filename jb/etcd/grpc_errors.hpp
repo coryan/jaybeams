@@ -1,14 +1,40 @@
-#ifndef jb_etcd_grpc_errors_hpp
-#define jb_etcd_grpc_errors_hpp
 /**
  * @file Helper functions to handle errors reported by gRPC++
  */
+#ifndef jb_etcd_grpc_errors_hpp
+#define jb_etcd_grpc_errors_hpp
+
+#include <jb/etcd/detail/grpc_errors_annotations.hpp>
 
 #include <google/protobuf/message.h>
-#include <iostream>
+#include <grpc++/grpc++.h>
+#include <sstream>
 
 namespace jb {
 namespace etcd {
+
+/**
+ * Format a gRPC error into a std::ostream.
+ *
+ * This is often converted into an exception, but it is easier to
+ * unit tests if separated.
+ *
+ * @param where a string to let the user know where the error took
+ * place.
+ * @param status the status to format
+ */
+template <typename Location, typename... Annotations>
+void check_grpc_status(
+    grpc::Status const& status, Location const& where, Annotations&&... a) {
+  if (status.ok()) {
+    return;
+  }
+  std::ostringstream os;
+  os << where << " grpc error: " << status.error_message() << " ["
+     << status.error_code() << "]";
+  detail::append_annotations(os, std::forward<Annotations>(a)...);
+  throw std::runtime_error(os.str());
+}
 
 /**
  * Print a protobuf on a std::ostream.

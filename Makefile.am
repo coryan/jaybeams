@@ -542,6 +542,7 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/client_factory.hpp \
   jb/etcd/completion_queue.hpp \
   jb/etcd/detail/async_ops.hpp \
+  jb/etcd/detail/grpc_errors_annotations.hpp \
   jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
   jb/etcd/session.hpp \
