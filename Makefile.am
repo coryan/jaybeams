@@ -529,6 +529,7 @@ jb_libjb_etcd_a_SOURCES = \
   jb/etcd/completion_queue.cpp \
   jb/etcd/grpc_errors.cpp \
   jb/etcd/leader_election_participant.cpp \
+  jb/etcd/log_promise_errors.cpp \
   jb/etcd/session.cpp \
   google/api/http.pb.cc \
   google/api/annotations.pb.cc \
@@ -545,6 +546,7 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/detail/grpc_errors_annotations.hpp \
   jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
+  jb/etcd/log_promise_errors.hpp \
   jb/etcd/session.hpp \
   google/api/http.pb.h \
   google/api/annotations.pb.h \
@@ -558,6 +560,7 @@ noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
   jb/etcd/leader_election_participant_ut \
+  jb/etcd/log_promise_errors_ut \
   jb/etcd/session_ut
 
 noinst_SCRIPTS += jb/etcd/integration_tests.py
@@ -599,6 +602,11 @@ jb_etcd_leader_election_participant_ut_SOURCES = jb/etcd/leader_election_partici
 jb_etcd_leader_election_participant_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_leader_election_participant_ut
 jb_etcd_leader_election_participant_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_leader_election_participant_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_log_promise_errors_ut_SOURCES = jb/etcd/log_promise_errors_ut.cpp
+jb_etcd_log_promise_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_log_promise_errors_ut
+jb_etcd_log_promise_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_log_promise_errors_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
 jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut

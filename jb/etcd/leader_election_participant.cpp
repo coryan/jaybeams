@@ -1,5 +1,6 @@
 #include "jb/etcd/leader_election_participant.hpp"
 #include <jb/etcd/grpc_errors.hpp>
+#include <jb/etcd/log_promise_errors.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -574,23 +575,8 @@ void leader_election_participant::on_finish(
     check_grpc_status(op.status, log_header("on_finish()"));
     done.set_value(true);
   } catch (...) {
-    try {
-      done.set_exception(std::current_exception());
-    } catch (std::future_error const& ex) {
-      JB_LOG(info) << "std::future_error raised while reporting "
-                   << "exception in watcher stream closure."
-                   << "  participant=" << key() << ", value=" << value()
-                   << ", exception=" << ex.what();
-    } catch (std::exception const& ex) {
-      JB_LOG(info) << "std::exception raised while reporting "
-                   << "exception in watcher stream closure."
-                   << "  participant=" << key() << ", value=" << value()
-                   << ", exception=" << ex.what();
-    } catch (...) {
-      JB_LOG(info) << "std::exception raised while reporting "
-                   << "exception in watcher stream closure."
-                   << "  participant=" << key() << ", value=" << value();
-    }
+    log_promise_errors(
+        done, std::current_exception(), log_header("on_finish()"), "");
   }
 }
 

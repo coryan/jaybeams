@@ -1,6 +1,7 @@
 #include "jb/etcd/session.hpp"
 #include <jb/etcd/active_completion_queue.hpp>
 #include <jb/etcd/grpc_errors.hpp>
+#include <jb/etcd/log_promise_errors.hpp>
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
@@ -258,23 +259,9 @@ void session::on_finish(
     check_grpc_status(op.status, "session::on_finish()");
     done.set_value(true);
   } catch (...) {
-    try {
-      done.set_exception(std::current_exception());
-    } catch (std::future_error const& ex) {
-      JB_LOG(info) << std::hex << lease_id()
-                   << " std::future_error raised while reporting "
-                   << "exception in lease keep alive stream closure: "
-                   << ex.what();
-    } catch (std::exception const& ex) {
-      JB_LOG(info) << std::hex << lease_id()
-                   << " std::exception raised while reporting "
-                   << "exception in lease keep alive stream closure: "
-                   << ex.what();
-    } catch (...) {
-      JB_LOG(info) << std::hex << lease_id()
-                   << " unknown exception raised while reporting "
-                   << "exception in lease keep alive stream closure.";
-    }
+    std::ostringstream os;
+    os << std::hex << lease_id();
+    log_promise_errors(done, std::current_exception(), os.str(), "");
   }
 }
 
