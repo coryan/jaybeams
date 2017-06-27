@@ -20,18 +20,33 @@ BOOST_AUTO_TEST_CASE(check_grpc_status_ok) {
 /**
  * @test Verify that check_rpc_status throws what is expected.
  */
-BOOST_AUTO_TEST_CASE(check_grpc_status_error) {
+BOOST_AUTO_TEST_CASE(check_grpc_status_error_annotations) {
   try {
     grpc::Status status(grpc::UNKNOWN, "bad thing");
     etcdserverpb::LeaseKeepAliveRequest req;
     req.set_id(42);
     jb::etcd::check_grpc_status(
         status, "test", " request=", jb::etcd::print_to_stream(req));
-    BOOST_ERROR("this point should not be reached");
   } catch (std::runtime_error const& ex) {
     std::string const expected =
         R"""(test grpc error: bad thing [2] request=ID: 42
 )""";
+    BOOST_CHECK_EQUAL(ex.what(), expected);
+  }
+}
+
+/**
+ * @test Verify that check_rpc_status throws what is expected.
+ */
+BOOST_AUTO_TEST_CASE(check_grpc_status_error_bare) {
+  try {
+    grpc::Status status(grpc::UNKNOWN, "bad thing");
+    etcdserverpb::LeaseKeepAliveRequest req;
+    req.set_id(42);
+    jb::etcd::check_grpc_status(status, "test");
+  } catch (std::runtime_error const& ex) {
+    std::string const expected =
+        R"""(test grpc error: bad thing [2])""";
     BOOST_CHECK_EQUAL(ex.what(), expected);
   }
 }
