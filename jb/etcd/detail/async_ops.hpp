@@ -74,25 +74,6 @@ struct async_op : public base_async_op {
   std::unique_ptr<grpc::ClientAsyncResponseReader<R>> rpc;
 };
 
-/// Match an operation to create ClientAsyncReaderWriter to its
-/// signature - mismatch case.
-template <typename M>
-struct async_stream_create_requirements {
-  using matches = std::false_type;
-};
-
-/// Match an operation to create ClientAsyncReaderWriter to its
-/// signature - match case.
-template <typename W, typename R>
-struct async_stream_create_requirements<
-    std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>>(
-        grpc::ClientContext*, grpc::CompletionQueue*, void*)> {
-  using matches = std::true_type;
-
-  using write_type = W;
-  using read_type = R;
-};
-
 /**
  * A wrapper to run an asynchronous Write() operation.
  *
@@ -125,6 +106,26 @@ struct async_rdwr_stream {
 
   using write_op = ::jb::etcd::detail::write_op<W>;
   using read_op = ::jb::etcd::detail::read_op<R>;
+};
+
+/// Match an operation to create ClientAsyncReaderWriter to its
+/// signature - mismatch case.
+template <typename M>
+struct async_stream_create_requirements {
+  using matches = std::false_type;
+};
+
+/// Match an operation to create ClientAsyncReaderWriter to its
+/// signature - match case.
+template <typename W, typename R>
+struct async_stream_create_requirements<
+    std::unique_ptr<grpc::ClientAsyncReaderWriter<W, R>>(
+        grpc::ClientContext*, grpc::CompletionQueue*, void*)> {
+  using matches = std::true_type;
+
+  using write_type = W;
+  using read_type = R;
+  using stream_type = async_rdwr_stream<write_type, read_type>;
 };
 
 /**

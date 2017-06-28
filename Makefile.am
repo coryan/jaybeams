@@ -568,7 +568,8 @@ noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
   jb/etcd/leader_election_participant_ut \
-  jb/etcd/session_ut
+  jb/etcd/session_ut \
+  jb/etcd/with_promise_ut
 
 noinst_SCRIPTS += jb/etcd/integration_tests.py
 
@@ -620,6 +621,11 @@ jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
 jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut
 jb_etcd_session_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_session_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_with_promise_ut_SOURCES = jb/etcd/with_promise_ut.cpp
+jb_etcd_with_promise_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_with_promise_ut
+jb_etcd_with_promise_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_with_promise_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 # TODO() - decide if the protobuf files should be included in the
 # distribution tarball ...
