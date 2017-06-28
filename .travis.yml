@@ -56,8 +56,6 @@ script:
   - ci/check-style.sh
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install docker-ce
   - docker --version
 
 cache:
