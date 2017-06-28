@@ -523,6 +523,27 @@ JB_AM_PROTO_SEARCH_PATHS += $(srcdir)/googleapis $(srcdir)/gogoproto
 AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
+jb_libjb_etcd_proto_headers = \
+  google/api/http.pb.h \
+  google/api/annotations.pb.h \
+  gogoproto/gogo.pb.h \
+  etcd/mvcc/mvccpb/kv.pb.h \
+  etcd/auth/authpb/auth.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.pb.h
+
+nobase_jb_libjb_etcd_a_HEADERS = \
+  jb/etcd/active_completion_queue.hpp \
+  jb/etcd/client_factory.hpp \
+  jb/etcd/completion_queue.hpp \
+  jb/etcd/detail/async_ops.hpp \
+  jb/etcd/detail/grpc_errors_annotations.hpp \
+  jb/etcd/grpc_errors.hpp \
+  jb/etcd/leader_election_participant.hpp \
+  jb/etcd/log_promise_errors.hpp \
+  jb/etcd/session.hpp \
+  $(jb_libjb_etcd_proto_headers)
+
 jb_libjb_etcd_a_SOURCES = \
   jb/etcd/active_completion_queue.cpp \
   jb/etcd/client_factory.cpp \
@@ -538,23 +559,10 @@ jb_libjb_etcd_a_SOURCES = \
   etcd/auth/authpb/auth.pb.cc \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
   etcd/etcdserver/etcdserverpb/rpc.pb.cc
-nobase_jb_libjb_etcd_a_HEADERS = \
-  jb/etcd/active_completion_queue.hpp \
-  jb/etcd/client_factory.hpp \
-  jb/etcd/completion_queue.hpp \
-  jb/etcd/detail/async_ops.hpp \
-  jb/etcd/detail/grpc_errors_annotations.hpp \
-  jb/etcd/grpc_errors.hpp \
-  jb/etcd/leader_election_participant.hpp \
-  jb/etcd/log_promise_errors.hpp \
-  jb/etcd/session.hpp \
-  google/api/http.pb.h \
-  google/api/annotations.pb.h \
-  gogoproto/gogo.pb.h \
-  etcd/mvcc/mvccpb/kv.pb.h \
-  etcd/auth/authpb/auth.pb.h \
-  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
-  etcd/etcdserver/etcdserverpb/rpc.pb.h
+etcd/mvcc/mvccpb/kv.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
+etcd/auth/authpb/auth.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
+etcd/etcdserver/etcdserverpb/rpc.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
+etcd/etcdserver/etcdserverpb/rpc.grpc.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
 
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
