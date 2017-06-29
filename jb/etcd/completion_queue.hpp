@@ -105,8 +105,7 @@ public:
     auto op = create_op<op_type>(std::move(name), std::move(f));
     void* tag = register_op("async_rpc()", op);
     op->request.Swap(&request);
-    op->rpc = (async_client->*call)(&op->context, op->request, cq());
-    op->rpc->Finish(&op->response, &op->status, tag);
+    interceptor_.async_rpc(async_client, call, op, cq(), tag);
   }
 
   /**

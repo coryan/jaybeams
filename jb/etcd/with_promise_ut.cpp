@@ -1,10 +1,11 @@
 #include <jb/etcd/completion_queue.hpp>
 
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
-#include <future>
 
+#include <skye/mock_function.hpp>
 #include <boost/test/unit_test.hpp>
 #include <atomic>
+#include <future>
 #include <thread>
 
 namespace jb {
@@ -75,9 +76,9 @@ async_create_rdwr_stream(
   return promise->get_future().share();
 }
 
-template <typename C, typename M, typename W>
+template <typename completion_queue_type, typename C, typename M, typename W>
 std::shared_future<typename async_op_requirements<M>::response_type> async_rpc(
-    completion_queue<>* queue, C* async_client, M C::*call, W&& request,
+    completion_queue_type* queue, C* async_client, M C::*call, W&& request,
     std::string name, use_future) {
   auto promise = std::make_shared<
       std::promise<typename async_op_requirements<M>::response_type>>();
@@ -98,6 +99,18 @@ std::shared_future<typename async_op_requirements<M>::response_type> async_rpc(
   return promise->get_future().share();
 }
 
+struct mock_grpc_interceptor {
+  skye::mock_function<void(std::shared_ptr<base_async_op>)> mock_async_rpc;
+
+  template <typename C, typename M, typename op_type>
+  void async_rpc(
+      C* async_client, M C::*call, std::shared_ptr<op_type>& op,
+      grpc::CompletionQueue* cq, void* tag) {
+    std::shared_ptr<base_async_op> bop = op;
+    mock_async_rpc(bop);
+  }
+};
+
 } // namespace detail
 } // namespace etcd
 } // namespace jb
@@ -113,10 +126,10 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
       grpc::CreateChannel(endpoint, grpc::InsecureChannelCredentials());
   auto lease = etcdserverpb::Lease::NewStub(channel);
 
-  jb::etcd::completion_queue<> queue;
+  using namespace jb::etcd;
+  completion_queue<detail::mock_grpc_interceptor> queue;
   std::thread t([&queue]() { queue.run(); });
 
-  using namespace jb::etcd;
   etcdserverpb::LeaseGrantRequest req;
   req.set_ttl(5); // in seconds
   req.set_id(0);  // let the server pick the lease_id
