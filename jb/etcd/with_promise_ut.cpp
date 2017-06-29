@@ -58,7 +58,7 @@ template <typename C, typename M>
 std::shared_future<
     std::unique_ptr<typename async_stream_create_requirements<M>::stream_type>>
 async_create_rdwr_stream(
-    completion_queue* queue, C* async_client, M C::*call, std::string name,
+    completion_queue<>* queue, C* async_client, M C::*call, std::string name,
     use_future) {
   using ret_type = std::unique_ptr<
       typename async_stream_create_requirements<M>::stream_type>;
@@ -77,7 +77,7 @@ async_create_rdwr_stream(
 
 template <typename C, typename M, typename W>
 std::shared_future<typename async_op_requirements<M>::response_type> async_rpc(
-    completion_queue* queue, C* async_client, M C::*call, W&& request,
+    completion_queue<>* queue, C* async_client, M C::*call, W&& request,
     std::string name, use_future) {
   auto promise = std::make_shared<
       std::promise<typename async_op_requirements<M>::response_type>>();
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
       grpc::CreateChannel(endpoint, grpc::InsecureChannelCredentials());
   auto lease = etcdserverpb::Lease::NewStub(channel);
 
-  jb::etcd::completion_queue queue;
+  jb::etcd::completion_queue<> queue;
   std::thread t([&queue]() { queue.run(); });
 
   using namespace jb::etcd;
