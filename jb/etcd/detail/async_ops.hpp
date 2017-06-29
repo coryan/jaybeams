@@ -9,6 +9,7 @@
 namespace jb {
 namespace etcd {
 
+template <typename interceptor_t>
 class completion_queue;
 
 namespace detail {
@@ -183,6 +184,7 @@ struct deadline_timer : public base_async_op {
   std::chrono::system_clock::time_point deadline;
 
 private:
+  template<typename T>
   friend class ::jb::etcd::completion_queue;
   std::unique_ptr<grpc::Alarm> alarm_;
 };

@@ -1,7 +1,9 @@
 #ifndef jb_etcd_completion_queue_hpp
 #define jb_etcd_completion_queue_hpp
 
+#include <jb/etcd/completion_queue_base.hpp>
 #include <jb/etcd/detail/async_ops.hpp>
+#include <jb/etcd/detail/default_grpc_interceptor.hpp>
 
 #include <atomic>
 #include <chrono>
@@ -21,26 +23,34 @@ namespace etcd {
  * idiomatic in C++11 (and its successors).  This wrapper makes it easier to
  * write asynchronous operations that call functors (lambdas,
  * std::function<>, etc) when the operation completes.
+ *
+ * @tparam grpc_interceptor_t mediate all calls to the gRPC library,
+ * though mostly to grpc::CompletionQueue.  The default inlines all
+ * the calls, so it is basically zero overhead.  The main reason to
+ * change it is to mock the gRPC++ APIs in tests.
  */
-class completion_queue {
+template <typename grpc_interceptor_t = detail::default_grpc_interceptor>
+class completion_queue : public completion_queue_base {
 public:
-  /// Stop the loop periodically to check if we should shutdown.
-  // TODO() - the timeout should be configurable ...
-  static std::chrono::milliseconds constexpr loop_timeout{250};
+  //@{
+  /**
+   * @name type traits
+   */
+  using grpc_interceptor_type = grpc_interceptor_t;
+  //}
 
-  completion_queue();
-  ~completion_queue();
-
-  /// The underlying completion queue
-  grpc::CompletionQueue& raw() {
-    return queue_;
+  explicit completion_queue(
+      grpc_interceptor_type interceptor = grpc_interceptor_type())
+    : completion_queue_base()
+    , interceptor_(std::move(interceptor)) {
   }
 
-  /// Run the completion queue loop.
-  void run();
-
-  /// Shutdown the completion queue loop.
-  void shutdown();
+  explicit completion_queue(grpc_interceptor_type&& interceptor)
+    : completion_queue_base()
+    , interceptor_(std::move(interceptor)) {
+  }
+  virtual ~completion_queue() {
+  }
 
   /**
    * Create a new asynchronous read-write stream and call the functor
@@ -242,15 +252,10 @@ public:
   }
 
   operator grpc::CompletionQueue*() {
-    return &queue_;
+    return cq();
   }
 
 private:
-  /// The underlying completion queue pointer for the gRPC APIs.
-  grpc::CompletionQueue* cq() {
-    return &queue_;
-  }
-
   /// Create an operation and do the common initialization
   template <typename op_type, typename Functor>
   std::shared_ptr<op_type> create_op(std::string name, Functor&& f) const {
@@ -264,21 +269,8 @@ private:
     return op;
   }
 
-  /// Save a newly created operation and return its gRPC tag.
-  void*
-  register_op(char const* where, std::shared_ptr<detail::base_async_op> op);
-
-  /// Get an operation given its gRPC tag.
-  std::shared_ptr<detail::base_async_op> unregister_op(void* tag);
-
 private:
-  mutable std::mutex mu_;
-  using pending_ops_type =
-      std::unordered_map<std::intptr_t, std::shared_ptr<detail::base_async_op>>;
-  pending_ops_type pending_ops_;
-
-  grpc::CompletionQueue queue_;
-  std::atomic<bool> shutdown_;
+  grpc_interceptor_type interceptor_;
 };
 
 } // namespace etcd
