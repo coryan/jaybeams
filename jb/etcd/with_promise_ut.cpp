@@ -4,9 +4,23 @@
 
 #include <jb/gmock/init.hpp>
 #include <boost/test/unit_test.hpp>
+#include <gmock/gmock.h>
 #include <atomic>
 #include <future>
 #include <thread>
+
+namespace std {
+std::ostream& operator<<(std::ostream& os, std::future_status x) {
+  if (x == std::future_status::ready) {
+    return os << "[ready]";
+  } else if (x == std::future_status::timeout) {
+    return os << "[timeout]";
+  } else if (x == std::future_status::deferred) {
+    return os << "[deferred]";
+  }
+  return os << "[--invalid--]";
+}
+} // namespace std
 
 namespace jb {
 namespace etcd {
@@ -100,11 +114,21 @@ std::shared_future<typename async_op_requirements<M>::response_type> async_rpc(
 }
 
 struct mock_grpc_interceptor {
+  mock_grpc_interceptor()
+    : shared_mock(new mocked) {
+  }
   template <typename C, typename M, typename op_type>
   void async_rpc(
       C* async_client, M C::*call, std::shared_ptr<op_type>& op,
       grpc::CompletionQueue* cq, void* tag) {
+    shared_mock->async_rpc(op);
   }
+
+  struct mocked {
+    MOCK_CONST_METHOD1(async_rpc, void(std::shared_ptr<base_async_op> op));
+  };
+
+  std::shared_ptr<mocked> shared_mock;
 };
 
 } // namespace detail
@@ -112,9 +136,9 @@ struct mock_grpc_interceptor {
 } // namespace jb
 
 /**
- * @test Make sure jb::etcd::completion_queue handles errors gracefully.
+ * @test Make sure we can mock async_rpc() calls a completion_queue.
  */
-BOOST_AUTO_TEST_CASE(completion_queue_error) {
+BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
   using namespace std::chrono_literals;
 
   std::string const endpoint = "localhost:2379";
@@ -126,6 +150,20 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
   completion_queue<detail::mock_grpc_interceptor> queue;
   std::thread t([&queue]() { queue.run(); });
 
+  // Prepare the Mock to save the asynchronous operation state,
+  // normally you would simply invoke the callback in the mock action,
+  // but this test wants to verify what happens if there is a delay
+  // ...
+  using ::testing::_;
+  using ::testing::Invoke;
+  std::shared_ptr<jb::etcd::detail::base_async_op> last_op;
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(_))
+    .WillRepeatedly(Invoke([&last_op](auto const& op) mutable {
+          last_op = op;
+        }));
+
+  // ... make the request, that will post operations to the mock
+  // completion queue ...
   etcdserverpb::LeaseGrantRequest req;
   req.set_ttl(5); // in seconds
   req.set_id(0);  // let the server pick the lease_id
@@ -133,13 +171,32 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
       &queue, lease.get(), &etcdserverpb::Lease::Stub::AsyncLeaseGrant,
       std::move(req), "test/Lease", jb::etcd::use_future());
 
-  // ... force a failure, otherwise it deadlocks ...
-  // TODO() - need to mock the call to the async_op callback
-  BOOST_REQUIRE(false);
+  // ... verify the results are not there, the interceptor should have
+  // stopped the call from going out ...
+  auto wait_response = fut.wait_for(10ms);
+  BOOST_CHECK_EQUAL(wait_response, std::future_status::timeout);
 
-  // ... block ...
+  // ... we need to fill the response parameters, which again could be
+  // done in the mock action, but we are delaying the operations to
+  // verify the std::promise is not immediately satisfied ...
+  BOOST_REQUIRE(!!last_op);
+  {
+    auto op = dynamic_cast<jb::etcd::detail::async_op<
+        etcdserverpb::LeaseGrantRequest, etcdserverpb::LeaseGrantResponse>*>(
+        last_op.get());
+    BOOST_CHECK(op != nullptr);
+    op->response.set_ttl(7);
+    op->response.set_id(123456UL);
+  }
+  // ... now we can execute the callback ...
+  last_op->callback(*last_op, true);
+
+  // ... that must make the result read or we will get a deadlock ...
+  wait_response = fut.wait_for(10ms);
+  BOOST_REQUIRE_EQUAL(wait_response, std::future_status::ready);
+
+  // ... get the response ...
   auto response = fut.get();
-
   BOOST_CHECK_EQUAL(response.ttl(), 7);
   BOOST_CHECK_EQUAL(response.id(), 123456UL);
 
