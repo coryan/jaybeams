@@ -515,11 +515,16 @@ jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 # jb/libjb_gmock.a
 ################################################################
 jb_libjb_gmock_adir = $(includedir)
-jb_libjb_gmock_a_HEADERS =
+jb_libjb_gmock_a_HEADERS = \
+  jb/gmock/init.hpp
 jb_libjb_gmock_a_SOURCES = \
-  jb/gmock/gmock.cpp
+  jb/gmock/gmock.cpp \
+  jb/gmock/gtest.cpp
 jb_libjb_gmock_a_CPPFLAGS = \
-  $(GMOCK_CPPFLAGS) $(GMOCKSRC_CPPFLAGS) -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>"
+  $(GMOCK_CPPFLAGS) $(GMOCK_SOURCE_CPPFLAGS) \
+  -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>" \
+  $(GTEST_CPPFLAGS) $(GTEST_SOURCE_CPPFLAGS) \
+  -DGTEST_SOURCE="<$(GTEST_SOURCE)>"
 
 ################################################################
 # jb/libjb_etcd.a

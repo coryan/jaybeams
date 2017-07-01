@@ -14,9 +14,8 @@
 #
 # SYNOPSIS
 #
-#   AX_CHECK_GMOCK_HEADER([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [DIRS])
 #   AX_CHECK_GMOCK_SOURCE(
-#      [FILENAME], [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [DIRS])
+#      [FILENAMES], [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [DIRS])
 #
 # DESCRIPTION
 #
@@ -26,52 +25,14 @@
 #   with the right options.  This macro finds the source code and
 #   verifies it can be compiled.
 #
-#   If successful AC_CHECK_GMOCK_HEADER calls:
-#
-#     AC_SUBST(GMOCK_CPPFLAGS)
-#
-#   while AC_CHECK_GMOCK_SOURCE calls:
-#
-#     AC_SUBTS(GMOCK_SRCDIR)
+#   If successful, AC_CHECK_GMOCK_SOURCE sets AX_GMOCK_SOURCE to the
+#   name of the file found, and AX_GMOCK_SOURCE_CPPFLAGS to the
+#   pre-processor flags used to successfully compile it.  No attempt
+#   is made to *link* the file.
 #
 #
 
 #serial 1
-
-AC_DEFUN([AX_CHECK_GMOCK_HEADER], [
-  AC_REQUIRE([AC_PROG_CXX])
-  AC_LANG_PUSH(C++)
-  hdr=`echo gmock/gmock.h | $as_tr_sh`
-  got=no
-  for dir in - $3; do
-    if test "x${got}" = "xno"; then
-      ax_hashdr_cvdir=`echo $dir | $as_tr_sh`
-      AC_CACHE_CHECK([for gmock/gmock.h header with -I$dir],
-        [ax_cv${ax_hashdr_cvdir}_hashdr_${hdr}],
-        [ ax_have_hdr_save_cflags=${CXXFLAGS}
-          gmock_cxxflags=""
-          if test "$dir" != "-"; then
-            gmock_cxxflags="-I$dir"
-          fi
-          CXXFLAGS="$CXXFLAGS $gmock_cxxflags"
-          AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-@%:@include <gmock/gmock.h>
-              ]]
-            )],
-            [got="yes"; eval "ax_cv${ax_hashdr_cvdir}_hashdr_${hdr}"="yes"],
-            [got="no"; eval "ax_cv${ax_hashdr_cvdir}_hashdr_${hdr}"="no"])
-          CXXFLAGS=$ax_have_hdr_save_cflags
-      ])
-      if eval `echo 'test x${'ax_cv${ax_hashdr_cvdir}_hashdr_${hdr}'}' = "xyes"`; then
-        GMOCK_CPPFLAGS=$gmock_cxxflags
-        AC_SUBST(GMOCK_CPPFLAGS)
-        got="yes";
-      fi
-    fi
-  done
-  AS_IF([test "x${got}" = "xyes"], [$1], [$2])
-  AC_LANG_POP
-])
 
 AC_DEFUN([AX_CHECK_GMOCK_SOURCE], [
   AC_REQUIRE([AC_PROG_CXX])
@@ -99,10 +60,8 @@ AC_DEFUN([AX_CHECK_GMOCK_SOURCE], [
           CXXFLAGS=$ax_have_src_save_cflags
       ])
       if eval `echo 'test x${'ax_cv${ax_hassrc_cvdir}_hassrc_${src}'}' = "xyes"`; then
-        GMOCKSRC_CPPFLAGS=$gmock_cxxflags
-        GMOCK_SOURCE=$fil
-        AC_SUBST(GMOCKSRC_CPPFLAGS)
-        AC_SUBST(GMOCK_SOURCE)
+        AX_GMOCK_SOURCE_CPPFLAGS=$gmock_cxxflags
+        AX_GMOCK_SOURCE=$fil
         got="yes";
       fi
     fi
