@@ -1,3 +1,4 @@
+#include "jb/etcd/detail/mocked_grpc_interceptor.hpp"
 #include <jb/etcd/completion_queue.hpp>
 #include <jb/gmock/init.hpp>
 #include <jb/testing/future_status.hpp>
@@ -6,40 +7,12 @@
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>
-#include <gmock/gmock.h>
 #include <thread>
-
-namespace jb {
-namespace etcd {
-
-namespace detail {
-
-struct mock_grpc_interceptor {
-  mock_grpc_interceptor()
-      : shared_mock(new mocked) {
-  }
-  template <typename C, typename M, typename op_type>
-  void async_rpc(
-      C* async_client, M C::*call, std::shared_ptr<op_type>& op,
-      grpc::CompletionQueue* cq, void* tag) {
-    shared_mock->async_rpc(op);
-  }
-
-  struct mocked {
-    MOCK_CONST_METHOD1(async_rpc, void(std::shared_ptr<base_async_op> op));
-  };
-
-  std::shared_ptr<mocked> shared_mock;
-};
-
-} // namespace detail
-} // namespace etcd
-} // namespace jb
 
 /**
  * @test Make sure we can mock async_rpc() calls a completion_queue.
  */
-BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
+BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rpc) {
   using namespace std::chrono_literals;
 
   // Create a null lease object, we do not need (or want) a real
@@ -47,7 +20,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
   using namespace jb::etcd;
-  completion_queue<detail::mock_grpc_interceptor> queue;
+  completion_queue<detail::mocked_grpc_interceptor> queue;
 
   // Prepare the Mock to save the asynchronous operation state,
   // normally you would simply invoke the callback in the mock action,
@@ -102,7 +75,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
 /**
  * @test Verify canceled RPCs result in exception for the std::promise.
  */
-BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc_cancelled) {
+BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rpc_cancelled) {
   using namespace std::chrono_literals;
 
   // Create a null lease object, we do not need (or want) a real
@@ -110,7 +83,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc_cancelled) {
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
   using namespace jb::etcd;
-  completion_queue<detail::mock_grpc_interceptor> queue;
+  completion_queue<detail::mocked_grpc_interceptor> queue;
 
   // Prepare the Mock to save the asynchronous operation state,
   // normally you would simply invoke the callback in the mock action,

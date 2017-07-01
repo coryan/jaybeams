@@ -555,13 +555,25 @@ jb_libjb_etcd_proto_headers = \
 
 jb_libjb_etcd_proto_sources = $(jb_libjb_etcd_proto_headers:.pb.h=.pb.cc)
 
+# TODO() - decide if the protobuf files should be included in the
+# distribution tarball ...
+nodist_noinst_DATA = \
+  googleapis/google/api/http.proto \
+  googleapis/google/api/annotations.proto \
+  gogoproto/gogoproto/gogo.proto \
+  etcd/mvcc/mvccpb/kv.proto \
+  etcd/auth/authpb/auth.proto \
+  etcd/etcdserver/etcdserverpb/rpc.proto
+
 nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/active_completion_queue.hpp \
   jb/etcd/client_factory.hpp \
   jb/etcd/completion_queue_base.hpp \
   jb/etcd/completion_queue.hpp \
   jb/etcd/detail/async_ops.hpp \
+  jb/etcd/detail/default_grpc_interceptor.hpp \
   jb/etcd/detail/grpc_errors_annotations.hpp \
+  jb/etcd/detail/mocked_grpc_interceptor.hpp \
   jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
   jb/etcd/log_promise_errors.hpp \
@@ -583,27 +595,22 @@ jb_libjb_etcd_a_SOURCES = \
 
 # ... we need to make sure all headers are generated *before* we start
 # compiling the files that include them ...
-#$(info proto headers = $(jb_libjb_etcd_proto_headers))
-#$(info proto sources = $(jb_libjb_etcd_proto_sources))
-#$(info proto objects = $(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)))
-#$(info other objects = $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)))
+# DEBUG $(info other objects = $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)))
 $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
 $(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
-
 
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
   jb/etcd/leader_election_participant_ut \
-  jb/etcd/session_ut \
-  jb/etcd/with_promise_ut
-
+  jb/etcd/session_ut
 noinst_SCRIPTS += jb/etcd/integration_tests.py
 
 jb_etcd_unit_tests = \
   jb/etcd/active_completion_queue_ut \
   jb/etcd/completion_queue_ut \
   jb/etcd/grpc_errors_ut \
+  jb/etcd/detail/mocked_grpc_interceptor_ut \
   jb/etcd/log_promise_errors_ut
 
 check_PROGRAMS += $(jb_etcd_unit_tests)
@@ -629,6 +636,11 @@ jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etc
 jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
 
+jb_etcd_detail_mocked_grpc_interceptor_ut_SOURCES = jb/etcd/detail/mocked_grpc_interceptor_ut.cpp
+jb_etcd_detail_mocked_grpc_interceptor_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_mocked_grpc_interceptor_ut
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDADD = $(jb_etcd_ut_ldadd) jb/libjb_gmock.a
+
 jb_etcd_grpc_errors_ut_SOURCES = jb/etcd/grpc_errors_ut.cpp
 jb_etcd_grpc_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_grpc_errors_ut
 jb_etcd_grpc_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
@@ -648,21 +660,6 @@ jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
 jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut
 jb_etcd_session_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_session_ut_LDADD = $(jb_etcd_ut_ldadd)
-
-jb_etcd_with_promise_ut_SOURCES = jb/etcd/with_promise_ut.cpp
-jb_etcd_with_promise_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_with_promise_ut
-jb_etcd_with_promise_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
-jb_etcd_with_promise_ut_LDADD = $(jb_etcd_ut_ldadd) jb/libjb_gmock.a
-
-# TODO() - decide if the protobuf files should be included in the
-# distribution tarball ...
-nodist_noinst_DATA = \
-  googleapis/google/api/http.proto \
-  googleapis/google/api/annotations.proto \
-  gogoproto/gogoproto/gogo.proto \
-  etcd/mvcc/mvccpb/kv.proto \
-  etcd/auth/authpb/auth.proto \
-  etcd/etcdserver/etcdserverpb/rpc.proto
 
 jb_etcd_election_listener_SOURCES = \
   jb/etcd/election_listener.cpp
