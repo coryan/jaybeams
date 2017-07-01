@@ -141,10 +141,9 @@ struct mock_grpc_interceptor {
 BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
   using namespace std::chrono_literals;
 
-  std::string const endpoint = "localhost:2379";
-  auto channel =
-      grpc::CreateChannel(endpoint, grpc::InsecureChannelCredentials());
-  auto lease = etcdserverpb::Lease::NewStub(channel);
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
   using namespace jb::etcd;
   completion_queue<detail::mock_grpc_interceptor> queue;
