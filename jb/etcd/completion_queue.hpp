@@ -231,7 +231,7 @@ public:
     };
     op->name = std::move(name);
     void* tag = register_op("async_create_rdwr_stream()", op);
-    op->stream->client = (async_client->*call)(&op->stream->context, cq(), tag);
+    interceptor_.async_create_rdwr_stream(async_client, call, op, cq(), tag);
   }
 
   /**
