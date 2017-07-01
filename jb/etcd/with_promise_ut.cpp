@@ -147,7 +147,6 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
 
   using namespace jb::etcd;
   completion_queue<detail::mock_grpc_interceptor> queue;
-  std::thread t([&queue]() { queue.run(); });
 
   // Prepare the Mock to save the asynchronous operation state,
   // normally you would simply invoke the callback in the mock action,
@@ -198,7 +197,45 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
   auto response = fut.get();
   BOOST_CHECK_EQUAL(response.ttl(), 7);
   BOOST_CHECK_EQUAL(response.id(), 123456UL);
+}
 
-  queue.shutdown();
-  t.join();
+/**
+ * @test Verify canceled RPCs result in exception for the std::promise.
+ */
+BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc_cancelled) {
+  using namespace std::chrono_literals;
+
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue<detail::mock_grpc_interceptor> queue;
+
+  // Prepare the Mock to save the asynchronous operation state,
+  // normally you would simply invoke the callback in the mock action,
+  // but this test wants to verify what happens if there is a delay
+  // ...
+  using ::testing::_;
+  using ::testing::Invoke;
+  std::shared_ptr<jb::etcd::detail::base_async_op> last_op;
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(_))
+    .WillRepeatedly(Invoke([](auto bop) mutable {
+          bop->callback(*bop, false);
+        }));
+
+  // ... make the request, that will post operations to the mock
+  // completion queue ...
+  etcdserverpb::LeaseGrantRequest req;
+  req.set_ttl(5); // in seconds
+  req.set_id(0);  // let the server pick the lease_id
+  auto fut = detail::async_rpc(
+      &queue, lease.get(), &etcdserverpb::Lease::Stub::AsyncLeaseGrant,
+      std::move(req), "test/Lease", jb::etcd::use_future());
+
+  // ... check that the operation was immediately cancelled ...
+  BOOST_REQUIRE_EQUAL(fut.wait_for(0ms), std::future_status::ready);
+
+  // ... and the promise was satisfied with an exception ...
+  BOOST_CHECK_THROW(fut.get(), std::exception);
 }
