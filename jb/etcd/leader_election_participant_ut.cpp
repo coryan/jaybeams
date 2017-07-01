@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
 
   {
     jb::etcd::leader_election_participant tested(
-        queue, etcd_channel, election_name, "42",
-        [](std::future<bool>&) {}, std::chrono::seconds(3));
+        queue, etcd_channel, election_name, "42", [](std::future<bool>&) {},
+        std::chrono::seconds(3));
     BOOST_TEST_CHECKPOINT("participant object constructed");
     BOOST_CHECK_EQUAL(tested.value(), "42");
     BOOST_CHECK_EQUAL(
@@ -59,8 +59,7 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   BOOST_TEST_MESSAGE("testing with election-name=" << election_name);
 
   jb::etcd::leader_election_participant participant_a(
-      queue, etcd_channel, election_name, "session_a",
-      std::chrono::seconds(3));
+      queue, etcd_channel, election_name, "session_a", std::chrono::seconds(3));
   BOOST_CHECK_EQUAL(participant_a.value(), "session_a");
 
   jb::etcd::session session_b(
