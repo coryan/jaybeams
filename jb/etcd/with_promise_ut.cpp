@@ -137,8 +137,16 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
       &queue, lease.get(), &etcdserverpb::Lease::Stub::AsyncLeaseGrant,
       std::move(req), "test/Lease", jb::etcd::use_future());
 
+  // ... force a failure, otherwise it deadlocks ...
+  // TODO() - need to mock the call to the async_op callback
+  BOOST_REQUIRE(false);
+
   // ... block ...
   auto response = fut.get();
+
+  queue.interceptor().mock_async_rpc.check_called().once();
+  BOOST_CHECK_EQUAL(response.ttl(), 7);
+  BOOST_CHECK_EQUAL(response.id(), 123456UL);
 
   queue.shutdown();
   t.join();

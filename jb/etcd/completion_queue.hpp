@@ -254,6 +254,10 @@ public:
     return cq();
   }
 
+  grpc_interceptor_type& interceptor() {
+    return interceptor_;
+  }
+
 private:
   /// Create an operation and do the common initialization
   template <typename op_type, typename Functor>
