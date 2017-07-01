@@ -258,45 +258,29 @@ void leader_election_participant::shutdown() {
   if (watcher_stream_) {
     // The watcher stream was already created, we need to close it
     // before shutting down the completion queue ...
-    std::promise<bool> stream_closed;
     (void)async_op_start_shutdown("writes done");
-    queue_->cq().async_writes_done(
+    auto writes_done_complete = queue_->cq().async_writes_done(
         watcher_stream_, "leader_election_participant/shutdown/writes_done",
-        [this, &stream_closed](auto op, bool ok) {
-          this->on_writes_done(op, ok, stream_closed);
-        });
-    // ... block until it closes ...
-    bool success = stream_closed.get_future().get();
-    if (success) {
-      JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                    << "  writes done completed";
-    }
+        jb::etcd::use_future());
 
-    std::promise<bool> stream_finished;
+    // ... block until it closes ...
+    writes_done_complete.get();
+    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
+                  << "  writes done completed";
+
     (void)async_op_start_shutdown("finish");
-    queue_->cq().async_finish(
+    auto finished_complete = queue_->cq().async_finish(
         watcher_stream_, "leader_election_participant/shutdown/finish",
-        [this, &stream_finished](auto const& op, bool ok) {
-          this->on_finish(op, ok, stream_finished);
-        });
+        jb::etcd::use_future());
     JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
                   << "  finish scheduled";
-    // ... block until it closes ...
-    auto fut = stream_finished.get_future();
     // TODO() - this is a workaround, the finish() call does not seem
     // to terminate for me ...
-    if (fut.wait_for(std::chrono::milliseconds(200)) ==
+    if (finished_complete.wait_for(std::chrono::milliseconds(200)) ==
         std::future_status::timeout) {
       JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
                    << "  timeout on Finish() call, forcing a on_finish()";
       async_op_done("on_finish() - forced");
-      try {
-        stream_finished.set_value(false);
-      } catch(...) {
-        log_promise_errors(
-            stream_finished, std::current_exception(),
-            log_header("on_finish() - forced"), "");
-      }
     }
   }
   (void)set_state("shutdown()", state::shutdown);
@@ -552,35 +536,6 @@ void leader_election_participant::on_watch_read(
       [this, wkey, revision](auto op, bool ok) {
         this->on_watch_read(op, ok, wkey, revision);
       });
-}
-
-void leader_election_participant::on_writes_done(
-    detail::writes_done_op const& writes_done, bool ok,
-    std::promise<bool>& done) {
-  async_op_done("on_writes_done()");
-  if (not ok) {
-    // ... operation aborted, just signal and return ...
-    done.set_value(ok);
-    return;
-  }
-  done.set_value(true);
-}
-
-void leader_election_participant::on_finish(
-    detail::finish_op const& op, bool ok, std::promise<bool>& done) {
-  async_op_done("on_finish()");
-  if (not ok) {
-    // ... operation canceled, no sense in waiting anymore ...
-    done.set_value(false);
-    return;
-  }
-  try {
-    check_grpc_status(op.status, log_header("on_finish()"));
-    done.set_value(true);
-  } catch (...) {
-    log_promise_errors(
-        done, std::current_exception(), log_header("on_finish()"), "");
-  }
 }
 
 void leader_election_participant::check_election_over_maybe() {

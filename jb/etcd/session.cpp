@@ -142,14 +142,15 @@ void session::shutdown() {
   if (ka_stream_) {
     // The KeepAlive stream was already created, we need to close it
     // before shutting down ...
-    std::promise<bool> stream_closed;
-    queue_->cq().async_writes_done(
-        ka_stream_, "session/shutdown/writes_done",
-        [this, &stream_closed](auto op, bool ok) {
-          this->on_writes_done(op, ok, stream_closed);
-        });
+    auto writes_done_complete = queue_->cq().async_writes_done(
+        ka_stream_, "session/shutdown/writes_done", jb::etcd::use_future());
     // ... block until it closes ...
-    stream_closed.get_future().get();
+    writes_done_complete.get();
+
+    auto finish_complete = queue_->cq().async_finish(
+        ka_stream_, "session/ka_stream/finish", jb::etcd::use_future());
+    auto status = finish_complete.get();
+    check_grpc_status(status, "session::finish()");
   }
   std::lock_guard<std::mutex> lock(mu_);
   state_ = state::shutdown;
@@ -229,37 +230,6 @@ void session::on_read(ka_stream_type::read_op& op, bool ok) {
   // etcd server may be telling us to backoff a little ...
   actual_TTL_ = std::chrono::seconds(op.response.ttl());
   set_timer();
-}
-
-void session::on_writes_done(
-    detail::writes_done_op& writes_done, bool ok, std::promise<bool>& done) {
-  if (not ok) {
-    // ... operation aborted, just signal and return ...
-    done.set_value(ok);
-    return;
-  }
-
-  queue_->cq().async_finish(
-      ka_stream_, "session/ka_stream/finish",
-      [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
-  JB_LOG(trace) << std::hex << lease_id() << " finish scheduled";
-}
-
-void session::on_finish(
-    detail::finish_op& op, bool ok, std::promise<bool>& done) {
-  if (not ok) {
-    // ... operation canceled, no sense in waiting anymore ...
-    done.set_value(false);
-    return;
-  }
-  try {
-    check_grpc_status(op.status, "session::on_finish()");
-    done.set_value(true);
-  } catch (...) {
-    std::ostringstream os;
-    os << std::hex << lease_id();
-    log_promise_errors(done, std::current_exception(), os.str(), "");
-  }
 }
 
 } // namespace etcd

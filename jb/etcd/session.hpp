@@ -141,13 +141,6 @@ private:
   /// Handle the Read() completion, schedule a new Timer().
   void on_read(ka_stream_type::read_op& op, bool ok);
 
-  /// Handle the WritesDone() completion, schedule a Finish()
-  void on_writes_done(
-      detail::writes_done_op& writes_done, bool ok, std::promise<bool>& done);
-
-  /// Handle the Finish() completion.
-  void on_finish(detail::finish_op& op, bool ok, std::promise<bool>& done);
-
   /// Convert the constructor argument to milliseconds.
   template <typename duration_type>
   static std::chrono::milliseconds to_milliseconds(duration_type d) {

@@ -202,14 +202,6 @@ private:
       watch_read_op const& op, bool ok, std::string const& key,
       std::uint64_t revision);
 
-  /// Called when the WritesDone() operation in the watcher stream completes.
-  void on_writes_done(
-      detail::writes_done_op const& op, bool ok, std::promise<bool>& done);
-
-  /// Called when the Finish() operation in the watcher stream completes.
-  void
-  on_finish(detail::finish_op const& op, bool ok, std::promise<bool>& done);
-
   /// Check if the election has finished, if so invoke the callbacks.
   void check_election_over_maybe();
 
