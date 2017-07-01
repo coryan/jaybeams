@@ -5,8 +5,8 @@
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 
 #include <boost/test/unit_test.hpp>
-#include <gmock/gmock.h>
 #include <atomic>
+#include <gmock/gmock.h>
 #include <thread>
 
 namespace jb {
@@ -16,7 +16,7 @@ namespace detail {
 
 struct mock_grpc_interceptor {
   mock_grpc_interceptor()
-    : shared_mock(new mocked) {
+      : shared_mock(new mocked) {
   }
   template <typename C, typename M, typename op_type>
   void async_rpc(
@@ -57,9 +57,8 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc) {
   using ::testing::Invoke;
   std::shared_ptr<jb::etcd::detail::base_async_op> last_op;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(_))
-    .WillRepeatedly(Invoke([&last_op](auto const& op) mutable {
-          last_op = op;
-        }));
+      .WillRepeatedly(
+          Invoke([&last_op](auto const& op) mutable { last_op = op; }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -121,9 +120,8 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc_cancelled) {
   using ::testing::Invoke;
   std::shared_ptr<jb::etcd::detail::base_async_op> last_op;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(_))
-    .WillRepeatedly(Invoke([](auto bop) mutable {
-          bop->callback(*bop, false);
-        }));
+      .WillRepeatedly(
+          Invoke([](auto bop) mutable { bop->callback(*bop, false); }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -131,8 +129,8 @@ BOOST_AUTO_TEST_CASE(completion_queue_mocked_rpc_cancelled) {
   req.set_ttl(5); // in seconds
   req.set_id(0);  // let the server pick the lease_id
   auto fut = queue.async_rpc(
-      lease.get(), &etcdserverpb::Lease::Stub::AsyncLeaseGrant,
-      std::move(req), "test/Lease", jb::etcd::use_future());
+      lease.get(), &etcdserverpb::Lease::Stub::AsyncLeaseGrant, std::move(req),
+      "test/Lease", jb::etcd::use_future());
 
   // ... check that the operation was immediately cancelled ...
   BOOST_REQUIRE_EQUAL(fut.wait_for(0ms), std::future_status::ready);

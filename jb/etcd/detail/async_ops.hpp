@@ -185,7 +185,7 @@ struct deadline_timer : public base_async_op {
   std::chrono::system_clock::time_point deadline;
 
 private:
-  template<typename T>
+  template <typename T>
   friend class ::jb::etcd::completion_queue;
   std::unique_ptr<grpc::Alarm> alarm_;
 };

@@ -1,6 +1,6 @@
 #include "jb/etcd/leader_election_participant.hpp"
-#include <jb/log.hpp>
 #include <jb/testing/future_status.hpp>
+#include <jb/log.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>

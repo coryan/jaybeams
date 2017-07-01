@@ -20,7 +20,6 @@ namespace etcd {
 /// invoking a callback.
 struct use_future {};
 
-
 /**
  * Wrap a gRPC completion queue.
  *
@@ -47,13 +46,13 @@ public:
 
   explicit completion_queue(
       grpc_interceptor_type interceptor = grpc_interceptor_type())
-    : completion_queue_base()
-    , interceptor_(std::move(interceptor)) {
+      : completion_queue_base()
+      , interceptor_(std::move(interceptor)) {
   }
 
   explicit completion_queue(grpc_interceptor_type&& interceptor)
-    : completion_queue_base()
-    , interceptor_(std::move(interceptor)) {
+      : completion_queue_base()
+      , interceptor_(std::move(interceptor)) {
   }
   virtual ~completion_queue() {
   }

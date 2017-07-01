@@ -8,9 +8,9 @@
  */
 BOOST_AUTO_TEST_CASE(jb_future_status_streaming) {
   std::map<std::future_status, std::string> tests = {
-    {std::future_status::timeout, "[timeout]"},
-    {std::future_status::deferred, "[deferred]"},
-    {std::future_status::ready, "[ready]"},
+      {std::future_status::timeout, "[timeout]"},
+      {std::future_status::deferred, "[deferred]"},
+      {std::future_status::ready, "[ready]"},
   };
   for (auto const& tcase : tests) {
     std::ostringstream os;

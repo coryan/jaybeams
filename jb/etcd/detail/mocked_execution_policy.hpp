@@ -5,10 +5,7 @@
 
 namespace jb {
 namespace etcd {
-namespace detail {
-
-
-} // namespace detail
+namespace detail {} // namespace detail
 } // namespace etcd
 } // namespace jb
 
