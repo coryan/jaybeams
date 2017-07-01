@@ -1,25 +1,10 @@
 #include "jb/etcd/leader_election_participant.hpp"
 #include <jb/log.hpp>
+#include <jb/testing/future_status.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>
 #include <thread>
-
-namespace std {
-// Introduce a streaming operator to satify Boost.Test needs.
-std::ostream& operator<<(std::ostream& os, std::future_status x) {
-  if (x == std::future_status::timeout) {
-    return os << "[timeout]";
-  }
-  if (x == std::future_status::deferred) {
-    return os << "[deferred]";
-  }
-  if (x == std::future_status::ready) {
-    return os << "[ready]";
-  }
-  return os << "[--invalid--]";
-}
-}
 
 /**
  * @test Verify that one can create, and delete a election participant.

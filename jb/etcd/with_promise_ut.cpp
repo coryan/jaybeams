@@ -1,25 +1,13 @@
 #include <jb/etcd/completion_queue.hpp>
+#include <jb/gmock/init.hpp>
+#include <jb/testing/future_status.hpp>
 
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 
-#include <jb/gmock/init.hpp>
 #include <boost/test/unit_test.hpp>
 #include <gmock/gmock.h>
 #include <atomic>
 #include <thread>
-
-namespace std {
-std::ostream& operator<<(std::ostream& os, std::future_status x) {
-  if (x == std::future_status::ready) {
-    return os << "[ready]";
-  } else if (x == std::future_status::timeout) {
-    return os << "[timeout]";
-  } else if (x == std::future_status::deferred) {
-    return os << "[deferred]";
-  }
-  return os << "[--invalid--]";
-}
-} // namespace std
 
 namespace jb {
 namespace etcd {

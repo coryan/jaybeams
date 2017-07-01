@@ -440,6 +440,7 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
+  jb/testing/future_status.hpp \
   jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
@@ -472,6 +473,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@
 
 unit_tests += \
+  jb/testing/future_status_ut \
   jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
@@ -486,6 +488,10 @@ jb_testing_check_random_device_LDADD = jb/libjb.a
 
 jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
 jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
+
+jb_testing_future_status_ut_SOURCES = jb/testing/future_status_ut.cpp
+jb_testing_future_status_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_future_status_ut
+jb_testing_future_status_ut_LDADD = $(jb_ut_testing_ldadd)
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
