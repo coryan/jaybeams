@@ -8,12 +8,18 @@
 #include <atomic>
 #include <chrono>
 #include <functional>
+#include <future>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
 
 namespace jb {
 namespace etcd {
+
+/// A struct to indicate the APIs should return futures instead of
+/// invoking a callback.
+struct use_future {};
+
 
 /**
  * Wrap a gRPC completion queue.
@@ -53,9 +59,7 @@ public:
   }
 
   /**
-   * Create a new asynchronous read-write stream and call the functor
-   * when it is constructed and ready.
-   *
+   * Start an asynchronous RPC call and invoke a functor with the results.
    *
    * Consider a typical gRPC:
    *
@@ -106,6 +110,71 @@ public:
     void* tag = register_op("async_rpc()", op);
     op->request.Swap(&request);
     interceptor_.async_rpc(async_client, call, op, cq(), tag);
+  }
+
+  /**
+   * Start an asynchronous RPC call and return a future to wait until
+   * it completes.
+   *
+   * Consider a typical gRPC:
+   *
+   * @code
+   * service Echo {
+   *    rpc Echo(Request) returns (Response) {}
+   * }
+   * @endcode
+   *
+   * When making an asynchronous request use:
+   *
+   * @code
+   * completion_queue queue = ...;
+   * std::unique_ptr<Echo::Stub> client = ...;
+   * auto fut = queue.async_rpc(
+   *     "debug string", stub, Echo::Stub::AsyncEcho, jb::etcd::use_future());
+   * // block until completed ..
+   * auto result = fut.get();
+   * @endcode
+   *
+   * The application can block (using std::future::get()) or poll (using
+   * std::future::wait_for()) until the asynchronous stream creation
+   * completes.  The future will hold a result of whatever type the
+   * RPC returns.
+   *
+   * Why use this instead of simply making a synchronous RPC?  Mainly
+   * because most of the gRPC operations that jb::etcd makes are
+   * asynchronous, so this fits in the framework.  Also because it was
+   * easier to mock the RPCs and do fault injection with the
+   * asynchronous APIs.
+   *
+   * @tparam C the type of the stub to make the request on
+   * @tparam M the type of the member function on the stub to make the
+   * request
+   * @tparam W the type of the request
+   *
+   * @returns a shared future to wait until the operation completes, of type
+   * std::shared_future<ResponseType>.
+   */
+  template <typename C, typename M, typename W>
+  std::shared_future<typename detail::async_op_requirements<M>::response_type>
+  async_rpc(
+      C* async_client, M C::*call, W&& request, std::string name, use_future) {
+    auto promise = std::make_shared<std::promise<
+        typename detail::async_op_requirements<M>::response_type>>();
+    this->async_rpc(
+        async_client, call, std::move(request), std::move(name),
+        [promise](auto& op, bool ok) {
+          if (not ok) {
+            promise->set_exception(std::make_exception_ptr(
+                std::runtime_error("async rpc cancelled")));
+            return;
+          }
+          // TODO() - we would want to use std::move(), but (a)
+          // protobufs do not have move semantics (yuck), and (b) we
+          // have a const& op parameter, so we would need to change that
+          // too.
+          promise->set_value(op.response);
+        });
+    return promise->get_future().share();
   }
 
   /**
@@ -164,6 +233,74 @@ public:
     op->name = std::move(name);
     void* tag = register_op("async_create_rdwr_stream()", op);
     op->stream->client = (async_client->*call)(&op->stream->context, cq(), tag);
+  }
+
+  /**
+   * Start the creation of a new asynchronous read-write stream and
+   * return a future to wait until it is constructed and ready.
+   *
+   * Consider a typical bi-directional streaming gRPC:
+   *
+   * @code
+   * service Echo {
+   *    rpc Echo(stream Request) returns (stream Response) {}
+   * }
+   * @endcode
+   *
+   * If you want to use that stream asynchronously you must also use
+   * the asynchronous APIs to create it.  Sometimes it is necessary or
+   * convenient to block until the asynchronous creation completes.
+   * This function makes it easy to do so, taking care of the promise
+   * creation and reporting:
+   *
+   * @code
+   * completion_queue queue = ...;
+   * std::unique_ptr<Echo::Stub> client = ...;
+   * auto fut = queue.async_create_rdwr_stream(
+   *     "debug string", stub, Echo::Stub::AsyncEcho,
+   *     jb::etcd::use_future());
+   * // block until the result is ready or an exception ...
+   * auto result = fut.get();
+   * @endcode
+   *
+   * The application can block (using std::future::get()) or poll (using
+   * std::future::wait_for()) until the asynchronous stream creation
+   * completes.  The future will hold a result of type:
+   *
+   * @code
+   * std::unique_ptr<async_rdwr_stream<Request, Response>>
+   * @endcode
+   *
+   * When the operation is successful, and an exception otherwise.  For
+   * applications that prefer a callback see the separate overload of
+   * this function with a Functor parameter.
+   *
+   * @tparam C the type of the stub to make the request on
+   * @tparam M the type of the member function on the stub to make the
+   * request
+   *
+   * @returns a shared future to wait until the operation completes, of type
+   * std::shared_future<std::unique_ptr<async_rdwr_stream<Request, Response>>>
+   */
+  template <typename C, typename M>
+  std::shared_future<std::unique_ptr<
+      typename detail::async_stream_create_requirements<M>::stream_type>>
+  async_create_rdwr_stream(
+      C* async_client, M C::*call, std::string name, use_future) {
+    using ret_type = std::unique_ptr<
+        typename detail::async_stream_create_requirements<M>::stream_type>;
+    auto promise = std::make_shared<std::promise<ret_type>>();
+    this->async_create_rdwr_stream(
+        async_client, call, name, [promise](auto stream, bool ok) {
+          // intercept canceled operations and raise an exception ...
+          if (not ok) {
+            promise->set_exception(std::make_exception_ptr(
+                std::runtime_error("async create_rdwr_stream cancelled")));
+            return;
+          }
+          promise->set_value(std::move(stream));
+        });
+    return promise->get_future().share();
   }
 
   /**
