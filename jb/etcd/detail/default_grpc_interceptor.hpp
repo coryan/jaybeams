@@ -21,15 +21,47 @@ struct default_grpc_interceptor {
     op->rpc->Finish(&op->response, &op->status, tag);
   }
 
-  /// Post an asyncthronous operation to create a rdwr RPC stream
+  /// Post an asynchronous operation to create a rdwr RPC stream
   template <typename C, typename M, typename op_type>
   void async_create_rdwr_stream(
       C* async_client, M C::*call, std::shared_ptr<op_type>& op,
       grpc::CompletionQueue* cq, void* tag) {
     op->stream->client = (async_client->*call)(&op->stream->context, cq, tag);
   }
-};
 
+  /// Post an asynchronous Write() operation over a rdwr RPC stream
+  template <typename W, typename R, typename op_type>
+  void async_write(
+      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
+      std::shared_ptr<op_type>& op, void* tag) {
+    stream->client->Write(op->request, tag);
+  }
+
+  /// Post an asynchronous Read() operation over a rdwr RPC stream
+  template <typename W, typename R, typename op_type>
+  void async_read(
+      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
+      std::shared_ptr<op_type>& op, void* tag) {
+    stream->client->Read(&op->response, tag);
+  }
+
+  /// Post an asynchronous WriteDone() operation over a rdwr RPC stream
+  template <typename W, typename R, typename op_type>
+  void async_writes_done(
+      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
+      std::shared_ptr<op_type>& op, void* tag) {
+    stream->client->WritesDone(tag);
+  }
+
+  /// Post an asynchronous Finish() operation over a rdwr RPC stream
+  template <typename W, typename R, typename op_type>
+  void async_finish(
+      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
+      std::shared_ptr<op_type>& op, void* tag) {
+    stream->client->Finish(&op->status, tag);
+  }
+};
+  
 } // namespace detail
 } // namespace etcd
 } // namespace jb

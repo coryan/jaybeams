@@ -143,7 +143,7 @@ void session::shutdown() {
     // The KeepAlive stream was already created, we need to close it
     // before shutting down ...
     std::promise<bool> stream_closed;
-    auto op = queue_->cq().async_writes_done(
+    queue_->cq().async_writes_done(
         ka_stream_, "session/shutdown/writes_done",
         [this, &stream_closed](auto op, bool ok) {
           this->on_writes_done(op, ok, stream_closed);
@@ -239,12 +239,10 @@ void session::on_writes_done(
     return;
   }
 
-  auto op = queue_->cq().async_finish(
+  queue_->cq().async_finish(
       ka_stream_, "session/ka_stream/finish",
       [this, &done](auto op, bool ok) { this->on_finish(op, ok, done); });
-  JB_LOG(trace) << std::hex << lease_id()
-                << " finish scheduled, status=" << op->status.error_message()
-                << " [" << op->status.error_code() << "]";
+  JB_LOG(trace) << std::hex << lease_id() << " finish scheduled";
 }
 
 void session::on_finish(

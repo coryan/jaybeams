@@ -307,14 +307,13 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::write_op<W>> async_write(
+  void async_write(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream, W&& request,
       std::string name, Functor&& f) {
     auto op = create_op<detail::write_op<W>>(std::move(name), std::move(f));
-    void* tag = register_op("async_writes_done()", op);
+    void* tag = register_op("async_write()", op);
     op->request.Swap(&request);
-    stream->client->Write(op->request, tag);
-    return op;
+    interceptor_.async_write(stream, op, tag);
   }
 
   /**
@@ -322,13 +321,12 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::read_op<R>> async_read(
+  void async_read(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
     auto op = create_op<detail::read_op<R>>(std::move(name), std::move(f));
-    void* tag = register_op("async_writes_done()", op);
-    stream->client->Read(&op->response, tag);
-    return op;
+    void* tag = register_op("async_read()", op);
+    interceptor_.async_read(stream, op, tag);
   }
 
   /**
@@ -336,27 +334,28 @@ public:
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::writes_done_op> async_writes_done(
+  void async_writes_done(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
     auto op = create_op<detail::writes_done_op>(std::move(name), std::move(f));
     void* tag = register_op("async_writes_done()", op);
-    stream->client->WritesDone(tag);
-    return op;
+    interceptor_.async_writes_done(stream, op, tag);
   }
+
+  // TODO() - if there is need, create the overloads that return a
+  // future object to wait until these operations complete ...
 
   /**
    * Make an asynchronous call to Finish() and call the functor
    * when it is completed.
    */
   template <typename W, typename R, typename Functor>
-  std::shared_ptr<detail::finish_op> async_finish(
+  void async_finish(
       std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
       std::string name, Functor&& f) {
     auto op = create_op<detail::finish_op>(std::move(name), std::move(f));
     void* tag = register_op("async_finish()", op);
-    stream->client->Finish(&op->status, tag);
-    return op;
+    interceptor_.async_finish(stream, op, tag);
   }
 
   /**
