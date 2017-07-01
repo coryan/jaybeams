@@ -342,8 +342,24 @@ public:
     interceptor_.async_writes_done(stream, op, tag);
   }
 
-  // TODO() - if there is need, create the overloads that return a
-  // future object to wait until these operations complete ...
+  /**
+   * Make an asynchronous call to Finish() and return a std::future<>.
+   */
+  template <typename W, typename R>
+  std::shared_future<void> async_writes_done(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
+      std::string name, use_future) {
+    auto promise = std::make_shared<std::promise<void>>();
+    this->async_writes_done(stream, name, [promise](auto& op, bool ok) {
+      if (not ok) {
+        promise->set_exception(std::make_exception_ptr(
+            std::runtime_error("async writes done cancelled")));
+        return;
+      }
+      promise->set_value();
+    });
+    return promise->get_future().share();
+  }
 
   /**
    * Make an asynchronous call to Finish() and call the functor
@@ -356,6 +372,25 @@ public:
     auto op = create_op<detail::finish_op>(std::move(name), std::move(f));
     void* tag = register_op("async_finish()", op);
     interceptor_.async_finish(stream, op, tag);
+  }
+
+  /**
+   * Make an asynchronous call to Finish() and return a std::future<>.
+   */
+  template <typename W, typename R>
+  std::shared_future<grpc::Status> async_finish(
+      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
+      std::string name, use_future) {
+    auto promise = std::make_shared<std::promise<grpc::Status>>();
+    this->async_finish(stream, name, [promise](auto& op, bool ok) {
+      if (not ok) {
+        promise->set_exception(std::make_exception_ptr(
+            std::runtime_error("async finished cancelled")));
+        return;
+      }
+      promise->set_value(op.status);
+    });
+    return promise->get_future().share();
   }
 
   /**

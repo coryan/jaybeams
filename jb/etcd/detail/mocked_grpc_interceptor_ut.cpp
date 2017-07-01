@@ -213,8 +213,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_write_functor) {
   using ::testing::_;
   using ::testing::Invoke;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_write(_))
-      .WillRepeatedly(
-          Invoke([](auto op) mutable { op->callback(*op, true); }));
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -253,8 +252,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_read_functor) {
   using ::testing::_;
   using ::testing::Invoke;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_read(_))
-      .WillRepeatedly(
-          Invoke([](auto op) mutable { op->callback(*op, true); }));
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -291,8 +289,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_writes_done_functor) {
   using ::testing::_;
   using ::testing::Invoke;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_writes_done(_))
-      .WillRepeatedly(
-          Invoke([](auto op) mutable { op->callback(*op, true); }));
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -309,6 +306,52 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_writes_done_functor) {
   BOOST_CHECK_EQUAL(counter, 1);
 }
 
+/**
+ * @test Verify WritesDone() operations with use_future() work as expected.
+ */
+BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_writes_done_future) {
+  using namespace std::chrono_literals;
+
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue<detail::mocked_grpc_interceptor> queue;
+
+  // Prepare the Mock to save the asynchronous operation state,
+  // normally you would simply invoke the callback in the mock action,
+  // but this test wants to verify what happens if there is a delay
+  // ...
+  using ::testing::_;
+  using ::testing::Invoke;
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_writes_done(_))
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
+
+  // ... make the request, that will post operations to the mock
+  // completion queue ...
+  using stream_type = detail::async_rdwr_stream<
+      etcdserverpb::LeaseKeepAliveRequest,
+      etcdserverpb::LeaseKeepAliveResponse>;
+  std::unique_ptr<stream_type> stream;
+  auto fut = queue.async_writes_done(
+      stream, "test/AsyncLeaseKeepAlive::WritesDone/future",
+      jb::etcd::use_future());
+  auto wait_response = fut.wait_for(0ms);
+  BOOST_REQUIRE_EQUAL(wait_response, std::future_status::ready);
+  BOOST_CHECK_NO_THROW(fut.get());
+
+  // ... also test cancelations ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_writes_done(_))
+      .WillRepeatedly(
+          Invoke([](auto op) mutable { op->callback(*op, false); }));
+  auto fut2 = queue.async_writes_done(
+      stream, "test/AsyncLeaseKeepAlive::WritesDone/future/canceled",
+      jb::etcd::use_future());
+  wait_response = fut2.wait_for(0ms);
+  BOOST_REQUIRE_EQUAL(wait_response, std::future_status::ready);
+  BOOST_CHECK_THROW(fut2.get(), std::exception);
+}
 /**
  * @test Verify Finish() operations on rdwr RPC streams are intercepted.
  */
@@ -329,8 +372,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_finish_functor) {
   using ::testing::_;
   using ::testing::Invoke;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_finish(_))
-      .WillRepeatedly(
-          Invoke([](auto op) mutable { op->callback(*op, true); }));
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
 
   // ... make the request, that will post operations to the mock
   // completion queue ...
@@ -345,4 +387,51 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_finish_functor) {
       [cnt](auto op, bool ok) { *cnt += int(ok); });
 
   BOOST_CHECK_EQUAL(counter, 1);
+}
+
+/**
+ * @test Verify Finish() operations with use_future() work as expected.
+ */
+BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_finish_future) {
+  using namespace std::chrono_literals;
+
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue<detail::mocked_grpc_interceptor> queue;
+
+  // Prepare the Mock to save the asynchronous operation state,
+  // normally you would simply invoke the callback in the mock action,
+  // but this test wants to verify what happens if there is a delay
+  // ...
+  using ::testing::_;
+  using ::testing::Invoke;
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_finish(_))
+      .WillRepeatedly(Invoke([](auto op) mutable { op->callback(*op, true); }));
+
+  // ... make the request, that will post operations to the mock
+  // completion queue ...
+  using stream_type = detail::async_rdwr_stream<
+      etcdserverpb::LeaseKeepAliveRequest,
+      etcdserverpb::LeaseKeepAliveResponse>;
+  std::unique_ptr<stream_type> stream;
+  auto fut = queue.async_finish(
+      stream, "test/AsyncLeaseKeepAlive::Finish/future",
+      jb::etcd::use_future());
+  auto wait_response = fut.wait_for(0ms);
+  BOOST_REQUIRE_EQUAL(wait_response, std::future_status::ready);
+  BOOST_CHECK_NO_THROW(fut.get());
+
+  // ... also test cancelations ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_finish(_))
+      .WillRepeatedly(
+          Invoke([](auto op) mutable { op->callback(*op, false); }));
+  auto fut2 = queue.async_finish(
+      stream, "test/AsyncLeaseKeepAlive::Finish/future/canceled",
+      jb::etcd::use_future());
+  wait_response = fut2.wait_for(0ms);
+  BOOST_REQUIRE_EQUAL(wait_response, std::future_status::ready);
+  BOOST_CHECK_THROW(fut2.get(), std::exception);
 }
