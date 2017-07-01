@@ -66,7 +66,7 @@ struct mocked_grpc_interceptor {
       std::shared_ptr<op_type>& op, void* tag) {
     shared_mock->async_finish(op);
   }
-  
+
   struct mocked {
     MOCK_CONST_METHOD1(async_rpc, void(std::shared_ptr<base_async_op> op));
     MOCK_CONST_METHOD1(

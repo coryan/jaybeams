@@ -61,7 +61,7 @@ struct default_grpc_interceptor {
     stream->client->Finish(&op->status, tag);
   }
 };
-  
+
 } // namespace detail
 } // namespace etcd
 } // namespace jb
