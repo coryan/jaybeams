@@ -19,7 +19,7 @@ class active_completion_queue {
 public:
   /// Constructor, creates new completion queue and thread.
   active_completion_queue()
-      : queue_(std::make_shared<completion_queue>())
+      : queue_(std::make_shared<completion_queue<>>())
       , thread_([q = queue()]() { q->run(); })
       , join_(&thread_)
       , shutdown_(queue()) {
@@ -27,7 +27,8 @@ public:
 
   /// Constructor from existing queue and thread.  Assumes thread
   /// calls q->run().
-  active_completion_queue(std::shared_ptr<completion_queue> q, std::thread&& t)
+  active_completion_queue(
+      std::shared_ptr<completion_queue<>> q, std::thread&& t)
       : queue_(std::move(q))
       , thread_(std::move(t))
       , join_(&thread_)
@@ -60,26 +61,26 @@ public:
     return static_cast<grpc::CompletionQueue*>(*queue_);
   }
 
-  completion_queue& cq() {
+  completion_queue<>& cq() {
     return *queue_;
   }
 
 private:
   /// A helper for the lambdas in the constructor
-  std::shared_ptr<completion_queue> queue() {
+  std::shared_ptr<completion_queue<>> queue() {
     return queue_;
   }
 
   /// Shutdown a completion queue
   struct defer_shutdown {
-    explicit defer_shutdown(std::shared_ptr<completion_queue> q)
+    explicit defer_shutdown(std::shared_ptr<completion_queue<>> q)
         : queue(q) {
     }
     ~defer_shutdown();
     void release() {
       queue.reset();
     }
-    std::shared_ptr<completion_queue> queue;
+    std::shared_ptr<completion_queue<>> queue;
   };
 
   /// Join a thread
@@ -95,7 +96,7 @@ private:
   };
 
 private:
-  std::shared_ptr<completion_queue> queue_;
+  std::shared_ptr<completion_queue<>> queue_;
   std::thread thread_;
   defer_join join_;
   defer_shutdown shutdown_;

@@ -113,7 +113,6 @@ AS_IF([test "x$SANITIZER" != "x"], [
     [AM_CONDITIONAL([HAVE_SANITIZER], [false])]
 )
 
-
 AS_IF([test "x$SANITIZER" == "xaddress"],
     [HAVE_SANITIZER_ADDRESS=yes
      AC_DEFINE(HAVE_SANTIZER_ADDRESS,,
@@ -134,6 +133,37 @@ AS_IF([test "x$SANITIZER" == "xthread"],
      AC_DEFINE(HAVE_SANTIZER_THREAD,,
         [define if built with thread sanitizer])
      AC_SUBST(HAVE_SANITIZER_THREAD)], [])
+
+# ... search for the gmock (Google Mocking Framework) header and
+# source.  This library is distributed as source and compiled, so we
+# use:
+AX_CHECK_GMOCK_SOURCE([gmock/gmock.h],
+    [GMOCK_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
+     AC_SUBST(GMOCK_CPPFLAGS)
+    ], [AC_MSG_ERROR([missing gmock/gmock.h])],
+    [/usr/local/include /opt/include])
+
+AX_CHECK_GMOCK_SOURCE([src/gmock-all.cc gmock-all.cc],
+    [GMOCK_SOURCE_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
+     AC_SUBST(GMOCK_SOURCE_CPPFLAGS)
+     GMOCK_SOURCE=$AX_GMOCK_SOURCE
+     AC_SUBST(GMOCK_SOURCE)
+    ], [AC_MSG_ERROR([cannot find gmock-all.cc])],
+    [/usr/src/gmock /usr/local/src/gmock /opt/src/gmock])
+
+AX_CHECK_GMOCK_SOURCE([gtest/gtest.h],
+    [GTEST_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
+     AC_SUBST(GTEST_CPPFLAGS)
+    ], [AC_MSG_ERROR([missing gtest/gtest.h])],
+    [/usr/local/include /opt/include])
+
+AX_CHECK_GMOCK_SOURCE([src/gtest-all.cc gtest-all.cc],
+    [GTEST_SOURCE_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
+     AC_SUBST(GTEST_SOURCE_CPPFLAGS)
+     GTEST_SOURCE=$AX_GMOCK_SOURCE
+     AC_SUBST(GTEST_SOURCE)
+    ], [AC_MSG_ERROR([cannot find gmock-all.cc])],
+    [/usr/src/gtest /usr/local/src/gtest /opt/src/gtest])
 
 # ... find out where the Protobuf and gRPC libraries can be found
 # using pkg-confg.  Avoid using PKG_CHECK_MODULES because we want

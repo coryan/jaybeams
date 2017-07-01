@@ -1,20 +1,20 @@
-#include "jb/etcd/completion_queue.hpp"
+#include "jb/etcd/completion_queue_base.hpp"
 #include <jb/assert_throw.hpp>
 #include <jb/log.hpp>
 
 namespace jb {
 namespace etcd {
 
-std::chrono::milliseconds constexpr completion_queue::loop_timeout;
+std::chrono::milliseconds constexpr completion_queue_base::loop_timeout;
 
-completion_queue::completion_queue()
+completion_queue_base::completion_queue_base()
     : mu_()
     , pending_ops_()
     , queue_()
     , shutdown_(false) {
 }
 
-completion_queue::~completion_queue() {
+completion_queue_base::~completion_queue_base() {
   if (not pending_ops_.empty()) {
     // At this point there is not much to do, we could try to call the
     // operations and tell them they are cancelled, but that is risky,
@@ -33,7 +33,7 @@ completion_queue::~completion_queue() {
   }
 }
 
-void completion_queue::run() {
+void completion_queue_base::run() {
   void* tag = nullptr;
   bool ok = false;
   while (not shutdown_.load()) {
@@ -67,13 +67,13 @@ void completion_queue::run() {
   }
 }
 
-void completion_queue::shutdown() {
+void completion_queue_base::shutdown() {
   JB_LOG(trace) << "shutting down queue";
   shutdown_.store(true);
   queue_.Shutdown();
 }
 
-void* completion_queue::register_op(
+void* completion_queue_base::register_op(
     char const* where, std::shared_ptr<detail::base_async_op> op) {
   void* tag = static_cast<void*>(op.get());
   auto key = reinterpret_cast<std::intptr_t>(tag);
@@ -84,7 +84,7 @@ void* completion_queue::register_op(
 }
 
 std::shared_ptr<detail::base_async_op>
-completion_queue::unregister_op(void* tag) {
+completion_queue_base::unregister_op(void* tag) {
   std::lock_guard<std::mutex> lock(mu_);
   pending_ops_type::iterator i =
       pending_ops_.find(reinterpret_cast<std::intptr_t>(tag));

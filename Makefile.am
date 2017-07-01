@@ -23,6 +23,7 @@ lib_LIBRARIES = \
   jb/libjb_itch5.a \
   jb/libjb_pitch2.a \
   jb/libjb_testing.a \
+  jb/libjb_gmock.a \
   jb/libjb_itch5_testing.a
 
 # The unit tests are added (via +=) in the same section where we
@@ -439,6 +440,7 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
+  jb/testing/future_status.hpp \
   jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
@@ -471,6 +473,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@
 
 unit_tests += \
+  jb/testing/future_status_ut \
   jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
@@ -485,6 +488,10 @@ jb_testing_check_random_device_LDADD = jb/libjb.a
 
 jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
 jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
+
+jb_testing_future_status_ut_SOURCES = jb/testing/future_status_ut.cpp
+jb_testing_future_status_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_future_status_ut
+jb_testing_future_status_ut_LDADD = $(jb_ut_testing_ldadd)
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
@@ -511,9 +518,23 @@ jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
 jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 
 ################################################################
+# jb/libjb_gmock.a
+################################################################
+jb_libjb_gmock_adir = $(includedir)
+jb_libjb_gmock_a_HEADERS = \
+  jb/gmock/init.hpp
+jb_libjb_gmock_a_SOURCES = \
+  jb/gmock/gmock.cpp \
+  jb/gmock/gtest.cpp
+jb_libjb_gmock_a_CPPFLAGS = \
+  $(GMOCK_CPPFLAGS) $(GMOCK_SOURCE_CPPFLAGS) \
+  -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>" \
+  $(GTEST_CPPFLAGS) $(GTEST_SOURCE_CPPFLAGS) \
+  -DGTEST_SOURCE="<$(GTEST_SOURCE)>"
+
+################################################################
 # jb/libjb_etcd.a
 ################################################################
-
 
 # TODO(#158) - the settings of these flags carefully workaround the
 # layout structure expected by protoc(1) and the differences between
@@ -523,29 +544,7 @@ JB_AM_PROTO_SEARCH_PATHS += $(srcdir)/googleapis $(srcdir)/gogoproto
 AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
 
 jb_libjb_etcd_adir = $(includedir)
-jb_libjb_etcd_a_SOURCES = \
-  jb/etcd/active_completion_queue.cpp \
-  jb/etcd/completion_queue.cpp \
-  jb/etcd/grpc_errors.cpp \
-  jb/etcd/leader_election_participant.cpp \
-  jb/etcd/log_promise_errors.cpp \
-  jb/etcd/session.cpp \
-  google/api/http.pb.cc \
-  google/api/annotations.pb.cc \
-  gogoproto/gogo.pb.cc \
-  etcd/mvcc/mvccpb/kv.pb.cc \
-  etcd/auth/authpb/auth.pb.cc \
-  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
-  etcd/etcdserver/etcdserverpb/rpc.pb.cc
-nobase_jb_libjb_etcd_a_HEADERS = \
-  jb/etcd/active_completion_queue.hpp \
-  jb/etcd/completion_queue.hpp \
-  jb/etcd/detail/async_ops.hpp \
-  jb/etcd/detail/grpc_errors_annotations.hpp \
-  jb/etcd/grpc_errors.hpp \
-  jb/etcd/leader_election_participant.hpp \
-  jb/etcd/log_promise_errors.hpp \
-  jb/etcd/session.hpp \
+jb_libjb_etcd_proto_headers = \
   google/api/http.pb.h \
   google/api/annotations.pb.h \
   gogoproto/gogo.pb.h \
@@ -554,18 +553,62 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
   etcd/etcdserver/etcdserverpb/rpc.pb.h
 
+jb_libjb_etcd_proto_sources = $(jb_libjb_etcd_proto_headers:.pb.h=.pb.cc)
+
+# TODO() - decide if the protobuf files should be included in the
+# distribution tarball ...
+nodist_noinst_DATA = \
+  googleapis/google/api/http.proto \
+  googleapis/google/api/annotations.proto \
+  gogoproto/gogoproto/gogo.proto \
+  etcd/mvcc/mvccpb/kv.proto \
+  etcd/auth/authpb/auth.proto \
+  etcd/etcdserver/etcdserverpb/rpc.proto
+
+nobase_jb_libjb_etcd_a_HEADERS = \
+  jb/etcd/active_completion_queue.hpp \
+  jb/etcd/completion_queue_base.hpp \
+  jb/etcd/completion_queue.hpp \
+  jb/etcd/detail/async_ops.hpp \
+  jb/etcd/detail/default_grpc_interceptor.hpp \
+  jb/etcd/detail/grpc_errors_annotations.hpp \
+  jb/etcd/detail/mocked_grpc_interceptor.hpp \
+  jb/etcd/grpc_errors.hpp \
+  jb/etcd/leader_election_participant.hpp \
+  jb/etcd/log_promise_errors.hpp \
+  jb/etcd/session.hpp \
+  $(jb_libjb_etcd_proto_headers)
+
+jb_libjb_etcd_a_sources = \
+  jb/etcd/active_completion_queue.cpp \
+  jb/etcd/completion_queue_base.cpp \
+  jb/etcd/grpc_errors.cpp \
+  jb/etcd/leader_election_participant.cpp \
+  jb/etcd/log_promise_errors.cpp \
+  jb/etcd/session.cpp
+
+jb_libjb_etcd_a_SOURCES = \
+  $(jb_libjb_etcd_a_sources) \
+  $(jb_libjb_etcd_proto_sources)
+
+# ... we need to make sure all headers are generated *before* we start
+# compiling the files that include them ...
+# DEBUG $(info other objects = $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)))
+$(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+$(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
   jb/etcd/election_participant \
   jb/etcd/leader_election_participant_ut \
   jb/etcd/session_ut
-
 noinst_SCRIPTS += jb/etcd/integration_tests.py
 
 jb_etcd_unit_tests = \
   jb/etcd/active_completion_queue_ut \
   jb/etcd/completion_queue_ut \
   jb/etcd/grpc_errors_ut \
+  jb/etcd/detail/mocked_grpc_interceptor_ut \
   jb/etcd/log_promise_errors_ut
 
 check_PROGRAMS += $(jb_etcd_unit_tests)
@@ -591,6 +634,11 @@ jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etc
 jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
 
+jb_etcd_detail_mocked_grpc_interceptor_ut_SOURCES = jb/etcd/detail/mocked_grpc_interceptor_ut.cpp
+jb_etcd_detail_mocked_grpc_interceptor_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_mocked_grpc_interceptor_ut
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDADD = $(jb_etcd_ut_ldadd) jb/libjb_gmock.a
+
 jb_etcd_grpc_errors_ut_SOURCES = jb/etcd/grpc_errors_ut.cpp
 jb_etcd_grpc_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_grpc_errors_ut
 jb_etcd_grpc_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
@@ -610,16 +658,6 @@ jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
 jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut
 jb_etcd_session_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_session_ut_LDADD = $(jb_etcd_ut_ldadd)
-
-# TODO() - decide if the protobuf files should be included in the
-# distribution tarball ...
-nodist_noinst_DATA = \
-  googleapis/google/api/http.proto \
-  googleapis/google/api/annotations.proto \
-  gogoproto/gogoproto/gogo.proto \
-  etcd/mvcc/mvccpb/kv.proto \
-  etcd/auth/authpb/auth.proto \
-  etcd/etcdserver/etcdserverpb/rpc.proto
 
 jb_etcd_election_listener_SOURCES = \
   jb/etcd/election_listener.cpp

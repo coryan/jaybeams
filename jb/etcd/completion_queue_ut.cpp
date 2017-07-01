@@ -8,7 +8,7 @@
  * @test Verify that one can create, run, and stop a completion queue.
  */
 BOOST_AUTO_TEST_CASE(completion_queue_basic) {
-  jb::etcd::completion_queue queue;
+  jb::etcd::completion_queue<> queue;
 
   std::atomic<int> cnt(0);
   std::atomic<int> cxl(0);
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(completion_queue_basic) {
 BOOST_AUTO_TEST_CASE(completion_queue_error) {
   using namespace std::chrono_literals;
 
-  jb::etcd::completion_queue queue;
+  jb::etcd::completion_queue<> queue;
   std::thread t([&queue]() { queue.run(); });
 
   // ... manually create a timer with a null tag, that requires going

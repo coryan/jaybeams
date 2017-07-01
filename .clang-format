@@ -92,3 +92,9 @@ IncludeCategories:
     Priority: 5000
   - Regex:    '^<fftw3'
     Priority: 5000
+  - Regex:    '^<grpc++'
+    Priority: 5000
+  - Regex:    '^<gmock'
+    Priority: 5000
+  - Regex:    '^<gtest'
+    Priority: 5000
