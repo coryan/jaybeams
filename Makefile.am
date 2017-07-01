@@ -23,6 +23,7 @@ lib_LIBRARIES = \
   jb/libjb_itch5.a \
   jb/libjb_pitch2.a \
   jb/libjb_testing.a \
+  jb/libjb_gmock.a \
   jb/libjb_itch5_testing.a
 
 # The unit tests are added (via +=) in the same section where we
@@ -511,9 +512,18 @@ jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
 jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 
 ################################################################
+# jb/libjb_gmock.a
+################################################################
+jb_libjb_gmock_adir = $(includedir)
+jb_libjb_gmock_a_HEADERS =
+jb_libjb_gmock_a_SOURCES = \
+  jb/gmock/gmock.cpp
+jb_libjb_gmock_a_CPPFLAGS = \
+  $(GMOCK_CPPFLAGS) $(GMOCKSRC_CPPFLAGS) -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>"
+
+################################################################
 # jb/libjb_etcd.a
 ################################################################
-
 
 # TODO(#158) - the settings of these flags carefully workaround the
 # layout structure expected by protoc(1) and the differences between
@@ -532,6 +542,8 @@ jb_libjb_etcd_proto_headers = \
   etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
   etcd/etcdserver/etcdserverpb/rpc.pb.h
 
+jb_libjb_etcd_proto_sources = $(jb_libjb_etcd_proto_headers:.pb.h=.pb.cc)
+
 nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/active_completion_queue.hpp \
   jb/etcd/client_factory.hpp \
@@ -545,25 +557,28 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/session.hpp \
   $(jb_libjb_etcd_proto_headers)
 
-jb_libjb_etcd_a_SOURCES = \
+jb_libjb_etcd_a_sources = \
   jb/etcd/active_completion_queue.cpp \
   jb/etcd/client_factory.cpp \
   jb/etcd/completion_queue_base.cpp \
   jb/etcd/grpc_errors.cpp \
   jb/etcd/leader_election_participant.cpp \
   jb/etcd/log_promise_errors.cpp \
-  jb/etcd/session.cpp \
-  google/api/http.pb.cc \
-  google/api/annotations.pb.cc \
-  gogoproto/gogo.pb.cc \
-  etcd/mvcc/mvccpb/kv.pb.cc \
-  etcd/auth/authpb/auth.pb.cc \
-  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.cc \
-  etcd/etcdserver/etcdserverpb/rpc.pb.cc
-etcd/mvcc/mvccpb/kv.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
-etcd/auth/authpb/auth.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
-etcd/etcdserver/etcdserverpb/rpc.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
-etcd/etcdserver/etcdserverpb/rpc.grpc.pb.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
+  jb/etcd/session.cpp
+
+jb_libjb_etcd_a_SOURCES = \
+  $(jb_libjb_etcd_a_sources) \
+  $(jb_libjb_etcd_proto_sources)
+
+# ... we need to make sure all headers are generated *before* we start
+# compiling the files that include them ...
+#$(info proto headers = $(jb_libjb_etcd_proto_headers))
+#$(info proto sources = $(jb_libjb_etcd_proto_sources))
+#$(info proto objects = $(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)))
+#$(info other objects = $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)))
+$(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+$(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+
 
 noinst_PROGRAMS += \
   jb/etcd/election_listener \
@@ -626,7 +641,7 @@ jb_etcd_session_ut_LDADD = $(jb_etcd_ut_ldadd)
 jb_etcd_with_promise_ut_SOURCES = jb/etcd/with_promise_ut.cpp
 jb_etcd_with_promise_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_with_promise_ut
 jb_etcd_with_promise_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
-jb_etcd_with_promise_ut_LDADD = $(jb_etcd_ut_ldadd)
+jb_etcd_with_promise_ut_LDADD = $(jb_etcd_ut_ldadd) jb/libjb_gmock.a
 
 # TODO() - decide if the protobuf files should be included in the
 # distribution tarball ...

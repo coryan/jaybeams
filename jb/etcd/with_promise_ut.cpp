@@ -2,7 +2,7 @@
 
 #include <etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h>
 
-#include <skye/mock_function.hpp>
+#include <jb/gmock/init.hpp>
 #include <boost/test/unit_test.hpp>
 #include <atomic>
 #include <future>
@@ -100,14 +100,10 @@ std::shared_future<typename async_op_requirements<M>::response_type> async_rpc(
 }
 
 struct mock_grpc_interceptor {
-  skye::mock_function<void(std::shared_ptr<base_async_op>)> mock_async_rpc;
-
   template <typename C, typename M, typename op_type>
   void async_rpc(
       C* async_client, M C::*call, std::shared_ptr<op_type>& op,
       grpc::CompletionQueue* cq, void* tag) {
-    std::shared_ptr<base_async_op> bop = op;
-    mock_async_rpc(bop);
   }
 };
 
@@ -144,7 +140,6 @@ BOOST_AUTO_TEST_CASE(completion_queue_error) {
   // ... block ...
   auto response = fut.get();
 
-  queue.interceptor().mock_async_rpc.check_called().once();
   BOOST_CHECK_EQUAL(response.ttl(), 7);
   BOOST_CHECK_EQUAL(response.id(), 123456UL);
 
