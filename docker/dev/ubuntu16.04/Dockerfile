@@ -99,7 +99,7 @@ RUN wget -q https://github.com/coreos/etcd/releases/download/v3.2.1/etcd-v3.2.1-
 
 # TODO() this should be installed in that first "apt-get install", need to
 # debug the image first.
-RUN apt-get update && apt-get install -y google-mock google-test && \
+RUN apt-get update && apt-get install -y google-mock libgtest-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
