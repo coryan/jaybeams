@@ -140,7 +140,7 @@ AS_IF([test "x$SANITIZER" == "xthread"],
 AX_CHECK_GMOCK_SOURCE([gmock/gmock.h],
     [GMOCK_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
      AC_SUBST(GMOCK_CPPFLAGS)
-    ], [AC_MSG_ERROR([missing gmock/gmock.h])],
+    ], [AC_MSG_ERROR([cannot find gmock/gmock.h])],
     [/usr/local/include /opt/include])
 
 AX_CHECK_GMOCK_SOURCE([src/gmock-all.cc gmock-all.cc],
@@ -154,7 +154,7 @@ AX_CHECK_GMOCK_SOURCE([src/gmock-all.cc gmock-all.cc],
 AX_CHECK_GMOCK_SOURCE([gtest/gtest.h],
     [GTEST_CPPFLAGS=$AX_GMOCK_SOURCE_CPPFLAGS
      AC_SUBST(GTEST_CPPFLAGS)
-    ], [AC_MSG_ERROR([missing gtest/gtest.h])],
+    ], [AC_MSG_ERROR([cannot find gtest/gtest.h])],
     [/usr/local/include /opt/include])
 
 AX_CHECK_GMOCK_SOURCE([src/gtest-all.cc gtest-all.cc],
@@ -162,8 +162,20 @@ AX_CHECK_GMOCK_SOURCE([src/gtest-all.cc gtest-all.cc],
      AC_SUBST(GTEST_SOURCE_CPPFLAGS)
      GTEST_SOURCE=$AX_GMOCK_SOURCE
      AC_SUBST(GTEST_SOURCE)
-    ], [AC_MSG_ERROR([cannot find gmock-all.cc])],
+     AM_CONDITIONAL([GTEST_USE_SOURCE], [true])
+    ], [],
     [/usr/src/gtest /usr/local/src/gtest /opt/src/gtest])
+
+AS_IF([test "x$GTEST_SOURCE" = "x"],
+  [AX_CHECK_LIBRARY(GTEST, [gtest/gtest.h], [gtest],
+      [GTEST_LIBS=-lgtest
+       AC_SUBST(GTEST_LIBS)
+       AM_CONDITIONAL([GTEST_USE_SOURCE], [false])
+      ],
+      [AC_MSG_ERROR([Cannot find gtest library, nor the source])
+      ]
+   )], [])
+
 
 # ... find out where the Protobuf and gRPC libraries can be found
 # using pkg-confg.  Avoid using PKG_CHECK_MODULES because we want

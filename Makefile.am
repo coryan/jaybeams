@@ -524,13 +524,18 @@ jb_libjb_gmock_adir = $(includedir)
 jb_libjb_gmock_a_HEADERS = \
   jb/gmock/init.hpp
 jb_libjb_gmock_a_SOURCES = \
-  jb/gmock/gmock.cpp \
-  jb/gmock/gtest.cpp
+  jb/gmock/gmock.cpp
 jb_libjb_gmock_a_CPPFLAGS = \
   $(GMOCK_CPPFLAGS) $(GMOCK_SOURCE_CPPFLAGS) \
   -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>" \
-  $(GTEST_CPPFLAGS) $(GTEST_SOURCE_CPPFLAGS) \
+  $(GTEST_CPPFLAGS)
+
+if GTEST_USE_SOURCE
+jb_libjb_gmock_a_SOURCES += \
+  jb/gmock/gtest.cpp
+jb_libjb_gmock_a_CPPFLAGS += $(GTEST_SOURCE_CPPFLAGS) \
   -DGTEST_SOURCE="<$(GTEST_SOURCE)>"
+endif GTEST_USE_SOURCE
 
 ################################################################
 # jb/libjb_etcd.a
@@ -637,7 +642,8 @@ jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
 jb_etcd_detail_mocked_grpc_interceptor_ut_SOURCES = jb/etcd/detail/mocked_grpc_interceptor_ut.cpp
 jb_etcd_detail_mocked_grpc_interceptor_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_mocked_grpc_interceptor_ut
 jb_etcd_detail_mocked_grpc_interceptor_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
-jb_etcd_detail_mocked_grpc_interceptor_ut_LDADD = $(jb_etcd_ut_ldadd) jb/libjb_gmock.a
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDADD = $(jb_etcd_ut_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_etcd_grpc_errors_ut_SOURCES = jb/etcd/grpc_errors_ut.cpp
 jb_etcd_grpc_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_grpc_errors_ut
