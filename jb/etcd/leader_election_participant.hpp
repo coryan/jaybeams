@@ -223,9 +223,6 @@ private:
 
   bool set_state(char const* msg, state new_state);
 
-  // Compute the end of the range for a prefix search.
-  static std::string prefix_end(std::string const& prefix);
-
 private:
   std::shared_ptr<active_completion_queue> queue_;
   std::shared_ptr<grpc::Channel> channel_;

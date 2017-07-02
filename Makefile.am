@@ -581,6 +581,7 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
   jb/etcd/log_promise_errors.hpp \
+  jb/etcd/prefix_end.hpp \
   jb/etcd/session.hpp \
   $(jb_libjb_etcd_proto_headers)
 
@@ -590,6 +591,7 @@ jb_libjb_etcd_a_sources = \
   jb/etcd/grpc_errors.cpp \
   jb/etcd/leader_election_participant.cpp \
   jb/etcd/log_promise_errors.cpp \
+  jb/etcd/prefix_end.cpp \
   jb/etcd/session.cpp
 
 jb_libjb_etcd_a_SOURCES = \
@@ -614,7 +616,8 @@ jb_etcd_unit_tests = \
   jb/etcd/completion_queue_ut \
   jb/etcd/grpc_errors_ut \
   jb/etcd/detail/mocked_grpc_interceptor_ut \
-  jb/etcd/log_promise_errors_ut
+  jb/etcd/log_promise_errors_ut \
+  jb/etcd/prefix_end_ut
 
 check_PROGRAMS += $(jb_etcd_unit_tests)
 TESTS += $(jb_etcd_unit_tests)
@@ -659,6 +662,11 @@ jb_etcd_log_promise_errors_ut_SOURCES = jb/etcd/log_promise_errors_ut.cpp
 jb_etcd_log_promise_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_log_promise_errors_ut
 jb_etcd_log_promise_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_log_promise_errors_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_prefix_end_ut_SOURCES = jb/etcd/prefix_end_ut.cpp
+jb_etcd_prefix_end_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_prefix_end_ut
+jb_etcd_prefix_end_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_prefix_end_ut_LDADD = $(jb_etcd_ut_ldadd)
 
 jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
 jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut

@@ -1,5 +1,7 @@
 /**
- * @file Helper functions to handle errors reported by gRPC++
+ * @file
+ *
+ * Helper functions to handle errors reported by gRPC++
  */
 #ifndef jb_etcd_grpc_errors_hpp
 #define jb_etcd_grpc_errors_hpp
