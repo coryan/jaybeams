@@ -13,6 +13,8 @@ lcov --remove coverage.info \
      'valgrind/valgrind.h' \
      '*.pb.h' \
      '*.pb.cc' \
+     'googletest/googlemock/*/*' \
+     'googletest/googletest/*/*' \
      '/usr/include/*' \
      '/usr/local/*' \
      --output-file coverage.info
