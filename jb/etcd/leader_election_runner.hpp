@@ -181,8 +181,7 @@ public:
     {
       std::lock_guard<std::mutex> lock(mu_);
       if (state_ != state::resigning) {
-        JB_LOG(trace) << key() << " " << state_ << " " << pending_async_ops_
-                      << " unexpected state for resign()/watches";
+        JB_LOG(trace) << log_header("resign()") << " unexpected state";
         std::ostringstream os;
         os << key() << " unexpected state " << state_ << " while resigning";
         throw std::runtime_error(os.str());
