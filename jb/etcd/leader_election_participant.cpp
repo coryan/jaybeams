@@ -134,7 +134,6 @@ void leader_election_participant::preamble() try {
   // constructed, it should not be used by more than one thread ...
   set_state("preamble()", state::connecting);
 
-  async_op_start("create stream / preamble/lambda()");
   auto fut = queue_->cq().async_create_rdwr_stream(
       watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
       "leader_election_participant/watch", jb::etcd::use_future());
