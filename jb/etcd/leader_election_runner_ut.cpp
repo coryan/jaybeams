@@ -832,11 +832,40 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
     bop->callback(*bop, true);
   }));
 
+  // ... shortly after creating a node, the class will request the
+  // range of other nodes with the same prefix ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election_campaign/range";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = detail::async_op<
+        etcdserverpb::RangeRequest, etcdserverpb::RangeResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.key(), "test-election/");
+    BOOST_REQUIRE_EQUAL(op->request.range_end(), "test-election0");
+    // ... the magic number is provided by the previous mocked call ...
+    BOOST_REQUIRE_EQUAL(op->request.max_create_revision(), 2345677UL);
+    BOOST_REQUIRE_EQUAL(
+        op->request.sort_order(), etcdserverpb::RangeRequest::DESCEND);
+    BOOST_REQUIRE_EQUAL(
+        op->request.sort_target(), etcdserverpb::RangeRequest::CREATE);
+    BOOST_REQUIRE_EQUAL(op->request.limit(), 1);
+
+    // ... in this test we just assume everything is simple, just
+    // provide an empty response ...
+    
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
   using runner_type = leader_election_runner<completion_queue_type>;
 
+  bool elected = false;
   runner_type runner(
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
-      std::string("test-election"),
-      std::string("mocked-runner-a"), [](std::future<bool>&){});
+      std::string("test-election"), std::string("mocked-runner-a"),
+      [&elected](std::future<bool>& src) { elected = src.get(); });
+  BOOST_CHECK_EQUAL(elected, true);
 }
