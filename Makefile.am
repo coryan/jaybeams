@@ -579,6 +579,7 @@ nobase_jb_libjb_etcd_a_HEADERS = \
   jb/etcd/detail/mocked_grpc_interceptor.hpp \
   jb/etcd/grpc_errors.hpp \
   jb/etcd/leader_election_participant.hpp \
+  jb/etcd/leader_election_runner.hpp \
   jb/etcd/log_promise_errors.hpp \
   jb/etcd/prefix_end.hpp \
   jb/etcd/session.hpp \
@@ -589,6 +590,7 @@ jb_libjb_etcd_a_sources = \
   jb/etcd/completion_queue_base.cpp \
   jb/etcd/grpc_errors.cpp \
   jb/etcd/leader_election_participant.cpp \
+  jb/etcd/leader_election_runner.cpp \
   jb/etcd/log_promise_errors.cpp \
   jb/etcd/prefix_end.cpp \
   jb/etcd/session.cpp
