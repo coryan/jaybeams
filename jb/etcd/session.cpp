@@ -93,20 +93,10 @@ void session::preamble() try {
   // this is (unfortunately) an asynchronous operation, so we have to
   // do some magic ...
   std::promise<bool> stream_ready;
-
-  queue_->cq().async_create_rdwr_stream(
+  auto fut = queue_->cq().async_create_rdwr_stream(
       lease_client_.get(), &etcdserverpb::Lease::Stub::AsyncLeaseKeepAlive,
-      "session/ka_stream", [this, &stream_ready](auto stream, bool ok) {
-        if (ok) {
-          this->ka_stream_ = std::move(stream);
-        }
-        stream_ready.set_value(ok);
-      });
-  // ... block until done ...
-  if (not stream_ready.get_future().get()) {
-    JB_LOG(info) << std::hex << lease_id() << " stream not ready!!";
-    throw std::runtime_error("cannot complete keep alive stream setup");
-  }
+      "session/ka_stream", jb::etcd::use_future());
+  this->ka_stream_ = fut.get();
 
   JB_LOG(trace) << std::hex << lease_id() << " stream connected";
   state_ = state::connected;
@@ -143,12 +133,12 @@ void session::shutdown() {
     // The KeepAlive stream was already created, we need to close it
     // before shutting down ...
     auto writes_done_complete = queue_->cq().async_writes_done(
-        ka_stream_, "session/shutdown/writes_done", jb::etcd::use_future());
+        *ka_stream_, "session/shutdown/writes_done", jb::etcd::use_future());
     // ... block until it closes ...
     writes_done_complete.get();
 
     auto finish_complete = queue_->cq().async_finish(
-        ka_stream_, "session/ka_stream/finish", jb::etcd::use_future());
+        *ka_stream_, "session/ka_stream/finish", jb::etcd::use_future());
     auto status = finish_complete.get();
     check_grpc_status(status, "session::finish()");
   }
@@ -191,8 +181,8 @@ void session::on_timeout(detail::deadline_timer const& op, bool ok) {
   etcdserverpb::LeaseKeepAliveRequest req;
   req.set_id(lease_id());
 
-  (void)queue_->cq().async_write(
-      ka_stream_, std::move(req), "session/on_timeout/write",
+  queue_->cq().async_write(
+      *ka_stream_, std::move(req), "session/on_timeout/write",
       [this](auto op, bool ok) { this->on_write(op, ok); });
 }
 
@@ -209,7 +199,7 @@ void session::on_write(ka_stream_type::write_op& op, bool ok) {
     }
   }
   queue_->cq().async_read(
-      ka_stream_, "session/on_write/read",
+      *ka_stream_, "session/on_write/read",
       [this](auto op, bool ok) { this->on_read(op, ok); });
 }
 

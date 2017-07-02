@@ -146,7 +146,7 @@ struct create_async_rdwr_stream : public base_async_op {
   create_async_rdwr_stream()
       : stream(new async_rdwr_stream<W, R>) {
   }
-  std::unique_ptr<async_rdwr_stream<W, R>> stream;
+  std::shared_ptr<async_rdwr_stream<W, R>> stream;
 
   using write_op = ::jb::etcd::detail::write_op<W>;
   using read_op = ::jb::etcd::detail::read_op<R>;

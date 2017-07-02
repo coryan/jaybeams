@@ -162,7 +162,7 @@ private:
 
   std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
-  std::unique_ptr<ka_stream_type> ka_stream_;
+  std::shared_ptr<ka_stream_type> ka_stream_;
   std::shared_ptr<active_completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor

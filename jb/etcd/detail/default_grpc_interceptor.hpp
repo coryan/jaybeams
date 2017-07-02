@@ -32,33 +32,33 @@ struct default_grpc_interceptor {
   /// Post an asynchronous Write() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_write(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
-    stream->client->Write(op->request, tag);
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
+    stream.client->Write(op->request, tag);
   }
 
   /// Post an asynchronous Read() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_read(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
-    stream->client->Read(&op->response, tag);
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
+    stream.client->Read(&op->response, tag);
   }
 
   /// Post an asynchronous WriteDone() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_writes_done(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
-    stream->client->WritesDone(tag);
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
+    stream.client->WritesDone(tag);
   }
 
   /// Post an asynchronous Finish() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_finish(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
-    stream->client->Finish(&op->status, tag);
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
+    stream.client->Finish(&op->status, tag);
   }
 };
 

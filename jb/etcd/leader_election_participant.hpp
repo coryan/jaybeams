@@ -229,7 +229,7 @@ private:
   std::shared_ptr<session> session_;
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
-  std::unique_ptr<watcher_stream_type> watcher_stream_;
+  std::shared_ptr<watcher_stream_type> watcher_stream_;
   std::string election_name_;
   std::string participant_value_;
   std::string election_prefix_;

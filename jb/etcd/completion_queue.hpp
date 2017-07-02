@@ -203,7 +203,7 @@ public:
    * The @a stream parameter will be of type:
    *
    * @code
-   * std::unique_ptr<async_rdwr_stream<Request, Response>>
+   * std::shared_ptr<async_rdwr_stream<Request, Response>>
    * @endcode
    *
    * This function deduces the type of read-write stream to create
@@ -267,7 +267,7 @@ public:
    * completes.  The future will hold a result of type:
    *
    * @code
-   * std::unique_ptr<async_rdwr_stream<Request, Response>>
+   * std::shared_ptr<async_rdwr_stream<Request, Response>>
    * @endcode
    *
    * When the operation is successful, and an exception otherwise.  For
@@ -279,14 +279,14 @@ public:
    * request
    *
    * @returns a shared future to wait until the operation completes, of type
-   * std::shared_future<std::unique_ptr<async_rdwr_stream<Request, Response>>>
+   * std::shared_future<std::shared_ptr<async_rdwr_stream<Request, Response>>>
    */
   template <typename C, typename M>
-  std::shared_future<std::unique_ptr<
+  std::shared_future<std::shared_ptr<
       typename detail::async_stream_create_requirements<M>::stream_type>>
   async_create_rdwr_stream(
       C* async_client, M C::*call, std::string name, use_future) {
-    using ret_type = std::unique_ptr<
+    using ret_type = std::shared_ptr<
         typename detail::async_stream_create_requirements<M>::stream_type>;
     auto promise = std::make_shared<std::promise<ret_type>>();
     this->async_create_rdwr_stream(
@@ -308,8 +308,8 @@ public:
    */
   template <typename W, typename R, typename Functor>
   void async_write(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream, W&& request,
-      std::string name, Functor&& f) {
+      detail::async_rdwr_stream<W, R>& stream, W&& request, std::string name,
+      Functor&& f) {
     auto op = create_op<detail::write_op<W>>(std::move(name), std::move(f));
     void* tag = register_op("async_write()", op);
     op->request.Swap(&request);
@@ -322,8 +322,8 @@ public:
    */
   template <typename W, typename R, typename Functor>
   void async_read(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
-      std::string name, Functor&& f) {
+      detail::async_rdwr_stream<W, R> const& stream, std::string name,
+      Functor&& f) {
     auto op = create_op<detail::read_op<R>>(std::move(name), std::move(f));
     void* tag = register_op("async_read()", op);
     interceptor_.async_read(stream, op, tag);
@@ -335,8 +335,8 @@ public:
    */
   template <typename W, typename R, typename Functor>
   void async_writes_done(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
-      std::string name, Functor&& f) {
+      detail::async_rdwr_stream<W, R> const& stream, std::string name,
+      Functor&& f) {
     auto op = create_op<detail::writes_done_op>(std::move(name), std::move(f));
     void* tag = register_op("async_writes_done()", op);
     interceptor_.async_writes_done(stream, op, tag);
@@ -347,8 +347,8 @@ public:
    */
   template <typename W, typename R>
   std::shared_future<void> async_writes_done(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
-      std::string name, use_future) {
+      detail::async_rdwr_stream<W, R> const& stream, std::string name,
+      use_future) {
     auto promise = std::make_shared<std::promise<void>>();
     this->async_writes_done(stream, name, [promise](auto& op, bool ok) {
       if (not ok) {
@@ -367,8 +367,8 @@ public:
    */
   template <typename W, typename R, typename Functor>
   void async_finish(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
-      std::string name, Functor&& f) {
+      detail::async_rdwr_stream<W, R> const& stream, std::string name,
+      Functor&& f) {
     auto op = create_op<detail::finish_op>(std::move(name), std::move(f));
     void* tag = register_op("async_finish()", op);
     interceptor_.async_finish(stream, op, tag);
@@ -379,8 +379,8 @@ public:
    */
   template <typename W, typename R>
   std::shared_future<grpc::Status> async_finish(
-      std::unique_ptr<detail::async_rdwr_stream<W, R>>& stream,
-      std::string name, use_future) {
+      detail::async_rdwr_stream<W, R> const& stream, std::string name,
+      use_future) {
     auto promise = std::make_shared<std::promise<grpc::Status>>();
     this->async_finish(stream, name, [promise](auto& op, bool ok) {
       if (not ok) {

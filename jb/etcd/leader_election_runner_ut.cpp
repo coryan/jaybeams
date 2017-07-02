@@ -14,48 +14,48 @@
 
 namespace jb {
 namespace etcd {
-  //@{
-  using watcher_stream_type = detail::async_rdwr_stream<
-      etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
-  using watch_write_op = watcher_stream_type::write_op;
-  using watch_read_op = watcher_stream_type::read_op;
-  //@}
+//@{
+using watcher_stream_type = detail::async_rdwr_stream<
+    etcdserverpb::WatchRequest, etcdserverpb::WatchResponse>;
+using watch_write_op = watcher_stream_type::write_op;
+using watch_read_op = watcher_stream_type::read_op;
+//@}
 
-  /**
-   * The implicit state machine in a leader election participant.
-   *
-   * Most of the states are there for debugging, the state machine is
-   * implicit after all.  Only shuttingdown and shutdown are used to
-   * stop new async operations from starting.
-   *
-   * -# constructing: the initial state.
-   * -# connecting: setting up bi-direction stream for watchers.
-   * -# testandtest:
-   * -# republish:
-   * -# published:
-   * -# querying: discover the previous participant in the election.
-   * -# campaigning: the previous participant is known and the
-   *    watchers are setup
-   * -# elected
-   * -# resigning
-   * -# shuttingdown
-   * -# shutdown
-   *
-   */
-  enum class leader_election_state {
-    constructing,
-    connecting,
-    testandset,
-    republish,
-    published,
-    querying,
-    campaigning,
-    elected,
-    resigning,
-    resigned,
-    shuttingdown,
-    shutdown,
-  };
+/**
+ * The implicit state machine in a leader election participant.
+ *
+ * Most of the states are there for debugging, the state machine is
+ * implicit after all.  Only shuttingdown and shutdown are used to
+ * stop new async operations from starting.
+ *
+ * -# constructing: the initial state.
+ * -# connecting: setting up bi-direction stream for watchers.
+ * -# testandtest:
+ * -# republish:
+ * -# published:
+ * -# querying: discover the previous participant in the election.
+ * -# campaigning: the previous participant is known and the
+ *    watchers are setup
+ * -# elected
+ * -# resigning
+ * -# shuttingdown
+ * -# shutdown
+ *
+ */
+enum class leader_election_state {
+  constructing,
+  connecting,
+  testandset,
+  republish,
+  published,
+  querying,
+  campaigning,
+  elected,
+  resigning,
+  resigned,
+  shuttingdown,
+  shutdown,
+};
 
 static char const* str(leader_election_state s) {
   static char const* names[] = {
@@ -109,8 +109,8 @@ public:
   }
 
   bool async_op_start(char const* msg) {
-    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "      " << msg;
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "      " << msg;
     std::unique_lock<std::mutex> lock(mu_);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return false;
@@ -120,16 +120,16 @@ public:
   }
 
   bool async_op_start_shutdown(char const* msg) {
-    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "      " << msg << " during shutdown";
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "      " << msg << " during shutdown";
     std::unique_lock<std::mutex> lock(mu_);
     ++pending_async_ops_;
     return true;
   }
 
   void async_op_done(char const* msg) {
-    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "      " << msg;
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "      " << msg;
     std::unique_lock<std::mutex> lock(mu_);
     if (--pending_async_ops_ == 0) {
       lock.unlock();
@@ -140,8 +140,8 @@ public:
 
   bool set_state(char const* msg, state new_state) {
     std::lock_guard<std::mutex> lock(mu_);
-    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "      " << msg << " " << str(new_state);
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "      " << msg << " " << str(new_state);
     if (state_ == state::shuttingdown or state_ == state::shutdown) {
       return false;
     }
@@ -177,7 +177,6 @@ protected:
       , watcher_stream_() {
   }
 
-
 protected:
   mutable std::mutex mu_;
   std::condition_variable cv_;
@@ -192,7 +191,7 @@ protected:
 
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
   std::unique_ptr<etcdserverpb::Watch::Stub> watch_client_;
-  std::unique_ptr<watcher_stream_type> watcher_stream_;
+  std::shared_ptr<watcher_stream_type> watcher_stream_;
 };
 
 /**
@@ -266,7 +265,7 @@ public:
       cancel.set_watch_id(w);
 
       queue_.async_write(
-          watcher_stream_, std::move(req),
+          *watcher_stream_, std::move(req),
           "leader_election_participant/resign/cancel",
           [this, w](auto op, bool ok) { this->on_watch_cancel(op, ok, w); });
     }
@@ -307,26 +306,10 @@ public:
     // constructed, it should not be used by more than one thread ...
     set_state("preamble()", state::connecting);
 
-    async_op_start("create stream / preamble/lambda()");
-    std::promise<bool> stream_ready;
-    queue_.async_create_rdwr_stream(
+    auto fut = queue_.async_create_rdwr_stream(
         watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
-        "leader_election_participant/watch",
-        [this, &stream_ready](auto stream, bool ok) {
-          this->async_op_done("create stream / preamble/lambda()");
-          if (ok) {
-            this->watcher_stream_ = std::move(stream);
-          }
-          stream_ready.set_value(ok);
-        });
-
-    // ... blocks until it is ready ...
-    if (not stream_ready.get_future().get()) {
-      JB_LOG(error) << key() << " " << str(state_) << " " << pending_async_ops_
-                    << "  stream not ready!!";
-      throw std::runtime_error("cannot complete watcher stream setup");
-    }
-
+        "leader_election_participant/watch", jb::etcd::use_future());
+    watcher_stream_ = fut.get();
     set_state("preamble()", state::testandset);
 
     // ... we need to create a node to represent this participant in
@@ -438,8 +421,8 @@ public:
     if (not set_state("shutdown()", state::shuttingdown)) {
       return;
     }
-    JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "  shutdown";
+    JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                 << "  shutdown";
     // ... if there is a pending range request we need to block on it ...
     async_ops_block();
     if (watcher_stream_) {
@@ -447,20 +430,20 @@ public:
       // before shutting down the completion queue ...
       (void)async_op_start_shutdown("writes done");
       auto writes_done_complete = queue_.async_writes_done(
-          watcher_stream_, "leader_election_participant/shutdown/writes_done",
+          *watcher_stream_, "leader_election_participant/shutdown/writes_done",
           jb::etcd::use_future());
 
       // ... block until it closes ...
       writes_done_complete.get();
-      JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                    << "  writes done completed";
+      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                   << "  writes done completed";
 
       (void)async_op_start_shutdown("finish");
       auto finished_complete = queue_.async_finish(
-          watcher_stream_, "leader_election_participant/shutdown/finish",
+          *watcher_stream_, "leader_election_participant/shutdown/finish",
           jb::etcd::use_future());
-      JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
-                    << "  finish scheduled";
+      JB_LOG(info) << key() << " " << str(state_) << " " << pending_async_ops_
+                   << "  finish scheduled";
       // TODO() - this is a workaround, the finish() call does not seem
       // to terminate for me ...
       if (finished_complete.wait_for(std::chrono::milliseconds(200)) ==
@@ -603,7 +586,7 @@ public:
       create.set_start_revision(op.response.header().revision() - 1);
 
       queue_.async_write(
-          watcher_stream_, std::move(req),
+          *watcher_stream_, std::move(req),
           "leader_election_participant/on_range_request/watch",
           [ this, key = kv.key(),
             revision = op.response.header().revision() ](auto op, bool ok) {
@@ -627,7 +610,7 @@ public:
     }
 
     queue_.async_read(
-        watcher_stream_, "leader_election_participant/on_watch_create/read",
+        *watcher_stream_, "leader_election_participant/on_watch_create/read",
         [this, watched_key, watched_revision](auto op, bool ok) {
           this->on_watch_read(op, ok, watched_key, watched_revision);
         });
@@ -710,7 +693,7 @@ public:
     }
 
     queue_.async_read(
-        watcher_stream_, "leader_election_participant/on_watch_read/read",
+        *watcher_stream_, "leader_election_participant/on_watch_read/read",
         [this, watched_key, watched_revision](auto op, bool ok) {
           this->on_watch_read(op, ok, watched_key, watched_revision);
         });
@@ -835,7 +818,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
   // ... shortly after creating a node, the class will request the
   // range of other nodes with the same prefix ...
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
-    return op->name == "leader_election_campaign/range";
+    return op->name == "leader_election_participant/campaign/range";
   }))).WillOnce(Invoke([](auto bop) {
     using op_type = detail::async_op<
         etcdserverpb::RangeRequest, etcdserverpb::RangeResponse>;
@@ -854,7 +837,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
 
     // ... in this test we just assume everything is simple, just
     // provide an empty response ...
-    
+
     // ... and to not forget the callback ...
     bop->callback(*bop, true);
   }));

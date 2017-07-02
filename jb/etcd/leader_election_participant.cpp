@@ -100,7 +100,7 @@ void leader_election_participant::resign() {
     cancel.set_watch_id(w);
 
     queue_->cq().async_write(
-        watcher_stream_, std::move(req),
+        *watcher_stream_, std::move(req),
         "leader_election_participant/resign/cancel",
         [this, w](auto op, bool ok) { this->on_watch_cancel(op, ok, w); });
   }
@@ -135,25 +135,10 @@ void leader_election_participant::preamble() try {
   set_state("preamble()", state::connecting);
 
   async_op_start("create stream / preamble/lambda()");
-  std::promise<bool> stream_ready;
-  queue_->cq().async_create_rdwr_stream(
+  auto fut = queue_->cq().async_create_rdwr_stream(
       watch_client_.get(), &etcdserverpb::Watch::Stub::AsyncWatch,
-      "leader_election_participant/watch",
-      [this, &stream_ready](auto stream, bool ok) {
-        this->async_op_done("create stream / preamble/lambda()");
-        if (ok) {
-          this->watcher_stream_ = std::move(stream);
-        }
-        stream_ready.set_value(ok);
-      });
-
-  // ... blocks until it is ready ...
-  if (not stream_ready.get_future().get()) {
-    JB_LOG(error) << key() << " " << str(state_) << " " << pending_async_ops_
-                  << "  stream not ready!!";
-    throw std::runtime_error("cannot complete watcher stream setup");
-  }
-
+      "leader_election_participant/watch", jb::etcd::use_future());
+  watcher_stream_ = fut.get();
   set_state("preamble()", state::testandset);
 
   // ... we need to create a node to represent this participant in
@@ -261,7 +246,7 @@ void leader_election_participant::shutdown() {
     // before shutting down the completion queue ...
     (void)async_op_start_shutdown("writes done");
     auto writes_done_complete = queue_->cq().async_writes_done(
-        watcher_stream_, "leader_election_participant/shutdown/writes_done",
+        *watcher_stream_, "leader_election_participant/shutdown/writes_done",
         jb::etcd::use_future());
 
     // ... block until it closes ...
@@ -271,7 +256,7 @@ void leader_election_participant::shutdown() {
 
     (void)async_op_start_shutdown("finish");
     auto finished_complete = queue_->cq().async_finish(
-        watcher_stream_, "leader_election_participant/shutdown/finish",
+        *watcher_stream_, "leader_election_participant/shutdown/finish",
         jb::etcd::use_future());
     JB_LOG(trace) << key() << " " << str(state_) << " " << pending_async_ops_
                   << "  finish scheduled";
@@ -432,7 +417,7 @@ void leader_election_participant::on_range_request(
     create.set_start_revision(op.response.header().revision() - 1);
 
     queue_->cq().async_write(
-        watcher_stream_, std::move(req),
+        *watcher_stream_, std::move(req),
         "leader_election_participant/on_range_request/watch", [
           this, key = kv.key(), revision = op.response.header().revision()
         ](auto op, bool ok) { this->on_watch_create(op, ok, key, revision); });
@@ -453,7 +438,7 @@ void leader_election_participant::on_watch_create(
   }
 
   queue_->cq().async_read(
-      watcher_stream_, "leader_election_participant/on_watch_create/read",
+      *watcher_stream_, "leader_election_participant/on_watch_create/read",
       [this, key, revision](auto op, bool ok) {
         this->on_watch_read(op, ok, key, revision);
       });
@@ -533,7 +518,7 @@ void leader_election_participant::on_watch_read(
   }
 
   queue_->cq().async_read(
-      watcher_stream_, "leader_election_participant/on_watch_read/read",
+      *watcher_stream_, "leader_election_participant/on_watch_read/read",
       [this, wkey, revision](auto op, bool ok) {
         this->on_watch_read(op, ok, wkey, revision);
       });

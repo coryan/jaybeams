@@ -38,32 +38,32 @@ struct mocked_grpc_interceptor {
   /// Intercept an asynchronous Write() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_write(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
     shared_mock->async_write(op);
   }
 
   /// Intercept an asynchronous Read() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_read(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
     shared_mock->async_read(op);
   }
 
   /// Intercept an asynchronous WriteDone() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_writes_done(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
     shared_mock->async_writes_done(op);
   }
 
   /// Intercept an asynchronous Finish() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_finish(
-      std::unique_ptr<async_rdwr_stream<W, R>>& stream,
-      std::shared_ptr<op_type>& op, void* tag) {
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      void* tag) {
     shared_mock->async_finish(op);
   }
 

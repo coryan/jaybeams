@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_write_functor) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   etcdserverpb::LeaseKeepAliveRequest req;
   req.set_id(123456UL);
   queue.async_write(
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_read_functor) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   queue.async_read(
       stream, "test/AsyncLeaseKeepAlive::Read/functor",
       [cnt](auto op, bool ok) { *cnt += int(ok); });
@@ -298,7 +298,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_writes_done_functor) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   queue.async_writes_done(
       stream, "test/AsyncLeaseKeepAlive::WriteDone/functor",
       [cnt](auto op, bool ok) { *cnt += int(ok); });
@@ -333,7 +333,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_writes_done_future) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   auto fut = queue.async_writes_done(
       stream, "test/AsyncLeaseKeepAlive::WritesDone/future",
       jb::etcd::use_future());
@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_finish_functor) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   queue.async_finish(
       stream, "test/AsyncLeaseKeepAlive::Finish/functor",
       [cnt](auto op, bool ok) { *cnt += int(ok); });
@@ -416,7 +416,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rdwr_stream_finish_future) {
   using stream_type = detail::async_rdwr_stream<
       etcdserverpb::LeaseKeepAliveRequest,
       etcdserverpb::LeaseKeepAliveResponse>;
-  std::unique_ptr<stream_type> stream;
+  stream_type stream;
   auto fut = queue.async_finish(
       stream, "test/AsyncLeaseKeepAlive::Finish/future",
       jb::etcd::use_future());
