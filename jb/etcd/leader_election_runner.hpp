@@ -181,12 +181,10 @@ public:
     {
       std::lock_guard<std::mutex> lock(mu_);
       if (state_ != state::resigning) {
-        JB_LOG(trace) << key() << " " << state_ << " "
-                      << pending_async_ops_
+        JB_LOG(trace) << key() << " " << state_ << " " << pending_async_ops_
                       << " unexpected state for resign()/watches";
         std::ostringstream os;
-        os << key() << " unexpected state " << state_
-           << " while resigning";
+        os << key() << " unexpected state " << state_ << " while resigning";
         throw std::runtime_error(os.str());
       }
       watches = std::move(current_watches_);
@@ -213,15 +211,14 @@ public:
 
   /// Change the published value
   void proclaim(std::string const& new_value) {
-    JB_LOG(trace) << log_header("")
-                  << " proclaim(" << new_value << ")";
+    JB_LOG(trace) << log_header("") << " proclaim(" << new_value << ")";
     std::string copy(new_value);
     etcdserverpb::RequestOp failure_op;
     auto result = publish_value(copy, failure_op);
     if (result.succeeded()) {
       copy.swap(participant_value_);
-      JB_LOG(trace) << log_header("")
-                    << " proclaim(" << new_value << ") - success";
+      JB_LOG(trace) << log_header("") << " proclaim(" << new_value
+                    << ") - success";
       return;
     }
     std::ostringstream os;
@@ -322,8 +319,7 @@ public:
     shutdown();
     throw;
   } catch (...) {
-    JB_LOG(info) << log_header("")
-                 << " unknown exception raised in preamble";
+    JB_LOG(info) << log_header("") << " unknown exception raised in preamble";
     shutdown();
     throw;
   }
@@ -344,8 +340,7 @@ public:
     if (not set_state("shutdown()", state::shuttingdown)) {
       return;
     }
-    JB_LOG(info) << log_header("")
-                 << "  shutdown";
+    JB_LOG(info) << log_header("") << "  shutdown";
     // ... if there is a pending range request we need to block on it ...
     async_ops_block();
     if (watcher_stream_) {
@@ -358,15 +353,13 @@ public:
 
       // ... block until it closes ...
       writes_done_complete.get();
-      JB_LOG(info) << log_header("")
-                   << "  writes done completed";
+      JB_LOG(info) << log_header("") << "  writes done completed";
 
       (void)async_op_start_shutdown("finish");
       auto finished_complete = queue_.async_finish(
           *watcher_stream_, "leader_election_participant/shutdown/finish",
           jb::etcd::use_future());
-      JB_LOG(info) << log_header("")
-                   << "  finish scheduled";
+      JB_LOG(info) << log_header("") << "  finish scheduled";
       // TODO() - this is a workaround, the finish() call does not seem
       // to terminate for me ...
       if (finished_complete.wait_for(std::chrono::milliseconds(200)) ==
@@ -394,8 +387,7 @@ public:
    * leader election is not a fast operation.
    */
   void campaign_impl(std::function<void(std::future<bool>&)>&& callback) {
-    JB_LOG(trace) << log_header("")
-                  << "  kicking off campaign";
+    JB_LOG(trace) << log_header("") << "  kicking off campaign";
     // First save the callback ...
     {
       std::lock_guard<std::mutex> lock(mu_);
@@ -450,8 +442,7 @@ public:
   /// Refactor code common to proclaim() and preamble()
   etcdserverpb::TxnResponse publish_value(
       std::string const& value, etcdserverpb::RequestOp const& failure_op) {
-    JB_LOG(trace) << log_header("")
-                  << " publish_value()";
+    JB_LOG(trace) << log_header("") << " publish_value()";
     etcdserverpb::TxnRequest req;
     auto& cmp = *req.add_compare();
     cmp.set_key(key());
@@ -497,8 +488,7 @@ public:
         return;
       }
       (void)set_state("on_range_request()", state::campaigning);
-      JB_LOG(trace) << log_header("")
-                    << "  create watcher ... k=" << kv.key();
+      JB_LOG(trace) << log_header("") << "  create watcher ... k=" << kv.key();
       watched_keys_.insert(kv.key());
 
       etcdserverpb::WatchRequest req;
@@ -559,8 +549,7 @@ public:
       std::lock_guard<std::mutex> lock(mu_);
       current_watches_.insert(op.response.watch_id());
     } else {
-      JB_LOG(trace) << log_header("")
-                    << "  update for existing watcher="
+      JB_LOG(trace) << log_header("") << "  update for existing watcher="
                     << op.response.watch_id();
     }
     for (auto const& ev : op.response.events()) {
@@ -590,7 +579,7 @@ public:
       // TODO() - if I am reading the documentation correctly, this
       // means the watcher was cancelled.  We need to worry about the
       // case where the participant figures out the key to watch.  Then
-      // it goes to sleep, or gets reschedule, then the key is deleted
+      // it goes to sleep, or gets rescheduled, then the key is deleted
       // and etcd compacted.  And then the client starts watching.  I am
       // not sure this is a problem, but it might be.
       JB_LOG(trace) << log_header("")
@@ -627,15 +616,14 @@ public:
     // will check again ...
     {
       std::lock_guard<std::mutex> lock(mu_);
-      if (not current_watches_.empty() or not watched_keys_.empty()) {
+      if (not watched_keys_.empty()) {
         return;
       }
       if (state_ != state::shuttingdown and state_ != state::shutdown) {
         state_ = state::elected;
       }
     }
-    JB_LOG(trace) << log_header("")
-                  << " election completed";
+    JB_LOG(trace) << log_header("") << " election completed";
     campaign_result_.set_value(true);
     make_callback();
   }
@@ -647,15 +635,13 @@ public:
       std::lock_guard<std::mutex> lock(mu_);
       callback = std::move(campaign_callback_);
       if (not callback) {
-        JB_LOG(info) << log_header("")
-                     << " no callback present";
+        JB_LOG(info) << log_header("") << " no callback present";
         return;
       }
     }
     auto future = campaign_result_.get_future();
     callback(future);
-    JB_LOG(trace) << log_header("")
-                  << "  made callback";
+    JB_LOG(trace) << log_header("") << "  made callback";
   }
 
 private:
