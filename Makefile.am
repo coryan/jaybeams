@@ -520,22 +520,21 @@ jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 ################################################################
 # jb/libjb_gmock.a
 ################################################################
+
+AM_CXXFLAGS += \
+  -I$(srcdir)/googletest/googlemock/include \
+  -I$(srcdir)/googletest/googletest/include
 jb_libjb_gmock_adir = $(includedir)
 jb_libjb_gmock_a_HEADERS = \
   jb/gmock/init.hpp
 jb_libjb_gmock_a_SOURCES = \
-  jb/gmock/gmock.cpp
-jb_libjb_gmock_a_CPPFLAGS = \
-  $(GMOCK_CPPFLAGS) $(GMOCK_SOURCE_CPPFLAGS) \
-  -DGMOCK_SOURCE="<$(GMOCK_SOURCE)>" \
-  $(GTEST_CPPFLAGS)
-
-if GTEST_USE_SOURCE
-jb_libjb_gmock_a_SOURCES += \
+  jb/gmock/gmock.cpp \
   jb/gmock/gtest.cpp
-jb_libjb_gmock_a_CPPFLAGS += $(GTEST_SOURCE_CPPFLAGS) \
-  -DGTEST_SOURCE="<$(GTEST_SOURCE)>"
-endif GTEST_USE_SOURCE
+jb_libjb_gmock_a_CPPFLAGS = \
+  -I$(srcdir)/googletest/googlemock \
+  -I$(srcdir)/googletest/googletest \
+  -DGMOCK_SOURCE="<src/gmock-all.cc>" \
+  -DGTEST_SOURCE="<src/gtest-all.cc>"
 
 ################################################################
 # jb/libjb_etcd.a
