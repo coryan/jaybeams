@@ -227,7 +227,7 @@ public:
     op->callback = [functor = std::move(f)](
         detail::base_async_op & bop, bool ok) {
       auto& op = dynamic_cast<op_type&>(bop);
-      functor(std::move(op.stream), ok);
+      functor(op.stream, ok);
     };
     op->name = std::move(name);
     void* tag = register_op("async_create_rdwr_stream()", op);
@@ -297,7 +297,7 @@ public:
                 std::runtime_error("async create_rdwr_stream cancelled")));
             return;
           }
-          promise->set_value(std::move(stream));
+          promise->set_value(stream);
         });
     return promise->get_future().share();
   }

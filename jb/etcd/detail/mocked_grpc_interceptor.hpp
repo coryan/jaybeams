@@ -22,7 +22,7 @@ struct mocked_grpc_interceptor {
   /// Intercept posting of asynchronous RPC operations
   template <typename C, typename M, typename op_type>
   void async_rpc(
-      C* async_client, M C::*call, std::shared_ptr<op_type>& op,
+      C* async_client, M C::*call, std::shared_ptr<op_type> op,
       grpc::CompletionQueue* cq, void* tag) {
     shared_mock->async_rpc(op);
   }
@@ -30,7 +30,7 @@ struct mocked_grpc_interceptor {
   /// Intercept creation of asynchronous rdwr RPC streams.
   template <typename C, typename M, typename op_type>
   void async_create_rdwr_stream(
-      C* async_client, M C::*call, std::shared_ptr<op_type>& op,
+      C* async_client, M C::*call, std::shared_ptr<op_type> op,
       grpc::CompletionQueue* cq, void* tag) {
     shared_mock->async_create_rdwr_stream(op);
   }
@@ -38,7 +38,7 @@ struct mocked_grpc_interceptor {
   /// Intercept an asynchronous Write() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_write(
-      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type> op,
       void* tag) {
     shared_mock->async_write(op);
   }
@@ -46,7 +46,7 @@ struct mocked_grpc_interceptor {
   /// Intercept an asynchronous Read() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_read(
-      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type> op,
       void* tag) {
     shared_mock->async_read(op);
   }
@@ -62,7 +62,7 @@ struct mocked_grpc_interceptor {
   /// Intercept an asynchronous Finish() operation over a rdwr RPC stream
   template <typename W, typename R, typename op_type>
   void async_finish(
-      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type>& op,
+      async_rdwr_stream<W, R> const& stream, std::shared_ptr<op_type> op,
       void* tag) {
     shared_mock->async_finish(op);
   }
