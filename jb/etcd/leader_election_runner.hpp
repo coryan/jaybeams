@@ -181,9 +181,13 @@ public:
     {
       std::lock_guard<std::mutex> lock(mu_);
       if (state_ != state::resigning) {
+        // ... this means there was a state transition to shutdown or
+        // something similar.  Better to abort and let the caller deal
+        // with it ...
         JB_LOG(trace) << log_header("resign()") << " unexpected state";
         std::ostringstream os;
-        os << key() << " unexpected state " << state_ << " while resigning";
+        os << key() << " unexpected state " << state_
+           << " while canceling watchers";
         throw std::runtime_error(os.str());
       }
       watches = std::move(current_watches_);
@@ -200,12 +204,13 @@ public:
 
       queue_.async_write(
           *watcher_stream_, std::move(req),
-          "leader_election_participant/resign/cancel",
+          "leader_election_participant/cancel_watcher",
           [this, w](auto op, bool ok) { this->on_watch_cancel(op, ok, w); });
     }
+    // ... block until all pending operations complete ...
     async_ops_block();
     // ... now we are really done with remote resources ...
-    set_state("resign() end", state::resigning);
+    set_state("resign() end", state::resigned);
   }
 
   /// Change the published value
