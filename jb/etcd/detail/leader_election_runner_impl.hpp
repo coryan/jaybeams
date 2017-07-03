@@ -77,6 +77,9 @@ public:
     }
     // ... block until all pending operations complete ...
     async_ops_block();
+    // ... if there is a pending callback we need to let them know the
+    // election failed ...
+    make_callback(false);
     // ... now we are really done with remote resources ...
     set_state("resign() end", state::resigned);
   }

@@ -48,25 +48,22 @@ void leader_election_participant::campaign() {
   // asynchronous operations to wait until the campaign is done.  It
   // will call the provided lambda when it is done ...
   campaign([&elected, this](bool result) {
-    // ... the callback receives a future, hopefully with "true"
-    // indicating the election was successful, but it could be an
-    // exception.  We capture both case ..
-    try {
+    // ... the callback receives a bool, hopefully with "true"
+    // indicating the election was successful.  Setting the value
+    // could raise, but that only happens when
+    if (result) {
       elected.set_value(result);
-    } catch (...) {
-      JB_LOG(info) << this->key() << " failed to set election result";
-      // elected.set_exception(std::current_exception());
+    } else {
+      std::ostringstream os;
+      os << "election aborted for " << std::hex << this->key();
+      elected.set_exception(
+          std::make_exception_ptr(std::runtime_error(os.str())));
     }
   });
   // ... block until the promise is satisfied, notice that get()
   // raises the exception if that was the result ...
   JB_LOG(trace) << key() << "  blocked running election";
-  if (elected.get_future().get() != true) {
-    // ... we also raise if the campaign failed ...
-    std::ostringstream os;
-    os << "Unexpected false value after running campaign, key=" << key();
-    throw std::runtime_error(os.str());
-  }
+  elected.get_future().get();
 }
 
 void leader_election_participant::campaign_impl(
