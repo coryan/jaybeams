@@ -85,6 +85,11 @@ public:
     return participant_value_;
   }
 
+  /// Return the fetched participant revision, mostly for debugging
+  std::uint64_t participant_revision() const {
+    return participant_revision_;
+  }
+
   /// Return the lease corresponding to this participant's session.
   std::uint64_t lease_id() {
     return lease_id_;
@@ -125,6 +130,7 @@ protected:
   std::string participant_value_;
   std::string election_prefix_;
   std::string participant_key_;
+  std::uint64_t participant_revision_;
   std::uint64_t lease_id_;
 
   std::unique_ptr<etcdserverpb::KV::Stub> kv_client_;
@@ -150,7 +156,6 @@ public:
             lease_id, std::move(kv_client), std::move(watch_client),
             election_name, participant_value)
       , queue_(queue)
-      , participant_revision_(0)
       , current_watches_()
       , watched_keys_()
       , campaign_result_()
@@ -650,7 +655,6 @@ public:
 
 private:
   completion_queue_type& queue_;
-  std::uint64_t participant_revision_;
 
   std::set<std::uint64_t> current_watches_;
   std::set<std::string> watched_keys_;

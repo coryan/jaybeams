@@ -17,11 +17,18 @@ using completion_queue_type =
     jb::etcd::completion_queue<jb::etcd::detail::mocked_grpc_interceptor>;
 using runner_type = jb::etcd::leader_election_runner<completion_queue_type>;
 
+/// Common initialization for all tests
+void prepare_mocks_common(completion_queue_type& queue);
+
 /// Run a basic test where the runner starts in the elected state.
-void prepare_queue_for_initially_elected(completion_queue_type& queue);
+void prepare_mocks_for_initially_elected(completion_queue_type& queue);
 
 /// Run a basic test where the runner does not start in the elected state.
-void prepare_queue_for_not_initially_elected(completion_queue_type& queue);
+void prepare_mocks_for_not_initially_elected(completion_queue_type& queue);
+
+/// Setup the mocks assuming the steps in the create_node phase are setup
+void prepare_mocks_for_initially_elected_post_node(
+    completion_queue_type& queue, int revision);
 }
 
 /**
@@ -37,7 +44,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
 
   completion_queue_type queue;
 
-  prepare_queue_for_initially_elected(queue);
+  prepare_mocks_for_initially_elected(queue);
 
   bool elected = false;
   auto runner = std::make_unique<runner_type>(
@@ -63,7 +70,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
 
   completion_queue_type queue;
 
-  prepare_queue_for_initially_elected(queue);
+  prepare_mocks_for_initially_elected(queue);
 
   bool elected = false;
   auto runner = std::make_unique<runner_type>(
@@ -148,7 +155,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
 
   completion_queue_type queue;
 
-  prepare_queue_for_initially_elected(queue);
+  prepare_mocks_for_initially_elected(queue);
 
   bool elected = false;
   auto runner = std::make_unique<runner_type>(
@@ -163,7 +170,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
   using namespace ::testing;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_write(Truly([](auto op) {
     return op->name == "leader_election/publish_value";
-        }))).Times(0);
+  }))).Times(0);
 
   // ... there should be no problems shutting down this client ...
   BOOST_CHECK_NO_THROW(runner->resign());
@@ -181,7 +188,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
 
   using namespace jb::etcd;
   completion_queue_type queue;
-  prepare_queue_for_not_initially_elected(queue);
+  prepare_mocks_for_not_initially_elected(queue);
 
   using namespace ::testing;
   // ... the runner class should also setup a Read() asynchronous operation
@@ -294,7 +301,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
 BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   using namespace jb::etcd;
   completion_queue_type queue;
-  prepare_queue_for_not_initially_elected(queue);
+  prepare_mocks_for_not_initially_elected(queue);
 
   using namespace ::testing;
   // ... the runner class should also setup a Read() asynchronous operation
@@ -367,12 +374,12 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   // simulate that Read() finishing ...
   using namespace std::chrono_literals;
   std::thread t([pending_read]() {
-      std::this_thread::sleep_for(10ms);
-      pending_read->response.set_created(false);
-      pending_read->response.set_canceled(true);
-      pending_read->response.set_watch_id(2000);
-      pending_read->callback(*pending_read, true);
-    });
+    std::this_thread::sleep_for(10ms);
+    pending_read->response.set_created(false);
+    pending_read->response.set_canceled(true);
+    pending_read->response.set_watch_id(2000);
+    pending_read->callback(*pending_read, true);
+  });
 
   // ... while the resign() call may block until the "asynchronous"
   // operation completes, it should complete eventually ...
@@ -384,9 +391,103 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
 }
 
+/**
+ * @test Verify that jb::etcd::leader_election_runner works if
+ * preamble() raises an exception.
+ */
+BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception) {
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+
+  using namespace ::testing;
+  // ... cause an exception by canceling the asynchronous operation to
+  // set initial value ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/commit/create_node";
+  }))).WillOnce(Invoke([](auto bop) {
+    // ... false indicates the operation was canceled ...
+    bop->callback(*bop, false);
+  }));
+
+  // ... the test itself is easy ...
+  bool elected = false;
+  std::unique_ptr<runner_type> runner;
+  BOOST_CHECK_THROW(
+      runner = std::make_unique<runner_type>(
+          queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
+          std::unique_ptr<etcdserverpb::Watch::Stub>(),
+          std::string("test-election"), std::string("mocked-runner-a"),
+          [&elected](std::future<bool>& src) { elected = src.get(); }),
+      std::exception);
+  BOOST_CHECK_EQUAL(elected, false);
+}
+
+/**
+ * @test Verify that jb::etcd::leader_election_runner works if the
+ * node already exists and its creation fails.
+ */
+BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+
+  using namespace ::testing;
+  // ... the runner will try to create a node for the participant using
+  // async_rpc, provide an initial (logical, not RPC) failure ..
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/commit/create_node";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.compare().size(), 1UL);
+    auto const& cmp = op->request.compare()[0];
+    BOOST_CHECK_EQUAL(cmp.key(), "test-election/123456");
+    BOOST_REQUIRE_EQUAL(op->request.success().size(), 1UL);
+    auto const& success = op->request.success()[0];
+    BOOST_CHECK_EQUAL(success.request_put().key(), "test-election/123456");
+    BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
+    BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
+
+    // ... in this test we just assume everything worked, so
+    // provide a response ...
+    op->response.set_succeeded(false);
+    op->response.mutable_header()->set_revision(4000);
+    auto& resp = *op->response.add_responses();
+    auto& kv = *resp.mutable_response_range()->add_kvs();
+    kv.set_create_revision(2000UL); // really old ...
+    kv.set_value("mocked-runner-a");
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  prepare_mocks_for_initially_elected_post_node(queue, 2000);
+
+  // ... the test itself is easy ...
+  bool elected = false;
+  std::unique_ptr<runner_type> runner = std::make_unique<runner_type>(
+      queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
+      std::unique_ptr<etcdserverpb::Watch::Stub>(),
+      std::string("test-election"), std::string("mocked-runner-a"),
+      [&elected](std::future<bool>& src) { elected = src.get(); });
+  BOOST_CHECK_EQUAL(elected, true);
+  BOOST_CHECK_EQUAL(runner->participant_revision(), 2000);
+  BOOST_CHECK_NO_THROW(runner.reset(nullptr));
+}
+
 namespace {
-/// Common initialization for all tests
-void prepare_queue_common(completion_queue_type& queue) {
+void prepare_mocks_common(completion_queue_type& queue) {
   using namespace ::testing;
   // ... on most calls we just invoke the application's callback
   // immediately ...
@@ -404,12 +505,41 @@ void prepare_queue_common(completion_queue_type& queue) {
       .WillRepeatedly(Invoke([](auto op) { op->callback(*op, true); }));
 }
 
-/// Run a basic test where the runner starts in the elected state.
-void prepare_queue_for_initially_elected(completion_queue_type& queue) {
+void prepare_mocks_for_initially_elected_post_node(
+    completion_queue_type& queue, int revision) {
+  using namespace ::testing;
+  // ... shortly after creating a node, the class will request the
+  // range of other nodes with the same prefix ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election_participant/campaign/range";
+  }))).WillOnce(Invoke([revision](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::RangeRequest, etcdserverpb::RangeResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.key(), "test-election/");
+    BOOST_REQUIRE_EQUAL(op->request.range_end(), "test-election0");
+    BOOST_CHECK_EQUAL(op->request.max_create_revision(), revision - 1);
+    BOOST_CHECK_EQUAL(
+        op->request.sort_order(), etcdserverpb::RangeRequest::DESCEND);
+    BOOST_CHECK_EQUAL(
+        op->request.sort_target(), etcdserverpb::RangeRequest::CREATE);
+    BOOST_CHECK_EQUAL(op->request.limit(), 1);
+
+    // ... in this test we just assume everything is simple, just
+    // provide an empty response ...
+
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+}
+
+void prepare_mocks_for_initially_elected(completion_queue_type& queue) {
   // The sequences of queries for a leader election participant is
   // rather long, but it goes like this ...
   using namespace ::testing;
-  prepare_queue_common(queue);
+  prepare_mocks_common(queue);
 
   // ... the class will try to create a node for the participant using
   // async_rpc, provide a good response for it ...
@@ -433,42 +563,17 @@ void prepare_queue_for_initially_elected(completion_queue_type& queue) {
     // ... in this test we just assume everything worked, so
     // provide a response ...
     op->response.set_succeeded(true);
-    op->response.mutable_header()->set_revision(2345678UL);
+    op->response.mutable_header()->set_revision(3000);
     // ... and to not forget the callback ...
     bop->callback(*bop, true);
   }));
 
-  // ... shortly after creating a node, the class will request the
-  // range of other nodes with the same prefix ...
-  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
-    return op->name == "leader_election_participant/campaign/range";
-  }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::RangeRequest, etcdserverpb::RangeResponse>;
-    auto* op = dynamic_cast<op_type*>(bop.get());
-    BOOST_REQUIRE(op != nullptr);
-    // ... verify the request is what we expect ...
-    BOOST_REQUIRE_EQUAL(op->request.key(), "test-election/");
-    BOOST_REQUIRE_EQUAL(op->request.range_end(), "test-election0");
-    // ... the magic number is provided by the previous mocked call ...
-    BOOST_REQUIRE_EQUAL(op->request.max_create_revision(), 2345677UL);
-    BOOST_REQUIRE_EQUAL(
-        op->request.sort_order(), etcdserverpb::RangeRequest::DESCEND);
-    BOOST_REQUIRE_EQUAL(
-        op->request.sort_target(), etcdserverpb::RangeRequest::CREATE);
-    BOOST_REQUIRE_EQUAL(op->request.limit(), 1);
-
-    // ... in this test we just assume everything is simple, just
-    // provide an empty response ...
-
-    // ... and to not forget the callback ...
-    bop->callback(*bop, true);
-  }));
+  prepare_mocks_for_initially_elected_post_node(queue, 3000);
 }
 
-void prepare_queue_for_not_initially_elected(completion_queue_type& queue) {
+void prepare_mocks_for_not_initially_elected(completion_queue_type& queue) {
   using namespace ::testing;
-  prepare_queue_common(queue);
+  prepare_mocks_common(queue);
 
   // ... the class will try to create a node for the participant using
   // async_rpc, provide a good response for it ...

@@ -24,6 +24,7 @@ leader_election_runner_base::leader_election_runner_base(
       os << election_name << "/" << std::hex << lease_id;
       return os.str();
     }())
+    , participant_revision_(0)
     , lease_id_(lease_id)
     , kv_client_(std::move(kv_client))
     , watch_client_(std::move(watch_client))
