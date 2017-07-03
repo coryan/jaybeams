@@ -1,5 +1,7 @@
 /**
- * @file Helper functions to log errors when setting std::promise.
+ * @file
+ *
+ * Helper functions to log errors when setting std::promise.
  */
 #ifndef jb_etcd_log_promise_errors_hpp
 #define jb_etcd_log_promise_errors_hpp
