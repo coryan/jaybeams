@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
   // ... we should have won the election ...
   BOOST_CHECK_EQUAL(elected, true);
 
-  BOOST_CHECKPOINT("about to delete the runner");
+  BOOST_TEST_CHECKPOINT("about to delete the runner");
   runner.reset(nullptr);
 }
 
@@ -387,7 +387,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
 
   t.join();
 
-  BOOST_CHECKPOINT("about to delete the runner");
+  BOOST_TEST_CHECKPOINT("about to delete the runner");
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
 }
 
