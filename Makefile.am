@@ -617,7 +617,7 @@ jb_etcd_unit_tests = \
   jb/etcd/completion_queue_ut \
   jb/etcd/grpc_errors_ut \
   jb/etcd/detail/mocked_grpc_interceptor_ut \
-  jb/etcd/leader_election_runner_ut \
+  jb/etcd/detail/leader_election_runner_impl_ut \
   jb/etcd/log_promise_errors_ut \
   jb/etcd/prefix_end_ut
 
@@ -660,10 +660,10 @@ jb_etcd_leader_election_participant_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MO
 jb_etcd_leader_election_participant_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
 jb_etcd_leader_election_participant_ut_LDADD = $(jb_etcd_ut_ldadd)
 
-jb_etcd_leader_election_runner_ut_SOURCES = jb/etcd/leader_election_runner_ut.cpp
-jb_etcd_leader_election_runner_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_leader_election_runner_ut
-jb_etcd_leader_election_runner_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
-jb_etcd_leader_election_runner_ut_LDADD = $(jb_etcd_ut_ldadd) \
+jb_etcd_detail_leader_election_runner_impl_ut_SOURCES = jb/etcd/detail/leader_election_runner_impl_ut.cpp
+jb_etcd_detail_leader_election_runner_impl_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_leader_election_runner_impl_ut
+jb_etcd_detail_leader_election_runner_impl_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_leader_election_runner_impl_ut_LDADD = $(jb_etcd_ut_ldadd) \
     jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_etcd_log_promise_errors_ut_SOURCES = jb/etcd/log_promise_errors_ut.cpp

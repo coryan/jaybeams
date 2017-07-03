@@ -1,9 +1,13 @@
 #include "jb/etcd/leader_election_runner.hpp"
+#include <jb/assert_throw.hpp>
+#include <jb/log.hpp>
+
+#include <sstream>
 
 namespace jb {
 namespace etcd {
 
-leader_election_runner_base::leader_election_runner_base(
+leader_election_runner::leader_election_runner(
     std::uint64_t lease_id, std::unique_ptr<etcdserverpb::KV::Stub> kv_client,
     std::unique_ptr<etcdserverpb::Watch::Stub> watch_client,
     std::string const& election_name, std::string const& participant_value)
@@ -31,21 +35,21 @@ leader_election_runner_base::leader_election_runner_base(
     , watcher_stream_() {
 }
 
-leader_election_runner_base::~leader_election_runner_base() noexcept(false) {
+leader_election_runner::~leader_election_runner() noexcept(false) {
 }
 
-std::string leader_election_runner_base::log_header(char const* log) const {
+std::string leader_election_runner::log_header(char const* log) const {
   std::ostringstream os;
   os << key() << " " << state_ << " " << pending_async_ops_ << log;
   return os.str();
 }
 
-void leader_election_runner_base::async_ops_block() {
+void leader_election_runner::async_ops_block() {
   std::unique_lock<std::mutex> lock(mu_);
   cv_.wait(lock, [this]() { return pending_async_ops_ == 0; });
 }
 
-bool leader_election_runner_base::async_op_start(char const* msg) {
+bool leader_election_runner::async_op_start(char const* msg) {
   JB_LOG(trace) << log_header("    ") << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
@@ -55,14 +59,14 @@ bool leader_election_runner_base::async_op_start(char const* msg) {
   return true;
 }
 
-bool leader_election_runner_base::async_op_start_shutdown(char const* msg) {
+bool leader_election_runner::async_op_start_shutdown(char const* msg) {
   JB_LOG(trace) << log_header("    ") << msg << " during shutdown";
   std::unique_lock<std::mutex> lock(mu_);
   ++pending_async_ops_;
   return true;
 }
 
-void leader_election_runner_base::async_op_done(char const* msg) {
+void leader_election_runner::async_op_done(char const* msg) {
   JB_LOG(trace) << log_header("      ") << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (--pending_async_ops_ == 0) {
@@ -72,7 +76,7 @@ void leader_election_runner_base::async_op_done(char const* msg) {
   }
 }
 
-bool leader_election_runner_base::set_state(char const* msg, state new_state) {
+bool leader_election_runner::set_state(char const* msg, state new_state) {
   std::lock_guard<std::mutex> lock(mu_);
   JB_LOG(trace) << log_header("      ") << msg << " " << new_state;
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
@@ -82,7 +86,7 @@ bool leader_election_runner_base::set_state(char const* msg, state new_state) {
   return true;
 }
 
-char const* to_str(leader_election_state s) {
+char const* to_str(leader_election_runner::state s) {
   static char const* names[] = {
       "constructing", "connecting", "testandset",   "republish",
       "published",    "querying",   "campaigning",  "elected",
@@ -93,7 +97,7 @@ char const* to_str(leader_election_state s) {
   return names[int(s)];
 }
 
-std::ostream& operator<<(std::ostream& os, leader_election_state x) {
+std::ostream& operator<<(std::ostream& os, leader_election_runner::state x) {
   return os << to_str(x);
 }
 

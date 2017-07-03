@@ -1,6 +1,6 @@
 #include "jb/etcd/leader_election_participant.hpp"
+#include <jb/etcd/detail/leader_election_runner_impl.hpp>
 #include <jb/etcd/grpc_errors.hpp>
-#include <jb/etcd/leader_election_runner.hpp>
 #include <jb/etcd/log_promise_errors.hpp>
 #include <jb/etcd/prefix_end.hpp>
 #include <jb/assert_throw.hpp>
@@ -30,26 +30,6 @@ leader_election_participant::leader_election_participant(
 }
 
 leader_election_participant::~leader_election_participant() noexcept(false) {
-}
-
-/// Return the etcd key associated with this participant
-std::string const& leader_election_participant::key() const {
-  return runner_->key();
-}
-
-/// Return the etcd eky associated with this participant
-std::string const& leader_election_participant::value() const {
-  return runner_->value();
-}
-
-/// Return the fetched participant revision, mostly for debugging
-std::uint64_t leader_election_participant::participant_revision() const {
-  return runner_->participant_revision();
-}
-
-/// Return the lease corresponding to this participant's session.
-std::uint64_t leader_election_participant::lease_id() const {
-  return runner_->lease_id();
 }
 
 void leader_election_participant::resign() {
@@ -91,7 +71,7 @@ void leader_election_participant::campaign() {
 
 void leader_election_participant::campaign_impl(
     std::function<void(bool)>&& callback) {
-  runner_.reset(new leader_election_runner<completion_queue<>>(
+  runner_.reset(new detail::leader_election_runner_impl<completion_queue<>>(
       queue_->cq(), session_->lease_id(), etcdserverpb::KV::NewStub(channel_),
       etcdserverpb::Watch::NewStub(channel_), std::move(election_name_),
       std::move(initial_value_), std::move(callback)));

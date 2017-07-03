@@ -33,6 +33,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
     BOOST_CHECK_EQUAL(tested.value(), "42");
     BOOST_CHECK_EQUAL(
         tested.key().substr(0, election_name.size()), election_name);
+    BOOST_CHECK_GT(tested.participant_revision(), 0);
+    BOOST_CHECK_GT(tested.lease_id(), 0);
   }
   BOOST_TEST_MESSAGE("destructed participant, revoking session leases");
   election_session.revoke();

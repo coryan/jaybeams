@@ -1,4 +1,4 @@
-#include "jb/etcd/leader_election_runner.hpp"
+#include "jb/etcd/detail/leader_election_runner_impl.hpp"
 
 #include <jb/etcd/detail/mocked_grpc_interceptor.hpp>
 #include <jb/etcd/grpc_errors.hpp>
@@ -15,7 +15,8 @@
 namespace {
 using completion_queue_type =
     jb::etcd::completion_queue<jb::etcd::detail::mocked_grpc_interceptor>;
-using runner_type = jb::etcd::leader_election_runner<completion_queue_type>;
+using runner_type =
+    jb::etcd::detail::leader_election_runner_impl<completion_queue_type>;
 
 /// Common initialization for all tests
 void prepare_mocks_common(completion_queue_type& queue);
@@ -40,7 +41,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
 
   completion_queue_type queue;
 
@@ -66,7 +67,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
 
   completion_queue_type queue;
 
@@ -87,7 +88,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
     return op->name == "leader_election/publish_value";
   }))).WillOnce(Invoke([](auto bop) {
     using op_type =
-        detail::async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...
@@ -117,7 +118,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
     return op->name == "leader_election/publish_value";
   }))).WillOnce(Invoke([](auto bop) {
     using op_type =
-        detail::async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     op->response.set_succeeded(false);
@@ -151,7 +152,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
 
   completion_queue_type queue;
 
@@ -186,7 +187,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_for_not_initially_elected(queue);
 
@@ -194,7 +195,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
   // ... the runner class should also setup a Read() asynchronous operation
   // to receive the Watcher status updates.  The first time we will do
   // nothing other than save the operation ...
-  using read_op_type = detail::read_op<etcdserverpb::WatchResponse>;
+  using read_op_type = read_op<etcdserverpb::WatchResponse>;
   std::shared_ptr<read_op_type> pending_read;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_read(Truly([](auto op) {
     return op->name == "leader_election_participant/on_watch_create/read";
@@ -299,7 +300,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
  * does not immediately win the election.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_for_not_initially_elected(queue);
 
@@ -307,7 +308,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   // ... the runner class should also setup a Read() asynchronous operation
   // to receive the Watcher status updates.  The first time we will do
   // nothing other than save the operation ...
-  using read_op_type = detail::read_op<etcdserverpb::WatchResponse>;
+  using read_op_type = read_op<etcdserverpb::WatchResponse>;
   std::shared_ptr<read_op_type> pending_read;
   EXPECT_CALL(*queue.interceptor().shared_mock, async_read(Truly([](auto op) {
     return op->name == "leader_election_participant/on_watch_create/read";
@@ -400,7 +401,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
 
@@ -436,7 +437,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
 
@@ -446,8 +447,8 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
     return op->name == "leader_election/commit/create_node";
   }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    using op_type =
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...
@@ -496,7 +497,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
 
@@ -506,8 +507,8 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
     return op->name == "leader_election/commit/create_node";
   }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    using op_type =
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...
@@ -537,8 +538,8 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
     return op->name == "leader_election/publish_value";
   }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    using op_type =
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...
@@ -581,7 +582,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
   // connection for mocked operations ...
   std::shared_ptr<etcdserverpb::Lease::Stub> lease;
 
-  using namespace jb::etcd;
+  using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
 
@@ -591,8 +592,8 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
     return op->name == "leader_election/commit/create_node";
   }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    using op_type =
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...
@@ -622,8 +623,8 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
   EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
     return op->name == "leader_election/publish_value";
   }))).WillOnce(Invoke([](auto bop) {
-    using op_type = jb::etcd::detail::async_op<
-        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    using op_type =
+        async_op<etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
     auto* op = dynamic_cast<op_type*>(bop.get());
     BOOST_REQUIRE(op != nullptr);
     // ... verify the request is what we expect ...

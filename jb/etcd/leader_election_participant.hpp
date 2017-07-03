@@ -2,6 +2,7 @@
 #define jb_etcd_leader_election_participant_hpp
 
 #include <jb/etcd/active_completion_queue.hpp>
+#include <jb/etcd/leader_election_runner.hpp>
 #include <jb/etcd/session.hpp>
 
 #include <atomic>
@@ -10,10 +11,6 @@
 
 namespace jb {
 namespace etcd {
-
-// forward declare the election runner
-template <typename queue_type>
-class leader_election_runner;
 
 /**
  * Participate in a leader election protocol.
@@ -77,16 +74,24 @@ public:
   ~leader_election_participant() noexcept(false);
 
   /// Return the etcd key associated with this participant
-  std::string const& key() const;
+  std::string const& key() const {
+    return runner_->key();
+  }
 
   /// Return the etcd eky associated with this participant
-  std::string const& value() const;
+  std::string const& value() const {
+    return runner_->value();
+  }
 
   /// Return the fetched participant revision, mostly for debugging
-  std::uint64_t participant_revision() const;
+  std::uint64_t participant_revision() const {
+    return runner_->participant_revision();
+  }
 
   /// Return the lease corresponding to this participant's session.
-  std::uint64_t lease_id() const;
+  std::uint64_t lease_id() const {
+    return runner_->lease_id();
+  }
 
   /// Resign from the election, terminate the internal loops
   void resign();
@@ -125,7 +130,7 @@ private:
   std::shared_ptr<active_completion_queue> queue_;
   std::shared_ptr<grpc::Channel> channel_;
   std::shared_ptr<session> session_;
-  std::shared_ptr<leader_election_runner<completion_queue<>>> runner_;
+  std::shared_ptr<leader_election_runner> runner_;
   std::string election_name_;
   std::string initial_value_;
 };
