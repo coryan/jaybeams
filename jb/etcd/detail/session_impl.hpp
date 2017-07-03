@@ -97,7 +97,7 @@ private:
     if (resp.error() != "") {
       std::ostringstream os;
       os << "Lease grant request rejected"
-         << "\n request=" << print_to_stream(req) << "\n response"
+         << "\n request=" << print_to_stream(req) << "\n response="
          << print_to_stream(resp);
       throw std::runtime_error(os.str());
     }

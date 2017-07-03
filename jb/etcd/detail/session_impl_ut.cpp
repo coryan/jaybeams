@@ -68,6 +68,86 @@ BOOST_AUTO_TEST_CASE(session_basic) {
   BOOST_CHECK_NO_THROW(session.reset(nullptr));
 }
 
+/**
+ * @test Verify that jb::etcd::detail::session_impl works when the
+ * lease fails to be acquired.
+ */
+BOOST_AUTO_TEST_CASE(session_lease_error) {
+  using namespace std::chrono_literals;
+  using namespace jb::etcd::detail;
+
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+  using namespace ::testing;
+  // ... we expect a call to request a lease ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "session/preamble/lease_grant";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::LeaseGrantRequest, etcdserverpb::LeaseGrantResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.ttl(), 5);
+    BOOST_REQUIRE_EQUAL(op->request.id(), 0);
+
+    // ... in this test we just assume everything worked, so
+    // provide a response ...
+    op->response.set_error("something broke");
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  // ... there should be no calls to setup the timer.
+  std::shared_ptr<deadline_timer> pending_timer;
+  EXPECT_CALL(
+      *queue.interceptor().shared_mock, make_deadline_timer(Truly([](auto op) {
+        return op->name == "session/set_timer/ttl_refresh";
+      })))
+    .Times(0);
+
+  std::unique_ptr<session_type> session;
+
+  BOOST_CHECK_THROW(
+      session = std::make_unique<session_type>(
+          queue, std::unique_ptr<etcdserverpb::Lease::Stub>(), 5000ms),
+      std::exception);
+}
+
+/**
+ * @test Verify that jb::etcd::detail::session_impl works when the
+ * lease fails to be acquired.
+ */
+BOOST_AUTO_TEST_CASE(session_lease_unusual_exception) {
+  using namespace std::chrono_literals;
+  using namespace jb::etcd::detail;
+
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+  using namespace ::testing;
+  // ... we expect a call to request a lease ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "session/preamble/lease_grant";
+  }))).WillOnce(Invoke([](auto bop) {
+    throw std::string("raising std::string is just bad manners");
+  }));
+
+  // ... there should be no calls to setup the timer.
+  std::shared_ptr<deadline_timer> pending_timer;
+  EXPECT_CALL(
+      *queue.interceptor().shared_mock, make_deadline_timer(Truly([](auto op) {
+        return op->name == "session/set_timer/ttl_refresh";
+      })))
+    .Times(0);
+
+  std::unique_ptr<session_type> session;
+
+  BOOST_CHECK_THROW(
+      session = std::make_unique<session_type>(
+          queue, std::unique_ptr<etcdserverpb::Lease::Stub>(), 5000ms),
+      std::string);
+}
+
 namespace {
 void prepare_mocks_common(completion_queue_type& queue) {
   using namespace ::testing;
