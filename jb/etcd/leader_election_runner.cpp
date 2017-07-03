@@ -46,7 +46,7 @@ void leader_election_runner_base::async_ops_block() {
 }
 
 bool leader_election_runner_base::async_op_start(char const* msg) {
-  JB_LOG(info) << log_header("    ") << msg;
+  JB_LOG(trace) << log_header("    ") << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
     return false;
@@ -56,14 +56,14 @@ bool leader_election_runner_base::async_op_start(char const* msg) {
 }
 
 bool leader_election_runner_base::async_op_start_shutdown(char const* msg) {
-  JB_LOG(info) << log_header("    ") << msg << " during shutdown";
+  JB_LOG(trace) << log_header("    ") << msg << " during shutdown";
   std::unique_lock<std::mutex> lock(mu_);
   ++pending_async_ops_;
   return true;
 }
 
 void leader_election_runner_base::async_op_done(char const* msg) {
-  JB_LOG(info) << log_header("      ") << msg;
+  JB_LOG(trace) << log_header("      ") << msg;
   std::unique_lock<std::mutex> lock(mu_);
   if (--pending_async_ops_ == 0) {
     lock.unlock();
@@ -74,7 +74,7 @@ void leader_election_runner_base::async_op_done(char const* msg) {
 
 bool leader_election_runner_base::set_state(char const* msg, state new_state) {
   std::lock_guard<std::mutex> lock(mu_);
-  JB_LOG(info) << log_header("      ") << msg << " " << new_state;
+  JB_LOG(trace) << log_header("      ") << msg << " " << new_state;
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
     return false;
   }

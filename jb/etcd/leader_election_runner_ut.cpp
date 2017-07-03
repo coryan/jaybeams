@@ -460,9 +460,10 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
     BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
     BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
 
-    // ... in this test we just assume everything worked, so
-    // provide a response ...
+    // ... in this test we just assume creation of the key failed ...
     op->response.set_succeeded(false);
+    // ... and we must return the result of the query that was part of
+    // the transaction ...
     op->response.mutable_header()->set_revision(4000);
     auto& resp = *op->response.add_responses();
     auto& kv = *resp.mutable_response_range()->add_kvs();
@@ -484,6 +485,175 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
   BOOST_CHECK_EQUAL(elected, true);
   BOOST_CHECK_EQUAL(runner->participant_revision(), 2000);
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
+}
+
+/**
+ * @test Verify that jb::etcd::leader_election_runner works if the
+ * node already exists and we need to change its value.
+ */
+BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+
+  using namespace ::testing;
+  // ... the runner will try to create a node for the participant using
+  // async_rpc, provide an initial (logical, not RPC) failure ..
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/commit/create_node";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.compare().size(), 1UL);
+    auto const& cmp = op->request.compare()[0];
+    BOOST_CHECK_EQUAL(cmp.key(), "test-election/123456");
+    BOOST_REQUIRE_EQUAL(op->request.success().size(), 1UL);
+    auto const& success = op->request.success()[0];
+    BOOST_CHECK_EQUAL(success.request_put().key(), "test-election/123456");
+    BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
+    BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
+
+    // ... in this test we assume the creation failed ...
+    op->response.set_succeeded(false);
+    // ... and return the exiting value ...
+    op->response.mutable_header()->set_revision(4000);
+    auto& resp = *op->response.add_responses();
+    auto& kv = *resp.mutable_response_range()->add_kvs();
+    kv.set_create_revision(2000UL); // really old ...
+    kv.set_value("mocked-runner-a OLD");
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  // ... in this case the runner with attempt to republish the new
+  // value, so try that ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/publish_value";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.compare().size(), 1UL);
+    auto const& cmp = op->request.compare()[0];
+    BOOST_CHECK_EQUAL(cmp.key(), "test-election/123456");
+    BOOST_REQUIRE_EQUAL(op->request.success().size(), 1UL);
+    auto const& success = op->request.success()[0];
+    BOOST_CHECK_EQUAL(success.request_put().key(), "test-election/123456");
+    BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
+    BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
+
+    // ... for this test assume success ...
+    op->response.set_succeeded(true);
+    op->response.mutable_header()->set_revision(4000);
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  prepare_mocks_for_initially_elected_post_node(queue, 2000);
+
+  // ... the test itself is easy ...
+  bool elected = false;
+  std::unique_ptr<runner_type> runner = std::make_unique<runner_type>(
+      queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
+      std::unique_ptr<etcdserverpb::Watch::Stub>(),
+      std::string("test-election"), std::string("mocked-runner-a"),
+      [&elected](std::future<bool>& src) { elected = src.get(); });
+  BOOST_CHECK_EQUAL(elected, true);
+  BOOST_CHECK_EQUAL(runner->participant_revision(), 2000);
+  BOOST_CHECK_NO_THROW(runner.reset(nullptr));
+}
+
+/**
+ * @test Verify that jb::etcd::leader_election_runner works if the
+ * node already exists and changing its value fails.
+ */
+BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
+  // Create a null lease object, we do not need (or want) a real
+  // connection for mocked operations ...
+  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
+
+  using namespace jb::etcd;
+  completion_queue_type queue;
+  prepare_mocks_common(queue);
+
+  using namespace ::testing;
+  // ... the runner will try to create a node for the participant using
+  // async_rpc, provide an initial (logical, not RPC) failure ..
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/commit/create_node";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.compare().size(), 1UL);
+    auto const& cmp = op->request.compare()[0];
+    BOOST_CHECK_EQUAL(cmp.key(), "test-election/123456");
+    BOOST_REQUIRE_EQUAL(op->request.success().size(), 1UL);
+    auto const& success = op->request.success()[0];
+    BOOST_CHECK_EQUAL(success.request_put().key(), "test-election/123456");
+    BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
+    BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
+
+    // ... in this test we assume the creation failed ...
+    op->response.set_succeeded(false);
+    // ... and return the exiting value ...
+    op->response.mutable_header()->set_revision(4000);
+    auto& resp = *op->response.add_responses();
+    auto& kv = *resp.mutable_response_range()->add_kvs();
+    kv.set_create_revision(2000UL); // really old ...
+    kv.set_value("mocked-runner-a OLD");
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  // ... in this case the runner with attempt to republish the new
+  // value, so try that ...
+  EXPECT_CALL(*queue.interceptor().shared_mock, async_rpc(Truly([](auto op) {
+    return op->name == "leader_election/publish_value";
+  }))).WillOnce(Invoke([](auto bop) {
+    using op_type = jb::etcd::detail::async_op<
+        etcdserverpb::TxnRequest, etcdserverpb::TxnResponse>;
+    auto* op = dynamic_cast<op_type*>(bop.get());
+    BOOST_REQUIRE(op != nullptr);
+    // ... verify the request is what we expect ...
+    BOOST_REQUIRE_EQUAL(op->request.compare().size(), 1UL);
+    auto const& cmp = op->request.compare()[0];
+    BOOST_CHECK_EQUAL(cmp.key(), "test-election/123456");
+    BOOST_REQUIRE_EQUAL(op->request.success().size(), 1UL);
+    auto const& success = op->request.success()[0];
+    BOOST_CHECK_EQUAL(success.request_put().key(), "test-election/123456");
+    BOOST_CHECK_EQUAL(success.request_put().value(), "mocked-runner-a");
+    BOOST_CHECK_EQUAL(success.request_put().lease(), 0x123456);
+
+    // ... for this test assume that fails ...
+    op->response.set_succeeded(false);
+    op->response.mutable_header()->set_revision(4000);
+    // ... and to not forget the callback ...
+    bop->callback(*bop, true);
+  }));
+
+  // ... the test itself is easy ...
+  bool elected = false;
+  std::unique_ptr<runner_type> runner;
+  BOOST_CHECK_THROW(
+      runner = std::make_unique<runner_type>(
+          queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
+          std::unique_ptr<etcdserverpb::Watch::Stub>(),
+          std::string("test-election"), std::string("mocked-runner-a"),
+          [&elected](std::future<bool>& src) { elected = src.get(); }),
+      std::exception);
+  BOOST_CHECK_EQUAL(elected, false);
 }
 
 namespace {

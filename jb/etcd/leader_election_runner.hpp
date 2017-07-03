@@ -323,12 +323,12 @@ public:
     }
     set_state("preamble()", state::published);
   } catch (std::exception const& ex) {
-    JB_LOG(info) << log_header("")
-                 << " std::exception raised in preamble: " << ex.what();
+    JB_LOG(trace) << log_header("")
+                  << " std::exception raised in preamble: " << ex.what();
     shutdown();
     throw;
   } catch (...) {
-    JB_LOG(info) << log_header("") << " unknown exception raised in preamble";
+    JB_LOG(trace) << log_header("") << " unknown exception raised in preamble";
     shutdown();
     throw;
   }
@@ -349,7 +349,7 @@ public:
     if (not set_state("shutdown()", state::shuttingdown)) {
       return;
     }
-    JB_LOG(info) << log_header("") << "  shutdown";
+    JB_LOG(trace) << log_header("") << "  shutdown";
     // ... if there is a pending range request we need to block on it ...
     async_ops_block();
     if (watcher_stream_) {
@@ -362,19 +362,18 @@ public:
 
       // ... block until it closes ...
       writes_done_complete.get();
-      JB_LOG(info) << log_header("") << "  writes done completed";
+      JB_LOG(trace) << log_header("") << "  writes done completed";
 
       (void)async_op_start_shutdown("finish");
       auto finished_complete = queue_.async_finish(
           *watcher_stream_, "leader_election_participant/shutdown/finish",
           jb::etcd::use_future());
-      JB_LOG(info) << log_header("") << "  finish scheduled";
+      JB_LOG(trace) << log_header("") << "  finish scheduled";
       // TODO() - this is a workaround, the finish() call does not seem
       // to terminate for me ...
       if (finished_complete.wait_for(std::chrono::milliseconds(200)) ==
           std::future_status::timeout) {
-        JB_LOG(info) << log_header("")
-                     << "  timeout on Finish() call, forcing a on_finish()";
+        JB_LOG(info) << log_header("") << "  timeout on Finish() call";
         async_op_done("on_finish() - forced");
       }
     }
@@ -549,8 +548,8 @@ public:
       std::uint64_t watched_revision) {
     async_op_done("on_watch_read()");
     if (not ok) {
-      JB_LOG(info) << log_header("")
-                   << "  watcher called with ok=false key=" << watched_key;
+      JB_LOG(trace) << log_header("")
+                    << "  watcher called with ok=false key=" << watched_key;
       return;
     }
     if (op.response.created()) {
@@ -644,7 +643,7 @@ public:
       std::lock_guard<std::mutex> lock(mu_);
       callback = std::move(campaign_callback_);
       if (not callback) {
-        JB_LOG(info) << log_header("") << " no callback present";
+        JB_LOG(trace) << log_header("") << " no callback present";
         return;
       }
     }
