@@ -54,21 +54,11 @@ public:
 
   /// Resign from the election, terminate the internal loops
   void resign() override {
-    set_state("resign() begin", state::resigning);
     std::set<std::uint64_t> watches;
-    {
-      std::lock_guard<std::mutex> lock(mu_);
-      if (state_ != state::resigning) {
-        // ... this means there was a state transition to shutdown or
-        // something similar.  Better to abort and let the caller deal
-        // with it ...
-        JB_LOG(trace) << log_header("resign()") << " unexpected state";
-        std::ostringstream os;
-        os << key() << " unexpected state " << state_
-           << " while canceling watchers";
-        throw std::runtime_error(os.str());
-      }
-      watches = std::move(current_watches_);
+    if (not set_state_action(
+            "resign() begin", state::resigning,
+            [&watches, this]() { watches = std::move(current_watches_); })) {
+      return;
     }
     // ... cancel all the watchers too ...
     for (auto w : watches) {
@@ -151,8 +141,6 @@ public:
     // ... execute the transaction in etcd ...
     etcdserverpb::TxnResponse resp =
         commit(req, "leader_election/commit/create_node");
-    JB_LOG(trace) << log_header(" commit()")
-                  << " with resp=" << print_to_stream(resp);
 
     // ... regardless of which branch of the test-and-set operation
     // pass, we now have fetched the participant revision value ..
@@ -178,8 +166,6 @@ public:
         auto& delete_op = *failure_op.mutable_request_delete_range();
         delete_op.set_key(key());
         auto published = publish_value(value(), failure_op);
-        JB_LOG(trace) << log_header(" published_value()")
-                      << " with resp=" << print_to_stream(published);
         if (not published.succeeded()) {
           // ... ugh, the publication failed.  We now have an
           // inconsistent state with the server.  We think we own the
@@ -306,11 +292,6 @@ public:
     // and broken over many functions, but the context is useful to
     // understand what is happening ...
 
-    // ... we need to create an object to hold the client context,
-    // status and result of the operation ...
-    JB_LOG(trace) << log_header("")
-                  << " range request(), rev=" << participant_revision_ << "\n"
-                  << print_to_stream(req);
     (void)set_state("campaign_impl()", state::querying);
     async_op_start("range request");
     queue_.async_rpc(
@@ -354,7 +335,10 @@ public:
   void on_range_request(
       detail::async_op<
           etcdserverpb::RangeRequest, etcdserverpb::RangeResponse> const& op,
-      bool ok) try {
+      bool ok) {
+    if (not ok) {
+      make_callback(false);
+    }
     async_op_done("on_range_request()");
     check_grpc_status(
         op.status, log_header("on_range_request()"), ", response=",
@@ -385,15 +369,15 @@ public:
           });
     }
     check_election_over_maybe();
-  } catch (...) {
   }
 
   /// Called when a Write() operation that creates a watcher completes.
   void on_watch_create(
-      watch_write_op const& op, bool ok, std::string const& watched_key,
-      std::uint64_t watched_revision) {
+      watch_write_op const& op, bool ok, std::string const& wkey,
+      std::uint64_t wrevision) {
     async_op_done("on_watch_create()");
     if (not ok) {
+      JB_LOG(trace) << log_header("on_watch_create(.., false) wkey=") << wkey;
       return;
     }
     if (not async_op_start("read watch")) {
@@ -402,8 +386,8 @@ public:
 
     queue_.async_read(
         *watcher_stream_, "leader_election_participant/on_watch_create/read",
-        [this, watched_key, watched_revision](auto op, bool ok) {
-          this->on_watch_read(op, ok, watched_key, watched_revision);
+        [this, wkey, wrevision](auto op, bool ok) {
+          this->on_watch_read(op, ok, wkey, wrevision);
         });
   }
 
@@ -416,12 +400,11 @@ public:
 
   /// Called when a Read() operation in the watcher stream completes.
   void on_watch_read(
-      watch_read_op const& op, bool ok, std::string const& watched_key,
-      std::uint64_t watched_revision) {
+      watch_read_op const& op, bool ok, std::string const& wkey,
+      std::uint64_t wrevision) {
     async_op_done("on_watch_read()");
     if (not ok) {
-      JB_LOG(trace) << log_header("")
-                    << "  watcher called with ok=false key=" << watched_key;
+      JB_LOG(trace) << log_header("on_watch_read(.., false) wkey=") << wkey;
       return;
     }
     if (op.response.created()) {
@@ -447,27 +430,25 @@ public:
     // ... unless the watcher was canceled we should continue to read
     // from it ...
     if (op.response.canceled()) {
-      JB_LOG(trace) << log_header("")
-                    << " watcher canceled for key=" << watched_key
-                    << ", revision=" << watched_revision
-                    << ", reason=" << op.response.cancel_reason()
-                    << ", watch_id=" << op.response.watch_id();
       current_watches_.erase(op.response.watch_id());
       return;
     }
     if (op.response.compact_revision()) {
       // TODO() - if I am reading the documentation correctly, this
-      // means the watcher was cancelled.  We need to worry about the
-      // case where the participant figures out the key to watch.  Then
-      // it goes to sleep, or gets rescheduled, then the key is deleted
-      // and etcd compacted.  And then the client starts watching.  I am
-      // not sure this is a problem, but it might be.
-      JB_LOG(trace) << log_header("")
-                    << " watcher cancelled with compact_revision="
-                    << op.response.compact_revision() << ", key=" << watched_key
-                    << ", revision=" << watched_revision
-                    << ", reason=" << op.response.cancel_reason()
-                    << ", watch_id=" << op.response.watch_id();
+      // means the watcher was cancelled, but the data may (or may
+      // not) still be there.  We need to worry about the case where
+      // the participant figures out the key to watch.  Then it goes
+      // to sleep, or gets rescheduled, then the key is deleted
+      // and etcd compacted.  And then the client starts watching.
+      //
+      // I am not sure this is a problem, but it might be.
+      //
+      JB_LOG(info) << log_header("")
+                   << " watcher cancelled with compact_revision="
+                   << op.response.compact_revision() << ", wkey=" << wkey
+                   << ", revision=" << wrevision
+                   << ", reason=" << op.response.cancel_reason()
+                   << ", watch_id=" << op.response.watch_id();
       current_watches_.erase(op.response.watch_id());
       return;
     }
@@ -484,8 +465,8 @@ public:
 
     queue_.async_read(
         *watcher_stream_, "leader_election_participant/on_watch_read/read",
-        [this, watched_key, watched_revision](auto op, bool ok) {
-          this->on_watch_read(op, ok, watched_key, watched_revision);
+        [this, wkey, wrevision](auto op, bool ok) {
+          this->on_watch_read(op, ok, wkey, wrevision);
         });
   }
 
@@ -513,10 +494,10 @@ public:
     {
       std::lock_guard<std::mutex> lock(mu_);
       callback = std::move(campaign_callback_);
-      if (not callback) {
-        JB_LOG(trace) << log_header("") << " no callback present";
-        return;
-      }
+    }
+    if (not callback) {
+      JB_LOG(trace) << log_header("") << " no callback present";
+      return;
     }
     callback(result);
     JB_LOG(trace) << log_header("") << "  made callback";

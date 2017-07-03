@@ -78,11 +78,15 @@ void leader_election_runner::async_op_done(char const* msg) {
 
 bool leader_election_runner::set_state(char const* msg, state new_state) {
   std::lock_guard<std::mutex> lock(mu_);
-  JB_LOG(trace) << log_header("      ") << msg << " " << new_state;
+  return set_state_unlocked(msg, new_state);
+}
+
+bool leader_election_runner::set_state_unlocked(char const* msg, state n) {
+  JB_LOG(trace) << log_header("      ") << msg << " " << state_ << " -> " << n;
   if (state_ == state::shuttingdown or state_ == state::shutdown) {
     return false;
   }
-  state_ = new_state;
+  state_ = n;
   return true;
 }
 

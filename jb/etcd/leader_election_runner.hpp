@@ -115,7 +115,26 @@ protected:
 
   /// Return false if the state transition is invalid
   bool set_state(char const* msg, state new_state);
+
+  /**
+   * Return false if the state transition is invalid
+   *
+   * Execute @a action was holding the lock.
+   */
+  template <typename Action>
+  bool set_state_action(char const* msg, state new_state, Action action) {
+    std::lock_guard<std::mutex> lock(mu_);
+    if (not set_state_unlocked(msg, new_state)) {
+      return false;
+    }
+    action();
+    return true;
+  }
   //@}
+
+private:
+  /// Change the state assuming the lock is held.
+  bool set_state_unlocked(char const* msg, state new_state);
 
 protected:
   mutable std::mutex mu_;
