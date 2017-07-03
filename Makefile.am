@@ -688,7 +688,7 @@ jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
 #jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_election_listener_LDADD = \
     jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
-jb/etcd/jb_etcd_election_listener-election_listener.$(OBJEXT): $(nobase_jb_libjb_etcd_a_HEADERS)
+jb/etcd/jb_etcd_election_listener-election_listener.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
 
 jb_etcd_election_participant_SOURCES = \
   jb/etcd/election_participant.cpp
@@ -697,7 +697,7 @@ jb_etcd_election_participant_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
 #jb_etcd_election_participant_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
 jb_etcd_election_participant_LDADD = \
     jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS) $(LIBS)
-jb/etcd/jb_etcd_election_participant-election_participant.$(OBJEXT): $(nobase_jb_libjb_etcd_a_HEADERS)
+jb/etcd/jb_etcd_election_participant-election_participant.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
 
 ################################################################
 # jb/libjb_itch5_testing.a
