@@ -67,6 +67,13 @@ struct mocked_grpc_interceptor {
     shared_mock->async_finish(op);
   }
 
+  /// Post a timer
+  template <typename op_type>
+  void make_deadline_timer(
+      std::shared_ptr<op_type> op, grpc::CompletionQueue* cq, void* tag) {
+    shared_mock->make_deadline_timer(op);
+  }
+
   struct mocked {
     MOCK_CONST_METHOD1(async_rpc, void(std::shared_ptr<base_async_op> op));
     MOCK_CONST_METHOD1(
@@ -76,6 +83,8 @@ struct mocked_grpc_interceptor {
     MOCK_CONST_METHOD1(
         async_writes_done, void(std::shared_ptr<base_async_op> op));
     MOCK_CONST_METHOD1(async_finish, void(std::shared_ptr<base_async_op> op));
+    MOCK_CONST_METHOD1(
+        make_deadline_timer, void(std::shared_ptr<base_async_op> op));
   };
 
   std::shared_ptr<mocked> shared_mock;

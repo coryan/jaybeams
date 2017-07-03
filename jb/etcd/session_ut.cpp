@@ -1,23 +1,22 @@
 #include "jb/etcd/session.hpp"
+#include <jb/etcd/detail/session_impl.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>
 #include <thread>
 
-namespace jb {
-namespace etcd {
-// Inject a streaming operator into the namespace because Boost.Test
-// needs them.
-std::ostream& operator<<(std::ostream& os, session::state s) {
-  return os << static_cast<int>(s);
-}
-}
-}
+/// Define helper types and functions used in these tests
+namespace {
+using session_type =
+    jb::etcd::detail::session_impl<jb::etcd::completion_queue<>>;
+} // anonymous namespace
 
 /**
  * @test Verify that one can create and destroy a session.
  */
 BOOST_AUTO_TEST_CASE(session_basic) {
+  using namespace std::chrono_literals;
+
   std::string const address = "localhost:2379";
   auto etcd_channel =
       grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
@@ -25,8 +24,8 @@ BOOST_AUTO_TEST_CASE(session_basic) {
 
   // We want to test that the destructor does not throw, so use a
   // smart pointer ...
-  auto session = std::make_unique<jb::etcd::session>(
-      queue, etcd_channel, std::chrono::seconds(5));
+  auto session = std::make_unique<session_type>(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 5s);
   BOOST_CHECK_NE(session->lease_id(), 0);
   BOOST_CHECK_NO_THROW(session.reset());
 }
@@ -35,12 +34,15 @@ BOOST_AUTO_TEST_CASE(session_basic) {
  * @test Verify that one can create, run, and stop a completion queue.
  */
 BOOST_AUTO_TEST_CASE(session_normal) {
+  using namespace std::chrono_literals;
+
   std::string const address = "localhost:2379";
   auto etcd_channel =
       grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
-  jb::etcd::session session(queue, etcd_channel, std::chrono::seconds(5));
+  session_type session(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 5s);
   BOOST_CHECK_NE(session.lease_id(), 0);
   using state = jb::etcd::session::state;
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);
@@ -53,18 +55,21 @@ BOOST_AUTO_TEST_CASE(session_normal) {
  * @test Verify that one can create, run, and stop a completion queue.
  */
 BOOST_AUTO_TEST_CASE(session_long) {
+  using namespace std::chrono_literals;
+
   std::string const address = "localhost:2379";
   auto etcd_channel =
       grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
   auto queue = std::make_shared<jb::etcd::active_completion_queue>();
 
-  jb::etcd::session session(queue, etcd_channel, std::chrono::seconds(1));
+  session_type session(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 1s);
   BOOST_CHECK_NE(session.lease_id(), 0);
   using state = jb::etcd::session::state;
   BOOST_CHECK_EQUAL(session.current_state(), state::connected);
 
   // ... keep the session open for a while ...
-  std::this_thread::sleep_for(std::chrono::seconds(5));
+  std::this_thread::sleep_for(5000ms);
 
   session.revoke();
   BOOST_CHECK_EQUAL(session.current_state(), state::shutdown);

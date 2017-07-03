@@ -60,6 +60,13 @@ struct default_grpc_interceptor {
       void* tag) {
     stream.client->Finish(&op->status, tag);
   }
+
+  /// Post a timer
+  template <typename op_type>
+  void make_deadline_timer(
+      std::shared_ptr<op_type> op, grpc::CompletionQueue* cq, void* tag) {
+    op->alarm_ = std::make_unique<grpc::Alarm>(cq, op->deadline, tag);
+  }
 };
 
 } // namespace detail

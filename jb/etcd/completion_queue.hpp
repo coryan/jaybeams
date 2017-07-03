@@ -408,7 +408,7 @@ public:
     auto op = create_op<detail::deadline_timer>(std::move(name), std::move(f));
     void* tag = register_op("deadline_timer()", op);
     op->deadline = deadline;
-    op->alarm_ = std::make_unique<grpc::Alarm>(cq(), deadline, tag);
+    interceptor_.make_deadline_timer(op, cq(), tag);
     return op;
   }
 

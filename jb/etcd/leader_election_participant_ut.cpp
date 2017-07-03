@@ -1,10 +1,17 @@
 #include "jb/etcd/leader_election_participant.hpp"
 #include <jb/testing/future_status.hpp>
 #include <jb/log.hpp>
+#include "jb/etcd/detail/session_impl.hpp"
 
 #include <boost/test/unit_test.hpp>
 #include <atomic>
 #include <thread>
+
+/// Define helper types and functions used in these tests
+namespace {
+using election_session_type =
+    jb::etcd::detail::session_impl<jb::etcd::completion_queue<>>;
+} // anonymous namespace
 
 /**
  * @test Verify that one can create, and delete a election participant.
@@ -17,7 +24,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
 
   // ... create a unique election name ...
   using namespace std::chrono_literals;
-  jb::etcd::session election_session(queue, etcd_channel, 3000ms);
+  election_session_type election_session(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 3000ms);
   BOOST_CHECK_NE(election_session.lease_id(), 0);
 
   std::ostringstream os;
@@ -51,7 +59,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
 
   // ... create a unique election name ...
   using namespace std::chrono_literals;
-  jb::etcd::session election_session(queue, etcd_channel, 3000ms);
+  election_session_type election_session(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 3000ms);
   BOOST_CHECK_NE(election_session.lease_id(), 0);
 
   std::ostringstream os;
@@ -63,16 +72,12 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
       queue, etcd_channel, election_name, "session_a", 3000ms);
   BOOST_CHECK_EQUAL(participant_a.value(), "session_a");
 
-  jb::etcd::session session_b(queue, etcd_channel, 3000ms);
-  BOOST_CHECK_NE(session_b.lease_id(), 0);
   std::promise<bool> elected_b;
   jb::etcd::leader_election_participant participant_b(
       queue, etcd_channel, election_name, "session_b",
       [&elected_b](bool r) { elected_b.set_value(r); }, 3000ms);
   BOOST_CHECK_EQUAL(participant_b.value(), "session_b");
 
-  jb::etcd::session session_c(queue, etcd_channel, 3000ms);
-  BOOST_CHECK_NE(session_b.lease_id(), 0);
   std::promise<bool> elected_c;
   jb::etcd::leader_election_participant participant_c(
       queue, etcd_channel, election_name, "session_c",
@@ -128,7 +133,8 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_abort) {
 
   // ... create a unique election name ...
   using namespace std::chrono_literals;
-  jb::etcd::session election_session(queue, etcd_channel, 3000ms);
+  election_session_type election_session(
+      queue->cq(), etcdserverpb::Lease::NewStub(etcd_channel), 3000ms);
   BOOST_CHECK_NE(election_session.lease_id(), 0);
 
   std::ostringstream os;
@@ -140,8 +146,6 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_abort) {
       queue, etcd_channel, election_name, "session_a", 3000ms);
   BOOST_CHECK_EQUAL(participant_a.value(), "session_a");
 
-  jb::etcd::session session_b(queue, etcd_channel, 3000ms);
-  BOOST_CHECK_NE(session_b.lease_id(), 0);
   std::promise<bool> elected_b;
   jb::etcd::leader_election_participant participant_b(
       queue, etcd_channel, election_name, "session_b",

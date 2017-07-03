@@ -8,10 +8,6 @@
 
 namespace jb {
 namespace etcd {
-
-template <typename interceptor_t>
-class completion_queue;
-
 namespace detail {
 
 /**
@@ -170,6 +166,9 @@ struct finish_op : public base_async_op {
   grpc::Status status;
 };
 
+// Forward declare the interceptor class, needed in deadline_timer
+struct default_grpc_interceptor;
+
 /**
  * A wrapper for deadline timers.
  */
@@ -179,14 +178,15 @@ struct deadline_timer : public base_async_op {
   // thread where the timer is fired, i.e., the thred running the
   // completion queue loop.
   void cancel() {
-    alarm_->Cancel();
+    if ((bool)alarm_) {
+      alarm_->Cancel();
+    }
   }
 
   std::chrono::system_clock::time_point deadline;
 
 private:
-  template <typename T>
-  friend class ::jb::etcd::completion_queue;
+  friend struct default_grpc_interceptor;
   std::unique_ptr<grpc::Alarm> alarm_;
 };
 

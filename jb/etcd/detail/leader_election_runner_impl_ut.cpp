@@ -37,10 +37,6 @@ void prepare_mocks_for_initially_elected_post_node(
  * simple case.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
 
   completion_queue_type queue;
@@ -63,10 +59,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
  * values after it is elected.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
 
   completion_queue_type queue;
@@ -148,10 +140,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
  * elected.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
 
   completion_queue_type queue;
@@ -183,10 +171,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
  * does not immediately win the election.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_for_not_initially_elected(queue);
@@ -397,10 +381,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
  * preamble() raises an exception.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
@@ -433,10 +413,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception) {
  * preamble() raises a unknown exception.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception_unknown) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
@@ -468,10 +444,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception_unknown) {
  * range query is canceled.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_range_canceled) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
@@ -532,10 +504,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_range_canceled) {
  * node already exists and its creation fails.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
@@ -592,10 +560,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
  * node already exists and we need to change its value.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);
@@ -677,10 +641,6 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
  * node already exists and changing its value fails.
  */
 BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
-  // Create a null lease object, we do not need (or want) a real
-  // connection for mocked operations ...
-  std::shared_ptr<etcdserverpb::Lease::Stub> lease;
-
   using namespace jb::etcd::detail;
   completion_queue_type queue;
   prepare_mocks_common(queue);

@@ -1,5 +1,6 @@
 #include "jb/etcd/leader_election_participant.hpp"
 #include <jb/etcd/detail/leader_election_runner_impl.hpp>
+#include <jb/etcd/detail/session_impl.hpp>
 #include <jb/etcd/grpc_errors.hpp>
 #include <jb/etcd/log_promise_errors.hpp>
 #include <jb/etcd/prefix_end.hpp>
@@ -20,10 +21,12 @@ leader_election_participant::leader_election_participant(
     bool shared, std::shared_ptr<active_completion_queue> queue,
     std::shared_ptr<grpc::Channel> etcd_channel,
     std::string const& election_name, std::string const& participant_value,
-    std::shared_ptr<session> session)
+    session::duration_type desired_TTL, std::uint64_t lease_id)
     : queue_(queue)
     , channel_(etcd_channel)
-    , session_(session)
+    , session_(new detail::session_impl<completion_queue<>>(
+          queue->cq(), etcdserverpb::Lease::NewStub(channel_), desired_TTL,
+          lease_id))
     , runner_()
     , election_name_(election_name)
     , initial_value_(participant_value) {

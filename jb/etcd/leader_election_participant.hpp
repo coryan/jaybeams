@@ -26,7 +26,7 @@ public:
       duration_type d, std::uint64_t lease_id = 0)
       : leader_election_participant(
             true, queue, etcd_channel, election_name, participant_value,
-            std::make_shared<session>(queue, etcd_channel, d, lease_id)) {
+            session::convert_duration(d), lease_id) {
     // ... block until this participant becomes the leader ...
     campaign();
   }
@@ -41,7 +41,7 @@ public:
       std::uint64_t lease_id = 0)
       : leader_election_participant(
             true, queue, etcd_channel, election_name, participant_value,
-            std::make_shared<session>(queue, etcd_channel, d, lease_id)) {
+            session::convert_duration(d), lease_id) {
     // ... adapt the functor and then call campaign_impl ...
     campaign(std::move(elected_callback));
   }
@@ -55,7 +55,7 @@ public:
       Functor&& elected_callback, duration_type d, std::uint64_t lease_id = 0)
       : leader_election_participant(
             true, queue, etcd_channel, election_name, participant_value,
-            std::make_shared<session>(queue, etcd_channel, d, lease_id)) {
+            session::convert_duration(d), lease_id) {
     // ... adapt the functor and then call campaign_impl ...
     campaign(elected_callback);
   }
@@ -104,7 +104,8 @@ private:
   leader_election_participant(
       bool, std::shared_ptr<active_completion_queue> queue,
       std::shared_ptr<grpc::Channel>, std::string const& election_name,
-      std::string const& participant_value, std::shared_ptr<session> session);
+      std::string const& participant_value, session::duration_type desired_TTL,
+      std::uint64_t lease_id);
 
   /// Block the calling thread until the participant has become the
   /// leader.

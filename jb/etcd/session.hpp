@@ -16,6 +16,18 @@ namespace etcd {
 
 class session {
 public:
+  //@{
+  /// @name type traits
+
+  /// The type of the bi-directional RPC stream for keep alive messages
+  using ka_stream_type = detail::async_rdwr_stream<
+      etcdserverpb::LeaseKeepAliveRequest,
+      etcdserverpb::LeaseKeepAliveResponse>;
+
+  /// The preferred units for measuring time in this class
+  using duration_type = std::chrono::milliseconds;
+  //@}
+
   /// How many KeepAlive requests we send per TTL cyle.
   // TODO() - the magic number 5  should be a configurable parameter.
   static int constexpr keep_alives_per_ttl = 5;
@@ -24,54 +36,50 @@ public:
    * The implicit state machine in the session.
    *
    * Sessions have a ver simple state machine:
-   * -# constructing: the initial state.  Transitions to @c connecting
-   * -# connecting: the session has obtained a lease id and is now
-   *    establishing a reader-writer stream to keep the lease alive.
-   *    Transitions to connected or shutting down.
-   * -# connected: the session is connected, in this state the session
-   *    sends period KeepAlive requests to renew the lease.
-   *    Transitions to shutting down.
-   * -# shuttingdown: the ssession is being shut down.  Any pending
-   *    KeepAlive requests are canceled, their responses, if any, are
-   *    received but trigger no further action.  The connection
-   *    half-closes the reader-writer stream.  When the reader-writer
-   *    stream is closed, a LeaseRevoke request is sent.  When that
-   *    request succeeds the CompletionQueue is shutdown, and the
-   *    object can be destructed.  Transitions to shutdown at the end
-   *    of that sequence.
-   * TODO() - consider more states for shutting down.
    */
   enum class state {
+    /**
+     * The initial state.
+     *
+     * Transitions to @c connecting
+     */
     constructing,
+    /**
+     * The session has obtained a lease id and is now
+     * establishing a reader-writer stream to keep the lease alive.
+     *
+     * Transitions to @c connected or @c shuttingdown.
+     */
     connecting,
+    /**
+     * The session is connected, in this state the session
+     *    sends period KeepAlive requests to renew the lease.
+     *
+     *    Transitions to @c shuttingdown.
+     */
     connected,
+
+    /**
+     * The ssession is being shut down.
+     *
+     * Any pending KeepAlive requests are canceled, their responses,
+     * if any, are received but trigger no further action.  The
+     * connection half-closes the reader-writer stream.  When the
+     * reader-writer stream is closed, a LeaseRevoke request is sent.
+     * When that request succeeds the CompletionQueue is shutdown, and
+     * the object can be destructed.
+     *
+     * Transitions to @c shutdown at the end of that sequence.
+     */
     shuttingdown,
+
+    /**
+     * Final state.
+     *
+     * The session cannot transition out of this state.
+     */
     shutdown,
   };
-
-  /// Constructor
-  template <typename duration_type>
-  session(
-      std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<grpc::Channel> etcd_channel, duration_type desired_TTL)
-      : session(true, queue, etcd_channel, to_milliseconds(desired_TTL), 0) {
-  }
-
-  /**
-   * Contructor with a previous lease.
-   *
-   * This could be useful for an application that saves its lease, shuts
-   * down, and quickly restarts.  I think it is a stretch, but so easy
-   * to implement that why not?
-   */
-  template <typename duration_type>
-  session(
-      std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<grpc::Channel> etcd_channel, duration_type desired_TTL,
-      std::uint64_t lease_id)
-      : session(
-            true, queue, etcd_channel, to_milliseconds(desired_TTL), lease_id) {
-  }
 
   /**
    * Destroy a session, releasing any local resources.
@@ -95,59 +103,36 @@ public:
     return lease_id_;
   }
 
+  std::chrono::milliseconds actual_TTL() const {
+    return actual_TTL_;
+  }
+
   state current_state() const {
     std::lock_guard<std::mutex> guard(mu_);
     return state_;
   }
 
   /**
-   * Requests the least to be revoked.
+   * Requests the lease to be revoked.
    *
-   * If successful, cancels all pending keep alive operations.
+   * If successful, all pending keep alive operations have been
+   * canceled and the lease is revoked on the server.
    */
-  void revoke();
+  virtual void revoke() = 0;
 
-private:
-  /**
-   * Constructor
-   *
-   * TODO() - we need to add some dependency injection for unit
-   * testing ...
-   */
-  session(
-      bool, std::shared_ptr<active_completion_queue> queue,
-      std::shared_ptr<grpc::Channel> etcd_channel,
-      std::chrono::milliseconds desired_TTL, std::uint64_t lease_id);
-
-  /// Requests (or renews) the lease and setup the watcher stream.
-  void preamble();
-
-  /// Shutdown the local resources.
-  void shutdown();
-
-  /// Set a timer to start the next Write/Read cycle.
-  void set_timer();
-
-  /// Handle the timer expiration, Write() a new LeaseKeepAlive request.
-  void on_timeout(detail::deadline_timer const& op, bool ok);
-
-  using ka_stream_type = detail::async_rdwr_stream<
-      etcdserverpb::LeaseKeepAliveRequest,
-      etcdserverpb::LeaseKeepAliveResponse>;
-
-  /// Handle the Write() completion, schedule a new LeaseKeepAlive Read().
-  void on_write(ka_stream_type::write_op& op, bool ok);
-
-  /// Handle the Read() completion, schedule a new Timer().
-  void on_read(ka_stream_type::read_op& op, bool ok);
-
-  /// Convert the constructor argument to milliseconds.
-  template <typename duration_type>
-  static std::chrono::milliseconds to_milliseconds(duration_type d) {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(d);
+  /// Convert a duration to the preferred units in this class
+  template <typename other_duration_type>
+  static duration_type convert_duration(other_duration_type d) {
+    return std::chrono::duration_cast<duration_type>(d);
   }
 
-private:
+protected:
+  /// Only derived classes can construct this object.
+  session(
+      std::unique_ptr<etcdserverpb::Lease::Stub> lease_stub,
+      std::chrono::milliseconds desired_TTL, std::uint64_t lease_id);
+
+protected:
   /// The usual mutex thing.
   mutable std::mutex mu_;
 
@@ -160,10 +145,8 @@ private:
    */
   state state_;
 
-  std::shared_ptr<grpc::Channel> channel_;
   std::unique_ptr<etcdserverpb::Lease::Stub> lease_client_;
   std::shared_ptr<ka_stream_type> ka_stream_;
-  std::shared_ptr<active_completion_queue> queue_;
 
   /// The lease is assigned by etcd during the constructor
   std::uint64_t lease_id_;
@@ -178,9 +161,9 @@ private:
 
   /// The current timer, can be null when waiting for a KeepAlive response.
   std::shared_ptr<detail::deadline_timer> current_timer_;
-
-  std::promise<bool> shutdown_completed_;
 };
+
+std::ostream& operator<<(std::ostream& os, session::state x);
 
 } // namespace etcd
 } // namespace jb
