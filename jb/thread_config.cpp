@@ -33,19 +33,17 @@ jb::thread_config::thread_config()
           defaults::thread_config_scheduler)
     , priority(
           desc("priority")
-              .help(
-                  "The priority for this thread. "
-                  "Use MIN/MID/MAX for the minimum, midpoint and maximum "
-                  "priorities "
-                  "in the scheduling class. "
-                  "Use a number to set the specific priority"),
+              .help("The priority for this thread. "
+                    "Use MIN/MID/MAX for the minimum, midpoint and maximum "
+                    "priorities "
+                    "in the scheduling class. "
+                    "Use a number to set the specific priority"),
           this, defaults::thread_config_priority)
     , affinity(
           desc("affinity", "cpu_set")
-              .help(
-                  "The CPU affinity for this thread. "
-                  "If none is set, the thread keeps its default affinity "
-                  "settings."),
+              .help("The CPU affinity for this thread. "
+                    "If none is set, the thread keeps its default affinity "
+                    "settings."),
           this)
     , ignore_setup_errors(
           desc("ignore-setup-errors")

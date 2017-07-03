@@ -24,10 +24,8 @@ connection::~connection() {
 void connection::run() {
   beast::http::async_read(
       sock_, sb_, req_,
-      strand_.wrap(
-          [self = shared_from_this()](boost::system::error_code const& ec) {
-            self->on_read(ec);
-          }));
+      strand_.wrap([self = shared_from_this()](
+          boost::system::error_code const& ec) { self->on_read(ec); }));
 }
 
 void connection::on_read(boost::system::error_code const& ec) {

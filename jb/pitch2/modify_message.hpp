@@ -42,9 +42,9 @@ struct modify_message {
  * specification:
  *   https://www.batstrading.com/resources/membership/BATS_MC_PITCH_Specification.pdf
  */
-struct modify_long_message
-    : public modify_message<boost::endian::little_uint32_buf_t,
-                            boost::endian::little_uint64_buf_t> {
+struct modify_long_message : public modify_message<
+                                 boost::endian::little_uint32_buf_t,
+                                 boost::endian::little_uint64_buf_t> {
   /// Define the messsage type
   constexpr static int type = 0x27;
 };
@@ -59,9 +59,9 @@ std::ostream& operator<<(std::ostream& os, modify_long_message const& x);
  * specification:
  *   https://www.batstrading.com/resources/membership/BATS_MC_PITCH_Specification.pdf
  */
-struct modify_short_message
-    : public modify_message<boost::endian::little_uint16_buf_t,
-                            boost::endian::little_uint16_buf_t> {
+struct modify_short_message : public modify_message<
+                                  boost::endian::little_uint16_buf_t,
+                                  boost::endian::little_uint16_buf_t> {
   /// Define the messsage type
   constexpr static int type = 0x28;
 };

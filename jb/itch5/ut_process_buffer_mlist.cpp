@@ -48,16 +48,16 @@ BOOST_AUTO_TEST_CASE(process_buffer_mlist_single) {
 
   {
     auto p = jb::itch5::testing::system_event();
-    jb::itch5::process_buffer_mlist<mock_message_handler,
-                                    jb::itch5::system_event_message>::
+    jb::itch5::process_buffer_mlist<
+        mock_message_handler, jb::itch5::system_event_message>::
         process(handler, 42, 2, 100, p.first, p.second);
   }
   handler.handle_message.require_called().once();
 
   {
     auto p = jb::itch5::testing::stock_directory();
-    jb::itch5::process_buffer_mlist<mock_message_handler,
-                                    jb::itch5::system_event_message>::
+    jb::itch5::process_buffer_mlist<
+        mock_message_handler, jb::itch5::system_event_message>::
         process(handler, 4242, 3, 200, p.first, p.second);
   }
   handler.handle_message.check_called().once();

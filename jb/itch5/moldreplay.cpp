@@ -166,9 +166,8 @@ int main(int argc, char* argv[]) try {
         if (not d) {
           res.status = 500;
           res.reason = beast::http::reason_string(res.status);
-          res.body = std::string(
-              "An internal error occurred\r\n"
-              "Null request handler in /metrics\r\n");
+          res.body = std::string("An internal error occurred\r\n"
+                                 "Null request handler in /metrics\r\n");
           return;
         }
         res.fields.replace("content-type", "text/plain; version=0.0.4");
@@ -223,9 +222,8 @@ int const control_port = 23000;
 config::config()
     : primary_destination(
           desc("primary-destination")
-              .help(
-                  "The destination for the UDP messages. "
-                  "The destination can be a unicast or multicast address."),
+              .help("The destination for the UDP messages. "
+                    "The destination can be a unicast or multicast address."),
           this, defaults::primary_destination)
     , primary_port(
           desc("primary-port")
@@ -233,10 +231,9 @@ config::config()
           this, defaults::primary_port)
     , secondary_destination(
           desc("secondary-destination")
-              .help(
-                  "The destination for the UDP messages. "
-                  "The destination can be empty, a unicast, or a multicast "
-                  "address."),
+              .help("The destination for the UDP messages. "
+                    "The destination can be empty, a unicast, or a multicast "
+                    "address."),
           this, defaults::secondary_destination)
     , secondary_port(
           desc("secondary-port")
@@ -244,10 +241,9 @@ config::config()
           this, defaults::secondary_port)
     , control_host(
           desc("control-host")
-              .help(
-                  "Where does the server listen for control connections."
-                  "Typically this is an address for the current host,"
-                  "for example: 'localhost', '0.0.0.0', or '::1'."),
+              .help("Where does the server listen for control connections."
+                    "Typically this is an address for the current host,"
+                    "for example: 'localhost', '0.0.0.0', or '::1'."),
           this, defaults::control_host)
     , control_port(
           desc("control-port").help("The port to receive control connections."),

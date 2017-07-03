@@ -19,9 +19,11 @@ instdir = $(prefix)
 lib_LIBRARIES = \
   jb/libjb.a \
   jb/libjb_ehs.a \
+  jb/libjb_etcd.a \
   jb/libjb_itch5.a \
   jb/libjb_pitch2.a \
   jb/libjb_testing.a \
+  jb/libjb_gmock.a \
   jb/libjb_itch5_testing.a
 
 # The unit tests are added (via +=) in the same section where we
@@ -49,12 +51,14 @@ bin_PROGRAMS = $(benchmarks) \
   tools/itch5trades \
   tools/moldheartbeat
 
+noinst_SCRIPTS =
+
 noinst_PROGRAMS = $(examples) \
   jb/testing/check_mt19937_initializer \
   jb/testing/check_random_device
 
 check_PROGRAMS = $(unit_tests)
-TESTS = $(check_PROGRAMS)
+TESTS = $(unit_tests)
 
 @VALGRIND_CHECK_RULES@
 
@@ -104,7 +108,7 @@ UT_CPPFLAGS = \
   $(CPPFLAGS)
 
 if STATIC_LINKING
-LIBS += -Wl,-Bdynamic
+LDFLAGS += -Wl,-Bdynamic
 else
 UT_CPPFLAGS += -DBOOST_TEST_DYN_LINK
 endif !STATIC_LINKING
@@ -119,7 +123,10 @@ jb_ut_ldflags =
 ################################################################
 if FOUND_CLANG_FORMAT
 check-style:
-	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' | \
+	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' -type f \
+	  ! -path $(top_srcdir)'/etcd/*' \
+	  ! -path $(top_srcdir)'/gogoproto/*' \
+	  ! -path $(top_srcdir)'/googleapis/*' | \
 	  xargs $(CLANG_FORMAT) -i
 	$(AM_V_at)git diff --exit-code && echo "clang-format checks passed"
 else
@@ -130,27 +137,35 @@ endif !FOUND_CLANG_FORMAT
 
 ################################################################
 # Special rules to compile protocol buffer files
+# TODO(#157) - this introduces a dependency on GNU Make.  We just
+# accept it as a given.
 ################################################################
 
-# Define the variables to silently compile ProtoBuf files into cpp files.
-PROTOCCOMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
+# Define the variables to silently compile ProtoBuf files into cpp
+# files.
+AM_PROTOCFLAGS =
+PROTOC_COMPILE = $(PROTOC) $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
 AM_V_PROTOC = $(am__v_PROTOC_$(V))
-am__v_PROTOC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_PROTOC_ = $(am__v_PROTOC_$(AM_DEFAULT_VERBOSITY))
 am__v_PROTOC_0 = @echo "  PROTOC  " $@;
 am__v_PROTOC_1 = 
 
+# TODO(#158) - define the search path for protocol buffers
+JB_AM_PROTO_SEARCH_PATHS=$(srcdir)
+vpath %.proto $(JB_AM_PROTO_SEARCH_PATHS)
+
 %.pb.cc %.pb.h: %.proto
-	$(AM_V_PROTOC)$(PROTOCCOMPILE) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
+	$(AM_V_PROTOC)$(PROTOC_COMPILE)	--cpp_out=$(builddir) $^
 
 # Define the variables to generate gRPC C++ files
-GRPCCOMPILE = $(PROTOC) --plugin=protoc-gen-grpc="$(GRPC_CPP_PLUGIN)" $(PROTOCFLAGS) $(AM_PROTOCFLAGS)
-AM_V_GRPC = $(am__v_PROTOC_$(V))
-am__v_GRPC_ = $(am_v_CXX_$(AM_DEFAULT_VERBOSITY))
+GRPC_COMPILE = $(PROTOC_COMPILE) --plugin=protoc-gen-grpc="$(GRPC_CPP_PLUGIN)"
+AM_V_GRPC = $(am__v_GRPC_$(V))
+am__v_GRPC_ = $(am__v_GRPC_$(AM_DEFAULT_VERBOSITY))
 am__v_GRPC_0 = @echo "  GRPC    " $@;
 am__v_GRPC_1 = 
 
 %.grpc.pb.cc %.grpc.pb.h: %.proto
-	$(AM_V_GRPC)$(GRPCCOMPILE) --grpc_out=$(builddir) --proto_path=$(srcdir) --cpp_out=$(builddir) $^
+	$(AM_V_GRPC)$(GRPC_COMPILE) --grpc_out=$(builddir) --cpp_out=$(builddir) $^
 
 ################################################################
 # jb/libjb.a
@@ -425,6 +440,7 @@ nobase_jb_libjb_testing_a_HEADERS = \
   jb/testing/create_square_timeseries.hpp \
   jb/testing/create_triangle_timeseries.hpp \
   jb/testing/delay_timeseries.hpp \
+  jb/testing/future_status.hpp \
   jb/testing/initialize_mersenne_twister.hpp \
   jb/testing/microbenchmark.hpp \
   jb/testing/microbenchmark_base.hpp \
@@ -457,6 +473,7 @@ jb/testing/compile_info.cpp: jb/testing/compile_info.hpp Makefile
 	echo '' >>$@
 
 unit_tests += \
+  jb/testing/future_status_ut \
   jb/testing/ut_check_close_enough \
   jb/testing/ut_create_square_timeseries \
   jb/testing/ut_create_triangle_timeseries \
@@ -471,6 +488,10 @@ jb_testing_check_random_device_LDADD = jb/libjb.a
 
 jb_testing_show_compile_info_SOURCES = jb/testing/show_compile_info.cpp
 jb_testing_show_compile_info_LDADD = jb/libjb_testing.a jb/libjb.a
+
+jb_testing_future_status_ut_SOURCES = jb/testing/future_status_ut.cpp
+jb_testing_future_status_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_future_status_ut
+jb_testing_future_status_ut_LDADD = $(jb_ut_testing_ldadd)
 
 jb_testing_ut_check_close_enough_SOURCES = jb/testing/ut_check_close_enough.cpp
 jb_testing_ut_check_close_enough_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_testing_ut_check_close_enough
@@ -497,34 +518,194 @@ jb_testing_ut_microbenchmark_config_LDFLAGS = $(jb_ut_testing_ldflags)
 jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 
 ################################################################
-# jb/libjb_etcd.a
-#
-# TODO() - for the moment this is just a small test program to verify
-# the makefiles work
+# jb/libjb_gmock.a
 ################################################################
+
+AM_CXXFLAGS += \
+  -I$(srcdir)/googletest/googlemock/include \
+  -I$(srcdir)/googletest/googletest/include
+jb_libjb_gmock_adir = $(includedir)
+jb_libjb_gmock_a_HEADERS = \
+  jb/gmock/init.hpp
+jb_libjb_gmock_a_SOURCES = \
+  jb/gmock/gmock.cpp \
+  jb/gmock/gtest.cpp
+jb_libjb_gmock_a_CPPFLAGS = \
+  -I$(srcdir)/googletest/googlemock \
+  -I$(srcdir)/googletest/googletest \
+  -DGMOCK_SOURCE="<src/gmock-all.cc>" \
+  -DGTEST_SOURCE="<src/gtest-all.cc>"
+
+################################################################
+# jb/libjb_etcd.a
+################################################################
+
+# TODO(#158) - the settings of these flags carefully workaround the
+# layout structure expected by protoc(1) and the differences between
+# how googleapis and etcd layout their files and import their protos.
+AM_PROTOCFLAGS += -I$(srcdir)/googleapis -I$(srcdir)/gogoproto -I$(srcdir)
+JB_AM_PROTO_SEARCH_PATHS += $(srcdir)/googleapis $(srcdir)/gogoproto
+AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
+
+jb_libjb_etcd_adir = $(includedir)
+jb_libjb_etcd_proto_headers = \
+  google/api/http.pb.h \
+  google/api/annotations.pb.h \
+  gogoproto/gogo.pb.h \
+  etcd/mvcc/mvccpb/kv.pb.h \
+  etcd/auth/authpb/auth.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.grpc.pb.h \
+  etcd/etcdserver/etcdserverpb/rpc.pb.h
+
+jb_libjb_etcd_proto_sources = $(jb_libjb_etcd_proto_headers:.pb.h=.pb.cc)
+
+# TODO() - decide if the protobuf files should be included in the
+# distribution tarball ...
+nodist_noinst_DATA = \
+  googleapis/google/api/http.proto \
+  googleapis/google/api/annotations.proto \
+  gogoproto/gogoproto/gogo.proto \
+  etcd/mvcc/mvccpb/kv.proto \
+  etcd/auth/authpb/auth.proto \
+  etcd/etcdserver/etcdserverpb/rpc.proto
+
+nobase_jb_libjb_etcd_a_HEADERS = \
+  jb/etcd/active_completion_queue.hpp \
+  jb/etcd/completion_queue_base.hpp \
+  jb/etcd/completion_queue.hpp \
+  jb/etcd/detail/async_ops.hpp \
+  jb/etcd/detail/default_grpc_interceptor.hpp \
+  jb/etcd/detail/grpc_errors_annotations.hpp \
+  jb/etcd/detail/mocked_grpc_interceptor.hpp \
+  jb/etcd/detail/session_impl.hpp \
+  jb/etcd/grpc_errors.hpp \
+  jb/etcd/leader_election_participant.hpp \
+  jb/etcd/leader_election_runner.hpp \
+  jb/etcd/log_promise_errors.hpp \
+  jb/etcd/prefix_end.hpp \
+  jb/etcd/session.hpp \
+  $(jb_libjb_etcd_proto_headers)
+
+jb_libjb_etcd_a_sources = \
+  jb/etcd/active_completion_queue.cpp \
+  jb/etcd/completion_queue_base.cpp \
+  jb/etcd/grpc_errors.cpp \
+  jb/etcd/leader_election_participant.cpp \
+  jb/etcd/leader_election_runner.cpp \
+  jb/etcd/log_promise_errors.cpp \
+  jb/etcd/prefix_end.cpp \
+  jb/etcd/session.cpp
+
+jb_libjb_etcd_a_SOURCES = \
+  $(jb_libjb_etcd_a_sources) \
+  $(jb_libjb_etcd_proto_sources)
+
+# ... we need to make sure all headers are generated *before* we start
+# compiling the files that include them ...
+# DEBUG $(info other objects = $(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)))
+$(jb_libjb_etcd_a_sources:.cpp=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+$(jb_libjb_etcd_proto_sources:.cc=.$(OBJEXT)): $(jb_libjb_etcd_proto_headers)
+
 noinst_PROGRAMS += \
-  jb/etcd/test_client \
-  jb/etcd/test_server
+  jb/etcd/election_listener \
+  jb/etcd/election_participant \
+  jb/etcd/leader_election_participant_ut \
+  jb/etcd/session_ut
+noinst_SCRIPTS += jb/etcd/integration_tests.py
 
-dist_noinst_DATA = jb/etcd/test.proto
+jb_etcd_unit_tests = \
+  jb/etcd/active_completion_queue_ut \
+  jb/etcd/completion_queue_ut \
+  jb/etcd/grpc_errors_ut \
+  jb/etcd/detail/mocked_grpc_interceptor_ut \
+  jb/etcd/detail/leader_election_runner_impl_ut \
+  jb/etcd/detail/session_impl_ut \
+  jb/etcd/log_promise_errors_ut \
+  jb/etcd/prefix_end_ut
 
-jb_etcd_test_client_SOURCES = jb/etcd/test_client.cpp \
-  jb/etcd/test.grpc.pb.cc \
-  jb/etcd/test.grpc.pb.h \
-  jb/etcd/test.pb.cc \
-  jb/etcd/test.pb.h
-jb_etcd_test_client_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
-jb_etcd_test_client_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
-jb_etcd_test_client_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+check_PROGRAMS += $(jb_etcd_unit_tests)
+TESTS += $(jb_etcd_unit_tests)
 
-jb_etcd_test_server_SOURCES = jb/etcd/test_server.cpp \
-  jb/etcd/test.grpc.pb.cc \
-  jb/etcd/test.grpc.pb.h \
-  jb/etcd/test.pb.cc \
-  jb/etcd/test.pb.h
-jb_etcd_test_server_CPPFLAGS = $(GRPCPP_CPPFLAGS) $(PROTOBUF_CPPFLAGS)
-jb_etcd_test_server_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
-jb_etcd_test_server_LDADD = $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+if HAVE_SANITIZER
+else
+TESTS += \
+  jb/etcd/integration_tests.py
+endif !HAVE_SANITIZER
+
+jb_etcd_ut_ldadd = jb/libjb_etcd.a $(jb_ut_ldadd) \
+    $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+jb_etcd_ut_ldflags = $(jb_ut_ldflags)
+
+jb_etcd_active_completion_queue_ut_SOURCES = jb/etcd/active_completion_queue_ut.cpp
+jb_etcd_active_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_active_completion_queue_ut
+jb_etcd_active_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_active_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_completion_queue_ut_SOURCES = jb/etcd/completion_queue_ut.cpp
+jb_etcd_completion_queue_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_completion_queue_ut
+jb_etcd_completion_queue_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_completion_queue_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_detail_mocked_grpc_interceptor_ut_SOURCES = jb/etcd/detail/mocked_grpc_interceptor_ut.cpp
+jb_etcd_detail_mocked_grpc_interceptor_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_mocked_grpc_interceptor_ut
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_mocked_grpc_interceptor_ut_LDADD = $(jb_etcd_ut_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
+
+jb_etcd_grpc_errors_ut_SOURCES = jb/etcd/grpc_errors_ut.cpp
+jb_etcd_grpc_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_grpc_errors_ut
+jb_etcd_grpc_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_grpc_errors_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_leader_election_participant_ut_SOURCES = jb/etcd/leader_election_participant_ut.cpp
+jb_etcd_leader_election_participant_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_leader_election_participant_ut
+jb_etcd_leader_election_participant_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_leader_election_participant_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_detail_leader_election_runner_impl_ut_SOURCES = jb/etcd/detail/leader_election_runner_impl_ut.cpp
+jb_etcd_detail_leader_election_runner_impl_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_leader_election_runner_impl_ut
+jb_etcd_detail_leader_election_runner_impl_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_leader_election_runner_impl_ut_LDADD = $(jb_etcd_ut_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
+
+jb_etcd_detail_session_impl_ut_SOURCES = jb/etcd/detail/session_impl_ut.cpp
+jb_etcd_detail_session_impl_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_detail_session_impl_ut
+jb_etcd_detail_session_impl_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_detail_session_impl_ut_LDADD = $(jb_etcd_ut_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
+
+jb_etcd_log_promise_errors_ut_SOURCES = jb/etcd/log_promise_errors_ut.cpp
+jb_etcd_log_promise_errors_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_log_promise_errors_ut
+jb_etcd_log_promise_errors_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_log_promise_errors_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_prefix_end_ut_SOURCES = jb/etcd/prefix_end_ut.cpp
+jb_etcd_prefix_end_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_prefix_end_ut
+jb_etcd_prefix_end_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_prefix_end_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_session_ut_SOURCES = jb/etcd/session_ut.cpp
+jb_etcd_session_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_etcd_session_ut
+jb_etcd_session_ut_LDFLAGS = $(jb_etcd_ut_ldflags)
+jb_etcd_session_ut_LDADD = $(jb_etcd_ut_ldadd)
+
+jb_etcd_election_listener_SOURCES = \
+  jb/etcd/election_listener.cpp
+jb_etcd_election_listener_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
+  $(PROTOBUF_CPPFLAGS) -I$(builddir)/gogoproto -I$(builddir)/googleapis
+#jb_etcd_election_listener_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+jb_etcd_election_listener_LDADD = \
+    jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS)
+jb/etcd/jb_etcd_election_listener-election_listener.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
+
+jb_etcd_election_participant_SOURCES = \
+  jb/etcd/election_participant.cpp
+jb_etcd_election_participant_CPPFLAGS = $(GRPCPP_CPPFLAGS) \
+  $(PROTOBUF_CPPFLAGS) -I$(builddir)/gogoproto -I$(builddir)/googleapis
+#jb_etcd_election_participant_CXXFLAGS = $(GRPCPP_CFLAGS) $(PROTOBUF_CFLAGS)
+jb_etcd_election_participant_LDADD = \
+    jb/libjb_etcd.a jb/libjb.a $(GRPCPP_LIBS) $(PROTOBUF_LIBS) $(LIBS)
+jb/etcd/jb_etcd_election_participant-election_participant.$(OBJEXT): $(jb_libjb_etcd_proto_headers)
 
 ################################################################
 # jb/libjb_itch5_testing.a
@@ -1218,6 +1399,15 @@ jb_opencl_unit_tests = \
   jb/opencl/ut_config \
   jb/opencl/ut_device_selector \
   jb/opencl/ut_generic_reduce
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_opencl_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_opencl_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_opencl_examples = \
   jb/opencl/show_device
 jb_opencl_benchmarks = \
@@ -1236,6 +1426,15 @@ lib_LIBRARIES += jb/libjb_clfft.a
 jb_clfft_unit_tests = \
   jb/clfft/ut_error \
   jb/clfft/ut_plan
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_clfft_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_clfft_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_clfft_benchmarks = \
   jb/clfft/bm_single_fft
 jb_ut_clfft_ldadd = \
@@ -1247,9 +1446,19 @@ jb_ut_clfft_ldflags = \
   $(jb_ut_opencl_ldflags)
 
 lib_LIBRARIES += jb/libjb_tde.a
+
 jb_tde_unit_tests = \
   jb/tde/ut_conjugate_and_multiply \
   jb/tde/ut_reduce_argmax_real
+
+# Adding to check programs makes sure the tests are compiled, do not
+# add to teste under sanitizers, too many errors in underlying libraries ...
+check_PROGRAMS += $(jb_tde_unit_tests)
+if HAVE_SANITIZER
+else
+TESTS += $(jb_tde_unit_tests)
+endif !HAVE_SANITIZER
+
 jb_tde_benchmarks = \
   jb/tde/bm_reduce_argmax_real
 jb_ut_tde_ldadd = \
@@ -1263,11 +1472,6 @@ AM_CXXFLAGS += \
   $(OPENCL_CPPFLAGS) -D__CL_ENABLE_EXCEPTIONS \
   $(CLFFT_CPPFLAGS) $(BOOST_COMPUTE_CPPFLAGS) \
   $(BEAST_CPPFLAGS)
-
-check_PROGRAMS += \
-  $(jb_opencl_unit_tests) \
-  $(jb_clfft_unit_tests) \
-  $(jb_tde_unit_tests)
 
 noinst_PROGRAMS += \
   $(jb_opencl_examples)

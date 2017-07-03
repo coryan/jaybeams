@@ -27,9 +27,8 @@ public:
       int size, boost::compute::context& context,
       boost::compute::command_queue& q)
       : chain_length(size)
-      , kernel(
-            jb::opencl::build_simple_kernel(
-                context, context.get_device(), source, "empty"))
+      , kernel(jb::opencl::build_simple_kernel(
+            context, context.get_device(), source, "empty"))
       , queue(q) {
   }
 

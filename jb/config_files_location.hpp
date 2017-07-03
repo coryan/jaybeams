@@ -97,8 +97,9 @@ private:
  *   path is readable.  This is used for dependency injection during
  *   testing.
  */
-template <typename getenv_functor = default_getenv,
-          typename validator_functor = default_validator>
+template <
+    typename getenv_functor = default_getenv,
+    typename validator_functor = default_validator>
 class config_files_locations : public config_files_locations_base {
 public:
   /**

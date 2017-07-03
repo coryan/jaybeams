@@ -16,9 +16,8 @@ int max_size = JB_ITCH5_DEFAULTS_array_based_book_max_size;
 array_based_order_book::config::config()
     : max_size(
           desc("max-size")
-              .help(
-                  "Configure the max size of a array based order book."
-                  " Only used when enable-array-based is set"),
+              .help("Configure the max size of a array based order book."
+                    " Only used when enable-array-based is set"),
           this, defaults::max_size) {
 }
 

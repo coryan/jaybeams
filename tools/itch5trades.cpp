@@ -126,9 +126,8 @@ config::config()
           this)
     , output_file(
           desc("output-file")
-              .help(
-                  "The name of the file where to store the inside data."
-                  "  Files ending in .gz are automatically compressed."),
+              .help("The name of the file where to store the inside data."
+                    "  Files ending in .gz are automatically compressed."),
           this, "stdout")
     , log(desc("log", "logging"), this) {
 }

@@ -173,12 +173,10 @@ jb::offline_feed_statistics::offline_feed_statistics(config const& cfg)
     , per_usec_rate_(
           cfg.max_messages_per_microsecond(), std::chrono::microseconds(1),
           std::chrono::nanoseconds(1))
-    , interarrival_(
-          interarrival_histogram_t::binning_strategy(
-              0, cfg.max_interarrival_time_nanoseconds()))
-    , processing_latency_(
-          processing_latency_histogram_t::binning_strategy(
-              0, cfg.max_processing_latency_nanoseconds()))
+    , interarrival_(interarrival_histogram_t::binning_strategy(
+          0, cfg.max_interarrival_time_nanoseconds()))
+    , processing_latency_(processing_latency_histogram_t::binning_strategy(
+          0, cfg.max_processing_latency_nanoseconds()))
     , reporting_interval_(
           std::chrono::seconds(cfg.reporting_interval_seconds()))
     , last_ts_(0)
@@ -355,12 +353,11 @@ jb::offline_feed_statistics::config::config()
           this, defaults::max_processing_latency_nanoseconds)
     , reporting_interval_seconds(
           desc("reporting-interval-seconds")
-              .help(
-                  "Configure how often the statistics are logged."
-                  "  Use 0 to suppress all logging."
-                  "  The time is measured using the even timestamps,"
-                  " for feeds using recorded or simulated timestamps the"
-                  " reporting interval will not match the wall time."),
+              .help("Configure how often the statistics are logged."
+                    "  Use 0 to suppress all logging."
+                    "  The time is measured using the even timestamps,"
+                    " for feeds using recorded or simulated timestamps the"
+                    " reporting interval will not match the wall time."),
           this, defaults::reporting_interval_seconds) {
 }
 

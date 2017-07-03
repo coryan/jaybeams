@@ -44,14 +44,12 @@ public:
   using complex_type = std::complex<precision_type>;
 
   /// The type used to store the DFT of the input timeseries
-  using frequency_array_type =
-      typename jb::detail::aligned_container<complex_type,
-                                             array_type>::array_type;
+  using frequency_array_type = typename jb::detail::aligned_container<
+      complex_type, array_type>::array_type;
 
   /// The type used to store the inverse of the DFT
-  using output_array_type =
-      typename jb::detail::aligned_container<precision_type,
-                                             array_type>::array_type;
+  using output_array_type = typename jb::detail::aligned_container<
+      precision_type, array_type>::array_type;
 
   /// The execution plan to apply the (forward) DFT
   using dplan = jb::fftw::plan<array_type, frequency_array_type>;

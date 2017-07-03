@@ -20,17 +20,16 @@ udp_receiver_config::udp_receiver_config()
           desc("port").help("The UDP port of the packets to receive."), this, 0)
     , local_address(
           desc("local-address")
-              .help(
-                  "The local address of the receive socket."
-                  "  If the value of --address is a unicast address this "
-                  "must be empty."
-                  "  If the value of --address is a multicast address this "
-                  "can be one of the local addresses of the host, in which "
-                  "cast that binds the socket to a specific interface to "
-                  "receive the multicast messages."
-                  "  If the value of --address is a multicast address, and "
-                  "this option is empty, the the system picks the right "
-                  "ADDRANY to receive the messages."),
+              .help("The local address of the receive socket."
+                    "  If the value of --address is a unicast address this "
+                    "must be empty."
+                    "  If the value of --address is a multicast address this "
+                    "can be one of the local addresses of the host, in which "
+                    "cast that binds the socket to a specific interface to "
+                    "receive the multicast messages."
+                    "  If the value of --address is a multicast address, and "
+                    "this option is empty, the the system picks the right "
+                    "ADDRANY to receive the messages."),
           this, "") {
 }
 

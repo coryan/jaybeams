@@ -112,9 +112,8 @@ BOOST_AUTO_TEST_CASE(config_files_location_program_root) {
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
   fs::path etc = fs::path(jb::sysconfdir()).filename();
-  std::vector<fs::path> expected(
-      {"/test/path" / etc, "/install/path" / etc, jb::sysconfdir(),
-       programdir});
+  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
+                                  jb::sysconfdir(), programdir});
 
   BOOST_CHECK_EQUAL_COLLECTIONS(
       t.search_path().begin(), t.search_path().end(), expected.begin(),
@@ -214,9 +213,9 @@ BOOST_AUTO_TEST_CASE(config_files_location_installed_binary) {
 
   mocked t(program, "TEST_ROOT", getenv);
 
-  std::vector<fs::path> expected(
-      {"/test/path" / etc, "/install/path" / etc, jb::sysconfdir(),
-       program.parent_path().parent_path() / etc});
+  std::vector<fs::path> expected({"/test/path" / etc, "/install/path" / etc,
+                                  jb::sysconfdir(),
+                                  program.parent_path().parent_path() / etc});
 
   BOOST_CHECK_EQUAL_COLLECTIONS(
       t.search_path().begin(), t.search_path().end(), expected.begin(),

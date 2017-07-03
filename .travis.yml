@@ -7,7 +7,7 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CHECK_STYLE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
 
     - os: linux
       compiler: gcc
@@ -15,7 +15,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g -fsanitize=address" CONFIGUREFLAGS="--without-opencl"
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g" CHECK_STYLE=yes CONFIGUREFLAGS="--with-sanitizer=address"
 
     - os: linux
       compiler: gcc
@@ -56,8 +56,6 @@ script:
   - ci/check-style.sh
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install docker-ce
   - docker --version
 
 cache:

@@ -53,8 +53,8 @@ namespace jb {
  *   counters, such as when measuring event rate per minute, you
  *   should consider using a 64-bit counter.
  */
-template <typename duration_t = std::chrono::microseconds,
-          typename counter_t = int>
+template <
+    typename duration_t = std::chrono::microseconds, typename counter_t = int>
 class event_rate_estimator {
 public:
   //@{

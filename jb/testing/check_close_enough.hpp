@@ -58,8 +58,10 @@ bool check_close_enough(value_t num_a, value_t num_b, int tol) {
  * @param tol tolerance that the pair of numbers have to be within
  * @tparam value_t the type of the floating-point argument numbers
  */
-template <typename value_t, typename std::enable_if<std::is_floating_point<
-                                value_t>::value>::type* = nullptr>
+template <
+    typename value_t,
+    typename std::enable_if<std::is_floating_point<value_t>::value>::type* =
+        nullptr>
 bool check_close_enough(value_t num_a, value_t num_b, int tol) {
   using value_type = value_t;
   value_type const eps = tol * std::numeric_limits<value_type>::epsilon();
@@ -155,7 +157,9 @@ value_type format(value_type t) {
  *
  * @tparam real the type of floating point number (float, double, long double)
  */
-template <typename real>
+template <
+    typename real, typename std::enable_if<
+                       std::is_floating_point<real>::value>::type* = nullptr>
 real relative_error(real actual, real expected) {
   if (std::numeric_limits<real>::is_integer) {
     return std::abs(actual - expected);
@@ -164,6 +168,26 @@ real relative_error(real actual, real expected) {
     return std::abs(actual);
   }
   return std::abs((actual - expected) / expected);
+}
+
+/**
+ * Adapt relative_error() for integral numbers.
+ *
+ * @return the absolute difference.
+ *
+ * @param actual the number the test got
+ * @param expected the number the test expected
+ *
+ * @tparam integral the type of integral number
+ */
+template <
+    typename integral,
+    typename std::enable_if<std::is_integral<integral>::value>::type* = nullptr>
+integral relative_error(integral actual, integral expected) {
+  if (actual > expected) {
+    return actual - expected;
+  }
+  return expected - actual;
 }
 
 /**

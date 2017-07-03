@@ -67,12 +67,12 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
 BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
   mock_message_handler handler;
 
-  std::string bytes = create_message_stream(
-      {jb::itch5::testing::system_event(),
-       jb::itch5::testing::stock_directory(),
-       jb::itch5::testing::stock_directory(),
-       jb::itch5::testing::stock_directory(),
-       jb::itch5::testing::stock_directory()});
+  std::string bytes =
+      create_message_stream({jb::itch5::testing::system_event(),
+                             jb::itch5::testing::stock_directory(),
+                             jb::itch5::testing::stock_directory(),
+                             jb::itch5::testing::stock_directory(),
+                             jb::itch5::testing::stock_directory()});
   std::istringstream is(bytes);
 
   int count = 0;

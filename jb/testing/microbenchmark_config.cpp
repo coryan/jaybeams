@@ -74,32 +74,29 @@ microbenchmark_config::microbenchmark_config()
           this, defaults::verbose)
     , test_case(
           desc("test-case")
-              .help(
-                  "Some microbenchmarks test completely different "
-                  "configurations"
-                  ", settings, or even different algorithms for the "
-                  "same problem."
-                  "  Use this option to configure such benchmarks"
-                  ", most microbenchmarks will ignore it."),
+              .help("Some microbenchmarks test completely different "
+                    "configurations"
+                    ", settings, or even different algorithms for the "
+                    "same problem."
+                    "  Use this option to configure such benchmarks"
+                    ", most microbenchmarks will ignore it."),
           this)
     , reconfigure_thread(
           desc("reconfigure-thread")
-              .help(
-                  "If set reconfigure the main thread scheduling parameters"
-                  "before running the benchmark. "
-                  "The actual scheduling parameters are configured via the "
-                  "--thread option.  Unsetting this flag is useful when "
-                  "testing "
-                  "with external scheduling parameter settings, e.g. chrt(1) "
-                  "and taskset(1)."),
+              .help("If set reconfigure the main thread scheduling parameters"
+                    "before running the benchmark. "
+                    "The actual scheduling parameters are configured via the "
+                    "--thread option.  Unsetting this flag is useful when "
+                    "testing "
+                    "with external scheduling parameter settings, e.g. chrt(1) "
+                    "and taskset(1)."),
           this, defaults::reconfigure_thread)
     , thread(
           desc("thread", "thread")
-              .help(
-                  "Configure how the main thread scheduling parameters are "
-                  "set before running the benchmark. "
-                  "By default we attempt to run the test in the FIFO "
-                  "scheduling class, at the maximum allowable priority."),
+              .help("Configure how the main thread scheduling parameters are "
+                    "set before running the benchmark. "
+                    "By default we attempt to run the test in the FIFO "
+                    "scheduling class, at the maximum allowable priority."),
           this, thread_config().scheduler("FIFO").priority("MAX"))
     , prefix(
           desc("prefix").help(

@@ -6,9 +6,10 @@ namespace pitch2 {
 
 std::ostream&
 operator<<(std::ostream& os, expanded_add_order_message const& x) {
-  using base = base_add_order_message<expanded_add_order_message::quantity_type,
-                                      expanded_add_order_message::symbol_type,
-                                      expanded_add_order_message::price_type>;
+  using base = base_add_order_message<
+      expanded_add_order_message::quantity_type,
+      expanded_add_order_message::symbol_type,
+      expanded_add_order_message::price_type>;
   return os << static_cast<base const&>(x)
             << ",participant_id=" << x.participant_id;
 }

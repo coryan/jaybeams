@@ -57,12 +57,11 @@ config::config()
           desc("randomize-size").help(randomize_size_help()), this, true)
     , copy_data(
           desc("copy-data")
-              .help(
-                  "If set, the test copies fresh data to the OpenCL device"
-                  " on each iteration.  Effectively that tests copy + "
-                  "reduction."
-                  " Disabling this flag tests reduction assuming the data is"
-                  " already on the device."),
+              .help("If set, the test copies fresh data to the OpenCL device"
+                    " on each iteration.  Effectively that tests copy + "
+                    "reduction."
+                    " Disabling this flag tests reduction assuming the data is"
+                    " already on the device."),
           this, true) {
 }
 
@@ -132,9 +131,8 @@ public:
       : host_(size)
       , device_(size, context)
       , queue_(q)
-      , generator_(
-            jb::testing::initialize_mersenne_twister<std::mt19937_64>(
-                0, jb::testing::default_initialization_marker))
+      , generator_(jb::testing::initialize_mersenne_twister<std::mt19937_64>(
+            0, jb::testing::default_initialization_marker))
       , iteration_size_(0)
       , avoid_optimization_(0)
       , cfg_(cfg) {

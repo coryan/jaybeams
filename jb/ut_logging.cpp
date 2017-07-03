@@ -10,11 +10,10 @@
  * @test Verify that basic logging functions work as expected.
  */
 BOOST_AUTO_TEST_CASE(logging_basic) {
-  jb::log::init(
-      jb::log::config()
-          .minimum_severity(jb::severity_level::debug)
-          .enable_file_logging(true)
-          .logfile_basename("ut_logging"));
+  jb::log::init(jb::log::config()
+                    .minimum_severity(jb::severity_level::debug)
+                    .enable_file_logging(true)
+                    .logfile_basename("ut_logging"));
 
   JB_LOG(trace) << "tracing tracing tracing";
   for (int i = 0; i != 30000; ++i) {

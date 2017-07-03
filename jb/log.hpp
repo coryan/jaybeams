@@ -63,9 +63,9 @@ void next_tid();
     for (::boost::log::record rec_var =                                        \
              (logger).open_record(boost::log::keywords::severity = lvl);       \
          !!rec_var;)                                                           \
-  ::boost::log::aux::make_record_pump((logger), rec_var).stream()              \
-      << boost::log::add_value("Filename", __FILE__)                           \
-      << boost::log::add_value("Lineno", static_cast<int>(__LINE__))
+    ::boost::log::aux::make_record_pump((logger), rec_var).stream()            \
+        << boost::log::add_value("Filename", __FILE__)                         \
+        << boost::log::add_value("Lineno", static_cast<int>(__LINE__))
 
 #define JB_LOG(lvl)                                                            \
   JB_LOG_I(                                                                    \

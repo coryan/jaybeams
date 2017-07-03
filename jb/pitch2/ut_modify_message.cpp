@@ -33,10 +33,9 @@ BOOST_AUTO_TEST_CASE(modify_message_long_basic) {
   std::ostringstream os;
   os << msg;
   BOOST_CHECK_EQUAL(
-      os.str(), std::string(
-                    "length=27,message_type=39,time_offset=447000"
-                    ",order_id=800891482924597253,quantity=75000"
-                    ",price=1025000,modify_flags=3"));
+      os.str(), std::string("length=27,message_type=39,time_offset=447000"
+                            ",order_id=800891482924597253,quantity=75000"
+                            ",price=1025000,modify_flags=3"));
 }
 
 /**
@@ -69,8 +68,7 @@ BOOST_AUTO_TEST_CASE(modify_message_short_basic) {
   std::ostringstream os;
   os << msg;
   BOOST_CHECK_EQUAL(
-      os.str(), std::string(
-                    "length=19,message_type=40,time_offset=447000"
-                    ",order_id=800891482924597253,quantity=100"
-                    ",price=10250,modify_flags=3"));
+      os.str(), std::string("length=19,message_type=40,time_offset=447000"
+                            ",order_id=800891482924597253,quantity=100"
+                            ",price=10250,modify_flags=3"));
 }

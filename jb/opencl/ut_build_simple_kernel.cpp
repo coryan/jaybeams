@@ -44,12 +44,10 @@ BOOST_AUTO_TEST_CASE(build_simple_kernel) {
   BOOST_TEST_MESSAGE("Running with device=" << device.name());
   boost::compute::context context(device);
 
-  BOOST_CHECK_NO_THROW(
-      jb::opencl::build_simple_kernel(
-          context, device, valid_program, "add_int"));
-  BOOST_CHECK_NO_THROW(
-      jb::opencl::build_simple_kernel(
-          context, device, valid_program, "add_float"));
+  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
+      context, device, valid_program, "add_int"));
+  BOOST_CHECK_NO_THROW(jb::opencl::build_simple_kernel(
+      context, device, valid_program, "add_float"));
   BOOST_CHECK_THROW(
       jb::opencl::build_simple_kernel(
           context, device, invalid_program, "add_float"),

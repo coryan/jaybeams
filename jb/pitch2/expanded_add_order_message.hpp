@@ -17,9 +17,9 @@ namespace pitch2 {
  *   https://www.batstrading.com/resources/membership/BATS_MC_PITCH_Specification.pdf
  */
 struct expanded_add_order_message
-    : public base_add_order_message<boost::endian::little_uint32_buf_t,
-                                    jb::fixed_string<8>,
-                                    boost::endian::little_uint64_buf_t> {
+    : public base_add_order_message<
+          boost::endian::little_uint32_buf_t, jb::fixed_string<8>,
+          boost::endian::little_uint64_buf_t> {
   /// Define the messsage type
   constexpr static int type = 0x2F;
 

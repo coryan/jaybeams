@@ -33,8 +33,9 @@ namespace itch5 {
  * @tparam value_validator a functor to validate the value for those
  *   fields that are only supposed to assume a known set of values.
  */
-template <std::size_t wire_size_value,
-          typename value_validator = noop_validator<char const*>>
+template <
+    std::size_t wire_size_value,
+    typename value_validator = noop_validator<char const*>>
 class short_string_field
     : public boost::less_than_comparable<
           short_string_field<wire_size_value, value_validator>>,

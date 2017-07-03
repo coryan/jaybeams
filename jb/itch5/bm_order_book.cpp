@@ -513,9 +513,8 @@ std::vector<operation> create_operations_without_validation(
   // distribution".  The default values are chosen from
   // realistic market data, so the benchmark should generate data
   // that is statistically similar to what the market shows ...
-  std::vector<int> boundaries(
-      {0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(), cfg.p99(), cfg.p999(),
-       cfg.p100()});
+  std::vector<int> boundaries({0, cfg.p25(), cfg.p50(), cfg.p75(), cfg.p90(),
+                               cfg.p99(), cfg.p999(), cfg.p100()});
   std::vector<double> weights({0.25, 0.25, 0.25, 0.15, 0.09, 0.009, 0.001});
   JB_ASSERT_THROW(boundaries.size() == weights.size() + 1);
   std::piecewise_constant_distribution<> ddis(

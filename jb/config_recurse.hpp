@@ -64,8 +64,8 @@ struct config_recurse {
    * Partial specialization for classes derived from jb::config_object.
    */
   template <typename T>
-  static typename std::enable_if<std::is_base_of<config_object, T>::value,
-                                 void>::type
+  static typename std::enable_if<
+      std::is_base_of<config_object, T>::value, void>::type
   apply_overrides(
       T& lhs, YAML::Node const& by_name, class_overrides const& by_class) {
     lhs.apply_overrides(by_name, by_class);
@@ -125,8 +125,8 @@ struct config_recurse {
    * Partial specialization for classes derived from jb::config_object.
    */
   template <typename T>
-  static typename std::enable_if<std::is_base_of<config_object, T>::value,
-                                 void>::type
+  static typename std::enable_if<
+      std::is_base_of<config_object, T>::value, void>::type
   add_options(
       boost::program_options::options_description& options, T const& object,
       std::string const& prefix, config_object::attribute_descriptor const& d) {
@@ -209,8 +209,8 @@ struct config_recurse {
    * Partial specialization for jb::config_object and derived classes.
    */
   template <typename T>
-  static typename std::enable_if<std::is_base_of<config_object, T>::value,
-                                 void>::type
+  static typename std::enable_if<
+      std::is_base_of<config_object, T>::value, void>::type
   apply_cmdline_values(
       T& rhs, boost::program_options::variables_map const& vm,
       std::string const& name) {
@@ -275,8 +275,8 @@ struct config_recurse {
    * derived classes.
    */
   template <typename T>
-  static typename std::enable_if<std::is_base_of<config_object, T>::value,
-                                 void>::type
+  static typename std::enable_if<
+      std::is_base_of<config_object, T>::value, void>::type
   validate(T const& object) {
     object.validate_all();
   }
@@ -324,8 +324,8 @@ struct config_recurse {
    * derived classes.
    */
   template <typename T>
-  static typename std::enable_if<std::is_base_of<config_object, T>::value,
-                                 YAML::Node>::type
+  static typename std::enable_if<
+      std::is_base_of<config_object, T>::value, YAML::Node>::type
   to_yaml(T const& object) {
     return object.to_yaml();
   }

@@ -268,41 +268,41 @@ struct histogram<binning_strategy, counter_type>::check_constraints {
         "The counter_type must be an integral type");
 
     static_assert(
-        std::is_convertible<decltype(histogram_min_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(histogram_min_return_type()), sample_type>::value,
         "The binning_strategy must provide a min() function, "
         "and it must return a type compatible with sample_type.");
     static_assert(
-        std::is_convertible<decltype(histogram_max_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(histogram_max_return_type()), sample_type>::value,
         "The binning_strategy must provide a max() function, "
         "and it must return a type compatible with sample_type.");
 
     static_assert(
-        std::is_convertible<decltype(theoretical_min_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(theoretical_min_return_type()), sample_type>::value,
         "The binning_strategy must provide a theoretical_min() function, "
         "and it must return a type compatible with sample_type.");
     static_assert(
-        std::is_convertible<decltype(theoretical_max_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(theoretical_max_return_type()), sample_type>::value,
         "The binning_strategy must provide a theoretical_max() function, "
         "and it must return a type compatible with sample_type.");
 
     static_assert(
-        std::is_convertible<decltype(interpolate_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(interpolate_return_type()), sample_type>::value,
         "The binning_strategy must provide a interpolate() function, "
         "and it must return a type compatible with sample_type.");
 
     static_assert(
-        std::is_convertible<decltype(sample2bin_return_type()),
-                            std::size_t>::value,
+        std::is_convertible<
+            decltype(sample2bin_return_type()), std::size_t>::value,
         "The binning_strategy must provide a sample2bin() function, "
         "and it must return a type compatible with std::size_t.");
     static_assert(
-        std::is_convertible<decltype(bin2sample_return_type()),
-                            sample_type>::value,
+        std::is_convertible<
+            decltype(bin2sample_return_type()), sample_type>::value,
         "The binning_strategy must provide a bin2sample() function, "
         "and it must return a type compatible with sample_type.");
 
@@ -325,14 +325,14 @@ struct histogram<binning_strategy, counter_type>::check_constraints {
   auto theoretical_max_return_type()
       -> decltype(std::declval<const binning_strategy>().theoretical_max());
 
-  auto sample2bin_return_type() -> decltype(
-      std::declval<const binning_strategy>().sample2bin(
+  auto sample2bin_return_type()
+      -> decltype(std::declval<const binning_strategy>().sample2bin(
           std::declval<const sample_type>()));
   auto bin2sample_return_type() -> decltype(
       std::declval<const binning_strategy>().bin2sample(std::size_t(0)));
 
-  auto interpolate_return_type() -> decltype(
-      std::declval<const binning_strategy>().interpolate(
+  auto interpolate_return_type()
+      -> decltype(std::declval<const binning_strategy>().interpolate(
           std::declval<const sample_type>(), std::declval<const sample_type>(),
           double(1.0), double(1.0), double(0.5)));
 

@@ -56,8 +56,8 @@ struct extrapolate_periodic {
  *   a std::chrono::duration<> instantiation
  * @tparam extrapolation_functor the type of the extrapolation
  */
-template <typename timeseries_t, typename duration_t,
-          typename extrapolation_functor>
+template <
+    typename timeseries_t, typename duration_t, typename extrapolation_functor>
 typename jb::detail::array_traits<timeseries_t>::element_type
 extrapolate_timeseries(
     timeseries_t const& ts, duration_t t, duration_t sampling_period,
@@ -73,8 +73,8 @@ extrapolate_timeseries(
 /**
  * Delay a timeseries using a user-provided extrapolation policy.
  */
-template <typename timeseries_t, typename duration_t,
-          typename extrapolation_functor>
+template <
+    typename timeseries_t, typename duration_t, typename extrapolation_functor>
 timeseries_t delay_timeseries(
     timeseries_t const& ts, duration_t delay, duration_t sampling_period,
     extrapolation_functor const& extrapolation) {

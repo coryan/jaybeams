@@ -46,9 +46,9 @@ BOOST_AUTO_TEST_CASE(expanded_add_order_message_basic) {
   std::ostringstream os;
   os << msg;
   BOOST_CHECK_EQUAL(
-      os.str(), std::string(
-                    "length=40,message_type=47,time_offset=447000,"
-                    "order_id=800891482924597253,side_indicator=B,"
-                    "quantity=20000,symbol=ZVZZT   ,price=9050,add_flags=1,"
-                    "participant_id=MPID"));
+      os.str(),
+      std::string("length=40,message_type=47,time_offset=447000,"
+                  "order_id=800891482924597253,side_indicator=B,"
+                  "quantity=20000,symbol=ZVZZT   ,price=9050,add_flags=1,"
+                  "participant_id=MPID"));
 }

@@ -127,7 +127,6 @@ BOOST_AUTO_TEST_CASE(opencl_device_selector_filter_failure) {
       jb::opencl::detail::best_device(
           [](device const&) { return false; }, "FAIL"),
       std::runtime_error);
-  BOOST_CHECK_NO_THROW(
-      jb::opencl::detail::best_device(
-          [](device const&) { return true; }, "ANY"));
+  BOOST_CHECK_NO_THROW(jb::opencl::detail::best_device(
+      [](device const&) { return true; }, "ANY"));
 }

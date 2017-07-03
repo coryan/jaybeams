@@ -69,9 +69,8 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_listen_address) {
               .port(50000)
               .local_address(interface));
   socket.open.check_called().once();
-  socket.bind.check_called().once().with(
-      boost::asio::ip::udp::endpoint(
-          boost::asio::ip::address::from_string(interface), 50000));
+  socket.bind.check_called().once().with(boost::asio::ip::udp::endpoint(
+      boost::asio::ip::address::from_string(interface), 50000));
   socket.set_option_join_group.check_called().once();
   socket.set_option_enable_loopback.check_called().once();
 }

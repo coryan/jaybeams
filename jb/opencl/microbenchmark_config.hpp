@@ -15,8 +15,8 @@ public:
   microbenchmark_config();
   config_object_constructors(microbenchmark_config);
 
-  jb::config_attribute<microbenchmark_config,
-                       jb::testing::microbenchmark_config>
+  jb::config_attribute<
+      microbenchmark_config, jb::testing::microbenchmark_config>
       microbenchmark;
   jb::config_attribute<microbenchmark_config, jb::log::config> log;
   jb::config_attribute<microbenchmark_config, jb::opencl::config> opencl;

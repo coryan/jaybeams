@@ -19,8 +19,9 @@ typedef char_list_field<u'B', u'S', u'N', u'O'> imbalance_direction_t;
  * Represent the 'Price Variation Indicator' field in the 'Net Order
  * Imbalance Indicator' message.
  */
-typedef char_list_field<u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8',
-                        u'9', u'A', u'B', u'C', u' '>
+typedef char_list_field<
+    u'L', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'A', u'B',
+    u'C', u' '>
     price_variation_indicator_t;
 
 /**
