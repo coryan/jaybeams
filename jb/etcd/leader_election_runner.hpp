@@ -91,7 +91,7 @@ public:
   }
 
   /// Return the lease corresponding to this participant's session.
-  std::uint64_t lease_id() {
+  std::uint64_t lease_id() const {
     return lease_id_;
   }
 
@@ -158,7 +158,6 @@ public:
       , queue_(queue)
       , current_watches_()
       , watched_keys_()
-      , campaign_result_()
       , campaign_callback_() {
     preamble();
     campaign(elected_callback);
@@ -226,8 +225,7 @@ public:
     auto result = publish_value(copy, failure_op);
     if (result.succeeded()) {
       copy.swap(participant_value_);
-      JB_LOG(trace) << log_header("") << " proclaim(" << new_value
-                    << ") - success";
+      JB_LOG(trace) << log_header("") << " proclaim(" << new_value << ")";
       return;
     }
     std::ostringstream os;
@@ -383,7 +381,7 @@ public:
   /// Kick-off a campaign and call a functor when elected
   template <typename Functor>
   void campaign(Functor&& callback) {
-    campaign_impl(std::function<void(std::future<bool>&)>(std::move(callback)));
+    campaign_impl(std::function<void(bool)>(std::move(callback)));
   }
 
   /**
@@ -394,7 +392,7 @@ public:
    * std::function<>.  The cost of such functions is higher, but
    * leader election is not a fast operation.
    */
-  void campaign_impl(std::function<void(std::future<bool>&)>&& callback) {
+  void campaign_impl(std::function<void(bool)>&& callback) {
     JB_LOG(trace) << log_header("") << "  kicking off campaign";
     // First save the callback ...
     {
@@ -632,13 +630,12 @@ public:
       }
     }
     JB_LOG(trace) << log_header("") << " election completed";
-    campaign_result_.set_value(true);
-    make_callback();
+    make_callback(true);
   }
 
   // Invoke the callback, notice that the callback is invoked only once.
-  void make_callback() {
-    std::function<void(std::future<bool>&)> callback;
+  void make_callback(bool result) {
+    std::function<void(bool)> callback;
     {
       std::lock_guard<std::mutex> lock(mu_);
       callback = std::move(campaign_callback_);
@@ -647,8 +644,7 @@ public:
         return;
       }
     }
-    auto future = campaign_result_.get_future();
-    callback(future);
+    callback(result);
     JB_LOG(trace) << log_header("") << "  made callback";
   }
 
@@ -658,8 +654,7 @@ private:
   std::set<std::uint64_t> current_watches_;
   std::set<std::string> watched_keys_;
 
-  std::promise<bool> campaign_result_;
-  std::function<void(std::future<bool>&)> campaign_callback_;
+  std::function<void(bool)> campaign_callback_;
 };
 } // namespace etcd
 } // namespace jb

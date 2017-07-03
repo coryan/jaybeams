@@ -59,14 +59,9 @@ int main(int argc, char* argv[]) try {
   // participant is elected leader ...
   jb::etcd::leader_election_participant participant(
       queue, etcd_channel, cfg.election_name(), cfg.value(),
-      [&is_leader](std::future<bool>& f) {
-        try {
-          std::cout << "... elected! ..." << std::endl;
-          is_leader.set_value(f.get());
-        } catch (...) {
-          is_leader.set_exception(std::current_exception());
-          std::cout << "... election failed ..." << std::endl;
-        }
+      [&is_leader](bool f) {
+        std::cout << "... election result! ..." << f << std::endl;
+        is_leader.set_value(f);
       },
       // TODO() - make the initial TTL configurable.
       std::chrono::seconds(10));

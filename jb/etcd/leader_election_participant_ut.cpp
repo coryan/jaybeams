@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_basic) {
 
   {
     jb::etcd::leader_election_participant tested(
-        queue, etcd_channel, election_name, "42", [](std::future<bool>&) {},
+        queue, etcd_channel, election_name, "42", [](bool) {},
         std::chrono::seconds(3));
     BOOST_TEST_CHECKPOINT("participant object constructed");
     BOOST_CHECK_EQUAL(tested.value(), "42");
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   std::promise<bool> elected_b;
   jb::etcd::leader_election_participant participant_b(
       queue, etcd_channel, election_name, "session_b",
-      [&elected_b](std::future<bool>&) { elected_b.set_value(true); },
+      [&elected_b](bool r) { elected_b.set_value(r); },
       std::chrono::seconds(3));
   BOOST_CHECK_EQUAL(participant_b.value(), "session_b");
 
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   std::promise<bool> elected_c;
   jb::etcd::leader_election_participant participant_c(
       queue, etcd_channel, election_name, "session_c",
-      [&elected_c](std::future<bool>&) { elected_c.set_value(true); },
+      [&elected_c](bool r) { elected_c.set_value(r); },
       std::chrono::seconds(3));
   BOOST_CHECK_EQUAL(participant_c.value(), "session_c");
 
@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE(leader_election_participant_switch_leader) {
   BOOST_TEST_CHECKPOINT("b::resign");
   participant_b.resign();
 
+  BOOST_CHECK_EQUAL(future_c.get(), true);
+
   BOOST_TEST_CHECKPOINT("c::resign");
   participant_c.resign();
-
-  BOOST_CHECK_EQUAL(future_c.get(), true);
 
   BOOST_TEST_CHECKPOINT("cleanup");
   election_session.revoke();

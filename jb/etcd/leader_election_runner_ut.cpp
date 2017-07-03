@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_basic) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
   BOOST_CHECK_EQUAL(elected, true);
 
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_proclaim) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
   BOOST_CHECK_EQUAL(elected, true);
 
   // ... when we call proclaim() that translates into a RPC, prepare
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
   BOOST_CHECK_EQUAL(elected, true);
 
   // ... when we call resign() we cancel all watchers, but there are
@@ -228,7 +228,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
 
   // ... when it returns, the class should not be elected yet ...
   BOOST_CHECK_EQUAL(elected, false);
@@ -341,7 +341,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
 
   // ... when it returns, the class should not be elected yet ...
   BOOST_CHECK_EQUAL(elected, false);
@@ -422,7 +422,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_exception) {
           queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
           std::unique_ptr<etcdserverpb::Watch::Stub>(),
           std::string("test-election"), std::string("mocked-runner-a"),
-          [&elected](std::future<bool>& src) { elected = src.get(); }),
+          [&elected](bool src) { elected = src; }),
       std::exception);
   BOOST_CHECK_EQUAL(elected, false);
 }
@@ -481,7 +481,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_fails) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
   BOOST_CHECK_EQUAL(elected, true);
   BOOST_CHECK_EQUAL(runner->participant_revision(), 2000);
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
@@ -566,7 +566,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_value) {
       queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
       std::unique_ptr<etcdserverpb::Watch::Stub>(),
       std::string("test-election"), std::string("mocked-runner-a"),
-      [&elected](std::future<bool>& src) { elected = src.get(); });
+      [&elected](bool src) { elected = src; });
   BOOST_CHECK_EQUAL(elected, true);
   BOOST_CHECK_EQUAL(runner->participant_revision(), 2000);
   BOOST_CHECK_NO_THROW(runner.reset(nullptr));
@@ -651,7 +651,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_preamble_create_node_change_fail) {
           queue, 0x123456UL, std::unique_ptr<etcdserverpb::KV::Stub>(),
           std::unique_ptr<etcdserverpb::Watch::Stub>(),
           std::string("test-election"), std::string("mocked-runner-a"),
-          [&elected](std::future<bool>& src) { elected = src.get(); }),
+          [&elected](bool src) { elected = src; }),
       std::exception);
   BOOST_CHECK_EQUAL(elected, false);
 }
