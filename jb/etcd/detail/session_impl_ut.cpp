@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(session_lease_error) {
       *queue.interceptor().shared_mock, make_deadline_timer(Truly([](auto op) {
         return op->name == "session/set_timer/ttl_refresh";
       })))
-    .Times(0);
+      .Times(0);
 
   std::unique_ptr<session_type> session;
 
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(session_lease_unusual_exception) {
       *queue.interceptor().shared_mock, make_deadline_timer(Truly([](auto op) {
         return op->name == "session/set_timer/ttl_refresh";
       })))
-    .Times(0);
+      .Times(0);
 
   std::unique_ptr<session_type> session;
 
@@ -146,6 +146,22 @@ BOOST_AUTO_TEST_CASE(session_lease_unusual_exception) {
       session = std::make_unique<session_type>(
           queue, std::unique_ptr<etcdserverpb::Lease::Stub>(), 5000ms),
       std::string);
+}
+
+/**
+ * @test Verify that jb::etcd::session::state iostream operators work
+ * as expected.
+ */
+BOOST_AUTO_TEST_CASE(session_state_iostream) {
+  using state = jb::etcd::session::state;
+
+  std::ostringstream os;
+  os << state::constructing << " " << state::connecting << " "
+     << state::connected << " " << state::shuttingdown << " "
+     << state::shutdown;
+  std::string expected =
+      "constructing connecting connected shuttingdown shutdown";
+  BOOST_CHECK_EQUAL(os.str(), expected);
 }
 
 namespace {

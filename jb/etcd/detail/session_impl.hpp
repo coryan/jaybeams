@@ -97,14 +97,12 @@ private:
     if (resp.error() != "") {
       std::ostringstream os;
       os << "Lease grant request rejected"
-         << "\n request=" << print_to_stream(req) << "\n response="
-         << print_to_stream(resp);
+         << "\n request=" << print_to_stream(req)
+         << "\n response=" << print_to_stream(resp);
       throw std::runtime_error(os.str());
     }
 
     lease_id_ = resp.id();
-    JB_LOG(trace) << std::hex << lease_id() << " - lease granted"
-                  << "  TTL=" << std::dec << resp.ttl() << "s";
     actual_TTL_ = convert_duration(std::chrono::seconds(resp.ttl()));
 
     // ... no real need to grab a mutex here.  The object is not fully
@@ -120,17 +118,12 @@ private:
         "session/ka_stream", jb::etcd::use_future());
     this->ka_stream_ = fut.get();
 
-    JB_LOG(trace) << std::hex << lease_id() << " stream connected";
     state_ = state::connected;
     set_timer();
   } catch (std::exception const& ex) {
-    JB_LOG(info) << std::hex << lease_id()
-                 << " std::exception raised in preamble: " << ex.what();
     shutdown();
     throw;
   } catch (...) {
-    JB_LOG(info) << std::hex << lease_id()
-                 << " unknown exception raised in preamble";
     shutdown();
     throw;
   }
