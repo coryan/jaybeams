@@ -235,7 +235,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
   BOOST_CHECK_EQUAL(elected, false);
 
   // ... there should be a pending read for the watcher ...
-  BOOST_REQUIRE(!!pending_read);
+  BOOST_REQUIRE((bool)pending_read);
 
   // ... we use the captured asynchronous operation to send back a
   // response.  First we simulate a simple PUT event ...
@@ -251,13 +251,13 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
   // ... reset the pending read and send the callback, as if the
   // operation had completed ...
   auto pr = std::move(pending_read);
-  BOOST_CHECK(!pending_read);
+  BOOST_CHECK(not pending_read);
   pr->callback(*pr, true);
 
   // ... we expect another pending read because that kind of update is
   // ignored, first create another boring update ...
   BOOST_CHECK_EQUAL(elected, false);
-  BOOST_REQUIRE(!!pending_read);
+  BOOST_REQUIRE((bool)pending_read);
 
   pending_read->response.set_created(false);
   pending_read->response.set_canceled(false);
@@ -268,13 +268,13 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
     ev.mutable_kv()->set_key("test-election/A0A0A0");
   }
   pr = std::move(pending_read);
-  BOOST_CHECK(!pending_read);
+  BOOST_CHECK(not pending_read);
   pr->callback(*pr, true);
 
   // ... same story, but now we create the update that makes things
   // interesting ...
   BOOST_CHECK_EQUAL(elected, false);
-  BOOST_REQUIRE(!!pending_read);
+  BOOST_REQUIRE((bool)pending_read);
 
   pending_read->response.set_created(false);
   pending_read->response.set_canceled(true);
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_must_wait) {
     ev.mutable_kv()->set_key("test-election/A0A0A0");
   }
   pr = std::move(pending_read);
-  BOOST_CHECK(!pending_read);
+  BOOST_CHECK(not pending_read);
   pr->callback(*pr, true);
 
   // ... we should have won the election ...
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   BOOST_CHECK_EQUAL(elected, false);
 
   // ... there should be a pending read for the watcher ...
-  BOOST_REQUIRE(!!pending_read);
+  BOOST_REQUIRE((bool)pending_read);
 
   // ... we use the captured asynchronous operation to send back a
   // response.  First we simulate a simple PUT event ...
@@ -363,12 +363,12 @@ BOOST_AUTO_TEST_CASE(leader_election_runner_resign_during_campaign) {
   // ... reset the pending read and send the callback, as if the
   // operation had completed ...
   auto pr = std::move(pending_read);
-  BOOST_CHECK(!pending_read);
+  BOOST_CHECK(not pending_read);
   pr->callback(*pr, true);
   // ... we expect another pending read because that kind of update is
   // ignored, first create another boring update ...
   BOOST_CHECK_EQUAL(elected, false);
-  BOOST_REQUIRE(!!pending_read);
+  BOOST_REQUIRE((bool)pending_read);
 
   // ... the resign() call would normally block waiting for the
   // pending read operation, but we can use a separate thread to

@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(mocked_grpc_interceptor_rpc) {
   // ... we need to fill the response parameters, which again could be
   // done in the mock action, but we are delaying the operations to
   // verify the std::promise is not immediately satisfied ...
-  BOOST_REQUIRE(!!last_op);
+  BOOST_REQUIRE((bool)last_op);
   {
     auto op = dynamic_cast<jb::etcd::detail::async_op<
         etcdserverpb::LeaseGrantRequest, etcdserverpb::LeaseGrantResponse>*>(
