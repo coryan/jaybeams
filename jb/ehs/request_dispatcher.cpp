@@ -56,8 +56,7 @@ response_type request_dispatcher::process(request_type const& req) try {
 } catch (std::exception const& e) {
   // ... if there is an exception preparing the response we try to
   // send back at least a 500 error ...
-  JB_LOG(info) << "std::exception raised while sending response: "
-               << e.what();
+  JB_LOG(info) << "std::exception raised while sending response: " << e.what();
   return internal_error(req);
 }
 

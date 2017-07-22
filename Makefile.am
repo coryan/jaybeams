@@ -124,7 +124,7 @@ jb_ut_ldflags =
 if FOUND_CLANG_FORMAT
 check-style:
 	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' -type f \
-	  ! -path $(top_srcdir)'/ext/*' \
+	  ! -path $(top_srcdir)'/ext/*' | \
 	  xargs $(CLANG_FORMAT) -i
 	$(AM_V_at)git diff --exit-code && echo "clang-format checks passed"
 else
