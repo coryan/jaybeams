@@ -10,43 +10,43 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_base) {
   using namespace jb::ehs;
   request_dispatcher tested("test");
   request_type req;
-  req.method = "GET";
-  req.url = "/";
+  req.method(beast::http::verb::get);
+  req.target("/");
   req.version = 11;
-  req.fields.insert("host", "example.com:80");
-  req.fields.insert("user-agent", "unit test");
+  req.insert("host", "example.com:80");
+  req.insert("user-agent", "unit test");
 
   response_type res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 404);
+  BOOST_CHECK_EQUAL(res.result_int(), (int)beast::http::status::not_found);
   BOOST_CHECK_EQUAL(res.version, 11);
-  BOOST_CHECK_EQUAL(res.fields["server"], "test");
+  BOOST_CHECK_EQUAL(res["server"], "test");
 
   tested.add_handler("/", [](request_type const& req, response_type& res) {
-    res.fields.insert("content-type", "text/plain");
+    res.insert("content-type", "text/plain");
     res.body = "OK\r\n";
   });
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 200);
+  BOOST_CHECK_EQUAL(res.result_int(), (int)beast::http::status::ok);
   BOOST_CHECK_EQUAL(res.version, 11);
-  BOOST_CHECK_EQUAL(res.fields["server"], "test");
+  BOOST_CHECK_EQUAL(res["server"], "test");
   BOOST_CHECK_EQUAL(res.body, "OK\r\n");
 
-  req.url = "/not-there";
+  req.target("/not-there");
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 404);
+  BOOST_CHECK_EQUAL(res.result_int(), (int)beast::http::status::not_found);
   BOOST_CHECK_EQUAL(res.version, 11);
-  BOOST_CHECK_EQUAL(res.fields["server"], "test");
+  BOOST_CHECK_EQUAL(res["server"], "test");
 
   tested.add_handler(
       "/not-there", [](request_type const& req, response_type& res) {
-        res.fields.insert("content-type", "text/plain");
+        res.insert("content-type", "text/plain");
         res.body = "Fine I guess\r\n";
       });
 
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 200);
+  BOOST_CHECK_EQUAL(res.result_int(), (int)beast::http::status::ok);
   BOOST_CHECK_EQUAL(res.version, 11);
-  BOOST_CHECK_EQUAL(res.fields["server"], "test");
+  BOOST_CHECK_EQUAL(res["server"], "test");
   BOOST_CHECK_EQUAL(res.body, "Fine I guess\r\n");
 }
 
@@ -62,16 +62,17 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_error) {
   tested.add_handler("/error", thrower);
 
   request_type req;
-  req.method = "GET";
-  req.url = "/error";
+  req.method(beast::http::verb::get);
+  req.target("/error");
   req.version = 11;
-  req.fields.insert("host", "example.com:80");
-  req.fields.insert("user-agent", "unit test");
+  req.insert("host", "example.com:80");
+  req.insert("user-agent", "unit test");
 
   response_type res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 500);
+  BOOST_CHECK_EQUAL(
+      res.result_int(), (int)beast::http::status::internal_server_error);
   BOOST_CHECK_EQUAL(res.version, 11);
-  BOOST_CHECK_EQUAL(res.fields["server"], "test");
+  BOOST_CHECK_EQUAL(res["server"], "test");
 
   BOOST_CHECK_THROW(tested.add_handler("/error", thrower), std::runtime_error);
   BOOST_CHECK_EQUAL(tested.get_write_500(), 1);
@@ -84,65 +85,64 @@ BOOST_AUTO_TEST_CASE(request_dispatcher_counter) {
   using namespace jb::ehs;
   request_dispatcher tested("test");
   tested.add_handler("/path", [](request_type const& req, response_type& res) {
-    if (req.fields.exists("x-return-status")) {
-      std::string val = req.fields["x-return-status"].data();
-      (void)jb::strtonum(val, res.status);
+    if (req.count("x-return-status") > 0) {
+      std::string val(req["x-return-status"]);
+      int r;
+      (void)jb::strtonum(val, r);
+      res.result(r);
+    } else {
+      BOOST_CHECK_MESSAGE(false, "x-return-status not set");
     }
-    res.fields.insert("content-type", "text/plain");
+    res.insert("content-type", "text/plain");
     res.body = "OK\r\n";
   });
 
   request_type req;
-  req.method = "GET";
-  req.url = "/path";
+  req.method(beast::http::verb::get);
+  req.target("/path");
   req.version = 11;
-  req.fields.insert("host", "example.com:80");
-  req.fields.insert("user-agent", "unit test");
+  req.insert("host", "example.com:80");
+  req.insert("user-agent", "unit test");
 
-  req.fields.replace("x-return-status", -10);
+  req.insert("x-return-status", "200");
   response_type res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, -10);
-  BOOST_CHECK_EQUAL(tested.get_write_invalid(), 1);
-
-  req.fields.replace("x-return-status", 0);
-  res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 0);
-  BOOST_CHECK_EQUAL(tested.get_write_invalid(), 2);
-
-  req.fields.replace("x-return-status", 100);
-  res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 100);
-  BOOST_CHECK_EQUAL(tested.get_write_100(), 1);
-
-  req.fields.replace("x-return-status", 200);
-  res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 200);
+  BOOST_CHECK_EQUAL(res.result_int(), 200);
   BOOST_CHECK_EQUAL(tested.get_write_200(), 1);
 
-  req.fields.replace("x-return-status", 300);
+  req.set("x-return-status", "100");
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 300);
+  BOOST_CHECK_EQUAL(res.result_int(), 100);
+  BOOST_CHECK_EQUAL(tested.get_write_100(), 1);
+
+  req.set("x-return-status", "204");
+  res = tested.process(req);
+  BOOST_CHECK_EQUAL(res.result_int(), 204);
+  BOOST_CHECK_EQUAL(tested.get_write_200(), 2);
+
+  req.set("x-return-status", "300");
+  res = tested.process(req);
+  BOOST_CHECK_EQUAL(res.result_int(), 300);
   BOOST_CHECK_EQUAL(tested.get_write_300(), 1);
 
-  req.fields.replace("x-return-status", 400);
+  req.set("x-return-status", "400");
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 400);
+  BOOST_CHECK_EQUAL(res.result_int(), 400);
   BOOST_CHECK_EQUAL(tested.get_write_400(), 1);
 
-  req.fields.replace("x-return-status", 500);
+  req.set("x-return-status", "500");
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 500);
+  BOOST_CHECK_EQUAL(res.result_int(), 500);
   BOOST_CHECK_EQUAL(tested.get_write_500(), 1);
 
-  req.fields.replace("x-return-status", 600);
+  req.set("x-return-status", "600");
   res = tested.process(req);
-  BOOST_CHECK_EQUAL(res.status, 600);
-  BOOST_CHECK_EQUAL(tested.get_write_invalid(), 3);
+  BOOST_CHECK_EQUAL(res.result_int(), 600);
+  BOOST_CHECK_EQUAL(tested.get_write_invalid(), 1);
 
   // ... verify that the counters were only updated for the right
   // event ...
   BOOST_CHECK_EQUAL(tested.get_write_100(), 1);
-  BOOST_CHECK_EQUAL(tested.get_write_200(), 1);
+  BOOST_CHECK_EQUAL(tested.get_write_200(), 2);
   BOOST_CHECK_EQUAL(tested.get_write_300(), 1);
   BOOST_CHECK_EQUAL(tested.get_write_400(), 1);
   BOOST_CHECK_EQUAL(tested.get_write_500(), 1);

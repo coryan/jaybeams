@@ -41,27 +41,24 @@ void request_dispatcher::add_handler(
   }
 }
 
-response_type request_dispatcher::process(request_type const& req) {
-  try {
-    auto found = find_handler(req.url);
-    if (not found.second) {
-      return not_found(req);
-    }
-    response_type res;
-    res.status = 200;
-    res.reason = beast::http::reason_string(res.status);
-    res.version = req.version;
-    res.fields.insert("server", server_name_);
-    found.first(req, res);
-    update_response_counter(res);
-    return res;
-  } catch (std::exception const& e) {
-    // ... if there is an exception preparing the response we try to
-    // send back at least a 500 error ...
-    JB_LOG(info) << "std::exception raised while sending response: "
-                 << e.what();
-    return internal_error(req);
+response_type request_dispatcher::process(request_type const& req) try {
+  auto found = find_handler(req.target());
+  if (not found.second) {
+    return not_found(req);
   }
+  response_type res;
+  res.result(beast::http::status::ok);
+  res.version = req.version;
+  res.insert("server", server_name_);
+  found.first(req, res);
+  update_response_counter(res);
+  return res;
+} catch (std::exception const& e) {
+  // ... if there is an exception preparing the response we try to
+  // send back at least a 500 error ...
+  JB_LOG(info) << "std::exception raised while sending response: "
+               << e.what();
+  return internal_error(req);
 }
 
 void request_dispatcher::append_metrics(response_type& res) const {
@@ -116,11 +113,10 @@ void request_dispatcher::append_metrics(response_type& res) const {
 
 response_type request_dispatcher::internal_error(request_type const& req) {
   response_type res;
-  res.status = 500;
-  res.reason = beast::http::reason_string(res.status);
+  res.result(beast::http::status::internal_server_error);
   res.version = req.version;
-  res.fields.insert("server", server_name_);
-  res.fields.insert("content-type", "text/plain");
+  res.insert("server", server_name_);
+  res.insert("content-type", "text/plain");
   res.body = std::string{"An internal error occurred"};
   update_response_counter(res);
   return res;
@@ -128,20 +124,20 @@ response_type request_dispatcher::internal_error(request_type const& req) {
 
 response_type request_dispatcher::not_found(request_type const& req) {
   response_type res;
-  res.status = 404;
-  res.reason = beast::http::reason_string(res.status);
+  res.result(beast::http::status::not_found);
   res.version = req.version;
-  res.fields.insert("server", server_name_);
-  res.fields.insert("content-type", "text/plain");
-  res.body = std::string("path: " + req.url + " not found\r\n");
+  res.insert("server", server_name_);
+  res.insert("content-type", "text/plain");
+  res.body =
+      std::string("path: ") + std::string(req.target()) + " not found\r\n";
   update_response_counter(res);
   return res;
 }
 
 std::pair<request_handler, bool>
-request_dispatcher::find_handler(std::string const& path) const {
+request_dispatcher::find_handler(beast::string_view path) const {
   std::lock_guard<std::mutex> guard(mu_);
-  auto location = handlers_.find(path);
+  auto location = handlers_.find(std::string(path));
   if (location == handlers_.end()) {
     return std::make_pair(request_handler(), false);
   }
@@ -151,20 +147,26 @@ request_dispatcher::find_handler(std::string const& path) const {
 void request_dispatcher::update_response_counter(response_type const& res) {
   // TODO(coryan) - this sound become a map of counter (or is that a
   // counter map?) when we create counter classes for prometheus.io
-  if (res.status < 100) {
+  using sc = beast::http::status_class;
+  switch (beast::http::to_status_class(res.result())) {
+  case sc::unknown:
     count_write_invalid();
-  } else if (res.status < 200) {
+    break;
+  case sc::informational:
     count_write_100();
-  } else if (res.status < 300) {
+    break;
+  case sc::successful:
     count_write_200();
-  } else if (res.status < 400) {
+    break;
+  case sc::redirection:
     count_write_300();
-  } else if (res.status < 500) {
+    break;
+  case sc::client_error:
     count_write_400();
-  } else if (res.status < 600) {
+    break;
+  case sc::server_error:
     count_write_500();
-  } else {
-    count_write_invalid();
+    break;
   }
 }
 

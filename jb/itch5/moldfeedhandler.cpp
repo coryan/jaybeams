@@ -320,14 +320,14 @@ int main(int argc, char* argv[]) try {
   // ... the root serves simply as a indication that the server is
   // running ...
   dispatcher->add_handler("/", [](request_type const&, response_type& res) {
-    res.fields.insert("Content-type", "text/plain");
+    res.insert("Content-type", "text/plain");
     res.body = "Server running...\r\n";
   });
   // ... this prints out the system configuration (command-line
   // parameters and the YAML configuration file), in YAML format ...
   dispatcher->add_handler(
       "/config", [cfg](request_type const&, response_type& res) {
-        res.fields.insert("Content-type", "text/plain");
+        res.insert("Content-type", "text/plain");
         std::ostringstream os;
         os << cfg << "\r\n";
         res.body = os.str();
@@ -345,13 +345,12 @@ int main(int argc, char* argv[]) try {
       "/metrics", [disp](request_type const&, response_type& res) {
         std::shared_ptr<jb::ehs::request_dispatcher> d(disp);
         if (not d) {
-          res.status = 500;
-          res.reason = beast::http::reason_string(res.status);
+          res.result(beast::http::status::internal_server_error);
           res.body = std::string("An internal error occurred\r\n"
                                  "Null request handler in /metrics\r\n");
           return;
         }
-        res.fields.replace("content-type", "text/plain; version=0.0.4");
+        res.set("content-type", "text/plain; version=0.0.4");
         d->append_metrics(res);
       });
 
