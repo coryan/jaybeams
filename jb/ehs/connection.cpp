@@ -38,7 +38,7 @@ void connection::on_read(boost::system::error_code const& ec) {
   dispatcher_->count_read_ok();
   // Prepare a response ...
   response_type res = dispatcher_->process(req_);
-  beast::http::prepare(res);
+  res.set(beast::http::field::content_length, res.body.size());
   // ... create a copy that will survive until the lambda wrapping
   // on_write() is called ...
   auto ptr = std::make_shared<response_type>(std::move(res));

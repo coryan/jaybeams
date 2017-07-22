@@ -148,12 +148,12 @@ int main(int argc, char* argv[]) try {
   using jb::ehs::response_type;
   auto dispatcher = std::make_shared<jb::ehs::request_dispatcher>("moldreplay");
   dispatcher->add_handler("/", [](request_type const&, response_type& res) {
-    res.fields.insert("Content-type", "text/plain");
+    res.insert("Content-type", "text/plain");
     res.body = "Server running...\r\n";
   });
   dispatcher->add_handler(
       "/config", [cfg](request_type const&, response_type& res) {
-        res.fields.insert("Content-type", "text/plain");
+        res.insert("Content-type", "text/plain");
         std::ostringstream os;
         os << cfg << "\r\n";
         res.body = os.str();
@@ -164,13 +164,12 @@ int main(int argc, char* argv[]) try {
       "/metrics", [disp](request_type const&, response_type& res) {
         std::shared_ptr<jb::ehs::request_dispatcher> d(disp);
         if (not d) {
-          res.status = 500;
-          res.reason = beast::http::reason_string(res.status);
+          res.result(beast::http::status::internal_server_error);
           res.body = std::string("An internal error occurred\r\n"
                                  "Null request handler in /metrics\r\n");
           return;
         }
-        res.fields.replace("content-type", "text/plain; version=0.0.4");
+        res.set("content-type", "text/plain; version=0.0.4");
         d->append_metrics(res);
       });
   dispatcher->add_handler(
@@ -356,7 +355,7 @@ replayer_control::replayer_control(config const& cfg)
 }
 
 void replayer_control::status(jb::ehs::response_type& res) const {
-  res.fields.replace("content-type", "text/plain");
+  res.set("content-type", "text/plain");
 
   std::lock_guard<std::mutex> guard(mu_);
   std::ostringstream os;
@@ -374,8 +373,7 @@ void replayer_control::status(jb::ehs::response_type& res) const {
     os << "replaying\n";
     break;
   default:
-    res.status = 500;
-    res.reason = beast::http::reason_string(res.status);
+    res.result(beast::http::status::internal_server_error);
     res.body = "Unkown state\n";
     return;
   }
@@ -390,15 +388,14 @@ void replayer_control::start(
     jb::ehs::request_type const&, jb::ehs::response_type& res) {
   std::lock_guard<std::mutex> guard(mu_);
   if (current_state_ != state::idle) {
-    res.status = 400;
-    res.reason = beast::http::reason_string(res.status);
+    res.result(beast::http::status::precondition_required);
     res.body = "request rejected, current status is not idle\n";
     return;
   }
   // ... set the result before any computation, if there is a failure
   // it will raise an exception and the caller sends back the error
   // ...
-  res.status = 200;
+  res.result(beast::http::status::ok);
   res.body = "request succeeded, started new session\n";
   auto s = std::make_shared<session>(cfg_);
   // ... wait until this point to set the state to starting, if there
@@ -429,12 +426,12 @@ void replayer_control::stop(
   std::lock_guard<std::mutex> guard(mu_);
   if (current_state_ != state::replaying and
       current_state_ != state::starting) {
-    res.status = 400;
+    res.result(beast::http::status::precondition_required);
     res.body = "request rejected, current status is not valid\n";
     return;
   }
   current_state_ = state::stopping;
-  res.status = 200;
+  res.result(beast::http::status::ok);
   res.body = "request succeeded, stopping current session\n";
   JB_ASSERT_THROW(session_.get() != 0);
   session_->stop();

@@ -103,7 +103,7 @@ if test "x$ax_want_beast" = "xyes"; then
   AC_LANG_POP([C++])
 
   if test "$succeeded" != "yes" ; then
-    AC_MSG_NOTICE([Cannot detect the Beast HTTP library])
+    AC_MSG_RESULT(no)
     # execute ACTION-IF-NOT-FOUND (if present):
     ifelse([$2], , :, [$2])
   else

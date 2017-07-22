@@ -3,6 +3,7 @@
 
 #include <jb/ehs/request_dispatcher.hpp>
 
+#include <beast/core/flat_buffer.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/strand.hpp>
 #include <atomic>
@@ -67,7 +68,7 @@ private:
   std::shared_ptr<request_dispatcher> dispatcher_;
   boost::asio::io_service::strand strand_;
   int id_;
-  beast::streambuf sb_;
+  beast::flat_buffer sb_;
   request_type req_;
 
   static std::atomic<int> idgen;

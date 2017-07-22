@@ -201,7 +201,7 @@ private:
    * @returns a pair with the request handler (if any) and a boolean.
    * The boolean is set to false if the path was not found.
    */
-  std::pair<request_handler, bool> find_handler(std::string const& path) const;
+  std::pair<request_handler, bool> find_handler(beast::string_view path) const;
 
   /**
    * Update the response code counters based on @a res.

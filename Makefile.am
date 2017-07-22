@@ -124,9 +124,7 @@ jb_ut_ldflags =
 if FOUND_CLANG_FORMAT
 check-style:
 	$(AM_V_at)find $(top_srcdir) -name '*.[hic]pp' -type f \
-	  ! -path $(top_srcdir)'/etcd/*' \
-	  ! -path $(top_srcdir)'/gogoproto/*' \
-	  ! -path $(top_srcdir)'/googleapis/*' | \
+	  ! -path $(top_srcdir)'/ext/*' | \
 	  xargs $(CLANG_FORMAT) -i
 	$(AM_V_at)git diff --exit-code && echo "clang-format checks passed"
 else
@@ -151,7 +149,7 @@ am__v_PROTOC_0 = @echo "  PROTOC  " $@;
 am__v_PROTOC_1 = 
 
 # TODO(#158) - define the search path for protocol buffers
-JB_AM_PROTO_SEARCH_PATHS=$(srcdir)
+JB_AM_PROTO_SEARCH_PATHS=$(srcdir)/ext
 vpath %.proto $(JB_AM_PROTO_SEARCH_PATHS)
 
 %.pb.cc %.pb.h: %.proto
@@ -522,8 +520,8 @@ jb_testing_ut_microbenchmark_config_LDADD = $(jb_ut_testing_ldadd)
 ################################################################
 
 AM_CXXFLAGS += \
-  -I$(srcdir)/googletest/googlemock/include \
-  -I$(srcdir)/googletest/googletest/include
+  -I$(srcdir)/ext/googletest/googlemock/include \
+  -I$(srcdir)/ext/googletest/googletest/include
 jb_libjb_gmock_adir = $(includedir)
 jb_libjb_gmock_a_HEADERS = \
   jb/gmock/init.hpp
@@ -531,8 +529,8 @@ jb_libjb_gmock_a_SOURCES = \
   jb/gmock/gmock.cpp \
   jb/gmock/gtest.cpp
 jb_libjb_gmock_a_CPPFLAGS = \
-  -I$(srcdir)/googletest/googlemock \
-  -I$(srcdir)/googletest/googletest \
+  -I$(srcdir)/ext/googletest/googlemock \
+  -I$(srcdir)/ext/googletest/googletest \
   -DGMOCK_SOURCE="<src/gmock-all.cc>" \
   -DGTEST_SOURCE="<src/gtest-all.cc>"
 
@@ -543,9 +541,17 @@ jb_libjb_gmock_a_CPPFLAGS = \
 # TODO(#158) - the settings of these flags carefully workaround the
 # layout structure expected by protoc(1) and the differences between
 # how googleapis and etcd layout their files and import their protos.
-AM_PROTOCFLAGS += -I$(srcdir)/googleapis -I$(srcdir)/gogoproto -I$(srcdir)
-JB_AM_PROTO_SEARCH_PATHS += $(srcdir)/googleapis $(srcdir)/gogoproto
-AM_CXXFLAGS += -I$(builddir)/gogoproto -I$(builddir)/googleapis -I$(builddir)
+AM_PROTOCFLAGS += \
+  -I$(srcdir)/ext/googleapis \
+  -I$(srcdir)/ext/gogoproto \
+  -I$(srcdir)/ext
+JB_AM_PROTO_SEARCH_PATHS += \
+  $(srcdir)/ext/googleapis \
+  $(srcdir)/ext/gogoproto
+AM_CXXFLAGS += \
+  -I$(builddir)/ext/gogoproto \
+  -I$(builddir)/ext/googleapis \
+  -I$(builddir)/ext
 
 jb_libjb_etcd_adir = $(includedir)
 jb_libjb_etcd_proto_headers = \

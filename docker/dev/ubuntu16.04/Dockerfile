@@ -1,7 +1,6 @@
 FROM ubuntu:16.04
-MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
+MAINTAINER "Carlos O'Ryan <coryan@users.noreply.github.com>"
 
-#'
 RUN apt-get update && apt-get install -y \
       autoconf \
       automake \
@@ -73,13 +72,6 @@ RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
       cp -r staging/usr/local/include/compute/boost/compute/ \
           /usr/include/boost/) && \
     /bin/rm -fr /var/tmp/build-boost-compute
-
-WORKDIR /var/tmp/build-beast-http
-RUN wget -q https://github.com/vinniefalco/Beast/archive/v1.0.0-b30.tar.gz && \
-    tar -xf v1.0.0-b30.tar.gz && \
-    (cd /var/tmp/build-beast-http/Beast-1.0.0-b30/ && \
-      cmake . && make -j 2 && cp -r include/beast /usr/include/beast/) && \
-    /bin/rm -fr /var/tmp/build-beast-http
 
 WORKDIR /var/tmp/build-grpc
 RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
