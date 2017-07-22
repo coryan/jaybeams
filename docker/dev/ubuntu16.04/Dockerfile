@@ -73,11 +73,6 @@ RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
           /usr/include/boost/) && \
     /bin/rm -fr /var/tmp/build-boost-compute
 
-WORKDIR /var/tmp/build-beast-http
-RUN git clone --depth 10 https://github.com/vinniefalco/Beast.git && \
-    (cd Beast && cp -r include/beast include/beast.hpp /usr/local/include) && \
-    /bin/rm -fr /var/tmp/build-beast-http
-
 WORKDIR /var/tmp/build-grpc
 RUN git clone --depth 10 --branch v1.3.4 https://github.com/grpc/grpc.git && \
   (cd /var/tmp/build-grpc/grpc/ && \

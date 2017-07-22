@@ -74,11 +74,6 @@ RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
           /usr/include/boost/) && \
     /bin/rm -fr /var/tmp/build-boost-compute
 
-WORKDIR /var/tmp/build-beast-http
-RUN git clone --depth 10 https://github.com/vinniefalco/Beast.git && \
-    (cd Beast && cp -r include/beast include/beast.hpp /usr/local/include) && \
-    /bin/rm -fr /var/tmp/build-beast-http
-
 #
 # This is awful, the distribution of gRPC is very Ubuntu specific.
 # We need to manually set the environment variables that select the C
