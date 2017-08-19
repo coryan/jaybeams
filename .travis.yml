@@ -11,7 +11,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 COVERITY=yes GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
+      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
 
     - os: linux
       compiler: gcc
