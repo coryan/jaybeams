@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
   std::istringstream is(bytes);
 
   int count = 0;
-  // Simulate a iostream failure on the 5 read() ...
+  // Simulate a iostream failure on the fifth read() ...
   using namespace ::testing;
   EXPECT_CALL(handler, now()).WillRepeatedly(Invoke([&is, &count]() {
     if (++count == 5) {
@@ -110,7 +110,6 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
     return 0;
   }));
 
-  EXPECT_CALL(handler, now()).Times(5);
   EXPECT_CALL(
       handler,
       handle_message(_, _, _, An<jb::itch5::system_event_message const&>()))
