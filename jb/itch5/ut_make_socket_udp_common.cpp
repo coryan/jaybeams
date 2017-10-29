@@ -3,6 +3,7 @@
 #include <jb/itch5/testing/mock_udp_socket.hpp>
 #include <boost/test/unit_test.hpp>
 
+using namespace ::testing;
 using jb::itch5::testing::mock_udp_socket;
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_basic) {
@@ -11,13 +12,6 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_basic) {
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
   jb::itch5::make_socket_udp_common(socket, jb::itch5::udp_config_common());
-  socket.set_option_debug.check_called().never();
-  socket.set_option_do_not_route.check_called().once();
-  socket.set_option_linger.check_called().never();
-  socket.set_option_receive_buffer_size.check_called().never();
-  socket.set_option_receive_low_watermark.check_called().never();
-  socket.set_option_send_buffer_size.check_called().never();
-  socket.set_option_send_low_watermark.check_called().never();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_debug) {
@@ -25,9 +19,9 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_debug) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(socket, set_option(An<boost::asio::socket_base::debug const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().debug(true));
-  socket.set_option_debug.check_called().once();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_linger) {
@@ -35,9 +29,10 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_linger) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(
+      socket, set_option(An<boost::asio::socket_base::linger const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().linger(true).linger_seconds(30));
-  socket.set_option_linger.check_called().once();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_rcvbuf) {
@@ -45,9 +40,11 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_rcvbuf) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::socket_base::receive_buffer_size const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().receive_buffer_size(8192));
-  socket.set_option_receive_buffer_size.check_called().once();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_sndbuf) {
@@ -55,9 +52,11 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_sndbuf) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::socket_base::send_buffer_size const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().send_buffer_size(8192));
-  socket.set_option_send_buffer_size.check_called().once();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_rcvlow) {
@@ -65,9 +64,11 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_rcvlow) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::socket_base::receive_low_watermark const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().receive_low_watermark(8192));
-  socket.set_option_receive_low_watermark.check_called().once();
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_sndlow) {
@@ -75,7 +76,9 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_common_sndlow) {
 
   // Create a mock socket and configure it with different options ...
   mock_udp_socket socket(io);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::socket_base::send_low_watermark const&>()));
   jb::itch5::make_socket_udp_common(
       socket, jb::itch5::udp_config_common().send_low_watermark(8192));
-  socket.set_option_send_low_watermark.check_called().once();
 }

@@ -104,7 +104,6 @@ LIBS = \
 # Common configuration for all unit tests
 UT_CPPFLAGS = \
   -DBOOST_TEST_MAIN \
-  -DSKYE_USE_BOOST_UNIT_TEST_FRAMEWORK \
   $(CPPFLAGS)
 
 if STATIC_LINKING
@@ -320,7 +319,7 @@ jb_ut_book_depth_statistics_LDADD = $(jb_ut_ldadd)
 jb_ut_config_files_location_SOURCES = jb/ut_config_files_location.cpp
 jb_ut_config_files_location_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_files_location
 jb_ut_config_files_location_LDFLAGS = $(jb_ut_ldflags)
-jb_ut_config_files_location_LDADD = $(jb_ut_ldadd)
+jb_ut_config_files_location_LDADD = jb/libjb.a jb/libjb_gmock.a $(GTEST_LIBS) $(jb_ut_ldadd)
 
 jb_ut_config_object_SOURCES = jb/ut_config_object.cpp
 jb_ut_config_object_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_ut_config_object
@@ -1079,7 +1078,8 @@ jb_itch5_ut_check_offset_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_ut_compute_book_SOURCES = jb/itch5/ut_compute_book.cpp
 jb_itch5_ut_compute_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_compute_book
 jb_itch5_ut_compute_book_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_compute_book_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_cross_trade_message_SOURCES = jb/itch5/ut_cross_trade_message.cpp
 jb_itch5_ut_cross_trade_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_cross_trade_message
@@ -1104,17 +1104,20 @@ jb_itch5_ut_ipo_quoting_period_update_message_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_ut_make_socket_udp_common_SOURCES = jb/itch5/ut_make_socket_udp_common.cpp
 jb_itch5_ut_make_socket_udp_common_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_common
 jb_itch5_ut_make_socket_udp_common_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_make_socket_udp_common_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_make_socket_udp_common_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_make_socket_udp_recv_SOURCES = jb/itch5/ut_make_socket_udp_recv.cpp
 jb_itch5_ut_make_socket_udp_recv_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_recv
 jb_itch5_ut_make_socket_udp_recv_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_make_socket_udp_recv_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_make_socket_udp_send_SOURCES = jb/itch5/ut_make_socket_udp_send.cpp
 jb_itch5_ut_make_socket_udp_send_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_make_socket_udp_send
 jb_itch5_ut_make_socket_udp_send_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_make_socket_udp_send_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_make_socket_udp_send_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_map_based_order_book_SOURCES = jb/itch5/ut_map_based_order_book.cpp
 jb_itch5_ut_map_based_order_book_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_map_based_order_book
@@ -1134,17 +1137,20 @@ jb_itch5_ut_message_header_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_ut_mold_udp_channel_SOURCES = jb/itch5/ut_mold_udp_channel.cpp
 jb_itch5_ut_mold_udp_channel_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_channel
 jb_itch5_ut_mold_udp_channel_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_channel_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_mold_udp_channel_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_mold_udp_pacer_SOURCES = jb/itch5/ut_mold_udp_pacer.cpp
 jb_itch5_ut_mold_udp_pacer_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer
 jb_itch5_ut_mold_udp_pacer_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_mold_udp_pacer_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_mold_udp_pacer_config_SOURCES = jb/itch5/ut_mold_udp_pacer_config.cpp
 jb_itch5_ut_mold_udp_pacer_config_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mold_udp_pacer_config
 jb_itch5_ut_mold_udp_pacer_config_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_mold_udp_pacer_config_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_mold_udp_pacer_config_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_mwcb_breach_message_SOURCES = jb/itch5/ut_mwcb_breach_message.cpp
 jb_itch5_ut_mwcb_breach_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_mwcb_breach_message
@@ -1204,12 +1210,14 @@ jb_itch5_ut_price_levels_LDADD = $(jb_ut_itch5_ldadd)
 jb_itch5_ut_process_buffer_mlist_SOURCES = jb/itch5/ut_process_buffer_mlist.cpp
 jb_itch5_ut_process_buffer_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_buffer_mlist
 jb_itch5_ut_process_buffer_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_process_buffer_mlist_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_process_buffer_mlist_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_process_iostream_mlist_SOURCES = jb/itch5/ut_process_iostream_mlist.cpp
 jb_itch5_ut_process_iostream_mlist_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_process_iostream_mlist
 jb_itch5_ut_process_iostream_mlist_LDFLAGS = $(jb_ut_itch5_ldflags)
-jb_itch5_ut_process_iostream_mlist_LDADD = $(jb_ut_itch5_ldadd)
+jb_itch5_ut_process_iostream_mlist_LDADD = $(jb_ut_itch5_ldadd) \
+    jb/libjb_gmock.a $(GTEST_LIBS)
 
 jb_itch5_ut_reg_sho_restriction_message_SOURCES = jb/itch5/ut_reg_sho_restriction_message.cpp
 jb_itch5_ut_reg_sho_restriction_message_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_itch5_ut_reg_sho_restriction_message

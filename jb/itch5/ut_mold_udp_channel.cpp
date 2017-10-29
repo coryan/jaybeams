@@ -5,7 +5,7 @@
 #include <jb/itch5/timestamp.hpp>
 #include <jb/itch5/udp_receiver_config.hpp>
 
-#include <skye/mock_function.hpp>
+#include <jb/gmock/init.hpp>
 #include <boost/test/unit_test.hpp>
 
 /**
@@ -96,14 +96,17 @@ struct mold_udp_channel_tester {
  * @test Verify that jb::itch5::mold_udp_channel works.
  */
 BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
-  skye::mock_function<void(
-      std::chrono::steady_clock::time_point, std::uint64_t, std::size_t,
-      std::string, std::size_t)>
-      handler;
-  auto adapter = [&handler](
+  struct mock_function {
+    MOCK_METHOD5(
+        method, void(
+                    std::chrono::steady_clock::time_point, std::uint64_t,
+                    std::size_t, std::string, std::size_t));
+  };
+  mock_function mock;
+  auto adapter = [&mock](
       std::chrono::steady_clock::time_point ts, std::uint64_t seqno,
       std::size_t offset, char const* msg, std::size_t msgsize) {
-    handler(ts, seqno, offset, std::string(msg, msgsize), msgsize);
+    mock.method(ts, seqno, offset, std::string(msg, msgsize), msgsize);
   };
 
   using boost::asio::ip::udp;
@@ -132,30 +135,31 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   }
   udp::socket socket(io, send_from);
 
+  using namespace ::testing;
+  EXPECT_CALL(mock, method(_, _, _, _, _)).Times(3);
   auto packet = create_mold_udp_packet(0, 3);
   socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
-  handler.check_called().exactly(3);
 
+  EXPECT_CALL(mock, method(_, _, _, _, _)).Times(3);
   packet = create_mold_udp_packet(0, 3);
   socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
-  handler.check_called().exactly(6);
 
+  EXPECT_CALL(mock, method(_, _, _, _, _)).Times(2);
   packet = create_mold_udp_packet(9, 2);
   socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
-  handler.check_called().exactly(8);
 
+  EXPECT_CALL(mock, method(_, _, _, _, _)).Times(1);
   packet = create_mold_udp_packet(12, 1);
   socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
-  handler.check_called().exactly(9);
 
+  EXPECT_CALL(mock, method(_, _, _, _, _)).Times(0);
   packet = create_mold_udp_packet(13, 0);
   socket.send_to(boost::asio::buffer(packet), send_to);
   io.run_one();
-  handler.check_called().exactly(9);
 }
 
 /**

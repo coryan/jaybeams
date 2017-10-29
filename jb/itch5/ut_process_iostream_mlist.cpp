@@ -5,8 +5,9 @@
 
 #include <jb/itch5/testing/data.hpp>
 
-#include <skye/mock_function.hpp>
-#include <skye/mock_template_function.hpp>
+#include <jb/gmock/init.hpp>
+#include <boost/test/unit_test.hpp>
+
 #include <initializer_list>
 
 namespace {
@@ -18,11 +19,24 @@ public:
 
   typedef int time_point;
 
-  skye::mock_function<int()> now;
-  skye::mock_function<void(int const&, jb::itch5::unknown_message const&)>
-      handle_unknown;
-
-  skye::mock_template_function<void> handle_message;
+  MOCK_METHOD0(now, int());
+  MOCK_METHOD2(
+      handle_unknown, void(int const&, jb::itch5::unknown_message const&));
+  MOCK_METHOD4(
+      handle_message,
+      void(
+          int const&, std::uint64_t msgcnt, std::size_t msgoffset,
+          jb::itch5::system_event_message const&));
+  MOCK_METHOD4(
+      handle_message,
+      void(
+          int const&, std::uint64_t msgcnt, std::size_t msgoffset,
+          jb::itch5::stock_directory_message const&));
+  MOCK_METHOD4(
+      handle_message,
+      void(
+          int const&, std::uint64_t msgcnt, std::size_t msgoffset,
+          jb::itch5::add_order_message const&));
 };
 
 std::string create_message_stream(
@@ -38,7 +52,8 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
   // get the code to compile.  The functions are tested elsewhere, but
   // this is a big shameful.
   mock_message_handler handler;
-  handler.now.returns(0);
+  using namespace ::testing;
+  EXPECT_CALL(handler, now()).WillRepeatedly(Return(0));
 
   std::string bytes = create_message_stream(
       {jb::itch5::testing::system_event(),
@@ -50,14 +65,24 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_simple) {
        jb::itch5::testing::system_event()});
   std::istringstream is(bytes);
 
+  EXPECT_CALL(handler, now()).Times(21);
+  EXPECT_CALL(
+      handler,
+      handle_message(_, _, _, An<jb::itch5::add_order_message const&>()))
+      .Times(4);
+  EXPECT_CALL(
+      handler,
+      handle_message(_, _, _, An<jb::itch5::stock_directory_message const&>()))
+      .Times(3);
+  EXPECT_CALL(
+      handler,
+      handle_message(_, _, _, An<jb::itch5::system_event_message const&>()))
+      .Times(2);
+  EXPECT_CALL(handler, handle_unknown(_, _)).Times(1);
   jb::itch5::process_iostream_mlist<
       mock_message_handler, jb::itch5::system_event_message,
       jb::itch5::stock_directory_message, jb::itch5::add_order_message>(
       is, handler);
-
-  handler.now.check_called().exactly(21);
-  handler.handle_message.check_called().exactly(9);
-  handler.handle_unknown.check_called().exactly(1);
 }
 
 /**
@@ -76,22 +101,28 @@ BOOST_AUTO_TEST_CASE(process_iostream_mlist_errors) {
   std::istringstream is(bytes);
 
   int count = 0;
-  handler.now.action([&is, &count]() {
+  // Simulate a iostream failure on the fifth read() ...
+  using namespace ::testing;
+  EXPECT_CALL(handler, now()).WillRepeatedly(Invoke([&is, &count]() {
     if (++count == 5) {
       is.setstate(std::ios::failbit);
     }
     return 0;
-  });
+  }));
 
+  EXPECT_CALL(
+      handler,
+      handle_message(_, _, _, An<jb::itch5::system_event_message const&>()))
+      .Times(1);
+  EXPECT_CALL(
+      handler,
+      handle_message(_, _, _, An<jb::itch5::stock_directory_message const&>()))
+      .Times(1);
+  EXPECT_CALL(handler, handle_unknown(_, _)).Times(0);
   jb::itch5::process_iostream_mlist<
       mock_message_handler, jb::itch5::system_event_message,
       jb::itch5::stock_directory_message, jb::itch5::add_order_message>(
       is, handler);
-
-  // We expect invocations for count == 0 and count == 1
-  handler.now.check_called().exactly(5);
-  handler.handle_message.check_called().exactly(2);
-  handler.handle_unknown.check_called().exactly(0);
 }
 
 namespace {
