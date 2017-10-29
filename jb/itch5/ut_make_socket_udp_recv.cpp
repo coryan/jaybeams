@@ -21,56 +21,88 @@ namespace {} // anonymous namespace
 using jb::itch5::testing::mock_udp_socket;
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_basic) {
-  boost::asio::io_service io;
-
   // A simple unicast socket on the default interface ...
-  mock_udp_socket socket = jb::itch5::make_socket_udp_recv<mock_udp_socket>(
-      io, jb::itch5::udp_receiver_config().address("::1").port(50000));
-  socket.open.check_called().once();
-  socket.bind.check_called().once();
-  socket.set_option_join_group.check_called().never();
-  socket.set_option_enable_loopback.check_called().never();
+  using namespace ::testing;
+  NiceMock<mock_udp_socket> socket;
+  EXPECT_CALL(socket, open(_)).Times(1);
+  EXPECT_CALL(socket, bind(_)).Times(1);
+  EXPECT_CALL(
+      socket, set_option(An<boost::asio::ip::multicast::join_group const&>()))
+      .Times(0);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::ip::multicast::enable_loopback const&>()))
+      .Times(0);
+
+  jb::itch5::detail::setup_socket_udp_recv(
+      socket, jb::itch5::udp_receiver_config().address("::1").port(50000));
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv4) {
-  boost::asio::io_service io;
+  using namespace ::testing;
+  NiceMock<mock_udp_socket> socket;
+  EXPECT_CALL(socket, open(_)).Times(1);
+  EXPECT_CALL(
+      socket, bind(boost::asio::ip::udp::endpoint(
+                  boost::asio::ip::address_v4(), 50000)))
+      .Times(1);
+  EXPECT_CALL(
+      socket, set_option(An<boost::asio::ip::multicast::join_group const&>()))
+      .Times(1);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::ip::multicast::enable_loopback const&>()))
+      .Times(1);
 
   // Create a IPv4 multicast socket on the default interface ...
-  mock_udp_socket socket = jb::itch5::make_socket_udp_recv<mock_udp_socket>(
-      io, jb::itch5::udp_receiver_config().address("239.128.1.1").port(50000));
-  socket.open.check_called().once();
-  socket.bind.check_called().once().with(
-      boost::asio::ip::udp::endpoint(boost::asio::ip::address_v4(), 50000));
-  socket.set_option_join_group.check_called().once();
-  socket.set_option_enable_loopback.check_called().once();
+  jb::itch5::detail::setup_socket_udp_recv(
+      socket,
+      jb::itch5::udp_receiver_config().address("239.128.1.1").port(50000));
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_multicast_ipv6) {
-  boost::asio::io_service io;
+  using namespace ::testing;
+  NiceMock<mock_udp_socket> socket;
+  EXPECT_CALL(socket, open(_)).Times(1);
+  EXPECT_CALL(
+      socket, bind(boost::asio::ip::udp::endpoint(
+                  boost::asio::ip::address_v6(), 50000)))
+      .Times(1);
+  EXPECT_CALL(
+      socket, set_option(An<boost::asio::ip::multicast::join_group const&>()))
+      .Times(1);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::ip::multicast::enable_loopback const&>()))
+      .Times(1);
 
   // Create a IPv6 multicast socket on the default interface ...
-  mock_udp_socket socket = jb::itch5::make_socket_udp_recv<mock_udp_socket>(
-      io, jb::itch5::udp_receiver_config().address("ff05::").port(50000));
-  socket.open.check_called().once();
-  socket.bind.check_called().once().with(
-      boost::asio::ip::udp::endpoint(boost::asio::ip::address_v6(), 50000));
-  socket.set_option_join_group.check_called().once();
-  socket.set_option_enable_loopback.check_called().once();
+  jb::itch5::detail::setup_socket_udp_recv(
+      socket, jb::itch5::udp_receiver_config().address("ff05::").port(50000));
 }
 
 BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_listen_address) {
-  boost::asio::io_service io;
+  using namespace ::testing;
+  NiceMock<mock_udp_socket> socket;
+  char const* interface = "2001:db8:ca2:2::1";
+  EXPECT_CALL(socket, open(_)).Times(1);
+  EXPECT_CALL(
+      socket, bind(boost::asio::ip::udp::endpoint(
+                  boost::asio::ip::address::from_string(interface), 50000)))
+      .Times(1);
+  EXPECT_CALL(
+      socket, set_option(An<boost::asio::ip::multicast::join_group const&>()))
+      .Times(1);
+  EXPECT_CALL(
+      socket,
+      set_option(An<boost::asio::ip::multicast::enable_loopback const&>()))
+      .Times(1);
 
   // Create a multicast socket on an specific interface ...
-  char const* interface = "2001:db8:ca2:2::1";
-  mock_udp_socket socket = jb::itch5::make_socket_udp_recv<mock_udp_socket>(
-      io, jb::itch5::udp_receiver_config()
-              .address("ff05::")
-              .port(50000)
-              .local_address(interface));
-  socket.open.check_called().once();
-  socket.bind.check_called().once().with(boost::asio::ip::udp::endpoint(
-      boost::asio::ip::address::from_string(interface), 50000));
-  socket.set_option_join_group.check_called().once();
-  socket.set_option_enable_loopback.check_called().once();
+  jb::itch5::detail::setup_socket_udp_recv(
+      socket,
+      jb::itch5::udp_receiver_config()
+          .address("ff05::")
+          .port(50000)
+          .local_address(interface));
 }

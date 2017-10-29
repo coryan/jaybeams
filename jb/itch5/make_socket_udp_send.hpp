@@ -12,26 +12,9 @@
 namespace jb {
 namespace itch5 {
 
-/**
- * Create a socket to send UDP messages given the configuration parameters.
- *
- * This is a function to create (open) sockets to send UDP
- * messages, either unicast or multicast and either IPv4 or IPv6.  The
- * socket is bound to ADDRANY, and uses an ephemeral port selected by
- * the operating system.  The address family (v4 vs. v6) is selected
- * based on the destination address.
- *
- * @tparam socket_t the type of socket to create.  The main reason to
- * change this type is for dependency injection during testing.
- *
- * @param io the Boost.ASIO io_service object that the socket is
- * managed by.
- *
- * @param cfg the socket configuration.
- */
-template <class socket_t = boost::asio::ip::udp::socket>
-socket_t make_socket_udp_send(
-    boost::asio::io_service& io, udp_sender_config const& cfg) {
+namespace detail {
+template <typename socket_t>
+void setup_socket_udp_send(socket_t& s, udp_sender_config const& cfg) {
   // Some type aliases to shorten the code inside the function ...
   namespace ip = boost::asio::ip;
   using socket_base = boost::asio::socket_base;
@@ -48,7 +31,7 @@ socket_t make_socket_udp_send(
   // ... create a socket bound to the right ADDRANY and an ephemeral
   // port ...
   ip::udp::endpoint endpoint(local_address, 0);
-  socket_t s(io);
+
   s.open(endpoint.protocol());
   s.set_option(socket_base::reuse_address(cfg.reuse_address()));
   s.bind(endpoint);
@@ -82,7 +65,31 @@ socket_t make_socket_udp_send(
     }
     s.set_option(socket_base::broadcast(cfg.broadcast()));
   }
+}
+} // namespace detail
 
+/**
+ * Create a socket to send UDP messages given the configuration parameters.
+ *
+ * This is a function to create (open) sockets to send UDP
+ * messages, either unicast or multicast and either IPv4 or IPv6.  The
+ * socket is bound to ADDRANY, and uses an ephemeral port selected by
+ * the operating system.  The address family (v4 vs. v6) is selected
+ * based on the destination address.
+ *
+ * @tparam socket_t the type of socket to create.  The main reason to
+ * change this type is for dependency injection during testing.
+ *
+ * @param io the Boost.ASIO io_service object that the socket is
+ * managed by.
+ *
+ * @param cfg the socket configuration.
+ */
+template <class socket_t = boost::asio::ip::udp::socket>
+socket_t make_socket_udp_send(
+    boost::asio::io_service& io, udp_sender_config const& cfg) {
+  socket_t s(io);
+  detail::setup_socket_udp_send(s, cfg);
   make_socket_udp_common(s, cfg);
   return s;
 }

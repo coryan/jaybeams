@@ -12,24 +12,10 @@
 namespace jb {
 namespace itch5 {
 
-/**
- * Create a socket given the configuration parameters.
- *
- * This is a function to create (open) sockets to receive UDP
- * messages, either unicast or multicast and either IPv4 or IPv6.
- *
- * @tparam socket_t the type of socket to create.  The main reason to
- * change this type is for dependency injection during testing.
- *
- * @param io the Boost.ASIO io_service object that the socket is
- * managed by.
- *
- * @param cfg the configuration parameters for the socket.
- *
- */
-template <class socket_t = boost::asio::ip::udp::socket>
-socket_t make_socket_udp_recv(
-    boost::asio::io_service& io, udp_receiver_config const& cfg) {
+namespace detail {
+/// Configure a socket to receive UDP packets
+template <class socket_t>
+void setup_socket_udp_recv(socket_t& socket, udp_receiver_config const& cfg) {
   auto r_address = boost::asio::ip::address::from_string(cfg.address());
 
   boost::asio::ip::address local_address;
@@ -55,7 +41,6 @@ socket_t make_socket_udp_recv(
 
   // ... the rest if fairly mechanical stuff ..
   boost::asio::ip::udp::endpoint endpoint(local_address, cfg.port());
-  socket_t socket(io);
   socket.open(endpoint.protocol());
   socket.set_option(
       boost::asio::ip::udp::socket::reuse_address(cfg.reuse_address()));
@@ -64,7 +49,29 @@ socket_t make_socket_udp_recv(
     socket.set_option(boost::asio::ip::multicast::join_group(r_address));
     socket.set_option(boost::asio::ip::multicast::enable_loopback(true));
   }
+}
+} // namespace detail
 
+/**
+ * Create a socket given the configuration parameters.
+ *
+ * This is a function to create (open) sockets to receive UDP
+ * messages, either unicast or multicast and either IPv4 or IPv6.
+ *
+ * @tparam socket_t the type of socket to create.  The main reason to
+ * change this type is for dependency injection during testing.
+ *
+ * @param io the Boost.ASIO io_service object that the socket is
+ * managed by.
+ *
+ * @param cfg the configuration parameters for the socket.
+ *
+ */
+template <class socket_t = boost::asio::ip::udp::socket>
+socket_t make_socket_udp_recv(
+    boost::asio::io_service& io, udp_receiver_config const& cfg) {
+  socket_t socket(io);
+  detail::setup_socket_udp_recv(socket, cfg);
   make_socket_udp_common(socket, cfg);
   return socket;
 }

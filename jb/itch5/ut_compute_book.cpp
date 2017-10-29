@@ -4,7 +4,7 @@
 #include <jb/itch5/trade_message.hpp>
 #include <jb/as_hhmmss.hpp>
 
-#include <skye/mock_function.hpp>
+#include <jb/gmock/init.hpp>
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 #include <thread>
@@ -15,6 +15,13 @@ namespace testing {
 buy_sell_indicator_t const BUY(u'B');
 buy_sell_indicator_t const SELL(u'S');
 
+struct mock_book_callback {
+  MOCK_METHOD5(
+      exec, void(
+                book_update update, half_quote best_bid, half_quote best_offer,
+                int buy_count, int offer_count));
+};
+
 /**
  * Test compute book based on book type.
  * @tparam based_order_book type used by compute_order and order_book
@@ -23,15 +30,12 @@ template <typename based_order_book>
 void test_compute_book_add_order_message_buy() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
+  ::testing::StrictMock<mock_book_callback> callback;
 
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
@@ -45,7 +49,14 @@ void test_compute_book_add_order_message_buy() {
   long msgcnt = 0;
   std::uint64_t id = 2;
   time_point now = tested.now();
-  // ... add an initial order to the book ...
+
+  // ... add an initial order to the book, we expect a single update,
+  // and the order should be in the book when the update is called ...
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, 100},
+                    half_quote{p10, 100}, empty_offer(), 1, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -60,14 +71,15 @@ void test_compute_book_add_order_message_buy() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, 100}, half_quote{p10, 100},
-      empty_offer(), 1, 0);
-
-  // ... add an order at a better price ...
+  // ... add an order at a better price, we also expect a single
+  // update, and the order should be in the book when the update is
+  // called ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p11, 200},
+                    half_quote{p11, 200}, empty_offer(), 2, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -78,14 +90,14 @@ void test_compute_book_add_order_message_buy() {
                         stock,
                         p11});
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p11, 200}, half_quote{p11, 200},
-      empty_offer(), 2, 0);
-
-  // ... add an order at a worse price ...
+  // ... add an order at a worse price, we also expect a single update, and the
+  // order should be in the book when the update is called ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p09, 300},
+                    half_quote{p11, 200}, empty_offer(), 3, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -95,16 +107,6 @@ void test_compute_book_add_order_message_buy() {
                         300,
                         stock,
                         p09});
-
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p09, 300}, half_quote{p11, 200},
-      empty_offer(), 3, 0);
-
-  // ... those should be all the updates, regardless of their contents
-  // ...
-  callback.check_called().exactly(3);
 }
 
 /**
@@ -115,15 +117,12 @@ template <typename based_order_book>
 void test_compute_book_add_order_message_sell() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
 
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
@@ -138,7 +137,12 @@ void test_compute_book_add_order_message_sell() {
   long msgcnt = 0;
   std::uint64_t id = 2;
   time_point now = tested.now();
-  // ... add an initial order to the book ...
+
+  // ... add an initial order to the book, we expect a single update,
+  // and the order should be in the book when the update is called ...
+  EXPECT_CALL(callback, exec(
+      book_update{now, stock, SELL, p11, 100}, empty_bid(),
+      half_quote{p11, 100}, 0, 1)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -153,14 +157,13 @@ void test_compute_book_add_order_message_sell() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, 100}, empty_bid(),
-      half_quote{p11, 100}, 0, 1);
 
-  // ... add an order at a better price ...
+  // ... add an order at a better price, we  expect a single update,
+  // and the order should be in the book when the update is called ...
   now = tested.now();
+  EXPECT_CALL(callback, exec(
+      book_update{now, stock, SELL, p10, 200}, empty_bid(),
+      half_quote{p10, 200}, 0, 2)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -171,14 +174,14 @@ void test_compute_book_add_order_message_sell() {
                         stock,
                         p10});
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p10, 200}, empty_bid(),
-      half_quote{p10, 200}, 0, 2);
 
-  // ... add an order at a worse price ...
+  // ... add an order at a worse price, we also expect a single
+  // update, and the order should be in the book when the update is
+  // called ... 
   now = tested.now();
+  EXPECT_CALL(callback, exec(
+      book_update{now, stock, SELL, p12, 300}, empty_bid(),
+      half_quote{p10, 200}, 0, 3)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -188,16 +191,6 @@ void test_compute_book_add_order_message_sell() {
                         300,
                         stock,
                         p12});
-
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p12, 300}, empty_bid(),
-      half_quote{p10, 200}, 0, 3);
-
-  // ... those should be all the updates, regardless of their contents
-  // ...
-  callback.check_called().exactly(3);
 }
 
 /**
@@ -209,10 +202,9 @@ void test_compute_book_increase_coverage() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
-  skye::mock_function<void()> callback;
-  auto cb = [&callback](
-      jb::itch5::message_header const&, book_type const& b,
-      book_update const& update) { callback(); };
+  auto cb =
+      [](jb::itch5::message_header const&, book_type const& b,
+         book_update const& update) {};
   typename compute_type::callback_type const tmp(cb);
   typename based_order_book::config cfg;
   book_type book(cfg);
@@ -255,17 +247,16 @@ template <typename based_order_book>
 void test_compute_book_edge_cases() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
 
+  using namespace ::testing;
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
+
   // ... create the unit under test ...
   typename based_order_book::config cfg;
   book_type book(cfg);
@@ -281,6 +272,8 @@ void test_compute_book_edge_cases() {
 
   // ... add an initial order to the book ...
   time_point now = tested.now();
+  using namespace ::testing;
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -290,10 +283,8 @@ void test_compute_book_edge_cases() {
                         100,
                         stock,
                         p10});
-  // ... we expect a callback from that event ...
-  callback.check_called().once();
 
-  // ... try to send the same order ...
+  // ... try to send the same order, no changes in expectations ...
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -303,8 +294,6 @@ void test_compute_book_edge_cases() {
                         100,
                         stock,
                         p10});
-  // ... we expect no additional callbacks in this case ...
-  callback.check_called().once();
 }
 
 /**
@@ -316,16 +305,15 @@ void test_compute_book_reduction_edge_cases() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
+  using namespace ::testing;
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
+
   // ... create the unit under test ...
   typename based_order_book::config cfg;
   book_type book(cfg);
@@ -339,7 +327,10 @@ void test_compute_book_reduction_edge_cases() {
   std::uint64_t id = 2;
   auto const id_buy = ++id;
 
-  // ... add an initial order to the book ...
+  // ... add an initial order to the book, we expect a callback from
+  // that event ...
+  using namespace ::testing;
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   time_point now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0,
@@ -350,10 +341,9 @@ void test_compute_book_reduction_edge_cases() {
                         100,
                         stock,
                         p10});
-  // ... we expect a callback from that event ...
-  callback.check_called().once();
 
-  // ... try to cancel a different order ...
+  // ... try to cancel a different order, we expect that no further
+  // callbacks are created ...
   now = tested.now();
   tested.handle_message(
       now, ++msgcnt, 0,
@@ -361,18 +351,15 @@ void test_compute_book_reduction_edge_cases() {
                             timestamp{std::chrono::nanoseconds(0)}},
                            std::uint64_t(1),
                            100});
-  // ... we expect that no further callbacks are created ...
-  callback.check_called().once();
 
-  // ... fully cancel the order ...
+  // ... fully cancel the order, we expect a new callback ...
   now = tested.now();
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_delete_message{{order_delete_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_buy});
-  // ... we expect a new callback ...
-  callback.check_called().exactly(2);
 
   // ... fully cancel the order a second time should produce no action ...
   now = tested.now();
@@ -381,10 +368,10 @@ void test_compute_book_reduction_edge_cases() {
       order_delete_message{{order_delete_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_buy});
-  // ... we expect a new callback ...
-  callback.check_called().exactly(2);
 
-  // ... add another order to the book ...
+  // ... add another order to the book, we expect a callback from that
+  // event ...
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   auto const id_sell = ++id;
   now = tested.now();
   tested.handle_message(
@@ -396,29 +383,20 @@ void test_compute_book_reduction_edge_cases() {
                         300,
                         stock,
                         p10});
-  // ... we expect a callback from that event ...
-  callback.check_called().exactly(3);
 
   // ... try to cancel more shares than are available in the order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p10, -300}, empty_bid(),
+                    empty_offer(), 0, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_cancel_message{{order_cancel_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_sell,
                            600});
-  // ... that should create a callback ...
-  callback.check_called().exactly(4);
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p10, -300}, empty_bid(), empty_offer(), 0,
-      0);
-
-  // ... at the end log all the calls to ease debugging ...
-  for (auto const& capture : callback) {
-    std::ostringstream os;
-    decltype(callback)::capture_strategy::stream(os, capture);
-    BOOST_TEST_MESSAGE("    " << os.str());
-  }
 }
 
 /**
@@ -429,15 +407,12 @@ template <typename based_order_book>
 void test_compute_book_replace_edge_cases() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
 
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
@@ -458,6 +433,8 @@ void test_compute_book_replace_edge_cases() {
 
   // ... add an orders to the book ...
   time_point now = tested.now();
+  using namespace ::testing;
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -467,7 +444,6 @@ void test_compute_book_replace_edge_cases() {
                         100,
                         stock,
                         p10});
-  callback.check_called().once();
 
   // ... replacing a non-existing order should have no effect ...
   now = tested.now();
@@ -479,11 +455,10 @@ void test_compute_book_replace_edge_cases() {
                             id_buy_3,
                             400,
                             p11});
-  // ... we expect that no further callbacks are created ...
-  callback.check_called().once();
 
-  // ... add a second order ...
+  // ... add a second order, we expect a callback from that event ...
   now = tested.now();
+  EXPECT_CALL(callback, exec(_, _, _, _, _)).Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -493,8 +468,6 @@ void test_compute_book_replace_edge_cases() {
                         300,
                         stock,
                         p11});
-  // ... we expect a callback from that event ...
-  callback.check_called().exactly(2);
 
   // ... replacing with a duplicate id should have no effect ...
   now = tested.now();
@@ -506,8 +479,6 @@ void test_compute_book_replace_edge_cases() {
                             id_buy_2,
                             400,
                             p11});
-  // ... we expect that no further callbacks are created ...
-  callback.check_called().exactly(2);
 }
 
 /**
@@ -518,15 +489,13 @@ template <typename based_order_book>
 void test_compute_book_order_executed_message() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
 
+  using namespace ::testing;
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
@@ -543,8 +512,14 @@ void test_compute_book_order_executed_message() {
   std::uint64_t id = 2;
   auto const id_buy = ++id;
 
-  // ... add an initial order to the book ...
+  // ... add an initial order to the book, we expect a single update,
+  // and the order should be in the book when the update is called ...
   time_point now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, 500},
+                    half_quote{p10, 500}, empty_offer(), 1, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
@@ -560,15 +535,17 @@ void test_compute_book_order_executed_message() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
 
   // ... add an order to the opposite side of the book ...
   now = tested.now();
   auto const id_sell = ++id;
+  // ... we also expect a single update, and the order should be in
+  // the book when the update is called ...
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, 500},
+                    half_quote{p10, 500}, half_quote{p11, 500}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
@@ -579,14 +556,14 @@ void test_compute_book_order_executed_message() {
                               stock,
                               p11},
                              mpid_t("LOOF")});
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, 500}, half_quote{p10, 500},
-      half_quote{p11, 500}, 1, 1);
 
   // ... execute the BUY order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, -100},
+                    half_quote{p10, 400}, half_quote{p11, 500}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_executed_message{{order_executed_message::message_type, 0, 0,
@@ -594,12 +571,14 @@ void test_compute_book_order_executed_message() {
                              id_buy,
                              100,
                              ++id});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -100}, half_quote{p10, 400},
-      half_quote{p11, 500}, 1, 1);
 
   // ... execute the SELL order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, -100},
+                    half_quote{p10, 400}, half_quote{p11, 400}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_executed_message{{order_executed_message::message_type, 0, 0,
@@ -607,12 +586,14 @@ void test_compute_book_order_executed_message() {
                              id_sell,
                              100,
                              ++id});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -100}, half_quote{p10, 400},
-      half_quote{p11, 400}, 1, 1);
 
   // ... execute the BUY order with a price ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, -100},
+                    half_quote{p10, 300}, half_quote{p11, 400}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0, order_executed_price_message{
                             {{order_executed_price_message::message_type, 0, 0,
@@ -622,12 +603,14 @@ void test_compute_book_order_executed_message() {
                              ++id},
                             printable_t('N'),
                             price4_t(99901)});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -100}, half_quote{p10, 300},
-      half_quote{p11, 400}, 1, 1);
 
   // ... execute the SELL order with a price ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, -100},
+                    half_quote{p10, 300}, half_quote{p11, 300}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0, order_executed_price_message{
                             {{order_executed_price_message::message_type, 0, 0,
@@ -637,12 +620,14 @@ void test_compute_book_order_executed_message() {
                              ++id},
                             printable_t('N'),
                             price4_t(110001)});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -100}, half_quote{p10, 300},
-      half_quote{p11, 300}, 1, 1);
 
   // ... complete the execution of the BUY order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, -300}, empty_bid(),
+                    half_quote{p11, 300}, 0, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_executed_message{{order_executed_message::message_type, 0, 0,
@@ -650,12 +635,14 @@ void test_compute_book_order_executed_message() {
                              id_buy,
                              300,
                              ++id});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -300}, empty_bid(),
-      half_quote{p11, 300}, 0, 1);
 
   // ... execute the SELL order with a price ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, -300}, empty_bid(),
+                    empty_offer(), 0, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_executed_message{{order_executed_message::message_type, 0, 0,
@@ -663,15 +650,6 @@ void test_compute_book_order_executed_message() {
                              id_sell,
                              300,
                              ++id});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -300}, empty_bid(), empty_offer(), 0,
-      0);
-
-  for (auto const& capture : callback) {
-    std::ostringstream os;
-    decltype(callback)::capture_strategy::stream(os, capture);
-    BOOST_TEST_MESSAGE("    " << os.str());
-  }
 }
 
 /**
@@ -682,15 +660,13 @@ template <typename based_order_book>
 void test_compute_book_order_replace_message() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
 
+  using namespace ::testing;
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
   // ... create the object under test ...
@@ -708,8 +684,14 @@ void test_compute_book_order_replace_message() {
   std::uint64_t id = 2;
   auto const id_buy = ++id;
 
-  // ... add an initial order to the book ...
+  // ... add an initial order to the book, we expect a single update,
+  // and the order should be in the book when the update is called ...
   time_point now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, 500},
+                    half_quote{p10, 500}, empty_offer(), 1, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
@@ -720,19 +702,21 @@ void test_compute_book_order_replace_message() {
                               stock,
                               p10},
                              mpid_t("LOOF")});
-  // ... we expect the new order to implicitly add the symbol ...
+  // ... we also expect the new order to implicitly add the symbol ...
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
 
-  // ... add an order to the opposite side of the book ...
+  // ... add an order to the opposite side of the book, we expect a
+  // single update, and the order should be in the book when the
+  // update is called ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, 500},
+                    half_quote{p10, 500}, half_quote{p11, 500}, 1, 1))
+      .Times(1);
   auto const id_sell = ++id;
   tested.handle_message(
       now, ++msgcnt, 0,
@@ -744,15 +728,15 @@ void test_compute_book_order_replace_message() {
                               stock,
                               p11},
                              mpid_t("LOOF")});
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, 500}, half_quote{p10, 500},
-      half_quote{p11, 500}, 1, 1);
 
   // ... replace the SELL order ...
   now = tested.now();
   auto id_sell_replx = ++id;
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p12, 600, true, p11, 500},
+                    half_quote{p10, 500}, half_quote{p12, 600}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_replace_message{{order_replace_message::message_type, 0, 0,
@@ -761,13 +745,15 @@ void test_compute_book_order_replace_message() {
                             id_sell_replx,
                             600,
                             p12});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p12, 600, true, p11, 500},
-      half_quote{p10, 500}, half_quote{p12, 600}, 1, 1);
 
   // ... replace the BUY order ...
   now = tested.now();
   auto id_buy_replx = ++id;
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p11, 600, true, p12, 500},
+                    half_quote{p11, 600}, half_quote{p12, 600}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_replace_message{{order_replace_message::message_type, 0, 0,
@@ -776,9 +762,6 @@ void test_compute_book_order_replace_message() {
                             id_buy_replx,
                             600,
                             p11});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p11, 600, true, p12, 500},
-      half_quote{p11, 600}, half_quote{p12, 600}, 1, 1);
 }
 
 /**
@@ -790,14 +773,12 @@ void test_compute_book_order_cancel_message() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
 
-  skye::mock_function<void(
-      book_update update, half_quote best_bid, half_quote best_offer,
-      int buy_count, int offer_count)>
-      callback;
+  using namespace ::testing;
+  ::testing::StrictMock<mock_book_callback> callback;
   auto cb = [&callback](
       jb::itch5::message_header const&, book_type const& b,
       book_update const& update) {
-    callback(
+    callback.exec(
         update, b.best_bid(), b.best_offer(), b.buy_count(), b.sell_count());
   };
 
@@ -813,8 +794,14 @@ void test_compute_book_order_cancel_message() {
   std::uint64_t id = 2;
   auto const id_buy = ++id;
 
-  // ... add an initial order to the book ...
+  // ... add an initial order to the book, we expect a single update,
+  // and the order should be in the book when the update is called ...
   time_point now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, 500},
+                    half_quote{p10, 500}, empty_offer(), 1, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
@@ -830,15 +817,16 @@ void test_compute_book_order_cancel_message() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, 500}, half_quote{p10, 500},
-      empty_offer(), 1, 0);
-
-  // ... add an order to the opposite side of the book ...
+  // ... add an order to the opposite side of the book, we expect a
+  // single update, and the order should be in the book when the
+  // update is called ...
   now = tested.now();
   auto const id_sell = ++id;
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, 500},
+                    half_quote{p10, 500}, half_quote{p11, 500}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_mpid_message{{{add_order_mpid_message::message_type, 0, 0,
@@ -849,63 +837,60 @@ void test_compute_book_order_cancel_message() {
                               stock,
                               p11},
                              mpid_t("LOOF")});
-  // ... we also expect a single update, and the order should be in
-  // the book when the update is called ...
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, 500}, half_quote{p10, 500},
-      half_quote{p11, 500}, 1, 1);
 
   // ... cancel 100 shares in the BUY order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, -100},
+                    half_quote{p10, 400}, half_quote{p11, 500}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_cancel_message{{order_cancel_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_buy,
                            100});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -100}, half_quote{p10, 400},
-      half_quote{p11, 500}, 1, 1);
 
   // ... cancel 100 shares in the SELL order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, -100},
+                    half_quote{p10, 400}, half_quote{p11, 400}, 1, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_cancel_message{{order_cancel_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_sell,
                            100});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -100}, half_quote{p10, 400},
-      half_quote{p11, 400}, 1, 1);
 
   // ... fully cancel the BUY order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, BUY, p10, -400}, empty_bid(),
+                    half_quote{p11, 400}, 0, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_delete_message{{order_delete_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_buy});
-  callback.check_called().once().with(
-      book_update{now, stock, BUY, p10, -400}, empty_bid(),
-      half_quote{p11, 400}, 0, 1);
 
   // ... fully cancel the SELL order ...
   now = tested.now();
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, -400}, empty_bid(),
+                    empty_offer(), 0, 0))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       order_delete_message{{order_delete_message::message_type, 0, 0,
                             timestamp{std::chrono::nanoseconds(0)}},
                            id_sell});
-  callback.check_called().once().with(
-      book_update{now, stock, SELL, p11, -400}, empty_bid(), empty_offer(), 0,
-      0);
-
-  for (auto const& capture : callback) {
-    std::ostringstream os;
-    decltype(callback)::capture_strategy::stream(os, capture);
-    BOOST_TEST_MESSAGE("    " << os.str());
-  }
 }
 
 /**
@@ -916,10 +901,9 @@ template <typename based_order_book>
 void test_compute_book_stock_directory_message() {
   using book_type = order_book<based_order_book>;
   using compute_type = compute_book<based_order_book>;
-  skye::mock_function<void()> callback;
-  auto cb = [&callback](
-      jb::itch5::message_header const&, book_type const&,
-      book_update const& update) { callback(); };
+  auto cb =
+      [](jb::itch5::message_header const&, book_type const&,
+         book_update const& update) {};
 
   typename based_order_book::config cfg;
   book_type book(cfg);
@@ -959,12 +943,12 @@ void test_compute_book_stock_directory_message() {
  */
 BOOST_AUTO_TEST_CASE(compute_book_add_order_message) {
   using namespace jb::itch5;
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_add_order_message_buy<map_based_order_book>();
+  t::test_compute_book_add_order_message_sell<map_based_order_book>();
 
-  testing::test_compute_book_add_order_message_buy<map_based_order_book>();
-  testing::test_compute_book_add_order_message_sell<map_based_order_book>();
-
-  testing::test_compute_book_add_order_message_buy<array_based_order_book>();
-  testing::test_compute_book_add_order_message_sell<array_based_order_book>();
+  t::test_compute_book_add_order_message_buy<array_based_order_book>();
+  t::test_compute_book_add_order_message_sell<array_based_order_book>();
 }
 
 /**
@@ -972,9 +956,9 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
   using namespace jb::itch5;
-
-  testing::test_compute_book_increase_coverage<map_based_order_book>();
-  testing::test_compute_book_increase_coverage<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_increase_coverage<map_based_order_book>();
+  t::test_compute_book_increase_coverage<array_based_order_book>();
 }
 
 /**
@@ -983,9 +967,9 @@ BOOST_AUTO_TEST_CASE(compute_book_increase_coverage) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
   using namespace jb::itch5;
-
-  testing::test_compute_book_edge_cases<map_based_order_book>();
-  testing::test_compute_book_edge_cases<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_edge_cases<map_based_order_book>();
+  t::test_compute_book_edge_cases<array_based_order_book>();
 }
 
 /**
@@ -994,8 +978,9 @@ BOOST_AUTO_TEST_CASE(compute_book_add_order_message_edge_cases) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
   using namespace jb::itch5;
-  testing::test_compute_book_reduction_edge_cases<map_based_order_book>();
-  testing::test_compute_book_reduction_edge_cases<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_reduction_edge_cases<map_based_order_book>();
+  t::test_compute_book_reduction_edge_cases<array_based_order_book>();
 }
 
 /**
@@ -1003,8 +988,9 @@ BOOST_AUTO_TEST_CASE(compute_book_reduction_edge_cases) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
   using namespace jb::itch5;
-  testing::test_compute_book_replace_edge_cases<map_based_order_book>();
-  testing::test_compute_book_replace_edge_cases<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_replace_edge_cases<map_based_order_book>();
+  t::test_compute_book_replace_edge_cases<array_based_order_book>();
 }
 
 /**
@@ -1013,8 +999,9 @@ BOOST_AUTO_TEST_CASE(compute_book_replace_edge_cases) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
   using namespace jb::itch5;
-  testing::test_compute_book_order_executed_message<map_based_order_book>();
-  testing::test_compute_book_order_executed_message<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_order_executed_message<map_based_order_book>();
+  t::test_compute_book_order_executed_message<array_based_order_book>();
 }
 
 /**
@@ -1023,8 +1010,9 @@ BOOST_AUTO_TEST_CASE(compute_book_order_executed_message) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
   using namespace jb::itch5;
-  testing::test_compute_book_order_replace_message<map_based_order_book>();
-  testing::test_compute_book_order_replace_message<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_order_replace_message<map_based_order_book>();
+  t::test_compute_book_order_replace_message<array_based_order_book>();
 }
 
 /**
@@ -1033,8 +1021,9 @@ BOOST_AUTO_TEST_CASE(compute_book_order_replace_message) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
   using namespace jb::itch5;
-  testing::test_compute_book_order_cancel_message<map_based_order_book>();
-  testing::test_compute_book_order_cancel_message<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_order_cancel_message<map_based_order_book>();
+  t::test_compute_book_order_cancel_message<array_based_order_book>();
 }
 
 /**
@@ -1043,8 +1032,9 @@ BOOST_AUTO_TEST_CASE(compute_book_order_cancel_message) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
   using namespace jb::itch5;
-  testing::test_compute_book_stock_directory_message<map_based_order_book>();
-  testing::test_compute_book_stock_directory_message<array_based_order_book>();
+  namespace t = jb::itch5::testing;
+  t::test_compute_book_stock_directory_message<map_based_order_book>();
+  t::test_compute_book_stock_directory_message<array_based_order_book>();
 }
 
 /**
@@ -1053,29 +1043,28 @@ BOOST_AUTO_TEST_CASE(compute_book_stock_directory_message) {
  */
 BOOST_AUTO_TEST_CASE(compute_book_book_update_operators) {
   using namespace jb::itch5;
+  namespace t = jb::itch5::testing;
+
   auto const ts0 = clock_type::now();
   std::this_thread::sleep_for(std::chrono::milliseconds(20));
   auto const ts1 = clock_type::now();
-#define BUY testing::BUY
-#define SELL testing::SELL
 
   BOOST_CHECK_EQUAL(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}),
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}));
-
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}));
   BOOST_CHECK_NE(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}),
-      book_update({ts1, stock_t("A"), BUY, price4_t(1000), 100}));
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
+      book_update({ts1, stock_t("A"), t::BUY, price4_t(1000), 100}));
   BOOST_CHECK_NE(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}),
-      book_update({ts0, stock_t("B"), BUY, price4_t(1000), 100}));
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
+      book_update({ts0, stock_t("B"), t::BUY, price4_t(1000), 100}));
   BOOST_CHECK_NE(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 10}),
-      book_update({ts0, stock_t("A"), SELL, price4_t(1000), 10}));
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 10}),
+      book_update({ts0, stock_t("A"), t::SELL, price4_t(1000), 10}));
   BOOST_CHECK_NE(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}),
-      book_update({ts0, stock_t("A"), BUY, price4_t(1001), 100}));
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1001), 100}));
   BOOST_CHECK_NE(
-      book_update({ts0, stock_t("A"), BUY, price4_t(1000), 100}),
-      book_update({ts0, stock_t("B"), BUY, price4_t(1000), 200}));
+      book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
+      book_update({ts0, stock_t("B"), t::BUY, price4_t(1000), 200}));
 }
