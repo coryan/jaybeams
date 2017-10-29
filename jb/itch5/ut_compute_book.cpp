@@ -1069,4 +1069,9 @@ BOOST_AUTO_TEST_CASE(compute_book_book_update_operators) {
   BOOST_CHECK_NE(
       book_update({ts0, stock_t("A"), t::BUY, price4_t(1000), 100}),
       book_update({ts0, stock_t("B"), t::BUY, price4_t(1000), 200}));
+
+  std::ostringstream os;
+  os << book_update{ts1, stock_t("A"), t::BUY, price4_t(1000), 300};
+  BOOST_CHECK_EQUAL(os.str(), "{A,B,0.1000,300}");
 }
+
