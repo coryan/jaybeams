@@ -1,6 +1,6 @@
+#include <jb/gmock/init.hpp>
 #include <jb/itch5/mold_udp_pacer.hpp>
 #include <jb/itch5/testing/data.hpp>
-#include <jb/gmock/init.hpp>
 
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
@@ -54,10 +54,10 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_basic) {
   using namespace ::testing;
   mock_clock_interface::clear();
   EXPECT_CALL(mock_clock_interface::instance(), now())
-    .WillRepeatedly(Invoke([]() {
-          static int ts = 0;
-          return mock_clock::time_point(std::chrono::microseconds(++ts));
-        }));
+      .WillRepeatedly(Invoke([]() {
+        static int ts = 0;
+        return mock_clock::time_point(std::chrono::microseconds(++ts));
+      }));
 
   jb::itch5::mold_udp_pacer<mock_clock> p(
       jb::itch5::mold_udp_pacer_config().maximum_delay_microseconds(5));
@@ -100,10 +100,10 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_coalesce) {
   using namespace ::testing;
   mock_clock_interface::clear();
   EXPECT_CALL(mock_clock_interface::instance(), now())
-    .WillRepeatedly(Invoke([]() {
-          static int ts = 0;
-          return mock_clock::time_point(std::chrono::microseconds(++ts));
-        }));
+      .WillRepeatedly(Invoke([]() {
+        static int ts = 0;
+        return mock_clock::time_point(std::chrono::microseconds(++ts));
+      }));
   mock_sink sink;
 
   // ... create a pacer that commits up to 1024 bytes and blocks for
@@ -160,10 +160,10 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_full) {
   using namespace ::testing;
   mock_clock_interface::clear();
   EXPECT_CALL(mock_clock_interface::instance(), now())
-    .WillRepeatedly(Invoke([]() {
-          static int ts = 0;
-          return mock_clock::time_point(std::chrono::microseconds(++ts));
-        }));
+      .WillRepeatedly(Invoke([]() {
+        static int ts = 0;
+        return mock_clock::time_point(std::chrono::microseconds(++ts));
+      }));
   mock_sink sink;
 
   // ... create a pacer that commits up to 220 bytes and blocks for
@@ -219,18 +219,19 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
   using namespace ::testing;
   mock_clock_interface::clear();
   EXPECT_CALL(mock_clock_interface::instance(), now())
-    .WillRepeatedly(Invoke([]() {
-          static int ts = 0;
-          return mock_clock::time_point(std::chrono::microseconds(++ts));
-        }));
+      .WillRepeatedly(Invoke([]() {
+        static int ts = 0;
+        return mock_clock::time_point(std::chrono::microseconds(++ts));
+      }));
 
   struct sleep {
     MOCK_METHOD1(m, void(mock_clock::duration));
   } sleeper;
   auto mock_sleep = [&sleeper](mock_clock::duration d) { sleeper.m(d); };
   EXPECT_CALL(sleeper, m(Truly([](auto const& d) {
-        return d == std::chrono::microseconds(2020);
-        }))).Times(1);
+                return d == std::chrono::microseconds(2020);
+              })))
+      .Times(1);
 
   mock_sink sink;
 
@@ -272,7 +273,6 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_timeout) {
   // ... that should immediately flush the first two messages ...
   BOOST_REQUIRE_EQUAL(sink.packets.size(), 1);
   BOOST_CHECK_EQUAL(hdrsize + 100 + 2 + 90 + 2, sink.packets.at(0).size());
-
 }
 
 /**
@@ -285,10 +285,10 @@ BOOST_AUTO_TEST_CASE(itch5_mold_udp_pacer_flush_on_empty) {
   using namespace ::testing;
   mock_clock_interface::clear();
   EXPECT_CALL(mock_clock_interface::instance(), now())
-    .WillRepeatedly(Invoke([]() {
-          static int ts = 0;
-          return mock_clock::time_point(std::chrono::microseconds(++ts));
-        }));
+      .WillRepeatedly(Invoke([]() {
+        static int ts = 0;
+        return mock_clock::time_point(std::chrono::microseconds(++ts));
+      }));
   mock_sink sink;
 
   // ... create a pacer that commits up to 1024 bytes and blocks for

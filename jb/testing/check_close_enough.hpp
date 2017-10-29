@@ -158,8 +158,9 @@ value_type format(value_type t) {
  * @tparam real the type of floating point number (float, double, long double)
  */
 template <
-    typename real, typename std::enable_if<
-                       std::is_floating_point<real>::value>::type* = nullptr>
+    typename real,
+    typename std::enable_if<std::is_floating_point<real>::value>::type* =
+        nullptr>
 real relative_error(real actual, real expected) {
   if (std::numeric_limits<real>::is_integer) {
     return std::abs(actual - expected);

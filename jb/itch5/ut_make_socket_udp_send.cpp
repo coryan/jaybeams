@@ -105,8 +105,7 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_send_multicast_options) {
   EXPECT_CALL(
       v4s, set_option(boost::asio::ip::multicast::enable_loopback(true)))
       .Times(1);
-  EXPECT_CALL(
-      v4s, set_option(An<boost::asio::ip::multicast::hops const&>()))
+  EXPECT_CALL(v4s, set_option(An<boost::asio::ip::multicast::hops const&>()))
       .Times(0);
   jb::itch5::detail::setup_socket_udp_send(
       v4s,

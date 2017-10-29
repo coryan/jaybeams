@@ -163,10 +163,11 @@ int const port = 50000;
 
 config::config()
     : receiver(
-          desc("receiver"), this, jb::itch5::udp_receiver_config()
-                                      .port(defaults::port)
-                                      .local_address(defaults::local_address)
-                                      .address(defaults::address))
+          desc("receiver"), this,
+          jb::itch5::udp_receiver_config()
+              .port(defaults::port)
+              .local_address(defaults::local_address)
+              .address(defaults::address))
     , output_file(
           desc("output-file")
               .help("The name of the file where to store the inside data."

@@ -140,9 +140,11 @@ void test_compute_book_add_order_message_sell() {
 
   // ... add an initial order to the book, we expect a single update,
   // and the order should be in the book when the update is called ...
-  EXPECT_CALL(callback, exec(
-      book_update{now, stock, SELL, p11, 100}, empty_bid(),
-      half_quote{p11, 100}, 0, 1)).Times(1);
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p11, 100}, empty_bid(),
+                    half_quote{p11, 100}, 0, 1))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -157,13 +159,14 @@ void test_compute_book_add_order_message_sell() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-
   // ... add an order at a better price, we  expect a single update,
   // and the order should be in the book when the update is called ...
   now = tested.now();
-  EXPECT_CALL(callback, exec(
-      book_update{now, stock, SELL, p10, 200}, empty_bid(),
-      half_quote{p10, 200}, 0, 2)).Times(1);
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p10, 200}, empty_bid(),
+                    half_quote{p10, 200}, 0, 2))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -174,14 +177,15 @@ void test_compute_book_add_order_message_sell() {
                         stock,
                         p10});
 
-
   // ... add an order at a worse price, we also expect a single
   // update, and the order should be in the book when the update is
-  // called ... 
+  // called ...
   now = tested.now();
-  EXPECT_CALL(callback, exec(
-      book_update{now, stock, SELL, p12, 300}, empty_bid(),
-      half_quote{p10, 200}, 0, 3)).Times(1);
+  EXPECT_CALL(
+      callback, exec(
+                    book_update{now, stock, SELL, p12, 300}, empty_bid(),
+                    half_quote{p10, 200}, 0, 3))
+      .Times(1);
   tested.handle_message(
       now, ++msgcnt, 0,
       add_order_message{{add_order_message::message_type, 0, 0,
@@ -535,7 +539,6 @@ void test_compute_book_order_executed_message() {
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
 
-
   // ... add an order to the opposite side of the book ...
   now = tested.now();
   auto const id_sell = ++id;
@@ -706,7 +709,6 @@ void test_compute_book_order_replace_message() {
   auto symbols = tested.symbols();
   BOOST_REQUIRE_EQUAL(symbols.size(), std::size_t(1));
   BOOST_CHECK_EQUAL(symbols[0], stock);
-
 
   // ... add an order to the opposite side of the book, we expect a
   // single update, and the order should be in the book when the

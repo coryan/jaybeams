@@ -97,14 +97,15 @@ struct mold_udp_channel_tester {
  */
 BOOST_AUTO_TEST_CASE(itch5_mold_udp_channel_basic) {
   struct mock_function {
-    MOCK_METHOD5(method, void(
-      std::chrono::steady_clock::time_point, std::uint64_t, std::size_t,
-      std::string, std::size_t));
+    MOCK_METHOD5(
+        method, void(
+                    std::chrono::steady_clock::time_point, std::uint64_t,
+                    std::size_t, std::string, std::size_t));
   };
   mock_function mock;
   auto adapter = [&mock](
-        std::chrono::steady_clock::time_point ts, std::uint64_t seqno,
-        std::size_t offset, char const* msg, std::size_t msgsize) {
+      std::chrono::steady_clock::time_point ts, std::uint64_t seqno,
+      std::size_t offset, char const* msg, std::size_t msgsize) {
     mock.method(ts, seqno, offset, std::string(msg, msgsize), msgsize);
   };
 

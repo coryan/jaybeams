@@ -1,5 +1,5 @@
-#include <jb/config_files_location.hpp>
 #include <jb/gmock/init.hpp>
+#include <jb/config_files_location.hpp>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/test/unit_test.hpp>
@@ -27,7 +27,7 @@ typedef jb::config_files_locations<trivial_getenv, trivial_validator> trivial;
 
 namespace boost {
 namespace filesystem {
-  // Introduce help for GoogleMock library.
+// Introduce help for GoogleMock library.
 void PrintTo(path const& p, ::std::ostream* os) {
   *os << p.string();
 }
@@ -100,19 +100,17 @@ using mock_validator = shared_functor<mock_validator_f>;
 using mocked = jb::config_files_locations<mock_getenv, mock_validator>;
 
 /// Configure mocks for most tests
-void set_mocks(mock_getenv& getenv, mock_validator& validator,
-               char const* test_root, char const* jaybeams_root,
-               bool valid) {
+void set_mocks(
+    mock_getenv& getenv, mock_validator& validator, char const* test_root,
+    char const* jaybeams_root, bool valid) {
   getenv.reset();
   using namespace ::testing;
   EXPECT_CALL(*getenv.mock, exec(Truly([](auto arg) {
-                return std::string("TEST_ROOT") == arg;
-              })))
-      .WillRepeatedly(Return(test_root));
+    return std::string("TEST_ROOT") == arg;
+  }))).WillRepeatedly(Return(test_root));
   EXPECT_CALL(*getenv.mock, exec(Truly([](auto arg) {
-                return std::string("JAYBEAMS_ROOT") == arg;
-              })))
-      .WillRepeatedly(Return(jaybeams_root));
+    return std::string("JAYBEAMS_ROOT") == arg;
+  }))).WillRepeatedly(Return(jaybeams_root));
 
   validator.reset();
   EXPECT_CALL(*validator.mock, exec(_)).WillRepeatedly(Return(valid));
@@ -126,7 +124,7 @@ BOOST_AUTO_TEST_CASE(config_files_location_program_root) {
   mock_getenv getenv;
   mock_validator validator;
   set_mocks(getenv, validator, "/test/path", "/install/path", true);
-  
+
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", "TEST_ROOT", getenv);
 
