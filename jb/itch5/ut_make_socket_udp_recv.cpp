@@ -100,9 +100,8 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_recv_listen_address) {
 
   // Create a multicast socket on an specific interface ...
   jb::itch5::detail::setup_socket_udp_recv(
-      socket,
-      jb::itch5::udp_receiver_config()
-          .address("ff05::")
-          .port(50000)
-          .local_address(interface));
+      socket, jb::itch5::udp_receiver_config()
+                  .address("ff05::")
+                  .port(50000)
+                  .local_address(interface));
 }

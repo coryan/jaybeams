@@ -88,13 +88,12 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_send_multicast_options) {
       .Times(1);
 
   jb::itch5::detail::setup_socket_udp_send(
-      v6s,
-      jb::itch5::udp_sender_config()
-          .address("ff05::")
-          .port(50000)
-          .enable_loopback(true)
-          .hops(10)
-          .outbound_interface("2"));
+      v6s, jb::itch5::udp_sender_config()
+               .address("ff05::")
+               .port(50000)
+               .enable_loopback(true)
+               .hops(10)
+               .outbound_interface("2"));
 
   NiceMock<mock_udp_socket> v4s;
   EXPECT_CALL(v4s, open(_)).Times(1);
@@ -108,13 +107,12 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_send_multicast_options) {
   EXPECT_CALL(v4s, set_option(An<boost::asio::ip::multicast::hops const&>()))
       .Times(0);
   jb::itch5::detail::setup_socket_udp_send(
-      v4s,
-      jb::itch5::udp_sender_config()
-          .address("239.128.1.1")
-          .port(50000)
-          .enable_loopback(true)
-          .hops(-1)
-          .outbound_interface("127.0.0.1"));
+      v4s, jb::itch5::udp_sender_config()
+               .address("239.128.1.1")
+               .port(50000)
+               .enable_loopback(true)
+               .hops(-1)
+               .outbound_interface("127.0.0.1"));
 }
 
 /// @test Create a multicast socket on an specific interface.
@@ -122,13 +120,12 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_send_multicast_options_errors) {
   boost::asio::io_service io;
   BOOST_CHECK_THROW(
       jb::itch5::make_socket_udp_send(
-          io,
-          jb::itch5::udp_sender_config()
-              .address("ff05::")
-              .port(50000)
-              .enable_loopback(true)
-              .hops(10)
-              .outbound_interface("abcd")),
+          io, jb::itch5::udp_sender_config()
+                  .address("ff05::")
+                  .port(50000)
+                  .enable_loopback(true)
+                  .hops(10)
+                  .outbound_interface("abcd")),
       std::runtime_error);
 }
 
@@ -151,10 +148,9 @@ BOOST_AUTO_TEST_CASE(itch5_make_socket_udp_send_unicast_options) {
       .Times(1);
 
   jb::itch5::detail::setup_socket_udp_send(
-      socket,
-      jb::itch5::udp_sender_config()
-          .address("192.168.1.7")
-          .port(50000)
-          .broadcast(true)
-          .hops(10));
+      socket, jb::itch5::udp_sender_config()
+                  .address("192.168.1.7")
+                  .port(50000)
+                  .broadcast(true)
+                  .hops(10));
 }

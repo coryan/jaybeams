@@ -13,8 +13,8 @@ BOOST_AUTO_TEST_CASE(check_grpc_status_ok) {
 
   etcdserverpb::LeaseKeepAliveRequest req;
   BOOST_CHECK_NO_THROW(jb::etcd::check_grpc_status(
-      status, "test", " in iteration=", 42,
-      ", request=", jb::etcd::print_to_stream(req)));
+      status, "test", " in iteration=", 42, ", request=",
+      jb::etcd::print_to_stream(req)));
 }
 
 /**

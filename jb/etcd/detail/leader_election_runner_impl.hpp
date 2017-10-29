@@ -344,8 +344,8 @@ public:
     }
     async_op_done("on_range_request()");
     check_grpc_status(
-        op.status, log_header("on_range_request()"),
-        ", response=", print_to_stream(op.response));
+        op.status, log_header("on_range_request()"), ", response=",
+        print_to_stream(op.response));
 
     for (auto const& kv : op.response.kvs()) {
       // ... we need to capture the key and revision of the result, so

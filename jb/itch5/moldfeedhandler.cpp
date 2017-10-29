@@ -394,10 +394,9 @@ config::config()
                               "1, 4, or 8."),
           this, defaults::levels)
     , primary(
-          desc("primary"), this,
-          jb::itch5::udp_receiver_config()
-              .address(defaults::mold_address)
-              .port(defaults::mold_port))
+          desc("primary"), this, jb::itch5::udp_receiver_config()
+                                     .address(defaults::mold_address)
+                                     .port(defaults::mold_port))
     , secondary(
           desc("secondary"), this,
           jb::itch5::udp_receiver_config().address(defaults::mold_address))
