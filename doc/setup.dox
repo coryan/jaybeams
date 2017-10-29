@@ -157,17 +157,6 @@ patch -d / -p0 < m4/ax_cxx_compile_stdcxx.m4.patch
 
 @subsection fedora_install_libraries Installing Additional Libraries
 
-<b>Skye (Small Mocking framework)</b>
-
-We are going to manually install a small mocking framework
-[Skye](https://github.com/coryan/Skye)
-
-@code
-wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz
-tar -xf skye-0.3.2.tar.gz
-(cd skye-0.3.2 && ./configure && make check && sudo make install)
-@endcode
-
 <b>clFFT (FFT library for OpenCL)</b>
 
 @code

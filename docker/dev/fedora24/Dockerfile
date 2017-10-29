@@ -39,15 +39,6 @@ RUN dnf makecache && dnf install -y \
       zlib-devel && \
     dnf clean all
 
-WORKDIR /var/tmp/build-skye
-RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
-    tar -xf skye-0.3.2.tar.gz && \
-    (cd skye-0.3.2 && \
-      CXX=g++ CC=gcc ./configure && \
-      make check && \
-      make install) && \
-    /bin/rm -fr /var/tmp/build-skye
-
 WORKDIR /var/tmp/build-clFFT
 RUN wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz && \
     tar -xf v2.12.2.tar.gz && \

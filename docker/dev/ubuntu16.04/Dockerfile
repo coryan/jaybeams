@@ -47,15 +47,6 @@ RUN wget -q http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.2
       ./configure --prefix=/usr && make && make install) && \
     /bin/rm -fr /var/tmp/install-autoconf-archive
 
-WORKDIR /var/tmp/build-skye
-RUN wget -q https://github.com/coryan/Skye/releases/download/v0.3.2/skye-0.3.2.tar.gz && \
-    tar -xf skye-0.3.2.tar.gz && \
-    (cd skye-0.3.2 && \
-      CXX=g++ CC=gcc CPPFLAGS=-D_GLIBCXX_USE_CXX11_ABI=1 ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu && \
-      make check && \
-      make install) && \
-    /bin/rm -fr /var/tmp/build-skye
-
 WORKDIR /var/tmp/build-pocl
 RUN wget -q http://portablecl.org/downloads/pocl-0.13.tar.gz && \
     tar -zxf pocl-0.13.tar.gz && \
