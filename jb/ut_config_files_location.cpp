@@ -25,6 +25,15 @@ struct trivial_validator {
 typedef jb::config_files_locations<trivial_getenv, trivial_validator> trivial;
 } // anonymous namespace
 
+namespace boost {
+namespace filesystem {
+  // Introduce help for GoogleMock library.
+void PrintTo(path const& p, ::std::ostream* os) {
+  *os << p.string();
+}
+} // namespace filesystem
+} // namespace boost
+
 /**
  * @test Verify that the common constructors compile.
  */
@@ -179,7 +188,7 @@ BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_test_root) {
 BOOST_AUTO_TEST_CASE(config_files_location_undefined_undef_system_root) {
   mock_getenv getenv;
   mock_validator validator;
-  set_mocks(getenv, validator, "test/path", nullptr, true);
+  set_mocks(getenv, validator, "/test/path", nullptr, true);
 
   fs::path programdir = fs::path("/foo/var/baz");
   mocked t(programdir / "program", "TEST_ROOT", getenv);
@@ -261,12 +270,13 @@ BOOST_AUTO_TEST_CASE(config_files_location_find) {
       t.find_configuration_file(filename, validator), std::runtime_error);
 
   // ... then check that each path is checked in order ...
+  validator.reset();
   for (auto path : t.search_path()) {
-    validator.reset();
-    EXPECT_CALL(*validator.mock, exec(Truly([path](auto arg) {
-            return path == arg;
-          }))).WillOnce(Return(true));
+    EXPECT_CALL(*validator.mock, exec(_))
+        .WillRepeatedly(Invoke(
+            [path, filename](auto arg) { return path / filename == arg; }));
     auto full = path / filename;
     BOOST_CHECK_EQUAL(full, t.find_configuration_file(filename, validator));
+    validator.reset();
   }
 }
