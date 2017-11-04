@@ -175,8 +175,44 @@ set(jb_unit_tests
   jb_ut_thread_config
   )
 
-#add_library(jb_testing SHARED
-#  )
+add_custom_command(
+  OUTPUT compile_info.cpp
+  COMMAND ${PROJECT_SOURCE_DIR}/tools/gen_compile_info.sh
+      ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS} >${PROJECT_BINARY_DIR}/compile_info.cpp
+  )
+
+add_library(jb_testing SHARED
+  jb/testing/check_close_enough.hpp
+  ${PROJECT_BINARY_DIR}/compile_info.cpp
+  jb/testing/compile_info.hpp
+  jb/testing/create_square_timeseries.hpp
+  jb/testing/create_triangle_timeseries.hpp
+  jb/testing/delay_timeseries.hpp
+  jb/testing/future_status.hpp
+  jb/testing/initialize_mersenne_twister.hpp
+  jb/testing/microbenchmark.hpp
+  jb/testing/microbenchmark_base.cpp
+  jb/testing/microbenchmark_base.hpp
+  jb/testing/microbenchmark_config.cpp
+  jb/testing/microbenchmark_config.hpp
+  jb/testing/microbenchmark_group_main.cpp
+  jb/testing/microbenchmark_group_main.hpp
+  jb/testing/sum_square.hpp
+  )
+target_link_libraries(jb_testing jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+set(jb_testing_unit_tests
+  jb_testing_future_status_ut
+  jb_testing_ut_check_close_enough
+  jb_testing_ut_create_square_timeseries
+  jb_testing_ut_create_triangle_timeseries
+  jb_testing_ut_delay_timeseries
+  jb_testing_ut_microbenchmark_config
+  )
+add_executable(jb_testing_check_mt19937_initializer jb/testing/check_mt19937_initializer.cpp)
+target_link_libraries(jb_testing_check_mt19937_initializer jb_testing jb)
+add_executable(jb_testing_check_random_device jb/testing/check_random_device.cpp)
+target_link_libraries(jb_testing_check_random_device jb_testing jb)
+
 add_library(jb_gmock SHARED
   jb/gmock/init.hpp
   )
@@ -203,17 +239,6 @@ set(bin_PROGRAMS
   tools/itch5stats
   tools/itch5trades
   tools/moldheartbeat
-  )
-set(noinst_PROGRAMS
-  jb/testing/check_mt19937_initializer
-  jb/testing/check_random_device
-  )
-
-# TODO(coryan) - we need to enable valgrind
-set(AM_CXXFLAGS
-  $(YAML_CPP_CPPFLAGS)
-  -DJB_SYSCONFDIR=\"$(sysconfdir)\"
-  -DJB_BINDIR=\"$(bindir)\"
   )
 
 include(cmake/CompileProtos.cmake)
@@ -267,6 +292,9 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/gogoproto/ DESTINATION include/gogoproto F
 install(DIRECTORY ${CMAKE_BINARY_DIR}/google/ DESTINATION include/google FILES_MATCHING PATTERN "*.h")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
 
+include(GNUInstallDirs)
+add_definitions(-DJB_SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}" -DJB_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
+
 if(NOT JB_DISABLE_TESTS)
   # ... turn on testing support in CMake ...
   enable_testing()
@@ -276,22 +304,25 @@ if(NOT JB_DISABLE_TESTS)
 
   # ... add the right libraries to all the unit tests, and also turn them into tests ...
   set(ut_sources)
-  foreach(target ${jb_unit_tests})
+  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests})
     string(REGEX MATCH ".*_ut$" is_ut ${target})
     if(NOT is_ut)
       string(REGEX MATCH ".*_ut_.*" is_ut ${target})
     endif()
     if(is_ut)
-      string(REGEX REPLACE "^jb_detail_" "jb/detail/" fname ${target})
+      string(REGEX REPLACE "^jb_testing_" "jb/testing/" fname ${target})
+      string(REGEX REPLACE "^jb_detail_" "jb/detail/" fname ${fname})
       string(REGEX REPLACE "^jb_" "jb/" fname ${fname})
       add_executable(${target} ${fname}.cpp)
       get_target_property(tname ${target} NAME)
       add_test(${tname} ${target})
-      get_target_property(sources ${target} SOURCES)
-      set(ut_sources ${ut_sources} ${sources})
       target_compile_definitions(${target} PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
       target_link_libraries(${target} jb Boost::unit_test_framework)
     endif()
+  endforeach()
+  foreach(target ${jb_testing_unit_tests})
+      message(STATUS ${target})
+      target_link_libraries(${target} jb_testing)
   endforeach()
   target_link_libraries(jb_ut_config_files_location jb jb_gmock Boost::unit_test_framework)
 endif(NOT JB_DISABLE_TESTS)
