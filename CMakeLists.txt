@@ -50,6 +50,26 @@ if(COMPILER_SUPPORTS_SWALL)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
 endif()
 
+# ... include the functions to compile proto files ...
+include(FindProtobuf)
+
+# ... find the protobuf, grpc, and grpc++ libraries using pkg-config ...
+include(FindPkgConfig)
+pkg_check_modules(PROTOBUF REQUIRED protobuf>=3.0)
+pkg_check_modules(GRPCPP REQUIRED grpc++>=1.0)
+pkg_check_modules(GRPC REQUIRED grpc>=4.0)
+link_directories(${GRPCPP_LIBRARY_DIRS} ${GRPC_LIBRARY_DIRS} ${PROTOBUF_LIBRARY_DIRS})
+include_directories(${GRPCPP_INCLUDE_DIRS} ${GRPC_INCLUDE_DIRS} ${PROTOBUF_INCLUDE_DIRS})
+
+# ... we need Boost >= 1.58 because Beast and Boost.Endian require them ...
+include(FindBoost)
+find_package(Boost 1.58 REQUIRED
+  COMPONENTS log log_setup filesystem date_time thread iostreams program_options unit_test_framework)
+include_directories(${Boost_INCLUDE_DIRS})
+
+# ... YAML-CPP is a library to parse YAML files, JayBeams uses such files for all runtime configuration ...
+find_package(yaml-cpp REQUIRED)
+
 # ... if set, enable code coverage builds for g++, and create a "test_coverage" target to collect the coverage using
 # lcov.  My attempts at using the gcovr cobertura output failed miserably, so I am sticking to what I know ...
 set(COVERAGE false CACHE BOOL "Enable code coverage builds.")
@@ -68,6 +88,7 @@ if(${COVERAGE})
     )
 endif(${COVERAGE})
 
+# ... we need the -I flags so we can find header files using the installed path for JayBeams headers ...
 include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 
 # Compile things into shared libraries, apparently it is easy to instruct cmake(1) to generate a static library even
@@ -75,8 +96,6 @@ include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 add_library(jb SHARED
   jb/as_hhmmss.cpp
   jb/as_hhmmss.hpp
-  )
-set(PENDING_MOVE
   jb/assert_throw.cpp
   jb/assert_throw.hpp
   jb/book_depth_statistics.cpp
@@ -126,10 +145,42 @@ set(PENDING_MOVE
   jb/thread_config.hpp
   jb/usage.hpp
   )
+target_compile_definitions(jb PUBLIC -DBOOST_LOG_DYN_LINK)
+target_link_libraries(jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+# ... the jb library unit tests, we setup the targets and dependencies further down using a loop ...
+set(jb_unit_tests
+  jb_ut_as_hhmmss
+  jb_ut_assert_throw
+  jb_ut_book_depth_statistics
+  jb_ut_config_files_location
+  jb_ut_config_object
+  jb_ut_config_object_vector
+  jb_ut_cpu_set
+  jb_ut_event_rate_estimator
+  jb_ut_event_rate_histogram
+  jb_ut_explicit_cuts_binning
+  jb_ut_fileio
+  jb_ut_filetype
+  jb_ut_fixed_string
+  jb_ut_histogram
+  jb_ut_histogram_summary
+  jb_ut_integer_range_binning
+  jb_ut_launch_thread
+  jb_ut_logging
+  jb_ut_merge_yaml
+  jb_ut_offline_feed_statistics
+  jb_ut_p2ceil
+  jb_ut_severity_level
+  jb_ut_strtonum
+  jb_ut_thread_config
+  )
+
 #add_library(jb_testing SHARED
 #  )
-#add_library(jb_gmock SHARED
-#  )
+add_library(jb_gmock SHARED
+  jb/gmock/init.hpp
+  )
+target_link_libraries(jb_gmock gmock gtest)
 #add_library(jb_ehs SHARED
 #  )
 #add_library(jb_itch5 SHARED
@@ -160,33 +211,10 @@ set(noinst_PROGRAMS
 
 # TODO(coryan) - we need to enable valgrind
 set(AM_CXXFLAGS
+  $(YAML_CPP_CPPFLAGS)
   -DJB_SYSCONFDIR=\"$(sysconfdir)\"
   -DJB_BINDIR=\"$(bindir)\"
-  $(YAML_CPP_CPPFLAGS)
-  $(BOOST_CPPFLAGS)
   )
-
-#
-# Generate C++ sources for the etcd proto files.  It is not a huge collection, but the directory hierarchy is very
-# finicky, see https://github.com/coryan/jaybeams/issues/158 for my rant on the subject.
-#
-# ... include the functions to compile proto files ...
-include(FindProtobuf)
-
-# ... find the protobuf, grpc, and grpc++ libraries using pkg-config ...
-include(FindPkgConfig)
-pkg_check_modules(PROTOBUF REQUIRED protobuf>=3.0)
-pkg_check_modules(GRPCPP REQUIRED grpc++>=1.0)
-pkg_check_modules(GRPC REQUIRED grpc>=4.0)
-link_directories(${GRPCPP_LIBRARY_DIRS} ${GRPC_LIBRARY_DIRS} ${PROTOBUF_LIBRARY_DIRS})
-include_directories(${GRPCPP_INCLUDE_DIRS} ${GRPC_INCLUDE_DIRS} ${PROTOBUF_INCLUDE_DIRS})
-
-include(FindBoost)
-find_package(Boost 1.58 REQUIRED
-  COMPONENTS log log_setup filesystem date_time thread iostreams program_options unit_test_framework)
-if(Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-endif(Boost_FOUND)
 
 include(cmake/CompileProtos.cmake)
 set(PROTOBUF_IMPORT_DIRS "${PROJECT_SOURCE_DIR}/ext/googleapis"
@@ -246,14 +274,9 @@ if(NOT JB_DISABLE_TESTS)
   # ... external dependencies and packages ...
   add_subdirectory(ext/googletest/googlemock)
 
-  # ... all the unit tests, we setup the targets and dependencies in a loop ...
-  set(all_unit_tests
-    jb_ut_as_hhmmss
-    )
-
   # ... add the right libraries to all the unit tests, and also turn them into tests ...
   set(ut_sources)
-  foreach(target ${all_unit_tests})
+  foreach(target ${jb_unit_tests})
     string(REGEX MATCH ".*_ut$" is_ut ${target})
     if(NOT is_ut)
       string(REGEX MATCH ".*_ut_.*" is_ut ${target})
@@ -267,8 +290,8 @@ if(NOT JB_DISABLE_TESTS)
       get_target_property(sources ${target} SOURCES)
       set(ut_sources ${ut_sources} ${sources})
       target_compile_definitions(${target} PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
+      target_link_libraries(${target} jb Boost::unit_test_framework)
     endif()
   endforeach()
-
-  target_link_libraries(jb_ut_as_hhmmss jb Boost::unit_test_framework)
+  target_link_libraries(jb_ut_config_files_location jb jb_gmock Boost::unit_test_framework)
 endif(NOT JB_DISABLE_TESTS)
