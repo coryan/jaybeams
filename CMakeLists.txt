@@ -679,6 +679,7 @@ endif(OpenCL_FOUND)
 
 include(cmake/FindCLFFT.cmake)
 if(CLFFT_FOUND)
+  message(STATUS "CLFFT Found!")
   add_subdirectory(jb/clfft)
   add_subdirectory(jb/tde)
 endif(CLFFT_FOUND)

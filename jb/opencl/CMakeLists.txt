@@ -33,8 +33,9 @@ target_link_libraries(jb_opencl jb ${OpenCL_LIBRARY})
 # "ignored attributes" warnings, we need to silence them to support
 # -Werror
 CHECK_CXX_COMPILER_FLAG(-Wno-ignored-attributes COMPILER_SUPPORTS_WNO_I_A)
-target_compile_options(jb_opencl PUBLIC -Wno-ignored-attributes)
-
+if(COMPILER_SUPPORTS_WNO_I_A)
+  target_compile_options(jb_opencl PUBLIC -Wno-ignored-attributes)
+endif()
 
 add_library(jb_opencl_testing SHARED
   microbenchmark_config.cpp

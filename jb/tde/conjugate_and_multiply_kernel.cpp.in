@@ -1,0 +1,5 @@
+#include <jb/tde/conjugate_and_multiply_kernel.hpp>
+
+char const jb::tde::conjugate_and_multiply_kernel_source[] = R"""(
+@KERNEL_SOURCE_CL@
+)""";

@@ -26,7 +26,7 @@ if(OpenCL_FOUND)
   find_path(
     CLFFT_INCLUDES clFFT.h
     HINTS ${_CLFFT_ROOT_DIR}/include)
-  find_library(CLFFT_LIB NAMES clFFT
+  find_library(CLFFT_LIBRARIES NAMES clFFT
     HINTS ${_CLFFT_ROOT_DIR}/lib)
 
   include(FindPackageHandleStandardArgs)

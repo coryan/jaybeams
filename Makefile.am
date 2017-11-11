@@ -1438,8 +1438,8 @@ jb_ut_opencl_ldflags = \
 
 lib_LIBRARIES += jb/libjb_clfft.a
 jb_clfft_unit_tests = \
-  jb/clfft/ut_error \
-  jb/clfft/ut_plan
+  jb/clfft/clfft_error_ut \
+  jb/clfft/clfft_plan_ut
 
 # Adding to check programs makes sure the tests are compiled, do not
 # add to teste under sanitizers, too many errors in underlying libraries ...
@@ -1593,15 +1593,15 @@ nobase_jb_libjb_clfft_a_HEADERS = \
   jb/clfft/init.hpp \
   jb/clfft/plan.hpp
 
-jb_clfft_ut_error_SOURCES = jb/clfft/ut_error.cpp
-jb_clfft_ut_error_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_error
-jb_clfft_ut_error_LDFLAGS = $(jb_ut_clfft_ldflags)
-jb_clfft_ut_error_LDADD = $(jb_ut_clfft_ldadd)
+jb_clfft_clfft_error_ut_SOURCES = jb/clfft/clfft_error_ut.cpp
+jb_clfft_clfft_error_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_clfft_error_ut
+jb_clfft_clfft_error_ut_LDFLAGS = $(jb_ut_clfft_ldflags)
+jb_clfft_clfft_error_ut_LDADD = $(jb_ut_clfft_ldadd)
 
-jb_clfft_ut_plan_SOURCES = jb/clfft/ut_plan.cpp
-jb_clfft_ut_plan_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_ut_plan
-jb_clfft_ut_plan_LDFLAGS = $(jb_ut_clfft_ldflags)
-jb_clfft_ut_plan_LDADD = $(jb_ut_clfft_ldadd)
+jb_clfft_clfft_plan_ut_SOURCES = jb/clfft/clfft_plan_ut.cpp
+jb_clfft_clfft_plan_ut_CPPFLAGS = $(UT_CPPFLAGS) -DBOOST_TEST_MODULE=jb_clfft_clfft_plan_ut
+jb_clfft_clfft_plan_ut_LDFLAGS = $(jb_ut_clfft_ldflags)
+jb_clfft_clfft_plan_ut_LDADD = $(jb_ut_clfft_ldadd)
 
 jb_clfft_bm_single_fft_SOURCES = jb/clfft/bm_single_fft.cpp
 jb_clfft_bm_single_fft_CPPFLAGS =
@@ -1630,13 +1630,6 @@ jb/tde/conjugate_and_multiply_kernel.cpp: jb/tde/conjugate_and_multiply_kernel.c
 	$(AM_V_GEN)echo '#include <jb/tde/conjugate_and_multiply_kernel.hpp>' >$@; \
 	echo '' >>$@; \
 	echo 'char const jb::tde::conjugate_and_multiply_kernel_source[] = R"""(' >>$@; \
-	cat $< >>$@; \
-	echo ')""";' >> $@
-
-jb/tde/reduce_argmax_real_kernel.cpp: jb/tde/reduce_argmax_real_kernel.cl Makefile
-	$(AM_V_GEN)echo '#include <jb/tde/reduce_argmax_real_kernel.hpp>' >$@; \
-	echo '' >>$@; \
-	echo 'char const jb::tde::reduce_argmax_real_kernel_source[] = R"""(' >>$@; \
 	cat $< >>$@; \
 	echo ')""";' >> $@
 
