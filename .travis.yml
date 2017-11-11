@@ -6,81 +6,40 @@ sudo: false
 matrix:
   include:
     - os: linux
-      compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
+      compiler: clang
+      env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=25
 
-    - os: linux
-      compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
-
-    - os: linux
-      compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g" CHECK_STYLE=yes CONFIGUREFLAGS="--with-sanitizer=address"
-
-    - os: linux
-      compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
-
-    - os: linux
-      compiler: gcc
-      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
+#    - os: linux
+#      compiler: gcc
+#      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
+#
+#    - os: linux
+#      compiler: gcc
+#      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
+#
+#    - os: linux
+#      compiler: gcc
+#      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g" CHECK_STYLE=yes CONFIGUREFLAGS="--with-sanitizer=address"
+#
+#    - os: linux
+#      compiler: gcc
+#      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
+#
+#    - os: linux
+#      compiler: gcc
+#      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
 
 services:
   - docker
 
 # This is the main section of the automated build ...
 script:
-  # ... run the build inside the docker image, use the current user id ...
-  - docker run --rm -it
-    --env CONFIGUREFLAGS=${CONFIGUREFLAGS}
-    --env CXX=${COMPILER?}
-    --env CXXFLAGS="${CXXFLAGS}"
-    --env VALGRIND="${VALGRIND}"
-    --env COVERITY="${COVERITY}"
-    --env TRAVIS_BRANCH="${TRAVIS_BRANCH}"
-    --env TRAVIS_EVENT_TYPE="${TRAVIS_EVENT_TYPE}"
-    --env TRAVIS_PULL_REQUEST="${TRAVIS_PULL_REQUEST}"
-    --volume $PWD:$PWD
-    --volume ${TRAVIS_BUILD_DIR?}/coverity:/opt/coverity
-    --workdir $PWD
-    ${IMAGE?}:tip ci/build-in-docker.sh
-  # ... print out the test results, that way any errors can be
-  # debugged, this is *not* part of the build script because we want
-  # this output regardless of the sucess or failure of the script ...
-  - cat build/test-suite.log || echo "Could not print test logs"
-  # ... print out the memcheck results, same rationale as printing the
-  # test results, except that missing the file is not reported,
-  # because not all builds create one ...
-  - cat build/test-suite-memcheck.log || true
-  # ... if configured, run the style checker phase ...
-  - ci/check-style.sh
-
-before_install:
-  - docker --version
-
-cache:
-  directories:
-    - coverity
-
-install:
-  # Install coveralls-lcov for the code coverage builds only ...
-  - if [ "x${COVERAGE}" = "xyes" ]; then gem install coveralls-lcov ; fi
-  # ... first download the current docker image with the development
-  # environment ... 
-  - docker pull ${IMAGE?}
-  - docker image inspect -f '{{ .Id }}' ${IMAGE?}:latest
-  # ... update the image using the latest Dockerfile, and possibly
-  # rebuild from scratch if the existing image is too old ...
-  - ci/create-build-image.sh
-  - docker image inspect -f '{{ .Id }}' ${IMAGE?}:tip
-  # ... if necessary, download Coverity ...
-  - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
+  - ci/build-linux.sh
 
 after_success:
-  - cd ${TRAVIS_BUILD_DIR?}
-  # ... on the right builds, collect coverage data, and push it to
-  # coveralls.io ...
-  - ci/coverage.sh
+  - ci/upload-coverage.sh
+  # ... if configured, run the style checker phase ...
+  - ci/check-style.sh
   # ... create the Doxygen documentation inside the docker container,
   # and push it to github ...
   - ci/gendocs.sh
@@ -92,6 +51,30 @@ after_success:
   - ci/create-runtime-image.sh
   # ... on the right builds, create the analysis image and push to docker ...
   - ci/create-analysis-image.sh
+
+# Cache the (saved) docker images.
+# With recent version of docker one can reuse a prior image as a
+# source cache, that can speed up the builds, as the dependencies and
+# images can be reused ...
+# TODO() - we need to add a cron job to rebuild without a cache every
+# so often, the dependencies do change and we want to validate that
+# the examples build with the newer versions.  That is easy to do with
+# a cron-based build in Travis that cleans up the cache every X days.
+cache:
+  directories:
+    - coverity
+    - docker-images/ubuntu/16.04
+    - docker-images/ubuntu/17.04
+    - docker-images/fedora/24
+    - docker-images/fedora/25
+
+before_cache:
+  - ci/cache-linux.sh
+
+install:
+  - ci/install-linux.sh
+  # ... if necessary, download Coverity ...
+  - if [ "x${COVERITY}" = "xyes" ]; then ci/coverity-install.sh; fi
 
 notifications:
   email: false
