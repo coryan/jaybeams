@@ -13,12 +13,17 @@
 #   limitations under the License.
 #
 
+if(FFTW3_INCLUDES)
+  # Already in cache, be silent
+  set(FFTW3_FIND_QUIETLY TRUE)
+endif(FFTW3_INCLUDES)
+
 find_path(FFTW3_INCLUDES fftw3.h)
 find_library(FFTW3_LIB NAMES fftw3)
 find_library(FFTW3L_LIB NAMES fftw3l)
 find_library(FFTW3F_LIB NAMES fftw3f)
 set(FFTW3_LIBRARIES ${FFTW3_LIB} ${FFTW3L_LIB} ${FFTW3F_LIB})
 
-# ... included from the JayBeams project ...
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FFTW3 DEFAULT_MSG FFTW3_LIBRARIES FFTW3_INCLUDES)
+mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDES)
