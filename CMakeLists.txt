@@ -174,6 +174,8 @@ set(jb_unit_tests
   jb_ut_strtonum
   jb_ut_thread_config
   )
+add_executable(examples_configuration examples/configuration.cpp)
+target_link_libraries(examples_configuration jb)
 
 add_custom_command(
   OUTPUT compile_info.cpp
@@ -212,6 +214,9 @@ add_executable(jb_testing_check_mt19937_initializer jb/testing/check_mt19937_ini
 target_link_libraries(jb_testing_check_mt19937_initializer jb_testing jb)
 add_executable(jb_testing_check_random_device jb/testing/check_random_device.cpp)
 target_link_libraries(jb_testing_check_random_device jb_testing jb)
+
+add_executable(jb_bm_clocks jb/bm_clocks.cpp)
+target_link_libraries(jb_bm_clocks jb_testing jb)
 
 add_library(jb_gmock SHARED
   jb/gmock/init.hpp
