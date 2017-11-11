@@ -225,6 +225,9 @@ target_link_libraries(jb_testing_check_random_device jb_testing jb)
 add_executable(jb_bm_clocks jb/bm_clocks.cpp)
 target_link_libraries(jb_bm_clocks jb_testing jb)
 
+add_executable(jb_testing_show_compile_info jb/testing/show_compile_info.cpp)
+target_link_libraries(jb_testing_show_compile_info jb_testing jb)
+
 add_library(jb_gmock SHARED
   jb/gmock/init.hpp
   )
@@ -432,20 +435,30 @@ set(jb_itch5_unit_tests
   jb/itch5/ut_udp_receiver_config
   )
 
+add_executable(jb_itch5_mold2inside jb/itch5/mold2inside.cpp)
+target_link_libraries(jb_itch5_mold2inside jb_itch5 jb)
+add_executable(jb_itch5_moldfeedhandler jb/itch5/moldfeedhandler.cpp)
+target_link_libraries(jb_itch5_moldfeedhandler jb_itch5 jb_ehs jb)
+add_executable(jb_itch5_moldreplay jb/itch5/moldreplay.cpp)
+target_link_libraries(jb_itch5_moldreplay jb_itch5 jb_ehs jb)
+
+add_executable(tools_itch5bookdepth tools/itch5bookdepth.cpp)
+target_link_libraries(tools_itch5bookdepth jb_itch5 jb)
+add_executable(tools_itch5eventdepth tools/itch5eventdepth.cpp)
+target_link_libraries(tools_itch5eventdepth jb_itch5 jb)
+add_executable(tools_itch5inside tools/itch5inside.cpp)
+target_link_libraries(tools_itch5inside jb_itch5 jb)
+add_executable(tools_itch5moldreplay tools/itch5moldreplay.cpp)
+target_link_libraries(tools_itch5moldreplay jb_itch5 jb)
+add_executable(tools_itch5stats tools/itch5stats.cpp)
+target_link_libraries(tools_itch5stats jb_itch5 jb)
+add_executable(tools_itch5trades tools/itch5trades.cpp)
+target_link_libraries(tools_itch5trades jb_itch5 jb)
+add_executable(tools_moldheartbeat tools/moldheartbeat.cpp)
+target_link_libraries(tools_moldheartbeat jb_itch5 jb)
+
+# TODO(coryan) - what to do with these
 set(bin_SCRIPTS tools/benchmark_common.sh)
-set(bin_PROGRAMS
-  jb/itch5/mold2inside
-  jb/itch5/moldfeedhandler
-  jb/itch5/moldreplay
-  jb/testing/show_compile_info
-  tools/itch5bookdepth
-  tools/itch5eventdepth
-  tools/itch5inside
-  tools/itch5moldreplay
-  tools/itch5stats
-  tools/itch5trades
-  tools/moldheartbeat
-  )
 
 include(cmake/CompileProtos.cmake)
 set(PROTOBUF_IMPORT_DIRS "${PROJECT_SOURCE_DIR}/ext/googleapis"
