@@ -156,30 +156,30 @@ target_compile_definitions(jb PUBLIC -DBOOST_LOG_DYN_LINK)
 target_link_libraries(jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
 # ... the jb library unit tests, we setup the targets and dependencies further down using a loop ...
 set(jb_unit_tests
-  jb_ut_as_hhmmss
-  jb_ut_assert_throw
-  jb_ut_book_depth_statistics
-  jb_ut_config_files_location
-  jb_ut_config_object
-  jb_ut_config_object_vector
-  jb_ut_cpu_set
-  jb_ut_event_rate_estimator
-  jb_ut_event_rate_histogram
-  jb_ut_explicit_cuts_binning
-  jb_ut_fileio
-  jb_ut_filetype
-  jb_ut_fixed_string
-  jb_ut_histogram
-  jb_ut_histogram_summary
-  jb_ut_integer_range_binning
-  jb_ut_launch_thread
-  jb_ut_logging
-  jb_ut_merge_yaml
-  jb_ut_offline_feed_statistics
-  jb_ut_p2ceil
-  jb_ut_severity_level
-  jb_ut_strtonum
-  jb_ut_thread_config
+  jb/ut_as_hhmmss
+  jb/ut_assert_throw
+  jb/ut_book_depth_statistics
+  jb/ut_config_files_location
+  jb/ut_config_object
+  jb/ut_config_object_vector
+  jb/ut_cpu_set
+  jb/ut_event_rate_estimator
+  jb/ut_event_rate_histogram
+  jb/ut_explicit_cuts_binning
+  jb/ut_fileio
+  jb/ut_filetype
+  jb/ut_fixed_string
+  jb/ut_histogram
+  jb/ut_histogram_summary
+  jb/ut_integer_range_binning
+  jb/ut_launch_thread
+  jb/ut_logging
+  jb/ut_merge_yaml
+  jb/ut_offline_feed_statistics
+  jb/ut_p2ceil
+  jb/ut_severity_level
+  jb/ut_strtonum
+  jb/ut_thread_config
   )
 add_executable(examples_configuration examples/configuration.cpp)
 target_link_libraries(examples_configuration jb)
@@ -210,12 +210,12 @@ add_library(jb_testing SHARED
   )
 target_link_libraries(jb_testing jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
 set(jb_testing_unit_tests
-  jb_testing_future_status_ut
-  jb_testing_ut_check_close_enough
-  jb_testing_ut_create_square_timeseries
-  jb_testing_ut_create_triangle_timeseries
-  jb_testing_ut_delay_timeseries
-  jb_testing_ut_microbenchmark_config
+  jb/testing/future_status_ut
+  jb/testing/ut_check_close_enough
+  jb/testing/ut_create_square_timeseries
+  jb/testing/ut_create_triangle_timeseries
+  jb/testing/ut_delay_timeseries
+  jb/testing/ut_microbenchmark_config
   )
 add_executable(jb_testing_check_mt19937_initializer jb/testing/check_mt19937_initializer.cpp)
 target_link_libraries(jb_testing_check_mt19937_initializer jb_testing jb)
@@ -230,9 +230,6 @@ add_library(jb_gmock SHARED
   )
 target_link_libraries(jb_gmock gmock gtest)
 
-#add_library(jb_itch5 SHARED
-#  )
-
 add_library(jb_ehs SHARED
   jb/ehs/acceptor.cpp
   jb/ehs/acceptor.hpp
@@ -244,8 +241,8 @@ add_library(jb_ehs SHARED
   )
 target_link_libraries(jb_ehs jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
 set(jb_ehs_unit_tests
-  jb_ehs_ut_acceptor
-  jb_ehs_ut_request_dispatcher)
+  jb/ehs/ut_acceptor
+  jb/ehs/ut_request_dispatcher)
 
 add_library(jb_pitch2 SHARED
   jb/pitch2/add_order_message.cpp
@@ -274,19 +271,166 @@ add_library(jb_pitch2 SHARED
   jb/pitch2/unit_clear_message.hpp
   )
 set(jb_pitch2_unit_tests
-  jb_pitch2_ut_add_order_message
-  jb_pitch2_ut_auction_update_message
-  jb_pitch2_ut_delete_order_message
-  jb_pitch2_ut_expanded_add_order_message
-  jb_pitch2_ut_modify_message
-  jb_pitch2_ut_order_executed_message
-  jb_pitch2_ut_order_executed_price_message
-  jb_pitch2_ut_reduce_size_message
-  jb_pitch2_ut_short_add_order_message
-  jb_pitch2_ut_time_message
-  jb_pitch2_ut_unit_clear_message
+  jb/pitch2/ut_add_order_message
+  jb/pitch2/ut_auction_update_message
+  jb/pitch2/ut_delete_order_message
+  jb/pitch2/ut_expanded_add_order_message
+  jb/pitch2/ut_modify_message
+  jb/pitch2/ut_order_executed_message
+  jb/pitch2/ut_order_executed_price_message
+  jb/pitch2/ut_reduce_size_message
+  jb/pitch2/ut_short_add_order_message
+  jb/pitch2/ut_time_message
+  jb/pitch2/ut_unit_clear_message
   )
 target_link_libraries(jb_pitch2 jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+
+add_library(jb_itch5 SHARED
+  jb/itch5/add_order_message.cpp
+  jb/itch5/add_order_message.hpp
+  jb/itch5/add_order_mpid_message.cpp
+  jb/itch5/add_order_mpid_message.hpp
+  jb/itch5/array_based_order_book.cpp
+  jb/itch5/array_based_order_book.hpp
+  jb/itch5/base_decoders.cpp
+  jb/itch5/base_decoders.hpp
+  jb/itch5/base_encoders.hpp
+  jb/itch5/broken_trade_message.cpp
+  jb/itch5/broken_trade_message.hpp
+  jb/itch5/char_list_field.hpp
+  jb/itch5/char_list_validator.cpp
+  jb/itch5/char_list_validator.hpp
+  jb/itch5/check_offset.cpp
+  jb/itch5/check_offset.hpp
+  jb/itch5/compute_book.hpp
+  jb/itch5/cross_trade_message.cpp
+  jb/itch5/cross_trade_message.hpp
+  jb/itch5/cross_type.hpp
+  jb/itch5/decoder.hpp
+  jb/itch5/generate_inside.hpp
+  jb/itch5/ipo_quoting_period_update_message.cpp
+  jb/itch5/ipo_quoting_period_update_message.hpp
+  jb/itch5/make_socket_udp_common.hpp
+  jb/itch5/make_socket_udp_recv.hpp
+  jb/itch5/make_socket_udp_send.hpp
+  jb/itch5/map_based_order_book.hpp
+  jb/itch5/market_participant_position_message.cpp
+  jb/itch5/market_participant_position_message.hpp
+  jb/itch5/message_header.cpp
+  jb/itch5/message_header.hpp
+  jb/itch5/mold_udp_channel.cpp
+  jb/itch5/mold_udp_channel.hpp
+  jb/itch5/mold_udp_pacer.hpp
+  jb/itch5/mold_udp_pacer_config.cpp
+  jb/itch5/mold_udp_pacer_config.hpp
+  jb/itch5/mold_udp_protocol_constants.hpp
+  jb/itch5/mpid_field.hpp
+  jb/itch5/mwcb_breach_message.cpp
+  jb/itch5/mwcb_breach_message.hpp
+  jb/itch5/mwcb_decline_level_message.cpp
+  jb/itch5/mwcb_decline_level_message.hpp
+  jb/itch5/net_order_imbalance_indicator_message.cpp
+  jb/itch5/net_order_imbalance_indicator_message.hpp
+  jb/itch5/order_book.hpp
+  jb/itch5/order_cancel_message.cpp
+  jb/itch5/order_cancel_message.hpp
+  jb/itch5/order_delete_message.cpp
+  jb/itch5/order_delete_message.hpp
+  jb/itch5/order_executed_message.cpp
+  jb/itch5/order_executed_message.hpp
+  jb/itch5/order_executed_price_message.cpp
+  jb/itch5/order_executed_price_message.hpp
+  jb/itch5/order_replace_message.cpp
+  jb/itch5/order_replace_message.hpp
+  jb/itch5/price_field.hpp
+  jb/itch5/price_levels.hpp
+  jb/itch5/process_buffer_mlist.hpp
+  jb/itch5/process_iostream.hpp
+  jb/itch5/process_iostream_mlist.hpp
+  jb/itch5/protocol_constants.hpp
+  jb/itch5/quote_defaults.hpp
+  jb/itch5/reg_sho_restriction_message.cpp
+  jb/itch5/reg_sho_restriction_message.hpp
+  jb/itch5/seconds_field.cpp
+  jb/itch5/seconds_field.hpp
+  jb/itch5/short_string_field.hpp
+  jb/itch5/static_digits.hpp
+  jb/itch5/stock_directory_message.cpp
+  jb/itch5/stock_directory_message.hpp
+  jb/itch5/stock_field.hpp
+  jb/itch5/stock_trading_action_message.cpp
+  jb/itch5/stock_trading_action_message.hpp
+  jb/itch5/system_event_message.cpp
+  jb/itch5/system_event_message.hpp
+  jb/itch5/timestamp.cpp
+  jb/itch5/timestamp.hpp
+  jb/itch5/trade_message.cpp
+  jb/itch5/trade_message.hpp
+  jb/itch5/udp_config_common.cpp
+  jb/itch5/udp_config_common.hpp
+  jb/itch5/udp_receiver_config.cpp
+  jb/itch5/udp_receiver_config.hpp
+  jb/itch5/udp_sender_config.cpp
+  jb/itch5/udp_sender_config.hpp
+  jb/itch5/unknown_message.hpp
+  )
+target_link_libraries(jb_itch5 jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+
+add_library(jb_itch5_testing SHARED
+  jb/itch5/testing/data.cpp
+  jb/itch5/testing/data.hpp
+  jb/itch5/testing/messages.cpp
+  jb/itch5/testing/messages.hpp
+  )
+target_link_libraries(jb_itch5_testing jb_itch5 jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+set(jb_itch5_unit_tests
+  jb/itch5/ut_add_order_message
+  jb/itch5/ut_add_order_mpid_message
+  jb/itch5/ut_array_based_order_book
+  jb/itch5/ut_base_decoders
+  jb/itch5/ut_base_encoders
+  jb/itch5/ut_broken_trade_message
+  jb/itch5/ut_char_list_field
+  jb/itch5/ut_char_list_validator
+  jb/itch5/ut_check_offset
+  jb/itch5/ut_compute_book
+  jb/itch5/ut_cross_trade_message
+  jb/itch5/ut_cross_type
+  jb/itch5/ut_generate_inside
+  jb/itch5/ut_ipo_quoting_period_update_message
+  jb/itch5/ut_make_socket_udp_common
+  jb/itch5/ut_make_socket_udp_recv
+  jb/itch5/ut_make_socket_udp_send
+  jb/itch5/ut_map_based_order_book
+  jb/itch5/ut_market_participant_position_message
+  jb/itch5/ut_message_header
+  jb/itch5/ut_mold_udp_pacer
+  jb/itch5/ut_mold_udp_pacer_config
+  jb/itch5/ut_mold_udp_channel
+  jb/itch5/ut_mwcb_breach_message
+  jb/itch5/ut_mwcb_decline_level_message
+  jb/itch5/ut_net_order_imbalance_indicator_message
+  jb/itch5/ut_order_book
+  jb/itch5/ut_order_cancel_message
+  jb/itch5/ut_order_delete_message
+  jb/itch5/ut_order_executed_message
+  jb/itch5/ut_order_executed_price_message
+  jb/itch5/ut_order_replace_message
+  jb/itch5/ut_price_field
+  jb/itch5/ut_price_levels
+  jb/itch5/ut_process_buffer_mlist
+  jb/itch5/ut_process_iostream_mlist
+  jb/itch5/ut_reg_sho_restriction_message
+  jb/itch5/ut_seconds_field
+  jb/itch5/ut_short_string_field
+  jb/itch5/ut_static_digits
+  jb/itch5/ut_stock_directory_message
+  jb/itch5/ut_stock_trading_action_message
+  jb/itch5/ut_system_event_message
+  jb/itch5/ut_timestamp
+  jb/itch5/ut_trade_message
+  jb/itch5/ut_udp_receiver_config
+  )
 
 set(bin_SCRIPTS tools/benchmark_common.sh)
 set(bin_PROGRAMS
@@ -366,18 +510,20 @@ if(NOT JB_DISABLE_TESTS)
 
   # ... add the right libraries to all the unit tests, and also turn them into tests ...
   set(ut_sources)
-  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests} ${jb_pitch2_unit_tests} ${jb_ehs_unit_tests})
+  set(all_unit_tests
+    ${jb_unit_tests}
+    ${jb_testing_unit_tests}
+    ${jb_pitch2_unit_tests}
+    ${jb_ehs_unit_tests}
+    ${jb_itch5_unit_tests}
+    )    
+  foreach(fname ${all_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
     string(REGEX MATCH ".*_ut$" is_ut ${target})
     if(NOT is_ut)
       string(REGEX MATCH ".*_ut_.*" is_ut ${target})
     endif()
     if(is_ut)
-      set(fname ${target})
-      string(REGEX REPLACE "^jb_pitch2_" "jb/pitch2/" fname ${fname})
-      string(REGEX REPLACE "^jb_ehs_" "jb/ehs/" fname ${fname})
-      string(REGEX REPLACE "^jb_testing_" "jb/testing/" fname ${fname})
-      string(REGEX REPLACE "^jb_detail_" "jb/detail/" fname ${fname})
-      string(REGEX REPLACE "^jb_" "jb/" fname ${fname})
       add_executable(${target} ${fname}.cpp)
       get_target_property(tname ${target} NAME)
       add_test(${tname} ${target})
@@ -385,17 +531,34 @@ if(NOT JB_DISABLE_TESTS)
       target_link_libraries(${target} jb Boost::unit_test_framework)
     endif()
   endforeach()
-  foreach(target ${jb_testing_unit_tests})
-      message(STATUS ${target})
-      target_link_libraries(${target} jb_testing)
+  foreach(fname ${jb_testing_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    target_link_libraries(${target} jb_testing)
   endforeach()
-  foreach(target ${jb_pitch2_unit_tests})
-      message(STATUS ${target})
-      target_link_libraries(${target} jb_pitch2)
+  foreach(fname ${jb_pitch2_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    target_link_libraries(${target} jb_pitch2)
   endforeach()
-  foreach(target ${jb_ehs_unit_tests})
-      message(STATUS ${target})
-      target_link_libraries(${target} jb_ehs)
+  foreach(fname ${jb_itch5_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    target_link_libraries(${target} jb_itch5_testing jb_itch5)
   endforeach()
-  target_link_libraries(jb_ut_config_files_location jb jb_gmock Boost::unit_test_framework)
+  foreach(fname ${jb_ehs_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    target_link_libraries(${target} jb_ehs)
+  endforeach()
+  foreach(target
+      jb_itch5_ut_compute_book
+      jb_itch5_ut_make_socket_udp_common
+      jb_itch5_ut_make_socket_udp_recv
+      jb_itch5_ut_make_socket_udp_send
+      jb_itch5_ut_mold_udp_channel
+      jb_itch5_ut_mold_udp_pacer
+      jb_itch5_ut_process_buffer_mlist
+      jb_itch5_ut_process_iostream_mlist
+      jb_ut_config_files_location
+      )
+    target_include_directories(${target} PRIVATE ${PROJECT_SOURCE_DIR}/ext/googletest/googlemock)
+    target_link_libraries(${target} jb_gmock)
+  endforeach()
 endif(NOT JB_DISABLE_TESTS)
