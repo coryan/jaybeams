@@ -21,7 +21,7 @@ set(PACKAGE_STRING    "${PACKAGE_NAME} ${PACKAGE_VERSION}")
 set(PACKAGE_TARNAME   "${PACKAGE_NAME}-${PACKAGE_VERSION}")
 set(PACKAGE_BUGREPORT "https://github.com/coryan/jaybeams/issues")
 
-project(Jaybeams CXX C)
+project(JayBeams CXX C)
 
 # Require C++14 for this project ...
 set(CMAKE_CXX_STANDARD 14)
@@ -228,6 +228,8 @@ target_link_libraries(jb_bm_clocks jb_testing jb)
 add_executable(jb_testing_show_compile_info jb/testing/show_compile_info.cpp)
 target_link_libraries(jb_testing_show_compile_info jb_testing jb)
 
+# ... jb_gmock needs the googletest libraries ...
+add_subdirectory(ext/googletest/googlemock)
 add_library(jb_gmock SHARED
   jb/gmock/init.hpp
   )
@@ -562,15 +564,33 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/p
 include(GNUInstallDirs)
 add_definitions(-DJB_SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}" -DJB_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
 
+# A helper function to wrap the common configuration for tests ...
+function(jb_create_unit_test_targets)
+  foreach(fname ${ARGN})
+    string(REPLACE "/" "_" target ${fname})
+    string(REGEX MATCH ".*_ut$" is_ut ${target})
+    if(NOT is_ut)
+      string(REGEX MATCH ".*_ut_.*" is_ut ${target})
+    endif()
+    if(NOT is_ut)
+      string(REGEX MATCH "^ut_.*" is_ut ${target})
+    endif()
+    if(is_ut)
+      add_executable(${target} ${fname}.cpp)
+      get_target_property(tname ${target} NAME)
+      if(NOT JB_DISABLE_TESTS)
+        add_test(${tname} ${target})
+      endif()
+      target_compile_definitions(${target} PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
+      target_link_libraries(${target} jb Boost::unit_test_framework)
+    endif()
+  endforeach()
+endfunction(jb_create_unit_test_targets)
+
 if(NOT JB_DISABLE_TESTS)
   # ... turn on testing support in CMake ...
   enable_testing()
 
-  # ... external dependencies and packages ...
-  add_subdirectory(ext/googletest/googlemock)
-
-  # ... add the right libraries to all the unit tests, and also turn them into tests ...
-  set(ut_sources)
   set(all_unit_tests
     ${jb_unit_tests}
     ${jb_testing_unit_tests}
@@ -578,21 +598,10 @@ if(NOT JB_DISABLE_TESTS)
     ${jb_ehs_unit_tests}
     ${jb_itch5_unit_tests}
     ${jb_etcd_unit_tests}
-    )    
-  foreach(fname ${all_unit_tests})
-    string(REPLACE "/" "_" target ${fname})
-    string(REGEX MATCH ".*_ut$" is_ut ${target})
-    if(NOT is_ut)
-      string(REGEX MATCH ".*_ut_.*" is_ut ${target})
-    endif()
-    if(is_ut)
-      add_executable(${target} ${fname}.cpp)
-      get_target_property(tname ${target} NAME)
-      add_test(${tname} ${target})
-      target_compile_definitions(${target} PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
-      target_link_libraries(${target} jb Boost::unit_test_framework)
-    endif()
-  endforeach()
+    )
+  jb_create_unit_test_targets(${all_unit_tests})
+
+  # ... add the right libraries to all the unit tests, and also turn them into tests ...
   foreach(fname ${jb_testing_unit_tests})
     string(REPLACE "/" "_" target ${fname})
     target_link_libraries(${target} jb_testing)
@@ -631,3 +640,8 @@ if(NOT JB_DISABLE_TESTS)
     target_link_libraries(${target} jb_gmock)
   endforeach()
 endif(NOT JB_DISABLE_TESTS)
+
+include(cmake/FindFFTW.cmake)
+if(FFTW3_FOUND)
+  add_subdirectory(jb/fftw)
+endif(FFTW3_FOUND)
