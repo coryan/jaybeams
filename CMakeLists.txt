@@ -226,10 +226,46 @@ target_link_libraries(jb_gmock gmock gtest)
 #  )
 #add_library(jb_itch5 SHARED
 #  )
-#add_library(jb_testing SHARED
-#  )
-#add_library(jb_pitch2 SHARED
-#  )
+add_library(jb_pitch2 SHARED
+  jb/pitch2/add_order_message.cpp
+  jb/pitch2/add_order_message.hpp
+  jb/pitch2/auction_update_message.cpp
+  jb/pitch2/auction_update_message.hpp
+  jb/pitch2/base_add_order_message.hpp
+  jb/pitch2/base_add_order_message_streaming.hpp
+  jb/pitch2/delete_order_message.cpp
+  jb/pitch2/delete_order_message.hpp
+  jb/pitch2/expanded_add_order_message.cpp
+  jb/pitch2/expanded_add_order_message.hpp
+  jb/pitch2/modify_message.cpp
+  jb/pitch2/modify_message.hpp
+  jb/pitch2/order_executed_message.cpp
+  jb/pitch2/order_executed_message.hpp
+  jb/pitch2/order_executed_price_message.cpp
+  jb/pitch2/order_executed_price_message.hpp
+  jb/pitch2/reduce_size_message.cpp
+  jb/pitch2/reduce_size_message.hpp
+  jb/pitch2/short_add_order_message.cpp
+  jb/pitch2/short_add_order_message.hpp
+  jb/pitch2/time_message.cpp
+  jb/pitch2/time_message.hpp
+  jb/pitch2/unit_clear_message.cpp
+  jb/pitch2/unit_clear_message.hpp
+  )
+set(jb_pitch2_unit_tests
+  jb_pitch2_ut_add_order_message
+  jb_pitch2_ut_auction_update_message
+  jb_pitch2_ut_delete_order_message
+  jb_pitch2_ut_expanded_add_order_message
+  jb_pitch2_ut_modify_message
+  jb_pitch2_ut_order_executed_message
+  jb_pitch2_ut_order_executed_price_message
+  jb_pitch2_ut_reduce_size_message
+  jb_pitch2_ut_short_add_order_message
+  jb_pitch2_ut_time_message
+  jb_pitch2_ut_unit_clear_message
+  )
+target_link_libraries(jb_pitch2 jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
 
 set(bin_SCRIPTS tools/benchmark_common.sh)
 set(bin_PROGRAMS
@@ -309,13 +345,15 @@ if(NOT JB_DISABLE_TESTS)
 
   # ... add the right libraries to all the unit tests, and also turn them into tests ...
   set(ut_sources)
-  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests})
+  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests} ${jb_pitch2_unit_tests})
     string(REGEX MATCH ".*_ut$" is_ut ${target})
     if(NOT is_ut)
       string(REGEX MATCH ".*_ut_.*" is_ut ${target})
     endif()
     if(is_ut)
-      string(REGEX REPLACE "^jb_testing_" "jb/testing/" fname ${target})
+      set(fname ${target})
+      string(REGEX REPLACE "^jb_pitch2_" "jb/pitch2/" fname ${fname})
+      string(REGEX REPLACE "^jb_testing_" "jb/testing/" fname ${fname})
       string(REGEX REPLACE "^jb_detail_" "jb/detail/" fname ${fname})
       string(REGEX REPLACE "^jb_" "jb/" fname ${fname})
       add_executable(${target} ${fname}.cpp)
@@ -328,6 +366,10 @@ if(NOT JB_DISABLE_TESTS)
   foreach(target ${jb_testing_unit_tests})
       message(STATUS ${target})
       target_link_libraries(${target} jb_testing)
+  endforeach()
+  foreach(target ${jb_pitch2_unit_tests})
+      message(STATUS ${target})
+      target_link_libraries(${target} jb_pitch2)
   endforeach()
   target_link_libraries(jb_ut_config_files_location jb jb_gmock Boost::unit_test_framework)
 endif(NOT JB_DISABLE_TESTS)
