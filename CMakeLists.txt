@@ -477,10 +477,58 @@ GRPC_GENERATE_CPP(GRPCPP_SOURCES GRPCPP_HDRS GRPCPP_MOCKS
   ${PROJECT_SOURCE_DIR}/ext/etcd/etcdserver/etcdserverpb/rpc.proto
   )
 add_library(jb_etcd SHARED
+  jb/etcd/active_completion_queue.cpp
+  jb/etcd/active_completion_queue.hpp
+  jb/etcd/completion_queue.hpp
+  jb/etcd/completion_queue_base.cpp
+  jb/etcd/completion_queue_base.hpp
+  jb/etcd/detail/async_ops.hpp
+  jb/etcd/detail/default_grpc_interceptor.hpp
+  jb/etcd/detail/grpc_errors_annotations.hpp
+  jb/etcd/detail/mocked_grpc_interceptor.hpp
+  jb/etcd/detail/session_impl.hpp
+  jb/etcd/grpc_errors.cpp
+  jb/etcd/grpc_errors.hpp
+  jb/etcd/leader_election_participant.cpp
+  jb/etcd/leader_election_participant.hpp
+  jb/etcd/leader_election_runner.cpp
+  jb/etcd/leader_election_runner.hpp
+  jb/etcd/log_promise_errors.cpp
+  jb/etcd/log_promise_errors.hpp
+  jb/etcd/prefix_end.cpp
+  jb/etcd/prefix_end.hpp
+  jb/etcd/session.cpp
+  jb/etcd/session.hpp
   ${PROTO_SOURCES} ${PROTO_HDRS}
   ${GRPCPP_SOURCES} ${GRPCPP_HEADERS}
   )
-target_link_libraries(jb_etcd ${GRPCPP_LIBRARIES} ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES})
+target_link_libraries(jb_etcd ${GRPCPP_LIBRARIES} ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} jb)
+set(jb_etcd_unit_tests
+  jb/etcd/active_completion_queue_ut
+  jb/etcd/completion_queue_ut
+  jb/etcd/detail/leader_election_runner_impl_ut
+  jb/etcd/detail/mocked_grpc_interceptor_ut
+  jb/etcd/detail/session_impl_ut
+  jb/etcd/grpc_errors_ut
+  jb/etcd/log_promise_errors_ut
+  jb/etcd/prefix_end_ut
+  )
+
+add_executable(jb_etcd_election_listener jb/etcd/election_listener.cpp)
+target_link_libraries(jb_etcd_election_listener jb_etcd jb)
+
+add_executable(jb_etcd_election_participant jb/etcd/election_participant.cpp)
+target_link_libraries(jb_etcd_election_participant jb_etcd jb)
+
+add_executable(jb_etcd_leader_election_participant_ut jb/etcd/leader_election_participant_ut.cpp)
+target_link_libraries(jb_etcd_leader_election_participant_ut jb_etcd jb Boost::unit_test_framework)
+target_compile_definitions(jb_etcd_leader_election_participant_ut
+  PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
+
+add_executable(jb_etcd_session_ut jb/etcd/session_ut.cpp)
+target_link_libraries(jb_etcd_session_ut jb_etcd jb Boost::unit_test_framework)
+target_compile_definitions(jb_etcd_session_ut
+  PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
 
 # ... determine if libraries are installed in the lib64 directory ...
 get_property(LIB64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
@@ -529,6 +577,7 @@ if(NOT JB_DISABLE_TESTS)
     ${jb_pitch2_unit_tests}
     ${jb_ehs_unit_tests}
     ${jb_itch5_unit_tests}
+    ${jb_etcd_unit_tests}
     )    
   foreach(fname ${all_unit_tests})
     string(REPLACE "/" "_" target ${fname})
@@ -560,7 +609,14 @@ if(NOT JB_DISABLE_TESTS)
     string(REPLACE "/" "_" target ${fname})
     target_link_libraries(${target} jb_ehs)
   endforeach()
+  foreach(fname ${jb_etcd_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    target_link_libraries(${target} jb_etcd)
+  endforeach()
   foreach(target
+      jb_etcd_detail_leader_election_runner_impl_ut
+      jb_etcd_detail_mocked_grpc_interceptor_ut
+      jb_etcd_detail_session_impl_ut
       jb_itch5_ut_compute_book
       jb_itch5_ut_make_socket_udp_common
       jb_itch5_ut_make_socket_udp_recv
