@@ -102,24 +102,6 @@ option(Beast_BUILD_TESTS "Disable tests in Beast" OFF)
 add_subdirectory(ext/Beast)
 include_directories(${PROJECT_SOURCE_DIR}/ext/Beast/include)
 
-# ... if set, enable code coverage builds for g++, and create a "test_coverage" target to collect the coverage using
-# lcov.  My attempts at using the gcovr cobertura output failed miserably, so I am sticking to what I know ...
-set(COVERAGE false CACHE BOOL "Enable code coverage builds.")
-if(${COVERAGE})
-    include(cmake/CodeCoverage.cmake)
-    include(ProcessorCount)
-    ProcessorCount(NCPUS)
-    set(ctest_parallelism "")
-    if(NOT N EQUAL 0)
-        set(ctest_parallelism "-j ${NCPUS}")
-    endif()
-    APPEND_COVERAGE_COMPILER_FLAGS()
-    SETUP_TARGET_FOR_COVERAGE(
-            NAME test_coverage
-            EXECUTABLE ctest ${ctest_parallelism}
-    )
-endif(${COVERAGE})
-
 # ... we need the -I flags so we can find header files using the installed path for JayBeams headers ...
 include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 
