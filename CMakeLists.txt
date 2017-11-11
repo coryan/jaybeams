@@ -184,15 +184,41 @@ set(jb_unit_tests
 add_executable(examples_configuration examples/configuration.cpp)
 target_link_libraries(examples_configuration jb)
 
-add_custom_command(
-  OUTPUT compile_info.cpp
-  COMMAND ${PROJECT_SOURCE_DIR}/tools/gen_compile_info.sh
-      ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS} >${PROJECT_BINARY_DIR}/compile_info.cpp
-  )
+##
+## Capture configuration information in a series of variables, useful in benchmarks and tests
+##
+if(WIN32)
+  set(UNAME_LOG "TODO(coryan) - capture windows config")
+else()
+  execute_process(COMMAND uname -a OUTPUT_VARIABLE UNAME_LOG ERROR_VARIABLE UNAME_LOG)
+endif(WIN32)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  set(CXX_VERSION "TODO(coryan) - capture compiler version for MSVC")
+else()
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version
+    OUTPUT_VARIABLE CXX_VERSION_LOG ERROR_VARIABLE CXX_VERSION_LOG)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  set(CXXLD_VERSION "TODO(coryan) - capture linker version for MSVC")
+else()
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -Wl,--version
+    OUTPUT_VARIABLE CXXLD_VERSION_LOG ERROR_VARIABLE CXXLD_VERSION_LOG)
+endif()
+
+if(IS_DIRECTORY ${PROJECT_SOURCE_DIR}/.git)
+  execute_process(COMMAND git rev-parse HEAD
+    OUTPUT_VARIABLE GIT_HEAD_LOG ERROR_VARIABLE GIT_HEAD_LOG)
+else()
+  set(GIT_HEAD_LOG "not .git directory")
+endif()
+
+configure_file(jb/testing/compile_info.cpp.in jb/testing/compile_info.cpp)
 
 add_library(jb_testing SHARED
   jb/testing/check_close_enough.hpp
-  ${PROJECT_BINARY_DIR}/compile_info.cpp
+  ${PROJECT_BINARY_DIR}/jb/testing/compile_info.cpp
   jb/testing/compile_info.hpp
   jb/testing/create_square_timeseries.hpp
   jb/testing/create_triangle_timeseries.hpp

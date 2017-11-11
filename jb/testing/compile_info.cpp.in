@@ -1,0 +1,23 @@
+#include <jb/testing/compile_info.hpp>
+
+char const jb::testing::uname_a[] = R"""(
+@UNAME_LOG@
+)""";
+
+char const jb::testing::compiler[] = R"""(
+@CXX_VERSION_LOG@
+)""";
+
+char const jb::testing::compiler_flags[] = R"""(
+@CMAKE_CXX_FLAGS@
+@CMAKE_CXX_FLAGS_Release@
+@CMAKE_CXX_FLAGS_Debug@
+)""";
+
+char const jb::testing::linker[] = R"""(
+@CXXLD_VERSION_LOG@
+)""";
+
+char const jb::testing::gitrev[] = R"""('
+@GIT_HEAD_LOG@
+)""";
