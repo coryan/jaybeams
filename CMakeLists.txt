@@ -27,7 +27,7 @@ project(JayBeams CXX C)
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED ON)
 
-option(JB_DISABLE_TESTS, "Disable unit and integration tests. Can be useful to avoid installing gmock+gtest." OFF)
+option(JB_DISABLE_TESTS "Disable unit and integration tests. Can be useful to avoid installing gmock+gtest." OFF)
 
 # ... the author is paranoid.  Turn on all available warnings
 # and turn warnings into errors to stop the build if any warning is
@@ -50,6 +50,24 @@ if(COMPILER_SUPPORTS_SWALL)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
 endif()
 
+# ... if set, enable code coverage builds for g++, and create a "test_coverage" target to collect the coverage using
+# lcov.  My attempts at using the gcovr cobertura output failed miserably, so I am sticking to what I know ...
+option(COVERAGE "Enable code coverage builds." OFF)
+if(${COVERAGE})
+    include(cmake/CodeCoverage.cmake)
+    include(ProcessorCount)
+    ProcessorCount(NCPUS)
+    set(ctest_parallelism "")
+    if(NOT N EQUAL 0)
+        set(ctest_parallelism "-j ${NCPUS}")
+    endif()
+    APPEND_COVERAGE_COMPILER_FLAGS()
+    SETUP_TARGET_FOR_COVERAGE(
+            NAME test_coverage
+            EXECUTABLE ctest ${ctest_parallelism}
+    )
+endif(${COVERAGE})
+
 # ... include the functions to compile proto files ...
 include(FindProtobuf)
 
@@ -68,7 +86,14 @@ find_package(Boost 1.58 REQUIRED
 include_directories(${Boost_INCLUDE_DIRS})
 
 # ... YAML-CPP is a library to parse YAML files, JayBeams uses such files for all runtime configuration ...
-find_package(yaml-cpp REQUIRED)
+find_package(yaml-cpp)
+if(yaml-cpp_FOUND)
+    message(STATUS "Found yaml-cpp using find_package()")
+    set(YAMLCPP_LIBRARIES yaml-cpp)
+else()
+    pkg_check_modules(YAMLCPP REQUIRED yaml-cpp>=0.5)
+    message(STATUS "Found yaml-cpp using pkg_check_modules()")
+endif()
 
 # ... Beast (https://github.com/boostorg/beast) is a library for writing HTTP clients and servers ...
 option(Boost_USE_STATIC_LIBS "Disable static Boost libraries in Beast" OFF)
@@ -153,7 +178,7 @@ add_library(jb SHARED
   jb/usage.hpp
   )
 target_compile_definitions(jb PUBLIC -DBOOST_LOG_DYN_LINK)
-target_link_libraries(jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+target_link_libraries(jb Boost::log Boost::program_options Boost::iostreams ${YAMLCPP_LIBRARIES})
 # ... the jb library unit tests, we setup the targets and dependencies further down using a loop ...
 set(jb_unit_tests
   jb/ut_as_hhmmss
@@ -585,7 +610,7 @@ install(DIRECTORY jb/ DESTINATION include/jb FILES_MATCHING PATTERN "*.hpp")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/etcd/ DESTINATION include/etcd FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/gogoproto/ DESTINATION include/gogoproto FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/google/ DESTINATION include/google FILES_MATCHING PATTERN "*.h")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
+#install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
 
 include(GNUInstallDirs)
 add_definitions(-DJB_SYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}" -DJB_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
