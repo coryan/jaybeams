@@ -70,6 +70,13 @@ include_directories(${Boost_INCLUDE_DIRS})
 # ... YAML-CPP is a library to parse YAML files, JayBeams uses such files for all runtime configuration ...
 find_package(yaml-cpp REQUIRED)
 
+# ... Beast (https://github.com/boostorg/beast) is a library for writing HTTP clients and servers ...
+option(Boost_USE_STATIC_LIBS "Disable static Boost libraries in Beast" OFF)
+option(Beast_BUILD_EXAMPLES "Disable examples in Beast" OFF)
+option(Beast_BUILD_TESTS "Disable tests in Beast" OFF)
+add_subdirectory(ext/Beast)
+include_directories(${PROJECT_SOURCE_DIR}/ext/Beast/include)
+
 # ... if set, enable code coverage builds for g++, and create a "test_coverage" target to collect the coverage using
 # lcov.  My attempts at using the gcovr cobertura output failed miserably, so I am sticking to what I know ...
 set(COVERAGE false CACHE BOOL "Enable code coverage builds.")
@@ -222,10 +229,24 @@ add_library(jb_gmock SHARED
   jb/gmock/init.hpp
   )
 target_link_libraries(jb_gmock gmock gtest)
-#add_library(jb_ehs SHARED
-#  )
+
 #add_library(jb_itch5 SHARED
 #  )
+
+add_library(jb_ehs SHARED
+  jb/ehs/acceptor.cpp
+  jb/ehs/acceptor.hpp
+  jb/ehs/base_types.hpp
+  jb/ehs/connection.cpp
+  jb/ehs/connection.hpp
+  jb/ehs/request_dispatcher.cpp
+  jb/ehs/request_dispatcher.hpp
+  )
+target_link_libraries(jb_ehs jb Boost::log Boost::program_options Boost::iostreams yaml-cpp)
+set(jb_ehs_unit_tests
+  jb_ehs_ut_acceptor
+  jb_ehs_ut_request_dispatcher)
+
 add_library(jb_pitch2 SHARED
   jb/pitch2/add_order_message.cpp
   jb/pitch2/add_order_message.hpp
@@ -345,7 +366,7 @@ if(NOT JB_DISABLE_TESTS)
 
   # ... add the right libraries to all the unit tests, and also turn them into tests ...
   set(ut_sources)
-  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests} ${jb_pitch2_unit_tests})
+  foreach(target ${jb_unit_tests} ${jb_testing_unit_tests} ${jb_pitch2_unit_tests} ${jb_ehs_unit_tests})
     string(REGEX MATCH ".*_ut$" is_ut ${target})
     if(NOT is_ut)
       string(REGEX MATCH ".*_ut_.*" is_ut ${target})
@@ -353,6 +374,7 @@ if(NOT JB_DISABLE_TESTS)
     if(is_ut)
       set(fname ${target})
       string(REGEX REPLACE "^jb_pitch2_" "jb/pitch2/" fname ${fname})
+      string(REGEX REPLACE "^jb_ehs_" "jb/ehs/" fname ${fname})
       string(REGEX REPLACE "^jb_testing_" "jb/testing/" fname ${fname})
       string(REGEX REPLACE "^jb_detail_" "jb/detail/" fname ${fname})
       string(REGEX REPLACE "^jb_" "jb/" fname ${fname})
@@ -370,6 +392,10 @@ if(NOT JB_DISABLE_TESTS)
   foreach(target ${jb_pitch2_unit_tests})
       message(STATUS ${target})
       target_link_libraries(${target} jb_pitch2)
+  endforeach()
+  foreach(target ${jb_ehs_unit_tests})
+      message(STATUS ${target})
+      target_link_libraries(${target} jb_ehs)
   endforeach()
   target_link_libraries(jb_ut_config_files_location jb jb_gmock Boost::unit_test_framework)
 endif(NOT JB_DISABLE_TESTS)
