@@ -110,12 +110,6 @@ WORKDIR /var/tmp/jaybeams
 COPY . /var/tmp/jaybeams/
 COPY . /var/tmp/jaybeams-orig/
 
-# ... the version of CMake distributed with Ubuntu 16.04 is too old for the version of Beast we have.
-# Annoyingly newer versions of Beast can use older versions of CMake, but they require newever versions of
-# Boost.ASIO.  Patching here is a bad idea, but will let me test the rest and then I can change the Beast
-# installation ...
-RUN sed -i 's/VERSION 3.5.2/VERSION 3.5/' ext/Beast/CMakeLists.txt
-
 # ... build inside a sub-directory, easier to copy the artifacts that way
 WORKDIR /var/tmp/jaybeams/build
 # ... run the configure / compile / test cycle ...
