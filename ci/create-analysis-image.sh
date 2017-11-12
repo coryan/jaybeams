@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -17,15 +17,14 @@ if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     exit 0
 fi
 
-# Extract the variant from the IMAGE environment variable (it is set
-# in .travis.yml) ...
-IMAGE=${IMAGE/:*//}
-variant=${IMAGE#coryan/jaybeamsdev-}
-
-if [ "${variant?}" != "ubuntu16.04" ]; then
+if [ "${DISTRO?}" != "ubuntu" -o "${DISTRO_VERSION}" != "16.04" ]; then
     echo "We only need to create the analysis image for Ubuntu 16.04"
     exit 0
 fi
+
+# ... copy the data from the source image ...
+IMAGE="cached-${DISTRO?}-${DISTRO_VERSION?}";
+sudo docker run --volume $PWD/staging:/d --rm -it ${IMAGE}:tip cp -r /usr/local /d;
 
 # ... that determines the name of the image we want to build ...
 IMAGE=coryan/jaybeams-analysis

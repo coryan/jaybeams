@@ -17,15 +17,14 @@ if [ "x${TRAVIS_BRANCH}" != "xmaster" ]; then
     exit 0
 fi
 
-# Extract the variant from the IMAGE environment variable (it is set
-# in .travis.yml)
-IMAGE=${IMAGE/:*//}
-variant=${IMAGE#coryan/jaybeamsdev-}
-
-# ... that determines the name of the image we want to build ...
-IMAGE=coryan/jaybeams-runtime-${variant?}
+# ... copy the data from the source image ...
+SOURCE="cached-${DISTRO?}-${DISTRO_VERSION?}";
+mkdir staging || echo "staging directory already exist"
+sudo docker run --volume $PWD/staging:/d --rm -it ${SOURCE}:tip cp -r /usr/local /d;
 
 # ... make sure the image is available ...
+variant=${DISTRO?}${DISTRO_VERSION?}
+IMAGE=coryan/jaybeams-runtime-${variant?}
 sudo docker pull ${IMAGE?}:latest
 
 # Determine now old is the image, if it is old enough, we re-create
@@ -42,8 +41,8 @@ if [ ${age_days?} -ge 30 ]; then
 fi
 
 # Build a new docker image
-cp docker/runtime/${variant?}/Dockerfile build/staging
-sudo docker image build ${caching?} -t ${IMAGE?}:tip build/staging
+cp docker/runtime/${variant?}/Dockerfile staging
+sudo docker image build ${caching?} -t ${IMAGE?}:tip staging
 
 if [ -z "${DOCKER_USER}" -o -z "${DOCKER_PASSWORD}" ]; then
     echo "DOCKER_USER / DOCKER_PASSWORD not set, docker push disabled."

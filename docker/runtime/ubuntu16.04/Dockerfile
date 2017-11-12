@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
+MAINTAINER "Carlos O'Ryan <coryan@users.noreply.github.com>"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     binutils \
@@ -45,6 +45,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-COPY bin /opt/jaybeams/bin/
-COPY lib /opt/jaybeams/lib/
-COPY include /opt/jaybeams/include/
+COPY local/bin /opt/jaybeams/bin/
+COPY local/lib /opt/jaybeams/lib/
+COPY local/include /opt/jaybeams/include/
