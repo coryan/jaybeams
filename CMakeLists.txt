@@ -98,10 +98,6 @@ else ()
 endif ()
 
 # ... Beast (https://github.com/boostorg/beast) is a library for writing HTTP clients and servers ...
-option(Boost_USE_STATIC_LIBS "Disable static Boost libraries in Beast" OFF)
-option(Beast_BUILD_EXAMPLES "Disable examples in Beast" OFF)
-option(Beast_BUILD_TESTS "Disable tests in Beast" OFF)
-add_subdirectory(ext/Beast)
 include_directories(${PROJECT_SOURCE_DIR}/ext/Beast/include)
 
 # ... we need the -I flags so we can find header files using the installed path for JayBeams headers ...
