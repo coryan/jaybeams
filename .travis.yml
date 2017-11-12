@@ -10,8 +10,16 @@ matrix:
       env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=24
     - os: linux
       compiler: gcc
-      env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=25 \
-           CMAKE_FLAGS="-DCOVERAGE:BOOL=true -DCMAKE_BUILD_TYPE=Debug" BUILD_EXTRA=COVERAGE
+      env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=25 CMAKE_FLAGS="-DCOVERAGE:BOOL=true -DCMAKE_BUILD_TYPE=Debug" BUILD_EXTRA=COVERAGE
+    - os: linux
+      compiler: clang
+      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release"
+    - os: linux
+      compiler: gcc
+      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=16.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Debug"
+    - os: linux
+      compiler: clang
+      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release"
 
 #    - os: linux
 #      compiler: gcc

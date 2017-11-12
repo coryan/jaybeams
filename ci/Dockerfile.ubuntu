@@ -61,9 +61,9 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/tmp/build-pocl
-RUN wget -q http://portablecl.org/downloads/pocl-0.13.tar.gz && \
-    tar -zxf pocl-0.13.tar.gz && \
-    (cd pocl-0.13 && ./configure && make && make install) && \
+RUN wget -q http://portablecl.org/downloads/pocl-0.14.tar.gz && \
+    tar -zxf pocl-0.14.tar.gz && \
+    (cd pocl-0.14 && cmake . && make && make install) && \
     /bin/rm -fr /var/tmp/build-pocl
 
 WORKDIR /var/tmp/build-boost-compute
@@ -108,6 +108,12 @@ RUN echo Running build=${TRAVIS_JOB_NUMBER}
 # ... copy the contents of the source code directory to the container ...
 WORKDIR /var/tmp/build-jaybeams
 COPY . /var/tmp/build-jaybeams/
+
+# ... the version of CMake distributed with Ubuntu 16.04 is too old for the version of Beast we have.
+# Annoyingly newer versions of Beast can use older versions of CMake, but they require newever versions of
+# Boost.ASIO.  Patching here is a bad idea, but will let me test the rest and then I can change the Beast
+# installation ...
+RUN sed -i 's/VERSION 3.5.2/VERSION 3.5/' ext/Beast/CMakeLists.txt
 
 # ... build inside a sub-directory, easier to copy the artifacts that way
 WORKDIR /var/tmp/build-jaybeams/build
