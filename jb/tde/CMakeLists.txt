@@ -18,20 +18,23 @@
 file(READ conjugate_and_multiply_kernel.cl KERNEL_SOURCE_CL)
 configure_file(conjugate_and_multiply_kernel.cpp.in conjugate_and_multiply_kernel.cpp)
 add_library(jb_tde SHARED
-  ${CMAKE_CURRENT_BINARY_DIR}/conjugate_and_multiply_kernel.cpp
-  conjugate_and_multiply_kernel.hpp
-  )
+        ${CMAKE_CURRENT_BINARY_DIR}/conjugate_and_multiply_kernel.cpp
+        conjugate_and_multiply_kernel.hpp
+        )
 target_link_libraries(jb_tde jb_clfft jb_opencl ${CLFFT_LIBRARY} ${OpenCL_LIBRARY})
 
 set(jb_tde_unit_tests
-  ut_conjugate_and_multiply
-  ut_reduce_argmax_real
-  )
+        ut_conjugate_and_multiply
+        ut_reduce_argmax_real
+        )
 jb_create_unit_test_targets(${jb_tde_unit_tests})
-foreach(fname ${jb_tde_unit_tests})
-  string(REPLACE "/" "_" target ${fname})
-  target_link_libraries(${target} jb_tde)
-endforeach()
+foreach (fname ${jb_tde_unit_tests})
+    string(REPLACE "/" "_" target ${fname})
+    if ((NOT ${SANITIZER_ENABLED}) AND (NOT ${JB_DISABLE_TESTS}))
+        add_test(${target} ${target})
+    endif ()
+    target_link_libraries(${target} jb_tde)
+endforeach ()
 
 add_executable(bm_reduce_argmax_real bm_reduce_argmax_real.cpp)
 target_link_libraries(bm_reduce_argmax_real jb_tde jb_clfft jb_opencl_testing jb_opencl jb_testing jb)

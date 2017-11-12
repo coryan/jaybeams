@@ -16,10 +16,11 @@ matrix:
       env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release"
     - os: linux
       compiler: gcc
-      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=16.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Debug"
+      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=16.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release"
     - os: linux
       compiler: clang
-      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release"
+      env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 \
+           CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Debug -DSANITIZE_ADDRESS=ON"
 
 #    - os: linux
 #      compiler: gcc
@@ -29,17 +30,6 @@ matrix:
 #      compiler: gcc
 #      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
 #
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=clang++ CXXFLAGS="-O1 -g" CHECK_STYLE=yes CONFIGUREFLAGS="--with-sanitizer=address"
-#
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS="-O0 -g -coverage" COVERAGE=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
-#
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-fedora24 COMPILER=clang++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes
 
 services:
   - docker
