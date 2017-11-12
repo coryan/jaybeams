@@ -23,8 +23,10 @@ if [ "${DISTRO?}" != "ubuntu" -o "${DISTRO_VERSION}" != "16.04" ]; then
 fi
 
 # ... copy the data from the source image ...
-IMAGE="cached-${DISTRO?}-${DISTRO_VERSION?}";
-sudo docker run --volume $PWD/staging:/d --rm -it ${IMAGE}:tip cp -r /usr/local /d;
+# ... copy the data from the source image ...
+SOURCE="cached-${DISTRO?}-${DISTRO_VERSION?}";
+mkdir staging || echo "staging directory already exist"
+sudo docker run --volume $PWD/staging:/d --rm -it ${SOURCE}:tip cp -r /usr/local /d;
 
 # ... that determines the name of the image we want to build ...
 IMAGE=coryan/jaybeams-analysis
@@ -46,9 +48,9 @@ if [ ${age_days?} -ge 30 ]; then
 fi
 
 # ... build a new docker image ..
-cp docker/analysis/Dockerfile build/staging/Dockerfile.analysis
+cp docker/analysis/Dockerfile staging/Dockerfile.analysis
 sudo docker image build ${caching?} -t ${IMAGE?}:tip \
-       -f build/staging/Dockerfile.analysis build/staging
+       -f staging/Dockerfile.analysis staging
 
 if [ -z "${DOCKER_USER}" -o -z "${DOCKER_PASSWORD}" ]; then
     echo "DOCKER_USER / DOCKER_PASSWORD not set, docker push disabled."

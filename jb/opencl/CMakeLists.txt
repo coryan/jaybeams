@@ -73,3 +73,4 @@ target_link_libraries(bm_launch_kernel jb_opencl_testing jb_opencl jb_testing)
 install(TARGETS jb_opencl show_device
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${INSTALL_LIB_DIR})
+install(PROGRAMS bm_generic_reduce_report.Rmd bm_generic_reduce_driver.sh DESTINATION bin)

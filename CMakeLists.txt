@@ -595,6 +595,9 @@ install(TARGETS jb jb_testing jb_ehs jb_pitch2 jb_itch5 jb_etcd
         jb_itch5_mold2inside jb_itch5_moldfeedhandler jb_itch5_moldreplay
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${INSTALL_LIB_DIR})
+install(PROGRAMS jb/itch5/bm_order_book_report.Rmd jb/itch5/bm_order_book_analyze.R jb/itch5/bm_order_book_analyze.R
+        tools/benchmark_common.sh tools/benchmark_teardown.sh
+        DESTINATION bin)
 install(DIRECTORY jb/ DESTINATION include/jb FILES_MATCHING PATTERN "*.hpp")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/etcd/ DESTINATION include/etcd FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/gogoproto/ DESTINATION include/gogoproto FILES_MATCHING PATTERN "*.h")
