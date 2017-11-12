@@ -100,6 +100,9 @@ endif ()
 # ... Beast (https://github.com/boostorg/beast) is a library for writing HTTP clients and servers ...
 include_directories(${PROJECT_SOURCE_DIR}/ext/Beast/include)
 
+# ... Gee-H (https://github.com/coryan/gee-h) is a client library for etcd ...
+add_subdirectory(ext/gee-h)
+
 # ... we need the -I flags so we can find header files using the installed path for JayBeams headers ...
 include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 
@@ -261,7 +264,7 @@ add_executable(jb_testing_show_compile_info jb/testing/show_compile_info.cpp)
 target_link_libraries(jb_testing_show_compile_info jb_testing jb)
 
 # ... jb_gmock needs the googletest libraries ...
-add_subdirectory(ext/googletest/googlemock)
+# add_subdirectory(ext/googletest/googlemock)
 add_library(jb_gmock SHARED
         jb/gmock/init.hpp
         )
@@ -495,74 +498,6 @@ target_link_libraries(tools_moldheartbeat jb_itch5 jb)
 set(bin_SCRIPTS tools/benchmark_common.sh)
 
 include(cmake/CompileProtos.cmake)
-set(PROTOBUF_IMPORT_DIRS "${PROJECT_SOURCE_DIR}/ext/googleapis"
-        "${PROJECT_SOURCE_DIR}/ext/gogoproto"
-        "${PROJECT_SOURCE_DIR}/ext"
-        )
-PROTOBUF_GENERATE_CPP(PROTO_SOURCES PROTO_HDRS
-        ${PROJECT_SOURCE_DIR}/ext/googleapis/google/api/http.proto
-        ${PROJECT_SOURCE_DIR}/ext/googleapis/google/api/annotations.proto
-        ${PROJECT_SOURCE_DIR}/ext/gogoproto/gogoproto/gogo.proto
-        ${PROJECT_SOURCE_DIR}/ext/etcd/mvcc/mvccpb/kv.proto
-        ${PROJECT_SOURCE_DIR}/ext/etcd/auth/authpb/auth.proto
-        ${PROJECT_SOURCE_DIR}/ext/etcd/etcdserver/etcdserverpb/rpc.proto
-        )
-GRPC_GENERATE_CPP(GRPCPP_SOURCES GRPCPP_HDRS GRPCPP_MOCKS
-        ${PROJECT_SOURCE_DIR}/ext/etcd/etcdserver/etcdserverpb/rpc.proto
-        )
-add_library(jb_etcd SHARED
-        jb/etcd/active_completion_queue.cpp
-        jb/etcd/active_completion_queue.hpp
-        jb/etcd/completion_queue.hpp
-        jb/etcd/completion_queue_base.cpp
-        jb/etcd/completion_queue_base.hpp
-        jb/etcd/detail/async_ops.hpp
-        jb/etcd/detail/default_grpc_interceptor.hpp
-        jb/etcd/detail/grpc_errors_annotations.hpp
-        jb/etcd/detail/mocked_grpc_interceptor.hpp
-        jb/etcd/detail/session_impl.hpp
-        jb/etcd/grpc_errors.cpp
-        jb/etcd/grpc_errors.hpp
-        jb/etcd/leader_election_participant.cpp
-        jb/etcd/leader_election_participant.hpp
-        jb/etcd/leader_election_runner.cpp
-        jb/etcd/leader_election_runner.hpp
-        jb/etcd/log_promise_errors.cpp
-        jb/etcd/log_promise_errors.hpp
-        jb/etcd/prefix_end.cpp
-        jb/etcd/prefix_end.hpp
-        jb/etcd/session.cpp
-        jb/etcd/session.hpp
-        ${PROTO_SOURCES} ${PROTO_HDRS}
-        ${GRPCPP_SOURCES} ${GRPCPP_HEADERS}
-        )
-target_link_libraries(jb_etcd ${GRPCPP_LIBRARIES} ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} jb)
-set(jb_etcd_unit_tests
-        jb/etcd/active_completion_queue_ut
-        jb/etcd/completion_queue_ut
-        jb/etcd/detail/leader_election_runner_impl_ut
-        jb/etcd/detail/mocked_grpc_interceptor_ut
-        jb/etcd/detail/session_impl_ut
-        jb/etcd/grpc_errors_ut
-        jb/etcd/log_promise_errors_ut
-        jb/etcd/prefix_end_ut
-        )
-
-add_executable(jb_etcd_election_listener jb/etcd/election_listener.cpp)
-target_link_libraries(jb_etcd_election_listener jb_etcd jb)
-
-add_executable(jb_etcd_election_participant jb/etcd/election_participant.cpp)
-target_link_libraries(jb_etcd_election_participant jb_etcd jb)
-
-add_executable(jb_etcd_leader_election_participant_ut jb/etcd/leader_election_participant_ut.cpp)
-target_link_libraries(jb_etcd_leader_election_participant_ut jb_etcd jb Boost::unit_test_framework)
-target_compile_definitions(jb_etcd_leader_election_participant_ut
-        PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
-
-add_executable(jb_etcd_session_ut jb/etcd/session_ut.cpp)
-target_link_libraries(jb_etcd_session_ut jb_etcd jb Boost::unit_test_framework)
-target_compile_definitions(jb_etcd_session_ut
-        PUBLIC -DBOOST_TEST_MAIN -DBOOST_TEST_DYN_LINK -DBOOST_TEST_MODULE=${target})
 
 # ... determine if libraries are installed in the lib64 directory ...
 get_property(LIB64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
@@ -584,8 +519,8 @@ set(PKG_CONFIG_CFLAGS "-I\${includedir}")
 #        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc")
 
 # ... define the install rules ...
-install(TARGETS jb jb_testing jb_ehs jb_pitch2 jb_itch5 jb_etcd
-        jb_etcd_election_participant jb_etcd_election_listener tools_itch5bookdepth tools_itch5eventdepth
+install(TARGETS jb jb_testing jb_ehs jb_pitch2 jb_itch5
+        tools_itch5bookdepth tools_itch5eventdepth
         tools_itch5inside tools_itch5moldreplay tools_itch5stats tools_itch5trades tools_moldheartbeat
         jb_itch5_mold2inside jb_itch5_moldfeedhandler jb_itch5_moldreplay
         RUNTIME DESTINATION bin
@@ -594,9 +529,6 @@ install(PROGRAMS jb/itch5/bm_order_book_report.Rmd jb/itch5/bm_order_book_analyz
         tools/benchmark_common.sh tools/benchmark_teardown.sh
         DESTINATION bin)
 install(DIRECTORY jb/ DESTINATION include/jb FILES_MATCHING PATTERN "*.hpp")
-install(DIRECTORY ${CMAKE_BINARY_DIR}/etcd/ DESTINATION include/etcd FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CMAKE_BINARY_DIR}/gogoproto/ DESTINATION include/gogoproto FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CMAKE_BINARY_DIR}/google/ DESTINATION include/google FILES_MATCHING PATTERN "*.h")
 #install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION lib/pkgconfig)
 
 include(GNUInstallDirs)
@@ -628,7 +560,6 @@ set(all_unit_tests
         ${jb_pitch2_unit_tests}
         ${jb_ehs_unit_tests}
         ${jb_itch5_unit_tests}
-        ${jb_etcd_unit_tests}
         )
 jb_create_unit_test_targets(${all_unit_tests})
 
@@ -658,14 +589,7 @@ if (NOT JB_DISABLE_TESTS)
         string(REPLACE "/" "_" target ${fname})
         target_link_libraries(${target} jb_ehs)
     endforeach ()
-    foreach (fname ${jb_etcd_unit_tests})
-        string(REPLACE "/" "_" target ${fname})
-        target_link_libraries(${target} jb_etcd)
-    endforeach ()
     foreach (target
-            jb_etcd_detail_leader_election_runner_impl_ut
-            jb_etcd_detail_mocked_grpc_interceptor_ut
-            jb_etcd_detail_session_impl_ut
             jb_itch5_ut_compute_book
             jb_itch5_ut_make_socket_udp_common
             jb_itch5_ut_make_socket_udp_recv
