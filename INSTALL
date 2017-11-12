@@ -1,23 +1,15 @@
 JayBeams does not have any releases yet, so you probably cloned the
 git repository.  You should first get the dependencies for JayBeams,
-which include (at least): autoconf, automake,
-autoconf-archive (>= 2015.02.24), make, clang (>= 3.5),
-Boost (>= 1.55), YAML-CPP, Skye, FFTW3, OpenCL, clFFT, Boost.Compute.
+detailed instructions are in the doc/setup.md document.
 
-More detailed install instructions are in the doc/setup.dox document
-for both Fedora and Ubuntu.  The Travis-CI configuration script a good
-place to find all details on how to install the dependencies.
+The ci/Dockerfile.* files are a good place to find all details on
+how to install the dependencies, as the continuous integration builds
+are driven from these files.
 
-$ ./bootstrap
+Once all dependencies are installed compilation is relatively easy:
+
 $ mkdir build ; cd build
-$ CXX=clang++ CXXFLAGS=-O3 ../configure
+$ cmake ..
 $ make
-$ make check
-
-Once we have releases the configure script will be bundled with the
-release tarball and you can use:
-
-$ ./configure
-$ make
-$ make check
+$ make test
 $ sudo make install
