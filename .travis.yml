@@ -13,6 +13,9 @@ matrix:
       env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=25 CMAKE_FLAGS="-DCOVERAGE:BOOL=true -DCMAKE_BUILD_TYPE=Debug" BUILD_EXTRA=COVERAGE
     - os: linux
       compiler: clang
+      env: LINUX_BUILD=yes DISTRO=fedora DISTRO_VERSION=25 BUILD_EXTRA=check-style
+    - os: linux
+      compiler: clang
       env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Release" \
            BUILD_EXTRA=GENDOCS
     - os: linux
@@ -22,15 +25,6 @@ matrix:
       compiler: clang
       env: LINUX_BUILD=yes DISTRO=ubuntu DISTRO_VERSION=17.04 \
            CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=Debug -DSANITIZE_ADDRESS=ON"
-
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-ubuntu16.04 COMPILER=g++ CXXFLAGS=-O3 CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes CREATE_ANALYSIS_IMAGE=yes
-#
-#    - os: linux
-#      compiler: gcc
-#      env: IMAGE=coryan/jaybeamsdev-fedora25 COMPILER=g++ CXXFLAGS=-O3 GENDOCS=yes CONFIGUREFLAGS="" CREATE_BUILD_IMAGE=yes CREATE_RUNTIME_IMAGE=yes
-#
 
 services:
   - docker
@@ -48,8 +42,6 @@ after_success:
   - ci/gendocs.sh
   # ... upload the coverity results ...
   - ci/coverity-upload.sh
-  # ... on the right builds, create the build image and push to docker ...
-  - ci/upload-build-image.sh
   # ... on the right builds, create the runtime image and push to docker ...
   - ci/create-runtime-image.sh
   # ... on the right builds, create the analysis image and push to docker ...

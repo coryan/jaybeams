@@ -36,7 +36,7 @@ git clone "${REPO_URL?}" doc/html
 
 # ... finally copy the documents generated during the build into that checkout ...
 IMAGE="cached-${DISTRO?}-${DISTRO_VERSION?}";
-sudo docker run --volume $PWD/doc:/d --rm -it ${IMAGE}:tip cp -r /var/tmp/build-jaybeams/doc/html /d;
+sudo docker run --volume $PWD/doc:/d --rm -it ${IMAGE}:tip cp -r /var/tmp/jaybeams/doc/html /d;
 
 # ... at this point the doc/html subdirectory contains a fresh copy of the generated documents.  git will detect what
 # changed and only push those changes to the gh-pages branch ...

@@ -106,8 +106,9 @@ ARG TRAVIS_JOB_NUMBER=""
 RUN echo Running build=${TRAVIS_JOB_NUMBER}
 
 # ... copy the contents of the source code directory to the container ...
-WORKDIR /var/tmp/build-jaybeams
-COPY . /var/tmp/build-jaybeams/
+WORKDIR /var/tmp/jaybeams
+COPY . /var/tmp/jaybeams/
+COPY . /var/tmp/jaybeams-orig/
 
 # ... the version of CMake distributed with Ubuntu 16.04 is too old for the version of Beast we have.
 # Annoyingly newer versions of Beast can use older versions of CMake, but they require newever versions of
@@ -116,7 +117,7 @@ COPY . /var/tmp/build-jaybeams/
 RUN sed -i 's/VERSION 3.5.2/VERSION 3.5/' ext/Beast/CMakeLists.txt
 
 # ... build inside a sub-directory, easier to copy the artifacts that way
-WORKDIR /var/tmp/build-jaybeams/build
+WORKDIR /var/tmp/jaybeams/build
 # ... run the configure / compile / test cycle ...
 RUN cmake ${CMAKE_FLAGS} .. && make -j ${NCPU}
 RUN make -j ${NCPU} test || ( cat Testing/Temporary/LastTest.log; exit 1 )
@@ -126,5 +127,12 @@ RUN make -j ${NCPU} test || ( cat Testing/Temporary/LastTest.log; exit 1 )
 RUN make install
 
 # ... verify that the Doxygen code generation works ...
-WORKDIR /var/tmp/build-jaybeams
+WORKDIR /var/tmp/jaybeams
 RUN doxygen doc/Doxyfile
+
+# ... verify that the code is properly formatted ...
+WORKDIR /var/tmp/jaybeams/build
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || make clang-format
+WORKDIR /var/tmp/
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || diff -r -u jaybeams-orig/jb jaybeams/jb
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || diff -r -u jaybeams-orig/examples jaybeams/examples
