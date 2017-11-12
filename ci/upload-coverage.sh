@@ -8,17 +8,16 @@ if [ "x$TRAVIS_PULL_REQUEST" != "xfalse" ]; then
     exit 0
 fi
 
-if [ "x${COVERAGE}" != "xyes" ]; then
+if [ "x${BUILD_EXTRA}" != "xCOVERAGE" ]; then
     echo "Code coverage not enabled, this is not a code coverage build"
     exit 0
 fi
 
-docker run --rm -it -v $PWD:$PWD --workdir $PWD ${IMAGE?} ci/coverage-lcov.sh
-# Push results to coveralls ...
-coveralls-lcov --repo-token ${COVERALLS_TOKEN?} coverage.info
+IMAGE="cached-${DISTRO?}-${DISTRO_VERSION?}";
+sudo docker run --volume $PWD:/d --rm -it ${IMAGE}:tip cp -r /var/tmp/jaybeams/build /d;
 
 if [ "x${CODECOV_TOKEN}" != "x" ]; then
-    bash <(curl -s https://codecov.io/bash)
+    bash <(curl -s https://codecov.io/bash)  || echo "Coverage upload failed."
 fi
 
 exit 0

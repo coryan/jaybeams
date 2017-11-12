@@ -1,5 +1,5 @@
 FROM fedora:24
-MAINTAINER Carlos O'Ryan <coryan@users.noreply.github.com>
+MAINTAINER "Carlos O'Ryan <coryan@users.noreply.github.com>"
 
 RUN dnf makecache && dnf install -y \
     binutils \
@@ -17,6 +17,6 @@ RUN dnf makecache && dnf install -y \
     yaml-cpp \
     zlib && dnf clean all
 
-COPY bin /opt/jaybeams/bin/
-COPY lib /opt/jaybeams/lib/
-COPY include /opt/jaybeams/include/
+COPY local/bin /opt/jaybeams/bin/
+COPY local/lib /opt/jaybeams/lib/
+COPY local/include /opt/jaybeams/include/

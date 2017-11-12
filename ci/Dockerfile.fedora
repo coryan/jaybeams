@@ -1,0 +1,174 @@
+# Builds JayBeams inside a docker container.
+#
+#   Copyright 2017 Carlos O'Ryan
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+
+# This Dockerfile requires docker 17 or higher, it uses an argument to set
+# the base image version, which was not supported in early versions of docker.
+ARG DISTRO_VERSION=25
+FROM fedora:$DISTRO_VERSION
+MAINTAINER "Carlos O'Ryan <coryan@users.noreply.github.com>"
+
+# Install the pre-requisites, the long command line is to create as few
+# layers as possible in the image ...
+RUN dnf makecache && \
+  dnf install -y \
+    autoconf \
+    autoconf-archive \
+    automake \
+    boost \
+    boost-devel \
+    boost-static \
+    bzip2-devel \
+    clang \
+    clinfo \
+    cmake \
+    compiler-rt \
+    curl \
+    doxygen \
+    fftw-devel \
+    findutils \
+    gcc-c++ \
+    git \
+    golang \
+    lcov \
+    libtool \
+    make \
+    lshw \
+    ocl-icd-devel \
+    opencl-headers \
+    openssl \
+    openssl-devel \
+    openssl-static \
+    patch \
+    pocl-devel \
+    pkgconfig \
+    python \
+    shtool \
+    sudo \
+    tar \
+    time \
+    unzip \
+    valgrind \
+    wget \
+    yaml-cpp-devel \
+    zlib-devel && \
+  dnf clean all
+
+WORKDIR /var/tmp/build-clFFT
+RUN wget -q https://github.com/clMathLibraries/clFFT/archive/v2.12.2.tar.gz && \
+    tar -xf v2.12.2.tar.gz && \
+    (cd clFFT-2.12.2/src && \
+      cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/clFFT-2.12.2 . && \
+      make && \
+      make install) && \
+    /bin/rm -fr /var/tmp/build-clFFT
+
+# ... use this to avoid setting LD_LIBRARY_PATH everywhere ...
+RUN echo /usr/local/clFFT-2.12.2/lib64 | \
+    tee /etc/ld.so.conf.d/clfft-2.12.2.conf && \
+    ldconfig
+
+WORKDIR /var/tmp/build-boost-compute
+RUN wget -q https://github.com/boostorg/compute/archive/boost-1.62.0.tar.gz && \
+    tar -xf boost-1.62.0.tar.gz && \
+    (cd compute-boost-1.62.0 && \
+      cmake . && make && make DESTDIR=staging install && \
+      cp -r staging/usr/local/include/compute/boost/compute.hpp \
+          /usr/include/boost/ && \
+      cp -r staging/usr/local/include/compute/boost/compute/ \
+          /usr/include/boost/) && \
+    /bin/rm -fr /var/tmp/build-boost-compute
+
+#
+# This is awful, the distribution of gRPC is very Ubuntu specific.
+# We need to manually set the environment variables that select the C
+# and C++ compiler (as well as linkers).
+#
+WORKDIR /var/tmp/build-grpc
+RUN git clone --depth 10 --branch v1.6.x https://github.com/grpc/grpc.git && \
+  (cd /var/tmp/build-grpc/grpc/ && \
+    git submodule update --init && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make install && \
+    env LDXX="g++ -std=c++14" LD=gcc CXX="g++ -std=c++14" CC=gcc \
+      make -C third_party/protobuf install && \
+    echo /usr/local/lib >/etc/ld.so.conf.d/local.conf && ldconfig && \
+    find /usr/local -type f -name '*.la' -exec rm -f {} \;) && \
+  /bin/rm -fr /var/tmp/build-grpc
+
+# ... install etcd and etcdctl in /usr/bin, they are used in the integration tests ...
+WORKDIR /var/tmp/install-etcd
+RUN wget -q https://github.com/coreos/etcd/releases/download/v3.2.1/etcd-v3.2.1-linux-amd64.tar.gz && \
+  tar -xf etcd-v3.2.1-linux-amd64.tar.gz && \
+  cp etcd-v3.2.1-linux-amd64/etcd /usr/bin && \
+  cp etcd-v3.2.1-linux-amd64/etcdctl /usr/bin && \
+  /bin/rm -fr /var/tmp/install-etcd
+
+# Boost has deprecated a few headers, warns about it, and other parts
+# of Boost still use them:
+#   https://svn.boost.org/trac/boost/ticket/11860
+#   https://github.com/boostorg/iostreams/pull/24
+#
+# Until 1.62.0 or so is released, we simply remove the wawrnings from Boost.
+# I could just remove them all:
+#    RUN find /usr/include/boost/ -type f -exec sed -i '/pragma message.*deprecated/d' {} \;
+# but I have chosen to be more surgical about it:
+RUN sed -i '/pragma message.*deprecated/d' \
+  /usr/include/boost/type_traits/detail/template_arity_spec.hpp \
+  /usr/include/boost/type_traits/detail/bool_trait_def.hpp
+
+# ... capture the arguments that control the build ...
+ARG CXX=clang++
+ARG CC=clang
+ARG CMAKE_FLAGS=""
+ARG BUILD_EXTRA=""
+ARG NCPU=2
+
+# ... by default, Fedora does not look for packages in /usr/local/lib/pkgconfig ...
+ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
+# ... capture the Travis job number, effectively this busts the cache
+# in each build, which we want anyway ...
+ARG TRAVIS_JOB_NUMBER=""
+RUN echo Running build=${TRAVIS_JOB_NUMBER}
+
+# ... copy the contents of the source code directory to the container ...
+WORKDIR /var/tmp/jaybeams
+COPY . /var/tmp/jaybeams/
+COPY . /var/tmp/jaybeams-orig/
+
+# ... build inside a sub-directory, easier to copy the artifacts that way
+WORKDIR /var/tmp/jaybeams/build
+# ... run the configure / compile / test cycle ...
+RUN cmake ${CMAKE_FLAGS} .. && make -j ${NCPU}
+RUN make -j ${NCPU} test || ( cat Testing/Temporary/LastTest.log; exit 1 )
+
+# ... verify that the install target works as expected ...
+# TODO(coryan) - need to write a test for the installed files.
+RUN make install
+
+# ... verify that the Doxygen code generation works ...
+WORKDIR /var/tmp/jaybeams
+RUN doxygen doc/Doxyfile
+
+# ... verify that the code is properly formatted ...
+WORKDIR /var/tmp/jaybeams/build
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || make clang-format
+WORKDIR /var/tmp/
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || diff -r -u jaybeams-orig/jb jaybeams/jb
+RUN test "x${BUILD_EXTRA}" != "xcheck-style" || diff -r -u jaybeams-orig/examples jaybeams/examples

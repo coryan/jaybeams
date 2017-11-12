@@ -9,7 +9,7 @@ changing the code.
 
 ## Header Files
 
-### All headers shoudl be self-contained.
+### All headers should be self-contained.
 
 One should be able to `#``include` a header and compile it without
 requiring any additional headers before or after.
@@ -55,7 +55,7 @@ Inline function should not be separate from the class definition.
 **Use:**
 
 ```c++
-class Foo {
+class foo {
 public:
   inline int answer() const {
     return 42;
@@ -65,7 +65,7 @@ public:
 **Do Not Use:**
 
 ```c++
-class Foo {
+class foo {
 public:
   int answer() const;
 };

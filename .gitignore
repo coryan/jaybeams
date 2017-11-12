@@ -53,3 +53,7 @@ doc/html/
 
 # Staging, temporary place to test the install rules.
 staging/
+
+# CLion directories
+cmake-build-debug/
+.idea/

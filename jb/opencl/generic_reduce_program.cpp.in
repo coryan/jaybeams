@@ -1,0 +1,5 @@
+#include <jb/opencl/generic_reduce_program.hpp>
+
+char const jb::opencl::generic_reduce_program_source[] = R"""(
+@GENERIC_REDUCE_CL@
+)""";

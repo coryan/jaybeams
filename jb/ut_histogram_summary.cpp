@@ -11,5 +11,5 @@ BOOST_AUTO_TEST_CASE(histogram_summary_ios) {
   os << summary;
   BOOST_CHECK_EQUAL(
       os.str(), "nsamples=1000, min=0, p25=25, "
-                "p50=50, p75=75, p90=90, max=100");
+                "p50=50, p75=75, p90=90, p99=99, max=100");
 }
