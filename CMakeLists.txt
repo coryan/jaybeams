@@ -69,7 +69,6 @@ if (${COVERAGE})
 endif (${COVERAGE})
 
 include(cmake/FindSanitizers.cmake)
-message(STATUS ${CMAKE_CXX_FLAGS})
 
 # ... include the functions to compile proto files ...
 include(FindProtobuf)
