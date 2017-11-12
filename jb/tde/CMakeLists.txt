@@ -38,3 +38,7 @@ endforeach ()
 
 add_executable(bm_reduce_argmax_real bm_reduce_argmax_real.cpp)
 target_link_libraries(bm_reduce_argmax_real jb_tde jb_clfft jb_opencl_testing jb_opencl jb_testing jb)
+
+install(TARGETS jb_tde
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION ${INSTALL_LIB_DIR})

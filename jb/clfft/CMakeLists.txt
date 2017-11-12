@@ -46,3 +46,7 @@ endforeach ()
 
 add_executable(bm_single_fft bm_single_fft.cpp)
 target_link_libraries(bm_single_fft jb_clfft jb_testing jb_opencl_testing)
+
+install(TARGETS jb_clfft
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION ${INSTALL_LIB_DIR})

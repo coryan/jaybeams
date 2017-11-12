@@ -589,7 +589,10 @@ set(PKG_CONFIG_CFLAGS "-I\${includedir}")
 #        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc")
 
 # ... define the install rules ...
-install(TARGETS jb
+install(TARGETS jb jb_testing jb_ehs jb_pitch2 jb_itch5 jb_etcd
+        jb_etcd_election_participant jb_etcd_election_listener tools_itch5bookdepth tools_itch5eventdepth
+        tools_itch5inside tools_itch5moldreplay tools_itch5stats tools_itch5trades tools_moldheartbeat
+        jb_itch5_mold2inside jb_itch5_moldfeedhandler jb_itch5_moldreplay
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${INSTALL_LIB_DIR})
 install(DIRECTORY jb/ DESTINATION include/jb FILES_MATCHING PATTERN "*.hpp")
@@ -695,3 +698,15 @@ if (CLFFT_FOUND)
     add_subdirectory(jb/clfft)
     add_subdirectory(jb/tde)
 endif (CLFFT_FOUND)
+
+file(GLOB_RECURSE ALL_CXX_SOURCE_FILES jb/*.[hc]pp examples/*.[hc]pp tools/*.[hc]pp)
+find_program(CLANG_FORMAT clang-format)
+if (CLANG_FORMAT)
+    add_custom_target(clang-format
+            COMMAND ${CLANG_FORMAT} -i ${ALL_CXX_SOURCE_FILES})
+    add_custom_target(check-style
+            COMMAND git diff --exit-code
+            DEPENDS clang-format)
+else()
+    add_custom_target(check-style)
+endif (CLANG_FORMAT)

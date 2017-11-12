@@ -69,3 +69,7 @@ target_link_libraries(bm_generic_reduce jb_opencl_testing jb_opencl jb_testing)
 
 add_executable(bm_launch_kernel bm_launch_kernel.cpp)
 target_link_libraries(bm_launch_kernel jb_opencl_testing jb_opencl jb_testing)
+
+install(TARGETS jb_opencl show_device
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION ${INSTALL_LIB_DIR})
