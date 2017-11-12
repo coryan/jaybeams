@@ -124,3 +124,7 @@ RUN make -j ${NCPU} test || ( cat Testing/Temporary/LastTest.log; exit 1 )
 # ... verify that the install target works as expected ...
 # TODO(coryan) - need to write a test for the installed files.
 RUN make install
+
+# ... verify that the Doxygen code generation works ...
+WORKDIR /var/tmp/build-jaybeams
+RUN doxygen doc/Doxyfile
