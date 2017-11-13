@@ -14,3 +14,7 @@
 	path = ext/Beast
 	url = https://github.com/vinniefalco/Beast.git
 	branch = master
+[submodule "ext/gee-h"]
+	path = ext/gee-h
+	url = https://github.com/coryan/gee-h.git
+	branch = master
