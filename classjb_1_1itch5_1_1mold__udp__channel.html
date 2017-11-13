@@ -96,9 +96,12 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9c0fd3c7f726e33da6625230ea7f3c07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a9c0fd3c7f726e33da6625230ea7f3c07">mold_udp_channel</a> (boost::asio::io_service &amp;io, <a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a> handler, std::string const &amp;receive_address, int port, std::string const &amp;listen_address)</td></tr>
-<tr class="memdesc:a9c0fd3c7f726e33da6625230ea7f3c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, create a socket and register for IO notifications.  <a href="#a9c0fd3c7f726e33da6625230ea7f3c07">More...</a><br /></td></tr>
-<tr class="separator:a9c0fd3c7f726e33da6625230ea7f3c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae03701ac922c502a6a12def95bdb5bde"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#ae03701ac922c502a6a12def95bdb5bde">mold_udp_channel</a> (boost::asio::io_service &amp;io, <a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a> const &amp;handler, <a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;cfg)</td></tr>
+<tr class="memdesc:ae03701ac922c502a6a12def95bdb5bde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, create a socket and register for IO notifications.  <a href="#ae03701ac922c502a6a12def95bdb5bde">More...</a><br /></td></tr>
+<tr class="separator:ae03701ac922c502a6a12def95bdb5bde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4a22e20d69c36234b7a14d8b02f332"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#ada4a22e20d69c36234b7a14d8b02f332">mold_udp_channel</a> (boost::asio::io_service &amp;io, <a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a> &amp;&amp;handler, <a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;cfg)</td></tr>
+<tr class="memdesc:ada4a22e20d69c36234b7a14d8b02f332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, create a socket and register for IO notifications.  <a href="#ada4a22e20d69c36234b7a14d8b02f332">More...</a><br /></td></tr>
+<tr class="separator:ada4a22e20d69c36234b7a14d8b02f332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -139,7 +142,7 @@ Friends</h2></td></tr>
 <div class="textblock"><p>Create and manage a socket to receive MoldUDP64 packets. </p>
 <p>This class creates a socket to receive MoldUDP64 packets, registers with the Boost.ASIO IO service to be notified of new packets in the socket, and when new packets are received it breaks down the packet into ITCH-5.0 messages and invokes a handler for each one. </p>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00022">22</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00024">24</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a2db62db3c4b52d23a3bea0e6eb5edff9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2db62db3c4b52d23a3bea0e6eb5edff9">&#9670;&nbsp;</a></span>buffer_handler</h2>
@@ -162,13 +165,13 @@ Friends</h2></td></tr>
 <li>The size of the message, in bytes. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00040">40</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00042">42</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9c0fd3c7f726e33da6625230ea7f3c07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c0fd3c7f726e33da6625230ea7f3c07">&#9670;&nbsp;</a></span>mold_udp_channel()</h2>
+<a id="ae03701ac922c502a6a12def95bdb5bde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03701ac922c502a6a12def95bdb5bde">&#9670;&nbsp;</a></span>mold_udp_channel() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,26 +185,14 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a> const &amp;&#160;</td>
           <td class="paramname"><em>handler</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>receive_address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>port</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>listen_address</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -216,16 +207,60 @@ Friends</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">handler</td><td>the callback to invoke to process any ITCH-5.0 messages received </td></tr>
     <tr><td class="paramname">io</td><td>the Boost.ASIO IO service to register with for IO notifications </td></tr>
-    <tr><td class="paramname">receive_address</td><td>the IP address where the packets are recevied. This can be either IPv4 or IPv6, and either a unicast or multicast address. The class creates a socket of the right type. </td></tr>
-    <tr><td class="paramname">port</td><td>the UDP port where the packets are received. </td></tr>
-    <tr><td class="paramname">listen_address</td><td>if not empty, defines the network interface where the packets are received, for servers that have multiple NICs. </td></tr>
+    <tr><td class="paramname">cfg</td><td>the configuration for the UDP receiver. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00013">13</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00016">16</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+</div>
+</div>
+<a id="ada4a22e20d69c36234b7a14d8b02f332"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada4a22e20d69c36234b7a14d8b02f332">&#9670;&nbsp;</a></span>mold_udp_channel() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">jb::itch5::mold_udp_channel::mold_udp_channel </td>
+          <td>(</td>
+          <td class="paramtype">boost::asio::io_service &amp;&#160;</td>
+          <td class="paramname"><em>io</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a2db62db3c4b52d23a3bea0e6eb5edff9">buffer_handler</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor, create a socket and register for IO notifications. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td>the callback to invoke to process any ITCH-5.0 messages received </td></tr>
+    <tr><td class="paramname">io</td><td>the Boost.ASIO IO service to register with for IO notifications </td></tr>
+    <tr><td class="paramname">cfg</td><td>the configuration for the UDP receiver. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00022">22</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>
@@ -273,11 +308,11 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">32</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">40</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00025">jb::itch5::mold_udp_protocol::block_count_offset</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00107">buffer_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00096">expected_sequence_number_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00090">handler_</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acaf9b6b99962bf5c2264824231d7a40c">jb::info</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00100">message_offset_</a>, <a class="el" href="structjb_1_1itch5_1_1decoder.html#a393a87d597c91ef3516edf906f23f479">jb::itch5::decoder&lt; validate, T &gt;::r()</a>, <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>, and <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00020">jb::itch5::mold_udp_protocol::sequence_number_offset</a>.</p>
+<p class="reference">References <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00025">jb::itch5::mold_udp_protocol::block_count_offset</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00114">buffer_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00103">expected_sequence_number_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00097">handler_</a>, <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00030">jb::itch5::mold_udp_protocol::header_size</a>, <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acaf9b6b99962bf5c2264824231d7a40c">jb::info</a>, <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00107">message_offset_</a>, <a class="el" href="structjb_1_1itch5_1_1decoder.html#a393a87d597c91ef3516edf906f23f479">jb::itch5::decoder&lt; validate, T &gt;::r()</a>, <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>, and <a class="el" href="mold__udp__protocol__constants_8hpp_source.html#l00020">jb::itch5::mold_udp_protocol::sequence_number_offset</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ut__mold__udp__channel_8cpp_source.html#l00051">jb::itch5::mold_udp_channel_tester::call_with_empty_packet()</a>, <a class="el" href="ut__mold__udp__channel_8cpp_source.html#l00054">jb::itch5::mold_udp_channel_tester::call_with_error_code()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ut__mold__udp__channel_8cpp_source.html#l00082">jb::itch5::mold_udp_channel_tester::call_with_empty_packet()</a>, <a class="el" href="ut__mold__udp__channel_8cpp_source.html#l00085">jb::itch5::mold_udp_channel_tester::call_with_error_code()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>
@@ -307,11 +342,11 @@ Friends</h2></td></tr>
 <p>Refactor code to register (and reregister) for Boost.ASIO notifications. </p>
 <p>In the Boost.ASIO framework all I/O callbacks fire only once. We must reset them to get the first I/O event, and after each one. This function refactors that code into a single place. </p>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">24</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">32</a> of file <a class="el" href="mold__udp__channel_8cpp_source.html">mold_udp_channel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="mold__udp__channel_8hpp_source.html#l00107">buffer_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00103">buflen</a>, <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00110">sender_endpoint_</a>, and <a class="el" href="mold__udp__channel_8hpp_source.html#l00093">socket_</a>.</p>
+<p class="reference">References <a class="el" href="mold__udp__channel_8hpp_source.html#l00114">buffer_</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00110">buflen</a>, <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>, <a class="el" href="mold__udp__channel_8hpp_source.html#l00117">sender_endpoint_</a>, and <a class="el" href="mold__udp__channel_8hpp_source.html#l00100">socket_</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00013">mold_udp_channel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00022">mold_udp_channel()</a>.</p>
 
 </div>
 </div>
@@ -338,7 +373,7 @@ Friends</h2></td></tr>
 
 <p>Allow testing class access to the code ... </p>
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00086">86</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00093">93</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
 </div>
 </div>
@@ -363,9 +398,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00107">107</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00114">114</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>, and <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>
@@ -389,9 +424,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00103">103</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00110">110</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>
@@ -415,9 +450,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00096">96</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00103">103</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>.</p>
 
 </div>
 </div>
@@ -441,9 +476,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00090">90</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00097">97</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>.</p>
 
 </div>
 </div>
@@ -467,9 +502,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00100">100</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00107">107</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">handle_received()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00040">handle_received()</a>.</p>
 
 </div>
 </div>
@@ -493,9 +528,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00110">110</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00117">117</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>
@@ -519,9 +554,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00093">93</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mold__udp__channel_8hpp_source.html#l00100">100</a> of file <a class="el" href="mold__udp__channel_8hpp_source.html">mold_udp_channel.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00024">restart_async_receive_from()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="mold__udp__channel_8cpp_source.html#l00032">restart_async_receive_from()</a>.</p>
 
 </div>
 </div>

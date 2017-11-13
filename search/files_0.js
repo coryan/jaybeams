@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['add_5forder_5fmessage_2ecpp',['add_order_message.cpp',['../add__order__message_8cpp.html',1,'']]],
-  ['add_5forder_5fmessage_2ehpp',['add_order_message.hpp',['../add__order__message_8hpp.html',1,'']]],
+  ['acceptor_2ecpp',['acceptor.cpp',['../acceptor_8cpp.html',1,'']]],
+  ['acceptor_2ehpp',['acceptor.hpp',['../acceptor_8hpp.html',1,'']]],
+  ['add_5forder_5fmessage_2ecpp',['add_order_message.cpp',['../itch5_2add__order__message_8cpp.html',1,'(Global Namespace)'],['../pitch2_2add__order__message_8cpp.html',1,'(Global Namespace)']]],
+  ['add_5forder_5fmessage_2ehpp',['add_order_message.hpp',['../itch5_2add__order__message_8hpp.html',1,'(Global Namespace)'],['../pitch2_2add__order__message_8hpp.html',1,'(Global Namespace)']]],
   ['add_5forder_5fmpid_5fmessage_2ecpp',['add_order_mpid_message.cpp',['../add__order__mpid__message_8cpp.html',1,'']]],
   ['add_5forder_5fmpid_5fmessage_2ehpp',['add_order_mpid_message.hpp',['../add__order__mpid__message_8hpp.html',1,'']]],
   ['aligned_5fmulti_5farray_2ehpp',['aligned_multi_array.hpp',['../aligned__multi__array_8hpp.html',1,'']]],
@@ -13,5 +15,7 @@ var searchData=
   ['as_5fhhmmss_2ecpp',['as_hhmmss.cpp',['../as__hhmmss_8cpp.html',1,'']]],
   ['as_5fhhmmss_2ehpp',['as_hhmmss.hpp',['../as__hhmmss_8hpp.html',1,'']]],
   ['assert_5fthrow_2ecpp',['assert_throw.cpp',['../assert__throw_8cpp.html',1,'']]],
-  ['assert_5fthrow_2ehpp',['assert_throw.hpp',['../assert__throw_8hpp.html',1,'']]]
+  ['assert_5fthrow_2ehpp',['assert_throw.hpp',['../assert__throw_8hpp.html',1,'']]],
+  ['auction_5fupdate_5fmessage_2ecpp',['auction_update_message.cpp',['../auction__update__message_8cpp.html',1,'']]],
+  ['auction_5fupdate_5fmessage_2ehpp',['auction_update_message.hpp',['../auction__update__message_8hpp.html',1,'']]]
 ];

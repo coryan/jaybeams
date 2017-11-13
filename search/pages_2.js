@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['jaybeams_20doxygen_20documentation',['JayBeams Doxygen Documentation',['../index.html',1,'']]],
-  ['jaybeams_20style_20guide_20and_20coding_20standards',['JayBeams Style Guide and Coding Standards',['../md_doc_style_guide.html',1,'']]],
-  ['jaybeams_20tools',['JayBeams Tools',['../md_tools_README.html',1,'']]]
+  ['itch_2d5_2e0_20messages',['ITCH-5.0 Messages',['../itch50page.html',1,'']]],
+  ['itch_2d5_2e0_3a_20confused_20about_20securities_2c_20symbols_2c_20and_20tickers',['ITCH-5.0: Confused about Securities, Symbols, and Tickers',['../securities-vs-symbols.html',1,'']]]
 ];

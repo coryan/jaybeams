@@ -70,7 +70,7 @@ $(function() {
 
 <h3><a id="index_e"></a>- e -</h3><ul>
 <li>effective_workgroup_size_
-: <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#a4ef1c4158491bd14975f56fbd5b2bcb4">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+: <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#af54d993e9971c2f73806683eaa41453b">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 <li>element_type
 : <a class="el" href="namespacejb_1_1detail.html#a38f290c63aee93a9434b4399177d0192">jb::detail::array_traits&lt; container_type &gt;</a>
@@ -93,6 +93,9 @@ $(function() {
 <li>enable_file_logging
 : <a class="el" href="classjb_1_1log_1_1config.html#a23de33a08f412a865cbe0d19177698c6">jb::log::config</a>
 </li>
+<li>enable_loopback
+: <a class="el" href="classjb_1_1itch5_1_1udp__sender__config.html#a24842ccca824927696d2a80d2615ccdd">jb::itch5::udp_sender_config</a>
+</li>
 <li>encode()
 : <a class="el" href="structYAML_1_1convert_3_01jb_1_1cpu__set_01_4.html#ae6f147056708c3a4e63b3c9e7523a7bb">YAML::convert&lt; jb::cpu_set &gt;</a>
 , <a class="el" href="structYAML_1_1convert_3_01jb_1_1severity__level_01_4.html#aed733abd665b6c2d6ddffa97b8058c13">YAML::convert&lt; jb::severity_level &gt;</a>
@@ -101,7 +104,7 @@ $(function() {
 : <a class="el" href="classjb_1_1event__rate__estimator.html#ae79e32c2474047a2d003d8884207bb8c">jb::event_rate_estimator&lt; duration_t, counter_t &gt;</a>
 </li>
 <li>enqueue()
-: <a class="el" href="classjb_1_1clfft_1_1plan.html#a4da81382f97d54598ad4e9b0d5b8ff61">jb::clfft::plan&lt; invector, outvector &gt;</a>
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#ac9607da3db18a57c0326b9d9229b36b8">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>error_
 : <a class="el" href="classjb_1_1clfft_1_1clfft__error.html#a6f2ea9709d0de398667b003ed5adc354">jb::clfft::clfft_error</a>
@@ -137,20 +140,31 @@ $(function() {
 <li>event_rate_histogram()
 : <a class="el" href="classjb_1_1event__rate__histogram.html#aedc6a5e584843a4685bfed4177bcb9af">jb::event_rate_histogram&lt; duration_type, counter_type, rate_counter_type &gt;</a>
 </li>
+<li>exchange_ts
+: <a class="el" href="structjb_1_1mktdata_1_1inside__levels__update.html#a9944365619374579e171a7bd86eed308">jb::mktdata::inside_levels_update&lt; N &gt;</a>
+</li>
 <li>execute()
 : <a class="el" href="classjb_1_1fftw_1_1plan.html#a8c298f1baf3fd0966a8f25cc90892be9">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
-, <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#a5134e627c5b3254459ae79933d71ffe2">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+, <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#a734911addf2818bb4c1d3248ddc2495c">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 <li>execute_impl()
 : <a class="el" href="classjb_1_1fftw_1_1plan.html#ad73d41aea5678546920d347b75a002e1">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>execute_plan()
 : <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a54d6f982ecf9e80b299080a5f0c9986a">jb::fftw::traits&lt; double &gt;</a>
-, <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#ad56e30ace3fb33c4e6ac1fbc800c4882">jb::fftw::traits&lt; float &gt;</a>
-, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aaf78b6679c841d4b13672b4c36f626db">jb::fftw::traits&lt; long double &gt;</a>
+, <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#af845fa2c7935565ebfdc3f3c34d30f94">jb::fftw::traits&lt; float &gt;</a>
+, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#abf240a42cbe4bf8c72be68ae3e9e45da">jb::fftw::traits&lt; long double &gt;</a>
+</li>
+<li>executed_quantity
+: <a class="el" href="structjb_1_1pitch2_1_1order__executed__message.html#abb1249822da8a1771e424b58184023cd">jb::pitch2::order_executed_message</a>
+, <a class="el" href="structjb_1_1pitch2_1_1order__executed__price__message.html#a75da12a6fa0748009eaf3eb103ddee86">jb::pitch2::order_executed_price_message</a>
 </li>
 <li>executed_shares
 : <a class="el" href="structjb_1_1itch5_1_1order__executed__message.html#ae64415a17948f0d9b3d06218b8b3410c">jb::itch5::order_executed_message</a>
+</li>
+<li>execution_id
+: <a class="el" href="structjb_1_1pitch2_1_1order__executed__message.html#ad072ed4f958dc26e31a361764692f864">jb::pitch2::order_executed_message</a>
+, <a class="el" href="structjb_1_1pitch2_1_1order__executed__price__message.html#a427566806bd8b5f42f239b096d04556d">jb::pitch2::order_executed_price_message</a>
 </li>
 <li>execution_price
 : <a class="el" href="structjb_1_1itch5_1_1order__executed__price__message.html#ac79121ef52d040221decb9a469641d6c">jb::itch5::order_executed_price_message</a>
@@ -165,7 +179,7 @@ $(function() {
 : <a class="el" href="classjb_1_1itch5_1_1mold__udp__channel.html#a238bbcc88c830668a1d28e9721ceb042">jb::itch5::mold_udp_channel</a>
 </li>
 <li>explicit_cuts_binning()
-: <a class="el" href="classjb_1_1explicit__cuts__binning.html#a01485901f689ee957063548d88ea4ddc">jb::explicit_cuts_binning&lt; sample_type_t &gt;</a>
+: <a class="el" href="classjb_1_1explicit__cuts__binning.html#a71320fc108c2850324165dcfd2d5464b">jb::explicit_cuts_binning&lt; sample_type_t &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

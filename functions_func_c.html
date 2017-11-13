@@ -88,7 +88,8 @@ $(function() {
 : <a class="el" href="classjb_1_1testing_1_1has__resize.html#a2e1a8fe0c4d98586a379d27e34ddb48b">jb::testing::has_resize&lt; C &gt;</a>
 </li>
 <li>check_constraints()
-: <a class="el" href="structjb_1_1fftw_1_1plan_1_1check__constraints.html#a4d9eb591df174c8e6f84b112733f1b30">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;::check_constraints</a>
+: <a class="el" href="structjb_1_1clfft_1_1plan_1_1check__constraints.html#aefec83cb61701a7ee892be818288aa21">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::check_constraints</a>
+, <a class="el" href="structjb_1_1fftw_1_1plan_1_1check__constraints.html#a4d9eb591df174c8e6f84b112733f1b30">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;::check_constraints</a>
 , <a class="el" href="structjb_1_1histogram_1_1check__constraints.html#aaf3337374ad4282cab047a4f6203e188">jb::histogram&lt; binning_strategy_t, counter_type_t &gt;::check_constraints</a>
 </li>
 <li>check_range()
@@ -98,7 +99,7 @@ $(function() {
 : <a class="el" href="classjb_1_1config__object_1_1attribute__base.html#a131a924cee9c27d73d4f43a4d3f54189">jb::config_object::attribute_base</a>
 </li>
 <li>clear()
-: <a class="el" href="classjb_1_1cpu__set.html#abe43f0c4d96521e77dbba5a6187a3d58">jb::cpu_set</a>
+: <a class="el" href="classjb_1_1cpu__set.html#a79290316f416179c3300aa530a9cd946">jb::cpu_set</a>
 </li>
 <li>clfft_error()
 : <a class="el" href="classjb_1_1clfft_1_1clfft__error.html#ab704f2bb28cc37cca5a2bcb2d55106e3">jb::clfft::clfft_error</a>
@@ -110,8 +111,7 @@ $(function() {
 : <a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer.html#af958458f9aff844473b2a3a7f25842fe">jb::itch5::mold_udp_pacer&lt; clock_type &gt;</a>
 </li>
 <li>combine_body()
-: <a class="el" href="classjb_1_1tde_1_1reduce__sum.html#a0972d24d86eebde5ae94af16f204cc29">jb::tde::reduce_sum&lt; T &gt;</a>
-, <a class="el" href="classjb_1_1tde_1_1reducer__concept.html#a51e228b92c66d8c517e597bb58cc9845">jb::tde::reducer_concept</a>
+: <a class="el" href="classjb_1_1opencl_1_1reducer__concept.html#a849605f777211144fbf92b31a07a39ba">jb::opencl::reducer_concept</a>
 </li>
 <li>compute_book()
 : <a class="el" href="classjb_1_1itch5_1_1compute__book.html#acb022b434081c4220d26f180a754c09d">jb::itch5::compute_book&lt; book_type &gt;</a>
@@ -141,13 +141,20 @@ $(function() {
 , <a class="el" href="classjb_1_1itch5_1_1array__based__order__book_1_1config.html#ae6b130f4c52614c7ed41d91f43deb984">jb::itch5::array_based_order_book::config</a>
 , <a class="el" href="classjb_1_1itch5_1_1map__based__order__book_1_1config.html#a6bed50ab8f91194441c359fc19837741">jb::itch5::map_based_order_book::config</a>
 , <a class="el" href="classjb_1_1itch5_1_1mold__udp__pacer__config.html#a6a2e62b92b1248386b7d2713e0cc7e1f">jb::itch5::mold_udp_pacer_config</a>
+, <a class="el" href="classjb_1_1itch5_1_1udp__config__common.html#afb024cc1c21bdaa44203f535b2765111">jb::itch5::udp_config_common</a>
+, <a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html#aa04db81a11221708e62b5d91aa6ed0b6">jb::itch5::udp_receiver_config</a>
+, <a class="el" href="classjb_1_1itch5_1_1udp__sender__config.html#a3f2a5768deefe6ca909f05fe06cb239c">jb::itch5::udp_sender_config</a>
 , <a class="el" href="classjb_1_1log_1_1config.html#aa933b513c180eeb9691cf4c16bf17e0a">jb::log::config</a>
 , <a class="el" href="classjb_1_1offline__feed__statistics_1_1config.html#aa3ed648b8719775fe9d3137365f0c4b4">jb::offline_feed_statistics::config</a>
 , <a class="el" href="classjb_1_1opencl_1_1config.html#a3a245d583c21f4718ac9b31bc1787d63">jb::opencl::config</a>
+, <a class="el" href="classjb_1_1opencl_1_1microbenchmark__config.html#a2355dfa86f0ad7eac38e1b6cd4207423">jb::opencl::microbenchmark_config</a>
 , <a class="el" href="classjb_1_1testing_1_1microbenchmark__config.html#ac3f8daf5eab9536a338c3fc0950ecb4d">jb::testing::microbenchmark_config</a>
 , <a class="el" href="classjb_1_1thread__config.html#a87468589fc7e0c24d776875e260a52fb">jb::thread_config</a>
 , <a class="el" href="classthread__config.html#a8effaf792ec2b4b29dbc4fa714d221e9">thread_config</a>
 , <a class="el" href="classworker__config.html#ac0e633f7f4e10cb3173f3375bfa3a343">worker_config</a>
+</li>
+<li>connection()
+: <a class="el" href="classjb_1_1ehs_1_1connection.html#ab178f303388c8a977ec1e7581f52469b">jb::ehs::connection</a>
 </li>
 <li>construct()
 : <a class="el" href="classjb_1_1fftw_1_1allocator.html#a231af995532c25e4e223549de1d1833c">jb::fftw::allocator&lt; T &gt;</a>
@@ -158,14 +165,59 @@ $(function() {
 , <a class="el" href="classjb_1_1itch5_1_1map__based__book__side.html#ae49bd7fbeea3d8471ed137441f3afed7">jb::itch5::map_based_book_side&lt; compare_t &gt;</a>
 , <a class="el" href="classjb_1_1itch5_1_1unknown__message.html#aa844213def382040841e61fbedc061e7">jb::itch5::unknown_message</a>
 </li>
+<li>count_accept_closed()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a976f03f7b15e5af8e32a238d95c4b177">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_accept_error()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a127dde39e0571ab9934f82fb6f1943a2">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_accept_ok()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a661ee60be26c4a74b0ef2161cd52d87d">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_close_connection()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a77adabf9f0bde95d07e736b3cb900c68">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_open_connection()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#ad1357b49aeee9f6262aa1a21f80bd7d4">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_read_error()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a40cdd04ca7da453bef0a698fae202910">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_read_ok()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a65e4f4c19162e5f960032e72fd344cb4">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_100()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a2aa3813ff84857dd6c7a2469f93315ae">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_200()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a19b6d72885749af3f9ce33b493661f22">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_300()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#aff074a0039c27572a31071e8cb6dad79">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_400()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a0eafcceee26591e570227228b84af248">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_500()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a802c5be233e329fa84f4b3c402f326b7">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_error()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a3010d08a4109e6423e16369c2fa66dfa">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_invalid()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a332196d4af53af9d280d2147cef8b102">jb::ehs::request_dispatcher</a>
+</li>
+<li>count_write_ok()
+: <a class="el" href="classjb_1_1ehs_1_1request__dispatcher.html#a4a3e0e8a3948fbaf650d05c3733cd9e5">jb::ehs::request_dispatcher</a>
+</li>
 <li>cpu_set()
 : <a class="el" href="classjb_1_1cpu__set.html#a4cb4fde8225554456d034dde49a09d32">jb::cpu_set</a>
 </li>
 <li>create_backward_impl()
-: <a class="el" href="classjb_1_1fftw_1_1plan.html#ad564d27f58ef0771b82b5bc6746c33ea">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+: <a class="el" href="classjb_1_1fftw_1_1plan.html#a8af3e4df04be46d3101d98b8e0db3ba6">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>create_backward_many_impl()
-: <a class="el" href="classjb_1_1fftw_1_1plan.html#a6285317f4548ffeddc773f8e25776abb">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+: <a class="el" href="classjb_1_1fftw_1_1plan.html#aa4b7d92e4ed25cf323fa618f5eaba1ab">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>create_backward_plan()
 : <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a2159fb259b119760f21d39eea6f4ffa9">jb::fftw::traits&lt; double &gt;</a>
@@ -188,32 +240,26 @@ $(function() {
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#a36c96166de1acf1edc8b63389fe08a2f">jb::fftw::traits&lt; float &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aae9ea2024d6c0b90c050ffbbd347ec47">jb::fftw::traits&lt; long double &gt;</a>
 </li>
-<li>create_forward_plan_1d()
-: <a class="el" href="classjb_1_1clfft_1_1plan.html#aa87aa538f16c71e9b8b12af20fc1bfe4">jb::clfft::plan&lt; invector, outvector &gt;</a>
-</li>
 <li>create_forward_plan_many()
 : <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a5e060d37883890dbf6e1ffb843f0e876">jb::fftw::traits&lt; double &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#a3e6c352e9671d5e966f33cd4561ae2c6">jb::fftw::traits&lt; float &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#afa1e8163edd3607ef021f2b3d0b23b23">jb::fftw::traits&lt; long double &gt;</a>
 </li>
-<li>create_inverse_plan_1d()
-: <a class="el" href="classjb_1_1clfft_1_1plan.html#ac3d11fda7242037f69bdaee1e5f764a2">jb::clfft::plan&lt; invector, outvector &gt;</a>
-</li>
 <li>create_plan()
 : <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#ad49ccc2f52e57a92671aa2fbba8422f8">jb::fftw::traits&lt; double &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#a3c184cbba940a78ed8a502075bd08037">jb::fftw::traits&lt; float &gt;</a>
-, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aac56061563697d01956af5b9599d5d75">jb::fftw::traits&lt; long double &gt;</a>
+, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a902e3301c7150ff0980ed1483789d7ee">jb::fftw::traits&lt; long double &gt;</a>
 </li>
 <li>create_plan_1d_impl()
-: <a class="el" href="classjb_1_1clfft_1_1plan.html#a25dd3eeb35d46751245b4d3c71307782">jb::clfft::plan&lt; invector, outvector &gt;</a>
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#afae8203515142390204d20734a579543">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>create_plan_many()
 : <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a442a2bc63f4bc7454ec07b3058699172">jb::fftw::traits&lt; double &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#aa26b8372a9b6768d931ede27a8a11437">jb::fftw::traits&lt; float &gt;</a>
-, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#a9413152e411cb2fcbf4ccb01a8728dbf">jb::fftw::traits&lt; long double &gt;</a>
+, <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#adcb93a719ac7661b3d1ef2eb1cbd37ee">jb::fftw::traits&lt; long double &gt;</a>
 </li>
 <li>create_program()
-: <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#ae8862df3924fa5adbeaf28b47b2686c3">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+: <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#a0bd16163ae1142b450f9e95b74e884c2">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

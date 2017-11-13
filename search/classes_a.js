@@ -1,6 +1,25 @@
 var searchData=
 [
-  ['net_5forder_5fimbalance_5findicator_5fmessage',['net_order_imbalance_indicator_message',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html',1,'jb::itch5']]],
-  ['noop_5fvalidator',['noop_validator',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]],
-  ['noop_5fvalidator_3c_20char_20const_20_2a_3e',['noop_validator&lt; char const *&gt;',['../structjb_1_1itch5_1_1noop__validator.html',1,'jb::itch5']]]
+  ['map_5fbased_5fbook_5fside',['map_based_book_side',['../classjb_1_1itch5_1_1map__based__book__side.html',1,'jb::itch5']]],
+  ['map_5fbased_5forder_5fbook',['map_based_order_book',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1map__based__order__book',1,'jb::itch5']]],
+  ['market_5fid',['market_id',['../structjb_1_1mktdata_1_1market__id.html',1,'jb::mktdata']]],
+  ['market_5fparticipant_5fposition_5fmessage',['market_participant_position_message',['../structjb_1_1itch5_1_1market__participant__position__message.html',1,'jb::itch5']]],
+  ['message_5fhandler_5fconcept',['message_handler_concept',['../classjb_1_1itch5_1_1message__handler__concept.html',1,'jb::itch5']]],
+  ['message_5fheader',['message_header',['../namespacejb_1_1itch5.html#structjb_1_1itch5_1_1message__header',1,'jb::itch5']]],
+  ['microbenchmark',['microbenchmark',['../classjb_1_1testing_1_1microbenchmark.html',1,'jb::testing']]],
+  ['microbenchmark_5fbase',['microbenchmark_base',['../classjb_1_1testing_1_1microbenchmark__base.html',1,'jb::testing']]],
+  ['microbenchmark_5fconfig',['microbenchmark_config',['../classjb_1_1opencl_1_1microbenchmark__config.html',1,'jb::opencl::microbenchmark_config'],['../classjb_1_1testing_1_1microbenchmark__config.html',1,'jb::testing::microbenchmark_config']]],
+  ['mock_5fbook_5fcallback',['mock_book_callback',['../structjb_1_1itch5_1_1testing_1_1mock__book__callback.html',1,'jb::itch5::testing']]],
+  ['mock_5fudp_5fsocket',['mock_udp_socket',['../structjb_1_1itch5_1_1testing_1_1mock__udp__socket.html',1,'jb::itch5::testing']]],
+  ['modify_5flong_5fmessage',['modify_long_message',['../structjb_1_1pitch2_1_1modify__long__message.html',1,'jb::pitch2']]],
+  ['modify_5fmessage',['modify_message',['../namespacejb_1_1pitch2.html#structjb_1_1pitch2_1_1modify__message',1,'jb::pitch2']]],
+  ['modify_5fmessage_3c_20boost_3a_3aendian_3a_3alittle_5fuint16_5fbuf_5ft_2c_20boost_3a_3aendian_3a_3alittle_5fuint16_5fbuf_5ft_20_3e',['modify_message&lt; boost::endian::little_uint16_buf_t, boost::endian::little_uint16_buf_t &gt;',['../namespacejb_1_1pitch2.html',1,'jb::pitch2']]],
+  ['modify_5fmessage_3c_20boost_3a_3aendian_3a_3alittle_5fuint32_5fbuf_5ft_2c_20boost_3a_3aendian_3a_3alittle_5fuint64_5fbuf_5ft_20_3e',['modify_message&lt; boost::endian::little_uint32_buf_t, boost::endian::little_uint64_buf_t &gt;',['../namespacejb_1_1pitch2.html',1,'jb::pitch2']]],
+  ['modify_5fshort_5fmessage',['modify_short_message',['../structjb_1_1pitch2_1_1modify__short__message.html',1,'jb::pitch2']]],
+  ['mold_5fudp_5fchannel',['mold_udp_channel',['../classjb_1_1itch5_1_1mold__udp__channel.html',1,'jb::itch5']]],
+  ['mold_5fudp_5fchannel_5ftester',['mold_udp_channel_tester',['../structjb_1_1itch5_1_1mold__udp__channel__tester.html',1,'jb::itch5']]],
+  ['mold_5fudp_5fpacer',['mold_udp_pacer',['../classjb_1_1itch5_1_1mold__udp__pacer.html',1,'jb::itch5']]],
+  ['mold_5fudp_5fpacer_5fconfig',['mold_udp_pacer_config',['../classjb_1_1itch5_1_1mold__udp__pacer__config.html',1,'jb::itch5']]],
+  ['mwcb_5fbreach_5fmessage',['mwcb_breach_message',['../structjb_1_1itch5_1_1mwcb__breach__message.html',1,'jb::itch5']]],
+  ['mwcb_5fdecline_5flevel_5fmessage',['mwcb_decline_level_message',['../structjb_1_1itch5_1_1mwcb__decline__level__message.html',1,'jb::itch5']]]
 ];

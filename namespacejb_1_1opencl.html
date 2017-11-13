@@ -73,7 +73,8 @@ $(function() {
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">jb::opencl Namespace Reference</div>  </div>
 </div><!--header-->
@@ -94,6 +95,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1opencl_1_1config.html">config</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure the OpenCL device / context options.  <a href="classjb_1_1opencl_1_1config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1opencl_1_1generic__reduce.html">generic_reduce</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement a generic reducer for OpenCL.  <a href="classjb_1_1opencl_1_1generic__reduce.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1opencl_1_1microbenchmark__config.html">microbenchmark_config</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The configuration shared by all OpenCL microbenchmarks.  <a href="classjb_1_1opencl_1_1microbenchmark__config.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1opencl_1_1reducer__concept.html">reducer_concept</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The interface for reducers assumed by jb::opencl::generic_reducer.  <a href="classjb_1_1opencl_1_1reducer__concept.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -109,16 +119,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ac920eef64e579e027e09c1d2746595f0"><td class="memItemLeft" align="right" valign="top">boost::compute::program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1opencl.html#ac920eef64e579e027e09c1d2746595f0">build_simple_program</a> (boost::compute::context context, boost::compute::device device, std::istream &amp;code)</td></tr>
 <tr class="memdesc:ac920eef64e579e027e09c1d2746595f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience function to build a simple program and return it.  <a href="#ac920eef64e579e027e09c1d2746595f0">More...</a><br /></td></tr>
 <tr class="separator:ac920eef64e579e027e09c1d2746595f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64c8da5bbf788a39cec0125bbe6246f2"><td class="memTemplParams" colspan="2">template&lt;class DeviceIterator , class HostIterator &gt; </td></tr>
-<tr class="memitem:a64c8da5bbf788a39cec0125bbe6246f2"><td class="memTemplItemLeft" align="right" valign="top">boost::compute::future&lt; HostIterator &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1opencl.html#a64c8da5bbf788a39cec0125bbe6246f2">copy_to_host_async</a> (DeviceIterator first, DeviceIterator last, HostIterator result, boost::compute::command_queue &amp;queue, boost::compute::wait_list const &amp;wait=boost::compute::wait_list())</td></tr>
-<tr class="memdesc:a64c8da5bbf788a39cec0125bbe6246f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a device buffer to the host asynchronously.  <a href="#a64c8da5bbf788a39cec0125bbe6246f2">More...</a><br /></td></tr>
-<tr class="separator:a64c8da5bbf788a39cec0125bbe6246f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a719035c163e035df6504f50a67bf7773"><td class="memItemLeft" align="right" valign="top">boost::compute::device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1opencl.html#a719035c163e035df6504f50a67bf7773">device_selector</a> (<a class="el" href="classjb_1_1opencl_1_1config.html">config</a> const &amp;cfg)</td></tr>
 <tr class="memdesc:a719035c163e035df6504f50a67bf7773"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select an OpenCL device matching the current configuration.  <a href="#a719035c163e035df6504f50a67bf7773">More...</a><br /></td></tr>
 <tr class="separator:a719035c163e035df6504f50a67bf7773"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed518f64d8fc5487983975e34bca5633"><td class="memItemLeft" align="right" valign="top">boost::compute::device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1opencl.html#aed518f64d8fc5487983975e34bca5633">device_selector</a> ()</td></tr>
 <tr class="memdesc:aed518f64d8fc5487983975e34bca5633"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the default OpenCL device.  <a href="#aed518f64d8fc5487983975e34bca5633">More...</a><br /></td></tr>
 <tr class="separator:aed518f64d8fc5487983975e34bca5633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a31f6a7af9f1f8c4316eab5727eeabbe0"><td class="memItemLeft" align="right" valign="top">char const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1opencl.html#a31f6a7af9f1f8c4316eab5727eeabbe0">generic_reduce_program_source</a> []</td></tr>
+<tr class="memdesc:a31f6a7af9f1f8c4316eab5727eeabbe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the code for the kernels used in computing the argmax.  <a href="#a31f6a7af9f1f8c4316eab5727eeabbe0">More...</a><br /></td></tr>
+<tr class="separator:a31f6a7af9f1f8c4316eab5727eeabbe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrappers for the OpenCL library. </p>
@@ -257,7 +269,7 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="namespacejb.html#a8c91d72478d03f9b72486db893bf4603acb5e100e5a9a3e7f6d1fd97512215282">jb::error</a>, and <a class="el" href="log_8hpp_source.html#l00070">JB_LOG</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ut__build__simple__kernel_8cpp_source.html#l00074">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="build__simple__kernel_8cpp_source.html#l00006">build_simple_kernel()</a>, and <a class="el" href="build__simple__kernel_8cpp_source.html#l00038">build_simple_program()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ut__build__simple__kernel_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="build__simple__kernel_8cpp_source.html#l00006">build_simple_kernel()</a>, and <a class="el" href="build__simple__kernel_8cpp_source.html#l00037">build_simple_program()</a>.</p>
 
 </div>
 </div>
@@ -295,88 +307,9 @@ Functions</h2></td></tr>
 
 <p>Convenience function to build a simple program and return it. </p>
 
-<p class="definition">Definition at line <a class="el" href="build__simple__kernel_8cpp_source.html#l00038">38</a> of file <a class="el" href="build__simple__kernel_8cpp_source.html">build_simple_kernel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="build__simple__kernel_8cpp_source.html#l00037">37</a> of file <a class="el" href="build__simple__kernel_8cpp_source.html">build_simple_kernel.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="build__simple__kernel_8cpp_source.html#l00020">build_simple_program()</a>.</p>
-
-</div>
-</div>
-<a id="a64c8da5bbf788a39cec0125bbe6246f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64c8da5bbf788a39cec0125bbe6246f2">&#9670;&nbsp;</a></span>copy_to_host_async()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class DeviceIterator , class HostIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boost::compute::future&lt;HostIterator&gt; jb::opencl::copy_to_host_async </td>
-          <td>(</td>
-          <td class="paramtype">DeviceIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DeviceIterator&#160;</td>
-          <td class="paramname"><em>last</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">HostIterator&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
-          <td class="paramname"><em>queue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::wait_list const &amp;&#160;</td>
-          <td class="paramname"><em>wait</em> = <code>boost::compute::wait_list()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Copy a device buffer to the host asynchronously. </p>
-<p>Copies the range [<em>first</em>, <em>last</em>) from the device to the host, storing the results at <em>result</em>. The copy is started after all the events in <em>wait</em> have completed. The function returns a future object so you can wait for the copy to complete, and chain other operations.</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">DeviceIterator</td><td>the iterator type for the container on the device </td></tr>
-    <tr><td class="paramname">HostIterator</td><td>the iterator type for the container on the host </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">first</td><td>the beginning of the range to copy </td></tr>
-    <tr><td class="paramname">last</td><td>the end of the range to copy </td></tr>
-    <tr><td class="paramname">result</td><td>the beginning of the range to store the copy </td></tr>
-    <tr><td class="paramname">queue</td><td>command queue to perform the operation </td></tr>
-    <tr><td class="paramname">wait</td><td>a list of events (potentially empty) to wait for before starting the copy </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A Future, once fulfilled it points to the end of the result range. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="copy__to__host__async_8hpp_source.html#l00031">31</a> of file <a class="el" href="copy__to__host__async_8hpp_source.html">copy_to_host_async.hpp</a>.</p>
 
 </div>
 </div>
@@ -398,11 +331,11 @@ template&lt;class DeviceIterator , class HostIterator &gt; </div>
 
 <p>Select an OpenCL device matching the current configuration. </p>
 
-<p class="definition">Definition at line <a class="el" href="device__selector_8cpp_source.html#l00006">6</a> of file <a class="el" href="device__selector_8cpp_source.html">device_selector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="device__selector_8cpp_source.html#l00024">24</a> of file <a class="el" href="device__selector_8cpp_source.html">device_selector.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="device__selector_8hpp_source.html#l00026">jb::opencl::detail::best_device()</a>, and <a class="el" href="config_8hpp_source.html#l00017">jb::opencl::config::device_name</a>.</p>
+<p class="reference">References <a class="el" href="namespacejb_1_1opencl_1_1defaults.html#a91290d4492dcada3a89890212af8ffee">jb::opencl::defaults::device_name()</a>, and <a class="el" href="config_8hpp_source.html#l00017">jb::opencl::config::device_name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ut__build__simple__kernel_8cpp_source.html#l00042">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="ut__generic__reduce_8cpp_source.html#l00041">jb::tde::reduce_sum&lt; T &gt;::combine_body()</a>, <a class="el" href="device__selector_8cpp_source.html#l00025">device_selector()</a>, and <a class="el" href="show__device_8cpp_source.html#l00006">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft__plan__ut_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="device__selector_8cpp_source.html#l00035">device_selector()</a>, and <a class="el" href="bm__single__fft_8cpp_source.html#l00019">main()</a>.</p>
 
 </div>
 </div>
@@ -423,9 +356,28 @@ template&lt;class DeviceIterator , class HostIterator &gt; </div>
 
 <p>Return the default OpenCL device. </p>
 
-<p class="definition">Definition at line <a class="el" href="device__selector_8cpp_source.html#l00025">25</a> of file <a class="el" href="device__selector_8cpp_source.html">device_selector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="device__selector_8cpp_source.html#l00035">35</a> of file <a class="el" href="device__selector_8cpp_source.html">device_selector.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="device__selector_8cpp_source.html#l00006">device_selector()</a>.</p>
+<p class="reference">References <a class="el" href="device__selector_8cpp_source.html#l00024">device_selector()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a31f6a7af9f1f8c4316eab5727eeabbe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31f6a7af9f1f8c4316eab5727eeabbe0">&#9670;&nbsp;</a></span>generic_reduce_program_source</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char const jb::opencl::generic_reduce_program_source[]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Contains the code for the kernels used in computing the argmax. </p>
+
+<p class="reference">Referenced by <a class="el" href="generic__reduce_8hpp_source.html#l00238">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;::create_program()</a>.</p>
 
 </div>
 </div>

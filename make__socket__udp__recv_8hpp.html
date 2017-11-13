@@ -77,7 +77,9 @@ $(function() {
 <div class="title">make_socket_udp_recv.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/asio/ip/multicast.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="make__socket__udp__common_8hpp_source.html">jb/itch5/make_socket_udp_common.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="udp__receiver__config_8hpp_source.html">jb/itch5/udp_receiver_config.hpp</a>&gt;</code><br />
+<code>#include &lt;boost/asio/ip/multicast.hpp&gt;</code><br />
 <code>#include &lt;boost/asio/ip/udp.hpp&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 </div>
@@ -91,13 +93,19 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacejb_1_1itch5"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html">jb::itch5</a></td></tr>
 <tr class="memdesc:namespacejb_1_1itch5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains classes and functions to parse NASDAQ ITCH-5.0 messages, more information about ITCH-5.0 can be found at: <a href="http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf">http://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf</a>. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacejb_1_1itch5_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html">jb::itch5::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a223b933edfb9e14e14cba1eb24842c39"><td class="memTemplParams" colspan="2">template&lt;class socket_t  = boost::asio::ip::udp::socket&gt; </td></tr>
-<tr class="memitem:a223b933edfb9e14e14cba1eb24842c39"><td class="memTemplItemLeft" align="right" valign="top">socket_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a223b933edfb9e14e14cba1eb24842c39">jb::itch5::make_socket_udp_recv</a> (boost::asio::io_service &amp;io, std::string const &amp;receive_address, int port, std::string const &amp;listen_address)</td></tr>
-<tr class="memdesc:a223b933edfb9e14e14cba1eb24842c39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a socket given the configuration parameters.  <a href="namespacejb_1_1itch5.html#a223b933edfb9e14e14cba1eb24842c39">More...</a><br /></td></tr>
-<tr class="separator:a223b933edfb9e14e14cba1eb24842c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e975501daa42a8c08b43aa813aff691"><td class="memTemplParams" colspan="2">template&lt;class socket_t &gt; </td></tr>
+<tr class="memitem:a6e975501daa42a8c08b43aa813aff691"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#a6e975501daa42a8c08b43aa813aff691">jb::itch5::detail::setup_socket_udp_recv</a> (socket_t &amp;socket, udp_receiver_config const &amp;cfg)</td></tr>
+<tr class="memdesc:a6e975501daa42a8c08b43aa813aff691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure a socket to receive UDP packets.  <a href="namespacejb_1_1itch5_1_1detail.html#a6e975501daa42a8c08b43aa813aff691">More...</a><br /></td></tr>
+<tr class="separator:a6e975501daa42a8c08b43aa813aff691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8d4396f9afca43c976ccd10f9492e5"><td class="memTemplParams" colspan="2">template&lt;class socket_t  = boost::asio::ip::udp::socket&gt; </td></tr>
+<tr class="memitem:a6a8d4396f9afca43c976ccd10f9492e5"><td class="memTemplItemLeft" align="right" valign="top">socket_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5.html#a6a8d4396f9afca43c976ccd10f9492e5">jb::itch5::make_socket_udp_recv</a> (boost::asio::io_service &amp;io, udp_receiver_config const &amp;cfg)</td></tr>
+<tr class="memdesc:a6a8d4396f9afca43c976ccd10f9492e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a socket given the configuration parameters.  <a href="namespacejb_1_1itch5.html#a6a8d4396f9afca43c976ccd10f9492e5">More...</a><br /></td></tr>
+<tr class="separator:a6a8d4396f9afca43c976ccd10f9492e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

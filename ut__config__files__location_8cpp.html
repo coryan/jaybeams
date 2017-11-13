@@ -71,20 +71,30 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ut_config_files_location.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="config__files__location_8hpp_source.html">jb/config_files_location.hpp</a>&gt;</code><br />
-<code>#include &lt;skye/mock_function.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="gmock_2init_8hpp_source.html">jb/gmock/init.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="config__files__location_8hpp_source.html">jb/config_files_location.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/filesystem/operations.hpp&gt;</code><br />
 <code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
 </div>
 <p><a href="ut__config__files__location_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceboost"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost.html">boost</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceboost_1_1filesystem"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1filesystem.html">boost::filesystem</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:af2de5c1780ba543f846da38f084254c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1filesystem.html#af2de5c1780ba543f846da38f084254c2">boost::filesystem::PrintTo</a> (path const &amp;p, ::std::ostream *os)</td></tr>
+<tr class="separator:af2de5c1780ba543f846da38f084254c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ba03215f518ab2854c48976eb033087"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__files__location_8cpp.html#a3ba03215f518ab2854c48976eb033087">BOOST_AUTO_TEST_CASE</a> (config_files_location_constructors)</td></tr>
 <tr class="separator:a3ba03215f518ab2854c48976eb033087"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42559de00765521f7527fece34bb017a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__config__files__location_8cpp.html#a42559de00765521f7527fece34bb017a">BOOST_AUTO_TEST_CASE</a> (config_files_location_program_root)</td></tr>
@@ -118,9 +128,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000265">Test:</a></b></dt><dd>Verify that the common constructors compile.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000293">Test:</a></b></dt><dd>Verify that the common constructors compile.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00071">71</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00040">40</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 </div>
 </div>
@@ -139,9 +149,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000266">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works as expected.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000294">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works as expected.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00102">102</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00123">123</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -162,9 +172,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000267">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works without a program root.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000295">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works without a program root.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00128">128</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00144">144</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -185,9 +195,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000268">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works with some variables undefined.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000296">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works with some variables undefined.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00152">152</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00165">165</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -208,9 +218,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000269">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works with some variables undefined.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000297">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works with some variables undefined.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00177">177</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00186">186</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -231,11 +241,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000270">Test:</a></b></dt><dd>Verify that a simple config with a valid path for the binary works.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000298">Test:</a></b></dt><dd>Verify that a simple config with a valid path for the binary works.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00201">201</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00206">206</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00081">jb::bindir()</a>, and <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
+<p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00082">jb::bindir()</a>, and <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
 </div>
 </div>
@@ -254,9 +264,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000271">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works when the program is not path.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000299">Test:</a></b></dt><dd>Verify that a simple config_files_locations&lt;&gt; works when the program is not path.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00230">230</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00231">231</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
@@ -277,11 +287,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000272">Test:</a></b></dt><dd>Verify that the search algorithm works as expected.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000300">Test:</a></b></dt><dd>Verify that the search algorithm works as expected.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00251">251</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__config__files__location_8cpp_source.html#l00249">249</a> of file <a class="el" href="ut__config__files__location_8cpp_source.html">ut_config_files_location.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00081">jb::bindir()</a>, and <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
+<p class="reference">References <a class="el" href="config__files__location_8cpp_source.html#l00082">jb::bindir()</a>, and <a class="el" href="config__files__location_8cpp_source.html#l00074">jb::sysconfdir()</a>.</p>
 
 </div>
 </div>

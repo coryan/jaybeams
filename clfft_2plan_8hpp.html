@@ -78,8 +78,10 @@ $(function() {
 <div class="title">plan.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="error_8hpp_source.html">jb/clfft/error.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="init_8hpp_source.html">jb/clfft/init.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="clfft_2complex__traits_8hpp_source.html">jb/clfft/complex_traits.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="error_8hpp_source.html">jb/clfft/error.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="clfft_2init_8hpp_source.html">jb/clfft/init.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="complex__traits_8hpp_source.html">jb/complex_traits.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/compute/command_queue.hpp&gt;</code><br />
 <code>#include &lt;boost/compute/container/vector.hpp&gt;</code><br />
 <code>#include &lt;boost/compute/context.hpp&gt;</code><br />
@@ -90,8 +92,11 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan&lt; invector, outvector &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap clfftPlanHandle objects in a class that can automatically destroy them.  <a href="classjb_1_1clfft_1_1plan.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap clfftPlanHandle objects.  <a href="classjb_1_1clfft_1_1plan.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1clfft_1_1plan_1_1check__constraints.html">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::check_constraints</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the compile-time constraints for a jb::fftw::plan&lt;&gt;  <a href="structjb_1_1clfft_1_1plan_1_1check__constraints.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -105,12 +110,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#a8c9ebe1f5d062fa09d346a75d37ff17b">jb::clfft::create_forward_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q)</td></tr>
-<tr class="separator:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcaba02865de731f407d2fc4433417c8"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:abcaba02865de731f407d2fc4433417c8"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#abcaba02865de731f407d2fc4433417c8">jb::clfft::create_inverse_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q)</td></tr>
-<tr class="separator:abcaba02865de731f407d2fc4433417c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa67a90eaaad443a0129c950a860a621d"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
+<tr class="memitem:aa67a90eaaad443a0129c950a860a621d"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#aa67a90eaaad443a0129c950a860a621d">jb::clfft::create_forward_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q, int batch_size=1)</td></tr>
+<tr class="memdesc:aa67a90eaaad443a0129c950a860a621d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a forward DFT plan.  <a href="namespacejb_1_1clfft.html#aa67a90eaaad443a0129c950a860a621d">More...</a><br /></td></tr>
+<tr class="separator:aa67a90eaaad443a0129c950a860a621d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
+<tr class="memitem:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memTemplItemLeft" align="right" valign="top">plan&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#aa56ecc58e83cbcd822df9e7360de1b51">jb::clfft::create_inverse_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q, int batch_size=1)</td></tr>
+<tr class="memdesc:aa56ecc58e83cbcd822df9e7360de1b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an inverse DFT plan.  <a href="namespacejb_1_1clfft.html#aa56ecc58e83cbcd822df9e7360de1b51">More...</a><br /></td></tr>
+<tr class="separator:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -76,15 +76,16 @@ $(function() {
 <div class="title">ut_time_delay_estimator_many.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="tde__result_8hpp_source.html">jb/fftw/tde_result.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="aligned__vector_8hpp_source.html">jb/fftw/aligned_vector.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="time__delay__estimator__many_8hpp_source.html">jb/fftw/time_delay_estimator_many.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="check__close__enough_8hpp_source.html">jb/testing/check_close_enough.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="create__square__timeseries_8hpp_source.html">jb/testing/create_square_timeseries.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="create__triangle__timeseries_8hpp_source.html">jb/testing/create_triangle_timeseries.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="delay__timeseries_8hpp_source.html">jb/testing/delay_timeseries.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="sum__square_8hpp_source.html">jb/testing/sum_square.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;complex&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="ut__time__delay__estimator__many_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -126,10 +127,12 @@ Functions</h2></td></tr>
 <tr class="separator:a1caddbd84a3366ef0ed7dd4fda19ccee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64e90e9cf03b31d0c91bcaf4aa4166d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__time__delay__estimator__many_8cpp.html#a64e90e9cf03b31d0c91bcaf4aa4166d4">BOOST_AUTO_TEST_CASE</a> (fftw_time_delay_estimator_many_vector_tde_complex_double)</td></tr>
 <tr class="separator:a64e90e9cf03b31d0c91bcaf4aa4166d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac91715a5d46ab11482f105c7a2fc746c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut__time__delay__estimator__many_8cpp.html#ac91715a5d46ab11482f105c7a2fc746c">BOOST_AUTO_TEST_CASE</a> (fftw_time_delay_estimator_many_errors)</td></tr>
+<tr class="separator:ac91715a5d46ab11482f105c7a2fc746c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ac87649ec41cff1b4792b0ae3b1b624b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac87649ec41cff1b4792b0ae3b1b624b6">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[1/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87649ec41cff1b4792b0ae3b1b624b6">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[1/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -143,16 +146,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000052">Test:</a></b></dt><dd>Verify that FTE handles a timeseries filled with 0 dimension 3 </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000063">Test:</a></b></dt><dd>Verify that FTE handles a timeseries filled with 0 dimension 3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00016">16</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00017">17</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
 
 </div>
 </div>
 <a id="ab522e32504d67978e3088c9fa3f8a184"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab522e32504d67978e3088c9fa3f8a184">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[2/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab522e32504d67978e3088c9fa3f8a184">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[2/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -166,16 +169,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000053">Test:</a></b></dt><dd>Verify TDE handles exact same timeseries, delay = 0 dimension 3 </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000064">Test:</a></b></dt><dd>Verify TDE handles exact same timeseries, delay = 0 dimension 3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00080">80</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00074">74</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="ad5d4d4af4fe4d48022798e771a4b7716"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5d4d4af4fe4d48022798e771a4b7716">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[3/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5d4d4af4fe4d48022798e771a4b7716">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[3/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -189,16 +192,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000054">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with float value.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000065">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with float value.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00159">159</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00153">153</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a044bd8243de30e797b77770c41e83b8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a044bd8243de30e797b77770c41e83b8f">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[4/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a044bd8243de30e797b77770c41e83b8f">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[4/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,16 +215,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000055">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with float values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000066">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with float values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00228">228</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00223">223</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a3d40a5360e60690047fff456cf06c424"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d40a5360e60690047fff456cf06c424">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[5/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d40a5360e60690047fff456cf06c424">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[5/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,16 +238,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000056">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with float values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000067">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with float values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00294">294</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00290">290</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="ac6477872bce9ecf9b8a9f462ff388d18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6477872bce9ecf9b8a9f462ff388d18">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[6/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6477872bce9ecf9b8a9f462ff388d18">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[6/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,16 +261,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000057">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with float values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000068">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on <a class="el" href="namespacejb_1_1fftw.html#a28a740d610a8fb1805be996f7f4bac4c" title="Alias std::vector with properly allocated storage for FFTW3. ">jb::fftw::aligned_vector</a> timeseries with float values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00355">355</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00352">352</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a256c4b3e5d226415aff4ffb5a1b74e9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a256c4b3e5d226415aff4ffb5a1b74e9f">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[7/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a256c4b3e5d226415aff4ffb5a1b74e9f">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[7/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -281,16 +284,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000058">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with double value.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000069">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with double value.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00416">416</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00414">414</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="aaa0f0fe840ce62391daed2642d331a1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa0f0fe840ce62391daed2642d331a1e">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[8/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa0f0fe840ce62391daed2642d331a1e">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[8/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,16 +307,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000059">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with double values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000070">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with double values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00485">485</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00483">483</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="af715e70c6b4f0d890ac4ffd7ae2ced89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af715e70c6b4f0d890ac4ffd7ae2ced89">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[9/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af715e70c6b4f0d890ac4ffd7ae2ced89">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[9/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,16 +330,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000060">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with double values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000071">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with double values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00551">551</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00549">549</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a90e8f1e4c2da2f58f32a36c4986ac582"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90e8f1e4c2da2f58f32a36c4986ac582">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[10/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e8f1e4c2da2f58f32a36c4986ac582">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[10/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,16 +353,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000061">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with double values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000072">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with double values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00612">612</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00610">610</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a7865e1a08908561a8cc0babb1b0587e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7865e1a08908561a8cc0babb1b0587e6">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[11/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7865e1a08908561a8cc0babb1b0587e6">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[11/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,16 +376,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000062">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with std::complex&lt;float&gt; value.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000073">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with std::complex&lt;float&gt; value.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00673">673</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00671">671</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="af70c05be10933a04e67e944da5080a7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af70c05be10933a04e67e944da5080a7a">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[12/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af70c05be10933a04e67e944da5080a7a">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[12/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -396,16 +399,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000063">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with std::complex&lt;float&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000074">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with std::complex&lt;float&gt; values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00742">742</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00741">741</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a880096b3882c4e04e30695c930b9b9db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a880096b3882c4e04e30695c930b9b9db">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[13/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a880096b3882c4e04e30695c930b9b9db">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[13/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,16 +422,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000064">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with std::complex&lt;float&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000075">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with std::complex&lt;float&gt; values.</dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00808">808</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="af81c6adaff2becaddf7ba0139bde065b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af81c6adaff2becaddf7ba0139bde065b">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[14/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af81c6adaff2becaddf7ba0139bde065b">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[14/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,16 +445,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000065">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with std::complex&lt;float&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000076">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with std::complex&lt;float&gt; values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00869">869</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00870">870</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a1a54ded08a29616891ef5beb2e0c0ecb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a54ded08a29616891ef5beb2e0c0ecb">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[15/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a54ded08a29616891ef5beb2e0c0ecb">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[15/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -465,16 +468,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000066">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with std::complex&lt;double&gt; value.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000077">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 3, with std::complex&lt;double&gt; value.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00929">929</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00931">931</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a96e217d10f68ebf4f0750a52a2f21cd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96e217d10f68ebf4f0750a52a2f21cd1">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[16/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a96e217d10f68ebf4f0750a52a2f21cd1">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[16/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -488,16 +491,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000067">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with std::complex&lt;double&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000078">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi array dimension 2, with std::complex&lt;double&gt; values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l00998">998</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01000">1000</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a1caddbd84a3366ef0ed7dd4fda19ccee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1caddbd84a3366ef0ed7dd4fda19ccee">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[17/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1caddbd84a3366ef0ed7dd4fda19ccee">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[17/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,16 +514,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000068">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with std::complex&lt;double&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000079">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator multi_array dimension 1 with std::complex&lt;double&gt; values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01064">1064</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01066">1066</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
 
 </div>
 </div>
 <a id="a64e90e9cf03b31d0c91bcaf4aa4166d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64e90e9cf03b31d0c91bcaf4aa4166d4">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[18/18]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a64e90e9cf03b31d0c91bcaf4aa4166d4">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[18/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,11 +537,34 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="test"><dt><b><a class="el" href="test.html#_test000069">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with std::complex&lt;double&gt; values.</dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000080">Test:</a></b></dt><dd>Verify that we can create and use a simple time delay estimator based on std::vector timeseries with std::complex&lt;double&gt; values.</dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01125">1125</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01127">1127</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00235">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, and <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
+<p class="reference">References <a class="el" href="check__close__enough_8hpp_source.html#l00259">jb::testing::check_collection_close_enough()</a>, <a class="el" href="create__triangle__timeseries_8hpp_source.html#l00016">jb::testing::create_triangle_timeseries()</a>, <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>, and <a class="el" href="sum__square_8hpp_source.html#l00017">jb::testing::sum_square()</a>.</p>
+
+</div>
+</div>
+<a id="ac91715a5d46ab11482f105c7a2fc746c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac91715a5d46ab11482f105c7a2fc746c">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[19/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">fftw_time_delay_estimator_many_errors&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="test"><dt><b><a class="el" href="test.html#_test000081">Test:</a></b></dt><dd>Verify thattime delay estimator handles errors </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html#l01187">1187</a> of file <a class="el" href="ut__time__delay__estimator__many_8cpp_source.html">ut_time_delay_estimator_many.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="array__traits_8hpp_source.html#l00068">jb::detail::nsamples()</a>.</p>
 
 </div>
 </div>

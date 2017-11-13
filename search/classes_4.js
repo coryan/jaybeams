@@ -12,6 +12,7 @@ var searchData=
   ['event_5frate_5festimator_3c_20std_3a_3achrono_3a_3ananoseconds_2c_20int_20_3e',['event_rate_estimator&lt; std::chrono::nanoseconds, int &gt;',['../classjb_1_1event__rate__estimator.html',1,'jb']]],
   ['event_5frate_5fhistogram',['event_rate_histogram',['../classjb_1_1event__rate__histogram.html',1,'jb']]],
   ['event_5frate_5fhistogram_3c_20std_3a_3achrono_3a_3ananoseconds_2c_20std_3a_3aint64_5ft_20_3e',['event_rate_histogram&lt; std::chrono::nanoseconds, std::int64_t &gt;',['../classjb_1_1event__rate__histogram.html',1,'jb']]],
+  ['expanded_5fadd_5forder_5fmessage',['expanded_add_order_message',['../structjb_1_1pitch2_1_1expanded__add__order__message.html',1,'jb::pitch2']]],
   ['explicit_5fcuts_5fbinning',['explicit_cuts_binning',['../classjb_1_1explicit__cuts__binning.html',1,'jb']]],
   ['extract_5fvalue_5ftype',['extract_value_type',['../namespacejb.html#structjb_1_1extract__value__type',1,'jb']]],
   ['extract_5fvalue_5ftype_3c_20std_3a_3acomplex_3c_20t_20_3e_20_3e',['extract_value_type&lt; std::complex&lt; T &gt; &gt;',['../namespacejb.html#structjb_1_1extract__value__type_3_01std_1_1complex_3_01T_01_4_01_4',1,'jb']]],

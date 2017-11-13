@@ -4,5 +4,6 @@ var searchData=
   ['create_5fbackward_5fplan',['create_backward_plan',['../classjb_1_1fftw_1_1plan.html#ac497d63eea011cd95e64ef970b7c592c',1,'jb::fftw::plan']]],
   ['create_5fbackward_5fplan_5f1d',['create_backward_plan_1d',['../classjb_1_1fftw_1_1plan.html#aca5eff4169e4f381df84a96c7b8b25cc',1,'jb::fftw::plan']]],
   ['create_5fforward_5fplan',['create_forward_plan',['../classjb_1_1fftw_1_1plan.html#a06ae7367a7093e3c37aba3f80662996a',1,'jb::fftw::plan']]],
-  ['create_5fforward_5fplan_5f1d',['create_forward_plan_1d',['../classjb_1_1fftw_1_1plan.html#af1468e723d8d7dbd2d3bbf85f4861c31',1,'jb::fftw::plan']]]
+  ['create_5fforward_5fplan_5f1d',['create_forward_plan_1d',['../classjb_1_1clfft_1_1plan.html#a09183ef2d7b616b1e6a2950711767544',1,'jb::clfft::plan::create_forward_plan_1d()'],['../classjb_1_1fftw_1_1plan.html#af1468e723d8d7dbd2d3bbf85f4861c31',1,'jb::fftw::plan::create_forward_plan_1d()']]],
+  ['create_5finverse_5fplan_5f1d',['create_inverse_plan_1d',['../classjb_1_1clfft_1_1plan.html#a18823b400c9704e5152e4c16cfcb0a9a',1,'jb::clfft::plan']]]
 ];

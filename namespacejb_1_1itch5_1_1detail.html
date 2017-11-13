@@ -88,6 +88,13 @@ Functions</h2></td></tr>
 <tr class="memitem:ab6d35ee6f4007bca347b30981ade171b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#ab6d35ee6f4007bca347b30981ade171b">validate_operation_params</a> (char const *operation, int qty, <a class="el" href="namespacejb_1_1itch5.html#afbe422fcea46cc63c32e32644576d188">price4_t</a> px)</td></tr>
 <tr class="memdesc:ab6d35ee6f4007bca347b30981ade171b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate the input parameters for all array_order_book operations.  <a href="#ab6d35ee6f4007bca347b30981ade171b">More...</a><br /></td></tr>
 <tr class="separator:ab6d35ee6f4007bca347b30981ade171b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e975501daa42a8c08b43aa813aff691"><td class="memTemplParams" colspan="2">template&lt;class socket_t &gt; </td></tr>
+<tr class="memitem:a6e975501daa42a8c08b43aa813aff691"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#a6e975501daa42a8c08b43aa813aff691">setup_socket_udp_recv</a> (socket_t &amp;socket, <a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;cfg)</td></tr>
+<tr class="memdesc:a6e975501daa42a8c08b43aa813aff691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure a socket to receive UDP packets.  <a href="#a6e975501daa42a8c08b43aa813aff691">More...</a><br /></td></tr>
+<tr class="separator:a6e975501daa42a8c08b43aa813aff691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80ec88e10ba1a25c068e2cbf700e71b"><td class="memTemplParams" colspan="2">template&lt;typename socket_t &gt; </td></tr>
+<tr class="memitem:aa80ec88e10ba1a25c068e2cbf700e71b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1itch5_1_1detail.html#aa80ec88e10ba1a25c068e2cbf700e71b">setup_socket_udp_send</a> (socket_t &amp;s, <a class="el" href="classjb_1_1itch5_1_1udp__sender__config.html">udp_sender_config</a> const &amp;cfg)</td></tr>
+<tr class="separator:aa80ec88e10ba1a25c068e2cbf700e71b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a10aa1766c390ec7c575831fa33973ae5"></a>
@@ -138,7 +145,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00035">35</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00034">34</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00051">validate_operation_params()</a>.</p>
 
@@ -213,9 +220,83 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00045">45</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__based__order__book_8cpp_source.html#l00044">44</a> of file <a class="el" href="array__based__order__book_8cpp_source.html">array_based_order_book.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00249">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00051">validate_operation_params()</a>.</p>
+
+</div>
+</div>
+<a id="a6e975501daa42a8c08b43aa813aff691"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e975501daa42a8c08b43aa813aff691">&#9670;&nbsp;</a></span>setup_socket_udp_recv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class socket_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::itch5::detail::setup_socket_udp_recv </td>
+          <td>(</td>
+          <td class="paramtype">socket_t &amp;&#160;</td>
+          <td class="paramname"><em>socket</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1udp__receiver__config.html">udp_receiver_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Configure a socket to receive UDP packets. </p>
+
+<p class="definition">Definition at line <a class="el" href="make__socket__udp__recv_8hpp_source.html#l00018">18</a> of file <a class="el" href="make__socket__udp__recv_8hpp_source.html">make_socket_udp_recv.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="udp__receiver__config_8hpp_source.html#l00030">jb::itch5::udp_receiver_config::address</a>, <a class="el" href="udp__receiver__config_8hpp_source.html#l00032">jb::itch5::udp_receiver_config::local_address</a>, <a class="el" href="udp__receiver__config_8hpp_source.html#l00031">jb::itch5::udp_receiver_config::port</a>, and <a class="el" href="udp__config__common_8hpp_source.html#l00021">jb::itch5::udp_config_common::reuse_address</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="ut__make__socket__udp__recv_8cpp_source.html#l00023">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="make__socket__udp__recv_8hpp_source.html#l00071">jb::itch5::make_socket_udp_recv()</a>.</p>
+
+</div>
+</div>
+<a id="aa80ec88e10ba1a25c068e2cbf700e71b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa80ec88e10ba1a25c068e2cbf700e71b">&#9670;&nbsp;</a></span>setup_socket_udp_send()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename socket_t &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void jb::itch5::detail::setup_socket_udp_send </td>
+          <td>(</td>
+          <td class="paramtype">socket_t &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjb_1_1itch5_1_1udp__sender__config.html">udp_sender_config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="make__socket__udp__send_8hpp_source.html#l00017">17</a> of file <a class="el" href="make__socket__udp__send_8hpp_source.html">make_socket_udp_send.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="udp__sender__config_8hpp_source.html#l00018">jb::itch5::udp_sender_config::address</a>, <a class="el" href="udp__sender__config_8hpp_source.html#l00022">jb::itch5::udp_sender_config::broadcast</a>, <a class="el" href="udp__sender__config_8hpp_source.html#l00019">jb::itch5::udp_sender_config::enable_loopback</a>, <a class="el" href="udp__sender__config_8hpp_source.html#l00020">jb::itch5::udp_sender_config::hops</a>, <a class="el" href="udp__sender__config_8hpp_source.html#l00021">jb::itch5::udp_sender_config::outbound_interface</a>, <a class="el" href="udp__config__common_8hpp_source.html#l00021">jb::itch5::udp_config_common::reuse_address</a>, and <a class="el" href="strtonum_8hpp_source.html#l00040">jb::strtonum()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="ut__make__socket__udp__send_8cpp_source.html#l00018">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="make__socket__udp__send_8hpp_source.html#l00089">jb::itch5::make_socket_udp_send()</a>.</p>
 
 </div>
 </div>
@@ -278,7 +359,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="array__based__order__book_8hpp_source.html#l00051">51</a> of file <a class="el" href="array__based__order__book_8hpp_source.html">array_based_order_book.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="array__based__order__book_8cpp_source.html#l00035">raise_invalid_operation_parameters()</a>, and <a class="el" href="array__based__order__book_8cpp_source.html#l00045">raise_invalid_reduce()</a>.</p>
+<p class="reference">References <a class="el" href="array__based__order__book_8cpp_source.html#l00034">raise_invalid_operation_parameters()</a>, and <a class="el" href="array__based__order__book_8cpp_source.html#l00044">raise_invalid_reduce()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="array__based__order__book_8hpp_source.html#l00192">jb::itch5::array_based_book_side&lt; compare_t &gt;::add_order()</a>, and <a class="el" href="array__based__order__book_8hpp_source.html#l00249">jb::itch5::array_based_book_side&lt; compare_t &gt;::reduce_order()</a>.</p>
 

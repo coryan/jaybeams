@@ -1,11 +1,13 @@
 var searchData=
 [
-  ['sample_5ftype',['sample_type',['../classjb_1_1explicit__cuts__binning.html#ab054ceb97c1f0f37023c874558695c30',1,'jb::explicit_cuts_binning::sample_type()'],['../classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5',1,'jb::histogram::sample_type()'],['../structjb_1_1histogram_1_1check__constraints.html#aa2b3f5e0f6dcaa57bd7ed53bc80bdd79',1,'jb::histogram::check_constraints::sample_type()'],['../classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93',1,'jb::integer_range_binning::sample_type()']]],
-  ['sells_5ft',['sells_t',['../namespacejb_1_1itch5.html#a141311fcf359184ca086aa823bc032f5',1,'jb::itch5::array_based_order_book::sells_t()'],['../namespacejb_1_1itch5.html#a0dc50c532981e688900353e5d0429a90',1,'jb::itch5::map_based_order_book::sells_t()']]],
-  ['session_5fid_5ftype',['session_id_type',['../classjb_1_1itch5_1_1mold__udp__pacer.html#ad772180c9f3dcb7f6b27d745e9af0aa4',1,'jb::itch5::mold_udp_pacer']]],
-  ['short_5fsale_5fthreshold_5findicator_5ft',['short_sale_threshold_indicator_t',['../namespacejb_1_1itch5.html#a4044baa30718d071663c7bbe1fae5102',1,'jb::itch5']]],
-  ['size_5ftype',['size_type',['../classjb_1_1fftw_1_1allocator.html#abf236815b5d2d9b8be8209fc9a8f46a6',1,'jb::fftw::allocator']]],
-  ['std_5fcomplex_5ftype',['std_complex_type',['../classjb_1_1fftw_1_1plan.html#a04273b648fe0a3f58a09f4700be4b09f',1,'jb::fftw::plan::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a1fbaf2348a50992191eae8cb0850b2a8',1,'jb::fftw::traits&lt; double &gt;::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#a699ba52d95a019aca3291d4df5152ad2',1,'jb::fftw::traits&lt; float &gt;::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa2538820aaf0c2dc15982660a18f4949',1,'jb::fftw::traits&lt; long double &gt;::std_complex_type()']]],
-  ['stock_5ft',['stock_t',['../namespacejb_1_1itch5.html#a15d06d758be46b768909e5d1aa7ddc27',1,'jb::itch5']]],
-  ['sum2_5ftype',['sum2_type',['../classjb_1_1fftw_1_1time__delay__estimator__many.html#ab0d36adef72e09992018445aa2200157',1,'jb::fftw::time_delay_estimator_many']]]
+  ['rate_5fhistogram',['rate_histogram',['../classjb_1_1event__rate__histogram.html#abc9904205d72f7fa21a0dae8ccf13a7d',1,'jb::event_rate_histogram::rate_histogram()'],['../classjb_1_1offline__feed__statistics.html#afe4859f4d24f0227d2367b47cd5a8172',1,'jb::offline_feed_statistics::rate_histogram()']]],
+  ['reason_5ft',['reason_t',['../namespacejb_1_1itch5.html#af15c4e97bdc325d0e04ad4697a3cc531',1,'jb::itch5']]],
+  ['record_5ftype',['record_type',['../classjb_1_1fftw_1_1tde__result.html#a17036f8dd879b97ac43b478df5392bbb',1,'jb::fftw::tde_result::record_type()'],['../classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_00_01value__t_01_4.html#adb96d4f5ce5a3f536afd7cc480121275',1,'jb::fftw::tde_result&lt; boost::multi_array&lt; T, K, A &gt;, value_t &gt;::record_type()'],['../classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_011_00_01A_01_4_00_01value__t_01_4.html#ae9379b3bce59964e4095e9ee35eb6c93',1,'jb::fftw::tde_result&lt; boost::multi_array&lt; T, 1, A &gt;, value_t &gt;::record_type()']]],
+  ['reg_5fsho_5faction_5ft',['reg_sho_action_t',['../namespacejb_1_1itch5.html#a7e19588b34b5f37a9261b58ec3c9f4f9',1,'jb::itch5']]],
+  ['request_5fhandler',['request_handler',['../namespacejb_1_1ehs.html#a941396d1fc9565a0426ba6ac4e4e8945',1,'jb::ehs']]],
+  ['request_5ftype',['request_type',['../namespacejb_1_1ehs.html#a0c1a3dcc1406f022db0e9d34b83ee00b',1,'jb::ehs']]],
+  ['response_5ftype',['response_type',['../namespacejb_1_1ehs.html#a31a67d225b0f892682e46b3f3972e912',1,'jb::ehs']]],
+  ['result',['result',['../classjb_1_1testing_1_1microbenchmark__base.html#a8a3956d6911be04d4f06ef3685f8bfeb',1,'jb::testing::microbenchmark_base']]],
+  ['results',['results',['../classjb_1_1testing_1_1microbenchmark__base.html#aaf697c9132c05541c42a068c5e58d366',1,'jb::testing::microbenchmark_base']]],
+  ['roundlots_5fonly_5ft',['roundlots_only_t',['../namespacejb_1_1itch5.html#a91172a3c8009c61af339f4df0454a15f',1,'jb::itch5']]]
 ];

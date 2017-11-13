@@ -71,6 +71,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -81,6 +82,11 @@ $(function() {
 <p>Wrappers for the clFFT library.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacejb_1_1clfft_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft_1_1detail.html">detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1clfft__error.html">clfft_error</a></td></tr>
@@ -90,7 +96,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap clfftPlanHandle objects in a class that can automatically destroy them.  <a href="classjb_1_1clfft_1_1init.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap clfftPlanHandle objects in a class that can automatically destroy them.  <a href="classjb_1_1clfft_1_1plan.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrap clfftPlanHandle objects.  <a href="classjb_1_1clfft_1_1plan.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -98,12 +104,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a5b9b2ec98a09346c6bf36d5022f00346"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#a5b9b2ec98a09346c6bf36d5022f00346">check_error_code</a> (cl_int err, char const *msg)</td></tr>
 <tr class="memdesc:a5b9b2ec98a09346c6bf36d5022f00346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check in an OpenCL error code is really an error and raise an exception if so.  <a href="#a5b9b2ec98a09346c6bf36d5022f00346">More...</a><br /></td></tr>
 <tr class="separator:a5b9b2ec98a09346c6bf36d5022f00346"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#a8c9ebe1f5d062fa09d346a75d37ff17b">create_forward_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q)</td></tr>
-<tr class="separator:a8c9ebe1f5d062fa09d346a75d37ff17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcaba02865de731f407d2fc4433417c8"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
-<tr class="memitem:abcaba02865de731f407d2fc4433417c8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#abcaba02865de731f407d2fc4433417c8">create_inverse_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q)</td></tr>
-<tr class="separator:abcaba02865de731f407d2fc4433417c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa67a90eaaad443a0129c950a860a621d"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
+<tr class="memitem:aa67a90eaaad443a0129c950a860a621d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#aa67a90eaaad443a0129c950a860a621d">create_forward_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q, int batch_size=1)</td></tr>
+<tr class="memdesc:aa67a90eaaad443a0129c950a860a621d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a forward DFT plan.  <a href="#aa67a90eaaad443a0129c950a860a621d">More...</a><br /></td></tr>
+<tr class="separator:aa67a90eaaad443a0129c950a860a621d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memTemplParams" colspan="2">template&lt;typename invector , typename outvector &gt; </td></tr>
+<tr class="memitem:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1clfft.html#aa56ecc58e83cbcd822df9e7360de1b51">create_inverse_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;ct, boost::compute::command_queue &amp;q, int batch_size=1)</td></tr>
+<tr class="memdesc:aa56ecc58e83cbcd822df9e7360de1b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an inverse DFT plan.  <a href="#aa56ecc58e83cbcd822df9e7360de1b51">More...</a><br /></td></tr>
+<tr class="separator:aa56ecc58e83cbcd822df9e7360de1b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrappers for the clFFT library. </p>
@@ -146,12 +154,12 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="error_8hpp_source.html#l00045">45</a> of file <a class="el" href="error_8hpp_source.html">error.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ut__error_8cpp_source.html#l00009">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00083">jb::clfft::plan&lt; invector, outvector &gt;::create_plan_1d_impl()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00056">jb::clfft::plan&lt; invector, outvector &gt;::enqueue()</a>, <a class="el" href="init_8cpp_source.html#l00004">jb::clfft::init::init()</a>, <a class="el" href="init_8cpp_source.html#l00010">jb::clfft::init::~init()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00047">jb::clfft::plan&lt; invector, outvector &gt;::~plan()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft__error__ut_8cpp_source.html#l00009">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00151">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00107">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue()</a>, <a class="el" href="init_8cpp_source.html#l00004">jb::clfft::init::init()</a>, <a class="el" href="init_8cpp_source.html#l00010">jb::clfft::init::~init()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00076">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>
-<a id="a8c9ebe1f5d062fa09d346a75d37ff17b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c9ebe1f5d062fa09d346a75d37ff17b">&#9670;&nbsp;</a></span>create_forward_plan_1d()</h2>
+<a id="aa67a90eaaad443a0129c950a860a621d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa67a90eaaad443a0129c950a860a621d">&#9670;&nbsp;</a></span>create_forward_plan_1d()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,7 +188,13 @@ template&lt;typename invector , typename outvector &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>batch_size</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -190,16 +204,48 @@ template&lt;typename invector , typename outvector &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00157">157</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Create a forward DFT plan. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>the output destination prototype. The actual output in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">in</td><td>the input data prototype. The actual input in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">ct</td><td>a collection of devices in a single OpenCL platform. </td></tr>
+    <tr><td class="paramname">q</td><td>a command queue associated with <em>ct</em> to create and bake the plan. </td></tr>
+    <tr><td class="paramname">batch_size</td><td>the number of timeseries in the input and output vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a new plan that computes a DFT from a vector like <em>in</em> into a vector like <em>out</em>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::exception</td><td>if the parameters are invalid or there was an OpenCL or clFFT error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">batch_size</td><td>the number of timeseries in the vector.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">invector</td><td>the type of the input vector </td></tr>
+    <tr><td class="paramname">outvector</td><td>the type of the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00068">jb::clfft::plan&lt; invector, outvector &gt;::create_forward_plan_1d()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00255">255</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="fftw_2plan_8hpp_source.html#l00106">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>.</p>
+<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00151">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="clfft__plan__ut_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>, <a class="el" href="fftw_2plan_8hpp_source.html#l00106">jb::fftw::plan&lt; timeseries_type, frequency_timeseries_type &gt;::execute()</a>, and <a class="el" href="bm__single__fft_8cpp_source.html#l00019">main()</a>.</p>
 
 </div>
 </div>
-<a id="abcaba02865de731f407d2fc4433417c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abcaba02865de731f407d2fc4433417c8">&#9670;&nbsp;</a></span>create_inverse_plan_1d()</h2>
+<a id="aa56ecc58e83cbcd822df9e7360de1b51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa56ecc58e83cbcd822df9e7360de1b51">&#9670;&nbsp;</a></span>create_inverse_plan_1d()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,7 +274,13 @@ template&lt;typename invector , typename outvector &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>batch_size</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -238,11 +290,37 @@ template&lt;typename invector , typename outvector &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00164">164</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Create an inverse DFT plan. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>the output destination prototype. The actual output in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">in</td><td>the input data prototype. The actual input in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">ct</td><td>a collection of devices in a single OpenCL platform. </td></tr>
+    <tr><td class="paramname">q</td><td>a command queue associated with <em>ct</em> to create and bake the plan. </td></tr>
+    <tr><td class="paramname">batch_size</td><td>the number of timeseries in the input and output vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a new plan that computes a DFT from a vector like <em>in</em> into a vector like <em>out</em>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::exception</td><td>if the parameters are invalid or there was an OpenCL or clFFT error.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">invector</td><td>the type of the input vector </td></tr>
+    <tr><td class="paramname">outvector</td><td>the type of the output vector </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00075">jb::clfft::plan&lt; invector, outvector &gt;::create_inverse_plan_1d()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00284">284</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00151">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="clfft__plan__ut_8cpp_source.html#l00073">BOOST_AUTO_TEST_CASE()</a>.</p>
 
 </div>
 </div>

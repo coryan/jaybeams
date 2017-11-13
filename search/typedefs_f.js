@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['value_5ftype',['value_type',['../classjb_1_1config__attribute.html#ab6f6451e2a051f8eb776babac4659b66',1,'jb::config_attribute::value_type()'],['../classjb_1_1fftw_1_1allocator.html#a994506bb17131c30d7b22fc2d7f75de7',1,'jb::fftw::allocator::value_type()'],['../classjb_1_1fftw_1_1tde__result.html#a7afd2c197c3e2c3cafa6d091ac1f6f07',1,'jb::fftw::tde_result::value_type()'],['../classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_01K_00_01A_01_4_00_01value__t_01_4.html#ac89c6a642c5ba1bec8fec4fdda2d54e7',1,'jb::fftw::tde_result&lt; boost::multi_array&lt; T, K, A &gt;, value_t &gt;::value_type()'],['../classjb_1_1fftw_1_1tde__result_3_01boost_1_1multi__array_3_01T_00_011_00_01A_01_4_00_01value__t_01_4.html#ae4091224ff374dfe4d5b4fccac56f7df',1,'jb::fftw::tde_result&lt; boost::multi_array&lt; T, 1, A &gt;, value_t &gt;::value_type()'],['../classjb_1_1fftw_1_1time__delay__estimator.html#a6c96cfb5f2812284e01e74e810557549',1,'jb::fftw::time_delay_estimator::value_type()']]],
-  ['value_5fvalidator_5ft',['value_validator_t',['../classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386',1,'jb::itch5::short_string_field']]],
-  ['vector_5fiterator',['vector_iterator',['../classjb_1_1tde_1_1generic__reduce.html#a3bc6a7942ccd4e9857c01ee89c982a83',1,'jb::tde::generic_reduce']]],
-  ['void_5fpointer',['void_pointer',['../classjb_1_1fftw_1_1allocator.html#a94b5b7537fb496fc3f2a9de739ce9634',1,'jb::fftw::allocator']]]
+  ['tick',['tick',['../classjb_1_1itch5_1_1price__field.html#a8dd8c55f65fb83b28ab81e5a35d13823',1,'jb::itch5::price_field']]],
+  ['time_5fpoint',['time_point',['../classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8',1,'jb::itch5::compute_book::time_point()'],['../classjb_1_1itch5_1_1mold__udp__pacer.html#a527bef6a80e4cc1ccfaed92be8ab2355',1,'jb::itch5::mold_udp_pacer::time_point()'],['../namespacejb_1_1itch5.html#ab841715d223ab0bb40378f1081fbc933',1,'jb::itch5::time_point()']]],
+  ['timeseries_5ftype',['timeseries_type',['../classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682',1,'jb::fftw::time_delay_estimator']]],
+  ['trading_5fstate_5ft',['trading_state_t',['../namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303',1,'jb::itch5']]],
+  ['traits',['traits',['../classjb_1_1fftw_1_1plan.html#a64209d6f5fd3d1d11d6d9296c4480900',1,'jb::fftw::plan']]],
+  ['type',['type',['../classjb_1_1testing_1_1has__resize.html#a6da62d1402f4d4024724bc1512b91d99',1,'jb::testing::has_resize']]]
 ];

@@ -78,7 +78,8 @@ $(function() {
 <div class="title">delay_timeseries.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="array__traits_8hpp_source.html">jb/detail/array_traits.hpp</a>&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 </div>
@@ -104,10 +105,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae2512b2f0492857a7a2b786fe2daf36c"><td class="memTemplParams" colspan="2">template&lt;typename timeseries_t , typename duration_t , typename extrapolation_functor &gt; </td></tr>
-<tr class="memitem:ae2512b2f0492857a7a2b786fe2daf36c"><td class="memTemplItemLeft" align="right" valign="top">timeseries_t::value_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#ae2512b2f0492857a7a2b786fe2daf36c">jb::testing::extrapolate_timeseries</a> (timeseries_t const &amp;ts, duration_t t, duration_t sampling_period, extrapolation_functor const &amp;extrapolation)</td></tr>
-<tr class="memdesc:ae2512b2f0492857a7a2b786fe2daf36c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function to get the extrapolated value of a timeseries.  <a href="namespacejb_1_1testing.html#ae2512b2f0492857a7a2b786fe2daf36c">More...</a><br /></td></tr>
-<tr class="separator:ae2512b2f0492857a7a2b786fe2daf36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0039c0fa8ef40ad5838d4c3d155fd489"><td class="memTemplParams" colspan="2">template&lt;typename timeseries_t , typename duration_t , typename extrapolation_functor &gt; </td></tr>
+<tr class="memitem:a0039c0fa8ef40ad5838d4c3d155fd489"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacejb_1_1detail.html#structjb_1_1detail_1_1array__traits">jb::detail::array_traits</a>&lt; timeseries_t &gt;::element_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a0039c0fa8ef40ad5838d4c3d155fd489">jb::testing::extrapolate_timeseries</a> (timeseries_t const &amp;ts, duration_t t, duration_t sampling_period, extrapolation_functor const &amp;extrapolation)</td></tr>
+<tr class="memdesc:a0039c0fa8ef40ad5838d4c3d155fd489"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function to get the extrapolated value of a timeseries.  <a href="namespacejb_1_1testing.html#a0039c0fa8ef40ad5838d4c3d155fd489">More...</a><br /></td></tr>
+<tr class="separator:a0039c0fa8ef40ad5838d4c3d155fd489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a759e9b1da5a78a5269cdce029f78475c"><td class="memTemplParams" colspan="2">template&lt;typename timeseries_t , typename duration_t , typename extrapolation_functor &gt; </td></tr>
 <tr class="memitem:a759e9b1da5a78a5269cdce029f78475c"><td class="memTemplItemLeft" align="right" valign="top">timeseries_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing.html#a759e9b1da5a78a5269cdce029f78475c">jb::testing::delay_timeseries</a> (timeseries_t const &amp;ts, duration_t delay, duration_t sampling_period, extrapolation_functor const &amp;extrapolation)</td></tr>
 <tr class="memdesc:a759e9b1da5a78a5269cdce029f78475c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay a timeseries using a user-provided extrapolation policy.  <a href="namespacejb_1_1testing.html#a759e9b1da5a78a5269cdce029f78475c">More...</a><br /></td></tr>

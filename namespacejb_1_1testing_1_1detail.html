@@ -95,6 +95,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#a95bc2d9bacdc22d870ce8b92eb05c4f0">call_iteration_teardown</a> (Fixture &amp;&amp;fixture)</td></tr>
 <tr class="memdesc:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper to call Fixture::iteration_teardown() in the microbenchmarks.  <a href="#a95bc2d9bacdc22d870ce8b92eb05c4f0">More...</a><br /></td></tr>
 <tr class="separator:a95bc2d9bacdc22d870ce8b92eb05c4f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03dc433d236d84ced683a8c431eeb451"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejb_1_1testing_1_1detail.html#a03dc433d236d84ced683a8c431eeb451">report_exception_at_exit</a> ()</td></tr>
+<tr class="separator:a03dc433d236d84ced683a8c431eeb451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a75b996585dc363b095627115fcc8eb82"></a>
@@ -137,7 +139,7 @@ template&lt;typename Fixture , typename... Args&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00024">24</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00233">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, and <a class="el" href="microbenchmark_8hpp_source.html#l00253">jb::testing::microbenchmark&lt; Fixture &gt;::run_iteration()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00234">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, and <a class="el" href="microbenchmark_8hpp_source.html#l00254">jb::testing::microbenchmark&lt; Fixture &gt;::run_iteration()</a>.</p>
 
 </div>
 </div>
@@ -168,7 +170,7 @@ template&lt;typename Fixture , typename  = decltype(std::declval&lt;Fixture&gt;(
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00037">37</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00038">38</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
 
 </div>
 </div>
@@ -210,9 +212,9 @@ template&lt;typename Fixture , typename... Args&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00051">51</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00052">52</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00233">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, and <a class="el" href="microbenchmark_8hpp_source.html#l00253">jb::testing::microbenchmark&lt; Fixture &gt;::run_iteration()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="microbenchmark_8hpp_source.html#l00234">jb::testing::microbenchmark&lt; Fixture &gt;::run_base()</a>, and <a class="el" href="microbenchmark_8hpp_source.html#l00254">jb::testing::microbenchmark&lt; Fixture &gt;::run_iteration()</a>.</p>
 
 </div>
 </div>
@@ -243,7 +245,30 @@ template&lt;typename Fixture , typename  = decltype(std::declval&lt;Fixture&gt;(
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00064">64</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="microbenchmark_8hpp_source.html#l00066">66</a> of file <a class="el" href="microbenchmark_8hpp_source.html">microbenchmark.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a03dc433d236d84ced683a8c431eeb451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03dc433d236d84ced683a8c431eeb451">&#9670;&nbsp;</a></span>report_exception_at_exit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jb::testing::detail::report_exception_at_exit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="microbenchmark__group__main_8cpp_source.html#l00039">39</a> of file <a class="el" href="microbenchmark__group__main_8cpp_source.html">microbenchmark_group_main.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="usage_8hpp_source.html#l00021">jb::usage::exit_status()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="microbenchmark__group__main_8cpp_source.html#l00006">jb::testing::microbenchmark_group_main()</a>.</p>
 
 </div>
 </div>

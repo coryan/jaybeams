@@ -1,9 +1,14 @@
 var searchData=
 [
-  ['tick',['tick',['../classjb_1_1itch5_1_1price__field.html#a8dd8c55f65fb83b28ab81e5a35d13823',1,'jb::itch5::price_field']]],
-  ['time_5fpoint',['time_point',['../classjb_1_1itch5_1_1compute__book.html#adf3a0b44ab4dc8845abdde95a15814a8',1,'jb::itch5::compute_book::time_point()'],['../classjb_1_1itch5_1_1mold__udp__pacer.html#a527bef6a80e4cc1ccfaed92be8ab2355',1,'jb::itch5::mold_udp_pacer::time_point()'],['../namespacejb_1_1itch5.html#ab841715d223ab0bb40378f1081fbc933',1,'jb::itch5::time_point()']]],
-  ['timeseries_5ftype',['timeseries_type',['../classjb_1_1fftw_1_1time__delay__estimator.html#a1c2822c0a1484514823c746bb7b71682',1,'jb::fftw::time_delay_estimator']]],
-  ['trading_5fstate_5ft',['trading_state_t',['../namespacejb_1_1itch5.html#a21b9cbeb12020288f105517cbd7ac303',1,'jb::itch5']]],
-  ['traits',['traits',['../classjb_1_1fftw_1_1plan.html#a64209d6f5fd3d1d11d6d9296c4480900',1,'jb::fftw::plan']]],
-  ['type',['type',['../classjb_1_1testing_1_1has__resize.html#a6da62d1402f4d4024724bc1512b91d99',1,'jb::testing::has_resize']]]
+  ['sample_5ftype',['sample_type',['../classjb_1_1explicit__cuts__binning.html#ab054ceb97c1f0f37023c874558695c30',1,'jb::explicit_cuts_binning::sample_type()'],['../classjb_1_1histogram.html#acd9439f3aa2afdcfa81c70a8601d69e5',1,'jb::histogram::sample_type()'],['../structjb_1_1histogram_1_1check__constraints.html#aa2b3f5e0f6dcaa57bd7ed53bc80bdd79',1,'jb::histogram::check_constraints::sample_type()'],['../classjb_1_1integer__range__binning.html#a430e69ffa679dc47fe134466e107fd93',1,'jb::integer_range_binning::sample_type()']]],
+  ['sells_5ft',['sells_t',['../namespacejb_1_1itch5.html#a141311fcf359184ca086aa823bc032f5',1,'jb::itch5::array_based_order_book::sells_t()'],['../namespacejb_1_1itch5.html#a0dc50c532981e688900353e5d0429a90',1,'jb::itch5::map_based_order_book::sells_t()']]],
+  ['session_5fid_5ftype',['session_id_type',['../classjb_1_1itch5_1_1mold__udp__pacer.html#ad772180c9f3dcb7f6b27d745e9af0aa4',1,'jb::itch5::mold_udp_pacer']]],
+  ['short_5fsale_5fthreshold_5findicator_5ft',['short_sale_threshold_indicator_t',['../namespacejb_1_1itch5.html#a4044baa30718d071663c7bbe1fae5102',1,'jb::itch5']]],
+  ['size_5ftype',['size_type',['../classjb_1_1fftw_1_1allocator.html#abf236815b5d2d9b8be8209fc9a8f46a6',1,'jb::fftw::allocator']]],
+  ['socket_5ftype',['socket_type',['../classjb_1_1ehs_1_1connection.html#a18fbc815260e3b6e1a62366bfe299add',1,'jb::ehs::connection']]],
+  ['std_5fcomplex_5ftype',['std_complex_type',['../classjb_1_1fftw_1_1plan.html#a04273b648fe0a3f58a09f4700be4b09f',1,'jb::fftw::plan::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01double_01_4.html#a1fbaf2348a50992191eae8cb0850b2a8',1,'jb::fftw::traits&lt; double &gt;::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01float_01_4.html#a699ba52d95a019aca3291d4df5152ad2',1,'jb::fftw::traits&lt; float &gt;::std_complex_type()'],['../structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa2538820aaf0c2dc15982660a18f4949',1,'jb::fftw::traits&lt; long double &gt;::std_complex_type()']]],
+  ['stock_5fsymbol_5ftype',['stock_symbol_type',['../structjb_1_1pitch2_1_1auction__update__message.html#a6d8c9bad8942ae71fad1b792f5da7b18',1,'jb::pitch2::auction_update_message']]],
+  ['stock_5ft',['stock_t',['../namespacejb_1_1itch5.html#a15d06d758be46b768909e5d1aa7ddc27',1,'jb::itch5']]],
+  ['sum2_5ftype',['sum2_type',['../classjb_1_1fftw_1_1time__delay__estimator__many.html#ab0d36adef72e09992018445aa2200157',1,'jb::fftw::time_delay_estimator_many']]],
+  ['symbol_5ftype',['symbol_type',['../namespacejb_1_1pitch2.html#a701a19fa15e730988fd32b62062f5996',1,'jb::pitch2::base_add_order_message']]]
 ];

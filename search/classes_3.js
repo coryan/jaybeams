@@ -31,5 +31,6 @@ var searchData=
   ['decoder_3c_20validate_2c_20system_5fevent_5fmessage_20_3e',['decoder&lt; validate, system_event_message &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01system__event__message_01_4.html',1,'jb::itch5']]],
   ['decoder_3c_20validate_2c_20timestamp_20_3e',['decoder&lt; validate, timestamp &gt;',['../structjb_1_1itch5_1_1decoder_3_01validate_00_01timestamp_01_4.html',1,'jb::itch5']]],
   ['default_5fgetenv',['default_getenv',['../structjb_1_1default__getenv.html',1,'jb']]],
-  ['default_5fvalidator',['default_validator',['../structjb_1_1default__validator.html',1,'jb']]]
+  ['default_5fvalidator',['default_validator',['../structjb_1_1default__validator.html',1,'jb']]],
+  ['delete_5forder_5fmessage',['delete_order_message',['../structjb_1_1pitch2_1_1delete__order__message.html',1,'jb::pitch2']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>JayBeams: jb::clfft::plan&lt; invector, outvector &gt; Class Template Reference</title>
+<title>JayBeams: jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,93 +71,218 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classjb_1_1clfft_1_1plan-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">jb::clfft::plan&lt; invector, outvector &gt; Class Template Reference</div>  </div>
+<div class="title">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Wrap clfftPlanHandle objects in a class that can automatically destroy them.  
+<p>Wrap clfftPlanHandle objects.  
  <a href="classjb_1_1clfft_1_1plan.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjb_1_1clfft_1_1plan_1_1check__constraints.html">check_constraints</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the compile-time constraints for a jb::fftw::plan&lt;&gt;  <a href="structjb_1_1clfft_1_1plan_1_1check__constraints.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a5b62fa99fde6c64b0e0cba38ed45e23e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a> = typename in_timeseries_type::value_type</td></tr>
+<tr class="memdesc:a5b62fa99fde6c64b0e0cba38ed45e23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">type straits  <a href="#a5b62fa99fde6c64b0e0cba38ed45e23e">More...</a><br /></td></tr>
+<tr class="separator:a5b62fa99fde6c64b0e0cba38ed45e23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa28bfc49520d50c063d4e625ebdca43e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#aa28bfc49520d50c063d4e625ebdca43e">out_value_type</a> = typename out_timeseries_type::value_type</td></tr>
+<tr class="separator:aa28bfc49520d50c063d4e625ebdca43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fc6b5cb6c037c5b334fb48d54f041ed"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a0fc6b5cb6c037c5b334fb48d54f041ed">in_value_traits</a> = ::<a class="el" href="namespacejb_1_1clfft_1_1detail.html#structjb_1_1clfft_1_1detail_1_1complex__traits">jb::clfft::detail::complex_traits</a>&lt; <a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a> &gt;</td></tr>
+<tr class="separator:a0fc6b5cb6c037c5b334fb48d54f041ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab47ac84fe97f85355149f7fcee20286a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#ab47ac84fe97f85355149f7fcee20286a">out_value_traits</a> = ::<a class="el" href="namespacejb_1_1clfft_1_1detail.html#structjb_1_1clfft_1_1detail_1_1complex__traits">jb::clfft::detail::complex_traits</a>&lt; <a class="el" href="classjb_1_1clfft_1_1plan.html#aa28bfc49520d50c063d4e625ebdca43e">out_value_type</a> &gt;</td></tr>
+<tr class="separator:ab47ac84fe97f85355149f7fcee20286a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a378f422a3d53fd45ff9f57d8753f20bb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a378f422a3d53fd45ff9f57d8753f20bb">precision_type</a> = typename <a class="el" href="namespacejb.html#structjb_1_1extract__value__type">jb::extract_value_type</a>&lt; <a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a> &gt;::precision</td></tr>
+<tr class="separator:a378f422a3d53fd45ff9f57d8753f20bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a97c85d58b8634685a1e68cc2b10a9a8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a97c85d58b8634685a1e68cc2b10a9a8a">plan</a> ()</td></tr>
-<tr class="memdesc:a97c85d58b8634685a1e68cc2b10a9a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a97c85d58b8634685a1e68cc2b10a9a8a">More...</a><br /></td></tr>
-<tr class="separator:a97c85d58b8634685a1e68cc2b10a9a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a144ac6ea8d88da8ff5ba73f11b1369"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a3a144ac6ea8d88da8ff5ba73f11b1369">plan</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
-<tr class="memdesc:a3a144ac6ea8d88da8ff5ba73f11b1369"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic move constructor.  <a href="#a3a144ac6ea8d88da8ff5ba73f11b1369">More...</a><br /></td></tr>
-<tr class="separator:a3a144ac6ea8d88da8ff5ba73f11b1369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ef92adb4c4185eacba74f0532f09d65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a0ef92adb4c4185eacba74f0532f09d65">operator=</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
-<tr class="memdesc:a0ef92adb4c4185eacba74f0532f09d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assigment operator.  <a href="#a0ef92adb4c4185eacba74f0532f09d65">More...</a><br /></td></tr>
-<tr class="separator:a0ef92adb4c4185eacba74f0532f09d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a377834cc3b561fe885606741d7cd407f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a377834cc3b561fe885606741d7cd407f">~plan</a> ()</td></tr>
-<tr class="separator:a377834cc3b561fe885606741d7cd407f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4da81382f97d54598ad4e9b0d5b8ff61"><td class="memItemLeft" align="right" valign="top">boost::compute::event&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a4da81382f97d54598ad4e9b0d5b8ff61">enqueue</a> (outvector &amp;out, invector const &amp;in, boost::compute::command_queue &amp;queue, boost::compute::wait_list const &amp;wait=boost::compute::wait_list())</td></tr>
-<tr class="memdesc:a4da81382f97d54598ad4e9b0d5b8ff61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue the transform.  <a href="#a4da81382f97d54598ad4e9b0d5b8ff61">More...</a><br /></td></tr>
-<tr class="separator:a4da81382f97d54598ad4e9b0d5b8ff61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa87aa538f16c71e9b8b12af20fc1bfe4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#aa87aa538f16c71e9b8b12af20fc1bfe4">create_forward_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;context, boost::compute::command_queue &amp;queue)</td></tr>
-<tr class="memdesc:aa87aa538f16c71e9b8b12af20fc1bfe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a forward FFT for the given types and sizes.  <a href="#aa87aa538f16c71e9b8b12af20fc1bfe4">More...</a><br /></td></tr>
-<tr class="separator:aa87aa538f16c71e9b8b12af20fc1bfe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3d11fda7242037f69bdaee1e5f764a2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#ac3d11fda7242037f69bdaee1e5f764a2">create_inverse_plan_1d</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;context, boost::compute::command_queue &amp;queue)</td></tr>
-<tr class="memdesc:ac3d11fda7242037f69bdaee1e5f764a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an inverse FFT for the given types and sizes.  <a href="#ac3d11fda7242037f69bdaee1e5f764a2">More...</a><br /></td></tr>
-<tr class="separator:ac3d11fda7242037f69bdaee1e5f764a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6128be465a1e2b7a8cd4fd4d72d953c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#ae6128be465a1e2b7a8cd4fd4d72d953c">plan</a> ()</td></tr>
+<tr class="memdesc:ae6128be465a1e2b7a8cd4fd4d72d953c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ae6128be465a1e2b7a8cd4fd4d72d953c">More...</a><br /></td></tr>
+<tr class="separator:ae6128be465a1e2b7a8cd4fd4d72d953c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad477cb2510213ce85eb4a12e39475c2c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#ad477cb2510213ce85eb4a12e39475c2c">plan</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
+<tr class="memdesc:ad477cb2510213ce85eb4a12e39475c2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic move constructor.  <a href="#ad477cb2510213ce85eb4a12e39475c2c">More...</a><br /></td></tr>
+<tr class="separator:ad477cb2510213ce85eb4a12e39475c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af53dbd0561d31986cdf98379a6100c41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#af53dbd0561d31986cdf98379a6100c41">operator=</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&amp;rhs)</td></tr>
+<tr class="memdesc:af53dbd0561d31986cdf98379a6100c41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assigment operator.  <a href="#af53dbd0561d31986cdf98379a6100c41">More...</a><br /></td></tr>
+<tr class="separator:af53dbd0561d31986cdf98379a6100c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89af57ff8b80a49015bf17b97d44d477"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a89af57ff8b80a49015bf17b97d44d477">~plan</a> () noexcept(false)</td></tr>
+<tr class="memdesc:a89af57ff8b80a49015bf17b97d44d477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, cleanup the plan.  <a href="#a89af57ff8b80a49015bf17b97d44d477">More...</a><br /></td></tr>
+<tr class="separator:a89af57ff8b80a49015bf17b97d44d477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9607da3db18a57c0326b9d9229b36b8"><td class="memItemLeft" align="right" valign="top">boost::compute::event&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#ac9607da3db18a57c0326b9d9229b36b8">enqueue</a> (out_timeseries_type &amp;out, in_timeseries_type const &amp;in, boost::compute::command_queue &amp;queue, boost::compute::wait_list const &amp;wait=boost::compute::wait_list())</td></tr>
+<tr class="memdesc:ac9607da3db18a57c0326b9d9229b36b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enqueue the transform to be executed.  <a href="#ac9607da3db18a57c0326b9d9229b36b8">More...</a><br /></td></tr>
+<tr class="separator:ac9607da3db18a57c0326b9d9229b36b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a638c492fc189f858f4cbabcecb98f07b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a638c492fc189f858f4cbabcecb98f07b">plan</a> (clfftPlanHandle p, clfftDirection d)</td></tr>
-<tr class="memdesc:a638c492fc189f858f4cbabcecb98f07b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a clfftPlanHandle.  <a href="#a638c492fc189f858f4cbabcecb98f07b">More...</a><br /></td></tr>
-<tr class="separator:a638c492fc189f858f4cbabcecb98f07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78684be00f4b1ba2c3dd6289f2f4a518"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a78684be00f4b1ba2c3dd6289f2f4a518">plan</a> (clfftPlanHandle p, clfftDirection d)</td></tr>
+<tr class="memdesc:a78684be00f4b1ba2c3dd6289f2f4a518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a clfftPlanHandle.  <a href="#a78684be00f4b1ba2c3dd6289f2f4a518">More...</a><br /></td></tr>
+<tr class="separator:a78684be00f4b1ba2c3dd6289f2f4a518"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Deleted functions</div></td></tr>
-<tr class="memitem:a43edd93449b55eb156ac3dffd61c97be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a43edd93449b55eb156ac3dffd61c97be">plan</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
-<tr class="separator:a43edd93449b55eb156ac3dffd61c97be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abca2cc8ebc77f808d9d5368bb486be86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#abca2cc8ebc77f808d9d5368bb486be86">operator=</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
-<tr class="separator:abca2cc8ebc77f808d9d5368bb486be86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d6fca98d746fb44b0630a68834580c9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a1d6fca98d746fb44b0630a68834580c9">plan</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
+<tr class="separator:a1d6fca98d746fb44b0630a68834580c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3821f5ae2f113d3cbde2c2270525e7e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a3821f5ae2f113d3cbde2c2270525e7e8">operator=</a> (<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> const &amp;)=delete</td></tr>
+<tr class="separator:a3821f5ae2f113d3cbde2c2270525e7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a25dd3eeb35d46751245b4d3c71307782"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a25dd3eeb35d46751245b4d3c71307782">create_plan_1d_impl</a> (outvector const &amp;out, invector const &amp;in, boost::compute::context &amp;context, boost::compute::command_queue &amp;queue, clfftDirection direction)</td></tr>
-<tr class="memdesc:a25dd3eeb35d46751245b4d3c71307782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refactor common code to create forward and backward plan.  <a href="#a25dd3eeb35d46751245b4d3c71307782">More...</a><br /></td></tr>
-<tr class="separator:a25dd3eeb35d46751245b4d3c71307782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afae8203515142390204d20734a579543"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#afae8203515142390204d20734a579543">create_plan_1d_impl</a> (out_timeseries_type const &amp;out, in_timeseries_type const &amp;in, boost::compute::context &amp;context, boost::compute::command_queue &amp;queue, clfftDirection direction, std::size_t batch_size)</td></tr>
+<tr class="memdesc:afae8203515142390204d20734a579543"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refactor code to create plans.  <a href="#afae8203515142390204d20734a579543">More...</a><br /></td></tr>
+<tr class="separator:afae8203515142390204d20734a579543"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a0d80a8a8c599d49fd64f3aa05d5fda4f"><td class="memItemLeft" align="right" valign="top">clfftPlanHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a0d80a8a8c599d49fd64f3aa05d5fda4f">p_</a></td></tr>
-<tr class="separator:a0d80a8a8c599d49fd64f3aa05d5fda4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5008423a8de1b5a175dab86b58efcb7"><td class="memItemLeft" align="right" valign="top">clfftDirection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#af5008423a8de1b5a175dab86b58efcb7">d_</a></td></tr>
-<tr class="separator:af5008423a8de1b5a175dab86b58efcb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb7aeb6bd823cea609782c8593f1237b"><td class="memItemLeft" align="right" valign="top">clfftPlanHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#adb7aeb6bd823cea609782c8593f1237b">p_</a></td></tr>
+<tr class="separator:adb7aeb6bd823cea609782c8593f1237b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af99d5a5233cb25ed1720424ab876262a"><td class="memItemLeft" align="right" valign="top">clfftDirection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#af99d5a5233cb25ed1720424ab876262a">d_</a></td></tr>
+<tr class="separator:af99d5a5233cb25ed1720424ab876262a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a09183ef2d7b616b1e6a2950711767544"><td class="memTemplParams" colspan="2">template&lt;typename itype , typename otype &gt; </td></tr>
+<tr class="memitem:a09183ef2d7b616b1e6a2950711767544"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; itype, otype &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a09183ef2d7b616b1e6a2950711767544">create_forward_plan_1d</a> (otype const &amp;, itype const &amp;, boost::compute::context &amp;, boost::compute::command_queue &amp;, int)</td></tr>
+<tr class="separator:a09183ef2d7b616b1e6a2950711767544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18823b400c9704e5152e4c16cfcb0a9a"><td class="memTemplParams" colspan="2">template&lt;typename itype , typename otype &gt; </td></tr>
+<tr class="memitem:a18823b400c9704e5152e4c16cfcb0a9a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; itype, otype &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjb_1_1clfft_1_1plan.html#a18823b400c9704e5152e4c16cfcb0a9a">create_inverse_plan_1d</a> (otype const &amp;, itype const &amp;, boost::compute::context &amp;, boost::compute::command_queue &amp;, int)</td></tr>
+<tr class="separator:a18823b400c9704e5152e4c16cfcb0a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename invector, typename outvector&gt;<br />
-class jb::clfft::plan&lt; invector, outvector &gt;</h3>
+<div class="textblock"><h3>template&lt;typename in_timeseries_type, typename out_timeseries_type&gt;<br />
+class jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</h3>
 
-<p>Wrap clfftPlanHandle objects in a class that can automatically destroy them. </p>
+<p>Wrap clfftPlanHandle objects. </p>
+<p>The clFFT library optimizes execution by pre-computing coefficients, execution plans, and OpenCL kernels for a given input. The plan also stores the precision (float vs. double), and the input and output types (e.g. float to std::complex&lt;float&gt; vs. std::complex&lt;float&gt; to std::complex&lt;float&gt;).</p>
+<p>In JayBeams we prefer to store such details in the type system, and create a different plan type for different input and output types.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">in_timeseries_type</td><td>the type of the input timeseries, typically an instantiation of boost::compute::vector&lt;T&gt;. </td></tr>
+    <tr><td class="paramname">out_timseries_type</td><td>the type of the output timeseries, typically an instantiation of boost::compute::vector&lt;T&gt;. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00021">21</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a97c85d58b8634685a1e68cc2b10a9a8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97c85d58b8634685a1e68cc2b10a9a8a">&#9670;&nbsp;</a></span>plan() <span class="overload">[1/4]</span></h2>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00035">35</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a0fc6b5cb6c037c5b334fb48d54f041ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fc6b5cb6c037c5b334fb48d54f041ed">&#9670;&nbsp;</a></span>in_value_traits</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html#a0fc6b5cb6c037c5b334fb48d54f041ed">in_value_traits</a> =  ::<a class="el" href="namespacejb_1_1clfft_1_1detail.html#structjb_1_1clfft_1_1detail_1_1complex__traits">jb::clfft::detail::complex_traits</a>&lt;<a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00043">43</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5b62fa99fde6c64b0e0cba38ed45e23e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b62fa99fde6c64b0e0cba38ed45e23e">&#9670;&nbsp;</a></span>in_value_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a> =  typename in_timeseries_type::value_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>type straits </p>
+
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00041">41</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab47ac84fe97f85355149f7fcee20286a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab47ac84fe97f85355149f7fcee20286a">&#9670;&nbsp;</a></span>out_value_traits</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html#ab47ac84fe97f85355149f7fcee20286a">out_value_traits</a> =  ::<a class="el" href="namespacejb_1_1clfft_1_1detail.html#structjb_1_1clfft_1_1detail_1_1complex__traits">jb::clfft::detail::complex_traits</a>&lt;<a class="el" href="classjb_1_1clfft_1_1plan.html#aa28bfc49520d50c063d4e625ebdca43e">out_value_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00044">44</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa28bfc49520d50c063d4e625ebdca43e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa28bfc49520d50c063d4e625ebdca43e">&#9670;&nbsp;</a></span>out_value_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html#aa28bfc49520d50c063d4e625ebdca43e">out_value_type</a> =  typename out_timeseries_type::value_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00042">42</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a378f422a3d53fd45ff9f57d8753f20bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a378f422a3d53fd45ff9f57d8753f20bb">&#9670;&nbsp;</a></span>precision_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html#a378f422a3d53fd45ff9f57d8753f20bb">precision_type</a> =  typename <a class="el" href="namespacejb.html#structjb_1_1extract__value__type">jb::extract_value_type</a>&lt;<a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">in_value_type</a>&gt;::precision</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00049">49</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae6128be465a1e2b7a8cd4fd4d72d953c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6128be465a1e2b7a8cd4fd4d72d953c">&#9670;&nbsp;</a></span>plan() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -172,27 +297,27 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 <p>Default constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00024">24</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00053">53</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00083">jb::clfft::plan&lt; invector, outvector &gt;::create_plan_1d_impl()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00151">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl()</a>.</p>
 
 </div>
 </div>
-<a id="a3a144ac6ea8d88da8ff5ba73f11b1369"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a144ac6ea8d88da8ff5ba73f11b1369">&#9670;&nbsp;</a></span>plan() <span class="overload">[2/4]</span></h2>
+<a id="ad477cb2510213ce85eb4a12e39475c2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad477cb2510213ce85eb4a12e39475c2c">&#9670;&nbsp;</a></span>plan() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -206,25 +331,25 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 <p>Basic move constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00030">30</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00059">59</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00153">jb::clfft::plan&lt; invector, outvector &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00152">jb::clfft::plan&lt; invector, outvector &gt;::p_</a>.</p>
+<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00229">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00228">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::p_</a>.</p>
 
 </div>
 </div>
-<a id="a377834cc3b561fe885606741d7cd407f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a377834cc3b561fe885606741d7cd407f">&#9670;&nbsp;</a></span>~plan()</h2>
+<a id="a89af57ff8b80a49015bf17b97d44d477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89af57ff8b80a49015bf17b97d44d477">&#9670;&nbsp;</a></span>~plan()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::~<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::~<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -232,32 +357,34 @@ template&lt;typename invector, typename outvector&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00047">47</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p>Destructor, cleanup the plan. </p>
 
-<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00153">jb::clfft::plan&lt; invector, outvector &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00152">jb::clfft::plan&lt; invector, outvector &gt;::p_</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00076">76</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00229">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00228">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::p_</a>.</p>
 
 </div>
 </div>
-<a id="a43edd93449b55eb156ac3dffd61c97be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43edd93449b55eb156ac3dffd61c97be">&#9670;&nbsp;</a></span>plan() <span class="overload">[3/4]</span></h2>
+<a id="a1d6fca98d746fb44b0630a68834580c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d6fca98d746fb44b0630a68834580c9">&#9670;&nbsp;</a></span>plan() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt; const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -271,19 +398,19 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 </div>
 </div>
-<a id="a638c492fc189f858f4cbabcecb98f07b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a638c492fc189f858f4cbabcecb98f07b">&#9670;&nbsp;</a></span>plan() <span class="overload">[4/4]</span></h2>
+<a id="a78684be00f4b1ba2c3dd6289f2f4a518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78684be00f4b1ba2c3dd6289f2f4a518">&#9670;&nbsp;</a></span>plan() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::<a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> </td>
           <td>(</td>
           <td class="paramtype">clfftPlanHandle&#160;</td>
           <td class="paramname"><em>p</em>, </td>
@@ -309,148 +436,32 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 <p>Constructor from a clfftPlanHandle. </p>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00146">146</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00222">222</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa87aa538f16c71e9b8b12af20fc1bfe4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa87aa538f16c71e9b8b12af20fc1bfe4">&#9670;&nbsp;</a></span>create_forward_plan_1d()</h2>
+<a id="afae8203515142390204d20734a579543"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afae8203515142390204d20734a579543">&#9670;&nbsp;</a></span>create_plan_1d_impl()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::create_forward_plan_1d </td>
+          <td class="memname">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl </td>
           <td>(</td>
-          <td class="paramtype">outvector const &amp;&#160;</td>
+          <td class="paramtype">out_timeseries_type const &amp;&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">invector const &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::context &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
-          <td class="paramname"><em>queue</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create a forward FFT for the given types and sizes. </p>
-
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00068">68</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
-
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00083">jb::clfft::plan&lt; invector, outvector &gt;::create_plan_1d_impl()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00157">jb::clfft::create_forward_plan_1d()</a>.</p>
-
-</div>
-</div>
-<a id="ac3d11fda7242037f69bdaee1e5f764a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3d11fda7242037f69bdaee1e5f764a2">&#9670;&nbsp;</a></span>create_inverse_plan_1d()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::create_inverse_plan_1d </td>
-          <td>(</td>
-          <td class="paramtype">outvector const &amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">invector const &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::context &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
-          <td class="paramname"><em>queue</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create an inverse FFT for the given types and sizes. </p>
-
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00075">75</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
-
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00083">jb::clfft::plan&lt; invector, outvector &gt;::create_plan_1d_impl()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00164">jb::clfft::create_inverse_plan_1d()</a>.</p>
-
-</div>
-</div>
-<a id="a25dd3eeb35d46751245b4d3c71307782"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25dd3eeb35d46751245b4d3c71307782">&#9670;&nbsp;</a></span>create_plan_1d_impl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a> <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::create_plan_1d_impl </td>
-          <td>(</td>
-          <td class="paramtype">outvector const &amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">invector const &amp;&#160;</td>
+          <td class="paramtype">in_timeseries_type const &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
@@ -469,7 +480,13 @@ template&lt;typename invector, typename outvector&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">clfftDirection&#160;</td>
-          <td class="paramname"><em>direction</em>&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>batch_size</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -484,37 +501,55 @@ template&lt;typename invector, typename outvector&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Refactor common code to create forward and backward plan. </p>
+<p>Refactor code to create plans. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>the output destination prototype. The actual output in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">in</td><td>the input data prototype. The actual input in execute() must have the same size as this parameter. </td></tr>
+    <tr><td class="paramname">context</td><td>a collection of devices in a single OpenCL platform. </td></tr>
+    <tr><td class="paramname">queue</td><td>a command queue associated with <em>context</em>. </td></tr>
+    <tr><td class="paramname">direction</td><td>the direction of the transform </td></tr>
+    <tr><td class="paramname">batch_size</td><td>the size of the batch, the size of <em>out</em> and <em>in</em> must be a multiple of this number.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a new plan that computes a DFT (or the inverse DFT) from a vector like <em>in</em> into a vector like <em>out</em>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::exception</td><td>if the parameters are invalid or there was an OpenCL or clFFT error. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00083">83</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00151">151</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00039">jb::clfft::plan&lt; invector, outvector &gt;::operator=()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00024">jb::clfft::plan&lt; invector, outvector &gt;::plan()</a>.</p>
+<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00068">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::operator=()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00053">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::plan()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00068">jb::clfft::plan&lt; invector, outvector &gt;::create_forward_plan_1d()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00075">jb::clfft::plan&lt; invector, outvector &gt;::create_inverse_plan_1d()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00255">jb::clfft::create_forward_plan_1d()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00284">jb::clfft::create_inverse_plan_1d()</a>.</p>
 
 </div>
 </div>
-<a id="a4da81382f97d54598ad4e9b0d5b8ff61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4da81382f97d54598ad4e9b0d5b8ff61">&#9670;&nbsp;</a></span>enqueue()</h2>
+<a id="ac9607da3db18a57c0326b9d9229b36b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9607da3db18a57c0326b9d9229b36b8">&#9670;&nbsp;</a></span>enqueue()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">boost::compute::event <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::enqueue </td>
+          <td class="memname">boost::compute::event <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue </td>
           <td>(</td>
-          <td class="paramtype">outvector &amp;&#160;</td>
+          <td class="paramtype">out_timeseries_type &amp;&#160;</td>
           <td class="paramname"><em>out</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">invector const &amp;&#160;</td>
+          <td class="paramtype">in_timeseries_type const &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
@@ -542,31 +577,48 @@ template&lt;typename invector, typename outvector&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Queue the transform. </p>
+<p>Enqueue the transform to be executed. </p>
+<p>As it is often the case with OpenCL, this is an asynchronous operation. The transform is scheduled to be executed, but it may not have completed by the time this function returns. One must wait for the returned event to reach the <em>done</em> state before any operations can depend on the state of the output.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>the output location for the data, must have the same size as the prototype used to construct the plan. </td></tr>
+    <tr><td class="paramname">in</td><td>the input for the data, must have the same size as the prototype used to construct the plan. </td></tr>
+    <tr><td class="paramname">queue</td><td>where to schedule the computation on. </td></tr>
+    <tr><td class="paramname">wait</td><td>a set of events to wait for before starting the computation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a event that when satisfied indicates the computation has completed. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::exception</td><td>if there is an error scheduling the computation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00056">56</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00107">107</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00153">jb::clfft::plan&lt; invector, outvector &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00152">jb::clfft::plan&lt; invector, outvector &gt;::p_</a>.</p>
+<p class="reference">References <a class="el" href="error_8hpp_source.html#l00045">jb::clfft::check_error_code()</a>, <a class="el" href="classjb_1_1clfft_1_1plan.html#a09183ef2d7b616b1e6a2950711767544">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_forward_plan_1d</a>, <a class="el" href="classjb_1_1clfft_1_1plan.html#a18823b400c9704e5152e4c16cfcb0a9a">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_inverse_plan_1d</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00229">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00228">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::p_</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2ut__plan_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft__plan__ut_8cpp_source.html#l00028">BOOST_AUTO_TEST_CASE()</a>, and <a class="el" href="bm__single__fft_8cpp_source.html#l00019">main()</a>.</p>
 
 </div>
 </div>
-<a id="a0ef92adb4c4185eacba74f0532f09d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ef92adb4c4185eacba74f0532f09d65">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="af53dbd0561d31986cdf98379a6100c41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af53dbd0561d31986cdf98379a6100c41">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -580,29 +632,29 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 <p>Move assigment operator. </p>
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00039">39</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00068">68</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00153">jb::clfft::plan&lt; invector, outvector &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00152">jb::clfft::plan&lt; invector, outvector &gt;::p_</a>.</p>
+<p class="reference">References <a class="el" href="clfft_2plan_8hpp_source.html#l00229">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::d_</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00228">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::p_</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00083">jb::clfft::plan&lt; invector, outvector &gt;::create_plan_1d_impl()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00151">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::create_plan_1d_impl()</a>.</p>
 
 </div>
 </div>
-<a id="abca2cc8ebc77f808d9d5368bb486be86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abca2cc8ebc77f808d9d5368bb486be86">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+<a id="a3821f5ae2f113d3cbde2c2270525e7e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3821f5ae2f113d3cbde2c2270525e7e8">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&amp; <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; invector, outvector &gt; const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt; in_timeseries_type, out_timeseries_type &gt; const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -616,20 +668,141 @@ template&lt;typename invector, typename outvector&gt; </div>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a09183ef2d7b616b1e6a2950711767544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09183ef2d7b616b1e6a2950711767544">&#9670;&nbsp;</a></span>create_forward_plan_1d</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+<div class="memtemplate">
+template&lt;typename itype , typename otype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt;itype, otype&gt; create_forward_plan_1d </td>
+          <td>(</td>
+          <td class="paramtype">otype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">itype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::compute::context &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00107">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue()</a>.</p>
+
+</div>
+</div>
+<a id="a18823b400c9704e5152e4c16cfcb0a9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18823b400c9704e5152e4c16cfcb0a9a">&#9670;&nbsp;</a></span>create_inverse_plan_1d</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
+<div class="memtemplate">
+template&lt;typename itype , typename otype &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjb_1_1clfft_1_1plan.html">plan</a>&lt;itype, otype&gt; create_inverse_plan_1d </td>
+          <td>(</td>
+          <td class="paramtype">otype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">itype const &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::compute::context &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::compute::command_queue &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00107">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue()</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="af5008423a8de1b5a175dab86b58efcb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5008423a8de1b5a175dab86b58efcb7">&#9670;&nbsp;</a></span>d_</h2>
+<a id="af99d5a5233cb25ed1720424ab876262a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af99d5a5233cb25ed1720424ab876262a">&#9670;&nbsp;</a></span>d_</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">clfftDirection <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::d_</td>
+          <td class="memname">clfftDirection <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::d_</td>
         </tr>
       </table>
   </td>
@@ -639,25 +812,25 @@ template&lt;typename invector, typename outvector&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00153">153</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00229">229</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00056">jb::clfft::plan&lt; invector, outvector &gt;::enqueue()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00039">jb::clfft::plan&lt; invector, outvector &gt;::operator=()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00030">jb::clfft::plan&lt; invector, outvector &gt;::plan()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00047">jb::clfft::plan&lt; invector, outvector &gt;::~plan()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00107">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00068">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::operator=()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00059">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::plan()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00076">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>
-<a id="a0d80a8a8c599d49fd64f3aa05d5fda4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d80a8a8c599d49fd64f3aa05d5fda4f">&#9670;&nbsp;</a></span>p_</h2>
+<a id="adb7aeb6bd823cea609782c8593f1237b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb7aeb6bd823cea609782c8593f1237b">&#9670;&nbsp;</a></span>p_</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename invector, typename outvector&gt; </div>
+template&lt;typename in_timeseries_type, typename out_timeseries_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">clfftPlanHandle <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; invector, outvector &gt;::p_</td>
+          <td class="memname">clfftPlanHandle <a class="el" href="classjb_1_1clfft_1_1plan.html">jb::clfft::plan</a>&lt; in_timeseries_type, out_timeseries_type &gt;::p_</td>
         </tr>
       </table>
   </td>
@@ -667,9 +840,9 @@ template&lt;typename invector, typename outvector&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00152">152</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clfft_2plan_8hpp_source.html#l00228">228</a> of file <a class="el" href="clfft_2plan_8hpp_source.html">plan.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00056">jb::clfft::plan&lt; invector, outvector &gt;::enqueue()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00039">jb::clfft::plan&lt; invector, outvector &gt;::operator=()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00030">jb::clfft::plan&lt; invector, outvector &gt;::plan()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00047">jb::clfft::plan&lt; invector, outvector &gt;::~plan()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clfft_2plan_8hpp_source.html#l00107">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::enqueue()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00068">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::operator=()</a>, <a class="el" href="clfft_2plan_8hpp_source.html#l00059">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::plan()</a>, and <a class="el" href="clfft_2plan_8hpp_source.html#l00076">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;::~plan()</a>.</p>
 
 </div>
 </div>

@@ -190,7 +190,7 @@ $(function() {
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#ade31cd65b203e73d0fa58528526d6cfc">jb::fftw::traits&lt; long double &gt;</a>
 </li>
 <li>frequency_array_type
-: <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#a68405852a3cb41713951434cbc93117a">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
+: <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#a0e7e8d53f6023087b35c1d7afc6bf8f3">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
 </li>
 <li>frequency_timeseries_type
 : <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#afda95d5c74559cff998110d97fe74fdf">jb::fftw::time_delay_estimator&lt; timeseries_t, vector &gt;</a>
@@ -206,11 +206,15 @@ $(function() {
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
+<li>in_value_traits
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#a0fc6b5cb6c037c5b334fb48d54f041ed">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+</li>
 <li>in_value_type
-: <a class="el" href="classjb_1_1fftw_1_1plan.html#af9372d6ed3c1aecf0db8e7aad2084a0e">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#a5b62fa99fde6c64b0e0cba38ed45e23e">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+, <a class="el" href="classjb_1_1fftw_1_1plan.html#af9372d6ed3c1aecf0db8e7aad2084a0e">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 </li>
 <li>input_type
-: <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#ade938fecefdb40bdc19a85bb41f037f6">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+: <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#a3f3f02f598718f6a535b0da98bedaaf3">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 <li>interarrival_histogram_t
 : <a class="el" href="classjb_1_1offline__feed__statistics.html#a03b6232679a392f12effd5f03ab2eff5">jb::offline_feed_statistics</a>
@@ -232,19 +236,28 @@ $(function() {
 <li>other
 : <a class="el" href="classjb_1_1fftw_1_1allocator.html#a3b7d9c2ab1afe92526eb18cf999c047a">jb::fftw::allocator&lt; T &gt;::rebind&lt; U &gt;</a>
 </li>
+<li>out_value_traits
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#ab47ac84fe97f85355149f7fcee20286a">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+</li>
+<li>out_value_type
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#aa28bfc49520d50c063d4e625ebdca43e">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+</li>
 <li>output_array_type
-: <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#ac1e682d25bb19a41e63e429a29f8bd1d">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
+: <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#a6fd24c7c13c4b875469078cf14fac396">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
 </li>
 <li>output_timeseries_type
 : <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#a0af45135dc112c7c7795bb1143b11598">jb::fftw::time_delay_estimator&lt; timeseries_t, vector &gt;</a>
 </li>
 <li>output_type
-: <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#a96550203cc0d3cdfcd29b1d3336f0606">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+: <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#aa120ff12e7af6b323196c8e47ec994a8">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_p"></a>- p -</h3><ul>
+<li>participant_type
+: <a class="el" href="structjb_1_1pitch2_1_1expanded__add__order__message.html#aa3bcc2ba5fa00707bcded300f96620d1">jb::pitch2::expanded_add_order_message</a>
+</li>
 <li>pointer
 : <a class="el" href="classjb_1_1fftw_1_1allocator.html#a0730aa6e0db22be69231ce29ec096456">jb::fftw::allocator&lt; T &gt;</a>
 </li>
@@ -253,15 +266,29 @@ $(function() {
 , <a class="el" href="namespacejb.html#a1ee5f5686092bf00fb91e896560de611">jb::extract_value_type&lt; std::complex&lt; T &gt; &gt;</a>
 </li>
 <li>precision_type
-: <a class="el" href="classjb_1_1fftw_1_1plan.html#a5b5d2b2c48ff4a7471aab9e036e76970">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+: <a class="el" href="classjb_1_1clfft_1_1plan.html#a378f422a3d53fd45ff9f57d8753f20bb">jb::clfft::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
+, <a class="el" href="classjb_1_1fftw_1_1plan.html#a5b5d2b2c48ff4a7471aab9e036e76970">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 , <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator.html#ab754a1094d742e2dce641ba81da79d92">jb::fftw::time_delay_estimator&lt; timeseries_t, vector &gt;</a>
 , <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#a43897df1ba454825202a1a0223d6a287">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a5451270d5ae82128fd1fcd4fb629e71a">jb::fftw::traits&lt; double &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#ada817bbd1eea58183291d6efbf7d0299">jb::fftw::traits&lt; float &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa36a0b736862138d398fe294c194a6a7">jb::fftw::traits&lt; long double &gt;</a>
 </li>
+<li>price_type
+: <a class="el" href="namespacejb_1_1pitch2.html#a59661870c2dc1eab734978b42f712590">jb::pitch2::base_add_order_message&lt; quantity_t, symbol_t, price_t &gt;</a>
+, <a class="el" href="namespacejb_1_1pitch2.html#a11261ad253b720d76fe4393baf71e112">jb::pitch2::modify_message&lt; quantity_t, price_t &gt;</a>
+</li>
 <li>processing_latency_histogram_t
 : <a class="el" href="classjb_1_1offline__feed__statistics.html#a37ee77d33b9f76a9b6782e01d85d83c7">jb::offline_feed_statistics</a>
+</li>
+</ul>
+
+
+<h3><a id="index_q"></a>- q -</h3><ul>
+<li>quantity_type
+: <a class="el" href="namespacejb_1_1pitch2.html#aa389e84e64ae62e377ac30c83cab730e">jb::pitch2::base_add_order_message&lt; quantity_t, symbol_t, price_t &gt;</a>
+, <a class="el" href="namespacejb_1_1pitch2.html#a540728f85fdda931409e12d0ce1f21b8">jb::pitch2::modify_message&lt; quantity_t, price_t &gt;</a>
+, <a class="el" href="namespacejb_1_1pitch2.html#a4823998a609c34c98777d67da773d9f2">jb::pitch2::reduce_size_message&lt; quantity_t &gt;</a>
 </li>
 </ul>
 
@@ -302,14 +329,23 @@ $(function() {
 <li>size_type
 : <a class="el" href="classjb_1_1fftw_1_1allocator.html#abf236815b5d2d9b8be8209fc9a8f46a6">jb::fftw::allocator&lt; T &gt;</a>
 </li>
+<li>socket_type
+: <a class="el" href="classjb_1_1ehs_1_1connection.html#a18fbc815260e3b6e1a62366bfe299add">jb::ehs::connection</a>
+</li>
 <li>std_complex_type
 : <a class="el" href="classjb_1_1fftw_1_1plan.html#a04273b648fe0a3f58a09f4700be4b09f">jb::fftw::plan&lt; in_timeseries_type, out_timeseries_type &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01double_01_4.html#a1fbaf2348a50992191eae8cb0850b2a8">jb::fftw::traits&lt; double &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01float_01_4.html#a699ba52d95a019aca3291d4df5152ad2">jb::fftw::traits&lt; float &gt;</a>
 , <a class="el" href="structjb_1_1fftw_1_1traits_3_01long_01double_01_4.html#aa2538820aaf0c2dc15982660a18f4949">jb::fftw::traits&lt; long double &gt;</a>
 </li>
+<li>stock_symbol_type
+: <a class="el" href="structjb_1_1pitch2_1_1auction__update__message.html#a6d8c9bad8942ae71fad1b792f5da7b18">jb::pitch2::auction_update_message</a>
+</li>
 <li>sum2_type
 : <a class="el" href="classjb_1_1fftw_1_1time__delay__estimator__many.html#ab0d36adef72e09992018445aa2200157">jb::fftw::time_delay_estimator_many&lt; array_t &gt;</a>
+</li>
+<li>symbol_type
+: <a class="el" href="namespacejb_1_1pitch2.html#a701a19fa15e730988fd32b62062f5996">jb::pitch2::base_add_order_message&lt; quantity_t, symbol_t, price_t &gt;</a>
 </li>
 </ul>
 
@@ -347,7 +383,7 @@ $(function() {
 : <a class="el" href="classjb_1_1itch5_1_1short__string__field.html#a982d1199a237b124df529757d2571386">jb::itch5::short_string_field&lt; wire_size_value, value_validator &gt;</a>
 </li>
 <li>vector_iterator
-: <a class="el" href="classjb_1_1tde_1_1generic__reduce.html#a3bc6a7942ccd4e9857c01ee89c982a83">jb::tde::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
+: <a class="el" href="classjb_1_1opencl_1_1generic__reduce.html#a5b8c0fc902cd9cfec6572d3cefda2e34">jb::opencl::generic_reduce&lt; reducer, input_type_t, output_type_t &gt;</a>
 </li>
 <li>void_pointer
 : <a class="el" href="classjb_1_1fftw_1_1allocator.html#a94b5b7537fb496fc3f2a9de739ce9634">jb::fftw::allocator&lt; T &gt;</a>

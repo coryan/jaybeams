@@ -73,10 +73,10 @@ $(function() {
 <div class="textblock"><h2>Introduction</h2>
 <p>This document describes the coding standards used in JayBeams, and the rationale behind them. If you disagree with the standard please open a issue in github and/or send a PR to change this document before changing the code.</p>
 <h2>Header Files</h2>
-<h3>All headers shoudl be self-contained.</h3>
-<p>One should be able to <code>#include</code> a header and compile it without requiring any additional headers before or after.</p>
-<h3>The #define Guard</h3>
-<p>All headers should include a <code>#ifndef/#define/#endif</code> guard. The guard must be the first line in the header. The name of the guard is constructed by the full path of the header file from the root of JayBeams, replacing both slashes (<code>/</code>) and period (<code>.</code>) characters by an underscore (<code>_</code>). For example, the include guard for <code>foo/bar/baz_qux.hpp</code> becomes <code>foo_bar_baz_qux_hpp</code>. There must be no double underscores in a guard name, that limits your options for filenames.</p>
+<h3>All headers should be self-contained.</h3>
+<p>One should be able to <code>#</code><code>include</code> a header and compile it without requiring any additional headers before or after.</p>
+<h3>The <code>#</code>define Guard</h3>
+<p>All headers should include a <code>#</code><code>ifndef/</code><code>#</code><code>define/</code><code>#</code><code>endif</code> guard. The guard must be the first line in the header. The name of the guard is constructed by the full path of the header file from the root of JayBeams, replacing both slashes (<code>/</code>) and period (<code>.</code>) characters by an underscore (<code>_</code>). For example, the include guard for <code>foo/bar/baz_qux.hpp</code> becomes <code>foo_bar_baz_qux_hpp</code>. There must be no double underscores in a guard name, that limits your options for filenames.</p>
 <p><b>Example:</b> the <code>foo/bar/baz_qux.hpp</code> file <b>must</b> be protected by:</p>
 <div class="fragment"><div class="line">{c++}</div><div class="line">#ifndef foo_bar_baz_qux_hpp</div><div class="line">#define foo_bar_baz_qux_hpp</div><div class="line">// ... your code here</div><div class="line">#endif // foo_bar_baz_qux_hpp</div></div><!-- fragment --><p><b>Rationale:</b> protecting against multiple includes is a standard C++ practice, we will not elaborate further. Making that the first line enables some compilers to optimize parsing of the header if it is already included. Making the name of the guard algorithmic removes a debate. Identifiers with double underscores are reserved for the implementation in POSIX, so we avoid them.</p>
 <h3>Forward Declarations</h3>
@@ -84,8 +84,8 @@ $(function() {
 <h3>Inline Functions</h3>
 <p>Single line functions should be inlined, virtual functions, even if single line, should not be inlined. Inline function should not be separate from the class definition.</p>
 <p><b>Use:</b></p>
-<div class="fragment"><div class="line">{c++}</div><div class="line">class Foo {</div><div class="line">public:</div><div class="line">  inline int answer() const {</div><div class="line">    return 42;</div><div class="line">  }</div></div><!-- fragment --><p><b>Do Not Use:</b></p>
-<div class="fragment"><div class="line">{c++}</div><div class="line">class Foo {</div><div class="line">public:</div><div class="line">  int answer() const;</div><div class="line">};</div><div class="line">inline int Foo::answer() const {</div><div class="line">  return 42;</div><div class="line">}</div></div><!-- fragment --><p><b>Rationale:</b> We want to avoid function call overhead for trivial functions, but inlining rarely works for virtual functions. We want to minimize typing.</p>
+<div class="fragment"><div class="line">{c++}</div><div class="line">class foo {</div><div class="line">public:</div><div class="line">  inline int answer() const {</div><div class="line">    return 42;</div><div class="line">  }</div></div><!-- fragment --><p><b>Do Not Use:</b></p>
+<div class="fragment"><div class="line">{c++}</div><div class="line">class foo {</div><div class="line">public:</div><div class="line">  int answer() const;</div><div class="line">};</div><div class="line">inline int Foo::answer() const {</div><div class="line">  return 42;</div><div class="line">}</div></div><!-- fragment --><p><b>Rationale:</b> We want to avoid function call overhead for trivial functions, but inlining rarely works for virtual functions. We want to minimize typing.</p>
 <h3>Name of Includes</h3>
 <p>The name of the include must match the name of the main class or function in the include. Define a single class per include, do not define many classes in the same header. Multiple function overloads can be included in the same header, but avoid many unrelated functions in the same header.</p>
 <h3>Order of Includes</h3>

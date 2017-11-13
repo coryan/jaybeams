@@ -1,11 +1,15 @@
 var searchData=
 [
+  ['id',['id',['../structjb_1_1mktdata_1_1feed__id.html#ae19721427d6e4b423c28bfac2e2b5251',1,'jb::mktdata::feed_id::id()'],['../structjb_1_1mktdata_1_1market__id.html#a5d0f133a85159e8afa7556a421cb4cf9',1,'jb::mktdata::market_id::id()'],['../structjb_1_1mktdata_1_1security__id.html#ac91d1947270ff15263dc5ed557b90177',1,'jb::mktdata::security_id::id()']]],
+  ['id_5f',['id_',['../classjb_1_1ehs_1_1connection.html#a61eced41d13b9a5100bc50f10ff04b75',1,'jb::ehs::connection']]],
+  ['idgen',['idgen',['../classjb_1_1ehs_1_1connection.html#a584679960d6521ca931f7799de6dfb8d',1,'jb::ehs::connection']]],
   ['ignore_5fsetup_5ferrors',['ignore_setup_errors',['../classjb_1_1thread__config.html#ae4986998a011fc6fc882063c7d00c627',1,'jb::thread_config::ignore_setup_errors()'],['../namespacejb_1_1defaults.html#a547f91d66c2147f8e0c18fefedb8bb88',1,'jb::defaults::ignore_setup_errors()']]],
   ['imbalance_5fdirection',['imbalance_direction',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#ae87c9afdc0c68c7a1ebd78ec432a79f5',1,'jb::itch5::net_order_imbalance_indicator_message']]],
   ['imbalance_5fshares',['imbalance_shares',['../structjb_1_1itch5_1_1net__order__imbalance__indicator__message.html#a8eb4065c28520c0e678cee59522d92cf',1,'jb::itch5::net_order_imbalance_indicator_message']]],
-  ['initial_5f',['initial_',['../classjb_1_1tde_1_1generic__reduce.html#a4735b11012828b6841be3c100c1b8b8d',1,'jb::tde::generic_reduce']]],
+  ['indicative_5fprice',['indicative_price',['../structjb_1_1pitch2_1_1auction__update__message.html#ac185006140e872bb2bc7d14bebd9baf7',1,'jb::pitch2::auction_update_message']]],
+  ['initial_5f',['initial_',['../classjb_1_1opencl_1_1generic__reduce.html#ada6777222bba00d2cd98bb6fd392098a',1,'jb::opencl::generic_reduce']]],
   ['interarrival_5f',['interarrival_',['../classjb_1_1offline__feed__statistics.html#ae14adae74fb706cc40a77b292d93fd5d',1,'jb::offline_feed_statistics']]],
-  ['intermediate_5f',['intermediate_',['../classjb_1_1tde_1_1generic__reduce.html#a663be243b48d4ec001847be3b09c7e83',1,'jb::tde::generic_reduce']]],
+  ['intermediate_5f',['intermediate_',['../classjb_1_1opencl_1_1generic__reduce.html#a3a01ac87610a3903378b7fa6d68995a3',1,'jb::opencl::generic_reduce']]],
   ['invalid_5fprogram',['invalid_program',['../ut__build__simple__kernel_8cpp.html#a006b52148d76aea71c0ad6894506fe57',1,'ut_build_simple_kernel.cpp']]],
   ['inverse_5findicator',['inverse_indicator',['../structjb_1_1itch5_1_1stock__directory__message.html#a9be35b0375230ac42c540107747b7a70',1,'jb::itch5::stock_directory_message']]],
   ['ipo_5fflag',['ipo_flag',['../structjb_1_1itch5_1_1stock__directory__message.html#a7c5bbbe73694dc0c7156a9d9510054d1',1,'jb::itch5::stock_directory_message']]],
