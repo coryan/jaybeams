@@ -55,17 +55,7 @@ endif ()
 option(COVERAGE "Enable code coverage builds." OFF)
 if (${COVERAGE})
     include(cmake/CodeCoverage.cmake)
-    include(ProcessorCount)
-    ProcessorCount(NCPUS)
-    set(ctest_parallelism "")
-    if (NOT N EQUAL 0)
-        set(ctest_parallelism "-j ${NCPUS}")
-    endif ()
-    APPEND_COVERAGE_COMPILER_FLAGS()
-    SETUP_TARGET_FOR_COVERAGE(
-            NAME test_coverage
-            EXECUTABLE ctest ${ctest_parallelism}
-    )
+    append_coverage_compiler_flags()
 endif (${COVERAGE})
 
 include(cmake/FindSanitizers.cmake)
@@ -101,6 +91,7 @@ endif ()
 include_directories(${PROJECT_SOURCE_DIR}/ext/Beast/include)
 
 # ... Gee-H (https://github.com/coryan/gee-h) is a client library for etcd ...
+option(GEE_H_DISABLE_TESTS "Disable Gee-H unit tests in JayBeams" ON)
 add_subdirectory(ext/gee-h)
 
 # ... we need the -I flags so we can find header files using the installed path for JayBeams headers ...
@@ -264,7 +255,7 @@ add_executable(jb_testing_show_compile_info jb/testing/show_compile_info.cpp)
 target_link_libraries(jb_testing_show_compile_info jb_testing jb)
 
 # ... jb_gmock needs the googletest libraries ...
-# add_subdirectory(ext/googletest/googlemock)
+add_subdirectory(ext/googletest/googlemock)
 add_library(jb_gmock SHARED
         jb/gmock/init.hpp
         )
