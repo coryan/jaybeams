@@ -488,8 +488,6 @@ target_link_libraries(tools_moldheartbeat jb_itch5 jb)
 # TODO(coryan) - what to do with these
 set(bin_SCRIPTS tools/benchmark_common.sh)
 
-include(cmake/CompileProtos.cmake)
-
 # ... determine if libraries are installed in the lib64 directory ...
 get_property(LIB64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
 if ("${LIB64}" STREQUAL "TRUE")
