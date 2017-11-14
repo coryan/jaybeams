@@ -55,7 +55,6 @@ var searchData=
   ['issue_5fclassification_5ft',['issue_classification_t',['../namespacejb_1_1itch5.html#a6fa533b9e9085fa7870ce2d0e03a0ce9',1,'jb::itch5']]],
   ['issue_5fsubtype',['issue_subtype',['../structjb_1_1itch5_1_1stock__directory__message.html#ab23b6e322284e5ad215ebbdeb20d188c',1,'jb::itch5::stock_directory_message']]],
   ['issue_5fsubtype_5ft',['issue_subtype_t',['../namespacejb_1_1itch5.html#a5bce15829f64dd58442032f45004e91f',1,'jb::itch5']]],
-  ['itch_2d5_2e0_20messages',['ITCH-5.0 Messages',['../itch50page.html',1,'']]],
   ['itch5bookdepth_2ecpp',['itch5bookdepth.cpp',['../itch5bookdepth_8cpp.html',1,'']]],
   ['itch5eventdepth_2ecpp',['itch5eventdepth.cpp',['../itch5eventdepth_8cpp.html',1,'']]],
   ['itch5inside_2ecpp',['itch5inside.cpp',['../itch5inside_8cpp.html',1,'']]],
@@ -63,5 +62,6 @@ var searchData=
   ['itch5stats_2ecpp',['itch5stats.cpp',['../itch5stats_8cpp.html',1,'']]],
   ['itch5trades_2ecpp',['itch5trades.cpp',['../itch5trades_8cpp.html',1,'']]],
   ['iterations',['iterations',['../classjb_1_1testing_1_1microbenchmark__config.html#a7bb7cde49db7372c0966ae786b60fd51',1,'jb::testing::microbenchmark_config::iterations()'],['../namespacejb_1_1testing_1_1defaults.html#a37c60b5fb550eaac95e60ad65a1bf1f6',1,'jb::testing::defaults::iterations()']]],
+  ['itch_2d5_2e0_20messages',['ITCH-5.0 Messages',['../md_jb_itch5_README.html',1,'']]],
   ['itch_2d5_2e0_3a_20confused_20about_20securities_2c_20symbols_2c_20and_20tickers',['ITCH-5.0: Confused about Securities, Symbols, and Tickers',['../securities-vs-symbols.html',1,'']]]
 ];

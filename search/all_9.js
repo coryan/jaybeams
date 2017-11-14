@@ -9,7 +9,7 @@ var searchData=
   ['examples',['examples',['../namespacejb_1_1examples.html',1,'jb']]],
   ['fftw',['fftw',['../namespacejb_1_1fftw.html',1,'jb']]],
   ['gmock',['gmock',['../namespacejb_1_1gmock.html',1,'jb']]],
-  ['jaybeams_20doxygen_20documentation',['JayBeams Doxygen Documentation',['../index.html',1,'']]],
+  ['jaybeams_20documentation',['JayBeams Documentation',['../index.html',1,'']]],
   ['itch5',['itch5',['../namespacejb_1_1itch5.html',1,'jb']]],
   ['jb',['jb',['../namespacejb.html',1,'']]],
   ['jb_5fassert_5fthrow',['JB_ASSERT_THROW',['../assert__throw_8hpp.html#a3c5ff317866876ef0871ba32b5d2b9af',1,'assert_throw.hpp']]],

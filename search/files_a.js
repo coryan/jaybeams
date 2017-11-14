@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['mainpage_2edox',['mainpage.dox',['../mainpage_8dox.html',1,'']]],
   ['make_5fsocket_5fudp_5fcommon_2ehpp',['make_socket_udp_common.hpp',['../make__socket__udp__common_8hpp.html',1,'']]],
   ['make_5fsocket_5fudp_5frecv_2ehpp',['make_socket_udp_recv.hpp',['../make__socket__udp__recv_8hpp.html',1,'']]],
   ['make_5fsocket_5fudp_5fsend_2ehpp',['make_socket_udp_send.hpp',['../make__socket__udp__send_8hpp.html',1,'']]],

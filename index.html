@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>JayBeams: JayBeams Doxygen Documentation</title>
+<title>JayBeams: JayBeams Documentation</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,10 +67,30 @@ $(function() {
 
 <div class="header">
   <div class="headertitle">
-<div class="title">JayBeams Doxygen Documentation </div>  </div>
+<div class="title">JayBeams Documentation </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Here you will find the automatically generated documentation for JayBeams. Mostly low-level interface definitions and such, but a few documents describing the motivations and design decisions too. </p>
+<div class="textblock"><p><a href="https://gitter.im/jaybeams/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"></a> <a href="https://travis-ci.org/coryan/jaybeams"></a> <a href="https://codecov.io/gh/coryan/jaybeams"></a> <a href="https://www.codacy.com/app/coryan/jaybeams?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=coryan/jaybeams&amp;amp;utm_campaign=Badge_Grade"></a> <a href="http://coryan.github.io/jaybeams/"></a></p>
+<p>Another project to have fun coding.</p>
+<p>The JayBeams library performs relative time delay estimation of market feeds. That is, given two feeds for the same inside quote data it estimates, in near real-time which one is faster, and by how much.</p>
+<ul>
+<li>Licensing details are found in the LICENSE file.</li>
+<li>The installation instructions are in the INSTALL file.</li>
+</ul>
+<h3>Motivation</h3>
+<p>The US equity markets have a lot of redundant feeds with basically the same information, or where one feed is a super set of a second set. When one has two feeds an interesting question is to know how much faster is one feed vs. the other, or rather, how much faster it is right now, because the latency changes over time. There are (usually) no message IDs or any other simple way to match events in one feed vs. events in the second feed. So the problem of "time-delay
+estimation" requires some heavier computation, and doing this in real-time is extra challenging. The current implementation is based on cross-correlation of the two signals, using FFTs on GPUs to efficiently implement the cross-correlations.</p>
+<p>You can find more details about the motivation, and the performance requirements on <a href="htts://coryan.github.io/">my posts</a></p>
+<h4>Really, that is the motivation?</h4>
+<p>I confess, I wanted to learn how to program GPUs, and given my background this appeared as an interesting application.</p>
+<h4>So where is the code?</h4>
+<p>I am pushing the code slowly. I want to make sure it compiles and passes its tests on at least a couple of Linux variants. This can be a challenge given the dependency on OpenCL libraries.</p>
+<h3>What is with the name?</h3>
+<p>JayBeams is named after a <a href="https://en.wikipedia.org/wiki/List_of_World_War_II_electronic_warfare_equipment">WWII electronic warfare</a> system. The name was selected more or less at random from the Wikipedia list of such systems, and is not meant to represent anything in particular. It sounds cool, in a Flash Gordon kind of way.</p>
+<h2>Licensing and Copyright Notice</h2>
+<p>Copyright 2015-2017 Carlos O'Ryan</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at </p><pre class="fragment">http://www.apache.org/licenses/LICENSE-2.0
+</pre><p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

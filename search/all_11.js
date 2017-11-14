@@ -12,7 +12,7 @@ var searchData=
   ['read_5ferror_5f',['read_error_',['../classjb_1_1ehs_1_1request__dispatcher.html#af8faa336d2853d08047bf53565d1f864',1,'jb::ehs::request_dispatcher']]],
   ['read_5fok_5f',['read_ok_',['../classjb_1_1ehs_1_1request__dispatcher.html#ac57e18318f6cb2aff709fb1bc14f47c4',1,'jb::ehs::request_dispatcher']]],
   ['reader',['reader',['../classworker__config.html#ac98585011082a360a2545a50a559c9d0',1,'worker_config']]],
-  ['readme_2emd',['README.md',['../jb_2itch5_2README_8md.html',1,'(Global Namespace)'],['../tools_2README_8md.html',1,'(Global Namespace)']]],
+  ['readme_2emd',['README.md',['../README_8md.html',1,'(Global Namespace)'],['../jb_2itch5_2README_8md.html',1,'(Global Namespace)'],['../tools_2README_8md.html',1,'(Global Namespace)']]],
   ['reason',['reason',['../structjb_1_1itch5_1_1stock__trading__action__message.html#aa79c18c421554568a5d95edbd18f2abe',1,'jb::itch5::stock_trading_action_message']]],
   ['reason_5ft',['reason_t',['../namespacejb_1_1itch5.html#af15c4e97bdc325d0e04ad4697a3cc531',1,'jb::itch5']]],
   ['rebind',['rebind',['../classjb_1_1fftw_1_1allocator.html#structjb_1_1fftw_1_1allocator_1_1rebind',1,'jb::fftw::allocator']]],
