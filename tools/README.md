@@ -1,4 +1,4 @@
-## JayBeams Tools
+# JayBeams Tools
 
 The JayBeams tools serve both as (a) demonstrations of how to use the
 library in complete programs, and (b) utilities to analyze market data

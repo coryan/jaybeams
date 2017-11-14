@@ -1,5 +1,4 @@
-ITCH-5.0 Messages                    {#itch50page}
-=================
+# ITCH-5.0 Messages
 
 Helper classes to parse ITCH-5.0 messages, as documented in the ITCH-5.0
 protocol specification (hereafter 'the spec'):
